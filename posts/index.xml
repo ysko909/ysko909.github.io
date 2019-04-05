@@ -80,7 +80,7 @@ $ git submodule add https://github.com/Track3/hermit.git themes/hermit
 └── themes
 </code></pre>
 
-<p>この時点で下記のコマンドを実行するとサイトが生成される。ただし、コンテンツを作成していないため、トップページだけが生成されて中身はなにもない。</p>
+<p>この時点で下記のコマンドを実行すると、<code>public</code>という名前でフォルダが作成されて、その中に生成されたHTMLファイルなどが格納される。ただし、この時点ではコンテンツを作成していないため、トップページだけで中身はなにもない。</p>
 
 <pre><code>$ hugo
 </code></pre></li>
@@ -100,11 +100,13 @@ $ git submodule add https://github.com/Track3/hermit.git themes/hermit
 
 <p>下記のコマンドを実行すると<code>content</code>フォルダ配下にファイルを生成する。</p>
 
-<p>$ hugo new hoge.md</p>
+<pre><code>$ hugo new hoge.md
+</code></pre>
 
 <p>この際、出力先のフォルダを指定することができる。下記のコマンドでは、<code>content</code>フォルダ配下に<code>posts</code>フォルダが存在しなければ自動的に生成してから、ファイルを生成する。カテゴリだとかジャンル別にファイルを分別したい場合に有効な方法。</p>
 
-<p>$ hugo new posts/hoge.md</p>
+<pre><code>$ hugo new posts/hoge.md
+</code></pre>
 
 <p>生成された直後のファイルの中身は下記のような感じ。</p>
 
