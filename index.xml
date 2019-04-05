@@ -7,13 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 04 Apr 2019 19:32:06 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 05 Apr 2019 10:15:49 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>About</title>
+      <title>Hugoで静的サイトを生成してみる</title>
+      <link>https://idontwannawork.github.io/posts/make-site-with-hugo/</link>
+      <pubDate>Fri, 05 Apr 2019 10:15:49 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/make-site-with-hugo/</guid>
+      <description>Hugoとは Golangで作られている、静的サイトジェネレータ。なんでも、生成が速いらしい。 今回はコイツを使って、サイトを生成し公開してみる</description>
+    </item>
+    
+    <item>
+      <title>このページについて</title>
       <link>https://idontwannawork.github.io/about/</link>
       <pubDate>Thu, 04 Apr 2019 19:32:06 +0900</pubDate>
       

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hugo on Come as you are</title>
+    <link>https://idontwannawork.github.io/tags/hugo/</link>
+    <description>Recent content in Hugo on Come as you are</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Fri, 05 Apr 2019 10:15:49 +0900</lastBuildDate>
+    
+	<atom:link href="https://idontwannawork.github.io/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Hugoで静的サイトを生成してみる</title>
+      <link>https://idontwannawork.github.io/posts/make-site-with-hugo/</link>
+      <pubDate>Fri, 05 Apr 2019 10:15:49 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/make-site-with-hugo/</guid>
+      <description>Hugoとは Golangで作られている、静的サイトジェネレータ。なんでも、生成が速いらしい。 今回はコイツを使って、サイトを生成し公開してみる</description>
+    </item>
+    
+  </channel>
+</rss>

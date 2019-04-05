@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+
+<meta itemprop="name" content="Hugoで静的サイトを生成してみる">
+<meta itemprop="description" content="Hugoとは Golangで作られている、静的サイトジェネレータ。なんでも、生成が速いらしい。 今回はコイツを使って、サイトを生成し公開してみる">
+
+
+<meta itemprop="datePublished" content="2019-04-05T10:15:49&#43;09:00" />
+<meta itemprop="dateModified" content="2019-04-05T10:15:49&#43;09:00" />
+<meta itemprop="wordCount" content="2645">
+
+
+
+<meta itemprop="keywords" content="Hugo," />
+<meta property="og:title" content="Hugoで静的サイトを生成してみる" />
+<meta property="og:description" content="Hugoとは Golangで作られている、静的サイトジェネレータ。なんでも、生成が速いらしい。 今回はコイツを使って、サイトを生成し公開してみる" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://idontwannawork.github.io/posts/make-site-with-hugo/" />
+<meta property="article:published_time" content="2019-04-05T10:15:49&#43;09:00"/>
+<meta property="article:modified_time" content="2019-04-05T10:15:49&#43;09:00"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hugoで静的サイトを生成してみる"/>
+<meta name="twitter:description" content="Hugoとは Golangで作られている、静的サイトジェネレータ。なんでも、生成が速いらしい。 今回はコイツを使って、サイトを生成し公開してみる"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Hugoで静的サイトを生成してみる</title>
+	<link rel="stylesheet" href="https://idontwannawork.github.io/css/style.min.31706917653d2b9e8410abd431f30ec4359a88a94fc87a63654779d87329edec.css" integrity="sha256-MXBpF2U9K56EEKvUMfMOxDWaiKlPyHpjZUd52HMp7ew=">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://idontwannawork.github.io/">Come as you are</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					<a href="https://idontwannawork.github.io/posts/">Posts</a>
+					<a href="https://idontwannawork.github.io/about/">About</a>
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://twitter.com/webmaster909" target="_blank" rel="noopener" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/idontwannawork" target="_blank" rel="noopener" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://idontwannawork.github.io/posts/">Posts</a></li>
+			<li><a href="https://idontwannawork.github.io/about/">About</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Apr 5, 2019</span></div>
+				<h1>Hugoで静的サイトを生成してみる</h1>
+			</header>
+			<div class="content">
+				
+
+<h1 id="hugoとは">Hugoとは<a href="#hugoとは" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+
+<p>Golangで作られている、静的サイトジェネレータ。なんでも、生成が速いらしい。</p>
+
+<p>今回はコイツを使って、サイトを生成し公開してみる。</p>
+
+<h1 id="手順">手順<a href="#手順" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+
+<p>基本的には<a href="https://gohugo.io/getting-started/quick-start/">ここ</a>を参考にしている。以下の手順はWindows10にて行っているが、多分Macとかでも同様なはず。</p>
+
+<p>なお、個人的な好みでWindowsのコマンドプロンプトではなくbusyboxで実行しているが、普通にコマンドプロンプトやPowerShellで実行しても問題ないと思う。</p>
+
+<ol>
+<li><p>Golangのインストール</p>
+
+<p>Golangの<a href="https://golang.org/">オフィシャル</a>から、自分が利用するプラットフォーム用のインストーラをダウンロードして実行する。この記事を書いている現在での最新は1.12.1。</p></li>
+
+<li><p>Hugoのインストール</p>
+
+<p>Hugoの<a href="https://github.com/gohugoio/hugo/releases">Github</a>から、自分が利用するプラットフォーム用のインストーラをダウンロードして展開する。この記事を書いている現在での最新は0.54.0。</p>
+
+<p>インストール後、Hugoのbin（実行ファイルが格納されているアドレス）を環境変数に追加する。GUIでもいいし、<code>setx</code>コマンドを実行してもいい。インストールした後で、下記コマンドを実行してみる。</p>
+
+<pre><code>~ $ hugo version
+Hugo Static Site Generator v0.54.0-B1A82C61 windows/amd64 BuildDate: 2019-02-01T09:42:02Z
+</code></pre>
+
+<p>上記のように返ってくればOK。</p></li>
+
+<li><p>サイトを生成</p>
+
+<p>以下のコマンドを実行してサイトを生成する。<code>hoge</code>の部分は任意で、自分が生成したいサイト名でいい。なお、この名前でフォルダが作成される。実行したら生成されたフォルダに移動する。</p>
+
+<pre><code>$ hugo new site hoge
+$ cd hoge
+</code></pre></li>
+
+<li><p>テーマを決定</p>
+
+<p><a href="https://themes.gohugo.io/">Hugoのテーマを集めたページ</a>を参照して、好みのテーマを探す。カスタマイズしたり、自力で作成することももちろん可能だが今は触れない。今回はミニマムなデザインが気に入ったので、<a href="https://themes.gohugo.io/hermit/">Hermit</a>にしてみた。</p>
+
+<p><img src="/images/hermit.png" alt="Hermit" /></p>
+
+<p>テーマを決めたら下記のコマンドを実行して、gitでGitHubから必要なファイルをダウンロードする。なお、導入手順はテーマのページにしっかり記述されている。親切！</p>
+
+<pre><code>$ git init
+$ git submodule add https://github.com/Track3/hermit.git themes/hermit
+</code></pre>
+
+<p>ここまで実行すると、下記のようなフォルダとファイルの構成が出来上がっているはず。</p>
+
+<pre><code>.
+├── archetypes
+├── config.toml
+├── content
+├── data
+├── layouts
+├── static
+└── themes
+</code></pre>
+
+<p>この時点で下記のコマンドを実行するとサイトが生成される。ただし、コンテンツを作成していないため、トップページだけが生成されて中身はなにもない。</p>
+
+<pre><code>$ hugo
+</code></pre></li>
+
+<li><p>設定ファイルを変更</p>
+
+<p>ファイル<code>config.toml</code>に設定を追記する。</p>
+
+<p>オフィシャルでは下記のコマンドを実行するだけでいい、としている。要はテーマの名前を追加している。生成直後の設定ファイルの中身だと、何のテーマを利用するかわからないので追記してやる必要があるからだ。</p>
+
+<pre><code>$ echo 'theme = &quot;ananke&quot;' &gt;&gt; config.toml
+</code></pre>
+
+<p>ただ、一応これ以外にも後々修正する部分があるので、この時点で編集してしまっても問題ない。それと、他のテーマはわからないがHermitに関して言えば、<code>config.toml</code>は自分で記述するのではなくて、<a href="https://github.com/Track3/hermit/blob/master/exampleSite/config.toml">用意されたもの</a>を流用して中身を編集した方がいい。というのは、テーマによってはこの設定ファイル中に特定の設定値がないと、<code>hugo</code>コマンドでのサイト生成時にエラーになる可能性があるからだ・・・実際、それで30分ほど無駄にした_(┐「ε:)_</p></li>
+
+<li><p>記事を作成</p>
+
+<p>下記のコマンドを実行すると<code>content</code>フォルダ配下にファイルを生成する。</p>
+
+<p>$ hugo new hoge.md</p>
+
+<p>この際、出力先のフォルダを指定することができる。下記のコマンドでは、<code>content</code>フォルダ配下に<code>posts</code>フォルダが存在しなければ自動的に生成してから、ファイルを生成する。カテゴリだとかジャンル別にファイルを分別したい場合に有効な方法。</p>
+
+<p>$ hugo new posts/hoge.md</p>
+
+<p>生成された直後のファイルの中身は下記のような感じ。</p>
+
+<pre><code>---
+title: &quot;Hoge&quot;
+date: 2019-04-04T18:21:09+09:00
+draft: true
+---
+</code></pre>
+
+<p>ここに記事をMarkdown形式で記述する。ちなみに、ファイル冒頭の<code>draft</code>はtrueだと下書き扱いになる。<code>hugo server</code>とかでファイル生成すると内容の確認はできるんだけど、<code>public</code>フォルダには出力されない（下書きだから）。なので、サイト公開時には忘れずに<code>draft: false</code>にしておく必要がある・・・じゃないと、地味に30分くらいハマることになるので_(┐「ε:)_</p>
+
+<p>なお、Windowsあるある・・・かどうかはよくわからないけど、UTF-8でファイルを保存しておかないとコマンド<code>hugo</code>の実行時にエラーになるので注意。</p></li>
+
+<li><p>サーバーを起動して確認</p>
+
+<p>下記のコマンドを実行する。</p>
+
+<pre><code>$ hugo server -D
+</code></pre>
+
+<p>その後ブラウザで<a href="http://localhost:1313/"><code>http://localhost:1313/</code></a>にアクセスする。</p>
+
+<p>なお、ブラウザで生成したサイトを表示させたまま<code>config.toml</code>や記事の内容をいじったりすると、そのまま反映される。スゲェ。</p>
+
+<p>ちなみに、Hugoのサーバーを終了するには<code>Ctrl+C</code>を押す。</p></li>
+
+<li><p>固定ページなどの表示設定</p>
+
+<p>ここからの作業は任意だが、大抵のblogにはコンテンツ以外に「このページについて」みたいな固定ページが存在する。そういった、コンテンツ以外のページも必要に応じて追加する。</p>
+
+<p>追加する手順は基本的に記事を生成する際と何ら変わらない。注意するのは<code>content</code>フォルダ配下の構成と<code>config.toml</code>ファイルの設定内容。例えば、<code>content</code>フォルダの内容が下記の通りだったとする。<code>page</code>と<code>posts</code>はフォルダだ。</p>
+
+<pre><code>.
+├── page
+│    └── hoge-page.md
+├── posts
+│    ├── content1.md
+│    ├── content2.md
+│    └── content3.md
+└── about.md
+</code></pre>
+
+<p>この場合、設定ファイルの<code>config.toml</code>の内容を下記の通り記述することで、ファイルと生成後の出力内容を紐づけることができる。</p>
+
+<pre><code># コンテンツ用設定
+  [[menu.main]]
+    name = &quot;Posts&quot;
+    url = &quot;posts/&quot;
+    weight = 10
+
+# 固定ページ用設定。
+  [[menu.main]]
+    name = &quot;pages&quot;
+    url = &quot;page/&quot;
+    weight = 10
+
+# 「このページについて」ページの設定。
+  [[menu.main]]
+    name = &quot;About&quot;
+    url = &quot;about/&quot;
+    weight = 10
+</code></pre>
+
+<p>なお、ここで<code>*.md</code>ファイルを単体で置いておくと1枚の単体ページとしてHTMLファイル生成される。が、1つ以上の<code>*.md</code>ファイルをフォルダ配下に格納しておくと、各記事をHTMLファイルに変換するのと同時に、自動的にリストページを生成してくれる。便利。</p>
+
+<p>ただし、前述の下書き設定<code>draft</code>がtrueになっていたりすると、Markdownファイルがあっても下書き扱いとなるのでHTMLファイルが生成されない（ローカルでの内容確認はできるが、<code>public</code>フォルダに出力されない）。そのため、メニューに項目があってもファイルが存在せず404になってしまうので、そこだけは注意が必要。</p></li>
+</ol>
+
+<h1 id="というわけで">というわけで<a href="#というわけで" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+
+<p>当ページは<a href="https://gohugo.io/">Hugo</a>と<a href="https://github.com/Track3/hermit">Hermit</a>で作成されています_(┐「ε:)_</p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/hugo">Hugo</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2645 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-04-05 10:15 &#43;0900</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://idontwannawork.github.io/posts/after-tutorial/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>チュートリアルを卒業したくらいが一番ツラい</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2019 <a href="https://idontwannawork.github.io/">Tetsuya Katsuragi</a> Allrights reserved.</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://idontwannawork.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	<script src="https://idontwannawork.github.io/js/main.min.784417f5847151f848c339cf0acb13a06cbb648b1483435a28ed4556c4ead69b.js" integrity="sha256-eEQX9YRxUfhIwznPCssToGy7ZIsUg0NaKO1FVsTq1ps="></script>
+
+</body>
+
+</html>
