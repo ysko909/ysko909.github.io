@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 04 Apr 2019 18:38:04 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 04 Apr 2019 19:32:06 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>About</title>
+      <link>https://idontwannawork.github.io/about/</link>
+      <pubDate>Thu, 04 Apr 2019 19:32:06 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/about/</guid>
+      <description>はじめに このページは日々の学習内容を書いたりトラブルをメモったり、たまに全然関係ない記事を書いたりする予定。 どうぞ、よしなに。</description>
+    </item>
     
     <item>
       <title>チュートリアルを卒業したくらいが一番ツラい</title>
