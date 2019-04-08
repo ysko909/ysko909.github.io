@@ -32,10 +32,6 @@
 <p>なお、個人的な好みでWindowsのコマンドプロンプトではなくbusyboxで実行しているが、普通にコマンドプロンプトやPowerShellで実行しても問題ないと思う。</p>
 
 <ol>
-<li><p>Golangのインストール</p>
-
-<p>Golangの<a href="https://golang.org/">オフィシャル</a>から、自分が利用するプラットフォーム用のインストーラをダウンロードして実行する。この記事を書いている現在での最新は1.12.1。</p></li>
-
 <li><p>Hugoのインストール</p>
 
 <p>Hugoの<a href="https://github.com/gohugoio/hugo/releases">Github</a>から、自分が利用するプラットフォーム用のインストーラをダウンロードして展開する。この記事を書いている現在での最新は0.54.0。</p>
