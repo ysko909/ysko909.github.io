@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Fri, 05 Apr 2019 10:15:49 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 10 Apr 2019 16:23:49 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Codepen_test</title>
+      <link>https://idontwannawork.github.io/posts/codepen_test/</link>
+      <pubDate>Wed, 10 Apr 2019 16:23:49 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/codepen_test/</guid>
+      <description>降らせるって何を？ こんな感じ。 See the Pen aframe_particle_star by idontwannawork (@idontwannawork) on CodePen. 結論 これを使う。 概要 webVR用のフレームワークA-Frameには様々なサードパーティーのコ</description>
+    </item>
     
     <item>
       <title>Hugoで静的サイトを生成してみる</title>

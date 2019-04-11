@@ -7,8 +7,84 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Fri, 05 Apr 2019 10:15:49 +0900</lastBuildDate>
+		<lastBuildDate>Wed, 10 Apr 2019 16:23:49 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Codepen_test</title>
+			<link>https://idontwannawork.github.io/posts/codepen_test/</link>
+			<pubDate>Wed, 10 Apr 2019 16:23:49 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/codepen_test/</guid>
+			<description>降らせるって何を？ こんな感じ。 See the Pen aframe_particle_star by idontwannawork (@idontwannawork) on CodePen. 結論 これを使う。 概要 webVR用のフレームワークA-Frameには様々なサードパーティーのコ</description>
+			<content type="html"><![CDATA[
+
+<h1 id="降らせるって何を">降らせるって何を？</h1>
+
+<p>こんな感じ。</p>
+
+<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="mgWdgj" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="aframe_particle_star">
+  <span>See the Pen <a href="https://codepen.io/idontwannawork/pen/mgWdgj/">
+  aframe_particle_star</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p>
+
+<h1 id="結論">結論</h1>
+
+<p><a href="https://github.com/IdeaSpaceVR/aframe-particle-system-component">これ</a>を使う。</p>
+
+<h1 id="概要">概要</h1>
+
+<p>webVR用のフレームワーク<a href="https://aframe.io/">A-Frame</a>には様々なサードパーティーのコンポーネントが存在する。その中で、「いろいろ降らせる」コンポーネントを実装する。これを実装することで「雪の降る町」や「チリの舞う荒野」なんかの表現ができる。</p>
+
+<h1 id="設定値">設定値</h1>
+
+<h2 id="preset">preset</h2>
+
+<p><code>preset</code>の値でいろいろ降らせることができる。</p>
+
+<ul>
+<li>stars（デフォルト）
+星が降ってくる。rainとほぼ同じくらいの落下速度だが、粒度がrainより粗い。そして、星形をしている。他と異なり、後方で噴水のように噴き出している。</li>
+</ul>
+
+<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="mgWdgj" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="aframe_particle_star">
+  <span>See the Pen <a href="https://codepen.io/idontwannawork/pen/mgWdgj/">
+  aframe_particle_star</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p>
+
+<ul>
+<li>dust
+チリっぽい何か。この設定値が一番ゆっくり降ってくる。というか、舞う。粒度は以下の2つと同様で、細かい。チリっていうよりも「ホコリ」っていった方が正確かもしれない。</li>
+<li>snow
+その名の通り、雪。rainより遅く降ってくる。粒度はdustと同様。これはしっかり上から「降ってくる」。</li>
+<li>rain
+その名の通り、雨。snowよりは早く降ってくる。粒度はdustと同様。これもしっかり上から「降ってくる」。</li>
+</ul>
+
+<h2 id="texture">texture</h2>
+
+<pre><code>&lt;a-entity position=&quot;0 2.25 -15&quot; particle-system=&quot;preset: dust; texture: ./images/star2.png; color: #0000FF,#00FF00,#FF0000&quot;&gt;&lt;/a-entity&gt;
+</code></pre>
+
+<p>画像指定することでテクスチャを貼ることができる。ただ、あんまり粒子が小さい（デフォルトで1）だといまいち判別がつかないような・・・。</p>
+
+<h2 id="maxage">maxAge</h2>
+
+<p>粒子の最大経過時間（秒）。これを増やすと、粒子が長時間画面に留まる＝画面上の粒子の数が増える。</p>
+
+<h2 id="size">size</h2>
+
+<p>粒子の大きさ。デフォルトは1なのだが、これだと星なのか雪なのかわからないくらい（落下スピードが異なるので、そこで区別はつくが）なので、変更するとはっきり区別できるようになる。</p>
+
+<h2 id="color">color</h2>
+
+<p>粒子の色。何色か指定できるが3色くらいが見た目的に限度ではなかろうか。あんまりカラフルだと目が疲れる・・・。</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>Hugoで静的サイトを生成してみる</title>
