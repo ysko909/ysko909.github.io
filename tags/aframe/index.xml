@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Aframe on Come as you are</title>
+    <link>https://idontwannawork.github.io/tags/aframe/</link>
+    <description>Recent content in Aframe on Come as you are</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Thu, 11 Apr 2019 09:47:58 +0900</lastBuildDate>
+    
+	<atom:link href="https://idontwannawork.github.io/tags/aframe/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>A-Frameでいろいろ降らせる</title>
+      <link>https://idontwannawork.github.io/posts/aframe-particle/</link>
+      <pubDate>Thu, 11 Apr 2019 09:47:58 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/aframe-particle/</guid>
+      <description>降らせるって何を？ こんな感じ。 See the Pen aframe_particle_star by idontwannawork (@idontwannawork) on CodePen. 結論 これを使う。 概要 webVR用のフレームワークA-Frameには様々なサードパーティーのコ</description>
+    </item>
+    
+  </channel>
+</rss>

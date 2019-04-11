@@ -7,15 +7,15 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Wed, 10 Apr 2019 16:23:49 +0900</lastBuildDate>
+		<lastBuildDate>Thu, 11 Apr 2019 09:47:58 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
 		
 		<item>
-			<title>Codepen_test</title>
-			<link>https://idontwannawork.github.io/posts/codepen_test/</link>
-			<pubDate>Wed, 10 Apr 2019 16:23:49 +0900</pubDate>
+			<title>A-Frameでいろいろ降らせる</title>
+			<link>https://idontwannawork.github.io/posts/aframe-particle/</link>
+			<pubDate>Thu, 11 Apr 2019 09:47:58 +0900</pubDate>
 			
-			<guid>https://idontwannawork.github.io/posts/codepen_test/</guid>
+			<guid>https://idontwannawork.github.io/posts/aframe-particle/</guid>
 			<description>降らせるって何を？ こんな感じ。 See the Pen aframe_particle_star by idontwannawork (@idontwannawork) on CodePen. 結論 これを使う。 概要 webVR用のフレームワークA-Frameには様々なサードパーティーのコ</description>
 			<content type="html"><![CDATA[
 
@@ -42,27 +42,48 @@
 
 <h2 id="preset">preset</h2>
 
-<p><code>preset</code>の値でいろいろ降らせることができる。</p>
+<p><code>preset</code>の値で粒子の形を変えて降らせることができる。</p>
 
 <ul>
-<li>stars（デフォルト）
-星が降ってくる。rainとほぼ同じくらいの落下速度だが、粒度がrainより粗い。そして、星形をしている。他と異なり、後方で噴水のように噴き出している。</li>
-</ul>
+<li><p>stars（デフォルト）
+星が降ってくる。デフォルトではrainとsnowの中間くらいの落下速度だが、粒度がrainより粗い。そして、星形をしている。他と異なり、後方で噴水のように噴き出している。</p>
 
 <p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="mgWdgj" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="aframe_particle_star">
-  <span>See the Pen <a href="https://codepen.io/idontwannawork/pen/mgWdgj/">
-  aframe_particle_star</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
-  on <a href="https://codepen.io">CodePen</a>.</span>
+<span>See the Pen <a href="https://codepen.io/idontwannawork/pen/mgWdgj/">
+aframe_particle_star</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
+on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p></li>
 
-<ul>
-<li>dust
-チリっぽい何か。この設定値が一番ゆっくり降ってくる。というか、舞う。粒度は以下の2つと同様で、細かい。チリっていうよりも「ホコリ」っていった方が正確かもしれない。</li>
-<li>snow
-その名の通り、雪。rainより遅く降ってくる。粒度はdustと同様。これはしっかり上から「降ってくる」。</li>
-<li>rain
-その名の通り、雨。snowよりは早く降ってくる。粒度はdustと同様。これもしっかり上から「降ってくる」。</li>
+<li><p>dust
+チリっぽい何か。この設定値が一番ゆっくり降ってくる。というか、舞う。粒度は以下の2つと同様で、細かい。チリっていうよりも「ホコリ」っていった方が正確かもしれない。</p>
+
+<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="mgWpWa" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="aframe_particle_dust">
+<span>See the Pen <a href="https://codepen.io/idontwannawork/pen/mgWpWa/">
+aframe_particle_dust</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
+on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p></li>
+
+<li><p>snow
+その名の通り、雪。rainより遅く降ってくる。粒度はデフォルトではdustと同様に見える。これはしっかり上から「降ってくる」。</p>
+
+<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="oOZXMX" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="aframe_particle_snow">
+<span>See the Pen <a href="https://codepen.io/idontwannawork/pen/oOZXMX/">
+aframe_particle_snow</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
+on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p></li>
+
+<li><p>rain
+その名の通り、雨。snowよりは早く降ってくる。粒子はいわゆるティアドロップっぽい形。これもしっかり上から「降ってくる」。</p>
+
+<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="JVWLvR" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="aframe_particle_rain">
+<span>See the Pen <a href="https://codepen.io/idontwannawork/pen/JVWLvR/">
+aframe_particle_rain</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
+on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p></li>
 </ul>
 
 <h2 id="texture">texture</h2>
@@ -82,7 +103,7 @@
 
 <h2 id="color">color</h2>
 
-<p>粒子の色。何色か指定できるが3色くらいが見た目的に限度ではなかろうか。あんまりカラフルだと目が疲れる・・・。</p>
+<p>粒子の色。何色か指定できるが2色くらいが見た目的に限度ではなかろうか。あんまりカラフルだと目が疲れる・・・。</p>
 ]]></content>
 		</item>
 		
