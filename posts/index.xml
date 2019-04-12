@@ -7,8 +7,147 @@
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
 		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Thu, 11 Apr 2019 09:47:58 +0900</lastBuildDate>
+		<lastBuildDate>Fri, 12 Apr 2019 15:27:02 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Pythonの命名規約</title>
+			<link>https://idontwannawork.github.io/posts/python_naming-conventions/</link>
+			<pubDate>Fri, 12 Apr 2019 15:27:02 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/python_naming-conventions/</guid>
+			<description>命名規約のメモ PEP8に準拠。何番煎じかわからないけども自学用に。 推奨される命名規約 命名対象 ルール 例 備考 パッケージ、モジュール 全て小文字で短</description>
+			<content type="html"><![CDATA[
+
+<h1 id="命名規約のメモ">命名規約のメモ</h1>
+
+<p><a href="https://www.python.org/dev/peps/pep-0008/">PEP8</a>に準拠。何番煎じかわからないけども自学用に。</p>
+
+<h2 id="推奨される命名規約">推奨される命名規約</h2>
+
+<table>
+<thead>
+<tr>
+<th align="center">命名対象</th>
+<th align="center">ルール</th>
+<th align="center">例</th>
+<th align="center">備考</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">パッケージ、モジュール</td>
+<td align="center">全て小文字で短く</td>
+<td align="center">flask, os</td>
+<td align="center">アンダースコアの利用は非推奨</td>
+</tr>
+
+<tr>
+<td align="center">クラス</td>
+<td align="center">（アッパー）キャメルケース</td>
+<td align="center">MyClass</td>
+<td align="center"></td>
+</tr>
+
+<tr>
+<td align="center">型変数</td>
+<td align="center">（アッパー）キャメルケース</td>
+<td align="center">MyClass</td>
+<td align="center"></td>
+</tr>
+
+<tr>
+<td align="center">例外</td>
+<td align="center">（アッパー）キャメルケース、最後に「Error」</td>
+<td align="center">MyExcepError</td>
+<td align="center">例外はクラスであるべき、とのこと</td>
+</tr>
+
+<tr>
+<td align="center">グローバル変数</td>
+<td align="center">全て小文字でアンダースコア区切り、2つアンダースコアを付与</td>
+<td align="center"><code>__all__</code></td>
+<td align="center">グローバル変数をエクスポートするのを防ぐ</td>
+</tr>
+
+<tr>
+<td align="center">関数、変数</td>
+<td align="center">全て小文字でアンダースコア区切り</td>
+<td align="center">my_funcion</td>
+<td align="center"></td>
+</tr>
+
+<tr>
+<td align="center">メソッド、インスタンス変数</td>
+<td align="center">全て小文字でアンダースコア区切り</td>
+<td align="center">my_method</td>
+<td align="center"></td>
+</tr>
+
+<tr>
+<td align="center">定数</td>
+<td align="center">全て大文字でアンダースコア区切り</td>
+<td align="center">MY_CONST</td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="ポピュラーな命名">ポピュラーな命名</h2>
+
+<p>上記の基本的なルールに準拠して、実際にはどんな感じで命名をされているか、について。</p>
+
+<h3 id="1文字のみ">1文字のみ</h3>
+
+<pre><code>b
+</code></pre>
+
+<p>小文字1文字。</p>
+
+<pre><code>B
+</code></pre>
+
+<p>大文字1文字。</p>
+
+<h3 id="複数文字列">複数文字列</h3>
+
+<pre><code>lowercase
+</code></pre>
+
+<p>または</p>
+
+<pre><code>lower_case_with_underscores
+</code></pre>
+
+<p>小文字たちとアンダースコア。</p>
+
+<pre><code>UPPERCASE
+</code></pre>
+
+<p>または</p>
+
+<pre><code>UPPER_CASE_WITH_UNDERSCORES
+</code></pre>
+
+<p>大文字たちとアンダースコア。</p>
+
+<h3 id="その他">その他</h3>
+
+<pre><code>CapitalizedWords
+</code></pre>
+
+<p>キャメルケース。</p>
+
+<pre><code>Capitalized_Words_With_Underscores
+</code></pre>
+
+<p>大文字小文字とアンダースコア。ただし、これはPEP8の<a href="https://www.python.org/dev/peps/pep-0008/#descriptive-naming-styles">命名に関するドキュメント</a>中でも「いまいち」扱いされている。</p>
+
+<pre><code>Capitalized_Words_With_Underscores (ugly!)
+</code></pre>
+]]></content>
+		</item>
 		
 		<item>
 			<title>A-Frameでいろいろ降らせる</title>

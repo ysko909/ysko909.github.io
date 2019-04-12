@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Thu, 11 Apr 2019 09:47:58 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 12 Apr 2019 15:27:02 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Pythonの命名規約</title>
+      <link>https://idontwannawork.github.io/posts/python_naming-conventions/</link>
+      <pubDate>Fri, 12 Apr 2019 15:27:02 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/python_naming-conventions/</guid>
+      <description>命名規約のメモ PEP8に準拠。何番煎じかわからないけども自学用に。 推奨される命名規約 命名対象 ルール 例 備考 パッケージ、モジュール 全て小文字で短</description>
+    </item>
     
     <item>
       <title>A-Frameでいろいろ降らせる</title>
