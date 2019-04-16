@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://idontwannawork.github.io/posts/busybox-on-windows/</loc>
+    <lastmod>2019-04-16T09:38:26+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/posts/python_naming-conventions/</loc>
     <lastmod>2019-04-12T15:27:02+09:00</lastmod>
   </url>
@@ -34,8 +39,14 @@
   </url>
   
   <url>
+    <loc>https://idontwannawork.github.io/tags/busybox/</loc>
+    <lastmod>2019-04-16T09:38:26+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/</loc>
-    <lastmod>2019-04-12T15:27:02+09:00</lastmod>
+    <lastmod>2019-04-16T09:38:26+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -53,7 +64,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/posts/</loc>
-    <lastmod>2019-04-12T15:27:02+09:00</lastmod>
+    <lastmod>2019-04-16T09:38:26+09:00</lastmod>
     <priority>0</priority>
   </url>
   
