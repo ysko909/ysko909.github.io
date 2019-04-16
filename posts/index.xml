@@ -122,6 +122,13 @@ Currently defined functions:
 
 <p>この場合、「busybox使って<code>ps</code>を実行するぜ」と言っていることになります。</p>
 
+<p>なお、オプションを利用してコマンド発行するのも普段と同様です。</p>
+
+<pre><code>busybox64.exe ls -la
+</code></pre>
+
+<p>このように入力して実行すれば<code>l</code>と<code>a</code>のオプションが有効になります。</p>
+
 <h2 id="毎回busyboxって入力しなきゃいけないの">毎回busyboxって入力しなきゃいけないの？</h2>
 
 <p>もちろん、そんなことはないです。ログインシェルとして利用することも可能です。その場合のコマンドは下記の通りです。</p>
