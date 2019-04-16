@@ -9,23 +9,23 @@
 	<meta name="msapplication-TileColor" content="#494f5c">
 
 <meta itemprop="name" content="Hugoで静的サイトを生成してみる">
-<meta itemprop="description" content="Hugoとは Golangで作られている、静的サイトジェネレータ。なんでも、生成が速いらしい。 今回はコイツを使って、サイトを生成し公開してみる">
+<meta itemprop="description" content="Hugoとは Golangで作られている、静的サイトジェネレータ。なんでも、生成が速いらしいです。 今回はコイツを使って、サイトを生成し公開して">
 
 
 <meta itemprop="datePublished" content="2019-04-05T10:15:49&#43;09:00" />
 <meta itemprop="dateModified" content="2019-04-05T10:15:49&#43;09:00" />
-<meta itemprop="wordCount" content="2682">
+<meta itemprop="wordCount" content="2777">
 
 
 
 <meta itemprop="keywords" content="Hugo," />
 <meta property="og:title" content="Hugoで静的サイトを生成してみる" />
-<meta property="og:description" content="Hugoとは Golangで作られている、静的サイトジェネレータ。なんでも、生成が速いらしい。 今回はコイツを使って、サイトを生成し公開してみる" />
+<meta property="og:description" content="Hugoとは Golangで作られている、静的サイトジェネレータ。なんでも、生成が速いらしいです。 今回はコイツを使って、サイトを生成し公開して" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://idontwannawork.github.io/posts/make-site-with-hugo/" /><meta property="article:published_time" content="2019-04-05T10:15:49&#43;09:00"/>
 <meta property="article:modified_time" content="2019-04-05T10:15:49&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Hugoで静的サイトを生成してみる"/>
-<meta name="twitter:description" content="Hugoとは Golangで作られている、静的サイトジェネレータ。なんでも、生成が速いらしい。 今回はコイツを使って、サイトを生成し公開してみる"/>
+<meta name="twitter:description" content="Hugoとは Golangで作られている、静的サイトジェネレータ。なんでも、生成が速いらしいです。 今回はコイツを使って、サイトを生成し公開して"/>
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -76,9 +76,9 @@
 
 <h1 id="hugoとは">Hugoとは<a href="#hugoとは" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
 
-<p>Golangで作られている、静的サイトジェネレータ。なんでも、生成が速いらしい。</p>
+<p>Golangで作られている、静的サイトジェネレータ。なんでも、生成が速いらしいです。</p>
 
-<p>今回はコイツを使って、サイトを生成し公開してみる。</p>
+<p>今回はコイツを使って、サイトを生成し公開してみようと思います。</p>
 
 <h1 id="この記事が役立つであろう人">この記事が役立つであろう人<a href="#この記事が役立つであろう人" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
 
@@ -86,26 +86,26 @@
 
 <h1 id="手順">手順<a href="#手順" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
 
-<p>基本的には<a href="https://gohugo.io/getting-started/quick-start/">ここ</a>を参考にしている。以下の手順はWindows10にて行っているが、多分Macとかでも同様なはず。</p>
+<p>基本的には<a href="https://gohugo.io/getting-started/quick-start/">ここ</a>を参考にしています。以下の手順はWindows10にて行っているが、多分Macとかでも同様なはずです。</p>
 
-<p>なお、個人的な好みでWindowsのコマンドプロンプトではなくbusyboxで実行しているが、普通にコマンドプロンプトやPowerShellで実行しても問題ないと思う。</p>
+<p>なお、個人的な好みでWindowsのコマンドプロンプトではなくbusyboxで実行しているが、普通にコマンドプロンプトやPowerShellで実行しても問題ないと思います。</p>
 
 <ol>
 <li><p>Hugoのインストール</p>
 
-<p>Hugoの<a href="https://github.com/gohugoio/hugo/releases">Github</a>から、自分が利用するプラットフォーム用のインストーラをダウンロードして展開する。この記事を書いている現在での最新は0.54.0。</p>
+<p>Hugoの<a href="https://github.com/gohugoio/hugo/releases">Github</a>から、自分が利用するプラットフォーム用のインストーラをダウンロードして展開します。この記事を書いている現在での最新は0.54.0。</p>
 
-<p>インストール後、Hugoのbin（実行ファイルが格納されているアドレス）を環境変数に追加する。GUIでもいいし、<code>setx</code>コマンドを実行してもいい。インストールした後で、下記コマンドを実行してみる。</p>
+<p>インストール後、Hugoのbin（実行ファイルが格納されているアドレス）を環境変数に追加します。GUIでもいいし、<code>setx</code>コマンドを実行しても問題ありません。インストールした後で、下記コマンドを実行してみます。</p>
 
 <pre><code>~ $ hugo version
 Hugo Static Site Generator v0.54.0-B1A82C61 windows/amd64 BuildDate: 2019-02-01T09:42:02Z
 </code></pre>
 
-<p>上記のように返ってくればOK。</p></li>
+<p>上記のように返ってくれば完了です。</p></li>
 
 <li><p>サイトを生成</p>
 
-<p>以下のコマンドを実行してサイトを生成する。<code>hoge</code>の部分は任意で、自分が生成したいサイト名でいい。なお、この名前でフォルダが作成される。実行したら生成されたフォルダに移動する。</p>
+<p>以下のコマンドを実行してサイトを生成します。<code>hoge</code>の部分は任意で、自分が生成したいサイト名でOKです。実行したら生成されたフォルダに移動します。</p>
 
 <pre><code>$ hugo new site hoge
 $ cd hoge
@@ -113,11 +113,11 @@ $ cd hoge
 
 <li><p>テーマを決定</p>
 
-<p><a href="https://themes.gohugo.io/">Hugoのテーマを集めたページ</a>を参照して、好みのテーマを探す。カスタマイズしたり、自力で作成することももちろん可能だが今は触れない。今回はミニマムなデザインが気に入ったので、<a href="https://themes.gohugo.io/hermit/">Hermit</a>にしてみた。</p>
+<p><a href="https://themes.gohugo.io/">Hugoのテーマを集めたページ</a>を参照して、好みのテーマを探します。カスタマイズしたり、自力で作成することももちろん可能ですが今回は割愛させていただきます。今回はミニマムなデザインが気に入ったので、<a href="https://themes.gohugo.io/hermit/">Hermit</a>にしてみました。</p>
 
 <p><img src="/images/hermit.png" alt="Hermit" /></p>
 
-<p>テーマを決めたら下記のコマンドを実行して、gitでGitHubから必要なファイルをダウンロードする。なお、導入手順はテーマのページにしっかり記述されている。親切！</p>
+<p>テーマを決めたら下記のコマンドを実行して、gitでGitHubから必要なファイルをダウンロードします。なお、導入手順はテーマのページにしっかり記述されていました。親切！</p>
 
 <pre><code>$ git init
 $ git submodule add https://github.com/Track3/hermit.git themes/hermit
@@ -135,30 +135,30 @@ $ git submodule add https://github.com/Track3/hermit.git themes/hermit
 └── themes
 </code></pre>
 
-<p>この時点で下記のコマンドを実行すると、<code>public</code>という名前でフォルダが作成されて、その中に生成されたHTMLファイルなどが格納される。ただし、この時点ではコンテンツを作成していないため、トップページだけで中身はなにもない。</p>
+<p>この時点で下記のコマンドを実行すると、<code>public</code>という名前でフォルダが作成されて、その中に生成されたHTMLファイルなどが格納されるはずです。ただし、この時点ではコンテンツを作成していないため、トップページだけで中身はなにもありません。</p>
 
 <pre><code>$ hugo
 </code></pre></li>
 
 <li><p>設定ファイルを変更</p>
 
-<p>ファイル<code>config.toml</code>に設定を追記する。</p>
+<p>ファイル<code>config.toml</code>に設定を追記します。</p>
 
-<p>オフィシャルでは下記のコマンドを実行するだけでいい、としている。要はテーマの名前を追加している。生成直後の設定ファイルの中身だと、何のテーマを利用するかわからないので追記してやる必要があるからだ。</p>
+<p>オフィシャルでは下記のコマンドを実行するだけでいい、としています。要はテーマの名前を追加しています。なぜかというと、生成直後の設定ファイルの中身では、何のテーマを利用するか記述がないためわからないから追記してやる必要があるわけです。</p>
 
 <pre><code>$ echo 'theme = &quot;ananke&quot;' &gt;&gt; config.toml
 </code></pre>
 
-<p>ただ、一応これ以外にも後々修正する部分があるので、この時点で編集してしまっても問題ない。それと、他のテーマはわからないがHermitに関して言えば、<code>config.toml</code>は自分で記述するのではなくて、<a href="https://github.com/Track3/hermit/blob/master/exampleSite/config.toml">用意されたもの</a>を流用して中身を編集した方がいい。というのは、テーマによってはこの設定ファイル中に特定の設定値がないと、<code>hugo</code>コマンドでのサイト生成時にエラーになる可能性があるからだ・・・実際、それで30分ほど無駄にした_(┐「ε:)_</p></li>
+<p>ただ、一応これ以外にも後々修正したり追記したりする部分があるので、この時点で編集してしまっても問題ありません。それと、他のテーマについては不明ですがHermitに関して言えば、<code>config.toml</code>は自分で記述するのではなくて、<a href="https://github.com/Track3/hermit/blob/master/exampleSite/config.toml">用意されたもの</a>を流用して中身を編集した方が話が早かったです。というのは、テーマによってはこの設定ファイル中に特定の設定値がないと、<code>hugo</code>コマンドでのサイト生成時にエラーになる可能性があるから・・・実際、それで30分ほど無駄にしました_(┐「ε:)_</p></li>
 
 <li><p>記事を作成</p>
 
-<p>下記のコマンドを実行すると<code>content</code>フォルダ配下にファイルを生成する。</p>
+<p>下記のコマンドを実行すると<code>content</code>フォルダ配下にファイルを生成します。</p>
 
 <pre><code>$ hugo new hoge.md
 </code></pre>
 
-<p>この際、出力先のフォルダを指定することができる。下記のコマンドでは、<code>content</code>フォルダ配下に<code>posts</code>フォルダが存在しなければ自動的に生成してから、ファイルを生成する。カテゴリだとかジャンル別にファイルを分別したい場合に有効な方法。</p>
+<p>この際、出力先のフォルダを指定することができます。下記のコマンドでは、<code>content</code>フォルダ配下に<code>posts</code>フォルダが存在しなければ自動的に生成してから、ファイルを生成します。カテゴリだとかジャンル別にファイルを分別したい場合に有効な方法。</p>
 
 <pre><code>$ hugo new posts/hoge.md
 </code></pre>
@@ -172,28 +172,28 @@ draft: true
 ---
 </code></pre>
 
-<p>ここに記事をMarkdown形式で記述する。ちなみに、ファイル冒頭の<code>draft</code>はtrueだと下書き扱いになる。<code>hugo server</code>とかでファイル生成すると内容の確認はできるんだけど、<code>public</code>フォルダには出力されない（下書きだから）。なので、サイト公開時には忘れずに<code>draft: false</code>にしておく必要がある・・・じゃないと、地味に30分くらいハマることになるので_(┐「ε:)_</p>
+<p>ここに記事をMarkdown形式で記述します。ちなみに、ファイル冒頭の<code>draft</code>はtrueだと下書き扱いになります。<code>hugo server</code>とかでファイル生成すると内容の確認はできるんだけど、<code>public</code>フォルダには出力されません（下書きだから）。なので、サイト公開時には忘れずに<code>draft: false</code>にしておく必要があります。じゃないと、地味に30分くらいハマることになるので_(┐「ε:)_</p>
 
 <p>なお、Windowsあるある・・・かどうかはよくわからないけど、UTF-8でファイルを保存しておかないとコマンド<code>hugo</code>の実行時にエラーになるので注意。</p></li>
 
 <li><p>サーバーを起動して確認</p>
 
-<p>下記のコマンドを実行する。</p>
+<p>下記のコマンドを実行します。</p>
 
 <pre><code>$ hugo server -D
 </code></pre>
 
-<p>その後ブラウザで<a href="http://localhost:1313/"><code>http://localhost:1313/</code></a>にアクセスする。</p>
+<p>その後ブラウザで<a href="http://localhost:1313/"><code>http://localhost:1313/</code></a>にアクセスします。</p>
 
-<p>なお、ブラウザで生成したサイトを表示させたまま<code>config.toml</code>や記事の内容をいじったりすると、そのまま反映される。スゲェ。</p>
+<p>なお、ブラウザで生成したサイトを表示させたまま<code>config.toml</code>や記事の内容をいじったりすると、そのまま反映されます。スゲェ。</p>
 
-<p>ちなみに、Hugoのサーバーを終了するには<code>Ctrl+C</code>を押す。</p></li>
+<p>ちなみに、Hugoのサーバーを終了するには<code>Ctrl+C</code>を押します。</p></li>
 
 <li><p>固定ページなどの表示設定</p>
 
-<p>ここからの作業は任意だが、大抵のblogにはコンテンツ以外に「このページについて」みたいな固定ページが存在する。そういった、コンテンツ以外のページも必要に応じて追加する。</p>
+<p>ここからの作業は任意ですが、大抵のblogにはコンテンツ以外に「このページについて」みたいな固定ページが存在します。そういった、コンテンツ以外のページも必要に応じて追加します。</p>
 
-<p>追加する手順は基本的に記事を生成する際と何ら変わらない。注意するのは<code>content</code>フォルダ配下の構成と<code>config.toml</code>ファイルの設定内容。例えば、<code>content</code>フォルダの内容が下記の通りだったとする。<code>page</code>と<code>posts</code>はフォルダだ。</p>
+<p>追加する手順は基本的に記事を生成する際と何ら変わりません。注意するのは<code>content</code>フォルダ配下の構成と<code>config.toml</code>ファイルの設定内容。例えば、<code>content</code>フォルダの内容が下記の通りだったとします。<code>page</code>と<code>posts</code>はフォルダです。</p>
 
 <pre><code>.
 ├── page
@@ -205,7 +205,7 @@ draft: true
 └── about.md
 </code></pre>
 
-<p>この場合、設定ファイルの<code>config.toml</code>の内容を下記の通り記述することで、ファイルと生成後の出力内容を紐づけることができる。</p>
+<p>この場合、設定ファイルの<code>config.toml</code>の内容を下記の通り記述することで、ファイルと生成後の出力内容を紐づけることができます。</p>
 
 <pre><code># コンテンツ用設定
   [[menu.main]]
@@ -226,9 +226,9 @@ draft: true
     weight = 10
 </code></pre>
 
-<p>なお、ここで<code>*.md</code>ファイルを単体で置いておくと1枚の単体ページとしてHTMLファイル生成される。が、1つ以上の<code>*.md</code>ファイルをフォルダ配下に格納しておくと、各記事をHTMLファイルに変換するのと同時に、自動的にリストページを生成してくれる。便利。</p>
+<p>なお、ここで<code>*.md</code>ファイルを単体で置いておくと1枚の単体ページとしてHTMLファイル生成されます。が、1つ以上の<code>*.md</code>ファイルをフォルダ配下に格納しておくと、各記事をHTMLファイルに変換するのと同時に、自動的にリストページを生成してくれます。便利。</p>
 
-<p>ただし、前述の下書き設定<code>draft</code>がtrueになっていたりすると、Markdownファイルがあっても下書き扱いとなるのでHTMLファイルが生成されない（ローカルでの内容確認はできるが、<code>public</code>フォルダに出力されない）。そのため、メニューに項目があってもファイルが存在せず404になってしまうので、そこだけは注意が必要。</p></li>
+<p>ただし、前述の下書き設定<code>draft</code>がtrueになっていたりすると、Markdownファイルがあっても下書き扱いとなるのでHTMLファイルが生成されません（ローカルでの内容確認はできるが、<code>public</code>フォルダに出力されない）。そのため、メニューに項目があってもファイルが存在せず404になってしまうので、そこだけは注意が必要です。</p></li>
 </ol>
 
 <h1 id="というわけで">というわけで<a href="#というわけで" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
@@ -241,7 +241,7 @@ draft: true
 				<p>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/hugo">Hugo</a></span>
 				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2682 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2777 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-04-05 01:15 &#43;0000</p>
 			</footer>
 		</article>
