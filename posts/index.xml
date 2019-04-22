@@ -6,9 +6,56 @@
 		<description>Recent content in Posts on Come as you are</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-		<lastBuildDate>Tue, 16 Apr 2019 09:38:26 +0900</lastBuildDate>
+		<lastBuildDate>Mon, 22 Apr 2019 13:06:22 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Windowsでドット付ファイルを作成する</title>
+			<link>https://idontwannawork.github.io/posts/make-file-with-dot-on-windows/</link>
+			<pubDate>Mon, 22 Apr 2019 13:06:22 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/make-file-with-dot-on-windows/</guid>
+			<description>結論 ファイル名の冒頭および語尾の両方にドットを付与！ 小ネタです .gitignoreとか.bashrcのように、何かの設定ファイルは冒頭に「.</description>
+			<content type="html"><![CDATA[
+
+<h1 id="結論">結論</h1>
+
+<p>ファイル名の冒頭および語尾の両方にドットを付与！</p>
+
+<h1 id="小ネタです">小ネタです</h1>
+
+<p><code>.gitignore</code>とか<code>.bashrc</code>のように、何かの設定ファイルは冒頭に「.（ドット）」が付いて拡張子なしであるような名前だったりします。</p>
+
+<p>ところが、Windowsのexplorer上でドット付のファイルを作成しようとするとエラーになります。</p>
+
+<p>例えば<code>.hoge</code>という名前のファイルを作成しようとします。</p>
+
+<p><img src="2019-04-22-13-09-06.png" alt="" /></p>
+
+<p>こんな名前のファイルを作成しようとすると・・・</p>
+
+<p><img src="2019-04-22-13-09-27.png" alt="" /></p>
+
+<p>エラー！</p>
+
+<h1 id="対策">対策</h1>
+
+<p>そういう場合は、下記のようにファイル名の冒頭および語尾の両方にドットを付与してやるとファイルを作成できます。</p>
+
+<pre><code>.hoge.
+</code></pre>
+
+<p><img src="2019-04-22-13-10-14.png" alt="" /></p>
+
+<p>すると・・・</p>
+
+<p><img src="2019-04-22-13-10-28.png" alt="" /></p>
+
+<p>「はい」を押せばドット付ファイルの出来上がりです。</p>
+
+<p><img src="2019-04-22-13-11-07.png" alt="" /></p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>WindowsでLinuxのコマンドが使える「busybox」</title>
@@ -151,10 +198,10 @@ Currently defined functions:
 		
 		<item>
 			<title>Pythonの命名規約</title>
-			<link>https://idontwannawork.github.io/posts/python_naming-conventions/</link>
+			<link>https://idontwannawork.github.io/posts/python-naming-conventions/</link>
 			<pubDate>Fri, 12 Apr 2019 15:27:02 +0900</pubDate>
 			
-			<guid>https://idontwannawork.github.io/posts/python_naming-conventions/</guid>
+			<guid>https://idontwannawork.github.io/posts/python-naming-conventions/</guid>
 			<description>命名規約のメモ PEP8に準拠。何番煎じかわからないけども自学用に。 推奨される命名規約 命名対象 ルール 例 備考 パッケージ、モジュール 全て小文字で短</description>
 			<content type="html"><![CDATA[
 
