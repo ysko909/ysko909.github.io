@@ -18,18 +18,18 @@
 			<description>概要 Pythonでjson.dumps()した際に、日本語が文字化けするのを防ぐメモ。 環境 Windows 10 Python 3.6 実際のコード &amp;gt;&amp;gt;&amp;gt; import json &amp;gt;&amp;gt;&amp;gt; dic = {&amp;quot;hoge&amp;quot;:&amp;quot;foo&amp;quot;, &amp;quot;fuga&amp;quot;:&amp;quot;bar&amp;quot;, &amp;quot;piyo&amp;quot;:&amp;quot;baz&amp;quot;} &amp;gt;&amp;gt;&amp;gt; json.dumps(dic) &#39;{&amp;quot;hoge&amp;quot;: &amp;quot;foo&amp;quot;, &amp;quot;fuga&amp;quot;: &amp;quot;bar&amp;quot;,</description>
 			<content type="html"><![CDATA[
 
-<h1 id="概要">概要</h1>
+<h2 id="概要">概要</h2>
 
 <p>Pythonで<code>json.dumps()</code>した際に、日本語が文字化けするのを防ぐメモ。</p>
 
-<h1 id="環境">環境</h1>
+<h2 id="環境">環境</h2>
 
 <ul>
 <li>Windows 10</li>
 <li>Python 3.6</li>
 </ul>
 
-<h1 id="実際のコード">実際のコード</h1>
+<h2 id="実際のコード">実際のコード</h2>
 
 <pre><code>&gt;&gt;&gt; import json
 &gt;&gt;&gt; dic = {&quot;hoge&quot;:&quot;foo&quot;, &quot;fuga&quot;:&quot;bar&quot;, &quot;piyo&quot;:&quot;baz&quot;}
@@ -59,42 +59,42 @@
 			<description>結論 ファイル名の冒頭および語尾の両方にドットを付与！ 小ネタです .gitignoreとか.bashrcのように、何かの設定ファイルは冒頭に「.</description>
 			<content type="html"><![CDATA[
 
-<h1 id="結論">結論</h1>
+<h2 id="結論">結論</h2>
 
 <p>ファイル名の冒頭および語尾の両方にドットを付与！</p>
 
-<h1 id="小ネタです">小ネタです</h1>
+<h2 id="小ネタです">小ネタです</h2>
 
 <p><code>.gitignore</code>とか<code>.bashrc</code>のように、何かの設定ファイルは冒頭に「.（ドット）」が付いて拡張子なしであるような名前だったりします。</p>
 
-<p>ところが、Windowsのexplorer上でドット付のファイルを作成しようとするとエラーになります。</p>
+<p>ところが、Windowsのexplorer上でドット付のファイルを作成しようとしたらエラーになりました。</p>
 
-<p>例えば<code>.hoge</code>という名前のファイルを作成しようとします。</p>
+<p>たとえば<code>.hoge</code>という名前のファイルを作成しようとします。</p>
 
-<p><img src="2019-04-22-13-09-06.png" alt="" /></p>
+<p><img src="2019-04-22-13-09-06.png" alt="alt text" /></p>
 
 <p>こんな名前のファイルを作成しようとすると・・・</p>
 
-<p><img src="2019-04-22-13-09-27.png" alt="" /></p>
+<p><img src="2019-04-22-13-09-27.png" alt="alt text" /></p>
 
 <p>エラー！</p>
 
-<h1 id="対策">対策</h1>
+<h2 id="対策">対策</h2>
 
 <p>そういう場合は、下記のようにファイル名の冒頭および語尾の両方にドットを付与してやるとファイルを作成できます。</p>
 
 <pre><code>.hoge.
 </code></pre>
 
-<p><img src="2019-04-22-13-10-14.png" alt="" /></p>
+<p><img src="2019-04-22-13-10-14.png" alt="alt text" /></p>
 
 <p>すると・・・</p>
 
-<p><img src="2019-04-22-13-10-28.png" alt="" /></p>
+<p><img src="2019-04-22-13-10-28.png" alt="alt text" /></p>
 
-<p>「はい」を押せばドット付ファイルの出来上がりです。</p>
+<p>「はい」を押せばドット付ファイルのできあがりです。</p>
 
-<p><img src="2019-04-22-13-11-07.png" alt="" /></p>
+<p><img src="2019-04-22-13-11-07.png" alt="alt text" /></p>
 ]]></content>
 		</item>
 		
@@ -107,23 +107,27 @@
 			<description>結論 普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、busyboxを使えばいいよ</description>
 			<content type="html"><![CDATA[
 
-<h1 id="結論">結論</h1>
+<h2 id="結論">結論</h2>
 
 <p>普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、<a href="https://busybox.net/">busybox</a>を使えばいいよ！</p>
 
-<h1 id="はじめに">はじめに</h1>
+<h2 id="はじめに">はじめに</h2>
 
 <p>仕事ではWindows、プライベートではMacまたはLinuxなんて人もいるかもしれません。そこな貴方、こんなシチュエーションがありませんでしょうか？</p>
 
 <blockquote>
 <p>ふと仕事中に「<code>grep</code>使いたいなー」とか「<code>awk</code>使いたいなー」とかなっても、Windowsのコマンドプロンプトじゃ足りないし、PowerShellはあの文法がいまいち性に合わない。ガッツリ使うわけじゃないから、わざわざ端末や仮想環境を用意するというわけにもいかない。</p>
+</blockquote>
 
+<p>とか、</p>
+
+<blockquote>
 <p>Windows使ってるのに普段のMacのノリで<code>ls</code>って入力しちゃって、Windowsに「そんなコマンドないよ」と言われた経験がある。</p>
 </blockquote>
 
 <p>そんな貴方（私）のため、busyboxが十徳ナイフのごとく活躍してくれます。</p>
 
-<h1 id="この記事の対象者">この記事の対象者</h1>
+<h2 id="この記事の対象者">この記事の対象者</h2>
 
 <p>以下に当てはまる方は、busyboxで幸せになれるかもしれません。</p>
 
@@ -133,32 +137,32 @@
 <li>Hyper-Vなどの仮想環境がない</li>
 </ul>
 
-<h2 id="余談-win10だとlinux使えなかったっけ">（余談）Win10だとLinux使えなかったっけ？</h2>
+<h3 id="余談1-win10だとlinux使えなかったっけ">（余談1）Win10だとLinux使えなかったっけ？</h3>
 
-<p>Windows10だとWSL（Windows Subsystem for Linux）で、UbuntuなどのLinuxディストリビューションを利用できます・・・が、Win10のリリースモデルの一つ、Enterprise LTSB(Long-Term Servicing Branch)だとWSLが利用できません。企業によっては、「安定性などを確保するために、OSに対する頻繁な変更は行いたくない」場合、このモデルが採用されている可能性があります。</p>
+<p>Windows 10だとWSL（Windows Subsystem for Linux）で、UbuntuなどのLinuxディストリビューションを利用できます・・・が、Win10のリリースモデルの1つ、Enterprise LTSB(Long-Term Servicing Branch)だとWSLが利用できません。企業によっては、「安定性などを確保するために、OSに対する頻繁な変更は行いたくない」場合、このモデルが採用されている可能性があります。</p>
 
 <p>この場合も、やっぱりbusyboxの出番です。</p>
 
-<h2 id="余談２-cygwinとかじゃダメなの">（余談２）Cygwinとかじゃダメなの？</h2>
+<h3 id="余談2-cygwinとかじゃダメなの">（余談2）Cygwinとかじゃダメなの？</h3>
 
 <p>ダメじゃないです、全然大丈夫です。ただ、「ちょっと<code>sed</code>使いたいなー」っていう場合には、機能てんこ盛りなCygwinだとオーバースペックだったりします。</p>
 
-<p>VMwareなどの仮想環境が利用できるなら、そっちの方がいろいろ話が速いです。ただ、マシンスペックがイマイチだったり記憶容量があまりない場合は却ってストレスになるでしょうし、やっぱりちょっとだけ使うという用途に対してオーバースペックと言わざるを得ません。</p>
+<p>VMwareなどの仮想環境が利用できるなら、そっちの方がいろいろ便利です。ただ、マシンスペックがイマイチだったり記憶容量があまりない場合は却ってストレスになるでしょうし、やっぱりちょっとだけ使うという用途に対してオーバースペックと言わざるを得ません。</p>
 
-<h1 id="インストール">インストール</h1>
+<h2 id="インストール">インストール</h2>
 
 <ol>
-<li><a href="https://busybox.net/">サイト</a>からバイナリをダウンロードして、任意のフォルダにて展開する。</li>
-<li>展開したフォルダを環境変数に登録する（利用するだけなら必須ではないけど、登録しておくと後が楽）。</li>
+<li><a href="https://busybox.net/">サイト</a>からバイナリをダウンロードして、任意のフォルダーにて展開する。</li>
+<li>展開したフォルダーを環境変数に登録する（利用するだけなら必須ではないけど、登録しておくと後が楽）。</li>
 </ol>
 
 <p>終わりです。ダウンロードして展開すればいい実行ファイルなので、インストール権限は必要ないです。しかもめちゃくちゃ軽量なので、記憶容量をガツガツ食っちゃうこともありません。</p>
 
 <p>なお、ソースもダウンロードが可能ですが、あまりニーズはないだろうと判断し、この記事の中では触れません。</p>
 
-<h1 id="使い方">使い方</h1>
+<h2 id="使い方">使い方</h2>
 
-<h2 id="とりあえず実行してみる">とりあえず実行してみる</h2>
+<h3 id="とりあえず実行してみる">とりあえず実行してみる</h3>
 
 <p><code>busybox64.exe</code>と入力して実行してみます。</p>
 
@@ -194,9 +198,9 @@ Currently defined functions:
         uudecode, uuencode, vi, watch, wc, wget, which, whoami, whois, xargs, xxd, xz, xzcat, yes, zcat
 </code></pre>
 
-<p>利用方法や利用可能なコマンドが表示されます。<code>awk</code>や<code>find</code>、<code>grep</code>など一般的なコマンドが利用できることがわかります。</p>
+<p>利用方法や利用可能なコマンドが表示されます。<code>awk</code>や<code>find</code>、<code>grep</code>など一般的なコマンドを利用できることがわかります。</p>
 
-<h2 id="コマンドの実行方法">コマンドの実行方法</h2>
+<h3 id="コマンドの実行方法">コマンドの実行方法</h3>
 
 <p>コマンドプロンプトを立ち上げ、下記のように入力し実行します。</p>
 
@@ -217,14 +221,14 @@ Currently defined functions:
 
 <p>このように入力して実行すれば<code>l</code>と<code>a</code>のオプションが有効になります。</p>
 
-<h2 id="毎回busyboxって入力しなきゃいけないの">毎回busyboxって入力しなきゃいけないの？</h2>
+<h3 id="毎回busyboxって入力しなきゃいけないの">毎回busyboxって入力しなきゃいけないの？</h3>
 
 <p>もちろん、そんなことはないです。ログインシェルとして利用することも可能です。その場合のコマンドは下記の通りです。</p>
 
-<pre><code>  busybox64.exe sh -l
+<pre><code>busybox64.exe sh -l
 </code></pre>
 
-<h2 id="実行時の注意">実行時の注意</h2>
+<h3 id="実行時の注意">実行時の注意</h3>
 
 <p>前述の通り、busyboxはログインシェルとしても利用できます。ただし、コマンドによっては管理者権限が要求されているようで、「Permission Denied」と言われ実行できないケースがありました。自分が実行した際は、<code>grep</code>でこの症状が出ました。</p>
 
@@ -243,14 +247,14 @@ Currently defined functions:
 			<pubDate>Fri, 12 Apr 2019 15:27:02 +0900</pubDate>
 			
 			<guid>https://idontwannawork.github.io/posts/python-naming-conventions/</guid>
-			<description>命名規約のメモ PEP8に準拠。何番煎じかわからないけども自学用に。 推奨される命名規約 命名対象 ルール 例 備考 パッケージ、モジュール 全て小文字で短</description>
+			<description>命名規約のメモ PEP8に準拠。何番煎じかわからないけども自学用に。 推奨される命名規約 命名対象 ルール 例 備考 パッケージ、モジュール すべて小文字で</description>
 			<content type="html"><![CDATA[
 
-<h1 id="命名規約のメモ">命名規約のメモ</h1>
+<h2 id="命名規約のメモ">命名規約のメモ</h2>
 
 <p><a href="https://www.python.org/dev/peps/pep-0008/">PEP8</a>に準拠。何番煎じかわからないけども自学用に。</p>
 
-<h2 id="推奨される命名規約">推奨される命名規約</h2>
+<h3 id="推奨される命名規約">推奨される命名規約</h3>
 
 <table>
 <thead>
@@ -265,7 +269,7 @@ Currently defined functions:
 <tbody>
 <tr>
 <td align="center">パッケージ、モジュール</td>
-<td align="center">全て小文字で短く</td>
+<td align="center">すべて小文字で短く</td>
 <td align="center">flask, os</td>
 <td align="center">アンダースコアの利用は非推奨</td>
 </tr>
@@ -293,39 +297,39 @@ Currently defined functions:
 
 <tr>
 <td align="center">グローバル変数</td>
-<td align="center">全て小文字でアンダースコア区切り、2つアンダースコアを付与</td>
+<td align="center">すべて小文字でアンダースコア区切り、2つアンダースコアを付与</td>
 <td align="center"><code>__all__</code></td>
 <td align="center">グローバル変数をエクスポートするのを防ぐ</td>
 </tr>
 
 <tr>
 <td align="center">関数、変数</td>
-<td align="center">全て小文字でアンダースコア区切り</td>
+<td align="center">すべて小文字でアンダースコア区切り</td>
 <td align="center">my_funcion</td>
 <td align="center"></td>
 </tr>
 
 <tr>
 <td align="center">メソッド、インスタンス変数</td>
-<td align="center">全て小文字でアンダースコア区切り</td>
+<td align="center">すべて小文字でアンダースコア区切り</td>
 <td align="center">my_method</td>
 <td align="center"></td>
 </tr>
 
 <tr>
 <td align="center">定数</td>
-<td align="center">全て大文字でアンダースコア区切り</td>
+<td align="center">すべて大文字でアンダースコア区切り</td>
 <td align="center">MY_CONST</td>
 <td align="center"></td>
 </tr>
 </tbody>
 </table>
 
-<h2 id="ポピュラーな命名">ポピュラーな命名</h2>
+<h3 id="ポピュラーな命名">ポピュラーな命名</h3>
 
 <p>上記の基本的なルールに準拠して、実際にはどんな感じで命名をされているか、について。</p>
 
-<h3 id="1文字のみ">1文字のみ</h3>
+<h4 id="1文字のみ">1文字のみ</h4>
 
 <pre><code>b
 </code></pre>
@@ -337,7 +341,7 @@ Currently defined functions:
 
 <p>大文字1文字。</p>
 
-<h3 id="複数文字列">複数文字列</h3>
+<h4 id="複数文字列">複数文字列</h4>
 
 <pre><code>lowercase
 </code></pre>
@@ -359,7 +363,7 @@ Currently defined functions:
 
 <p>大文字たちとアンダースコア。</p>
 
-<h3 id="その他">その他</h3>
+<h4 id="その他">その他</h4>
 
 <pre><code>CapitalizedWords
 </code></pre>
@@ -382,10 +386,10 @@ Currently defined functions:
 			<pubDate>Thu, 11 Apr 2019 09:47:58 +0900</pubDate>
 			
 			<guid>https://idontwannawork.github.io/posts/aframe-particle/</guid>
-			<description>降らせるって何を？ こんな感じ。 See the Pen aframe_particle_star by idontwannawork (@idontwannawork) on CodePen. 結論 これを使います。 概要 webVR用のフレームワークA-Frameには様々なサードパーティー</description>
+			<description>降らせるって何を？ こんな感じ。 See the Pen aframe_particle_star by idontwannawork (@idontwannawork) on CodePen. 結論 これを使います。 概要 webVR用のフレームワークA-Frameにはさまざまなサードパーテ</description>
 			<content type="html"><![CDATA[
 
-<h1 id="降らせるって何を">降らせるって何を？</h1>
+<h2 id="降らせるって何を">降らせるって何を？</h2>
 
 <p>こんな感じ。</p>
 
@@ -396,17 +400,17 @@ Currently defined functions:
 </p>
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script></p>
 
-<h1 id="結論">結論</h1>
+<h2 id="結論">結論</h2>
 
 <p><a href="https://github.com/IdeaSpaceVR/aframe-particle-system-component">これ</a>を使います。</p>
 
-<h1 id="概要">概要</h1>
+<h2 id="概要">概要</h2>
 
-<p>webVR用のフレームワーク<a href="https://aframe.io/">A-Frame</a>には様々なサードパーティーのコンポーネントが存在します。その中で、「いろいろ降らせる」コンポーネントを実装します。これを実装することで「雪の降る町」や「チリの舞う荒野」なんかの表現ができます。</p>
+<p>webVR用のフレームワーク<a href="https://aframe.io/">A-Frame</a>にはさまざまなサードパーティーのコンポーネントが存在します。その中で、「いろいろ降らせる」コンポーネントを実装します。これを実装することで「雪の降る町」や「チリの舞う荒野」なんかの表現ができます。</p>
 
-<h1 id="設定値">設定値</h1>
+<h2 id="設定値">設定値</h2>
 
-<h2 id="preset">preset</h2>
+<h3 id="preset">preset</h3>
 
 <p><code>preset</code>の値で粒子の形を変えて降らせることができます。</p>
 
@@ -452,22 +456,22 @@ on <a href="https://codepen.io">CodePen</a>.</span>
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script></p></li>
 </ul>
 
-<h2 id="texture">texture</h2>
+<h3 id="texture">texture</h3>
 
 <pre><code>&lt;a-entity position=&quot;0 2.25 -15&quot; particle-system=&quot;preset: dust; texture: ./images/star2.png; color: #0000FF,#00FF00,#FF0000&quot;&gt;&lt;/a-entity&gt;
 </code></pre>
 
 <p>画像指定することでテクスチャを貼ることができます。ただ、あんまり粒子が小さい（デフォルトで1）だといまいち判別がつかないような・・・。</p>
 
-<h2 id="maxage">maxAge</h2>
+<h3 id="maxage">maxAge</h3>
 
 <p>粒子の最大経過時間（秒）。これを増やすと、粒子が長時間画面に留まる＝画面上の粒子の数が増えます。</p>
 
-<h2 id="size">size</h2>
+<h3 id="size">size</h3>
 
 <p>粒子の大きさ。デフォルトは1なのだけど、これだと星なのか雪なのかわからないくらい（落下スピードが異なるので、そこで区別はつくけど）なので、変更するとはっきり区別できるようになります。</p>
 
-<h2 id="color">color</h2>
+<h3 id="color">color</h3>
 
 <p>粒子の色。指定できるけど、2色くらいが見た目的に限度かな、と。あんまりカラフルだと目が疲れる・・・。</p>
 ]]></content>
@@ -479,33 +483,33 @@ on <a href="https://codepen.io">CodePen</a>.</span>
 			<pubDate>Fri, 05 Apr 2019 10:15:49 +0900</pubDate>
 			
 			<guid>https://idontwannawork.github.io/posts/make-site-with-hugo/</guid>
-			<description>Hugoとは Golangで作られている、静的サイトジェネレータ。なんでも、生成が速いらしいです。 今回はコイツを使って、サイトを生成し公開して</description>
+			<description>Hugoとは Golangで作られている、静的サイトジェネレーター。なんでも、生成が速いらしいです。 今回はコイツを使って、サイトを生成し公開し</description>
 			<content type="html"><![CDATA[
 
-<h1 id="hugoとは">Hugoとは</h1>
+<h2 id="hugoとは">Hugoとは</h2>
 
-<p>Golangで作られている、静的サイトジェネレータ。なんでも、生成が速いらしいです。</p>
+<p>Golangで作られている、静的サイトジェネレーター。なんでも、生成が速いらしいです。</p>
 
 <p>今回はコイツを使って、サイトを生成し公開してみようと思います。</p>
 
-<h1 id="この記事が役立つであろう人">この記事が役立つであろう人</h1>
+<h2 id="この記事が役立つであろう人">この記事が役立つであろう人</h2>
 
 <p>サイトを立ち上げたくて、ターミナルでの作業が苦でない人。また、自分でCSSなどをいじったりしてデザインするなら、記事を書くほうに労力を割きたい人。</p>
 
-<h1 id="手順">手順</h1>
+<h2 id="手順">手順</h2>
 
-<p>基本的には<a href="https://gohugo.io/getting-started/quick-start/">ここ</a>を参考にしています。以下の手順はWindows10にて行っているが、多分Macとかでも同様なはずです。</p>
+<p>基本的には<a href="https://gohugo.io/getting-started/quick-start/">ここ</a>を参考にしています。以下の手順はWindows 10にて行っているが、多分Macとかでも同様なはずです。</p>
 
 <p>なお、個人的な好みでWindowsのコマンドプロンプトではなくbusyboxで実行しているが、普通にコマンドプロンプトやPowerShellで実行しても問題ないと思います。</p>
 
 <ol>
 <li><p>Hugoのインストール</p>
 
-<p>Hugoの<a href="https://github.com/gohugoio/hugo/releases">Github</a>から、自分が利用するプラットフォーム用のインストーラをダウンロードして展開します。この記事を書いている現在での最新は0.54.0。</p>
+<p>Hugoの<a href="https://github.com/gohugoio/hugo/releases">Github</a>から、自分が利用するプラットフォーム用のインストーラーをダウンロードして展開します。この記事を書いている現在での最新は0.54.0。</p>
 
-<p>インストール後、Hugoのbin（実行ファイルが格納されているアドレス）を環境変数に追加します。GUIでもいいし、<code>setx</code>コマンドを実行しても問題ありません。インストールした後で、下記コマンドを実行してみます。</p>
+<p>インストール後、Hugoのbin（実行ファイルが格納されているアドレス）を環境変数に追加します。GUIでもいいし、<code>setx</code>コマンドを実行しても問題ありません。インストールしたあとで、下記コマンドを実行してみます。</p>
 
-<pre><code>~ $ hugo version
+<pre><code>$ hugo version
 Hugo Static Site Generator v0.54.0-B1A82C61 windows/amd64 BuildDate: 2019-02-01T09:42:02Z
 </code></pre>
 
@@ -513,25 +517,25 @@ Hugo Static Site Generator v0.54.0-B1A82C61 windows/amd64 BuildDate: 2019-02-01T
 
 <li><p>サイトを生成</p>
 
-<p>以下のコマンドを実行してサイトを生成します。<code>hoge</code>の部分は任意で、自分が生成したいサイト名でOKです。実行したら生成されたフォルダに移動します。</p>
+<p>以下のコマンドを実行してサイトを生成します。<code>hoge</code>の部分は任意で、自分が生成したいサイト名でOKです。実行したら生成されたフォルダーに移動します。</p>
 
-<pre><code>$ hugo new site hoge
-$ cd hoge
+<pre><code>hugo new site hoge
+cd hoge
 </code></pre></li>
 
 <li><p>テーマを決定</p>
 
-<p><a href="https://themes.gohugo.io/">Hugoのテーマを集めたページ</a>を参照して、好みのテーマを探します。カスタマイズしたり、自力で作成することももちろん可能ですが今回は割愛させていただきます。今回はミニマムなデザインが気に入ったので、<a href="https://themes.gohugo.io/hermit/">Hermit</a>にしてみました。</p>
+<p><a href="https://themes.gohugo.io/">Hugoのテーマを集めたページ</a>を参照して、好みのテーマを探します。カスタマイズしたり、自力で作成することももちろん可能ですが今回は割愛いたします。今回はミニマムなデザインが気に入ったので、<a href="https://themes.gohugo.io/hermit/">Hermit</a>にしてみました。</p>
 
 <p><img src="/images/hermit.png" alt="Hermit" /></p>
 
 <p>テーマを決めたら下記のコマンドを実行して、gitでGitHubから必要なファイルをダウンロードします。なお、導入手順はテーマのページにしっかり記述されていました。親切！</p>
 
-<pre><code>$ git init
-$ git submodule add https://github.com/Track3/hermit.git themes/hermit
+<pre><code>git init
+git submodule add https://github.com/Track3/hermit.git themes/hermit
 </code></pre>
 
-<p>ここまで実行すると、下記のようなフォルダとファイルの構成が出来上がっているはず。</p>
+<p>ここまで実行すると、下記のようなフォルダーとファイルの構成ができ上がっているはずです。</p>
 
 <pre><code>.
 ├── archetypes
@@ -543,9 +547,9 @@ $ git submodule add https://github.com/Track3/hermit.git themes/hermit
 └── themes
 </code></pre>
 
-<p>この時点で下記のコマンドを実行すると、<code>public</code>という名前でフォルダが作成されて、その中に生成されたHTMLファイルなどが格納されるはずです。ただし、この時点ではコンテンツを作成していないため、トップページだけで中身はなにもありません。</p>
+<p>この時点で下記のコマンドを実行すると、<code>public</code>という名前でフォルダーが作成されて、その中に生成されたHTMLファイルなどが格納されるはずです。ただし、この時点ではコンテンツを作成していないため、トップページだけで中身はなにもありません。</p>
 
-<pre><code>$ hugo
+<pre><code>hugo
 </code></pre></li>
 
 <li><p>設定ファイルを変更</p>
@@ -554,21 +558,21 @@ $ git submodule add https://github.com/Track3/hermit.git themes/hermit
 
 <p>オフィシャルでは下記のコマンドを実行するだけでいい、としています。要はテーマの名前を追加しています。なぜかというと、生成直後の設定ファイルの中身では、何のテーマを利用するか記述がないためわからないから追記してやる必要があるわけです。</p>
 
-<pre><code>$ echo 'theme = &quot;ananke&quot;' &gt;&gt; config.toml
+<pre><code>echo 'theme = &quot;ananke&quot;' &gt;&gt; config.toml
 </code></pre>
 
-<p>ただ、一応これ以外にも後々修正したり追記したりする部分があるので、この時点で編集してしまっても問題ありません。それと、他のテーマについては不明ですがHermitに関して言えば、<code>config.toml</code>は自分で記述するのではなくて、<a href="https://github.com/Track3/hermit/blob/master/exampleSite/config.toml">用意されたもの</a>を流用して中身を編集した方が話が早かったです。というのは、テーマによってはこの設定ファイル中に特定の設定値がないと、<code>hugo</code>コマンドでのサイト生成時にエラーになる可能性があるから・・・実際、それで30分ほど無駄にしました_(┐「ε:)_</p></li>
+<p>ただ、一応これ以外にも後々修正や追記したりする部分があるので、この時点で編集してしまっても問題ありません。それと、他のテーマについては不明ですがHermitに関して言えば、<code>config.toml</code>は自分で記述するのではなくて、<a href="https://github.com/Track3/hermit/blob/master/exampleSite/config.toml">用意されたもの</a>を流用して中身を編集した方が便利です。というのは、テーマによってはこの設定ファイル中に特定の設定値がないと、<code>hugo</code>コマンドでのサイト生成の際エラーになる可能性があるから・・・実際、それで30分ほどムダにしました_(┐「ε:)_</p></li>
 
 <li><p>記事を作成</p>
 
-<p>下記のコマンドを実行すると<code>content</code>フォルダ配下にファイルを生成します。</p>
+<p>下記のコマンドを実行すると<code>content</code>フォルダー配下にファイルを生成します。</p>
 
-<pre><code>$ hugo new hoge.md
+<pre><code>hugo new hoge.md
 </code></pre>
 
-<p>この際、出力先のフォルダを指定することができます。下記のコマンドでは、<code>content</code>フォルダ配下に<code>posts</code>フォルダが存在しなければ自動的に生成してから、ファイルを生成します。カテゴリだとかジャンル別にファイルを分別したい場合に有効な方法。</p>
+<p>この際、出力先のフォルダーを指定できます。下記のコマンドでは、<code>content</code>フォルダー配下に<code>posts</code>フォルダーが存在しなければ自動的に生成してから、ファイルを生成します。カテゴリだとかジャンル別にファイルを分別したい場合に有効な方法。</p>
 
-<pre><code>$ hugo new posts/hoge.md
+<pre><code>hugo new posts/hoge.md
 </code></pre>
 
 <p>生成された直後のファイルの中身は下記のような感じ。</p>
@@ -580,15 +584,15 @@ draft: true
 ---
 </code></pre>
 
-<p>ここに記事をMarkdown形式で記述します。ちなみに、ファイル冒頭の<code>draft</code>はtrueだと下書き扱いになります。<code>hugo server</code>とかでファイル生成すると内容の確認はできるんだけど、<code>public</code>フォルダには出力されません（下書きだから）。なので、サイト公開時には忘れずに<code>draft: false</code>にしておく必要があります。じゃないと、地味に30分くらいハマることになるので_(┐「ε:)_</p>
+<p>ここに記事をMarkdown形式で記述します。ちなみに、ファイル冒頭の<code>draft</code>はtrueだと下書き扱いになります。<code>hugo server</code>とかでファイル生成すると内容の確認はできるんだけど、<code>public</code>フォルダーには出力されません（下書きだから）。なので、サイト公開時には忘れずに<code>draft: false</code>としておく必要があります。じゃないと、地味に30分くらいハマることになるので_(┐「ε:)_</p>
 
-<p>なお、Windowsあるある・・・かどうかはよくわからないけど、UTF-8でファイルを保存しておかないとコマンド<code>hugo</code>の実行時にエラーになるので注意。</p></li>
+<p>なお、Windowsあるある・・・かどうかはよくわからないけど、UTF-8でファイルを保存しておかないとコマンド<code>hugo</code>の実行の際エラーになるので注意が必要です。</p></li>
 
 <li><p>サーバーを起動して確認</p>
 
 <p>下記のコマンドを実行します。</p>
 
-<pre><code>$ hugo server -D
+<pre><code>hugo server -D
 </code></pre>
 
 <p>その後ブラウザで<a href="http://localhost:1313/"><code>http://localhost:1313/</code></a>にアクセスします。</p>
@@ -601,7 +605,7 @@ draft: true
 
 <p>ここからの作業は任意ですが、大抵のblogにはコンテンツ以外に「このページについて」みたいな固定ページが存在します。そういった、コンテンツ以外のページも必要に応じて追加します。</p>
 
-<p>追加する手順は基本的に記事を生成する際と何ら変わりません。注意するのは<code>content</code>フォルダ配下の構成と<code>config.toml</code>ファイルの設定内容。例えば、<code>content</code>フォルダの内容が下記の通りだったとします。<code>page</code>と<code>posts</code>はフォルダです。</p>
+<p>追加する手順は基本的に記事を生成する際と何ら変わりません。注意するのは<code>content</code>フォルダー配下の構成と<code>config.toml</code>ファイルの設定内容。たとえば、<code>content</code>フォルダーの内容が下記の通りだったとします。<code>page</code>と<code>posts</code>はフォルダーです。</p>
 
 <pre><code>.
 ├── page
@@ -615,31 +619,31 @@ draft: true
 
 <p>この場合、設定ファイルの<code>config.toml</code>の内容を下記の通り記述することで、ファイルと生成後の出力内容を紐づけることができます。</p>
 
-<pre><code># コンテンツ用設定
+<pre><code>## コンテンツ用設定
   [[menu.main]]
     name = &quot;Posts&quot;
     url = &quot;posts/&quot;
     weight = 10
 
-# 固定ページ用設定。
+## 固定ページ用設定。
   [[menu.main]]
     name = &quot;pages&quot;
     url = &quot;page/&quot;
     weight = 10
 
-# 「このページについて」ページの設定。
+## 「このページについて」ページの設定。
   [[menu.main]]
     name = &quot;About&quot;
     url = &quot;about/&quot;
     weight = 10
 </code></pre>
 
-<p>なお、ここで<code>*.md</code>ファイルを単体で置いておくと1枚の単体ページとしてHTMLファイル生成されます。が、1つ以上の<code>*.md</code>ファイルをフォルダ配下に格納しておくと、各記事をHTMLファイルに変換するのと同時に、自動的にリストページを生成してくれます。便利。</p>
+<p>なお、ここで<code>*.md</code>ファイルを単体で置いておくと1枚の単体ページとしてHTMLファイル生成されます。が、1つ以上の<code>*.md</code>ファイルをフォルダー配下に格納しておくと、各記事をHTMLファイルに変換するのと同時に、自動的にリストページを生成してくれます。便利。</p>
 
-<p>ただし、前述の下書き設定<code>draft</code>がtrueになっていたりすると、Markdownファイルがあっても下書き扱いとなるのでHTMLファイルが生成されません（ローカルでの内容確認はできるが、<code>public</code>フォルダに出力されない）。そのため、メニューに項目があってもファイルが存在せず404になってしまうので、そこだけは注意が必要です。</p></li>
+<p>ただし、前述の下書き設定<code>draft</code>がtrueになっていたりすると、Markdownファイルがあっても下書き扱いとなるのでHTMLファイルが生成されません（ローカルでの内容確認はできるが、<code>public</code>フォルダーに出力されない）。そのため、メニューに項目があってもファイルが存在せず404になってしまうので、そこだけは注意が必要です。</p></li>
 </ol>
 
-<h1 id="というわけで">というわけで</h1>
+<h2 id="というわけで">というわけで</h2>
 
 <p>当ページは<a href="https://gohugo.io/">Hugo</a>と<a href="https://github.com/Track3/hermit">Hermit</a>で作成されています_(┐「ε:)_</p>
 ]]></content>
@@ -654,26 +658,26 @@ draft: true
 			<description>チュートリアルってあるよね どんなプログラミング言語やライブラリやフレームワークでもあるもの、チュートリアル。「Getting Started」</description>
 			<content type="html"><![CDATA[
 
-<h1 id="チュートリアルってあるよね">チュートリアルってあるよね</h1>
+<h2 id="チュートリアルってあるよね">チュートリアルってあるよね</h2>
 
 <p>どんなプログラミング言語やライブラリやフレームワークでもあるもの、チュートリアル。「Getting Started」とか書かれたりもする。そして大抵の人がチュートリアルに触れて、場合によってはちょっと値を自分流に編集したりして、対象の雰囲気をざっくり掴むのに使う。そして、そこから「自分が作りたいもの」を目指していく。</p>
 
 <p>文章として記述するとこれだけなんだけど、自分はチュートリアルをやった<strong>直後にモチベーションがガクッと下がる</strong>。折れるまでは行かなくとも、再起するのに苦労する。</p>
 
-<h1 id="何故なんだぜ">何故なんだぜ</h1>
+<h2 id="なぜなんだぜ">なぜなんだぜ</h2>
 
 <p>結論から言ってしまえば、<strong>チュートリアル卒業レベルでは作りたいものは作れない</strong>から。</p>
 
-<h1 id="何言ってんだ">何言ってんだ</h1>
+<h2 id="何言ってんだ">何言ってんだ</h2>
 
-<p>「チュートリアル」は基本的にほんの触りだけ。だから内容としては薄かったりしょぼかったりする。仕方ない、「触り」だもの。
-「自分が作りたいもの」は、既存の製品だったりサービスだったり「すでに稼働しているスゲーやつ」を見た後で、「特定の問題やニーズを解消したい」あるいは「似たものを作りたい」という風に発生する感情だったりする。</p>
+<p>「チュートリアル」は基本的にほんの触りだけ。だから内容としては薄かったり、しょぼかったりする。仕方ない、「触り」だもの。
+「自分が作りたいもの」は、既存の製品やサービスだったり「すでに稼働しているスゲーやつ」を見た後で、「特定の問題やニーズを解消したい」あるいは「似たものを作りたい」という風に発生する感情だったりする。</p>
 
 <p>大抵はこの感情が発露する時点で、中途半端に目が肥えていたり、利用する側としての経験値を得てしまっている。</p>
 
 <p>たぶん、これが問題なんだ。</p>
 
-<h1 id="だからどういうことだってばよ">だからどういうことだってばよ</h1>
+<h2 id="だからどういうことだってばよ">だからどういうことだってばよ</h2>
 
 <p>中途半端に目が肥えてしまった上に、なまじ既存サービスが利用できてしまうため、チュートリアルに毛が生えたレベルでは下記の感情に対処しにくい。</p>
 
@@ -683,14 +687,14 @@ draft: true
 <li>そもそも自分が作る必要あるの？</li>
 </ul>
 
-<h1 id="あー-なんて言えばいいのかな">あー・・・なんて言えばいいのかな</h1>
+<h2 id="あー-なんて言えばいいのかな">あー・・・なんて言えばいいのかな</h2>
 
 <p>こんな例えはどうだろう。</p>
 
 <p>ふと、「アクションゲームを作りたい」と思ったあなた。そう、そこのあなた。どうして作りたいと思った？アサシ〇クリードとかプレイして、「面白えー！すげー！俺も作ってみてー！」って、そう思ったんじゃない？「これで俺も『クリエイター』で『ミリオネア』だぜー！うひょー！」とか、人と場合によっちゃ思ったんじゃない？
 そして、その感情迸るままUnityのチュートリアルに触れたりしちゃってるんじゃない？</p>
 
-<p>あるいはTwit〇erにほんのちょっとした不満のあるあなた。そう、あなた。確かにTwit〇erは、興味のあるカテゴリだけ抽出してタイムラインに流すのは難しい。うん、その通りだ。プログラミング関係がフォローした人が、プログラミングのことだけツイートすることってあんまりないよね。場合によっては旅行のことだったり、引退するスポーツ選手のことをツイートしてたりする。
+<p>あるいはTwit〇erにほんのちょっとした不満のあるあなた。そう、あなた。確かにTwit〇erは、興味のあるカテゴリだけ抽出してタイムラインに流すのは難しい。うん、その通りだ。プログラミング関係でフォローした人が、プログラミングのことだけツイートすることってあんまりないよね。場合によっては旅行のことだったり、引退するスポーツ選手のことをツイートしてたりする。
 だから「カテゴライズして必要な情報だけタイムラインに流したいな。そういうサービス作ろうかな」って思ったりするんじゃない？そして「動作が軽いって評判のGolangやってみるかな」って思ったりして、Gopherに見守られながらチュートリアルをやってみたりしてるんだよね？</p>
 
 <p>オーライ、そこで質問なんだけど、そのチュートリアルってアレク〇オスが画面を縦横無尽に動き回るような、そんな<strong>アグレッシブで派手なチュートリアル</strong>かな？
@@ -700,7 +704,7 @@ draft: true
 
 <p>そんな訳がない。<strong>そんな訳がないのだ</strong>。</p>
 
-<h1 id="現実に立ち返る">現実に立ち返る</h1>
+<h2 id="現実に立ち返る">現実に立ち返る</h2>
 
 <p>昨今あらゆる機能や情報が提供されるwebサービスにおいても、ジャンルが細分化されまくってるゲームもスマートフォンのアプリにおいても同様のことが言える。
 自分よりずっと知識も経験も技術も熱意も、場合によっては将来の時間すらも持ち合わせた先人たちがいる。そんな一騎当千の偉人たちが綿々と作り上げてきた実績を見た、一介の雑兵ができることなどたかが知れているんだ。</p>

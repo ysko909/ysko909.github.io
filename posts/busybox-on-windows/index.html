@@ -14,7 +14,7 @@
 
 <meta itemprop="datePublished" content="2019-04-16T09:38:26&#43;09:00" />
 <meta itemprop="dateModified" content="2019-04-16T09:38:26&#43;09:00" />
-<meta itemprop="wordCount" content="2156">
+<meta itemprop="wordCount" content="2154">
 
 
 
@@ -74,23 +74,27 @@
 			<div class="content">
 				
 
-<h1 id="結論">結論<a href="#結論" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<h2 id="結論">結論<a href="#結論" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、<a href="https://busybox.net/">busybox</a>を使えばいいよ！</p>
 
-<h1 id="はじめに">はじめに<a href="#はじめに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<h2 id="はじめに">はじめに<a href="#はじめに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>仕事ではWindows、プライベートではMacまたはLinuxなんて人もいるかもしれません。そこな貴方、こんなシチュエーションがありませんでしょうか？</p>
 
 <blockquote>
 <p>ふと仕事中に「<code>grep</code>使いたいなー」とか「<code>awk</code>使いたいなー」とかなっても、Windowsのコマンドプロンプトじゃ足りないし、PowerShellはあの文法がいまいち性に合わない。ガッツリ使うわけじゃないから、わざわざ端末や仮想環境を用意するというわけにもいかない。</p>
+</blockquote>
 
+<p>とか、</p>
+
+<blockquote>
 <p>Windows使ってるのに普段のMacのノリで<code>ls</code>って入力しちゃって、Windowsに「そんなコマンドないよ」と言われた経験がある。</p>
 </blockquote>
 
 <p>そんな貴方（私）のため、busyboxが十徳ナイフのごとく活躍してくれます。</p>
 
-<h1 id="この記事の対象者">この記事の対象者<a href="#この記事の対象者" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<h2 id="この記事の対象者">この記事の対象者<a href="#この記事の対象者" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>以下に当てはまる方は、busyboxで幸せになれるかもしれません。</p>
 
@@ -100,32 +104,32 @@
 <li>Hyper-Vなどの仮想環境がない</li>
 </ul>
 
-<h2 id="余談-win10だとlinux使えなかったっけ">（余談）Win10だとLinux使えなかったっけ？<a href="#余談-win10だとlinux使えなかったっけ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h3 id="余談1-win10だとlinux使えなかったっけ">（余談1）Win10だとLinux使えなかったっけ？<a href="#余談1-win10だとlinux使えなかったっけ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 
-<p>Windows10だとWSL（Windows Subsystem for Linux）で、UbuntuなどのLinuxディストリビューションを利用できます・・・が、Win10のリリースモデルの一つ、Enterprise LTSB(Long-Term Servicing Branch)だとWSLが利用できません。企業によっては、「安定性などを確保するために、OSに対する頻繁な変更は行いたくない」場合、このモデルが採用されている可能性があります。</p>
+<p>Windows 10だとWSL（Windows Subsystem for Linux）で、UbuntuなどのLinuxディストリビューションを利用できます・・・が、Win10のリリースモデルの1つ、Enterprise LTSB(Long-Term Servicing Branch)だとWSLが利用できません。企業によっては、「安定性などを確保するために、OSに対する頻繁な変更は行いたくない」場合、このモデルが採用されている可能性があります。</p>
 
 <p>この場合も、やっぱりbusyboxの出番です。</p>
 
-<h2 id="余談２-cygwinとかじゃダメなの">（余談２）Cygwinとかじゃダメなの？<a href="#余談２-cygwinとかじゃダメなの" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h3 id="余談2-cygwinとかじゃダメなの">（余談2）Cygwinとかじゃダメなの？<a href="#余談2-cygwinとかじゃダメなの" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 
 <p>ダメじゃないです、全然大丈夫です。ただ、「ちょっと<code>sed</code>使いたいなー」っていう場合には、機能てんこ盛りなCygwinだとオーバースペックだったりします。</p>
 
-<p>VMwareなどの仮想環境が利用できるなら、そっちの方がいろいろ話が速いです。ただ、マシンスペックがイマイチだったり記憶容量があまりない場合は却ってストレスになるでしょうし、やっぱりちょっとだけ使うという用途に対してオーバースペックと言わざるを得ません。</p>
+<p>VMwareなどの仮想環境が利用できるなら、そっちの方がいろいろ便利です。ただ、マシンスペックがイマイチだったり記憶容量があまりない場合は却ってストレスになるでしょうし、やっぱりちょっとだけ使うという用途に対してオーバースペックと言わざるを得ません。</p>
 
-<h1 id="インストール">インストール<a href="#インストール" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<h2 id="インストール">インストール<a href="#インストール" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <ol>
-<li><a href="https://busybox.net/">サイト</a>からバイナリをダウンロードして、任意のフォルダにて展開する。</li>
-<li>展開したフォルダを環境変数に登録する（利用するだけなら必須ではないけど、登録しておくと後が楽）。</li>
+<li><a href="https://busybox.net/">サイト</a>からバイナリをダウンロードして、任意のフォルダーにて展開する。</li>
+<li>展開したフォルダーを環境変数に登録する（利用するだけなら必須ではないけど、登録しておくと後が楽）。</li>
 </ol>
 
 <p>終わりです。ダウンロードして展開すればいい実行ファイルなので、インストール権限は必要ないです。しかもめちゃくちゃ軽量なので、記憶容量をガツガツ食っちゃうこともありません。</p>
 
 <p>なお、ソースもダウンロードが可能ですが、あまりニーズはないだろうと判断し、この記事の中では触れません。</p>
 
-<h1 id="使い方">使い方<a href="#使い方" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h1>
+<h2 id="使い方">使い方<a href="#使い方" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
-<h2 id="とりあえず実行してみる">とりあえず実行してみる<a href="#とりあえず実行してみる" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h3 id="とりあえず実行してみる">とりあえず実行してみる<a href="#とりあえず実行してみる" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 
 <p><code>busybox64.exe</code>と入力して実行してみます。</p>
 
@@ -161,9 +165,9 @@ Currently defined functions:
         uudecode, uuencode, vi, watch, wc, wget, which, whoami, whois, xargs, xxd, xz, xzcat, yes, zcat
 </code></pre>
 
-<p>利用方法や利用可能なコマンドが表示されます。<code>awk</code>や<code>find</code>、<code>grep</code>など一般的なコマンドが利用できることがわかります。</p>
+<p>利用方法や利用可能なコマンドが表示されます。<code>awk</code>や<code>find</code>、<code>grep</code>など一般的なコマンドを利用できることがわかります。</p>
 
-<h2 id="コマンドの実行方法">コマンドの実行方法<a href="#コマンドの実行方法" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h3 id="コマンドの実行方法">コマンドの実行方法<a href="#コマンドの実行方法" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 
 <p>コマンドプロンプトを立ち上げ、下記のように入力し実行します。</p>
 
@@ -184,14 +188,14 @@ Currently defined functions:
 
 <p>このように入力して実行すれば<code>l</code>と<code>a</code>のオプションが有効になります。</p>
 
-<h2 id="毎回busyboxって入力しなきゃいけないの">毎回busyboxって入力しなきゃいけないの？<a href="#毎回busyboxって入力しなきゃいけないの" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h3 id="毎回busyboxって入力しなきゃいけないの">毎回busyboxって入力しなきゃいけないの？<a href="#毎回busyboxって入力しなきゃいけないの" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 
 <p>もちろん、そんなことはないです。ログインシェルとして利用することも可能です。その場合のコマンドは下記の通りです。</p>
 
-<pre><code>  busybox64.exe sh -l
+<pre><code>busybox64.exe sh -l
 </code></pre>
 
-<h2 id="実行時の注意">実行時の注意<a href="#実行時の注意" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h3 id="実行時の注意">実行時の注意<a href="#実行時の注意" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 
 <p>前述の通り、busyboxはログインシェルとしても利用できます。ただし、コマンドによっては管理者権限が要求されているようで、「Permission Denied」と言われ実行できないケースがありました。自分が実行した際は、<code>grep</code>でこの症状が出ました。</p>
 
@@ -208,7 +212,7 @@ Currently defined functions:
 				<p>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/busybox">busybox</a></span>
 				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2156 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2154 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-04-16 00:38 &#43;0000</p>
 			</footer>
 		</article>

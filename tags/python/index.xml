@@ -26,7 +26,7 @@
       <pubDate>Fri, 12 Apr 2019 15:27:02 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/python-naming-conventions/</guid>
-      <description>命名規約のメモ PEP8に準拠。何番煎じかわからないけども自学用に。 推奨される命名規約 命名対象 ルール 例 備考 パッケージ、モジュール 全て小文字で短</description>
+      <description>命名規約のメモ PEP8に準拠。何番煎じかわからないけども自学用に。 推奨される命名規約 命名対象 ルール 例 備考 パッケージ、モジュール すべて小文字で</description>
     </item>
     
   </channel>
