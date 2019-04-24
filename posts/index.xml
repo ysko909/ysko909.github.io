@@ -6,8 +6,49 @@
 		<description>Recent content in Posts on Come as you are</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Mon, 22 Apr 2019 13:06:22 +0900</lastBuildDate>
+		<lastBuildDate>Wed, 24 Apr 2019 10:38:54 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>json.dumpsでの文字化けを解消する</title>
+			<link>https://idontwannawork.github.io/posts/garbled-text-with-json-dumps/</link>
+			<pubDate>Wed, 24 Apr 2019 10:38:54 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/garbled-text-with-json-dumps/</guid>
+			<description>概要 Pythonでjson.dumps()した際に、日本語が文字化けするのを防ぐメモ。 環境 Windows 10 Python 3.6 実際のコード &amp;gt;&amp;gt;&amp;gt; import json &amp;gt;&amp;gt;&amp;gt; dic = {&amp;quot;hoge&amp;quot;:&amp;quot;foo&amp;quot;, &amp;quot;fuga&amp;quot;:&amp;quot;bar&amp;quot;, &amp;quot;piyo&amp;quot;:&amp;quot;baz&amp;quot;} &amp;gt;&amp;gt;&amp;gt; json.dumps(dic) &#39;{&amp;quot;hoge&amp;quot;: &amp;quot;foo&amp;quot;, &amp;quot;fuga&amp;quot;: &amp;quot;bar&amp;quot;,</description>
+			<content type="html"><![CDATA[
+
+<h1 id="概要">概要</h1>
+
+<p>Pythonで<code>json.dumps()</code>した際に、日本語が文字化けするのを防ぐメモ。</p>
+
+<h1 id="環境">環境</h1>
+
+<ul>
+<li>Windows 10</li>
+<li>Python 3.6</li>
+</ul>
+
+<h1 id="実際のコード">実際のコード</h1>
+
+<pre><code>&gt;&gt;&gt; import json
+&gt;&gt;&gt; dic = {&quot;hoge&quot;:&quot;foo&quot;, &quot;fuga&quot;:&quot;bar&quot;, &quot;piyo&quot;:&quot;baz&quot;}
+&gt;&gt;&gt; json.dumps(dic)
+'{&quot;hoge&quot;: &quot;foo&quot;, &quot;fuga&quot;: &quot;bar&quot;, &quot;piyo&quot;: &quot;baz&quot;}'
+&gt;&gt;&gt; dicj = {&quot;日本語&quot;:&quot;項目名&quot;, &quot;にほんご&quot;:&quot;こうもくめい&quot;}
+&gt;&gt;&gt; json.dumps(dicj)
+'{&quot;\\u65e5\\u672c\\u8a9e&quot;: &quot;\\u9805\\u76ee\\u540d&quot;, &quot;\\u306b\\u307b\\u3093\\u3054&quot;: &quot;\\u3053\\u3046\\u3082\\u304f\\u3081\\u3044&quot;}'
+</code></pre>
+
+<p>こんな感じで、単純に<code>json.dumps()</code>すると文字化けする。この場合、<code>ensure_ascii</code>オプションで<code>False</code>を指定する。</p>
+
+<pre><code>&gt;&gt;&gt; json.dumps(dicj, ensure_ascii=False)
+'{&quot;日本語&quot;: &quot;項目名&quot;, &quot;にほんご&quot;: &quot;こうもくめい&quot;}'
+</code></pre>
+
+<p>すると、文字化けが解消された。</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>Windowsでドット付ファイルを作成する</title>

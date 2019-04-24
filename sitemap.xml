@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://idontwannawork.github.io/posts/garbled-text-with-json-dumps/</loc>
+    <lastmod>2019-04-24T10:38:54+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/posts/make-file-with-dot-on-windows/</loc>
     <lastmod>2019-04-22T13:06:22+09:00</lastmod>
   </url>
@@ -51,7 +56,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/</loc>
-    <lastmod>2019-04-22T13:06:22+09:00</lastmod>
+    <lastmod>2019-04-24T10:38:54+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -69,13 +74,13 @@
   
   <url>
     <loc>https://idontwannawork.github.io/posts/</loc>
-    <lastmod>2019-04-22T13:06:22+09:00</lastmod>
+    <lastmod>2019-04-24T10:38:54+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://idontwannawork.github.io/tags/python/</loc>
-    <lastmod>2019-04-12T15:27:02+09:00</lastmod>
+    <lastmod>2019-04-24T10:38:54+09:00</lastmod>
     <priority>0</priority>
   </url>
   
