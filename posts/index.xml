@@ -40,13 +40,13 @@
 '{&quot;\\u65e5\\u672c\\u8a9e&quot;: &quot;\\u9805\\u76ee\\u540d&quot;, &quot;\\u306b\\u307b\\u3093\\u3054&quot;: &quot;\\u3053\\u3046\\u3082\\u304f\\u3081\\u3044&quot;}'
 </code></pre>
 
-<p>こんな感じで、単純に<code>json.dumps()</code>すると文字化けする。この場合、<code>ensure_ascii</code>オプションで<code>False</code>を指定する。</p>
+<p>こんな感じで、単純に<code>json.dumps()</code>すると文字化けしてしまいます。この場合、<code>ensure_ascii</code>オプションで<code>False</code>を指定します。</p>
 
 <pre><code>&gt;&gt;&gt; json.dumps(dicj, ensure_ascii=False)
 '{&quot;日本語&quot;: &quot;項目名&quot;, &quot;にほんご&quot;: &quot;こうもくめい&quot;}'
 </code></pre>
 
-<p>すると、文字化けが解消された。</p>
+<p>すると、上記のように文字化けが解消されました。</p>
 ]]></content>
 		</item>
 		
