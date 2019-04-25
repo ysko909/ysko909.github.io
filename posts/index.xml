@@ -28,7 +28,7 @@
 
 <p>そうしたら憎きアイツが出てきたわけです。</p>
 
-<p><img src="2019-04-25-10-59-29.png" alt="pic" /></p>
+<p><img src="2019-04-25-13-12-56.png" alt="pic" /></p>
 
 <p>出たよ、<code>UnicodeDecodeError</code>・・・。</p>
 
@@ -42,9 +42,7 @@
 
 <h2 id="コード">コード</h2>
 
-<pre><code># -*- Coding: utf-8 -*-
-
-s = '\x85'
+<pre><code>s = '\x85'
 print(s)
 
 with open('C:/app/hoge.txt', mode='w', encoding='utf-8') as f:
@@ -96,7 +94,7 @@ with open('C:/app/hoge.txt', mode='r') as g:
 
 <p>ちなみに、書き出しの際に<code>encoding</code>を指定しなかった場合も、読み込みと同様にエラーになります。当然っちゃ当然ですね。</p>
 
-<p><img src="2019-04-25-11-00-17.png" alt="pic" /></p>
+<p><img src="2019-04-25-13-13-57.png" alt="pic" /></p>
 
 <p>とりあえず今回は、両方に<code>encoding</code>を指定する方法を取りました。</p>
 
