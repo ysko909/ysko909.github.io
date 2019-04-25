@@ -39,12 +39,12 @@
     </item>
     
     <item>
-      <title>WindowsでLinuxのコマンドが使える「busybox」</title>
+      <title>WindowsでLinuxのコマンドが使える「BusyBox」</title>
       <link>https://idontwannawork.github.io/posts/busybox-on-windows/</link>
       <pubDate>Tue, 16 Apr 2019 09:38:26 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/busybox-on-windows/</guid>
-      <description>結論 普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、busyboxを使えばいいよ</description>
+      <description>結論 普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、BusyBoxを使えばいいよ</description>
     </item>
     
     <item>

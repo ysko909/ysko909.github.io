@@ -58,7 +58,7 @@ with open('C:/app/hoge.txt', mode='r') as g:
 
 <h2 id="原因">原因</h2>
 
-<p>つまるところ、読み込み時の<code>open</code>で引数の<code>encoding</code>を指定していなかったからでした_:(´ཀ`」 ∠):_</p>
+<p>つまるところ、読み込み時の<code>open</code>で引数の<code>encoding</code>を指定していなかったからでした_:(´ཀ`」∠):_</p>
 
 <p>書き出しの際には下記のように<code>encoding</code>を指定していました。</p>
 
@@ -201,17 +201,17 @@ with open('C:/app/hoge.txt', mode='r') as g:
 		</item>
 		
 		<item>
-			<title>WindowsでLinuxのコマンドが使える「busybox」</title>
+			<title>WindowsでLinuxのコマンドが使える「BusyBox」</title>
 			<link>https://idontwannawork.github.io/posts/busybox-on-windows/</link>
 			<pubDate>Tue, 16 Apr 2019 09:38:26 +0900</pubDate>
 			
 			<guid>https://idontwannawork.github.io/posts/busybox-on-windows/</guid>
-			<description>結論 普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、busyboxを使えばいいよ</description>
+			<description>結論 普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、BusyBoxを使えばいいよ</description>
 			<content type="html"><![CDATA[
 
 <h2 id="結論">結論</h2>
 
-<p>普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、<a href="https://busybox.net/">busybox</a>を使えばいいよ！</p>
+<p>普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、<a href="https://BusyBox.net/">BusyBox</a>を使えばいいよ！</p>
 
 <h2 id="はじめに">はじめに</h2>
 
@@ -227,11 +227,11 @@ with open('C:/app/hoge.txt', mode='r') as g:
 <p>Windows使ってるのに普段のMacのノリで<code>ls</code>って入力しちゃって、Windowsに「そんなコマンドないよ」と言われた経験がある。</p>
 </blockquote>
 
-<p>そんな貴方（私）のため、busyboxが十徳ナイフのごとく活躍してくれます。</p>
+<p>そんな貴方（私）のため、BusyBoxが十徳ナイフのごとく活躍してくれます。</p>
 
 <h2 id="この記事の対象者">この記事の対象者</h2>
 
-<p>以下に当てはまる方は、busyboxで幸せになれるかもしれません。</p>
+<p>以下に当てはまる方は、BusyBoxで幸せになれるかもしれません。</p>
 
 <ul>
 <li>Windowsを利用しているがUnixのコマンドを使いたい</li>
@@ -243,7 +243,7 @@ with open('C:/app/hoge.txt', mode='r') as g:
 
 <p>Windows 10だとWSL（Windows Subsystem for Linux）で、UbuntuなどのLinuxディストリビューションを利用できます・・・が、リリースモデルの1つ、Enterprise LTSC（Long Term Servicing Channel）だとWSLが利用できません。企業によっては、「安定性などを確保するために、OSに対する頻繁な変更は行いたくない」場合、このモデルが採用されている可能性があります。</p>
 
-<p>この場合も、やっぱりbusyboxの出番です。</p>
+<p>この場合も、やっぱりBusyBoxの出番です。</p>
 
 <blockquote>
 <p>※以前は「Long Term Servicing Branch（LTSB）」という名前でリリースされていましたが、現在は「Long Term Servicing Channel（LTSC）」に名称変更されました。</p>
@@ -258,7 +258,7 @@ with open('C:/app/hoge.txt', mode='r') as g:
 <h2 id="インストール">インストール</h2>
 
 <ol>
-<li><a href="https://busybox.net/">サイト</a>からバイナリをダウンロードして、任意のフォルダーにて展開する。</li>
+<li><a href="https://BusyBox.net/">サイト</a>からバイナリをダウンロードして、任意のフォルダーにて展開する。</li>
 <li>展開したフォルダーを環境変数に登録する（利用するだけなら必須ではないけど、登録しておくと後が楽）。</li>
 </ol>
 
@@ -270,9 +270,9 @@ with open('C:/app/hoge.txt', mode='r') as g:
 
 <h3 id="とりあえず実行してみる">とりあえず実行してみる</h3>
 
-<p><code>busybox64.exe</code>と入力して実行してみます。</p>
+<p><code>BusyBox64.exe</code>と入力して実行してみます。</p>
 
-<pre><code>C:\hoge&gt;busybox64.exe
+<pre><code>C:\hoge&gt;BusyBox64.exe
 BusyBox v1.31.0-FRP-2910-ge92596d0b (2019-01-10 14:16:45 GMT) multi-call binary
 (mingw64-gcc 8.2.0-3.fc29; mingw64-crt 5.0.4-2.fc29)
 
@@ -280,20 +280,20 @@ BusyBox is copyrighted by many authors between 1998-2018.
 Licensed under GPLv2. See source distribution for detailed
 copyright notices.
 
-Usage: busybox [function [arguments]...]
-  or: busybox --list[-full]
-  or: busybox --install [DIR]
-  or: busybox --uninstall [-n] file
+Usage: BusyBox [function [arguments]...]
+  or: BusyBox --list[-full]
+  or: BusyBox --install [DIR]
+  or: BusyBox --uninstall [-n] file
   or: function [arguments]...
 
         BusyBox is a multi-call binary that combines many common Unix
         utilities into a single executable.  The shell in this build
         is configured to run built-in utilities without $PATH search.
-        You don't need to install a link to busybox for each utility.
+        You don't need to install a link to BusyBox for each utility.
         To run external program, use full path (/sbin/ip instead of ip).
 
 Currently defined functions:
-        [, [[, ar, arch, ash, awk, base64, basename, bash, bunzip2, busybox, bzcat, bzip2, cal, cat, chmod, cksum,
+        [, [[, ar, arch, ash, awk, base64, basename, bash, bunzip2, BusyBox, bzcat, bzip2, cal, cat, chmod, cksum,
         clear, cmp, comm, cp, cpio, cut, date, dc, dd, df, diff, dirname, dos2unix, dpkg-deb, du, echo, ed, egrep, env,
         expand, expr, factor, false, fgrep, find, fold, fsync, ftpget, ftpput, getopt, grep, groups, gunzip, gzip, hd,
         head, hexdump, iconv, id, ipcalc, kill, killall, less, link, ln, logname, ls, lzcat, lzma, lzop, lzopcat, man,
@@ -310,37 +310,37 @@ Currently defined functions:
 
 <p>コマンドプロンプトを立ち上げ、下記のように入力し実行します。</p>
 
-<pre><code>busybox64.exe 実行したいコマンド
+<pre><code>BusyBox64.exe 実行したいコマンド
 </code></pre>
 
 <p>プロセスを参照したければ<code>ps</code>を実行するわけですが、その場合は下記のように入力して実行します。</p>
 
-<pre><code>busybox64.exe ps
+<pre><code>BusyBox64.exe ps
 </code></pre>
 
-<p>この場合、「busybox使って<code>ps</code>を実行するぜ」と言っていることになります。</p>
+<p>この場合、「BusyBox使って<code>ps</code>を実行するぜ」と言っていることになります。</p>
 
 <p>なお、オプションを利用してコマンド発行するのも普段と同様です。</p>
 
-<pre><code>busybox64.exe ls -la
+<pre><code>BusyBox64.exe ls -la
 </code></pre>
 
 <p>このように入力して実行すれば<code>l</code>と<code>a</code>のオプションが有効になります。</p>
 
-<h3 id="毎回busyboxって入力しなきゃいけないの">毎回busyboxって入力しなきゃいけないの？</h3>
+<h3 id="毎回busyboxって入力しなきゃいけないの">毎回BusyBoxって入力しなきゃいけないの？</h3>
 
 <p>もちろん、そんなことはないです。ログインシェルとして利用することも可能です。その場合のコマンドは下記の通りです。</p>
 
-<pre><code>busybox64.exe sh -l
+<pre><code>BusyBox64.exe sh -l
 </code></pre>
 
 <h3 id="実行時の注意">実行時の注意</h3>
 
-<p>前述の通り、busyboxはログインシェルとしても利用できます。ただし、コマンドによっては管理者権限が要求されているようで、「Permission Denied」と言われ実行できないケースがありました。自分が実行した際は、<code>grep</code>でこの症状が出ました。</p>
+<p>前述の通り、BusyBoxはログインシェルとしても利用できます。ただし、コマンドによっては管理者権限が要求されているようで、「Permission Denied」と言われ実行できないケースがありました。自分が実行した際は、<code>grep</code>でこの症状が出ました。</p>
 
-<p>そうなれば管理者権限を付与した状態でシェルを起動すればいい、ということになりますが、毎回「スタートボタンで右クリックしてコマンドプロンプトを管理者権限で実行してから<code>busybox sh -l</code>を実行してシェル起動」するのは鬱陶しいので、最初から権限を付与して起動することにしました。</p>
+<p>そうなれば管理者権限を付与した状態でシェルを起動すればいい、ということになりますが、毎回「スタートボタンで右クリックしてコマンドプロンプトを管理者権限で実行してから<code>BusyBox sh -l</code>を実行してシェル起動」するのは鬱陶しいので、最初から権限を付与して起動することにしました。</p>
 
-<pre><code>powershell start-process busybox64.exe -verb runas 'sh -l'
+<pre><code>powershell start-process BusyBox64.exe -verb runas 'sh -l'
 </code></pre>
 
 <p>上記コマンドを、batファイルなどにするかエイリアス設定してやればいいわけです。自分は、個人用に作成したランチャーで上記のコマンドを実行しています。</p>
