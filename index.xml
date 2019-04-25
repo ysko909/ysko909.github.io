@@ -6,10 +6,19 @@
     <description>Recent content on Come as you are</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Wed, 24 Apr 2019 10:38:54 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 25 Apr 2019 10:57:12 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Pythonのopen関数はencoding引数を指定しよう</title>
+      <link>https://idontwannawork.github.io/posts/encode-error-with-open-function/</link>
+      <pubDate>Thu, 25 Apr 2019 10:57:12 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/encode-error-with-open-function/</guid>
+      <description>結論 WindowsでPythonのopen関数を使うなら、encoding引数を指定しよう（血涙 何があったのさ WindowsにてPython</description>
+    </item>
     
     <item>
       <title>json.dumpsでの文字化けを解消する</title>
