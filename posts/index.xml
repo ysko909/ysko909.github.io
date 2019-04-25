@@ -103,6 +103,13 @@ with open('C:/app/hoge.txt', mode='r') as g:
 <h2 id="おわりに">おわりに</h2>
 
 <p><code>encoding</code>を指定のは、手癖にしておくべきだと思いました（小並感</p>
+
+<h2 id="参考文献">参考文献</h2>
+
+<ul>
+<li><a href="https://docs.python.org/ja/3.7/index.html">Pythonドキュメント</a></li>
+<li><a href="https://qiita.com/butada/items/33db39ced989c2ebf644">(Windows) Python3でのUnicodeEncodeErrorの原因と回避方法</a></li>
+</ul>
 ]]></content>
 		</item>
 		
