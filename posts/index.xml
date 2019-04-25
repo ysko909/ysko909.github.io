@@ -139,9 +139,13 @@
 
 <h3 id="余談1-win10だとlinux使えなかったっけ">（余談1）Win10だとLinux使えなかったっけ？</h3>
 
-<p>Windows 10だとWSL（Windows Subsystem for Linux）で、UbuntuなどのLinuxディストリビューションを利用できます・・・が、Win10のリリースモデルの1つ、Enterprise LTSB(Long-Term Servicing Branch)だとWSLが利用できません。企業によっては、「安定性などを確保するために、OSに対する頻繁な変更は行いたくない」場合、このモデルが採用されている可能性があります。</p>
+<p>Windows 10だとWSL（Windows Subsystem for Linux）で、UbuntuなどのLinuxディストリビューションを利用できます・・・が、リリースモデルの1つ、Enterprise LTSC（Long Term Servicing Channel）だとWSLが利用できません。企業によっては、「安定性などを確保するために、OSに対する頻繁な変更は行いたくない」場合、このモデルが採用されている可能性があります。</p>
 
 <p>この場合も、やっぱりbusyboxの出番です。</p>
+
+<blockquote>
+<p>※以前は「Long Term Servicing Branch（LTSB）」という名前でリリースされていましたが、現在は「Long Term Servicing Channel（LTSC）」に名称変更されました。</p>
+</blockquote>
 
 <h3 id="余談2-cygwinとかじゃダメなの">（余談2）Cygwinとかじゃダメなの？</h3>
 
