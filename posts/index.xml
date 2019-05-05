@@ -6,8 +6,73 @@
 		<description>Recent content in Posts on Come as you are</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Thu, 25 Apr 2019 10:57:12 +0900</lastBuildDate>
+		<lastBuildDate>Sun, 05 May 2019 17:38:31 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Vue.jsでデータの内容を開発ツールを使わないで確認する</title>
+			<link>https://idontwannawork.github.io/posts/show-data-without-tools/</link>
+			<pubDate>Sun, 05 May 2019 17:38:31 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/show-data-without-tools/</guid>
+			<description>小ネタです Vue.jsは、ブラウザの開発ツールやVue.js用の拡張機能を利用しなくても、HTMLファイルにとあるタグを記述することで、デー</description>
+			<content type="html"><![CDATA[
+
+<h2 id="小ネタです">小ネタです</h2>
+
+<p>Vue.jsは、ブラウザの開発ツールやVue.js用の拡張機能を利用しなくても、HTMLファイルに<strong>とあるタグ</strong>を記述することで、データの内容をJSON形式で確認できます。</p>
+
+<h3 id="記述方法">記述方法</h3>
+
+<p>HTMLファイル内に「<code>{{ $data }}</code>」を任意の場所に記述します。</p>
+
+<pre><code>&lt;html&gt;
+    &lt;head&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div id=&quot;app&quot;&gt;
+        &lt;p&gt;{{ message.v }}&lt;/p&gt;
+        &lt;p&gt;{{ message.v.length }}&lt;/p&gt;
+        &lt;p&gt;{{ l[2] }}&lt;/p&gt;
+        &lt;p&gt;{{ l[n] }}&lt;/p&gt;
+        &lt;pre&gt;{{ $data }}&lt;/pre&gt;
+        &lt;/div&gt;
+        &lt;script src=&quot;https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js&quot;&gt;&lt;/script&gt;
+        &lt;script src=&quot;main.js&quot;&gt;&lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>仮にJavaScript側が下記の内容だった場合、</p>
+
+<pre><code>var app = new Vue({
+    el: '#app',
+    data: {
+        message: {
+        v: 'Hello Vue World!'
+        },
+        l: ['hoge', 'ふが', 'ぴyo'],
+        n: 1
+    }
+})
+</code></pre>
+
+<p>表示内容は下記の通り。</p>
+
+<p><img src="2019-05-05-17-48-12.png" alt="" /></p>
+
+<p>CodePenでやってみました。</p>
+
+<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="yrmOOJ" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="vuejs_type">
+  <span>See the Pen <a href="https://codepen.io/idontwannawork/pen/yrmOOJ/">
+  vuejs_type</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p>
+
+<p>あんまり複雑なデータを出力すると、かえって見にくくなってしまうと思われますが、ちょっとした確認には十分に利用できるかな。</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>Pythonのopen関数はencoding引数を指定しよう</title>
