@@ -6,10 +6,19 @@
     <description>Recent content on Come as you are</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Sun, 05 May 2019 17:38:31 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 15 May 2019 13:44:12 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>VS CodeでMarkdownをPDFに自動で変換する</title>
+      <link>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</link>
+      <pubDate>Wed, 15 May 2019 13:44:12 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</guid>
+      <description>はじめに Markdownで記述したmdファイルは、エンジニア間ではそのまま利用することが多いように思います（GitHubなどにREADME.</description>
+    </item>
     
     <item>
       <title>Vue.jsでデータの内容を開発ツールを使わないで確認する</title>
@@ -90,15 +99,6 @@
       
       <guid>https://idontwannawork.github.io/about/</guid>
       <description>はじめに このページは日々の学習内容を書いたりトラブルをメモったり、たまに全然関係ない記事を書いたりする予定。 どうぞ、よしなに。</description>
-    </item>
-    
-    <item>
-      <title>チュートリアルを卒業したくらいが一番ツラい</title>
-      <link>https://idontwannawork.github.io/posts/after-tutorial/</link>
-      <pubDate>Thu, 04 Apr 2019 18:38:04 +0900</pubDate>
-      
-      <guid>https://idontwannawork.github.io/posts/after-tutorial/</guid>
-      <description>チュートリアルってあるよね どんなプログラミング言語やライブラリやフレームワークでもあるもの、チュートリアル。「Getting Started」</description>
     </item>
     
   </channel>

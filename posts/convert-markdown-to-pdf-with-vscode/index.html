@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+
+<meta itemprop="name" content="VS CodeでMarkdownをPDFに自動で変換する">
+<meta itemprop="description" content="はじめに Markdownで記述したmdファイルは、エンジニア間ではそのまま利用することが多いように思います（GitHubなどにREADME.">
+
+
+<meta itemprop="datePublished" content="2019-05-15T13:44:12&#43;09:00" />
+<meta itemprop="dateModified" content="2019-05-15T13:44:12&#43;09:00" />
+<meta itemprop="wordCount" content="1080">
+
+
+
+<meta itemprop="keywords" content="VS Code,Markdown," />
+<meta property="og:title" content="VS CodeでMarkdownをPDFに自動で変換する" />
+<meta property="og:description" content="はじめに Markdownで記述したmdファイルは、エンジニア間ではそのまま利用することが多いように思います（GitHubなどにREADME." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/" /><meta property="article:published_time" content="2019-05-15T13:44:12&#43;09:00"/>
+<meta property="article:modified_time" content="2019-05-15T13:44:12&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="VS CodeでMarkdownをPDFに自動で変換する"/>
+<meta name="twitter:description" content="はじめに Markdownで記述したmdファイルは、エンジニア間ではそのまま利用することが多いように思います（GitHubなどにREADME."/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>VS CodeでMarkdownをPDFに自動で変換する</title>
+	<link rel="stylesheet" href="https://idontwannawork.github.io/css/style.min.e81f50049998463da8cdbf0f848b77d9797f27f249581a236a3161d386f310db.css" integrity="sha256-6B9QBJmYRj2ozb8PhIt32Xl/J/JJWBojajFh04bzENs=">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://idontwannawork.github.io/">Come as you are</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					<a href="https://idontwannawork.github.io/posts/">Posts</a>
+					<a href="https://idontwannawork.github.io/about/">About</a>
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://twitter.com/unknown_strings" target="_blank" rel="noopener" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/idontwannawork" target="_blank" rel="noopener" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://codepen.io/idontwannawork/" target="_blank" rel="noopener" title="Codepen"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-codepen"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon><line x1="12" y1="22" x2="12" y2="15.5"></line><polyline points="22 8.5 12 15.5 2 8.5"></polyline><polyline points="2 15.5 12 8.5 22 15.5"></polyline><line x1="12" y1="2" x2="12" y2="8.5"></line></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://idontwannawork.github.io/posts/">Posts</a></li>
+			<li><a href="https://idontwannawork.github.io/about/">About</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>May 15, 2019</span></div>
+				<h1>VS CodeでMarkdownをPDFに自動で変換する</h1>
+			</header>
+			<div class="content">
+				
+
+<h2 id="はじめに">はじめに<a href="#はじめに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>Markdownで記述したmdファイルは、エンジニア間ではそのまま利用することが多いように思います（GitHubなどにREADME.mdとしてアップするとか）。ところが、メールに添付したり印刷する等、外部へ持ち出す際はPDFに変換しておいた方がいろいろ安心。とくに「mdファイルって何？」みたいなお客さんにドキュメントを渡さないといけない場合とか・・・。</p>
+
+<p>MarkdownをPDF化するのは、Pandocを利用する方法もあるのですが、ここではVisual Studio Code（以下、VS Code）の拡張機能である「<a href="https://marketplace.visualstudio.com/items?itemName=yzane.markdown-pdf">Markdown PDF</a>」を利用します。</p>
+
+<h2 id="環境">環境<a href="#環境" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<ul>
+<li>Windows 10</li>
+<li>VS Code</li>
+</ul>
+
+<h2 id="インストール">インストール<a href="#インストール" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>VS Codeにて、Ctrl＋Shift＋Xで拡張機能の検索窓に「Markdown PDF」と入力するか、上記のリンクをクリックします。検索結果から「Markdown PDF」を選択し、インストールします。Markdown PDFをインストールしてから、VS Codeで適当なMarkdownファイルを最初に開いた際、Chromiumのダウンロードが自動で始まります。ちなみに、なんでChromiumが必要かというと、Markdown PDFがPDF変換するのに利用しているから。</p>
+
+<h2 id="使い方">使い方<a href="#使い方" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<ol>
+<li>PDF化したいMarkdownファイルを開く。</li>
+<li>F1キーを押すか、Ctrl+Shift+Pキーを押しコマンドパレットを表示させる。</li>
+
+<li><p>exportと入力すると下記のメニューが表示される。</p>
+
+<ul>
+<li>markdown-pdf: Export (settings.json)</li>
+<li>markdown-pdf: Export (pdf)</li>
+<li>markdown-pdf: Export (html)</li>
+<li>markdown-pdf: Export (png)</li>
+<li>markdown-pdf: Export (jpeg)</li>
+<li>markdown-pdf: Export (all: pdf, html, png, jpeg)</li>
+</ul>
+
+<p>この中からExport (pdf)を選択する。</p></li>
+
+<li><p>少し待つと、Markdownと同一のフォルダーにPDFが生成される。</p></li>
+</ol>
+
+<h2 id="自動化">自動化<a href="#自動化" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>上記の使い方ではPDFへ変換するのに、毎回コマンドパレットを表示してコマンドを入力し、どのファイル形式でエクスポートするかを選択する必要があります。これを特定の変換先（今回はPDF）に限定して自動変換するよう設定します。</p>
+
+<ol>
+<li><p>「ファイル」メニュー＞「基本設定」＞「設定」を選択するか、<code>Ctrl＋,</code>で直接画面を開く。</p></li>
+
+<li><p>setting.jsonファイルを開いて下記のように設定する。</p>
+
+<pre><code>&quot;markdown-pdf.convertOnSave&quot;: true,
+&quot;markdown-pdf.type&quot;: [
+    &quot;pdf&quot;
+],
+</code></pre></li>
+
+<li><p>設定内容を書き込んだらVS Codeを1度再起動する。</p></li>
+</ol>
+
+<p>これで、Markdownファイルを編集し保存したタイミングで自動的にPDFへ変換するようになります。</p>
+
+<h2 id="注意">注意<a href="#注意" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>この拡張機能は変換したファイルの出力先を変更できないので、必ずMarkdownファイルが格納されているフォルダーと同じ場所に出力されます。また、出力先ファイル名も指定できないので、同一名のファイルが既存である場合は自動的に上書きします。</p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/vs-code">VS Code</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/markdown">Markdown</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1080 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-05-15 04:44 &#43;0000</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://idontwannawork.github.io/posts/show-data-without-tools/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>Vue.jsでデータの内容を開発ツールを使わないで確認する</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "come-as-you-are" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2019 <a href="https://idontwannawork.github.io/">Tetsuya Katsuragi</a> Allrights reserved.</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://idontwannawork.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	<script src="https://idontwannawork.github.io/js/main.min.784417f5847151f848c339cf0acb13a06cbb648b1483435a28ed4556c4ead69b.js" integrity="sha256-eEQX9YRxUfhIwznPCssToGy7ZIsUg0NaKO1FVsTq1ps="></script>
+
+</body>
+
+</html>
