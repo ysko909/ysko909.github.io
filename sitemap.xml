@@ -8,6 +8,11 @@
   </url>
   
   <url>
+    <loc>https://idontwannawork.github.io/posts/iterator-will-return-blank-with-loop-twice/</loc>
+    <lastmod>2019-05-15T11:57:24+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/posts/show-data-without-tools/</loc>
     <lastmod>2019-05-05T17:38:31+09:00</lastmod>
   </url>
@@ -101,7 +106,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/tags/python/</loc>
-    <lastmod>2019-04-25T10:57:12+09:00</lastmod>
+    <lastmod>2019-05-15T11:57:24+09:00</lastmod>
     <priority>0</priority>
   </url>
   

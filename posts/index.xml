@@ -84,6 +84,208 @@
 		</item>
 		
 		<item>
+			<title>イテレータを複数回ループしたい</title>
+			<link>https://idontwannawork.github.io/posts/iterator-will-return-blank-with-loop-twice/</link>
+			<pubDate>Wed, 15 May 2019 11:57:24 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/iterator-will-return-blank-with-loop-twice/</guid>
+			<description>なんのこっちゃ？ 実行しようとしていたのはこんなコードでした。 &amp;gt;&amp;gt;&amp;gt; import re &amp;gt;&amp;gt;&amp;gt; s = &amp;quot;hogefugapiyofoobarbaz1234567890abc987efg654hij321&amp;quot; &amp;gt;&amp;gt;&amp;gt; iter = re.finditer(&amp;quot;b..&amp;quot;, s) ← finditer()は結果をイテレータで返す &amp;gt;&amp;gt;&amp;gt; for i in iter:</description>
+			<content type="html"><![CDATA[
+
+<h2 id="なんのこっちゃ">なんのこっちゃ？</h2>
+
+<p>実行しようとしていたのはこんなコードでした。</p>
+
+<pre><code>&gt;&gt;&gt; import re
+&gt;&gt;&gt; s = &quot;hogefugapiyofoobarbaz1234567890abc987efg654hij321&quot;
+&gt;&gt;&gt; iter = re.finditer(&quot;b..&quot;, s)    ← finditer()は結果をイテレータで返す
+&gt;&gt;&gt; for i in iter:
+...     print(i.start())
+...
+15
+18
+32
+&gt;&gt;&gt; for i in iter:
+...     print(i.start())
+...
+&gt;&gt;&gt;    ← 同じループを実行しても最初のループと異なり結果が返ってこない
+</code></pre>
+
+<p>このように、同一のイテレータに対しループ処理を複数回行うと、2回目以降のループは結果が空になってしまいます。</p>
+
+<p>ちなみにジェネレータでも上記のような複数回のループ処理を行おうとすると、<a href="https://qiita.com/tomotaka_ito/items/15b5999c76001dbc9a58">2回目以降のループで結果が空になる</a>らしいですが、ジェネレータについては別途まとめて記事にしようと思います（まだ勉強中）。</p>
+
+<h2 id="なんでこーなるの">なんでこーなるの？</h2>
+
+<p><a href="https://docs.python.org/ja/3/glossary.html#term-iterator">イテレータ</a>が持つ要素を取得したい場合、__next__() メソッド（または組み込み関数の<code>next()</code>）を繰り返し呼び出すと、イテレータ中の要素を1つずつ返します。このメソッドは集合から1つずつ要素を<strong>取り出して</strong>います。取り出しているので、すべて取り出し終わったら元の集合には要素が存在しません。よって2回目以降のループは空っぽになります（要素がない場合は、StopIteration例外を返す）。</p>
+
+<p>※「取り出す」という表現が正確かどうかはちょっと自信がありません。メソッドや関数の「next」という名前の通り「次の要素へ」という挙動と、同じ要素を複数回取得できないことから「取り出す」という表現を使っています。</p>
+
+<p>なお、直接関係はありませんが、<a href="https://docs.python.org/ja/3/library/functions.html#map"><code>map()</code></a>や<a href="https://docs.python.org/ja/3/library/functions.html#filter"><code>filter()</code></a>はイテレータを返す（Python3での話）ので、返されたオブジェクトについて<code>list()</code>などを複数回実行すると、上記のように<a href="https://stackoverflow.com/questions/19759247/listing-a-filter-object-twice-will-return-a-blank-list">2回目以降は空っぽになってしまう</a>ようです。</p>
+
+<pre><code>&gt;&gt;&gt; list = [1, 2, 3]
+&gt;&gt;&gt; f = filter(None, list)
+&gt;&gt;&gt; list(list)
+[1, 2, 3]
+&gt;&gt;&gt; list(list)
+[1, 2, 3] ← リストlistに複数回listしても結果が返ってくる
+&gt;&gt;&gt; list(f)
+[1, 2, 3]
+&gt;&gt;&gt; list(f)
+[] ← イテレータに複数回listすると2回目以降ブランクになる
+&gt;&gt;&gt;
+</code></pre>
+
+<h2 id="そもそもイテレータって">そもそもイテレータって？</h2>
+
+<p><a href="https://docs.python.org/ja/3/glossary.html#term-iterator">iterator</a>とはオブジェクトの一種で、データの走査方法について表現するものです。なんのこっちゃ、という感じですが「要素を1つずつ繰り返し取得できる構造を持っていて（<code>iterable</code>）、実際に順次取得ができる」オブジェクトっていう感じかと。</p>
+
+<pre><code>&gt;&gt;&gt; list = [1, 2, 3]
+&gt;&gt;&gt; i = iter(list)
+&gt;&gt;&gt; type(list)
+&lt;class 'list'&gt;
+&gt;&gt;&gt; type(i)
+&lt;class 'list_iterator'&gt;
+&gt;&gt;&gt; print(next(i))
+1
+&gt;&gt;&gt; print(next(i))
+2
+&gt;&gt;&gt; print(next(i))
+3
+&gt;&gt;&gt; print(next(i))
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+StopIteration ← 「これ以上next()で取り出せる要素ねぇよ！」と言っている
+&gt;&gt;&gt;
+</code></pre>
+
+<p>これと似たオブジェクトに<a href="https://docs.python.org/ja/3/glossary.html#term-iterable">itetable</a>（反復可能オブジェクト）があります。こちらはデータの構造そのものについて表現しており、<code>iterator</code>とは別物です。たとえばリストやタプル、辞書などは<code>iterable</code>で、オブジェクトに対しアクセスすることで、要素を1つずつ取得することができる<strong>構造</strong>のことを指しています。つまり、先述の<code>iterator</code>は<code>iterable</code>に含まれるわけです。</p>
+
+<p>ちなみに「iterable」の英単語本来の意味は<a href="https://ejje.weblio.jp/content/iterable">「繰り返し可能な」という形容詞</a>。</p>
+
+<h2 id="どうすれば回避できる">どうすれば回避できる？</h2>
+
+<h3 id="変数に格納する">変数に格納する</h3>
+
+<p>再利用したいなら、単純に変数へ格納しちゃえという方法。</p>
+
+<pre><code>&gt;&gt;&gt; import re
+&gt;&gt;&gt; s = &quot;hogefugapiyofoobarbaz1234567890abc987efg654hij321&quot;
+&gt;&gt;&gt; iter = re.finditer(&quot;b..&quot;, s)
+&gt;&gt;&gt; type(iter)
+&lt;class 'callable_iterator'&gt;
+&gt;&gt;&gt; lists = list(iter)
+&gt;&gt;&gt; type(lists)
+&lt;class 'list'&gt;
+&gt;&gt;&gt; for i in lists:
+...     print(i)
+...
+&lt;_sre.SRE_Match object; span=(15, 18), match='bar'&gt;
+&lt;_sre.SRE_Match object; span=(18, 21), match='baz'&gt;
+&lt;_sre.SRE_Match object; span=(32, 35), match='bc9'&gt;
+&gt;&gt;&gt; for i in lists:
+...     print(i.start())
+...
+15
+18
+32
+&gt;&gt;&gt; for i in lists:
+...     print(i.start())
+...
+15
+18
+32    ← 複数回ループしても結果が返ってきている
+&gt;&gt;&gt;
+</code></pre>
+
+<p><code>filter()</code>などのイテレータを返すものも同様。</p>
+
+<pre><code>&gt;&gt;&gt; list = [1, 2, 3]
+&gt;&gt;&gt; f = filter(None, list)
+&gt;&gt;&gt; type(f)
+&lt;class 'filter'&gt;
+&gt;&gt;&gt; listed = list(f)
+&gt;&gt;&gt; type(listed)
+&lt;class 'list'&gt;
+&gt;&gt;&gt; list(listed)
+[1, 2, 3]
+&gt;&gt;&gt; list(listed)
+[1, 2, 3]
+&gt;&gt;&gt; list(f)
+[]
+&gt;&gt;&gt;
+</code></pre>
+
+<h3 id="リストでループする">リストでループする</h3>
+
+<p>今回の場合で言うと<code>finditer()</code>ではなく<code>findall()</code>を用いて、イテレータでなくリストでループするようにします。</p>
+
+<pre><code>&gt;&gt;&gt; list = re.findall(&quot;b..&quot;, s)
+&gt;&gt;&gt; for item in list:
+...     print(item)
+...
+bar
+baz
+bc9
+&gt;&gt;&gt; for item in list:
+...     print(item)
+...
+bar
+baz
+bc9
+</code></pre>
+
+<p><code>findall()</code>はリストを返すメソッド。リスト<code>list</code>に対しては、ループ処理を何回行っても同様な結果が出力されます。これなら上記のような問題は発生しませんが、このあたりは要求される機能と相談する必要があると思います。</p>
+
+<h3 id="itertoolsを用いる">itertoolsを用いる</h3>
+
+<p>再利用する回数が事前に分かっているなら<code>itertools.tee()</code>を利用する方法もあります。</p>
+
+<pre><code>&gt;&gt;&gt; import itertools
+&gt;&gt;&gt; list = [1, 2, 3]
+&gt;&gt;&gt; i = iter(list)
+&gt;&gt;&gt; i1, i2, i3 = itertools.tee(i, 3) ← 3回再利用する必要があると仮定
+&gt;&gt;&gt; for n in i1:
+...     print(n)
+...
+1
+2
+3
+&gt;&gt;&gt; for n in i1:
+...     print(n)
+...
+&gt;&gt;&gt; for n in i2:
+...     print(n)
+...
+1
+2
+3
+&gt;&gt;&gt; for n in i2:
+...     print(n)
+...
+&gt;&gt;&gt; for n in i3:
+...     print(n)
+...
+1
+2
+3
+&gt;&gt;&gt; for n in i3:
+...     print(n)
+...
+&gt;&gt;&gt;
+</code></pre>
+
+<p>ただ、個人的にはこの方法を利用するようなシチュエーションがあまり思い浮かばない・・・。</p>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>「ん？何で同じ条件なのにループすると空っぽになるんじゃ？」と素朴に思ったのが始まりなのですが、調べてみると案外深い仕様になっていて勉強になりました（小並感）。</p>
+
+<p>ちなみに、複数回ループしようとしてた理由は、原因を調べているうちに忘れました（鳥頭）。</p>
+]]></content>
+		</item>
+		
+		<item>
 			<title>Vue.jsでデータの内容を開発ツールを使わないで確認する</title>
 			<link>https://idontwannawork.github.io/posts/show-data-without-tools/</link>
 			<pubDate>Sun, 05 May 2019 17:38:31 +0900</pubDate>
@@ -891,76 +1093,6 @@ draft: true
 <h2 id="というわけで">というわけで</h2>
 
 <p>当ページは<a href="https://gohugo.io/">Hugo</a>と<a href="https://github.com/Track3/hermit">Hermit</a>で作成されています_(┐「ε:)_</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>チュートリアルを卒業したくらいが一番ツラい</title>
-			<link>https://idontwannawork.github.io/posts/after-tutorial/</link>
-			<pubDate>Thu, 04 Apr 2019 18:38:04 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/after-tutorial/</guid>
-			<description>チュートリアルってあるよね どんなプログラミング言語やライブラリやフレームワークでもあるもの、チュートリアル。「Getting Started」</description>
-			<content type="html"><![CDATA[
-
-<h2 id="チュートリアルってあるよね">チュートリアルってあるよね</h2>
-
-<p>どんなプログラミング言語やライブラリやフレームワークでもあるもの、チュートリアル。「Getting Started」とか書かれたりもする。そして大抵の人がチュートリアルに触れて、場合によってはちょっと値を自分流に編集したりして、対象の雰囲気をざっくり掴むのに使う。そして、そこから「自分が作りたいもの」を目指していく。</p>
-
-<p>文章として記述するとこれだけなんだけど、自分はチュートリアルをやった<strong>直後にモチベーションがガクッと下がる</strong>。折れるまでは行かなくとも、再起するのに苦労する。</p>
-
-<h2 id="なぜなんだぜ">なぜなんだぜ</h2>
-
-<p>結論から言ってしまえば、<strong>チュートリアル卒業レベルでは作りたいものは作れない</strong>から。</p>
-
-<h2 id="何言ってんだ">何言ってんだ</h2>
-
-<p>「チュートリアル」は基本的にほんの触りだけ。だから内容としては薄かったり、しょぼかったりする。仕方ない、「触り」だもの。
-「自分が作りたいもの」は、既存の製品やサービスだったり「すでに稼働しているスゲーやつ」を見た後で、「特定の問題やニーズを解消したい」あるいは「似たものを作りたい」という風に発生する感情だったりする。</p>
-
-<p>大抵はこの感情が発露する時点で、中途半端に目が肥えていたり、利用する側としての経験値を得てしまっている。</p>
-
-<p>たぶん、これが問題なんだ。</p>
-
-<h2 id="だからどういうことだってばよ">だからどういうことだってばよ</h2>
-
-<p>中途半端に目が肥えてしまった上に、なまじ既存サービスが利用できてしまうため、チュートリアルに毛が生えたレベルでは下記の感情に対処しにくい。</p>
-
-<ul>
-<li>見た目がしょぼい</li>
-<li>機能少ない</li>
-<li>そもそも自分が作る必要あるの？</li>
-</ul>
-
-<h2 id="あー-なんて言えばいいのかな">あー・・・なんて言えばいいのかな</h2>
-
-<p>こんな例えはどうだろう。</p>
-
-<p>ふと、「アクションゲームを作りたい」と思ったあなた。そう、そこのあなた。どうして作りたいと思った？アサシ〇クリードとかプレイして、「面白えー！すげー！俺も作ってみてー！」って、そう思ったんじゃない？「これで俺も『クリエイター』で『ミリオネア』だぜー！うひょー！」とか、人と場合によっちゃ思ったんじゃない？
-そして、その感情迸るままUnityのチュートリアルに触れたりしちゃってるんじゃない？</p>
-
-<p>あるいはTwit〇erにほんのちょっとした不満のあるあなた。そう、あなた。確かにTwit〇erは、興味のあるカテゴリだけ抽出してタイムラインに流すのは難しい。うん、その通りだ。プログラミング関係でフォローした人が、プログラミングのことだけツイートすることってあんまりないよね。場合によっては旅行のことだったり、引退するスポーツ選手のことをツイートしてたりする。
-だから「カテゴライズして必要な情報だけタイムラインに流したいな。そういうサービス作ろうかな」って思ったりするんじゃない？そして「動作が軽いって評判のGolangやってみるかな」って思ったりして、Gopherに見守られながらチュートリアルをやってみたりしてるんだよね？</p>
-
-<p>オーライ、そこで質問なんだけど、そのチュートリアルってアレク〇オスが画面を縦横無尽に動き回るような、そんな<strong>アグレッシブで派手なチュートリアル</strong>かな？
-あるいは、Bo〇tstrapなんかのフレームワークよろしく美しくデザインされたUIにいろんな機能がモリモリ実装できるような、そんな<strong>洗練されたチュートリアル</strong>かな？</p>
-
-<p>そして何より、チュートリアルを卒業したあなたは、<strong>卒業したての今、まさにこの瞬間</strong>、どんなものを作れるのかな？見た人が、利用した人が、プレイした人があっと驚き感動し熱中するようなものだろうか？</p>
-
-<p>そんな訳がない。<strong>そんな訳がないのだ</strong>。</p>
-
-<h2 id="現実に立ち返る">現実に立ち返る</h2>
-
-<p>昨今あらゆる機能や情報が提供されるwebサービスにおいても、ジャンルが細分化されまくってるゲームもスマートフォンのアプリにおいても同様のことが言える。
-自分よりずっと知識も経験も技術も熱意も、場合によっては将来の時間すらも持ち合わせた先人たちがいる。そんな一騎当千の偉人たちが綿々と作り上げてきた実績を見た、一介の雑兵ができることなどたかが知れているんだ。</p>
-
-<p>どうしろって言うんだ。</p>
-
-<hr />
-
-<p>オーライ、わかった。やればいいんだろ、やれば。とにかくやるしかないんだ、悩んでる時間も惜しいんだ、おっさんはさ。</p>
-
-<p>・・・というわけで、日々の学習内容を書いたりトラブルをメモったり、たまに全然関係ない記事を書いたりする予定。どうぞ、よしなに。</p>
 ]]></content>
 		</item>
 		

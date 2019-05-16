@@ -21,6 +21,15 @@
     </item>
     
     <item>
+      <title>イテレータを複数回ループしたい</title>
+      <link>https://idontwannawork.github.io/posts/iterator-will-return-blank-with-loop-twice/</link>
+      <pubDate>Wed, 15 May 2019 11:57:24 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/iterator-will-return-blank-with-loop-twice/</guid>
+      <description>なんのこっちゃ？ 実行しようとしていたのはこんなコードでした。 &amp;gt;&amp;gt;&amp;gt; import re &amp;gt;&amp;gt;&amp;gt; s = &amp;quot;hogefugapiyofoobarbaz1234567890abc987efg654hij321&amp;quot; &amp;gt;&amp;gt;&amp;gt; iter = re.finditer(&amp;quot;b..&amp;quot;, s) ← finditer()は結果をイテレータで返す &amp;gt;&amp;gt;&amp;gt; for i in iter:</description>
+    </item>
+    
+    <item>
       <title>Vue.jsでデータの内容を開発ツールを使わないで確認する</title>
       <link>https://idontwannawork.github.io/posts/show-data-without-tools/</link>
       <pubDate>Sun, 05 May 2019 17:38:31 +0900</pubDate>
@@ -90,15 +99,6 @@
       
       <guid>https://idontwannawork.github.io/posts/make-site-with-hugo/</guid>
       <description>Hugoとは Golangで作られている、静的サイトジェネレーター。なんでも、生成が速いらしいです。 今回はコイツを使って、サイトを生成し公開し</description>
-    </item>
-    
-    <item>
-      <title>このページについて</title>
-      <link>https://idontwannawork.github.io/about/</link>
-      <pubDate>Thu, 04 Apr 2019 19:32:06 +0900</pubDate>
-      
-      <guid>https://idontwannawork.github.io/about/</guid>
-      <description>はじめに このページは日々の学習内容を書いたりトラブルをメモったり、たまに全然関係ない記事を書いたりする予定。 どうぞ、よしなに。</description>
     </item>
     
   </channel>

@@ -6,10 +6,19 @@
     <description>Recent content in Python on Come as you are</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Thu, 25 Apr 2019 10:57:12 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 15 May 2019 11:57:24 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>イテレータを複数回ループしたい</title>
+      <link>https://idontwannawork.github.io/posts/iterator-will-return-blank-with-loop-twice/</link>
+      <pubDate>Wed, 15 May 2019 11:57:24 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/iterator-will-return-blank-with-loop-twice/</guid>
+      <description>なんのこっちゃ？ 実行しようとしていたのはこんなコードでした。 &amp;gt;&amp;gt;&amp;gt; import re &amp;gt;&amp;gt;&amp;gt; s = &amp;quot;hogefugapiyofoobarbaz1234567890abc987efg654hij321&amp;quot; &amp;gt;&amp;gt;&amp;gt; iter = re.finditer(&amp;quot;b..&amp;quot;, s) ← finditer()は結果をイテレータで返す &amp;gt;&amp;gt;&amp;gt; for i in iter:</description>
+    </item>
     
     <item>
       <title>Pythonのopen関数はencoding引数を指定しよう</title>
