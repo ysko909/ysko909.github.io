@@ -6,8 +6,178 @@
 		<description>Recent content in Posts on Come as you are</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Wed, 15 May 2019 13:44:12 +0900</lastBuildDate>
+		<lastBuildDate>Fri, 24 May 2019 14:50:30 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>PythonでMarkdownファイルをHTMLへ変換する</title>
+			<link>https://idontwannawork.github.io/posts/convert-markdown-to-html-with-python/</link>
+			<pubDate>Fri, 24 May 2019 14:50:30 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/convert-markdown-to-html-with-python/</guid>
+			<description>はじめに 以前、VS CodeでMarkdownをPDFに自動で変換する方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので</description>
+			<content type="html"><![CDATA[
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>以前、<a href="/posts/convert-markdown-to-pdf-with-vscode/">VS CodeでMarkdownをPDFに自動で変換する</a>方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので勉強がてら、Pythonで書くことにしました。と言っても難しい処理では全然ないんだけど・・・_(┐「ε:)_</p>
+
+<p>ちなみに、<a href="/posts/convert-markdown-to-pdf-with-vscode/">前の記事</a>で紹介した拡張機能<a href="https://marketplace.visualstudio.com/items?itemName=yzane.markdown-pdf">Markdown PDF</a>を使えばHTMLにも変換できます。ただ、今回はVS Codeがないというシチュエーションでファイル変換したいのと、自分が作成したスタイルシートでHTMLファイルを生成したかったため、VS Codeの拡張機能を頼らない方法を取りました。</p>
+
+<p>というわけで、Pythonを使ったMarkdownファイルをHTMLへ変換する手順について書きます。</p>
+
+<h2 id="リポジトリ">リポジトリ</h2>
+
+<p><a href="https://github.com/idontwannawork/markdowntohtml">こちら</a>にソースコード一式を置いてあります。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Python ※3.x系</li>
+<li>Markdown</li>
+</ul>
+
+<p><a href="https://python-markdown.github.io/">Markdown</a>は事前に<code>pip</code>しておく。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">pip install Markdown</code></pre></div>
+<p>一応プラットフォームに関しては、MacやWindowsに限らず動作する・・・はず_(┐「ε:)_</p>
+
+<h2 id="概要">概要</h2>
+
+<p>フォルダ中に存在するmdファイルを取得して、HTMLファイルに変換します。</p>
+
+<h2 id="詳細">詳細</h2>
+
+<h3 id="ファイル">ファイル</h3>
+
+<ul>
+<li><p>mdtohtml.py</p>
+
+<p>Pythonで記述された本体。実行の際は当ファイルを指定します。</p></li>
+
+<li><p>style.css</p>
+
+<p>CSSが書かれたファイル。生成されたHTMLファイルに<code>&lt;style&gt;</code>タグで記述されます。スタイルの変更を行いたい場合、当ファイルを書き換えてHTMLを生成してください。</p></li>
+</ul>
+
+<h3 id="使い方">使い方</h3>
+
+<ol>
+<li><p>変換したいmdファイルがあるフォルダに上記の2ファイルを配置します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ ls
+README.md    iamacat.md   main.css     mdtohtml.py</code></pre></div></li>
+
+<li><p>配置したら、そのフォルダにて下記のコマンドを実行します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ python mdtohtml.py
+iamacat.md の変換を開始します
+-----------------------------------
+iamacat.md を iamacat.html へ変換しました
+README.md の変換を開始します
+-----------------------------------
+README.md を README.html へ変換しました
+$ ls
+README.html   README.md     iamacat.html  iamacat.md    main.css      mdtohtml.py</code></pre></div></li>
+</ol>
+
+<h3 id="処理内容">処理内容</h3>
+
+<p>実行されたフォルダ中に存在するmdファイルを取得して、HTMLファイルに変換して同じフォルダーに出力します。mdファイルが複数ある場合は、すべてHTML化します。</p>
+
+<h2 id="コード">コード</h2>
+
+<p>基本的には、HTML化はMarkdownに丸投げしています。丸投げした後、必要な<code>&lt;html&gt;</code>タグなどを付与しているだけです。</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">markdown</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+
+<span class="c1"># Markdown拡張</span>
+<span class="n">mdextensions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;tables&#34;</span><span class="p">]</span>
+
+
+<span class="c1"># ディレクトリ全探索</span>
+<span class="k">def</span> <span class="nf">find_all</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">root</span>
+        <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="nb">file</span><span class="p">)</span>
+
+
+<span class="c1"># カレントディレクトリから１番最初に見つかるファイル相対PATHを取得</span>
+<span class="k">def</span> <span class="nf">onefind_path</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">path</span>
+
+
+<span class="c1"># mdファイルの変換</span>
+<span class="k">def</span> <span class="nf">convertHtml</span><span class="p">(</span><span class="n">mdpath</span><span class="p">,</span> <span class="n">htmlpath</span><span class="p">,</span> <span class="n">style</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mdpath</span><span class="p">,</span> <span class="s1">&#39;rt&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="c1"># Markdown の import 文を除去</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;@import &#34;.+&#34;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="c1"># HTMLに変換</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="n">markdown</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="n">extensions</span><span class="o">=</span><span class="n">mdextensions</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="n">html</span> <span class="o">=</span> <span class="s1">&#39;&lt;html lang=&#34;ja&#34;&gt;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;</span>
+        <span class="n">html</span> <span class="o">+=</span> <span class="s1">&#39;&lt;style&gt;&#39;</span> <span class="o">+</span> <span class="n">style</span> <span class="o">+</span> <span class="s1">&#39;&lt;/style&gt;&#39;</span>
+        <span class="n">html</span> <span class="o">+=</span> <span class="s1">&#39;&lt;body&gt;&#39;</span> <span class="o">+</span> <span class="n">body</span> <span class="o">+</span> <span class="s1">&#39;&lt;/body&gt;&lt;/html&gt;&#39;</span>
+
+        <span class="c1"># HTMLで出力</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">((</span><span class="n">htmlpath</span><span class="p">),</span> <span class="s2">&#34;w&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">g</span><span class="p">:</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="c1"># スタイルは、style.cssを参照する</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">onefind_path</span><span class="p">(</span><span class="s1">&#39;style.css&#39;</span><span class="p">),</span> <span class="s1">&#39;rt&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">style</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">mdfile</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&#34;*.md&#34;</span><span class="p">):</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">%s</span><span class="s2"> の変換を開始します&#34;</span> <span class="o">%</span> <span class="n">mdfile</span><span class="p">)</span>
+            <span class="n">htmlname</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;.md$&#39;</span><span class="p">,</span> <span class="s1">&#39;.html&#39;</span><span class="p">,</span> <span class="n">mdfile</span><span class="p">)</span>
+            <span class="n">convertHtml</span><span class="p">(</span><span class="n">mdfile</span><span class="p">,</span> <span class="n">htmlname</span><span class="p">,</span> <span class="n">style</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&#34;-----------------------------------&#34;</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">%s</span><span class="s2"> を </span><span class="si">%s</span><span class="s2"> へ変換しました&#34;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mdfile</span><span class="p">,</span> <span class="n">htmlname</span><span class="p">))</span></code></pre></div>
+<p>途中の<code>style.css</code>は任意のスタイルを記述したファイルを、pyファイルと同じフォルダに格納しておきます。</p>
+
+<p>なお、style.cssの内容はとりあえず下記の内容を記述しています。用途に応じて、追記したり別のcssファイルに置き換えてもらえればいいかと思います。</p>
+<div class="highlight"><pre class="chroma"><code class="language-css" data-lang="css"><span class="nt">body</span> <span class="p">{</span>
+
+  <span class="k">font-family</span><span class="p">:</span> <span class="s2">&#34;Hiragino Kaku Gothic Pro&#34;</span><span class="p">,</span><span class="kc">sans-serif</span><span class="p">;</span>
+  <span class="k">font-size</span><span class="p">:</span> <span class="mi">14</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mi">0</span> <span class="mi">12</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">line-height</span><span class="p">:</span> <span class="mi">23</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">img</span> <span class="p">{</span>
+  <span class="k">max-width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">max-height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">hr</span> <span class="p">{</span>
+  <span class="k">border</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">height</span><span class="p">:</span> <span class="mi">2</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">border-bottom-width</span><span class="p">:</span> <span class="mi">2</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">border-bottom-style</span><span class="p">:</span> <span class="kc">dotted</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">h1</span> <span class="p">{</span>
+  <span class="k">padding-bottom</span><span class="p">:</span> <span class="mf">0.4</span><span class="kt">em</span><span class="p">;</span>
+  <span class="k">line-height</span><span class="p">:</span> <span class="mf">1.2</span><span class="p">;</span>
+  <span class="k">border-bottom-width</span><span class="p">:</span> <span class="mi">1</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">border-bottom-style</span><span class="p">:</span> <span class="kc">solid</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">h1</span><span class="o">,</span> <span class="nt">h2</span><span class="o">,</span> <span class="nt">h3</span><span class="o">,</span> <span class="nt">h4</span><span class="o">,</span> <span class="nt">h5</span><span class="o">,</span> <span class="nt">h6</span> <span class="p">{</span>
+  <span class="k">font-weight</span><span class="p">:</span> <span class="kc">normal</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+<h2 id="参考文献">参考文献</h2>
+
+<p><a href="https://python-markdown.github.io/">Python-Markdown</a></p>
+
+<p><a href="http://oboe2uran.hatenablog.com/entry/2019/01/25/150934">Markdownファイルを Python で PDF にする</a></p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>VS CodeでMarkdownをPDFに自動で変換する</title>
@@ -921,178 +1091,6 @@ on <a href="https://codepen.io">CodePen</a>.</span>
 <h3 id="color">color</h3>
 
 <p>粒子の色。指定できるけど、2色くらいが見た目的に限度かな、と。あんまりカラフルだと目が疲れる・・・。</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>Hugoで静的サイトを生成してみる</title>
-			<link>https://idontwannawork.github.io/posts/make-site-with-hugo/</link>
-			<pubDate>Fri, 05 Apr 2019 10:15:49 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/make-site-with-hugo/</guid>
-			<description>Hugoとは Golangで作られている、静的サイトジェネレーター。なんでも、生成が速いらしいです。 今回はコイツを使って、サイトを生成し公開し</description>
-			<content type="html"><![CDATA[
-
-<h2 id="hugoとは">Hugoとは</h2>
-
-<p>Golangで作られている、静的サイトジェネレーター。なんでも、生成が速いらしいです。</p>
-
-<p>今回はコイツを使って、サイトを生成し公開してみようと思います。</p>
-
-<h2 id="この記事が役立つであろう人">この記事が役立つであろう人</h2>
-
-<p>サイトを立ち上げたくて、ターミナルでの作業が苦でない人。また、自分でCSSなどをいじったりしてデザインするなら、記事を書くほうに労力を割きたい人。</p>
-
-<h2 id="手順">手順</h2>
-
-<p>基本的には<a href="https://gohugo.io/getting-started/quick-start/">ここ</a>を参考にしています。以下の手順はWindows 10にて行っているが、多分Macとかでも同様なはずです。</p>
-
-<p>なお、個人的な好みでWindowsのコマンドプロンプトではなくbusyboxで実行しているが、普通にコマンドプロンプトやPowerShellで実行しても問題ないと思います。</p>
-
-<ol>
-<li><p>Hugoのインストール</p>
-
-<p>Hugoの<a href="https://github.com/gohugoio/hugo/releases">Github</a>から、自分が利用するプラットフォーム用のインストーラーをダウンロードして展開します。この記事を書いている現在での最新は0.54.0。</p>
-
-<p>インストール後、Hugoのbin（実行ファイルが格納されているアドレス）を環境変数に追加します。GUIでもいいし、<code>setx</code>コマンドを実行しても問題ありません。インストールしたあとで、下記コマンドを実行してみます。</p>
-
-<pre><code>$ hugo version
-Hugo Static Site Generator v0.54.0-B1A82C61 windows/amd64 BuildDate: 2019-02-01T09:42:02Z
-</code></pre>
-
-<p>上記のように返ってくれば完了です。</p></li>
-
-<li><p>サイトを生成</p>
-
-<p>以下のコマンドを実行してサイトを生成します。<code>hoge</code>の部分は任意で、自分が生成したいサイト名でOKです。実行したら生成されたフォルダーに移動します。</p>
-
-<pre><code>hugo new site hoge
-cd hoge
-</code></pre></li>
-
-<li><p>テーマを決定</p>
-
-<p><a href="https://themes.gohugo.io/">Hugoのテーマを集めたページ</a>を参照して、好みのテーマを探します。カスタマイズしたり、自力で作成することももちろん可能ですが今回は割愛いたします。今回はミニマムなデザインが気に入ったので、<a href="https://themes.gohugo.io/hermit/">Hermit</a>にしてみました。</p>
-
-<p><img src="/images/hermit.png" alt="Hermit" /></p>
-
-<p>テーマを決めたら下記のコマンドを実行して、gitでGitHubから必要なファイルをダウンロードします。なお、導入手順はテーマのページにしっかり記述されていました。親切！</p>
-
-<pre><code>git init
-git submodule add https://github.com/Track3/hermit.git themes/hermit
-</code></pre>
-
-<p>ここまで実行すると、下記のようなフォルダーとファイルの構成ができ上がっているはずです。</p>
-
-<pre><code>.
-├── archetypes
-├── config.toml
-├── content
-├── data
-├── layouts
-├── static
-└── themes
-</code></pre>
-
-<p>この時点で下記のコマンドを実行すると、<code>public</code>という名前でフォルダーが作成されて、その中に生成されたHTMLファイルなどが格納されるはずです。ただし、この時点ではコンテンツを作成していないため、トップページだけで中身はなにもありません。</p>
-
-<pre><code>hugo
-</code></pre></li>
-
-<li><p>設定ファイルを変更</p>
-
-<p>ファイル<code>config.toml</code>に設定を追記します。</p>
-
-<p>オフィシャルでは下記のコマンドを実行するだけでいい、としています。要はテーマの名前を追加しています。なぜかというと、生成直後の設定ファイルの中身では、何のテーマを利用するか記述がないためわからないから追記してやる必要があるわけです。</p>
-
-<pre><code>echo 'theme = &quot;ananke&quot;' &gt;&gt; config.toml
-</code></pre>
-
-<p>ただ、一応これ以外にも後々修正や追記したりする部分があるので、この時点で編集してしまっても問題ありません。それと、他のテーマについては不明ですがHermitに関して言えば、<code>config.toml</code>は自分で記述するのではなくて、<a href="https://github.com/Track3/hermit/blob/master/exampleSite/config.toml">用意されたもの</a>を流用して中身を編集した方が便利です。というのは、テーマによってはこの設定ファイル中に特定の設定値がないと、<code>hugo</code>コマンドでのサイト生成の際エラーになる可能性があるから・・・実際、それで30分ほどムダにしました_(┐「ε:)_</p></li>
-
-<li><p>記事を作成</p>
-
-<p>下記のコマンドを実行すると<code>content</code>フォルダー配下にファイルを生成します。</p>
-
-<pre><code>hugo new hoge.md
-</code></pre>
-
-<p>この際、出力先のフォルダーを指定できます。下記のコマンドでは、<code>content</code>フォルダー配下に<code>posts</code>フォルダーが存在しなければ自動的に生成してから、ファイルを生成します。カテゴリだとかジャンル別にファイルを分別したい場合に有効な方法。</p>
-
-<pre><code>hugo new posts/hoge.md
-</code></pre>
-
-<p>生成された直後のファイルの中身は下記のような感じ。</p>
-
-<pre><code>---
-title: &quot;Hoge&quot;
-date: 2019-04-04T18:21:09+09:00
-draft: true
----
-</code></pre>
-
-<p>ここに記事をMarkdown形式で記述します。ちなみに、ファイル冒頭の<code>draft</code>はtrueだと下書き扱いになります。<code>hugo server</code>とかでファイル生成すると内容の確認はできるんだけど、<code>public</code>フォルダーには出力されません（下書きだから）。なので、サイト公開時には忘れずに<code>draft: false</code>としておく必要があります。じゃないと、地味に30分くらいハマることになるので_(┐「ε:)_</p>
-
-<p>なお、Windowsあるある・・・かどうかはよくわからないけど、UTF-8でファイルを保存しておかないとコマンド<code>hugo</code>の実行の際エラーになるので注意が必要です。</p></li>
-
-<li><p>サーバーを起動して確認</p>
-
-<p>下記のコマンドを実行します。</p>
-
-<pre><code>hugo server -D
-</code></pre>
-
-<p>その後ブラウザで<a href="http://localhost:1313/"><code>http://localhost:1313/</code></a>にアクセスします。</p>
-
-<p>なお、ブラウザで生成したサイトを表示させたまま<code>config.toml</code>や記事の内容をいじったりすると、そのまま反映されます。スゲェ。</p>
-
-<p>ちなみに、Hugoのサーバーを終了するには<code>Ctrl+C</code>を押します。</p></li>
-
-<li><p>固定ページなどの表示設定</p>
-
-<p>ここからの作業は任意ですが、大抵のblogにはコンテンツ以外に「このページについて」みたいな固定ページが存在します。そういった、コンテンツ以外のページも必要に応じて追加します。</p>
-
-<p>追加する手順は基本的に記事を生成する際と何ら変わりません。注意するのは<code>content</code>フォルダー配下の構成と<code>config.toml</code>ファイルの設定内容。たとえば、<code>content</code>フォルダーの内容が下記の通りだったとします。<code>page</code>と<code>posts</code>はフォルダーです。</p>
-
-<pre><code>.
-├── page
-│    └── hoge-page.md
-├── posts
-│    ├── content1.md
-│    ├── content2.md
-│    └── content3.md
-└── about.md
-</code></pre>
-
-<p>この場合、設定ファイルの<code>config.toml</code>の内容を下記の通り記述することで、ファイルと生成後の出力内容を紐づけることができます。</p>
-
-<pre><code>## コンテンツ用設定
-  [[menu.main]]
-    name = &quot;Posts&quot;
-    url = &quot;posts/&quot;
-    weight = 10
-
-## 固定ページ用設定。
-  [[menu.main]]
-    name = &quot;pages&quot;
-    url = &quot;page/&quot;
-    weight = 10
-
-## 「このページについて」ページの設定。
-  [[menu.main]]
-    name = &quot;About&quot;
-    url = &quot;about/&quot;
-    weight = 10
-</code></pre>
-
-<p>なお、ここで<code>*.md</code>ファイルを単体で置いておくと1枚の単体ページとしてHTMLファイル生成されます。が、1つ以上の<code>*.md</code>ファイルをフォルダー配下に格納しておくと、各記事をHTMLファイルに変換するのと同時に、自動的にリストページを生成してくれます。便利。</p>
-
-<p>ただし、前述の下書き設定<code>draft</code>がtrueになっていたりすると、Markdownファイルがあっても下書き扱いとなるのでHTMLファイルが生成されません（ローカルでの内容確認はできるが、<code>public</code>フォルダーに出力されない）。そのため、メニューに項目があってもファイルが存在せず404になってしまうので、そこだけは注意が必要です。</p></li>
-</ol>
-
-<h2 id="というわけで">というわけで</h2>
-
-<p>当ページは<a href="https://gohugo.io/">Hugo</a>と<a href="https://github.com/Track3/hermit">Hermit</a>で作成されています_(┐「ε:)_</p>
 ]]></content>
 		</item>
 		
