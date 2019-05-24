@@ -14,7 +14,7 @@
 
 <meta itemprop="datePublished" content="2019-05-24T14:50:30&#43;09:00" />
 <meta itemprop="dateModified" content="2019-05-24T14:50:30&#43;09:00" />
-<meta itemprop="wordCount" content="1367">
+<meta itemprop="wordCount" content="1290">
 
 
 
@@ -143,26 +143,10 @@ README.html   README.md     iamacat.html  iamacat.md    main.css      mdtohtml.p
 <p>基本的には、HTML化はMarkdownに丸投げしています。丸投げした後、必要な<code>&lt;html&gt;</code>タグなどを付与しているだけです。</p>
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">markdown</span>
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">glob</span>
 
 <span class="c1"># Markdown拡張</span>
 <span class="n">mdextensions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;tables&#34;</span><span class="p">]</span>
-
-
-<span class="c1"># ディレクトリ全探索</span>
-<span class="k">def</span> <span class="nf">find_all</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
-        <span class="k">yield</span> <span class="n">root</span>
-        <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="nb">file</span><span class="p">)</span>
-
-
-<span class="c1"># カレントディレクトリから１番最初に見つかるファイル相対PATHを取得</span>
-<span class="k">def</span> <span class="nf">onefind_path</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">path</span>
 
 
 <span class="c1"># mdファイルの変換</span>
@@ -186,7 +170,7 @@ README.html   README.md     iamacat.html  iamacat.md    main.css      mdtohtml.p
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
 
     <span class="c1"># スタイルは、style.cssを参照する</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">onefind_path</span><span class="p">(</span><span class="s1">&#39;style.css&#39;</span><span class="p">),</span> <span class="s1">&#39;rt&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./style.css&#39;</span><span class="p">,</span> <span class="s1">&#39;rt&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">style</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">mdfile</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&#34;*.md&#34;</span><span class="p">):</span>
             <span class="k">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">%s</span><span class="s2"> の変換を開始します&#34;</span> <span class="o">%</span> <span class="n">mdfile</span><span class="p">)</span>
@@ -239,7 +223,7 @@ README.html   README.md     iamacat.html  iamacat.md    main.css      mdtohtml.p
 				<p>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/python">Python</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/markdown">Markdown</a></span>
 				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1367 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1290 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-05-24 05:50 &#43;0000</p>
 			</footer>
 		</article>
