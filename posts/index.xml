@@ -6,8 +6,113 @@
 		<description>Recent content in Posts on Come as you are</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Fri, 24 May 2019 14:50:30 +0900</lastBuildDate>
+		<lastBuildDate>Tue, 04 Jun 2019 17:11:23 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>TASCAMのiXZを使ってiPhoneでレコーディングする</title>
+			<link>https://idontwannawork.github.io/posts/recocrd-with-tascam-ixz/</link>
+			<pubDate>Tue, 04 Jun 2019 17:11:23 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/recocrd-with-tascam-ixz/</guid>
+			<description>そもそもiXZって何ぞや TASCAMが販売しているスマートフォン・タブレット端末用オーディオインターフェイスです。発売は2011年とめちゃく</description>
+			<content type="html"><![CDATA[
+
+<h2 id="そもそもixzって何ぞや">そもそもiXZって何ぞや</h2>
+
+<p><img src="IMG_0671.png" alt="pic" /></p>
+
+<p><a href="https://tascam.jp/jp/product/ixz/top">TASCAMが販売している</a>スマートフォン・タブレット端末用オーディオインターフェイスです。発売は2011年とめちゃくちゃ昔なのですが現役で販売されていることからもわかる通り、スマートフォン・タブレット端末で利用できる手軽なインターフェイスの王道です。</p>
+
+<p>特徴としては、スマートフォンなどに「アナログで接続する」という点。そして、ギター専用の<a href="https://www.ikmultimedia.com/products/irig2/?L=JP">iRig</a>のような「スマートフォンに直接接続する」仕様であるにもかかわらず、ギターだけじゃなくコンデンサーマイクの利用も可能な点でしょうか。</p>
+
+<h2 id="仕様">仕様</h2>
+
+<p><img src="IMG_0679.png" alt="pic" /></p>
+
+<p>サイズは<code>106（W）× 40（H）× 45（D）mm</code>と、最近大型化しているスマートフォンと比べると厚さ以外は割とコンパクト。単3電池2本がセット可能ですが、電池を含めないと100gを切るくらいの軽量さ。</p>
+
+<p>入力端子はハイインピーダンス入力に対応していて、ギターなどを直接接続できます。また、端子がXLR/TSコンボジャック仕様で、ギター・ベースやシンセサイザーなどの標準プラグだけでなく、XLR端子をもつマイクも接続可能です。さらに、単3電池2本によるファントム電源の供給が可能で、コンデンサーマイクの接続もできるとあって、実売価格が4000円前後の商品としては割と充実した装備です。</p>
+
+<p>スマートフォンやタブレットへの接続には、本体から「ニョキッ」と生えている4極端子を用います。デバイスのヘッドホン端子に接続することで、アナログでのレコーディングができるようになるわけです。最近だとLightning端子などに接続してデジタルでレコーディングする機種もありますが、ヘッドホン端子でのアナログ接続ならAndroidとiOSの双方で利用できるので、ありがたいです。まぁ、最近はそもそも<a href="https://www.apple.com/jp/iphone-xs/">ヘッドホン端子</a>が<a href="https://www.apple.com/jp/iphone-xr/">存在しないスマホ</a>も<a href="https://www.nttdocomo.co.jp/product/smart_phone/so01l/">ゴロゴロ</a>ありますけどね・・・。</p>
+
+<p>ちなみに、説明書などにはこの機種が利用できるデバイスを「4極端子（CTIA規格）を搭載した端末に限ります」としているのですが、4極端子を装備していないデバイスって最近あるんですかね？</p>
+
+<p>また、本体背面の3.5mmステレオミニジャックにイヤホンやヘッドホンを接続することで、音声出力をモニターしながらレコーディングできます。まぁ、この「モニターしながらレコーディングできる」って言うのが、<strong>ちょっとした罠</strong> になっているんですけどね・・・_(┐「ε:)_（後述）</p>
+
+<p>なお、当機種はiOSにおける動作検証の対象機材となっており<a href="https://tascam.com/jp/support/news/5751">サポートページ</a>でiOS12における動作が確認されていることから、今後もしばらくは安心して使用できます。ただ、Lightning端子に接続するようなデジタル仕様じゃないので、OSの変更で影響が出てくるのか？と問われると、「ぶっちゃけ関係ないんじゃないの？」と首をかしげるところではありますが。</p>
+
+<p>ちなみに、細かいところにツッコミを入れるなら、多分USBオーディオインターフェイスじゃないと思うんですけど（名推理）</p>
+
+<p><img src="2019-06-04-17-36-25.png" alt="pic" /></p>
+
+<h2 id="使い方">使い方</h2>
+
+<h3 id="接続">接続</h3>
+
+<p>使い方は、正面の入力端子にギターやシンセを接続し、背面の4極ミニプラグケーブルをスマートフォンやタブレットのヘッドホンを接続します。また、本体の背面にあるヘッドホン端子へ対しヘッドホンなどを接続して音声出力をモニターします。</p>
+
+<p><img src="2019-06-04-18-09-02.png" alt="pic" /></p>
+
+<p>このとき、標準ジャックを利用するのであれば電池は不要です。電池は、コンデンサーマイクを接続する際のファントム電源の供給にのみ利用するからです。</p>
+
+<h3 id="音量調整">音量調整</h3>
+
+<p>音量はデバイスのボリュームを調整することで操作します。</p>
+
+<h3 id="さあレコーディング-あれ">さあレコーディング！・・・あれ？</h3>
+
+<p>接続はこれで終わりです。ただこれだけではレコーディングできません。そう、<strong>アプリ</strong>が必要なのですよ・・・！</p>
+
+<h3 id="アプリは">アプリは？</h3>
+
+<p>iXZ用のアプリというものはリリースされていません。じゃあどうするか？</p>
+
+<p><strong>好きなアプリを使えばいいんじゃね？</strong>、です。</p>
+
+<p>そう言ってしまうと冗談に聞こえますが割とマジです。何せアナログの入力なので、プロテクトも何もないわけですから、極端なことを言えばスマホに標準搭載されているカメラアプリを使って録画してもいいわけです。あるいは、iOSであれば<a href="https://www.apple.com/jp/ios/garageband/">GarageBand</a>がパッと思い浮かぶところでしょうか。</p>
+
+<p><strong>慣れ親しんだアプリを使ってね</strong>という、TASCAMの思いやりなのかもしれないデスネ（ぐるぐる目）</p>
+
+<h2 id="つまづいたところ">つまづいたところ</h2>
+
+<p>単純明快なアナログ接続のiXZですが、スムーズに万事うまく行ったわけではありませんでした。というのが、<strong>音声入力のモニターができるか否かはアプリに依存</strong>する点です。</p>
+
+<p>当初、この機種の動作確認を行うのに、iPhoneのカメラアプリを利用しました。ところが、接続したイヤホンから音声のモニターができないのです。かすかな「サー」というホワイトノイズが彼方に聞こえるのみで、INPUTのダイヤルをひねろうとiPhoneの音量を調整しようと一向に音声をモニターできません。</p>
+
+<p>「あちゃー、初期不良かなー」と思いましたが、録画した動画を再生してみるとしっかりと入力した音声が録画されていました。<strong>つまり、音声入力は取得できているけど、それをモニターできない</strong>わけでした。</p>
+
+<p>少し調べてみたところ「モニターの可否は、レコーディングに利用するアプリが<strong>入力された音声を出力へ返してくれるかどうか</strong>に依存している」ということがわかりました。</p>
+
+<p>つまり、iXZは録音するデバイス（この場合iPhone）からの音声出力を単純にイヤホンに出力しているだけで、iXZ本体でイヤホンジャックに向けて配線しているわけではない、ということです。なので、モニタリングできるよう入力された音声を出力できるようなアプリを利用すればよい、ということになります。</p>
+
+<p>ただし、GarageBandのようなアプリは動画ではなく音声のみを録音するので、「動画を取りつつ音声をモニターしたい」というニーズには残念ながら大抵のアプリが非対応、ということになります。</p>
+
+<p>この場合、根本的な解決策はモニターできる録画アプリを探すことになります。が、今回は録画したかったものがKORGのvolcaをいじる場面だったので、ステレオミニプラグを分岐させるアダプターを利用しました。volcaのアウトプットに分岐アダプターを接続し、一方はiXZに接続しつつもう一方をイヤホンやスピーカーに接続することで、モニターしながら録画できる環境にしました。</p>
+
+<h2 id="使った感じはどうなのよ">使った感じはどうなのよ？</h2>
+
+<p><strong>スゲーお手軽・・・！！</strong> _(┐「ε:)_</p>
+
+<p>これなんですよねぇ。レコーディングしたい機材をパパッと接続して、アプリを起動して録音するだけ。それ以上の操作は必要ないうえ、どこへでも持って行けるサイズ。ギターなどを接続するなら電池も不要で、とにかく身軽かつ気軽。</p>
+
+<p>アナログ特有のノイズはどうしてもありますが、言うほど気にはなりません。これ以上を望むならもう少し出費してデジタルのオーディオインターフェイスを準備するほうが、精神衛生上よろしいかと思います。</p>
+
+<p>というか、この手のインターフェイスでギターとマイクが接続できるものはiXZが今の所最安値です。より良い環境を求めるなら自動的に出費する以外にはありません。強いて言えばiRigですけど、あれはギターとかの標準プラグのみ対応してる機種ですしね。</p>
+
+<p>気になったと言えば、iXZ本体にイヤホンを接続してモニターする場合、原音と比べて若干音がマイルドになるというか、少しハリがなくなるというか、そんな気がします。良く言えば「角が取れて落ち着く」、悪く言えば「ヌケが悪くなってダルい」。ただし、イヤホンはあくまでもモニター用ですしiPhone本体にはそこそこのヌケで録音されているので問題ないでしょう。</p>
+
+<p>そして何よりこの値段設定が素晴らしい。コストパフォーマンスとしては、100点満点じゃないでしょうか。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p><strong>身軽でお手軽な上、コスパまで備えた働き者</strong>です。</p>
+
+<p>スマートフォンやタブレットを利用してレコーディングしたい、ギターだけじゃなくてマイクも使いたい、小難しいのはいいからとにかく気軽にやりたい。</p>
+
+<p>そんな人にぜひオススメしたい、良質なインターフェイスです。</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>PythonでMarkdownファイルをHTMLへ変換する</title>
@@ -978,103 +1083,6 @@ Currently defined functions:
 
 <pre><code>Capitalized_Words_With_Underscores (ugly!)
 </code></pre>
-]]></content>
-		</item>
-		
-		<item>
-			<title>A-Frameでいろいろ降らせる</title>
-			<link>https://idontwannawork.github.io/posts/aframe-particle/</link>
-			<pubDate>Thu, 11 Apr 2019 09:47:58 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/aframe-particle/</guid>
-			<description>降らせるって何を？ こんな感じ。 See the Pen aframe_particle_star by idontwannawork (@idontwannawork) on CodePen. 結論 これを使います。 概要 webVR用のフレームワークA-Frameにはさまざまなサードパーテ</description>
-			<content type="html"><![CDATA[
-
-<h2 id="降らせるって何を">降らせるって何を？</h2>
-
-<p>こんな感じ。</p>
-
-<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="mgWdgj" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="aframe_particle_star">
-  <span>See the Pen <a href="https://codepen.io/idontwannawork/pen/mgWdgj/">
-  aframe_particle_star</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
-  on <a href="https://codepen.io">CodePen</a>.</span>
-</p>
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p>
-
-<h2 id="結論">結論</h2>
-
-<p><a href="https://github.com/IdeaSpaceVR/aframe-particle-system-component">これ</a>を使います。</p>
-
-<h2 id="概要">概要</h2>
-
-<p>webVR用のフレームワーク<a href="https://aframe.io/">A-Frame</a>にはさまざまなサードパーティーのコンポーネントが存在します。その中で、「いろいろ降らせる」コンポーネントを実装します。これを実装することで「雪の降る町」や「チリの舞う荒野」なんかの表現ができます。</p>
-
-<h2 id="設定値">設定値</h2>
-
-<h3 id="preset">preset</h3>
-
-<p><code>preset</code>の値で粒子の形を変えて降らせることができます。</p>
-
-<ul>
-<li><p>stars（デフォルト）
-星が降ってきます。デフォルトではrainとsnowの中間くらいの落下速度で、粒度がrainより粗いです。そして、粒子が星形。他と異なり、後方で噴水のように噴き出しています。</p>
-
-<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="mgWdgj" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="aframe_particle_star">
-<span>See the Pen <a href="https://codepen.io/idontwannawork/pen/mgWdgj/">
-aframe_particle_star</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
-on <a href="https://codepen.io">CodePen</a>.</span>
-</p>
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p></li>
-
-<li><p>dust
-チリっぽい何か。この設定値が一番ゆっくり降ってきます。というか、舞ってます。粒度は以下の2つと同様で、細かいです。チリっていうよりも「ホコリ」っていった方が正確かもしれない。</p>
-
-<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="mgWpWa" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="aframe_particle_dust">
-<span>See the Pen <a href="https://codepen.io/idontwannawork/pen/mgWpWa/">
-aframe_particle_dust</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
-on <a href="https://codepen.io">CodePen</a>.</span>
-</p>
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p></li>
-
-<li><p>snow
-その名の通り、雪。rainよりゆっくり降ってきます。粒度と粒子はデフォルトではdustと同じっぽく見えます。これはしっかり上から「降って」きます。</p>
-
-<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="oOZXMX" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="aframe_particle_snow">
-<span>See the Pen <a href="https://codepen.io/idontwannawork/pen/oOZXMX/">
-aframe_particle_snow</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
-on <a href="https://codepen.io">CodePen</a>.</span>
-</p>
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p></li>
-
-<li><p>rain
-その名の通り、雨。snowより早く降ってきます。粒子はいわゆるティアドロップっぽい形。これもしっかり上から「降って」きます。</p>
-
-<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="JVWLvR" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="aframe_particle_rain">
-<span>See the Pen <a href="https://codepen.io/idontwannawork/pen/JVWLvR/">
-aframe_particle_rain</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
-on <a href="https://codepen.io">CodePen</a>.</span>
-</p>
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p></li>
-</ul>
-
-<h3 id="texture">texture</h3>
-
-<pre><code>&lt;a-entity position=&quot;0 2.25 -15&quot; particle-system=&quot;preset: dust; texture: ./images/star2.png; color: #0000FF,#00FF00,#FF0000&quot;&gt;&lt;/a-entity&gt;
-</code></pre>
-
-<p>画像指定することでテクスチャを貼ることができます。ただ、あんまり粒子が小さい（デフォルトで1）だといまいち判別がつかないような・・・。</p>
-
-<h3 id="maxage">maxAge</h3>
-
-<p>粒子の最大経過時間（秒）。これを増やすと、粒子が長時間画面に留まる＝画面上の粒子の数が増えます。</p>
-
-<h3 id="size">size</h3>
-
-<p>粒子の大きさ。デフォルトは1なのだけど、これだと星なのか雪なのかわからないくらい（落下スピードが異なるので、そこで区別はつくけど）なので、変更するとはっきり区別できるようになります。</p>
-
-<h3 id="color">color</h3>
-
-<p>粒子の色。指定できるけど、2色くらいが見た目的に限度かな、と。あんまりカラフルだと目が疲れる・・・。</p>
 ]]></content>
 		</item>
 		

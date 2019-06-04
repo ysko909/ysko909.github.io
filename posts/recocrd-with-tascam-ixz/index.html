@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+
+<meta itemprop="name" content="TASCAMのiXZを使ってiPhoneでレコーディングする">
+<meta itemprop="description" content="そもそもiXZって何ぞや TASCAMが販売しているスマートフォン・タブレット端末用オーディオインターフェイスです。発売は2011年とめちゃく">
+
+
+<meta itemprop="datePublished" content="2019-06-04T17:11:23&#43;09:00" />
+<meta itemprop="dateModified" content="2019-06-04T17:11:23&#43;09:00" />
+<meta itemprop="wordCount" content="3291">
+
+
+
+<meta itemprop="keywords" content="iPhone,iXZ," />
+<meta property="og:title" content="TASCAMのiXZを使ってiPhoneでレコーディングする" />
+<meta property="og:description" content="そもそもiXZって何ぞや TASCAMが販売しているスマートフォン・タブレット端末用オーディオインターフェイスです。発売は2011年とめちゃく" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://idontwannawork.github.io/posts/recocrd-with-tascam-ixz/" /><meta property="article:published_time" content="2019-06-04T17:11:23&#43;09:00"/>
+<meta property="article:modified_time" content="2019-06-04T17:11:23&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="TASCAMのiXZを使ってiPhoneでレコーディングする"/>
+<meta name="twitter:description" content="そもそもiXZって何ぞや TASCAMが販売しているスマートフォン・タブレット端末用オーディオインターフェイスです。発売は2011年とめちゃく"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>TASCAMのiXZを使ってiPhoneでレコーディングする</title>
+	<link rel="stylesheet" href="https://idontwannawork.github.io/css/style.min.e81f50049998463da8cdbf0f848b77d9797f27f249581a236a3161d386f310db.css" integrity="sha256-6B9QBJmYRj2ozb8PhIt32Xl/J/JJWBojajFh04bzENs=">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://idontwannawork.github.io/">Come as you are</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					<a href="https://idontwannawork.github.io/posts/">Posts</a>
+					<a href="https://idontwannawork.github.io/about/">About</a>
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://twitter.com/unknown_strings" target="_blank" rel="noopener me" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/idontwannawork" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://codepen.io/idontwannawork/" target="_blank" rel="noopener me" title="Codepen"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-codepen"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon><line x1="12" y1="22" x2="12" y2="15.5"></line><polyline points="22 8.5 12 15.5 2 8.5"></polyline><polyline points="2 15.5 12 8.5 22 15.5"></polyline><line x1="12" y1="2" x2="12" y2="8.5"></line></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://idontwannawork.github.io/posts/">Posts</a></li>
+			<li><a href="https://idontwannawork.github.io/about/">About</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Jun 4, 2019</span></div>
+				<h1>TASCAMのiXZを使ってiPhoneでレコーディングする</h1>
+			</header>
+			<div class="content">
+				
+
+<h2 id="そもそもixzって何ぞや">そもそもiXZって何ぞや<a href="#そもそもixzって何ぞや" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p><img src="IMG_0671.png" alt="pic" /></p>
+
+<p><a href="https://tascam.jp/jp/product/ixz/top">TASCAMが販売している</a>スマートフォン・タブレット端末用オーディオインターフェイスです。発売は2011年とめちゃくちゃ昔なのですが現役で販売されていることからもわかる通り、スマートフォン・タブレット端末で利用できる手軽なインターフェイスの王道です。</p>
+
+<p>特徴としては、スマートフォンなどに「アナログで接続する」という点。そして、ギター専用の<a href="https://www.ikmultimedia.com/products/irig2/?L=JP">iRig</a>のような「スマートフォンに直接接続する」仕様であるにもかかわらず、ギターだけじゃなくコンデンサーマイクの利用も可能な点でしょうか。</p>
+
+<h2 id="仕様">仕様<a href="#仕様" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p><img src="IMG_0679.png" alt="pic" /></p>
+
+<p>サイズは<code>106（W）× 40（H）× 45（D）mm</code>と、最近大型化しているスマートフォンと比べると厚さ以外は割とコンパクト。単3電池2本がセット可能ですが、電池を含めないと100gを切るくらいの軽量さ。</p>
+
+<p>入力端子はハイインピーダンス入力に対応していて、ギターなどを直接接続できます。また、端子がXLR/TSコンボジャック仕様で、ギター・ベースやシンセサイザーなどの標準プラグだけでなく、XLR端子をもつマイクも接続可能です。さらに、単3電池2本によるファントム電源の供給が可能で、コンデンサーマイクの接続もできるとあって、実売価格が4000円前後の商品としては割と充実した装備です。</p>
+
+<p>スマートフォンやタブレットへの接続には、本体から「ニョキッ」と生えている4極端子を用います。デバイスのヘッドホン端子に接続することで、アナログでのレコーディングができるようになるわけです。最近だとLightning端子などに接続してデジタルでレコーディングする機種もありますが、ヘッドホン端子でのアナログ接続ならAndroidとiOSの双方で利用できるので、ありがたいです。まぁ、最近はそもそも<a href="https://www.apple.com/jp/iphone-xs/">ヘッドホン端子</a>が<a href="https://www.apple.com/jp/iphone-xr/">存在しないスマホ</a>も<a href="https://www.nttdocomo.co.jp/product/smart_phone/so01l/">ゴロゴロ</a>ありますけどね・・・。</p>
+
+<p>ちなみに、説明書などにはこの機種が利用できるデバイスを「4極端子（CTIA規格）を搭載した端末に限ります」としているのですが、4極端子を装備していないデバイスって最近あるんですかね？</p>
+
+<p>また、本体背面の3.5mmステレオミニジャックにイヤホンやヘッドホンを接続することで、音声出力をモニターしながらレコーディングできます。まぁ、この「モニターしながらレコーディングできる」って言うのが、<strong>ちょっとした罠</strong> になっているんですけどね・・・_(┐「ε:)_（後述）</p>
+
+<p>なお、当機種はiOSにおける動作検証の対象機材となっており<a href="https://tascam.com/jp/support/news/5751">サポートページ</a>でiOS12における動作が確認されていることから、今後もしばらくは安心して使用できます。ただ、Lightning端子に接続するようなデジタル仕様じゃないので、OSの変更で影響が出てくるのか？と問われると、「ぶっちゃけ関係ないんじゃないの？」と首をかしげるところではありますが。</p>
+
+<p>ちなみに、細かいところにツッコミを入れるなら、多分USBオーディオインターフェイスじゃないと思うんですけど（名推理）</p>
+
+<p><img src="2019-06-04-17-36-25.png" alt="pic" /></p>
+
+<h2 id="使い方">使い方<a href="#使い方" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<h3 id="接続">接続<a href="#接続" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>使い方は、正面の入力端子にギターやシンセを接続し、背面の4極ミニプラグケーブルをスマートフォンやタブレットのヘッドホンを接続します。また、本体の背面にあるヘッドホン端子へ対しヘッドホンなどを接続して音声出力をモニターします。</p>
+
+<p><img src="2019-06-04-18-09-02.png" alt="pic" /></p>
+
+<p>このとき、標準ジャックを利用するのであれば電池は不要です。電池は、コンデンサーマイクを接続する際のファントム電源の供給にのみ利用するからです。</p>
+
+<h3 id="音量調整">音量調整<a href="#音量調整" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>音量はデバイスのボリュームを調整することで操作します。</p>
+
+<h3 id="さあレコーディング-あれ">さあレコーディング！・・・あれ？<a href="#さあレコーディング-あれ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>接続はこれで終わりです。ただこれだけではレコーディングできません。そう、<strong>アプリ</strong>が必要なのですよ・・・！</p>
+
+<h3 id="アプリは">アプリは？<a href="#アプリは" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>iXZ用のアプリというものはリリースされていません。じゃあどうするか？</p>
+
+<p><strong>好きなアプリを使えばいいんじゃね？</strong>、です。</p>
+
+<p>そう言ってしまうと冗談に聞こえますが割とマジです。何せアナログの入力なので、プロテクトも何もないわけですから、極端なことを言えばスマホに標準搭載されているカメラアプリを使って録画してもいいわけです。あるいは、iOSであれば<a href="https://www.apple.com/jp/ios/garageband/">GarageBand</a>がパッと思い浮かぶところでしょうか。</p>
+
+<p><strong>慣れ親しんだアプリを使ってね</strong>という、TASCAMの思いやりなのかもしれないデスネ（ぐるぐる目）</p>
+
+<h2 id="つまづいたところ">つまづいたところ<a href="#つまづいたところ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>単純明快なアナログ接続のiXZですが、スムーズに万事うまく行ったわけではありませんでした。というのが、<strong>音声入力のモニターができるか否かはアプリに依存</strong>する点です。</p>
+
+<p>当初、この機種の動作確認を行うのに、iPhoneのカメラアプリを利用しました。ところが、接続したイヤホンから音声のモニターができないのです。かすかな「サー」というホワイトノイズが彼方に聞こえるのみで、INPUTのダイヤルをひねろうとiPhoneの音量を調整しようと一向に音声をモニターできません。</p>
+
+<p>「あちゃー、初期不良かなー」と思いましたが、録画した動画を再生してみるとしっかりと入力した音声が録画されていました。<strong>つまり、音声入力は取得できているけど、それをモニターできない</strong>わけでした。</p>
+
+<p>少し調べてみたところ「モニターの可否は、レコーディングに利用するアプリが<strong>入力された音声を出力へ返してくれるかどうか</strong>に依存している」ということがわかりました。</p>
+
+<p>つまり、iXZは録音するデバイス（この場合iPhone）からの音声出力を単純にイヤホンに出力しているだけで、iXZ本体でイヤホンジャックに向けて配線しているわけではない、ということです。なので、モニタリングできるよう入力された音声を出力できるようなアプリを利用すればよい、ということになります。</p>
+
+<p>ただし、GarageBandのようなアプリは動画ではなく音声のみを録音するので、「動画を取りつつ音声をモニターしたい」というニーズには残念ながら大抵のアプリが非対応、ということになります。</p>
+
+<p>この場合、根本的な解決策はモニターできる録画アプリを探すことになります。が、今回は録画したかったものがKORGのvolcaをいじる場面だったので、ステレオミニプラグを分岐させるアダプターを利用しました。volcaのアウトプットに分岐アダプターを接続し、一方はiXZに接続しつつもう一方をイヤホンやスピーカーに接続することで、モニターしながら録画できる環境にしました。</p>
+
+<h2 id="使った感じはどうなのよ">使った感じはどうなのよ？<a href="#使った感じはどうなのよ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p><strong>スゲーお手軽・・・！！</strong> _(┐「ε:)_</p>
+
+<p>これなんですよねぇ。レコーディングしたい機材をパパッと接続して、アプリを起動して録音するだけ。それ以上の操作は必要ないうえ、どこへでも持って行けるサイズ。ギターなどを接続するなら電池も不要で、とにかく身軽かつ気軽。</p>
+
+<p>アナログ特有のノイズはどうしてもありますが、言うほど気にはなりません。これ以上を望むならもう少し出費してデジタルのオーディオインターフェイスを準備するほうが、精神衛生上よろしいかと思います。</p>
+
+<p>というか、この手のインターフェイスでギターとマイクが接続できるものはiXZが今の所最安値です。より良い環境を求めるなら自動的に出費する以外にはありません。強いて言えばiRigですけど、あれはギターとかの標準プラグのみ対応してる機種ですしね。</p>
+
+<p>気になったと言えば、iXZ本体にイヤホンを接続してモニターする場合、原音と比べて若干音がマイルドになるというか、少しハリがなくなるというか、そんな気がします。良く言えば「角が取れて落ち着く」、悪く言えば「ヌケが悪くなってダルい」。ただし、イヤホンはあくまでもモニター用ですしiPhone本体にはそこそこのヌケで録音されているので問題ないでしょう。</p>
+
+<p>そして何よりこの値段設定が素晴らしい。コストパフォーマンスとしては、100点満点じゃないでしょうか。</p>
+
+<h2 id="まとめ">まとめ<a href="#まとめ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p><strong>身軽でお手軽な上、コスパまで備えた働き者</strong>です。</p>
+
+<p>スマートフォンやタブレットを利用してレコーディングしたい、ギターだけじゃなくてマイクも使いたい、小難しいのはいいからとにかく気軽にやりたい。</p>
+
+<p>そんな人にぜひオススメしたい、良質なインターフェイスです。</p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/iphone">iPhone</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/ixz">iXZ</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>3291 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-06-04 08:11 &#43;0000</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://idontwannawork.github.io/posts/convert-markdown-to-html-with-python/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>PythonでMarkdownファイルをHTMLへ変換する</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "come-as-you-are" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2019 <a href="https://idontwannawork.github.io/">Tetsuya Katsuragi</a> Allrights reserved.</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://idontwannawork.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	<script src="https://idontwannawork.github.io/js/main.min.784417f5847151f848c339cf0acb13a06cbb648b1483435a28ed4556c4ead69b.js" integrity="sha256-eEQX9YRxUfhIwznPCssToGy7ZIsUg0NaKO1FVsTq1ps="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>
