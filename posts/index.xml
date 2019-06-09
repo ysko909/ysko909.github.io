@@ -6,8 +6,44 @@
 		<description>Recent content in Posts on Come as you are</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Tue, 04 Jun 2019 17:11:23 +0900</lastBuildDate>
+		<lastBuildDate>Sun, 09 Jun 2019 19:29:47 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>macOSアップデート後のxcrunエラーはxcodeをインストールする</title>
+			<link>https://idontwannawork.github.io/posts/xcrun-error-after-macos-update/</link>
+			<pubDate>Sun, 09 Jun 2019 19:29:47 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/xcrun-error-after-macos-update/</guid>
+			<description>macOSあるある？ macOSのアップデート（High SierraからMojave）後にgitを実行するとxcrunが見つからないよ！という</description>
+			<content type="html"><![CDATA[
+
+<h2 id="macosあるある">macOSあるある？</h2>
+
+<p>macOSのアップデート（High SierraからMojave）後にgitを実行すると<code>xcrun</code>が見つからないよ！というエラー内容が出現しました。</p>
+
+<p>経験上このエラーメッセージが出現するのってmacOSのアップデート直後なんですよね・・・。そんなわけで毎度調べるのもアレなのでメモしておきます。</p>
+
+<h2 id="エラー内容">エラー内容</h2>
+
+<p>macOSをアップデートした際に、gitを実行しようとすると下記のようなエラーになることがあります。</p>
+
+<pre><code>~ ❯❯❯ git
+xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun
+</code></pre>
+
+<p>他のコマンドでも同じようなエラーメッセージが出現するのかな？</p>
+
+<h2 id="解消法">解消法</h2>
+
+<p>下記のコマンドを発行します。</p>
+
+<pre><code>xcode-select --install 
+</code></pre>
+
+<p>「インストールしますか？」という旨のメッセージが表示されたらOKします。インストールは十数秒で終わると思います。インストールが終わればgitは使えるようになります。</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>TASCAMのiXZを使ってiPhoneでレコーディングする</title>
@@ -944,145 +980,6 @@ Currently defined functions:
 </code></pre>
 
 <p>上記コマンドを、batファイルなどにするかエイリアス設定してやればいいわけです。自分は、個人用に作成したランチャーで上記のコマンドを実行しています。</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>Pythonの命名規約</title>
-			<link>https://idontwannawork.github.io/posts/python-naming-conventions/</link>
-			<pubDate>Fri, 12 Apr 2019 15:27:02 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/python-naming-conventions/</guid>
-			<description>命名規約のメモ PEP8に準拠。何番煎じかわからないけども自学用に。 推奨される命名規約 命名対象 ルール 例 備考 パッケージ、モジュール すべて小文字で</description>
-			<content type="html"><![CDATA[
-
-<h2 id="命名規約のメモ">命名規約のメモ</h2>
-
-<p><a href="https://www.python.org/dev/peps/pep-0008/">PEP8</a>に準拠。何番煎じかわからないけども自学用に。</p>
-
-<h3 id="推奨される命名規約">推奨される命名規約</h3>
-
-<table>
-<thead>
-<tr>
-<th align="center">命名対象</th>
-<th align="center">ルール</th>
-<th align="center">例</th>
-<th align="center">備考</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td align="center">パッケージ、モジュール</td>
-<td align="center">すべて小文字で短く</td>
-<td align="center">flask, os</td>
-<td align="center">アンダースコアの利用は非推奨</td>
-</tr>
-
-<tr>
-<td align="center">クラス</td>
-<td align="center">（アッパー）キャメルケース</td>
-<td align="center">MyClass</td>
-<td align="center"></td>
-</tr>
-
-<tr>
-<td align="center">型変数</td>
-<td align="center">（アッパー）キャメルケース</td>
-<td align="center">MyClass</td>
-<td align="center"></td>
-</tr>
-
-<tr>
-<td align="center">例外</td>
-<td align="center">（アッパー）キャメルケース、最後に「Error」</td>
-<td align="center">MyExcepError</td>
-<td align="center">例外はクラスであるべき、とのこと</td>
-</tr>
-
-<tr>
-<td align="center">グローバル変数</td>
-<td align="center">すべて小文字でアンダースコア区切り、2つアンダースコアを付与</td>
-<td align="center"><code>__all__</code></td>
-<td align="center">グローバル変数をエクスポートするのを防ぐ</td>
-</tr>
-
-<tr>
-<td align="center">関数、変数</td>
-<td align="center">すべて小文字でアンダースコア区切り</td>
-<td align="center">my_funcion</td>
-<td align="center"></td>
-</tr>
-
-<tr>
-<td align="center">メソッド、インスタンス変数</td>
-<td align="center">すべて小文字でアンダースコア区切り</td>
-<td align="center">my_method</td>
-<td align="center"></td>
-</tr>
-
-<tr>
-<td align="center">定数</td>
-<td align="center">すべて大文字でアンダースコア区切り</td>
-<td align="center">MY_CONST</td>
-<td align="center"></td>
-</tr>
-</tbody>
-</table>
-
-<h3 id="ポピュラーな命名">ポピュラーな命名</h3>
-
-<p>上記の基本的なルールに準拠して、実際にはどんな感じで命名をされているか、について。</p>
-
-<h4 id="1文字のみ">1文字のみ</h4>
-
-<pre><code>b
-</code></pre>
-
-<p>小文字1文字。</p>
-
-<pre><code>B
-</code></pre>
-
-<p>大文字1文字。</p>
-
-<h4 id="複数文字列">複数文字列</h4>
-
-<pre><code>lowercase
-</code></pre>
-
-<p>または</p>
-
-<pre><code>lower_case_with_underscores
-</code></pre>
-
-<p>小文字たちとアンダースコア。</p>
-
-<pre><code>UPPERCASE
-</code></pre>
-
-<p>または</p>
-
-<pre><code>UPPER_CASE_WITH_UNDERSCORES
-</code></pre>
-
-<p>大文字たちとアンダースコア。</p>
-
-<h4 id="その他">その他</h4>
-
-<pre><code>CapitalizedWords
-</code></pre>
-
-<p>キャメルケース。</p>
-
-<pre><code>Capitalized_Words_With_Underscores
-</code></pre>
-
-<p>大文字小文字とアンダースコア。ただし、これはPEP8の<a href="https://www.python.org/dev/peps/pep-0008/#descriptive-naming-styles">命名に関するドキュメント</a>中でも「いまいち」扱いされている。</p>
-
-<pre><code>Capitalized_Words_With_Underscores (ugly!)
-</code></pre>
 ]]></content>
 		</item>
 		

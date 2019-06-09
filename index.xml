@@ -6,10 +6,19 @@
     <description>Recent content on Come as you are</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Tue, 04 Jun 2019 17:11:23 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 09 Jun 2019 19:29:47 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>macOSアップデート後のxcrunエラーはxcodeをインストールする</title>
+      <link>https://idontwannawork.github.io/posts/xcrun-error-after-macos-update/</link>
+      <pubDate>Sun, 09 Jun 2019 19:29:47 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/xcrun-error-after-macos-update/</guid>
+      <description>macOSあるある？ macOSのアップデート（High SierraからMojave）後にgitを実行するとxcrunが見つからないよ！という</description>
+    </item>
     
     <item>
       <title>TASCAMのiXZを使ってiPhoneでレコーディングする</title>
@@ -90,15 +99,6 @@
       
       <guid>https://idontwannawork.github.io/posts/busybox-on-windows/</guid>
       <description>結論 普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、BusyBoxを使えばいいよ</description>
-    </item>
-    
-    <item>
-      <title>Pythonの命名規約</title>
-      <link>https://idontwannawork.github.io/posts/python-naming-conventions/</link>
-      <pubDate>Fri, 12 Apr 2019 15:27:02 +0900</pubDate>
-      
-      <guid>https://idontwannawork.github.io/posts/python-naming-conventions/</guid>
-      <description>命名規約のメモ PEP8に準拠。何番煎じかわからないけども自学用に。 推奨される命名規約 命名対象 ルール 例 備考 パッケージ、モジュール すべて小文字で</description>
     </item>
     
   </channel>
