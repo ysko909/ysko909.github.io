@@ -30,6 +30,15 @@
     </item>
     
     <item>
+      <title>Docker</title>
+      <link>https://idontwannawork.github.io/tags/docker/</link>
+      <pubDate>Mon, 10 Jun 2019 00:52:30 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Hugo</title>
       <link>https://idontwannawork.github.io/tags/hugo/</link>
       <pubDate>Fri, 05 Apr 2019 10:15:49 +0900</pubDate>
@@ -86,18 +95,9 @@
     <item>
       <title>Python</title>
       <link>https://idontwannawork.github.io/tags/python/</link>
-      <pubDate>Fri, 24 May 2019 14:50:30 +0900</pubDate>
+      <pubDate>Mon, 10 Jun 2019 00:52:30 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/tags/python/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Vs Code</title>
-      <link>https://idontwannawork.github.io/tags/vs-code/</link>
-      <pubDate>Wed, 15 May 2019 13:44:12 +0900</pubDate>
-      
-      <guid>https://idontwannawork.github.io/tags/vs-code/</guid>
       <description></description>
     </item>
     

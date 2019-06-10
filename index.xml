@@ -6,10 +6,19 @@
     <description>Recent content on Come as you are</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Sun, 09 Jun 2019 19:29:47 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 10 Jun 2019 00:52:30 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>VS CodeでDockerコンテナーのPython開発環境にリモート接続する</title>
+      <link>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</link>
+      <pubDate>Mon, 10 Jun 2019 00:52:30 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</guid>
+      <description>はじめに Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、ptvsdでは</description>
+    </item>
     
     <item>
       <title>macOSアップデート後のxcrunエラーはxcodeをインストールする</title>
@@ -90,15 +99,6 @@
       
       <guid>https://idontwannawork.github.io/posts/make-file-with-dot-on-windows/</guid>
       <description>結論 ファイル名の冒頭および語尾の両方にドットを付与！ 小ネタです .gitignoreとか.bashrcのように、何かの設定ファイルは冒頭に「.</description>
-    </item>
-    
-    <item>
-      <title>WindowsでLinuxのコマンドが使える「BusyBox」</title>
-      <link>https://idontwannawork.github.io/posts/busybox-on-windows/</link>
-      <pubDate>Tue, 16 Apr 2019 09:38:26 +0900</pubDate>
-      
-      <guid>https://idontwannawork.github.io/posts/busybox-on-windows/</guid>
-      <description>結論 普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、BusyBoxを使えばいいよ</description>
     </item>
     
   </channel>

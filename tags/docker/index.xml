@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Vs Code on Come as you are</title>
-    <link>https://idontwannawork.github.io/tags/vs-code/</link>
-    <description>Recent content in Vs Code on Come as you are</description>
+    <title>Docker on Come as you are</title>
+    <link>https://idontwannawork.github.io/tags/docker/</link>
+    <description>Recent content in Docker on Come as you are</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <lastBuildDate>Mon, 10 Jun 2019 00:52:30 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/vs-code/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://idontwannawork.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,15 +18,6 @@
       
       <guid>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</guid>
       <description>はじめに Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、ptvsdでは</description>
-    </item>
-    
-    <item>
-      <title>VS CodeでMarkdownをPDFに自動で変換する</title>
-      <link>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</link>
-      <pubDate>Wed, 15 May 2019 13:44:12 +0900</pubDate>
-      
-      <guid>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</guid>
-      <description>はじめに Markdownで記述したmdファイルは、エンジニア間ではそのまま利用することが多いように思います（GitHubなどにREADME.</description>
     </item>
     
   </channel>

@@ -6,8 +6,156 @@
 		<description>Recent content in Posts on Come as you are</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Sun, 09 Jun 2019 19:29:47 +0900</lastBuildDate>
+		<lastBuildDate>Mon, 10 Jun 2019 00:52:30 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>VS CodeでDockerコンテナーのPython開発環境にリモート接続する</title>
+			<link>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</link>
+			<pubDate>Mon, 10 Jun 2019 00:52:30 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</guid>
+			<description>はじめに Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、ptvsdでは</description>
+			<content type="html"><![CDATA[
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、<a href="https://github.com/microsoft/ptvsd">ptvsd</a>ではなく、vscodeの拡張機能である<a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers">Remote</a>を用いて接続します。</p>
+
+<h2 id="環境構築">環境構築</h2>
+
+<h3 id="環境">環境</h3>
+
+<ul>
+<li>macOS Mojave 10.14.5</li>
+<li>Docker version 18.09.2</li>
+<li>Visual Studio Code version 1.35</li>
+</ul>
+
+<h3 id="拡張機能">拡張機能</h3>
+
+<p>まずは何はなくとも下記の拡張機能をインストールします。</p>
+
+<ul>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers">Remote - Containers</a></li>
+</ul>
+
+<p><img src="2019-06-09-19-47-16.png" alt="pic" /></p>
+
+<p>RemoteはまだvscodeのInsider版でしか動作しなかった・・・のですが、6月6日にStable版でも対応しました。</p>
+
+<h2 id="接続手順">接続手順</h2>
+
+<p>基本的な手順は<a href="https://code.visualstudio.com/docs/remote/containers#_quick-start-try-a-dev-container">ここ</a>にあるものを参考にしています。</p>
+
+<ol>
+<li><p>Dockerアイコンをクリックして、メニュー中の「Preferences」をクリック。「File Sharing」を選択して、共有したいディレクトリが設定されているか確認する。</p>
+
+<p><img src="2019-06-09-19-55-27.png" alt="pic" /></p>
+
+<p>Dockerのメニュー中にPreferencesがあるはずなので、これをクリック。</p>
+
+<p><img src="2019-06-09-19-56-03.png" alt="pic" /></p>
+
+<p>表示されたディレクトリのうち、共有したいディレクトリが設定されていることを確認しておきます。</p></li>
+
+<li><p>任意のコンテナーを準備します。今回はPython用のサンプルプロジェクトを<a href="https://github.com/microsoft/vscode-remote-try-python">microsoftが準備している</a>ので、これをcloneしました。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">~/devp  git clone https://github.com/microsoft/vscode-remote-try-python.git
+Cloning into &#39;vscode-remote-try-python&#39;...
+remote: Enumerating objects: 94, done.
+remote: Counting objects: 100% (94/94), done.
+remote: Compressing objects: 100% (70/70), done.
+remote: Total 94 (delta 47), reused 51 (delta 18), pack-reused 0
+Unpacking objects: 100% (94/94), done.</code></pre></div>
+<p>ちなみに<a href="https://github.com/microsoft/vscode-remote-try-go">Golang用</a>やいろんな言語があったりします。</p>
+
+<p>ただし、現在（2019年5月30日）のところAlpine LinuxやWindowsベースのコンテナーは<a href="https://code.visualstudio.com/docs/remote/containers#_getting-started">サポート外</a>とのこと。</p>
+
+<blockquote>
+<p>Note: Alpine Linux and Windows based dev containers are not currently supported.</p>
+</blockquote></li>
+
+<li><p>cloneした資産を拡張機能のRemoteで開きます。</p>
+
+<p>vscodeを起動します。起動したら、vscodeの左下にある「&gt;&lt;」みたいな部分をクリックします。このとき、先ほどcloneしたディレクトリを開く必要はありません。</p>
+
+<p><img src="2019-06-09-21-05-44.png" alt="pic" /></p>
+
+<p>すると、vscode上部に4つほどコマンドがリストで表示されます。その中から<code>Remote-Containers: Open Folder in Container...</code>を選択します。</p>
+
+<p><img src="2019-06-09-21-07-42.png" alt="pic" /></p>
+
+<p>ディレクトリを選択するダイアログが表示されるので、先ほどcloneしたディレクトリを選択します。</p>
+
+<p>ディレクトリを選択すると、画面がリロードされます。このとき、初回起動でコンテナーが存在していない場合はvscodeが自動的に生成します。しばらく待って、右下の「処理中」メッセージが消えたら準備完了です。</p>
+
+<p><img src="2019-06-09-21-12-03.png" alt="pic" /></p>
+
+<p>とりあえずこの時点で、パッと見はあまり普段と変化は感じられませんが・・・。</p>
+
+<p><img src="2019-06-09-21-21-57.png" alt="pic" /></p>
+
+<p>左下の部分を見ると「Dev Container: Python Sample」と表示されており、コンテナーに接続していることがわかります。</p>
+
+<p><img src="2019-06-09-21-24-28.png" alt="pic" /></p>
+
+<p>この状態でターミナルを起動し<code>docker ps</code>してみると、下記のようにコンテナーが起動していることがわかります。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">~ ❯❯❯ docker ps
+CONTAINER ID        IMAGE                                                           COMMAND                  CREATED             STATUS              PORTS                      NAMES
+3afa6cb8f1e2        vsc-vscode-remote-try-python-f50dab769712249e3a925e9d880f74de   &#34;/bin/sh -c &#39;echo Co…&#34;   6 minutes ago       Up 6 minutes        127.0.0.1:9000-&gt;9000/tcp   nervous_dirac</code></pre></div>
+<p>こんな手順を踏めば、Dockerのコンテナー上で動作している開発環境にvscodeで接続できます。</p></li>
+</ol>
+
+<h2 id="デバッグしてみる">デバッグしてみる</h2>
+
+<p>とりあえず接続はできたわけなので、今度は実際に動作確認とデバッグをしてみます。</p>
+
+<p>コンテナーに接続しているvscode上でTERMINALタブを開きます。まずは、プロンプトが接続先のコンテナーであることを確認します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">root@3afa6cb8f1e2:/workspaces/vscode-remote-try-python# uname
+Linux</code></pre></div>
+<p>本来、macOSのターミナルで<code>uname</code>を実行した場合は「Darwin」と返ってくるので、「Linux」と返ってくるならmacOSのそれではなくコンテナー上のプロンプトであると判断できます。</p>
+
+<p>ここでデバッグが可能か確認するために、app.pyのソースで任意の行にブレークポイントを設定します。ちなみに、すでにvscodeのデバッグメニューを見てみると、<code>Flask</code>で設定済みだったりします。これはclone元ですでにlaunch.jsonが作成済みだからです。親切！</p>
+
+<p><img src="2019-06-09-23-24-34.png" alt="pic" /></p>
+
+<p>この状態で<code>F5</code>キーを押します。あるいはデバッグメニューから「Start Debugging」をクリックします。すると、コンテナーのプロンプトでPythonが実行され、下記のようなメッセージが表示されてFlaskが起動します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">※実行コマンドは省略
+ * Serving Flask app &#34;app.py&#34;
+ * Environment: development
+ * Debug mode: off
+ * Running on http://0.0.0.0:9000/ (Press CTRL+C to quit)</code></pre></div>
+<p>ブラウザを起動してローカルホストに9000ポートで接続します。この際、先ほど設定したブレークポイントで処理が一時的に停止するはずです。この状態では、ローカルで開発しているときと同様に変数値のチェックなどができます。vscodeはコンテナーにリモート接続していますが、それを意識することなく普段どおりの使い方が可能です。</p>
+
+<p>ブレークポイントで停止している処理を続行してやれば、ブラウザがwebページを表示します。</p>
+
+<p><img src="2019-06-10-00-03-10.png" alt="pic" /></p>
+
+<p>これで動作確認とデバッグができました。</p>
+
+<p>なお、実行を止めたい場合はいつもどおり<code>Shift + F5</code>を押せば止まります。</p>
+
+<p>ちなみに、vscodeを終了するとコンテナーは自動的に停止します。<code>docker ps</code>で確認すると表示されなくなっているはずです。</p>
+
+<h2 id="コンテナー設定を変更したらリビルドする">コンテナー設定を変更したらリビルドする</h2>
+
+<p>コンテナーの設定を変更した場合は、vscodeの左下をクリックしてコマンドの一覧を表示します。</p>
+
+<p><img src="2019-06-10-00-09-16.png" alt="pic" /></p>
+
+<p>表示された一覧の中から<code>Remote Containers: Rebuild Container</code>を選択します。</p>
+
+<p><img src="2019-06-10-00-10-13.png" alt="pic" /></p>
+
+<p>画面がリロードされてコンテナーが再度ビルドされます。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>Dockerをインストールして、vscodeを導入し拡張機能のRemoteをインストールすれば、もうあとは欲しい環境をコンテナーで用意するだけで開発環境が揃います。ローカルに開発のための環境を用意する必要がないので、下手にローカル環境を汚すこともなくなります。</p>
+
+<p>ベタなセリフですが、すごい時代になったものです、ホントに。</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>macOSアップデート後のxcrunエラーはxcodeをインストールする</title>
@@ -833,153 +981,6 @@ with open('C:/app/hoge.txt', mode='r') as g:
 <p>「はい」を押せばドット付ファイルのできあがりです。</p>
 
 <p><img src="2019-04-22-13-11-07.png" alt="alt text" /></p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>WindowsでLinuxのコマンドが使える「BusyBox」</title>
-			<link>https://idontwannawork.github.io/posts/busybox-on-windows/</link>
-			<pubDate>Tue, 16 Apr 2019 09:38:26 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/busybox-on-windows/</guid>
-			<description>結論 普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、BusyBoxを使えばいいよ</description>
-			<content type="html"><![CDATA[
-
-<h2 id="結論">結論</h2>
-
-<p>普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、<a href="https://BusyBox.net/">BusyBox</a>を使えばいいよ！</p>
-
-<h2 id="はじめに">はじめに</h2>
-
-<p>仕事ではWindows、プライベートではMacまたはLinuxなんて人もいるかもしれません。そこな貴方、こんなシチュエーションがありませんでしょうか？</p>
-
-<blockquote>
-<p>ふと仕事中に「<code>grep</code>使いたいなー」とか「<code>awk</code>使いたいなー」とかなっても、Windowsのコマンドプロンプトじゃ足りないし、PowerShellはあの文法がいまいち性に合わない。ガッツリ使うわけじゃないから、わざわざ端末や仮想環境を用意するというわけにもいかない。</p>
-</blockquote>
-
-<p>とか、</p>
-
-<blockquote>
-<p>Windows使ってるのに普段のMacのノリで<code>ls</code>って入力しちゃって、Windowsに「そんなコマンドないよ」と言われた経験がある。</p>
-</blockquote>
-
-<p>そんな貴方（私）のため、BusyBoxが十徳ナイフのごとく活躍してくれます。</p>
-
-<h2 id="この記事の対象者">この記事の対象者</h2>
-
-<p>以下に当てはまる方は、BusyBoxで幸せになれるかもしれません。</p>
-
-<ul>
-<li>Windowsを利用しているがUnixのコマンドを使いたい</li>
-<li>管理者権限ではなくインストールができない</li>
-<li>Hyper-Vなどの仮想環境がない</li>
-</ul>
-
-<h3 id="余談1-win10だとlinux使えなかったっけ">（余談1）Win10だとLinux使えなかったっけ？</h3>
-
-<p>Windows 10だとWSL（Windows Subsystem for Linux）で、UbuntuなどのLinuxディストリビューションを利用できます・・・が、リリースモデルの1つ、Enterprise LTSC（Long Term Servicing Channel）だとWSLが利用できません。企業によっては、「安定性などを確保するために、OSに対する頻繁な変更は行いたくない」場合、このモデルが採用されている可能性があります。</p>
-
-<p>この場合も、やっぱりBusyBoxの出番です。</p>
-
-<blockquote>
-<p>※以前は「Long Term Servicing Branch（LTSB）」という名前でリリースされていましたが、現在は「Long Term Servicing Channel（LTSC）」に名称変更されました。</p>
-</blockquote>
-
-<h3 id="余談2-cygwinとかじゃダメなの">（余談2）Cygwinとかじゃダメなの？</h3>
-
-<p>ダメじゃないです、全然大丈夫です。ただ、「ちょっと<code>sed</code>使いたいなー」っていう場合には、機能てんこ盛りなCygwinだとオーバースペックだったりします。</p>
-
-<p>VMwareなどの仮想環境が利用できるなら、そっちの方がいろいろ便利です。ただ、マシンスペックがイマイチだったり記憶容量があまりない場合は却ってストレスになるでしょうし、やっぱりちょっとだけ使うという用途に対してオーバースペックと言わざるを得ません。</p>
-
-<h2 id="インストール">インストール</h2>
-
-<ol>
-<li><a href="https://BusyBox.net/">サイト</a>からバイナリをダウンロードして、任意のフォルダーにて展開する。</li>
-<li>展開したフォルダーを環境変数に登録する（利用するだけなら必須ではないけど、登録しておくと後が楽）。</li>
-</ol>
-
-<p>終わりです。ダウンロードして展開すればいい実行ファイルなので、インストール権限は必要ないです。しかもめちゃくちゃ軽量なので、記憶容量をガツガツ食っちゃうこともありません。</p>
-
-<p>なお、ソースもダウンロードが可能ですが、あまりニーズはないだろうと判断し、この記事の中では触れません。</p>
-
-<h2 id="使い方">使い方</h2>
-
-<h3 id="とりあえず実行してみる">とりあえず実行してみる</h3>
-
-<p><code>BusyBox64.exe</code>と入力して実行してみます。</p>
-
-<pre><code>C:\hoge&gt;BusyBox64.exe
-BusyBox v1.31.0-FRP-2910-ge92596d0b (2019-01-10 14:16:45 GMT) multi-call binary
-(mingw64-gcc 8.2.0-3.fc29; mingw64-crt 5.0.4-2.fc29)
-
-BusyBox is copyrighted by many authors between 1998-2018.
-Licensed under GPLv2. See source distribution for detailed
-copyright notices.
-
-Usage: BusyBox [function [arguments]...]
-  or: BusyBox --list[-full]
-  or: BusyBox --install [DIR]
-  or: BusyBox --uninstall [-n] file
-  or: function [arguments]...
-
-        BusyBox is a multi-call binary that combines many common Unix
-        utilities into a single executable.  The shell in this build
-        is configured to run built-in utilities without $PATH search.
-        You don't need to install a link to BusyBox for each utility.
-        To run external program, use full path (/sbin/ip instead of ip).
-
-Currently defined functions:
-        [, [[, ar, arch, ash, awk, base64, basename, bash, bunzip2, BusyBox, bzcat, bzip2, cal, cat, chmod, cksum,
-        clear, cmp, comm, cp, cpio, cut, date, dc, dd, df, diff, dirname, dos2unix, dpkg-deb, du, echo, ed, egrep, env,
-        expand, expr, factor, false, fgrep, find, fold, fsync, ftpget, ftpput, getopt, grep, groups, gunzip, gzip, hd,
-        head, hexdump, iconv, id, ipcalc, kill, killall, less, link, ln, logname, ls, lzcat, lzma, lzop, lzopcat, man,
-        md5sum, mkdir, mktemp, mv, nc, nl, od, paste, patch, pgrep, pidof, pipe_progress, pkill, printenv, printf, ps,
-        pwd, realpath, rev, rm, rmdir, rpm, rpm2cpio, sed, seq, sh, sha1sum, sha256sum, sha3sum, sha512sum, shred,
-        shuf, sleep, sort, split, ssl_client, stat, strings, sum, tac, tail, tar, tee, test, timeout, touch, tr, true,
-        truncate, ttysize, uname, uncompress, unexpand, uniq, unix2dos, unlink, unlzma, unlzop, unxz, unzip, usleep,
-        uudecode, uuencode, vi, watch, wc, wget, which, whoami, whois, xargs, xxd, xz, xzcat, yes, zcat
-</code></pre>
-
-<p>利用方法や利用可能なコマンドが表示されます。<code>awk</code>や<code>find</code>、<code>grep</code>など一般的なコマンドを利用できることがわかります。</p>
-
-<h3 id="コマンドの実行方法">コマンドの実行方法</h3>
-
-<p>コマンドプロンプトを立ち上げ、下記のように入力し実行します。</p>
-
-<pre><code>BusyBox64.exe 実行したいコマンド
-</code></pre>
-
-<p>プロセスを参照したければ<code>ps</code>を実行するわけですが、その場合は下記のように入力して実行します。</p>
-
-<pre><code>BusyBox64.exe ps
-</code></pre>
-
-<p>この場合、「BusyBox使って<code>ps</code>を実行するぜ」と言っていることになります。</p>
-
-<p>なお、オプションを利用してコマンド発行するのも普段と同様です。</p>
-
-<pre><code>BusyBox64.exe ls -la
-</code></pre>
-
-<p>このように入力して実行すれば<code>l</code>と<code>a</code>のオプションが有効になります。</p>
-
-<h3 id="毎回busyboxって入力しなきゃいけないの">毎回BusyBoxって入力しなきゃいけないの？</h3>
-
-<p>もちろん、そんなことはないです。ログインシェルとして利用することも可能です。その場合のコマンドは下記の通りです。</p>
-
-<pre><code>BusyBox64.exe sh -l
-</code></pre>
-
-<h3 id="実行時の注意">実行時の注意</h3>
-
-<p>前述の通り、BusyBoxはログインシェルとしても利用できます。ただし、コマンドによっては管理者権限が要求されているようで、「Permission Denied」と言われ実行できないケースがありました。自分が実行した際は、<code>grep</code>でこの症状が出ました。</p>
-
-<p>そうなれば管理者権限を付与した状態でシェルを起動すればいい、ということになりますが、毎回「スタートボタンで右クリックしてコマンドプロンプトを管理者権限で実行してから<code>BusyBox sh -l</code>を実行してシェル起動」するのは鬱陶しいので、最初から権限を付与して起動することにしました。</p>
-
-<pre><code>powershell start-process BusyBox64.exe -verb runas 'sh -l'
-</code></pre>
-
-<p>上記コマンドを、batファイルなどにするかエイリアス設定してやればいいわけです。自分は、個人用に作成したランチャーで上記のコマンドを実行しています。</p>
 ]]></content>
 		</item>
 		
