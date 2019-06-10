@@ -14,7 +14,7 @@
 
 <meta itemprop="datePublished" content="2019-06-10T00:52:30&#43;09:00" />
 <meta itemprop="dateModified" content="2019-06-10T00:52:30&#43;09:00" />
-<meta itemprop="wordCount" content="2299">
+<meta itemprop="wordCount" content="2323">
 
 
 
@@ -171,7 +171,7 @@ CONTAINER ID        IMAGE                                                       
 Linux</code></pre></div>
 <p>本来、macOSのターミナルで<code>uname</code>を実行した場合は「Darwin」と返ってくるので、「Linux」と返ってくるならmacOSのそれではなくコンテナー上のプロンプトであると判断できます。</p>
 
-<p>ここでデバッグが可能か確認するために、app.pyのソースで任意の行にブレークポイントを設定します。ちなみに、すでにvscodeのデバッグメニューを見てみると、<code>Flask</code>で設定済みだったりします。これはclone元ですでにlaunch.jsonが作成済みだからです。親切！</p>
+<p>ここでデバッグが可能か確認するために、app.pyのソースで任意の行にブレークポイントを設定します。ちなみに、vscodeのデバッグメニューを見てみると<code>Flask</code>で設定済みだったりします。これはclone元ですでにlaunch.jsonが作成済みだからです。親切！</p>
 
 <p><img src="2019-06-09-23-24-34.png" alt="pic" /></p>
 
@@ -181,7 +181,7 @@ Linux</code></pre></div>
  * Environment: development
  * Debug mode: off
  * Running on http://0.0.0.0:9000/ (Press CTRL+C to quit)</code></pre></div>
-<p>ブラウザを起動してローカルホストに9000ポートで接続します。この際、先ほど設定したブレークポイントで処理が一時的に停止するはずです。この状態では、ローカルで開発しているときと同様に変数値のチェックなどができます。vscodeはコンテナーにリモート接続していますが、それを意識することなく普段どおりの使い方が可能です。</p>
+<p>ブラウザを起動してローカルホストに9000ポートで接続します。この際、先ほど設定したブレークポイントで処理が一時的に停止するはずです。この状態で、ローカルで開発しているときと同様に変数値のチェックなどができます。vscodeはコンテナーにリモート接続していますが、それを意識することなく普段どおりの使い方が可能であるわけです。</p>
 
 <p>ブレークポイントで停止している処理を続行してやれば、ブラウザがwebページを表示します。</p>
 
@@ -203,11 +203,11 @@ Linux</code></pre></div>
 
 <p><img src="2019-06-10-00-10-13.png" alt="pic" /></p>
 
-<p>画面がリロードされてコンテナーが再度ビルドされます。</p>
+<p>画面がリロードされてコンテナーが再度ビルドされます。ビルドが終了すれば普段通りコンテナーを利用できます。</p>
 
 <h2 id="まとめ">まとめ<a href="#まとめ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
-<p>Dockerをインストールして、vscodeを導入し拡張機能のRemoteをインストールすれば、もうあとは欲しい環境をコンテナーで用意するだけで開発環境が揃います。ローカルに開発のための環境を用意する必要がないので、下手にローカル環境を汚すこともなくなります。</p>
+<p>Dockerをインストールして、vscodeを導入し拡張機能のRemoteをインストールすれば、あとは欲しい環境をコンテナーで用意するだけで開発環境が揃います。ローカルに開発のための環境を用意する必要がないので、下手にローカル環境を汚すこともなくなります。</p>
 
 <p>ベタなセリフですが、すごい時代になったものです、ホントに。</p>
 
@@ -217,7 +217,7 @@ Linux</code></pre></div>
 				<p>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/docker">Docker</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/vs-code">VS Code</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/python">Python</a></span>
 				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2299 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2323 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-06-09 15:52 &#43;0000</p>
 			</footer>
 		</article>
