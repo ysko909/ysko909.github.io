@@ -6,10 +6,19 @@
     <description>Recent content on Come as you are</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Mon, 10 Jun 2019 00:52:30 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 15 Jun 2019 21:02:37 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>SequenzのVolca Rackが来たのでレビューしてみる</title>
+      <link>https://idontwannawork.github.io/posts/sequenz-volca-rack-review/</link>
+      <pubDate>Sat, 15 Jun 2019 21:02:37 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/sequenz-volca-rack-review/</guid>
+      <description>はじめに （個人的に）待望の、待望のvolca rackが来ました！ volca rack? volcaといえば、KORGの生み出した大ヒット商品でして、個人的にも大</description>
+    </item>
     
     <item>
       <title>VS CodeでDockerコンテナーのPython開発環境にリモート接続する</title>
@@ -90,15 +99,6 @@
       
       <guid>https://idontwannawork.github.io/posts/garbled-text-with-json-dumps/</guid>
       <description>概要 Pythonでjson.dumps()した際に、日本語が文字化けするのを防ぐメモ。 環境 Windows 10 Python 3.6 実際のコード &amp;gt;&amp;gt;&amp;gt; import json &amp;gt;&amp;gt;&amp;gt; dic = {&amp;quot;hoge&amp;quot;:&amp;quot;foo&amp;quot;, &amp;quot;fuga&amp;quot;:&amp;quot;bar&amp;quot;, &amp;quot;piyo&amp;quot;:&amp;quot;baz&amp;quot;} &amp;gt;&amp;gt;&amp;gt; json.dumps(dic) &#39;{&amp;quot;hoge&amp;quot;: &amp;quot;foo&amp;quot;, &amp;quot;fuga&amp;quot;: &amp;quot;bar&amp;quot;,</description>
-    </item>
-    
-    <item>
-      <title>Windowsでドット付ファイルを作成する</title>
-      <link>https://idontwannawork.github.io/posts/make-file-with-dot-on-windows/</link>
-      <pubDate>Mon, 22 Apr 2019 13:06:22 +0900</pubDate>
-      
-      <guid>https://idontwannawork.github.io/posts/make-file-with-dot-on-windows/</guid>
-      <description>結論 ファイル名の冒頭および語尾の両方にドットを付与！ 小ネタです .gitignoreとか.bashrcのように、何かの設定ファイルは冒頭に「.</description>
     </item>
     
   </channel>
