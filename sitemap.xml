@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://idontwannawork.github.io/posts/korg-volca-modular-review/</loc>
+    <lastmod>2019-06-16T00:30:23+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/posts/sequenz-volca-rack-review/</loc>
     <lastmod>2019-06-15T21:02:37+09:00</lastmod>
   </url>
@@ -101,7 +106,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/</loc>
-    <lastmod>2019-06-15T21:02:37+09:00</lastmod>
+    <lastmod>2019-06-16T00:30:23+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -131,7 +136,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/tags/korg/</loc>
-    <lastmod>2019-06-15T21:02:37+09:00</lastmod>
+    <lastmod>2019-06-16T00:30:23+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -155,7 +160,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/posts/</loc>
-    <lastmod>2019-06-15T21:02:37+09:00</lastmod>
+    <lastmod>2019-06-16T00:30:23+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -167,7 +172,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/tags/review/</loc>
-    <lastmod>2019-06-15T21:02:37+09:00</lastmod>
+    <lastmod>2019-06-16T00:30:23+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -185,7 +190,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/tags/volca/</loc>
-    <lastmod>2019-06-15T21:02:37+09:00</lastmod>
+    <lastmod>2019-06-16T00:30:23+09:00</lastmod>
     <priority>0</priority>
   </url>
   
