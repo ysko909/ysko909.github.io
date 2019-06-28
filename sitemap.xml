@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://idontwannawork.github.io/posts/apple-iphone-xr-review/</loc>
+    <lastmod>2019-06-28T10:18:44+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/posts/korg-volca-modular-review/</loc>
     <lastmod>2019-06-16T00:30:23+09:00</lastmod>
   </url>
@@ -99,6 +104,12 @@
   </url>
   
   <url>
+    <loc>https://idontwannawork.github.io/tags/apple/</loc>
+    <lastmod>2019-06-28T10:18:44+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/tags/busybox/</loc>
     <lastmod>2019-04-16T09:38:26+09:00</lastmod>
     <priority>0</priority>
@@ -106,7 +117,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/</loc>
-    <lastmod>2019-06-16T00:30:23+09:00</lastmod>
+    <lastmod>2019-06-28T10:18:44+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -124,7 +135,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/tags/iphone/</loc>
-    <lastmod>2019-06-04T17:11:23+09:00</lastmod>
+    <lastmod>2019-06-28T10:18:44+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -160,13 +171,19 @@
   
   <url>
     <loc>https://idontwannawork.github.io/posts/</loc>
-    <lastmod>2019-06-16T00:30:23+09:00</lastmod>
+    <lastmod>2019-06-28T10:18:44+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://idontwannawork.github.io/tags/python/</loc>
     <lastmod>2019-06-10T00:52:30+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://idontwannawork.github.io/tags/reivew/</loc>
+    <lastmod>2019-06-28T10:18:44+09:00</lastmod>
     <priority>0</priority>
   </url>
   
