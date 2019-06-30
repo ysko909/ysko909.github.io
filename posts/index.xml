@@ -6,8 +6,186 @@
 		<description>Recent content in Posts on Come as you are</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Fri, 28 Jun 2019 10:18:44 +0900</lastBuildDate>
+		<lastBuildDate>Sun, 30 Jun 2019 16:40:00 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>なんでJavaの記事って少ないの？</title>
+			<link>https://idontwannawork.github.io/posts/why-are-there-few-articles-of-java/</link>
+			<pubDate>Sun, 30 Jun 2019 16:40:00 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/why-are-there-few-articles-of-java/</guid>
+			<description>はじめに とある事情でJavaとJavaEE（今はJakartaEEか）を使用しないといけなくなってしまって、それはそれはさんざんな目にあった</description>
+			<content type="html"><![CDATA[
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>とある事情でJavaとJavaEE（今はJakartaEEか）を使用しないといけなくなってしまって、それはそれはさんざんな目にあった（あっている）。</p>
+
+<p>そんな中で気づいたのだが、<strong>Javaって記事少なくない？</strong>ということ。</p>
+
+<h2 id="どういうこと">どういうこと？</h2>
+
+<p>JavaはブログのエントリーでもQiitaの記事でも、とにかく知名度の割りに数が少ない。検索してもエラい昔のエントリーがしれっと上位に表示される始末で、ホントに苦労した（している）。とくにJavaEEに関して言うと、例のEclipseへ移管されるニュースの方が検索上位に来てしまい、知りたい情報が埋没する。JSFについて調べたいなーと思ったら<a href="https://www.google.com/search?q=jsf&amp;ie=UTF-8">2013年の記事が検索上位にしれっと</a>紛れ込んできた。</p>
+
+<p><a href="https://www.codingdojo.com/blog/the-7-most-in-demand-programming-languages-of-2019">仕事の多いプログラミング言語の1位はJava</a>だそうだ。これはここ最近いきなり増加したわけじゃなく、何年も昔から同じ傾向だった。むしろ、Androidの開発はKotlinが普及する前はJavaで行われていたのだから、当然の結果と言える。それでもこの結果。</p>
+
+<p>どういうことだ。Javaに関する記事書いたら、黒服の男たちに記事ごと投稿者も消されるジンクスでもあるのか。東方算法騎士団もびっくりだぞ。</p>
+
+<h2 id="記事数を調べる">記事数を調べる</h2>
+
+<h3 id="qiita">Qiita</h3>
+
+<p>Qiitaでタグ検索すると、それぞれ下記のような結果になった。なお調べたのは2019年6月13日なので、下記の記事数はその時点でのものだ。</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">名称</th>
+<th align="center">記事数</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">Java</td>
+<td align="center"><a href="https://qiita.com/tags/java">12022記事</a></td>
+</tr>
+
+<tr>
+<td align="center">Python</td>
+<td align="center"><a href="https://qiita.com/tags/python">28170記事</a></td>
+</tr>
+
+<tr>
+<td align="center">JavaScript</td>
+<td align="center"><a href="https://qiita.com/tags/javascript">26033記事</a></td>
+</tr>
+
+<tr>
+<td align="center">Ruby</td>
+<td align="center"><a href="https://qiita.com/tags/ruby">21669記事</a></td>
+</tr>
+
+<tr>
+<td align="center">PHP</td>
+<td align="center"><a href="https://qiita.com/tags/php">15987記事</a></td>
+</tr>
+
+<tr>
+<td align="center">Go</td>
+<td align="center"><a href="https://qiita.com/tags/go">6035記事</a></td>
+</tr>
+
+<tr>
+<td align="center">golang</td>
+<td align="center"><a href="https://qiita.com/tags/golang">2899記事</a></td>
+</tr>
+
+<tr>
+<td align="center">C#</td>
+<td align="center"><a href="https://qiita.com/tags/csharp">7342記事</a></td>
+</tr>
+</tbody>
+</table>
+
+<p>順不同。Goとgolangで別タグになっているのはちょっとよくわからない。</p>
+
+<p>ちなみに<a href="https://qiita.com/tags/javaee">JavaEEに至ってはたった217記事</a>だ。</p>
+
+<p>あくまでタグでの検索結果なのでノイズがそこそこあると思う。それでもPythonの突出具合はスゴい・・・のではなく、Javaの記事数が少ないのだ。Python（1991年発表）はJavaの先輩だが、RubyやPHPはほぼ同期（1995年発表）だ。なのにこの差。Python、JavaScriptにはダブルスコア以上の差がある。Rubyとも、ダブルスコアまで行かなくても、1.8倍だ。だいぶ後輩のGo（golang）やC#はさすがにJavaに及ばなかったが、もう数年頑張れば記事数も逆転できるんじゃない？というくらいの差だ。</p>
+
+<p>やっぱり少なくないか？Java。</p>
+
+<h3 id="stackoverflow">stackoverflow</h3>
+
+<p>stackoverflowでも各言語でタグ検索してみた。</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">名称</th>
+<th align="center">記事数</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">Java</td>
+<td align="center"><a href="https://stackoverflow.com/questions/tagged/java">1556934</a></td>
+</tr>
+
+<tr>
+<td align="center">Python</td>
+<td align="center"><a href="https://stackoverflow.com/questions/tagged/python">1187632</a></td>
+</tr>
+
+<tr>
+<td align="center">JavaScript</td>
+<td align="center"><a href="https://stackoverflow.com/questions/tagged/javascript">1823840</a></td>
+</tr>
+
+<tr>
+<td align="center">Ruby</td>
+<td align="center"><a href="https://stackoverflow.com/questions/tagged/ruby">205187</a></td>
+</tr>
+
+<tr>
+<td align="center">PHP</td>
+<td align="center"><a href="https://stackoverflow.com/questions/tagged/php">1289292</a></td>
+</tr>
+
+<tr>
+<td align="center">Go</td>
+<td align="center"><a href="https://stackoverflow.com/questions/tagged/go">38620</a></td>
+</tr>
+
+<tr>
+<td align="center">C#</td>
+<td align="center"><a href="https://stackoverflow.com/questions/tagged/c%23">1319866</a></td>
+</tr>
+</tbody>
+</table>
+
+<p>こちらではJavaとPythonが逆転しているが、言うほどの極端な差はない。C#の質問数が結構多いのが気になる。</p>
+
+<p>Qiitaでの結果と同様にあくまでタグでの検索結果なので、完全に精緻ではないがJava・JavaScript・C#が頭一つ抜きん出ている感じ。それでもJavaはJavaScriptに質問数で負けている。</p>
+
+<p>やっぱり少なくないか？Java。</p>
+
+<h2 id="google">Google</h2>
+
+<p>Googleでの検索結果はそりゃもうめちゃくちゃ多くヒットするが、プログラミング言語以外の「Java」も引っかかってくるためヒット数の調査はしなかった。</p>
+
+<p>ただし、体感として「あー、これわからないなー」っていうときに調べて、パッと答えが出てくるのはPythonやJavaScriptが多い気がする（個人の感想なのであまり保障はできないが）。Javaは調べて一応解決するが、その元ネタがブログとかでなくどっかのホスティングサイトで、しかも歴史を感じさせるHTMLだったのは特筆すべきこと・・・なんだろうか。</p>
+
+<h2 id="qrunch">Qrunch</h2>
+
+<p>まだサービスが比較的生まれたばかりなので記事数を出すのは不平等かな、とは思うがやっぱりQrunchでも同様の結果だった。Java、少ない・・・。</p>
+
+<h2 id="考察-してもしょうがない">考察（してもしょうがない）</h2>
+
+<p><strong>さっぱりわからない</strong>。</p>
+
+<p>案件数が多く、現在Javaで動いているシステムもあり、モバイルアプリケーションもガラケーのころからJavaでの実装が多かった。それでこの記事数？って感じ。</p>
+
+<p>社内規定上、たとえ一部だったとしてもJavaのソースコードを外部に晒すことができなかったとか、そういう理由でもないと納得できないのだ。いくら大昔にブログやTwitterはなかっただろ？と言われても、PythonやPHPがゴリゴリ記事を書かれているに、Javaがそうならない理由がよくわからない。</p>
+
+<p>初心者向けじゃないのかな？と一瞬考えた。だが、よく「初心者向けな言語は？」みたいなページでは、いろんな理由でPythonを薦めてりするがJavaだって同様に推されている。機械学習したいからPythonの記事が多いのかなとも思ったが、さすがにプログラミングを始めるみんなが機械学習に興味があるとも思えない（ゲームだとUnityあたりとかなんだろうけど）。むしろ軽くバブルっぽかったモバイルアプリケーションは長らく主流がJavaだったのだから、少なくともこんなに体感的に少なく感じることはないはずなのだが。Javaを書く人たちはアウトプット志向ではない、とでも言うのか。</p>
+
+<h2 id="まとめ-まとまってない">まとめ（まとまってない）</h2>
+
+<p>記事が多ければいい、というわけではもちろんない。記事が多ければ、相対的にノイズも多くなるだろうし間違った記事も多くなるだろう。それでも、記事が多くなれば相対的に正解もまた多くなる。同じことを言っている記事がたくさんあるなら、それは正解なのだと判断できるようになる。</p>
+
+<p>そういう現状のを見るに、Javaには記事を書かないor書かせない力でも働いてるのだろうか？と思ってしまう。</p>
+
+<p>それとも「わざわざ記事にしなくても、Javaなんか一目見てわかるだろ言わせんな恥ずかしい」ってことなんだろうか。</p>
+
+<h2 id="つらい">つらい</h2>
+
+<p>つらい。</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>iPhone XRを購入して半年経った感想</title>
@@ -1095,71 +1273,6 @@ bc9
 <p>「ん？何で同じ条件なのにループすると空っぽになるんじゃ？」と素朴に思ったのが始まりなのですが、調べてみると案外深い仕様になっていて勉強になりました（小並感）。</p>
 
 <p>ちなみに、複数回ループしようとしてた理由は、原因を調べているうちに忘れました（鳥頭）。</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>Vue.jsでデータの内容を開発ツールを使わないで確認する</title>
-			<link>https://idontwannawork.github.io/posts/show-data-without-tools/</link>
-			<pubDate>Sun, 05 May 2019 17:38:31 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/show-data-without-tools/</guid>
-			<description>小ネタです Vue.jsは、ブラウザの開発ツールやVue.js用の拡張機能を利用しなくても、HTMLファイルにとあるタグを記述することで、デー</description>
-			<content type="html"><![CDATA[
-
-<h2 id="小ネタです">小ネタです</h2>
-
-<p>Vue.jsは、ブラウザの開発ツールやVue.js用の拡張機能を利用しなくても、HTMLファイルに<strong>とあるタグ</strong>を記述することで、データの内容をJSON形式で確認できます。</p>
-
-<h3 id="記述方法">記述方法</h3>
-
-<p>HTMLファイル内に「<code>{{ $data }}</code>」を任意の場所に記述します。</p>
-
-<pre><code>&lt;html&gt;
-    &lt;head&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;div id=&quot;app&quot;&gt;
-        &lt;p&gt;{{ message.v }}&lt;/p&gt;
-        &lt;p&gt;{{ message.v.length }}&lt;/p&gt;
-        &lt;p&gt;{{ l[2] }}&lt;/p&gt;
-        &lt;p&gt;{{ l[n] }}&lt;/p&gt;
-        &lt;pre&gt;{{ $data }}&lt;/pre&gt;
-        &lt;/div&gt;
-        &lt;script src=&quot;https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js&quot;&gt;&lt;/script&gt;
-        &lt;script src=&quot;main.js&quot;&gt;&lt;/script&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-
-<p>仮にJavaScript側が下記の内容だった場合、</p>
-
-<pre><code>var app = new Vue({
-    el: '#app',
-    data: {
-        message: {
-        v: 'Hello Vue World!'
-        },
-        l: ['hoge', 'ふが', 'ぴyo'],
-        n: 1
-    }
-})
-</code></pre>
-
-<p>表示内容は下記の通り。</p>
-
-<p><img src="2019-05-05-17-48-12.png" alt="" /></p>
-
-<p>CodePenでやってみました。</p>
-
-<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="yrmOOJ" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="vuejs_type">
-  <span>See the Pen <a href="https://codepen.io/idontwannawork/pen/yrmOOJ/">
-  vuejs_type</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
-  on <a href="https://codepen.io">CodePen</a>.</span>
-</p>
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p>
-
-<p>あんまり複雑なデータを出力すると、かえって見にくくなってしまうと思われますが、ちょっとした確認には十分に利用できるかな。</p>
 ]]></content>
 		</item>
 		
