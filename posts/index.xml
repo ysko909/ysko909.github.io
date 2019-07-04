@@ -15,12 +15,20 @@
 			<pubDate>Thu, 04 Jul 2019 13:58:10 +0900</pubDate>
 			
 			<guid>https://idontwannawork.github.io/posts/build-environment-of-vuejs-with-docker/</guid>
-			<description>概要 フロントの勉強としてVue.jsの開発環境を整備するときに、せっかくなのでDockerを使って環境を構築してみました。 手順 今回は勉強がて</description>
+			<description>概要 フロントの勉強としてVue.jsの開発環境を整備するときに、せっかくなのでDockerを使って環境を構築してみました。 環境 macOS Mojave 10.14.5 Docker version 18.09.2 Visual</description>
 			<content type="html"><![CDATA[
 
 <h2 id="概要">概要</h2>
 
 <p>フロントの勉強としてVue.jsの開発環境を整備するときに、せっかくなのでDockerを使って環境を構築してみました。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>macOS Mojave 10.14.5</li>
+<li>Docker version 18.09.2</li>
+<li>Visual Studio Code version 1.35</li>
+</ul>
 
 <h2 id="手順">手順</h2>
 
