@@ -6,8 +6,86 @@
 		<description>Recent content in Posts on Come as you are</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Sun, 30 Jun 2019 16:40:00 +0900</lastBuildDate>
+		<lastBuildDate>Thu, 04 Jul 2019 13:58:10 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>DockerでVue.jsの開発環境を構築する</title>
+			<link>https://idontwannawork.github.io/posts/build-environment-of-vuejs-with-docker/</link>
+			<pubDate>Thu, 04 Jul 2019 13:58:10 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/build-environment-of-vuejs-with-docker/</guid>
+			<description>概要 フロントの勉強としてVue.jsの開発環境を整備するときに、せっかくなのでDockerを使って環境を構築してみました。 手順 今回は勉強がて</description>
+			<content type="html"><![CDATA[
+
+<h2 id="概要">概要</h2>
+
+<p>フロントの勉強としてVue.jsの開発環境を整備するときに、せっかくなのでDockerを使って環境を構築してみました。</p>
+
+<h2 id="手順">手順</h2>
+
+<p>今回は勉強がてらdocker-composeを利用します。とは言っても「書くよ！」ってだけで複雑なことは全然やってないです。</p>
+
+<h3 id="dockerfileの作成">Dockerfileの作成</h3>
+<div class="highlight"><pre class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">FROM</span><span class="s"> node:lts-alpine</span><span class="err">
+</span><span class="err"></span><span class="k">WORKDIR</span><span class="s"> /app</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">RUN</span> apk update <span class="o">&amp;&amp;</span> <span class="se">\
+</span><span class="se"></span>    npm install -g npm @vue/cli</code></pre></div>
+<p>ただし、現時点（2019年7月3日）でVisual Studio CodeのRemoteはAlpine Linuxに対応していないので、Remoteを利用したい場合は別のイメージを使った方がいいと思われます（1敗）。<a href="/posts/connect-to-docker-with-vscode-extension/">以前記事にしていた</a>ので「Vue.jsの環境もリモートで開発だぁ！」とか思ってたんですけど出鼻をくじかれました。</p>
+
+<p>なお、Alpine Linuxは<a href="https://github.com/microsoft/vscode-remote-release/issues/54">VS Code Insidersではサポートされている</a>ため、そのうち正式対応するはずなので正座して待機しようと思います。</p>
+
+<h3 id="docker-compose-ymlの作成">docker-compose.ymlの作成</h3>
+<div class="highlight"><pre class="chroma"><code class="language-dockerfile" data-lang="dockerfile">version: <span class="s1">&#39;3&#39;</span><span class="err">
+</span><span class="err"></span>services:<span class="err">
+</span><span class="err"></span>  vue_app:<span class="err">
+</span><span class="err"></span>    build: .<span class="err">
+</span><span class="err"></span>    ports:<span class="err">
+</span><span class="err"></span>      - <span class="m">1234</span>:8080<span class="err">
+</span><span class="err"></span>    volumes:<span class="err">
+</span><span class="err"></span>      - .:/app<span class="err">
+</span><span class="err"></span>    stdin_open: true<span class="err">
+</span><span class="err"></span>    tty: true<span class="err">
+</span><span class="err"></span>    command: /bin/sh</code></pre></div>
+<h3 id="コンテナーのビルド">コンテナーのビルド</h3>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">docker-compose build</code></pre></div>
+<h3 id="コンテナーの起動">コンテナーの起動</h3>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">docker-compose up -d</code></pre></div>
+<p><code>docker ps</code>コマンドを叩くとコンテナーが起動しているはず。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+9fcc61e05285        dockapp_vue_app     <span class="s2">&#34;docker-entrypoint.s…&#34;</span>   <span class="m">2</span> minutes ago       Up <span class="m">2</span> minutes        <span class="m">0</span>.0.0.0:9000-&gt;9000/tcp   dockapp_vue_app_1</code></pre></div>
+<h3 id="コンテナーに入る">コンテナーに入る</h3>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">docker <span class="nb">exec</span> vue_app sh</code></pre></div>
+<h3 id="vueプロジェクトの作成">vueプロジェクトの作成</h3>
+
+<p>コンテナーに入るとプロンプトが変わるので、<code>vue</code>コマンドを叩いてプロジェクトを作成します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">vue create vue_app</code></pre></div>
+<p>3系のvue cliをインストールしているので<code>create</code>を利用します（2.x系だと<code>init webpack hoge</code>だった）。とくにこだわりがなければエンターを連打。しばらくすると・・・</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">  Successfully created project vue_app.
+  Get started with the following commands:
+
+ $ <span class="nb">cd</span> vue_app
+ $ npm run serve</code></pre></div>
+<p>となり、準備完了です。</p>
+
+<h3 id="vueプロジェクトの起動とアクセス">vueプロジェクトの起動とアクセス</h3>
+
+<p>コンテナー上でフォルダを移動して<code>npm run</code>します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> vue_app
+npm run serve</code></pre></div>
+<p>正常に起動したら<code>http://localhost:1234/</code>にアクセスする。</p>
+
+<p><img src="pic1.jpg" alt="pic" /></p>
+
+<p>上記のようなページが表示されたら環境構築は完了です。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>Pythonに引き続き、Vue.jsもDockerで環境構築してみましたが、ローカルを汚さない・いざとなったら潰して新しく作ればいいってのはホントに気軽でいいですね。あとはコーディングするだけです（血涙</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>なんでJavaの記事って少ないの？</title>
@@ -1019,7 +1097,7 @@ README.html   README.md     iamacat.html  iamacat.md    main.css      mdtohtml.p
 
 <ul>
 <li>Windows 10</li>
-<li>VS Code</li>
+<li>vscode</li>
 </ul>
 
 <h2 id="インストール">インストール</h2>
@@ -1071,208 +1149,6 @@ README.html   README.md     iamacat.html  iamacat.md    main.css      mdtohtml.p
 <h2 id="注意">注意</h2>
 
 <p>この拡張機能は変換したファイルの出力先を変更できないので、必ずMarkdownファイルが格納されているフォルダーと同じ場所に出力されます。また、出力先ファイル名も指定できないので、同一名のファイルが既存である場合は自動的に上書きします。</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>イテレータを複数回ループしたい</title>
-			<link>https://idontwannawork.github.io/posts/iterator-will-return-blank-with-loop-twice/</link>
-			<pubDate>Wed, 15 May 2019 11:57:24 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/iterator-will-return-blank-with-loop-twice/</guid>
-			<description>なんのこっちゃ？ 実行しようとしていたのはこんなコードでした。 &amp;gt;&amp;gt;&amp;gt; import re &amp;gt;&amp;gt;&amp;gt; s = &amp;quot;hogefugapiyofoobarbaz1234567890abc987efg654hij321&amp;quot; &amp;gt;&amp;gt;&amp;gt; iter = re.finditer(&amp;quot;b..&amp;quot;, s) ← finditer()は結果をイテレータで返す &amp;gt;&amp;gt;&amp;gt; for i in iter:</description>
-			<content type="html"><![CDATA[
-
-<h2 id="なんのこっちゃ">なんのこっちゃ？</h2>
-
-<p>実行しようとしていたのはこんなコードでした。</p>
-
-<pre><code>&gt;&gt;&gt; import re
-&gt;&gt;&gt; s = &quot;hogefugapiyofoobarbaz1234567890abc987efg654hij321&quot;
-&gt;&gt;&gt; iter = re.finditer(&quot;b..&quot;, s)    ← finditer()は結果をイテレータで返す
-&gt;&gt;&gt; for i in iter:
-...     print(i.start())
-...
-15
-18
-32
-&gt;&gt;&gt; for i in iter:
-...     print(i.start())
-...
-&gt;&gt;&gt;    ← 同じループを実行しても最初のループと異なり結果が返ってこない
-</code></pre>
-
-<p>このように、同一のイテレータに対しループ処理を複数回行うと、2回目以降のループは結果が空になってしまいます。</p>
-
-<p>ちなみにジェネレータでも上記のような複数回のループ処理を行おうとすると、<a href="https://qiita.com/tomotaka_ito/items/15b5999c76001dbc9a58">2回目以降のループで結果が空になる</a>らしいですが、ジェネレータについては別途まとめて記事にしようと思います（まだ勉強中）。</p>
-
-<h2 id="なんでこーなるの">なんでこーなるの？</h2>
-
-<p><a href="https://docs.python.org/ja/3/glossary.html#term-iterator">イテレータ</a>が持つ要素を取得したい場合、__next__() メソッド（または組み込み関数の<code>next()</code>）を繰り返し呼び出すと、イテレータ中の要素を1つずつ返します。このメソッドは集合から1つずつ要素を<strong>取り出して</strong>います。取り出しているので、すべて取り出し終わったら元の集合には要素が存在しません。よって2回目以降のループは空っぽになります（要素がない場合は、StopIteration例外を返す）。</p>
-
-<p>※「取り出す」という表現が正確かどうかはちょっと自信がありません。メソッドや関数の「next」という名前の通り「次の要素へ」という挙動と、同じ要素を複数回取得できないことから「取り出す」という表現を使っています。</p>
-
-<p>なお、直接関係はありませんが、<a href="https://docs.python.org/ja/3/library/functions.html#map"><code>map()</code></a>や<a href="https://docs.python.org/ja/3/library/functions.html#filter"><code>filter()</code></a>はイテレータを返す（Python3での話）ので、返されたオブジェクトについて<code>list()</code>などを複数回実行すると、上記のように<a href="https://stackoverflow.com/questions/19759247/listing-a-filter-object-twice-will-return-a-blank-list">2回目以降は空っぽになってしまう</a>ようです。</p>
-
-<pre><code>&gt;&gt;&gt; list = [1, 2, 3]
-&gt;&gt;&gt; f = filter(None, list)
-&gt;&gt;&gt; list(list)
-[1, 2, 3]
-&gt;&gt;&gt; list(list)
-[1, 2, 3] ← リストlistに複数回listしても結果が返ってくる
-&gt;&gt;&gt; list(f)
-[1, 2, 3]
-&gt;&gt;&gt; list(f)
-[] ← イテレータに複数回listすると2回目以降ブランクになる
-&gt;&gt;&gt;
-</code></pre>
-
-<h2 id="そもそもイテレータって">そもそもイテレータって？</h2>
-
-<p><a href="https://docs.python.org/ja/3/glossary.html#term-iterator">iterator</a>とはオブジェクトの一種で、データの走査方法について表現するものです。なんのこっちゃ、という感じですが「要素を1つずつ繰り返し取得できる構造を持っていて（<code>iterable</code>）、実際に順次取得ができる」オブジェクトっていう感じかと。</p>
-
-<pre><code>&gt;&gt;&gt; list = [1, 2, 3]
-&gt;&gt;&gt; i = iter(list)
-&gt;&gt;&gt; type(list)
-&lt;class 'list'&gt;
-&gt;&gt;&gt; type(i)
-&lt;class 'list_iterator'&gt;
-&gt;&gt;&gt; print(next(i))
-1
-&gt;&gt;&gt; print(next(i))
-2
-&gt;&gt;&gt; print(next(i))
-3
-&gt;&gt;&gt; print(next(i))
-Traceback (most recent call last):
-  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
-StopIteration ← 「これ以上next()で取り出せる要素ねぇよ！」と言っている
-&gt;&gt;&gt;
-</code></pre>
-
-<p>これと似たオブジェクトに<a href="https://docs.python.org/ja/3/glossary.html#term-iterable">itetable</a>（反復可能オブジェクト）があります。こちらはデータの構造そのものについて表現しており、<code>iterator</code>とは別物です。たとえばリストやタプル、辞書などは<code>iterable</code>で、オブジェクトに対しアクセスすることで、要素を1つずつ取得することができる<strong>構造</strong>のことを指しています。つまり、先述の<code>iterator</code>は<code>iterable</code>に含まれるわけです。</p>
-
-<p>ちなみに「iterable」の英単語本来の意味は<a href="https://ejje.weblio.jp/content/iterable">「繰り返し可能な」という形容詞</a>。</p>
-
-<h2 id="どうすれば回避できる">どうすれば回避できる？</h2>
-
-<h3 id="変数に格納する">変数に格納する</h3>
-
-<p>再利用したいなら、単純に変数へ格納しちゃえという方法。</p>
-
-<pre><code>&gt;&gt;&gt; import re
-&gt;&gt;&gt; s = &quot;hogefugapiyofoobarbaz1234567890abc987efg654hij321&quot;
-&gt;&gt;&gt; iter = re.finditer(&quot;b..&quot;, s)
-&gt;&gt;&gt; type(iter)
-&lt;class 'callable_iterator'&gt;
-&gt;&gt;&gt; lists = list(iter)
-&gt;&gt;&gt; type(lists)
-&lt;class 'list'&gt;
-&gt;&gt;&gt; for i in lists:
-...     print(i)
-...
-&lt;_sre.SRE_Match object; span=(15, 18), match='bar'&gt;
-&lt;_sre.SRE_Match object; span=(18, 21), match='baz'&gt;
-&lt;_sre.SRE_Match object; span=(32, 35), match='bc9'&gt;
-&gt;&gt;&gt; for i in lists:
-...     print(i.start())
-...
-15
-18
-32
-&gt;&gt;&gt; for i in lists:
-...     print(i.start())
-...
-15
-18
-32    ← 複数回ループしても結果が返ってきている
-&gt;&gt;&gt;
-</code></pre>
-
-<p><code>filter()</code>などのイテレータを返すものも同様。</p>
-
-<pre><code>&gt;&gt;&gt; list = [1, 2, 3]
-&gt;&gt;&gt; f = filter(None, list)
-&gt;&gt;&gt; type(f)
-&lt;class 'filter'&gt;
-&gt;&gt;&gt; listed = list(f)
-&gt;&gt;&gt; type(listed)
-&lt;class 'list'&gt;
-&gt;&gt;&gt; list(listed)
-[1, 2, 3]
-&gt;&gt;&gt; list(listed)
-[1, 2, 3]
-&gt;&gt;&gt; list(f)
-[]
-&gt;&gt;&gt;
-</code></pre>
-
-<h3 id="リストでループする">リストでループする</h3>
-
-<p>今回の場合で言うと<code>finditer()</code>ではなく<code>findall()</code>を用いて、イテレータでなくリストでループするようにします。</p>
-
-<pre><code>&gt;&gt;&gt; list = re.findall(&quot;b..&quot;, s)
-&gt;&gt;&gt; for item in list:
-...     print(item)
-...
-bar
-baz
-bc9
-&gt;&gt;&gt; for item in list:
-...     print(item)
-...
-bar
-baz
-bc9
-</code></pre>
-
-<p><code>findall()</code>はリストを返すメソッド。リスト<code>list</code>に対しては、ループ処理を何回行っても同様な結果が出力されます。これなら上記のような問題は発生しませんが、このあたりは要求される機能と相談する必要があると思います。</p>
-
-<h3 id="itertoolsを用いる">itertoolsを用いる</h3>
-
-<p>再利用する回数が事前に分かっているなら<code>itertools.tee()</code>を利用する方法もあります。</p>
-
-<pre><code>&gt;&gt;&gt; import itertools
-&gt;&gt;&gt; list = [1, 2, 3]
-&gt;&gt;&gt; i = iter(list)
-&gt;&gt;&gt; i1, i2, i3 = itertools.tee(i, 3) ← 3回再利用する必要があると仮定
-&gt;&gt;&gt; for n in i1:
-...     print(n)
-...
-1
-2
-3
-&gt;&gt;&gt; for n in i1:
-...     print(n)
-...
-&gt;&gt;&gt; for n in i2:
-...     print(n)
-...
-1
-2
-3
-&gt;&gt;&gt; for n in i2:
-...     print(n)
-...
-&gt;&gt;&gt; for n in i3:
-...     print(n)
-...
-1
-2
-3
-&gt;&gt;&gt; for n in i3:
-...     print(n)
-...
-&gt;&gt;&gt;
-</code></pre>
-
-<p>ただ、個人的にはこの方法を利用するようなシチュエーションがあまり思い浮かばない・・・。</p>
-
-<h2 id="おわりに">おわりに</h2>
-
-<p>「ん？何で同じ条件なのにループすると空っぽになるんじゃ？」と素朴に思ったのが始まりなのですが、調べてみると案外深い仕様になっていて勉強になりました（小並感）。</p>
-
-<p>ちなみに、複数回ループしようとしてた理由は、原因を調べているうちに忘れました（鳥頭）。</p>
 ]]></content>
 		</item>
 		
