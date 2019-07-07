@@ -6,10 +6,19 @@
     <description>Recent content on Come as you are</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Thu, 04 Jul 2019 13:58:10 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 07 Jul 2019 17:14:15 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Visual Studio CodeでGitが見つからないと言われたら</title>
+      <link>https://idontwannawork.github.io/posts/fix-git-path-with-vscode/</link>
+      <pubDate>Sun, 07 Jul 2019 17:14:15 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/fix-git-path-with-vscode/</guid>
+      <description>VS Codeをアップデートしたらこんなメッセージが Visual Studio Code(以下、VS Code)をアップデートしたらこんな通知が出るようになりました。 「G</description>
+    </item>
     
     <item>
       <title>DockerでVue.jsの開発環境を構築する</title>
@@ -90,15 +99,6 @@
       
       <guid>https://idontwannawork.github.io/posts/convert-markdown-to-html-with-python/</guid>
       <description>はじめに 以前、VS CodeでMarkdownをPDFに自動で変換する方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので</description>
-    </item>
-    
-    <item>
-      <title>VS CodeでMarkdownをPDFに自動で変換する</title>
-      <link>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</link>
-      <pubDate>Wed, 15 May 2019 13:44:12 +0900</pubDate>
-      
-      <guid>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</guid>
-      <description>はじめに Markdownで記述したmdファイルは、エンジニア間ではそのまま利用することが多いように思います（GitHubなどにREADME.</description>
     </item>
     
   </channel>

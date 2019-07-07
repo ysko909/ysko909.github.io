@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Git on Come as you are</title>
+    <link>https://idontwannawork.github.io/tags/git/</link>
+    <description>Recent content in Git on Come as you are</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Sun, 07 Jul 2019 17:14:15 +0900</lastBuildDate>
+    
+	<atom:link href="https://idontwannawork.github.io/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Visual Studio CodeでGitが見つからないと言われたら</title>
+      <link>https://idontwannawork.github.io/posts/fix-git-path-with-vscode/</link>
+      <pubDate>Sun, 07 Jul 2019 17:14:15 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/fix-git-path-with-vscode/</guid>
+      <description>VS Codeをアップデートしたらこんなメッセージが Visual Studio Code(以下、VS Code)をアップデートしたらこんな通知が出るようになりました。 「G</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://idontwannawork.github.io/posts/fix-git-path-with-vscode/</loc>
+    <lastmod>2019-07-07T17:14:15+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/posts/build-environment-of-vuejs-with-docker/</loc>
     <lastmod>2019-07-04T13:58:10+09:00</lastmod>
   </url>
@@ -127,13 +132,19 @@
   
   <url>
     <loc>https://idontwannawork.github.io/</loc>
-    <lastmod>2019-07-04T13:58:10+09:00</lastmod>
+    <lastmod>2019-07-07T17:14:15+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://idontwannawork.github.io/tags/docker/</loc>
     <lastmod>2019-07-04T13:58:10+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://idontwannawork.github.io/tags/git/</loc>
+    <lastmod>2019-07-07T17:14:15+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -187,7 +198,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/posts/</loc>
-    <lastmod>2019-07-04T13:58:10+09:00</lastmod>
+    <lastmod>2019-07-07T17:14:15+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -229,7 +240,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/tags/vscode/</loc>
-    <lastmod>2019-07-04T13:58:10+09:00</lastmod>
+    <lastmod>2019-07-07T17:14:15+09:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -6,8 +6,75 @@
 		<description>Recent content in Posts on Come as you are</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Thu, 04 Jul 2019 13:58:10 +0900</lastBuildDate>
+		<lastBuildDate>Sun, 07 Jul 2019 17:14:15 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Visual Studio CodeでGitが見つからないと言われたら</title>
+			<link>https://idontwannawork.github.io/posts/fix-git-path-with-vscode/</link>
+			<pubDate>Sun, 07 Jul 2019 17:14:15 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/fix-git-path-with-vscode/</guid>
+			<description>VS Codeをアップデートしたらこんなメッセージが Visual Studio Code(以下、VS Code)をアップデートしたらこんな通知が出るようになりました。 「G</description>
+			<content type="html"><![CDATA[
+
+<h2 id="vs-codeをアップデートしたらこんなメッセージが">VS Codeをアップデートしたらこんなメッセージが</h2>
+
+<p>Visual Studio Code(以下、VS Code)をアップデートしたらこんな通知が出るようになりました。</p>
+
+<p><img src="2019-07-07-17-14-40.png" alt="pic" /></p>
+
+<p>「Gitが見つからないよ！」って・・・いや、君今までしこたまGit使ってたじゃないか。</p>
+
+<p>理由はともかく、このままではGitの各種コマンドが利用できないので、設定します。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>macOS Mojave 10.14.5</li>
+<li>Visual Studio Code version 1.36</li>
+</ul>
+
+<h2 id="設定手順">設定手順</h2>
+
+<ol>
+<li><p>左下の歯車マークから、あるいは<code>Command + ,</code>で「Settings」画面を表示します。</p>
+
+<p><img src="2019-07-07-17-20-20.png" alt="pic" /></p></li>
+
+<li><p>出てきた画面に「git.path」と入力します。すると、「Settings.jsonで設定してね」と言われるのでSettings.jsonを開きます。</p>
+
+<p><img src="2019-07-07-17-25-35.png" alt="pic" /></p>
+
+<p>ごちゃごちゃしてますが、下のところに<code>&quot;git.path&quot;: &quot;/usr/bin&quot;</code>を追記しました。なお、gitのパスはコンソール画面にて<code>which git</code>すればわかります。</p></li>
+
+<li><p>編集が終わったら保存します。これで完了です。なお、いつのバージョン以降からかは失念しましたが、設定の変更を行ってもVS Codeを再起動する必要はなく即時反映されます。</p></li>
+</ol>
+
+<h2 id="番外編-xcodeをインストールしたらなぜかgitが使えないぞ">（番外編）XcodeをインストールしたらなぜかGitが使えないぞ</h2>
+
+<p>XcodeをインストールしたらGitが使えなくなりました。なんかライセンス契約に同意する必要があるみたいです。</p>
+
+<p>指示に従いコマンド発行および同意を行ったら、Gitが再び利用できるようになりました。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ git --version
+
+Agreeing to the Xcode/iOS license requires admin privileges, please run “sudo xcodebuild -license” and <span class="k">then</span> retry this command.
+
+$ sudo xcodebuild -license
+
+You have not agreed to the Xcode license agreements. You must agree to both license agreements below in order to use Xcode.
+
+（中略）
+
+“Apple Developer Program License Agreement” means a separate agreement that may be entered into between You and Apple regarding the development and su
+
+By typing <span class="s1">&#39;agree&#39;</span> you are agreeing to the terms of the software license agreements. Type <span class="s1">&#39;print&#39;</span> to print them or anything <span class="k">else</span> to cancel, <span class="o">[</span>agree, print, cancel<span class="o">]</span> agree
+
+You can view the license agreements in Xcode<span class="err">&#39;</span>s About Box, or at /Applications/Xcode.app/Contents/Resources/English.lproj/License.rtf
+
+$ git --version
+git version <span class="m">2</span>.20.1 <span class="o">(</span>Apple Git-117<span class="o">)</span></code></pre></div>]]></content>
+		</item>
 		
 		<item>
 			<title>DockerでVue.jsの開発環境を構築する</title>
@@ -1083,80 +1150,6 @@ README.html   README.md     iamacat.html  iamacat.md    main.css      mdtohtml.p
 <p><a href="https://python-markdown.github.io/">Python-Markdown</a></p>
 
 <p><a href="http://oboe2uran.hatenablog.com/entry/2019/01/25/150934">Markdownファイルを Python で PDF にする</a></p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>VS CodeでMarkdownをPDFに自動で変換する</title>
-			<link>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</link>
-			<pubDate>Wed, 15 May 2019 13:44:12 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</guid>
-			<description>はじめに Markdownで記述したmdファイルは、エンジニア間ではそのまま利用することが多いように思います（GitHubなどにREADME.</description>
-			<content type="html"><![CDATA[
-
-<h2 id="はじめに">はじめに</h2>
-
-<p>Markdownで記述したmdファイルは、エンジニア間ではそのまま利用することが多いように思います（GitHubなどにREADME.mdとしてアップするとか）。ところが、メールに添付したり印刷する等、外部へ持ち出す際はPDFに変換しておいた方がいろいろ安心。とくに「mdファイルって何？」みたいなお客さんにドキュメントを渡さないといけない場合とか・・・。</p>
-
-<p>MarkdownをPDF化するのは、Pandocを利用する方法もあるのですが、ここではVisual Studio Code（以下、VS Code）の拡張機能である「<a href="https://marketplace.visualstudio.com/items?itemName=yzane.markdown-pdf">Markdown PDF</a>」を利用します。</p>
-
-<h2 id="環境">環境</h2>
-
-<ul>
-<li>Windows 10</li>
-<li>vscode</li>
-</ul>
-
-<h2 id="インストール">インストール</h2>
-
-<p>VS Codeにて、Ctrl＋Shift＋Xで拡張機能の検索窓に「Markdown PDF」と入力するか、上記のリンクをクリックします。検索結果から「Markdown PDF」を選択し、インストールします。Markdown PDFをインストールしてから、VS Codeで適当なMarkdownファイルを最初に開いた際、Chromiumのダウンロードが自動で始まります。ちなみに、なんでChromiumが必要かというと、Markdown PDFがPDF変換するのに利用しているから。</p>
-
-<h2 id="使い方">使い方</h2>
-
-<ol>
-<li>PDF化したいMarkdownファイルを開く。</li>
-<li>F1キーを押すか、Ctrl+Shift+Pキーを押しコマンドパレットを表示させる。</li>
-
-<li><p>exportと入力すると下記のメニューが表示される。</p>
-
-<ul>
-<li>markdown-pdf: Export (settings.json)</li>
-<li>markdown-pdf: Export (pdf)</li>
-<li>markdown-pdf: Export (html)</li>
-<li>markdown-pdf: Export (png)</li>
-<li>markdown-pdf: Export (jpeg)</li>
-<li>markdown-pdf: Export (all: pdf, html, png, jpeg)</li>
-</ul>
-
-<p>この中からExport (pdf)を選択する。</p></li>
-
-<li><p>少し待つと、Markdownと同一のフォルダーにPDFが生成される。</p></li>
-</ol>
-
-<h2 id="自動化">自動化</h2>
-
-<p>上記の使い方ではPDFへ変換するのに、毎回コマンドパレットを表示してコマンドを入力し、どのファイル形式でエクスポートするかを選択する必要があります。これを特定の変換先（今回はPDF）に限定して自動変換するよう設定します。</p>
-
-<ol>
-<li><p>「ファイル」メニュー＞「基本設定」＞「設定」を選択するか、<code>Ctrl＋,</code>で直接画面を開く。</p></li>
-
-<li><p>setting.jsonファイルを開いて下記のように設定する。</p>
-
-<pre><code>&quot;markdown-pdf.convertOnSave&quot;: true,
-&quot;markdown-pdf.type&quot;: [
-    &quot;pdf&quot;
-],
-</code></pre></li>
-
-<li><p>設定内容を書き込んだらVS Codeを1度再起動する。</p></li>
-</ol>
-
-<p>これで、Markdownファイルを編集し保存したタイミングで自動的にPDFへ変換するようになります。</p>
-
-<h2 id="注意">注意</h2>
-
-<p>この拡張機能は変換したファイルの出力先を変更できないので、必ずMarkdownファイルが格納されているフォルダーと同じ場所に出力されます。また、出力先ファイル名も指定できないので、同一名のファイルが既存である場合は自動的に上書きします。</p>
 ]]></content>
 		</item>
 		
