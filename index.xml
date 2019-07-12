@@ -6,10 +6,19 @@
     <description>Recent content on Come as you are</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Sun, 07 Jul 2019 17:14:15 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 11 Jul 2019 16:41:00 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Unity Hubを使ってUnityをインストールする</title>
+      <link>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</link>
+      <pubDate>Thu, 11 Jul 2019 16:41:00 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</guid>
+      <description>Unityって何さ Unity 世界で最も広くつかわれているゲーム開発エンジン。 様々な機能を備えたエディターと、業界で最も幅広いプラットフォームへのサポ</description>
+    </item>
     
     <item>
       <title>Visual Studio CodeでGitが見つからないと言われたら</title>
@@ -90,15 +99,6 @@
       
       <guid>https://idontwannawork.github.io/posts/recocrd-with-tascam-ixz/</guid>
       <description>そもそもiXZって何ぞや TASCAMが販売しているスマートフォン・タブレット端末用オーディオインターフェイスです。発売は2011年とめちゃく</description>
-    </item>
-    
-    <item>
-      <title>PythonでMarkdownファイルをHTMLへ変換する</title>
-      <link>https://idontwannawork.github.io/posts/convert-markdown-to-html-with-python/</link>
-      <pubDate>Fri, 24 May 2019 14:50:30 +0900</pubDate>
-      
-      <guid>https://idontwannawork.github.io/posts/convert-markdown-to-html-with-python/</guid>
-      <description>はじめに 以前、VS CodeでMarkdownをPDFに自動で変換する方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので</description>
     </item>
     
   </channel>

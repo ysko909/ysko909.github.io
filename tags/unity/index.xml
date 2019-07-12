@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Unity on Come as you are</title>
+    <link>https://idontwannawork.github.io/tags/unity/</link>
+    <description>Recent content in Unity on Come as you are</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Thu, 11 Jul 2019 16:41:00 +0900</lastBuildDate>
+    
+	<atom:link href="https://idontwannawork.github.io/tags/unity/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Unity Hubを使ってUnityをインストールする</title>
+      <link>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</link>
+      <pubDate>Thu, 11 Jul 2019 16:41:00 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</guid>
+      <description>Unityって何さ Unity 世界で最も広くつかわれているゲーム開発エンジン。 様々な機能を備えたエディターと、業界で最も幅広いプラットフォームへのサポ</description>
+    </item>
+    
+  </channel>
+</rss>

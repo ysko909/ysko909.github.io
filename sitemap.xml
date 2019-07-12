@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</loc>
+    <lastmod>2019-07-11T16:41:00+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/posts/fix-git-path-with-vscode/</loc>
     <lastmod>2019-07-07T17:14:15+09:00</lastmod>
   </url>
@@ -132,7 +137,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/</loc>
-    <lastmod>2019-07-07T17:14:15+09:00</lastmod>
+    <lastmod>2019-07-11T16:41:00+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -198,7 +203,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/posts/</loc>
-    <lastmod>2019-07-07T17:14:15+09:00</lastmod>
+    <lastmod>2019-07-11T16:41:00+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -229,6 +234,12 @@
   <url>
     <loc>https://idontwannawork.github.io/tags/</loc>
     <lastmod>2019-04-11T09:47:58+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://idontwannawork.github.io/tags/unity/</loc>
+    <lastmod>2019-07-11T16:41:00+09:00</lastmod>
     <priority>0</priority>
   </url>
   

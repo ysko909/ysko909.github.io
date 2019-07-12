@@ -6,8 +6,155 @@
 		<description>Recent content in Posts on Come as you are</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Sun, 07 Jul 2019 17:14:15 +0900</lastBuildDate>
+		<lastBuildDate>Thu, 11 Jul 2019 16:41:00 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Unity Hubを使ってUnityをインストールする</title>
+			<link>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</link>
+			<pubDate>Thu, 11 Jul 2019 16:41:00 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</guid>
+			<description>Unityって何さ Unity 世界で最も広くつかわれているゲーム開発エンジン。 様々な機能を備えたエディターと、業界で最も幅広いプラットフォームへのサポ</description>
+			<content type="html"><![CDATA[
+
+<h2 id="unityって何さ">Unityって何さ</h2>
+
+<p><a href="https://unity.com/">Unity</a></p>
+
+<blockquote>
+<p>世界で最も広くつかわれているゲーム開発エンジン。 様々な機能を備えたエディターと、業界で最も幅広いプラットフォームへのサポートを利用して、ゲームやインタラクティブなコンテンツを制作する方法を学びましょう。</p>
+</blockquote>
+
+<p>「ゲーム開発エンジン」とは、画面描写、効果音やBGMなどの音楽管理、ステータスなどの各種データ管理などを総合して開発できる環境のこと。ただ、昨今ではゲームだけでなく映像制作にも用いられてますし、3Dに強いという特徴を生かして建築設計にも活用されているようです。すげぇ。</p>
+
+<p>2Dを多用した映像制作ではちょっとアレかもしれませんが、3Dがメインならリアルタイムで3Dレンダリングが可能なUnityの強みを活用できそうです。<a href="https://unity.com/">Unityオフィシャル</a>を始めとしてナレッジも多いですし、販売されているテキストも充実しているのも、Unityの強みかもしれません。</p>
+
+<p>何はともあれ、まずは環境を整備しようと思います。今回はインストールについて。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>macOS Mojave 10.14.5</li>
+</ul>
+
+<p>なお、インストールする対象は<a href="https://blogs.unity3d.com/jp/2019/04/16/introducing-unity-2019-1/">Unity 2019.1版</a>とします。</p>
+
+<h2 id="エディション">エディション</h2>
+
+<p>Unityには現在（2019年7月10日）エディションが3パターン存在します。</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">名称</th>
+<th align="center">月額</th>
+<th align="center">条件</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">Personal</td>
+<td align="center">無料</td>
+<td align="center">収入ならびに資金調達（自己資金を含む）の合計が年間10万ドルを超えない場合</td>
+</tr>
+
+<tr>
+<td align="center">Pro with Teams Advanced</td>
+<td align="center">15,000円</td>
+<td align="center">条件なし</td>
+</tr>
+
+<tr>
+<td align="center">Plus</td>
+<td align="center">～3000円</td>
+<td align="center">個人・法人問わず、年間収益ならびに資金調達（自己資金を含む）の合計が20万米ドル以下の場合</td>
+</tr>
+</tbody>
+</table>
+
+<p>エディション構成あるいは月額は、ある程度のスパンで更新されると思うので、<a href="https://unity.com/">Unityオフィシャル</a>を参照していただくことを強くオススメします。</p>
+
+<p>とりあえずここでは、Personalエディションを選択します。</p>
+
+<h2 id="インストール手順">インストール手順</h2>
+
+<p>Unityは基本的に直接インストーラーをダウンロードせず、Unity Hubと呼ばれるソフトを経由してインストールします。まずはそのUnity Hubをインストールするところから。</p>
+
+<h3 id="unity-hubのダウンロード">Unity Hubのダウンロード</h3>
+
+<p><a href="https://unity.com/">Unityオフィシャル</a>から「はじめる」をクリックします。</p>
+
+<p><img src="2019-07-07-16-53-46.png" alt="pic" /></p>
+
+<p>プランが表示されます。ここではPersonalを選択します。</p>
+
+<p><img src="2019-07-07-17-42-45.png" alt="pic" /></p>
+
+<p>「利用規約および〜」の部分にチェックを入れると、ボタンが活性化されてUnity Hubのダウンロードができるようになります。</p>
+
+<p><img src="2019-07-07-16-56-51.png" alt="pic" /></p>
+
+<p>ダウンロードしたらインストールします。MacへのインストールはApplicationsのフォルダーにコピーするだけです。</p>
+
+<h3 id="ダウンロードするunityの選択">ダウンロードするUnityの選択</h3>
+
+<p>Unity Hubのインストールが終わったら、起動します。</p>
+
+<p><img src="2019-07-07-16-59-36.png" alt="pic" /></p>
+
+<p>この状態ではまだUnity本体はインストールされていません。ダウンロードもされていません。そこで、左の「インストール」をクリックします。</p>
+
+<p><img src="2019-07-07-17-00-45.png" alt="pic" /></p>
+
+<p>右上の「インストール」ボタンをクリックします。すると現時点（2019年7月）でインストールが可能なバージョンの一覧が表示されます。</p>
+
+<p><img src="2019-07-07-17-01-32.png" alt="pic" /></p>
+
+<p>とくにこだわりがなければ最新の安定版をインストールします。</p>
+
+<h3 id="一緒にインストールするモジュールの選択">一緒にインストールするモジュールの選択</h3>
+
+<p>本体のバージョンを選択し「次へ」をクリックすると、今度は本体と同時にインストールするモジュールを選択できます。自分は「Android Build Support」「iOS Build Support」の2つを選択しました。とくに深い意味はありません。なんとなく必要になりそうだな・・・と思ったので。なお、Dev toolsのVisual Studio for Macは最初から選択されています。</p>
+
+<p>なお、ここで選択しなくても後で追加できるので、必要性を感じなければ選択しなくても何ら問題ありません。</p>
+
+<p>選択し終わったら「次へ」をクリック。</p>
+
+<p><img src="2019-07-07-17-06-08.png" alt="pic" /></p>
+
+<h3 id="ライセンス契約">ライセンス契約</h3>
+
+<p>ライセンス契約の画面です。おもむろに同意します。そして「実行」をクリックします。</p>
+
+<p><img src="2019-07-07-17-06-55.png" alt="pic" /></p>
+
+<p>すると、自動的にダウンロードが始まります。</p>
+
+<p><img src="2019-07-07-17-08-06.png" alt="pic" /></p>
+
+<p>しばらく放置しておけばダウンロードとインストールが完了します。</p>
+
+<p><img src="2019-07-07-17-41-01.png" alt="pic" /></p>
+
+<h3 id="インストールが終わったら">インストールが終わったら</h3>
+
+<p>左側の「プロジェクト」から「新規作成」をクリックします。</p>
+
+<p><img src="2019-07-07-17-45-00.png" alt="pic" /></p>
+
+<p>するとテンプレート画面が開きます。ここから新規作成すればいいわけですね。</p>
+
+<p><img src="2019-07-07-17-45-17.png" alt="pic" /></p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>Unityのインストールがこれで完了しました。なお、アップデートなどもUnity Hubを利用することになります。</p>
+
+<p>さあ、あとはコーディングするだけです。するだけです。するだけだってば。</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>Visual Studio CodeでGitが見つからないと言われたら</title>
@@ -996,160 +1143,6 @@ xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools
 <p>スマートフォンやタブレットを利用してレコーディングしたい、ギターだけじゃなくてマイクも使いたい、小難しいのはいいからとにかく気軽にやりたい。</p>
 
 <p>そんな人にぜひオススメしたい、良質なインターフェイスです。</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>PythonでMarkdownファイルをHTMLへ変換する</title>
-			<link>https://idontwannawork.github.io/posts/convert-markdown-to-html-with-python/</link>
-			<pubDate>Fri, 24 May 2019 14:50:30 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/convert-markdown-to-html-with-python/</guid>
-			<description>はじめに 以前、VS CodeでMarkdownをPDFに自動で変換する方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので</description>
-			<content type="html"><![CDATA[
-
-<h2 id="はじめに">はじめに</h2>
-
-<p>以前、<a href="/posts/convert-markdown-to-pdf-with-vscode/">VS CodeでMarkdownをPDFに自動で変換する</a>方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので勉強がてら、Pythonで書くことにしました。と言っても難しい処理では全然ないんだけど・・・_(┐「ε:)_</p>
-
-<p>ちなみに、<a href="/posts/convert-markdown-to-pdf-with-vscode/">前の記事</a>で紹介した拡張機能<a href="https://marketplace.visualstudio.com/items?itemName=yzane.markdown-pdf">Markdown PDF</a>を使えばHTMLにも変換できます。ただ、今回はVS Codeがないというシチュエーションでファイル変換したいのと、自分が作成したスタイルシートでHTMLファイルを生成したかったため、VS Codeの拡張機能を頼らない方法を取りました。</p>
-
-<p>というわけで、Pythonを使ったMarkdownファイルをHTMLへ変換する手順について書きます。</p>
-
-<h2 id="リポジトリ">リポジトリ</h2>
-
-<p><a href="https://github.com/idontwannawork/markdowntohtml">こちら</a>にソースコード一式を置いてあります。</p>
-
-<h2 id="環境">環境</h2>
-
-<ul>
-<li>Python ※3.x系</li>
-<li>Markdown</li>
-</ul>
-
-<p><a href="https://python-markdown.github.io/">Markdown</a>は事前に<code>pip</code>しておく。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">pip install Markdown</code></pre></div>
-<p>一応プラットフォームに関しては、MacやWindowsに限らず動作する・・・はず_(┐「ε:)_</p>
-
-<h2 id="概要">概要</h2>
-
-<p>フォルダ中に存在するmdファイルを取得して、HTMLファイルに変換します。</p>
-
-<h2 id="詳細">詳細</h2>
-
-<h3 id="ファイル">ファイル</h3>
-
-<ul>
-<li><p>mdtohtml.py</p>
-
-<p>Pythonで記述された本体。実行の際は当ファイルを指定します。</p></li>
-
-<li><p>style.css</p>
-
-<p>CSSが書かれたファイル。生成されたHTMLファイルに<code>&lt;style&gt;</code>タグで記述されます。スタイルの変更を行いたい場合、当ファイルを書き換えてHTMLを生成してください。</p></li>
-</ul>
-
-<h3 id="使い方">使い方</h3>
-
-<ol>
-<li><p>変換したいmdファイルがあるフォルダに上記の2ファイルを配置します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ ls
-README.md    iamacat.md   main.css     mdtohtml.py</code></pre></div></li>
-
-<li><p>配置したら、そのフォルダにて下記のコマンドを実行します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ python mdtohtml.py
-iamacat.md の変換を開始します
------------------------------------
-iamacat.md を iamacat.html へ変換しました
-README.md の変換を開始します
------------------------------------
-README.md を README.html へ変換しました
-$ ls
-README.html   README.md     iamacat.html  iamacat.md    main.css      mdtohtml.py</code></pre></div></li>
-</ol>
-
-<h3 id="処理内容">処理内容</h3>
-
-<p>実行されたフォルダ中に存在するmdファイルを取得して、HTMLファイルに変換して同じフォルダーに出力します。mdファイルが複数ある場合は、すべてHTML化します。</p>
-
-<h2 id="コード">コード</h2>
-
-<p>基本的には、HTML化はMarkdownに丸投げしています。丸投げした後、必要な<code>&lt;html&gt;</code>タグなどを付与しているだけです。</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">markdown</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">glob</span>
-
-<span class="c1"># Markdown拡張</span>
-<span class="n">mdextensions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;tables&#34;</span><span class="p">]</span>
-
-
-<span class="c1"># mdファイルの変換</span>
-<span class="k">def</span> <span class="nf">convertHtml</span><span class="p">(</span><span class="n">mdpath</span><span class="p">,</span> <span class="n">htmlpath</span><span class="p">,</span> <span class="n">style</span><span class="p">):</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mdpath</span><span class="p">,</span> <span class="s1">&#39;rt&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="c1"># Markdown の import 文を除去</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;@import &#34;.+&#34;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
-        <span class="c1"># HTMLに変換</span>
-        <span class="n">body</span> <span class="o">=</span> <span class="n">markdown</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="n">extensions</span><span class="o">=</span><span class="n">mdextensions</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-
-        <span class="n">html</span> <span class="o">=</span> <span class="s1">&#39;&lt;html lang=&#34;ja&#34;&gt;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;</span>
-        <span class="n">html</span> <span class="o">+=</span> <span class="s1">&#39;&lt;style&gt;&#39;</span> <span class="o">+</span> <span class="n">style</span> <span class="o">+</span> <span class="s1">&#39;&lt;/style&gt;&#39;</span>
-        <span class="n">html</span> <span class="o">+=</span> <span class="s1">&#39;&lt;body&gt;&#39;</span> <span class="o">+</span> <span class="n">body</span> <span class="o">+</span> <span class="s1">&#39;&lt;/body&gt;&lt;/html&gt;&#39;</span>
-
-        <span class="c1"># HTMLで出力</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">((</span><span class="n">htmlpath</span><span class="p">),</span> <span class="s2">&#34;w&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">g</span><span class="p">:</span>
-            <span class="n">g</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-
-    <span class="c1"># スタイルは、style.cssを参照する</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./style.css&#39;</span><span class="p">,</span> <span class="s1">&#39;rt&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">style</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">mdfile</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&#34;*.md&#34;</span><span class="p">):</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">%s</span><span class="s2"> の変換を開始します&#34;</span> <span class="o">%</span> <span class="n">mdfile</span><span class="p">)</span>
-            <span class="n">htmlname</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;.md$&#39;</span><span class="p">,</span> <span class="s1">&#39;.html&#39;</span><span class="p">,</span> <span class="n">mdfile</span><span class="p">)</span>
-            <span class="n">convertHtml</span><span class="p">(</span><span class="n">mdfile</span><span class="p">,</span> <span class="n">htmlname</span><span class="p">,</span> <span class="n">style</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&#34;-----------------------------------&#34;</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">%s</span><span class="s2"> を </span><span class="si">%s</span><span class="s2"> へ変換しました&#34;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mdfile</span><span class="p">,</span> <span class="n">htmlname</span><span class="p">))</span></code></pre></div>
-<p>途中の<code>style.css</code>は任意のスタイルを記述したファイルを、pyファイルと同じフォルダに格納しておきます。</p>
-
-<p>なお、style.cssの内容はとりあえず下記の内容を記述しています。用途に応じて、追記したり別のcssファイルに置き換えてもらえればいいかと思います。</p>
-<div class="highlight"><pre class="chroma"><code class="language-css" data-lang="css"><span class="nt">body</span> <span class="p">{</span>
-
-  <span class="k">font-family</span><span class="p">:</span> <span class="s2">&#34;Hiragino Kaku Gothic Pro&#34;</span><span class="p">,</span><span class="kc">sans-serif</span><span class="p">;</span>
-  <span class="k">font-size</span><span class="p">:</span> <span class="mi">14</span><span class="kt">px</span><span class="p">;</span>
-  <span class="k">padding</span><span class="p">:</span> <span class="mi">0</span> <span class="mi">12</span><span class="kt">px</span><span class="p">;</span>
-  <span class="k">line-height</span><span class="p">:</span> <span class="mi">23</span><span class="kt">px</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nt">img</span> <span class="p">{</span>
-  <span class="k">max-width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
-  <span class="k">max-height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nt">hr</span> <span class="p">{</span>
-  <span class="k">border</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">height</span><span class="p">:</span> <span class="mi">2</span><span class="kt">px</span><span class="p">;</span>
-  <span class="k">border-bottom-width</span><span class="p">:</span> <span class="mi">2</span><span class="kt">px</span><span class="p">;</span>
-  <span class="k">border-bottom-style</span><span class="p">:</span> <span class="kc">dotted</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nt">h1</span> <span class="p">{</span>
-  <span class="k">padding-bottom</span><span class="p">:</span> <span class="mf">0.4</span><span class="kt">em</span><span class="p">;</span>
-  <span class="k">line-height</span><span class="p">:</span> <span class="mf">1.2</span><span class="p">;</span>
-  <span class="k">border-bottom-width</span><span class="p">:</span> <span class="mi">1</span><span class="kt">px</span><span class="p">;</span>
-  <span class="k">border-bottom-style</span><span class="p">:</span> <span class="kc">solid</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nt">h1</span><span class="o">,</span> <span class="nt">h2</span><span class="o">,</span> <span class="nt">h3</span><span class="o">,</span> <span class="nt">h4</span><span class="o">,</span> <span class="nt">h5</span><span class="o">,</span> <span class="nt">h6</span> <span class="p">{</span>
-  <span class="k">font-weight</span><span class="p">:</span> <span class="kc">normal</span><span class="p">;</span>
-<span class="p">}</span></code></pre></div>
-<h2 id="参考文献">参考文献</h2>
-
-<p><a href="https://python-markdown.github.io/">Python-Markdown</a></p>
-
-<p><a href="http://oboe2uran.hatenablog.com/entry/2019/01/25/150934">Markdownファイルを Python で PDF にする</a></p>
 ]]></content>
 		</item>
 		
