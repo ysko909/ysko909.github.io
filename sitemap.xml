@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://idontwannawork.github.io/posts/run-jupyter-notebook-with-vscode/</loc>
+    <lastmod>2019-08-02T14:00:38+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</loc>
     <lastmod>2019-07-11T16:41:00+09:00</lastmod>
   </url>
@@ -172,6 +177,12 @@
   </url>
   
   <url>
+    <loc>https://idontwannawork.github.io/tags/jupyter/</loc>
+    <lastmod>2019-08-02T14:00:38+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/tags/korg/</loc>
     <lastmod>2019-06-16T00:30:23+09:00</lastmod>
     <priority>0</priority>
@@ -197,13 +208,13 @@
   
   <url>
     <loc>https://idontwannawork.github.io/posts/</loc>
-    <lastmod>2019-07-11T16:41:00+09:00</lastmod>
+    <lastmod>2019-08-02T14:00:38+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://idontwannawork.github.io/tags/python/</loc>
-    <lastmod>2019-06-10T00:52:30+09:00</lastmod>
+    <lastmod>2019-08-02T14:00:38+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -245,7 +256,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/tags/vscode/</loc>
-    <lastmod>2019-07-07T17:14:15+09:00</lastmod>
+    <lastmod>2019-08-02T14:00:38+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -263,7 +274,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/</loc>
-    <lastmod>2019-07-11T16:41:00+09:00</lastmod>
+    <lastmod>2019-08-02T14:00:38+09:00</lastmod>
     <priority>0</priority>
   </url>
   

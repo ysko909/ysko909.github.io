@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+
+<meta itemprop="name" content="Jupyter NotebookをVisual Studio Codeで実行する">
+<meta itemprop="description" content="はじめに Visual Studio Code（以下、vscode）ではDockerでPythonやVue.jsの開発環境を構築したり、あるいはMarkdownで書い">
+
+
+<meta itemprop="datePublished" content="2019-08-02T14:00:38&#43;09:00" />
+<meta itemprop="dateModified" content="2019-08-02T14:00:38&#43;09:00" />
+<meta itemprop="wordCount" content="2435">
+
+
+
+<meta itemprop="keywords" content="vscode,Python,Jupyter," />
+<meta property="og:title" content="Jupyter NotebookをVisual Studio Codeで実行する" />
+<meta property="og:description" content="はじめに Visual Studio Code（以下、vscode）ではDockerでPythonやVue.jsの開発環境を構築したり、あるいはMarkdownで書い" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://idontwannawork.github.io/posts/run-jupyter-notebook-with-vscode/" /><meta property="article:published_time" content="2019-08-02T14:00:38&#43;09:00"/>
+<meta property="article:modified_time" content="2019-08-02T14:00:38&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Jupyter NotebookをVisual Studio Codeで実行する"/>
+<meta name="twitter:description" content="はじめに Visual Studio Code（以下、vscode）ではDockerでPythonやVue.jsの開発環境を構築したり、あるいはMarkdownで書い"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Jupyter NotebookをVisual Studio Codeで実行する</title>
+	<link rel="stylesheet" href="https://idontwannawork.github.io/css/style.min.e81f50049998463da8cdbf0f848b77d9797f27f249581a236a3161d386f310db.css" integrity="sha256-6B9QBJmYRj2ozb8PhIt32Xl/J/JJWBojajFh04bzENs=">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://idontwannawork.github.io/">頑張らないために頑張る</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					<a href="https://idontwannawork.github.io/about/">About</a>
+					<a href="https://idontwannawork.github.io/posts/">Posts</a>
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<button id="toc-btn" class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://twitter.com/unknown_strings" target="_blank" rel="noopener" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/idontwannawork" target="_blank" rel="noopener" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://codepen.io/idontwannawork/" target="_blank" rel="noopener" title="Codepen"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-codepen"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon><line x1="12" y1="22" x2="12" y2="15.5"></line><polyline points="22 8.5 12 15.5 2 8.5"></polyline><polyline points="2 15.5 12 8.5 22 15.5"></polyline><line x1="12" y1="2" x2="12" y2="8.5"></line></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://idontwannawork.github.io/about/">About</a></li>
+			<li><a href="https://idontwannawork.github.io/posts/">Posts</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Aug 2, 2019</span></div>
+				<h1>Jupyter NotebookをVisual Studio Codeで実行する</h1>
+			</header>
+			<div class="content">
+				
+
+<h2 id="はじめに">はじめに<a href="#はじめに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>Visual Studio Code（以下、vscode）ではDockerで<a href="/posts/connect-to-docker-with-vscode-extension/">Python</a>や<a href="/posts/build-environment-of-vuejs-with-docker/">Vue.js</a>の開発環境を構築したり、あるいは<a href="/posts/convert-markdown-to-pdf-with-vscode/">Markdownで書いたドキュメントを配布用にPDF変換</a>したりと、今までいろいろやってきました。今度は<a href="https://jupyter.org/">Jupyter Notebook</a>を動かします。いやー、vscodeってホントに多彩ですね。</p>
+
+<p>なお、今回においてはDockerを利用せず、単純にローカル環境でJupyterを使用します。</p>
+
+<h2 id="jupyter-notebookとは">Jupyter Notebookとは<a href="#jupyter-notebookとは" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>Jupyter Notebook (なお、読み方は「ジュパイター・ノートブック」、または「ジュピター・ノートブック」。自分は「ジュピター」って言ってますが、どっちが一般的なんですかね？) とは、ブラウザ上で実行するデータ分析作業のためのツールです。特徴的なのは、<strong>実行結果を記録しながら</strong>プログラミングができる点です。<a href="https://jupyter.org/try">ここ</a>でブラウザから実行できます。</p>
+
+<p>プログラムそのものを記述しつつ、Markdownを利用して各種テキストや図表も同時に書き込んでいくことが可能です。つまり、プログラムのソースとその実行結果が、メモを含めて明確に紐づいた状態で確認できます。そのため、作業内容の振り返りに非常に便利ですし、複数人で作業を行う場合の共有にも有用です。また、Jupyterは<code>*.ipynb</code>形式のファイルで保存しますが、ソースコード部分を<code>*.py</code>のPythonコードとして出力することも可能ですし、実行結果をPDFやHTML形式で出力できるため、Jupyterの実行環境がなくても内容を共有できます。</p>
+
+<p>そんなJupyterをvscodeで使っちゃえ、というのが今回の趣旨です。</p>
+
+<h2 id="環境">環境<a href="#環境" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<ul>
+<li>Windows 10</li>
+<li>Anaconda version 1.7.2</li>
+<li>vscode 1.36</li>
+</ul>
+
+<h2 id="インストール">インストール<a href="#インストール" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>Anacondaをインストールしている場合、基本的にはJupyterも一緒にインストールされているはずです。なお、Anacondaのインストールは、<a href="https://www.anaconda.com/">オフィシャルページ</a>からプラットフォームに合ったインストーラーをダウンロードして実行します。インストール後に下記のコマンドを実行すると、<code>conda</code>コマンドにてインストールされているリストが出力されます。表示されたリストの中に<code>jupyter</code>があればインストール済みであることがわかります。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">conda list</code></pre></div>
+<p>ちなみに、Anacondaを導入しないでJupyterを利用するには<code>pip</code>を利用します。下記のコマンドを実行するだけです。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">pip install jupyter</code></pre></div>
+<h2 id="vscodeで実行する">vscodeで実行する<a href="#vscodeで実行する" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<h3 id="拡張機能のインストール">拡張機能のインストール<a href="#拡張機能のインストール" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>vscodeでJupyterを利用するには、Pythonの拡張機能をインストールする必要があります。</p>
+
+<p>拡張機能をインストールするには、vscodeの左側にあるメニュー中から拡張機能のアイコン（下画像の赤枠内）をクリックします。</p>
+
+<p><img src="2019-08-02-15-12-00.png" alt="pic" /></p>
+
+<p>検索窓に「python」と入力します。検索結果のうち、「Python」を選択し、インストールします。なお、下画像ではすでにインストール済みのため、歯車のアイコンが表示されています。</p>
+
+<p><img src="2019-08-02-15-15-04.png" alt="pic" /></p>
+
+<p>他にも導入すると便利な拡張機能はありますが、今回は割愛します。</p>
+
+<h3 id="vscodeでノートブックを書いてみる">vscodeでノートブックを書いてみる<a href="#vscodeでノートブックを書いてみる" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>まず任意のフォルダを作成します。今回は<code>workdir</code>としましたが、フォルダ名はなんでもいいです。次にvscodeで先ほど作成したフォルダを開きます。フォルダを開いたら、適当にファイルを作成します。ただし、この際に作成する<strong>ファイルの拡張子は<code>*.py</code>です</strong>。先ほどJupyterでは<code>*.ipynb</code>形式を用いると言いましたが、vscodeで実行する場合はPythonの拡張子でファイルを作成します。</p>
+
+<p>「だけど、それじゃあフツーのPythonコードを見分けがつかないじゃん！」と思ったあなたは正しい。つまりファイルの拡張子ではなく、ファイルの中身で見分けるわけです。</p>
+
+<p>ファイルを<code>*.py</code>形式で作成したら、下記のコードを入力してください。なお、「その2」部分はCSVファイルがないとコケちゃうので、適当なCSVファイルを作っておくかコードを削除してください。</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1">#%%</span>
+
+<span class="c1">## その１</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1">#%%</span>
+
+<span class="c1">## その２</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&#34;C:</span><span class="se">\\</span><span class="s2">app</span><span class="se">\\</span><span class="s2">hoge.csv&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;cp932&#34;</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+
+<span class="c1">#%%</span>
+
+<span class="c1">## その3</span>
+
+<span class="c1">### sin plot</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">pl</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">### cos plot</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">### tan plot</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></div>
+<p>何か見慣れない<code>#%%</code>という文字列が含まれていますが、これが<strong>普通のPythonコードとJupyterを見分けるコード</strong>です。これが「セル」という、Jupyter Notebookにおける区切りを表しています。これで区切られた領域が1つの実行単位です。これをvscode上で記述すると、「Run cell」とか表示されます。このボタンを押下するとセル単位で実行するか、別のセルも一緒くたに実行するかが選べます。</p>
+
+<ul>
+<li><p>Run cell</p>
+
+<p>押下したセルのみ実行します。<code>Shift + Enter</code>を押下しても同様の結果が得られます。</p></li>
+
+<li><p>Run Above</p>
+
+<p>押下したセルの直前セルまで実行します。</p></li>
+
+<li><p>Run Below</p>
+
+<p>押下したセルから下のセルをすべて実行します。</p></li>
+</ul>
+
+<p>ちなみに、下画像で<code>#%%</code>の部分なんかに赤い波線が表示されていますが、これはflake8のlintに引っかかっているためです。ファイルの拡張子が<code>*.py</code>であるため、flake8が反応しちゃってるようです。「<code>import</code>はモジュールの冒頭に記述しろよぉ」とか言ってるわけですけど、ごめんね、これ<code>*.py</code>ファイルだけどJupyterなのよ_:(´ཀ`」 ∠):_</p>
+
+<p><img src="2019-08-02-15-27-20.png" alt="pic" /></p>
+
+<p>実行すると、右側に新しいタブで実行結果が表示されます。</p>
+
+<p><img src="2019-08-02-15-35-43.png" alt="pic" /></p>
+
+<p>なお、基本的にAnacondaをインストールしている場合は上記のコードがそのまま動作すると思います。が、Jupyterを<code>pip</code>でインストールした場合は、必要なパッケージを別途<code>pip install</code>してください。</p>
+
+<h2 id="まとめ">まとめ<a href="#まとめ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>基本的にJupyterはブラウザ上で気軽にPythonを記述できる便利な環境でしたが、vscodeと組み合わせることでコードの補完機能を利用でき、より一層気軽かつ便利にコードを記述できます。</p>
+
+<p>ますますvscode依存が深まりそうです_:(´ཀ`」 ∠):_</p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/vscode">vscode</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/python">Python</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/jupyter">Jupyter</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2435 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-08-02 05:00 &#43;0000</p>
+			</footer>
+		</article>
+		<aside id="toc">
+			<div class="toc-title">Table of Contents</div>
+			<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#はじめに">はじめに</a></li>
+<li><a href="#jupyter-notebookとは">Jupyter Notebookとは</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#インストール">インストール</a></li>
+<li><a href="#vscodeで実行する">vscodeで実行する</a>
+<ul>
+<li><a href="#拡張機能のインストール">拡張機能のインストール</a></li>
+<li><a href="#vscodeでノートブックを書いてみる">vscodeでノートブックを書いてみる</a></li>
+</ul></li>
+<li><a href="#まとめ">まとめ</a></li>
+</ul></li>
+</ul>
+</nav>
+		</aside>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://idontwannawork.github.io/posts/install-unity-with-unity-hub/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>Unity Hubを使ってUnityをインストールする</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "come-as-you-are" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2019 <a href="https://idontwannawork.github.io/">Tetsuya Katsuragi</a> Allrights reserved.</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://idontwannawork.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	<script src="https://idontwannawork.github.io/js/main.min.784417f5847151f848c339cf0acb13a06cbb648b1483435a28ed4556c4ead69b.js" integrity="sha256-eEQX9YRxUfhIwznPCssToGy7ZIsUg0NaKO1FVsTq1ps="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>

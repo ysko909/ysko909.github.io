@@ -6,8 +6,149 @@
 		<description>Recent content in Posts on 頑張らないために頑張る</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Thu, 11 Jul 2019 16:41:00 +0900</lastBuildDate>
+		<lastBuildDate>Fri, 02 Aug 2019 14:00:38 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Jupyter NotebookをVisual Studio Codeで実行する</title>
+			<link>https://idontwannawork.github.io/posts/run-jupyter-notebook-with-vscode/</link>
+			<pubDate>Fri, 02 Aug 2019 14:00:38 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/run-jupyter-notebook-with-vscode/</guid>
+			<description>はじめに Visual Studio Code（以下、vscode）ではDockerでPythonやVue.jsの開発環境を構築したり、あるいはMarkdownで書い</description>
+			<content type="html"><![CDATA[
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>Visual Studio Code（以下、vscode）ではDockerで<a href="/posts/connect-to-docker-with-vscode-extension/">Python</a>や<a href="/posts/build-environment-of-vuejs-with-docker/">Vue.js</a>の開発環境を構築したり、あるいは<a href="/posts/convert-markdown-to-pdf-with-vscode/">Markdownで書いたドキュメントを配布用にPDF変換</a>したりと、今までいろいろやってきました。今度は<a href="https://jupyter.org/">Jupyter Notebook</a>を動かします。いやー、vscodeってホントに多彩ですね。</p>
+
+<p>なお、今回においてはDockerを利用せず、単純にローカル環境でJupyterを使用します。</p>
+
+<h2 id="jupyter-notebookとは">Jupyter Notebookとは</h2>
+
+<p>Jupyter Notebook (なお、読み方は「ジュパイター・ノートブック」、または「ジュピター・ノートブック」。自分は「ジュピター」って言ってますが、どっちが一般的なんですかね？) とは、ブラウザ上で実行するデータ分析作業のためのツールです。特徴的なのは、<strong>実行結果を記録しながら</strong>プログラミングができる点です。<a href="https://jupyter.org/try">ここ</a>でブラウザから実行できます。</p>
+
+<p>プログラムそのものを記述しつつ、Markdownを利用して各種テキストや図表も同時に書き込んでいくことが可能です。つまり、プログラムのソースとその実行結果が、メモを含めて明確に紐づいた状態で確認できます。そのため、作業内容の振り返りに非常に便利ですし、複数人で作業を行う場合の共有にも有用です。また、Jupyterは<code>*.ipynb</code>形式のファイルで保存しますが、ソースコード部分を<code>*.py</code>のPythonコードとして出力することも可能ですし、実行結果をPDFやHTML形式で出力できるため、Jupyterの実行環境がなくても内容を共有できます。</p>
+
+<p>そんなJupyterをvscodeで使っちゃえ、というのが今回の趣旨です。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Windows 10</li>
+<li>Anaconda version 1.7.2</li>
+<li>vscode 1.36</li>
+</ul>
+
+<h2 id="インストール">インストール</h2>
+
+<p>Anacondaをインストールしている場合、基本的にはJupyterも一緒にインストールされているはずです。なお、Anacondaのインストールは、<a href="https://www.anaconda.com/">オフィシャルページ</a>からプラットフォームに合ったインストーラーをダウンロードして実行します。インストール後に下記のコマンドを実行すると、<code>conda</code>コマンドにてインストールされているリストが出力されます。表示されたリストの中に<code>jupyter</code>があればインストール済みであることがわかります。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">conda list</code></pre></div>
+<p>ちなみに、Anacondaを導入しないでJupyterを利用するには<code>pip</code>を利用します。下記のコマンドを実行するだけです。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">pip install jupyter</code></pre></div>
+<h2 id="vscodeで実行する">vscodeで実行する</h2>
+
+<h3 id="拡張機能のインストール">拡張機能のインストール</h3>
+
+<p>vscodeでJupyterを利用するには、Pythonの拡張機能をインストールする必要があります。</p>
+
+<p>拡張機能をインストールするには、vscodeの左側にあるメニュー中から拡張機能のアイコン（下画像の赤枠内）をクリックします。</p>
+
+<p><img src="2019-08-02-15-12-00.png" alt="pic" /></p>
+
+<p>検索窓に「python」と入力します。検索結果のうち、「Python」を選択し、インストールします。なお、下画像ではすでにインストール済みのため、歯車のアイコンが表示されています。</p>
+
+<p><img src="2019-08-02-15-15-04.png" alt="pic" /></p>
+
+<p>他にも導入すると便利な拡張機能はありますが、今回は割愛します。</p>
+
+<h3 id="vscodeでノートブックを書いてみる">vscodeでノートブックを書いてみる</h3>
+
+<p>まず任意のフォルダを作成します。今回は<code>workdir</code>としましたが、フォルダ名はなんでもいいです。次にvscodeで先ほど作成したフォルダを開きます。フォルダを開いたら、適当にファイルを作成します。ただし、この際に作成する<strong>ファイルの拡張子は<code>*.py</code>です</strong>。先ほどJupyterでは<code>*.ipynb</code>形式を用いると言いましたが、vscodeで実行する場合はPythonの拡張子でファイルを作成します。</p>
+
+<p>「だけど、それじゃあフツーのPythonコードを見分けがつかないじゃん！」と思ったあなたは正しい。つまりファイルの拡張子ではなく、ファイルの中身で見分けるわけです。</p>
+
+<p>ファイルを<code>*.py</code>形式で作成したら、下記のコードを入力してください。なお、「その2」部分はCSVファイルがないとコケちゃうので、適当なCSVファイルを作っておくかコードを削除してください。</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1">#%%</span>
+
+<span class="c1">## その１</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1">#%%</span>
+
+<span class="c1">## その２</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&#34;C:</span><span class="se">\\</span><span class="s2">app</span><span class="se">\\</span><span class="s2">hoge.csv&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;cp932&#34;</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+
+<span class="c1">#%%</span>
+
+<span class="c1">## その3</span>
+
+<span class="c1">### sin plot</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">pl</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">### cos plot</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">### tan plot</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></div>
+<p>何か見慣れない<code>#%%</code>という文字列が含まれていますが、これが<strong>普通のPythonコードとJupyterを見分けるコード</strong>です。これが「セル」という、Jupyter Notebookにおける区切りを表しています。これで区切られた領域が1つの実行単位です。これをvscode上で記述すると、「Run cell」とか表示されます。このボタンを押下するとセル単位で実行するか、別のセルも一緒くたに実行するかが選べます。</p>
+
+<ul>
+<li><p>Run cell</p>
+
+<p>押下したセルのみ実行します。<code>Shift + Enter</code>を押下しても同様の結果が得られます。</p></li>
+
+<li><p>Run Above</p>
+
+<p>押下したセルの直前セルまで実行します。</p></li>
+
+<li><p>Run Below</p>
+
+<p>押下したセルから下のセルをすべて実行します。</p></li>
+</ul>
+
+<p>ちなみに、下画像で<code>#%%</code>の部分なんかに赤い波線が表示されていますが、これはflake8のlintに引っかかっているためです。ファイルの拡張子が<code>*.py</code>であるため、flake8が反応しちゃってるようです。「<code>import</code>はモジュールの冒頭に記述しろよぉ」とか言ってるわけですけど、ごめんね、これ<code>*.py</code>ファイルだけどJupyterなのよ_:(´ཀ`」 ∠):_</p>
+
+<p><img src="2019-08-02-15-27-20.png" alt="pic" /></p>
+
+<p>実行すると、右側に新しいタブで実行結果が表示されます。</p>
+
+<p><img src="2019-08-02-15-35-43.png" alt="pic" /></p>
+
+<p>なお、基本的にAnacondaをインストールしている場合は上記のコードがそのまま動作すると思います。が、Jupyterを<code>pip</code>でインストールした場合は、必要なパッケージを別途<code>pip install</code>してください。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>基本的にJupyterはブラウザ上で気軽にPythonを記述できる便利な環境でしたが、vscodeと組み合わせることでコードの補完機能を利用でき、より一層気軽かつ便利にコードを記述できます。</p>
+
+<p>ますますvscode依存が深まりそうです_:(´ཀ`」 ∠):_</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>Unity Hubを使ってUnityをインストールする</title>
@@ -1038,111 +1179,6 @@ xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools
 </code></pre>
 
 <p>「インストールしますか？」という旨のメッセージが表示されたらOKします。インストールは十数秒で終わると思います。インストールが終わればgitは使えるようになります。</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>TASCAMのiXZを使ってiPhoneでレコーディングする</title>
-			<link>https://idontwannawork.github.io/posts/recocrd-with-tascam-ixz/</link>
-			<pubDate>Tue, 04 Jun 2019 17:11:23 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/recocrd-with-tascam-ixz/</guid>
-			<description>そもそもiXZって何ぞや TASCAMが販売しているスマートフォン・タブレット端末用オーディオインターフェイスです。発売は2011年とめちゃく</description>
-			<content type="html"><![CDATA[
-
-<h2 id="そもそもixzって何ぞや">そもそもiXZって何ぞや</h2>
-
-<p><img src="IMG_0671.png" alt="pic" /></p>
-
-<p><a href="https://tascam.jp/jp/product/ixz/top">TASCAMが販売している</a>スマートフォン・タブレット端末用オーディオインターフェイスです。発売は2011年とめちゃくちゃ昔なのですが現役で販売されていることからもわかる通り、スマートフォン・タブレット端末で利用できる手軽なインターフェイスの王道です。</p>
-
-<p>特徴としては、スマートフォンなどに「アナログで接続する」という点。そして、ギター専用の<a href="https://www.ikmultimedia.com/products/irig2/?L=JP">iRig</a>のような「スマートフォンに直接接続する」仕様であるにもかかわらず、ギターだけじゃなくコンデンサーマイクの利用も可能な点でしょうか。</p>
-
-<h2 id="仕様">仕様</h2>
-
-<p><img src="IMG_0679.png" alt="pic" /></p>
-
-<p>サイズは<code>106（W）× 40（H）× 45（D）mm</code>と、最近大型化しているスマートフォンと比べると厚さ以外は割とコンパクト。単3電池2本がセット可能ですが、電池を含めないと100gを切るくらいの軽量さ。</p>
-
-<p>入力端子はハイインピーダンス入力に対応していて、ギターなどを直接接続できます。また、端子がXLR/TSコンボジャック仕様で、ギター・ベースやシンセサイザーなどの標準プラグだけでなく、XLR端子をもつマイクも接続可能です。さらに、単3電池2本によるファントム電源の供給が可能で、コンデンサーマイクの接続もできるとあって、実売価格が4000円前後の商品としては割と充実した装備です。</p>
-
-<p>スマートフォンやタブレットへの接続には、本体から「ニョキッ」と生えている4極端子を用います。デバイスのヘッドホン端子に接続することで、アナログでのレコーディングができるようになるわけです。最近だとLightning端子などに接続してデジタルでレコーディングする機種もありますが、ヘッドホン端子でのアナログ接続ならAndroidとiOSの双方で利用できるので、ありがたいです。まぁ、最近はそもそも<a href="https://www.apple.com/jp/iphone-xs/">ヘッドホン端子</a>が<a href="https://www.apple.com/jp/iphone-xr/">存在しないスマホ</a>も<a href="https://www.nttdocomo.co.jp/product/smart_phone/so01l/">ゴロゴロ</a>ありますけどね・・・。</p>
-
-<p>ちなみに、説明書などにはこの機種が利用できるデバイスを「4極端子（CTIA規格）を搭載した端末に限ります」としているのですが、4極端子を装備していないデバイスって最近あるんですかね？</p>
-
-<p>また、本体背面の3.5mmステレオミニジャックにイヤホンやヘッドホンを接続することで、音声出力をモニターしながらレコーディングできます。まぁ、この「モニターしながらレコーディングできる」って言うのが、<strong>ちょっとした罠</strong> になっているんですけどね・・・_(┐「ε:)_（後述）</p>
-
-<p>なお、当機種はiOSにおける動作検証の対象機材となっており<a href="https://tascam.com/jp/support/news/5751">サポートページ</a>でiOS12における動作が確認されていることから、今後もしばらくは安心して使用できます。ただ、Lightning端子に接続するようなデジタル仕様じゃないので、OSの変更で影響が出てくるのか？と問われると、「ぶっちゃけ関係ないんじゃないの？」と首をかしげるところではありますが。</p>
-
-<p>ちなみに、細かいところにツッコミを入れるなら、多分USBオーディオインターフェイスじゃないと思うんですけど（名推理）</p>
-
-<p><img src="2019-06-04-17-36-25.png" alt="pic" /></p>
-
-<h2 id="使い方">使い方</h2>
-
-<h3 id="接続">接続</h3>
-
-<p>使い方は、正面の入力端子にギターやシンセを接続し、背面の4極ミニプラグケーブルをスマートフォンやタブレットのヘッドホンを接続します。また、本体の背面にあるヘッドホン端子へ対しヘッドホンなどを接続して音声出力をモニターします。</p>
-
-<p><img src="2019-06-04-18-09-02.png" alt="pic" /></p>
-
-<p>このとき、標準ジャックを利用するのであれば電池は不要です。電池は、コンデンサーマイクを接続する際のファントム電源の供給にのみ利用するからです。</p>
-
-<h3 id="音量調整">音量調整</h3>
-
-<p>音量はデバイスのボリュームを調整することで操作します。</p>
-
-<h3 id="さあレコーディング-あれ">さあレコーディング！・・・あれ？</h3>
-
-<p>接続はこれで終わりです。ただこれだけではレコーディングできません。そう、<strong>アプリ</strong>が必要なのですよ・・・！</p>
-
-<h3 id="アプリは">アプリは？</h3>
-
-<p>iXZ用のアプリというものはリリースされていません。じゃあどうするか？</p>
-
-<p><strong>好きなアプリを使えばいいんじゃね？</strong>、です。</p>
-
-<p>そう言ってしまうと冗談に聞こえますが割とマジです。何せアナログの入力なので、プロテクトも何もないわけですから、極端なことを言えばスマホに標準搭載されているカメラアプリを使って録画してもいいわけです。あるいは、iOSであれば<a href="https://www.apple.com/jp/ios/garageband/">GarageBand</a>がパッと思い浮かぶところでしょうか。</p>
-
-<p><strong>慣れ親しんだアプリを使ってね</strong>という、TASCAMの思いやりなのかもしれないデスネ（ぐるぐる目）</p>
-
-<h2 id="つまづいたところ">つまづいたところ</h2>
-
-<p>単純明快なアナログ接続のiXZですが、スムーズに万事うまく行ったわけではありませんでした。というのが、<strong>音声入力のモニターができるか否かはアプリに依存</strong>する点です。</p>
-
-<p>当初、この機種の動作確認を行うのに、iPhoneのカメラアプリを利用しました。ところが、接続したイヤホンから音声のモニターができないのです。かすかな「サー」というホワイトノイズが彼方に聞こえるのみで、INPUTのダイヤルをひねろうとiPhoneの音量を調整しようと一向に音声をモニターできません。</p>
-
-<p>「あちゃー、初期不良かなー」と思いましたが、録画した動画を再生してみるとしっかりと入力した音声が録画されていました。<strong>つまり、音声入力は取得できているけど、それをモニターできない</strong>わけでした。</p>
-
-<p>少し調べてみたところ「モニターの可否は、レコーディングに利用するアプリが<strong>入力された音声を出力へ返してくれるかどうか</strong>に依存している」ということがわかりました。</p>
-
-<p>つまり、iXZは録音するデバイス（この場合iPhone）からの音声出力を単純にイヤホンに出力しているだけで、iXZ本体でイヤホンジャックに向けて配線しているわけではない、ということです。なので、モニタリングできるよう入力された音声を出力できるようなアプリを利用すればよい、ということになります。</p>
-
-<p>ただし、GarageBandのようなアプリは動画ではなく音声のみを録音するので、「動画を取りつつ音声をモニターしたい」というニーズには残念ながら大抵のアプリが非対応、ということになります。</p>
-
-<p>この場合、根本的な解決策はモニターできる録画アプリを探すことになります。が、今回は録画したかったものがKORGのvolcaをいじる場面だったので、ステレオミニプラグを分岐させるアダプターを利用しました。volcaのアウトプットに分岐アダプターを接続し、一方はiXZに接続しつつもう一方をイヤホンやスピーカーに接続することで、モニターしながら録画できる環境にしました。</p>
-
-<h2 id="使った感じはどうなのよ">使った感じはどうなのよ？</h2>
-
-<p><strong>スゲーお手軽・・・！！</strong> _(┐「ε:)_</p>
-
-<p>これなんですよねぇ。レコーディングしたい機材をパパッと接続して、アプリを起動して録音するだけ。それ以上の操作は必要ないうえ、どこへでも持って行けるサイズ。ギターなどを接続するなら電池も不要で、とにかく身軽かつ気軽。</p>
-
-<p>アナログ特有のノイズはどうしてもありますが、言うほど気にはなりません。これ以上を望むならもう少し出費してデジタルのオーディオインターフェイスを準備するほうが、精神衛生上よろしいかと思います。</p>
-
-<p>というか、この手のインターフェイスでギターとマイクが接続できるものはiXZが今の所最安値です。より良い環境を求めるなら自動的に出費する以外にはありません。強いて言えばiRigですけど、あれはギターとかの標準プラグのみ対応してる機種ですしね。</p>
-
-<p>気になったと言えば、iXZ本体にイヤホンを接続してモニターする場合、原音と比べて若干音がマイルドになるというか、少しハリがなくなるというか、そんな気がします。良く言えば「角が取れて落ち着く」、悪く言えば「ヌケが悪くなってダルい」。ただし、イヤホンはあくまでもモニター用ですしiPhone本体にはそこそこのヌケで録音されているので問題ないでしょう。</p>
-
-<p>そして何よりこの値段設定が素晴らしい。コストパフォーマンスとしては、100点満点じゃないでしょうか。</p>
-
-<h2 id="まとめ">まとめ</h2>
-
-<p><strong>身軽でお手軽な上、コスパまで備えた働き者</strong>です。</p>
-
-<p>スマートフォンやタブレットを利用してレコーディングしたい、ギターだけじゃなくてマイクも使いたい、小難しいのはいいからとにかく気軽にやりたい。</p>
-
-<p>そんな人にぜひオススメしたい、良質なインターフェイスです。</p>
 ]]></content>
 		</item>
 		
