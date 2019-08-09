@@ -6,10 +6,19 @@
     <description>Recent content on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Fri, 02 Aug 2019 14:00:38 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 09 Aug 2019 16:03:40 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Korgのvolca drumを買ったので軽くレビューしてみる</title>
+      <link>https://idontwannawork.github.io/posts/korg-volca-drum-review/</link>
+      <pubDate>Fri, 09 Aug 2019 16:03:40 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/korg-volca-drum-review/</guid>
+      <description>まーた買っちゃった modularに引き続き、volca drumも買っちゃったい_(:3」∠)_ volcaとは volcaとは、KORGの生み出</description>
+    </item>
     
     <item>
       <title>Jupyter NotebookをVisual Studio Codeで実行する</title>
@@ -90,15 +99,6 @@
       
       <guid>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</guid>
       <description>はじめに Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、ptvsdでは</description>
-    </item>
-    
-    <item>
-      <title>macOSアップデート後のxcrunエラーはxcodeをインストールする</title>
-      <link>https://idontwannawork.github.io/posts/xcrun-error-after-macos-update/</link>
-      <pubDate>Sun, 09 Jun 2019 19:29:47 +0900</pubDate>
-      
-      <guid>https://idontwannawork.github.io/posts/xcrun-error-after-macos-update/</guid>
-      <description>macOSあるある？ macOSのアップデート（High SierraからMojave）後にgitを実行するとxcrunが見つからないよ！という</description>
     </item>
     
   </channel>

@@ -6,8 +6,111 @@
 		<description>Recent content in Posts on 頑張らないために頑張る</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Fri, 02 Aug 2019 14:00:38 +0900</lastBuildDate>
+		<lastBuildDate>Fri, 09 Aug 2019 16:03:40 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Korgのvolca drumを買ったので軽くレビューしてみる</title>
+			<link>https://idontwannawork.github.io/posts/korg-volca-drum-review/</link>
+			<pubDate>Fri, 09 Aug 2019 16:03:40 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/korg-volca-drum-review/</guid>
+			<description>まーた買っちゃった modularに引き続き、volca drumも買っちゃったい_(:3」∠)_ volcaとは volcaとは、KORGの生み出</description>
+			<content type="html"><![CDATA[
+
+<h2 id="まーた買っちゃった">まーた買っちゃった</h2>
+
+<p>modularに引き続き、<strong>volca drumも買っちゃったい</strong>_(:3」∠)_</p>
+
+<h2 id="volcaとは">volcaとは</h2>
+
+<p>volcaとは、KORGの生み出したシンセサイザーのシリーズでして、個人的にも大好きなシリーズです。コンパクトな筐体にハイエンドモデル顔負けの要素をこれでもかと積み込んで、<a href="https://www.korg.com/jp/products/dj/volca_modular/">美味しいところをコンパクトな筐体に詰め込んだセミモジュラーシンセ</a>だったり、かと思えば<a href="https://www.korg.com/jp/products/dj/volca_kick/">キック音に特化しまくった超絶ニッチだけどスゴく使えるキックジェネレーター</a>だったり、<a href="https://www.korg.com/jp/products/dj/volca_keys/">王道のポリフォニックなアナログシンセサイザー</a>などなどを生み出してきたシリーズです。</p>
+
+<p>個人的にも今までに<a href="https://www.korg.com/jp/products/dj/volca_keys/index.php">keys</a>、<a href="https://www.korg.com/jp/products/dj/volca_bass/index.php">bass</a>、<a href="https://www.korg.com/jp/products/dj/volca_kick/index.php">kick</a>、<a href="https://www.korg.com/jp/products/dj/volca_sample/index.php">sample</a>などなど購入してきましたが、今回新たにリズムマシン・パーカッションシンセサイザーである<a href="https://www.korg.com/jp/products/dj/volca_drum/">volca drum</a>を購入しました！</p>
+
+<h2 id="ちなみにvolca-modularは">ちなみにvolca modularは</h2>
+
+<p>以前に購入したセミモジュラーシンセである<a href="/posts/korg-volca-modular-review/">volca modularのレビューはこちら</a>です。</p>
+
+<h2 id="volca-drumとは">volca drumとは</h2>
+
+<p>volca drum（以下、drum）はKORGがデジタル・パーカッション・シンセサイザーと銘打っているとおり、デジタルのリズムマシンです。すでにリリースされているvolca beatsやvolca kickがアナログのリズムマシンであることを考えると、今までにない新機軸の機種であることがわかります。ちなみに、volca sampleも同様にデジタルですが、こちらはサンプラーなので基本的にプレイバックが主な利用用途で、音作りに関しては限界があります。要は元のサンプルから大いに逸脱した音は作れないわけです。</p>
+
+<p>対して、drumではDSPによるアナログモデリングによって音を編集して、volcaシリーズでお馴染みのシーケンサーでリズムパターンを組み立てます。drumのDSPは、オシレーター波形にサイン波、のこぎり波、ノイズなどを採用しています。オシレーターから出力された音にいろんな変化を加えることで、本物の打楽器に近似した音からデジタル特有の独特な音まで、ドラムだけにはとどまらず、幅広いバリエーションのパーカッション・サウンドを生成できます。</p>
+
+<h2 id="パートの仕様">パートの仕様</h2>
+
+<p>volca drumは合計で6つのパートを保持しています。また、これらのパートはそれぞれ個別に2つのレイヤーを持っています。これらのパートはそれぞれ同じ仕様です。「同じ仕様」とは各パートが同じオシレーター、モジュレーター、EGを保持していることを指しています。つまり「ここはバス・ドラム、ここはシンバル・・・」といったルールや制限はないため、バスドラムやスネアドラムを抜いたパターンを構築したり、全パートでそれぞれ微妙に異なるシンバル音を生成したりすることも可能です。極端なことを言えば、全パートで同じ音を生成することも可能なわけです。まぁ、実用性があるかどうかは、とりあえず別にして。</p>
+
+<p>なお、パターンは最大16個まで保存が可能です。</p>
+
+<p>各パートはそれぞれ2レイヤーを保持しています。各レイヤーのパラメーターは個別でも同時でも編集が可能なので、2つのレイヤーに同じ音を重ねて厚みを持たせることができます。</p>
+
+<h2 id="ウェーブガイド-リゾネーター">ウェーブガイド・リゾネーター</h2>
+
+<p>エフェクト部は、物理モデリングをベースとしたウェーブガイド・レゾネーターを搭載しています。これは、太鼓の胴や長いパイプのような筒状の残響音を加えるチューブと、スネアの音っぽいメタリックな感じの弦の響きを加えるストリングスの2タイプが選択可能です。パネル中央部の3つのツマミによりDECAY（減衰量）、BODY（音のキャラクター）、TUNE（ピッチ）の設定が可能で、TUNEを小さな値にすればショートディレイにもなります。これらのツマミはモーションシーケンスの対象です。</p>
+
+<h2 id="シーケンサーなど">シーケンサーなど</h2>
+
+<p>シーケンサーは他のvolcaシリーズやリズムマシンでもおなじみな、16ステップがベースのシーケンサーです。16ステップを1小節としてパターンを組み立てていきます。その中でdrumには即興性と表現力に優れた機能がいくつかあります。</p>
+
+<h3 id="active-step">ACTIVE STEP</h3>
+
+<p>ACTIVE STEPは各パートにおいて再生したいステップを任意に設定できる機能です。各パートごとに設定できるので、全体のうち1パートだけリアルタイムに再生するステップを変えたいっていう場合にも利用可能です。</p>
+
+<h3 id="slice">SLICE</h3>
+
+<p>たとえばスネアドラムのロールは、シーケンサーが16ステップである場合これより細かいステップでビートを設定はできません。ところが、SLICE機能を利用することで、16ステップよりさらに細かいステップを設定でき、さらにSLICEするレベルはツマミで変更可能です。</p>
+
+<h3 id="accent">ACCENT</h3>
+
+<p>アクセントです。これが設定されたステップは強拍になり、リズムのニュアンスを多彩に表現することが可能です。</p>
+
+<h3 id="choke">CHOKE</h3>
+
+<p>複数パートのうち、発音を優先させたいパートを設定できるのがCHOKE機能です。チョークを有効にしたパートは同時には発音せず、パート番号の小さい1パートの発音が優先されます。要はサイドチェイン、あるいはダッキングのような感じです。</p>
+
+<h2 id="開封の儀">開封の儀</h2>
+
+<p>さて、いつもの如く開封の儀です。</p>
+
+<p><img src="IMG_0715.jpeg" alt="pic" /></p>
+
+<p>相変わらず、ひと目見てそれとわかるKORGのガジェット特有のデザインであるパッケージがとても良いです。</p>
+
+<p><img src="IMG_0716.jpeg" alt="pic" /></p>
+
+<p>こちらもいつもの如く開封してすぐ出てくるマニュアル類。</p>
+
+<p><img src="IMG_0717.jpeg" alt="pic" /></p>
+
+<p>中の蓋を外すとdrum本体が出てきます。</p>
+
+<p><img src="IMG_0718.jpeg" alt="pic" /></p>
+
+<p>本体です。黒とゴールドの彩色で、高級感のあるデザインです。あまりこの価格帯でのガジェットにはない色彩ですよね。</p>
+
+<h2 id="実際の動作の様子">実際の動作の様子</h2>
+
+<p><blockquote class="twitter-tweet"><p lang="ja" dir="ltr">volca drum買いました。特有の出音がクセになりそうな面白いガジェットですね<a href="https://twitter.com/hashtag/volca?src=hash&amp;ref_src=twsrc%5Etfw">#volca</a><a href="https://twitter.com/hashtag/korg?src=hash&amp;ref_src=twsrc%5Etfw">#korg</a> <a href="https://t.co/D2VT1rgejD">pic.twitter.com/D2VT1rgejD</a></p>&mdash; ysko (@unknown_strings) <a href="https://twitter.com/unknown_strings/status/1159623827975839744?ref_src=twsrc%5Etfw">August 9, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<p>いかにもダンストラック的な4つ打ちです。drumのDSPが出力する音は、結構特徴的であることがわかりますね。</p>
+
+<p><blockquote class="twitter-tweet"><p lang="ja" dir="ltr">他も<a href="https://twitter.com/hashtag/volca?src=hash&amp;ref_src=twsrc%5Etfw">#volca</a> <a href="https://twitter.com/hashtag/korg?src=hash&amp;ref_src=twsrc%5Etfw">#korg</a> <a href="https://t.co/eLEP0L5UON">pic.twitter.com/eLEP0L5UON</a></p>&mdash; ysko (@unknown_strings) <a href="https://twitter.com/unknown_strings/status/1159680380527497216?ref_src=twsrc%5Etfw">August 9, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<p>ドラムンベースのようなリズムパターン。スネアドラムにSLICE機能でロールを入れています。さらに「ぴょーん」という飛び道具的な音も組み込んでみました。</p>
+
+<p>なお、このパターンではSwing機能の値をマイナス方向に設定しています。そうすることで、前のめりなノリになっていることがわかります。ちなみに、Swingをマイナス方向に設定するには、FUNCキーを押しながらSwingのツマミをいじることで、設定可能です。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p><strong>音作りの底なし沼。馴染みな音も奇抜な音もなんでもござれな個性的リズムマシン！</strong>です。</p>
+
+<p>volca beatsと異なり、各パートで自由に音作りできる分とっかかりにくい印象を受けますが、一度慣れてしまえば実際のドラム音に似た音もそうじゃない音もコレ1台でこなせる多彩な表現力を持ったリズムマシンです。</p>
+
+<p>個人的には変に実際のドラム音に近似した音を作るより、DSPの自由度に物言わせた「こんな音もリズムパターンに組み込んじゃうぜー！」みたいな奇抜な音をどんどん作って行きたいです。AutechreとかPlaidっぽいトラックを作るには最適なガジェットだと思います。</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>Jupyter NotebookをVisual Studio Codeで実行する</title>
@@ -1143,42 +1246,6 @@ Linux</code></pre></div>
 <p>Dockerをインストールして、vscodeを導入し拡張機能のRemoteをインストールすれば、あとは欲しい環境をコンテナーで用意するだけで開発環境が揃います。ローカルに開発のための環境を用意する必要がないので、下手にローカル環境を汚すこともなくなります。</p>
 
 <p>ベタなセリフですが、すごい時代になったものです、ホントに。</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>macOSアップデート後のxcrunエラーはxcodeをインストールする</title>
-			<link>https://idontwannawork.github.io/posts/xcrun-error-after-macos-update/</link>
-			<pubDate>Sun, 09 Jun 2019 19:29:47 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/xcrun-error-after-macos-update/</guid>
-			<description>macOSあるある？ macOSのアップデート（High SierraからMojave）後にgitを実行するとxcrunが見つからないよ！という</description>
-			<content type="html"><![CDATA[
-
-<h2 id="macosあるある">macOSあるある？</h2>
-
-<p>macOSのアップデート（High SierraからMojave）後にgitを実行すると<code>xcrun</code>が見つからないよ！というエラー内容が出現しました。</p>
-
-<p>経験上このエラーメッセージが出現するのってmacOSのアップデート直後なんですよね・・・。そんなわけで毎度調べるのもアレなのでメモしておきます。</p>
-
-<h2 id="エラー内容">エラー内容</h2>
-
-<p>macOSをアップデートした際に、gitを実行しようとすると下記のようなエラーになることがあります。</p>
-
-<pre><code>~ ❯❯❯ git
-xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun
-</code></pre>
-
-<p>他のコマンドでも同じようなエラーメッセージが出現するのかな？</p>
-
-<h2 id="解消法">解消法</h2>
-
-<p>下記のコマンドを発行します。</p>
-
-<pre><code>xcode-select --install 
-</code></pre>
-
-<p>「インストールしますか？」という旨のメッセージが表示されたらOKします。インストールは十数秒で終わると思います。インストールが終わればgitは使えるようになります。</p>
 ]]></content>
 		</item>
 		
