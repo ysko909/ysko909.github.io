@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+
+<meta itemprop="name" content="Vue cliとBuefyでシンプルに始めるVue.js - まずは環境の用意">
+<meta itemprop="description" content="はじめに フロントの勉強としてVue.jsをいじってますが、Vue.jsのCLIを使ってシンプルなサイトを構築する際の手順についてまとめます。">
+
+
+<meta itemprop="datePublished" content="2019-08-19T15:23:26&#43;09:00" />
+<meta itemprop="dateModified" content="2019-08-19T15:23:26&#43;09:00" />
+<meta itemprop="wordCount" content="3456">
+
+
+
+<meta itemprop="keywords" content="vuejs," />
+<meta property="og:title" content="Vue cliとBuefyでシンプルに始めるVue.js - まずは環境の用意" />
+<meta property="og:description" content="はじめに フロントの勉強としてVue.jsをいじってますが、Vue.jsのCLIを使ってシンプルなサイトを構築する際の手順についてまとめます。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs/" /><meta property="article:published_time" content="2019-08-19T15:23:26&#43;09:00"/>
+<meta property="article:modified_time" content="2019-08-19T15:23:26&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Vue cliとBuefyでシンプルに始めるVue.js - まずは環境の用意"/>
+<meta name="twitter:description" content="はじめに フロントの勉強としてVue.jsをいじってますが、Vue.jsのCLIを使ってシンプルなサイトを構築する際の手順についてまとめます。"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Vue cliとBuefyでシンプルに始めるVue.js - まずは環境の用意</title>
+	<link rel="stylesheet" href="https://idontwannawork.github.io/css/style.min.e81f50049998463da8cdbf0f848b77d9797f27f249581a236a3161d386f310db.css" integrity="sha256-6B9QBJmYRj2ozb8PhIt32Xl/J/JJWBojajFh04bzENs=">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://idontwannawork.github.io/">頑張らないために頑張る</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					<a href="https://idontwannawork.github.io/about/">About</a>
+					<a href="https://idontwannawork.github.io/posts/">Posts</a>
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<button id="toc-btn" class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://twitter.com/unknown_strings" target="_blank" rel="noopener" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/idontwannawork" target="_blank" rel="noopener" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://codepen.io/idontwannawork/" target="_blank" rel="noopener" title="Codepen"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-codepen"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon><line x1="12" y1="22" x2="12" y2="15.5"></line><polyline points="22 8.5 12 15.5 2 8.5"></polyline><polyline points="2 15.5 12 8.5 22 15.5"></polyline><line x1="12" y1="2" x2="12" y2="8.5"></line></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://idontwannawork.github.io/about/">About</a></li>
+			<li><a href="https://idontwannawork.github.io/posts/">Posts</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Aug 19, 2019</span></div>
+				<h1>Vue cliとBuefyでシンプルに始めるVue.js - まずは環境の用意</h1>
+			</header>
+			<div class="content">
+				
+
+<h2 id="はじめに">はじめに<a href="#はじめに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>フロントの勉強としてVue.jsをいじってますが、Vue.jsのCLIを使ってシンプルなサイトを構築する際の手順についてまとめます。</p>
+
+<p>まずは構築するにあたって、開発環境の用意を行います。なお今回は<a href="https://nuxtjs.org/">Nuxt.js</a>を利用しない（あるいは利用するまでもない）、ライトな用途を想定しています。SSRする必要がある、とかならNuxt.jsの導入を検討してみるべきかと思います。</p>
+
+<h2 id="環境">環境<a href="#環境" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<ul>
+<li>Windows 10</li>
+<li>vue/cli@3.10.0</li>
+<li>npm 6.4.1</li>
+</ul>
+
+<p><code>npm</code>を利用する場合は<a href="https://nodejs.org/ja/">Node.js</a>のインストールが必要です。</p>
+
+<h2 id="インストール">インストール<a href="#インストール" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<h3 id="vue-jsのインストール手順">Vue.jsのインストール手順<a href="#vue-jsのインストール手順" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>Vue.jsのインストールには、<code>npm</code>を利用してローカルの環境に展開しておくか、<a href="/posts/build-environment-of-vuejs-with-docker/">Dockerで環境を準備</a>するか、CDNを利用します。</p>
+
+<h4 id="npmによるインストール">NPMによるインストール<a href="#npmによるインストール" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+
+<p>ローカル環境にインストールする場合は、<a href="https://jp.vuejs.org/v2/guide/installation.html">オフィシャルページ</a>に則って下記のコマンドを実行します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm install vue</code></pre></div>
+<p>なお、オフィシャルでは<a href="https://jp.vuejs.org/v2/guide/installation.html#NPM">大規模なアプリを構築する場合はNPMを利用しろ</a>、とのことです。</p>
+
+<blockquote>
+<p>Vue.js による大規模アプリケーションを構築するときには、NPM を利用したインストールを推奨しています。</p>
+</blockquote>
+
+<h4 id="dockerによる環境構築">Dockerによる環境構築<a href="#dockerによる環境構築" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+
+<p><a href="/posts/build-environment-of-vuejs-with-docker/">こちら</a>をどうぞ。</p>
+
+<h4 id="cdn">CDN<a href="#cdn" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+
+<p>NPMを利用したインストール以外にも<a href="https://unpkg.com/vue@2.6.10/dist/vue.js">unpkg</a>や<a href="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js">cdnjs</a>を利用することでVue.jsを利用できます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://cdn.jsdelivr.net/npm/vue/dist/vue.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span></code></pre></div>
+<p>なお、<a href="https://jp.vuejs.org/v2/guide/installation.html#CDN">本番環境ではバージョンを指定する</a>ことが推奨されています。</p>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://cdn.jsdelivr.net/npm/vue@2.6.0&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span></code></pre></div>
+<blockquote>
+<p>本番環境では、新しいバージョンによる意図しない不具合を避けるため、特定のバージョン番号とビルド番号にリンクすることをお勧めします</p>
+</blockquote>
+
+<h4 id="vue-cliの導入">Vue CLIの導入<a href="#vue-cliの導入" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+
+<p>Vue CLIはVue.jsを用いたサイトを生成する際に、環境のセットアップを肩代わりしてくれるコマンドラインのツールです。<a href="https://cli.vuejs.org/">オフィシャルページ</a>を参考にして導入します。とは言っても難しいことではなく、下記のコマンドを実行するだけです。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm install -g @vue/cli</code></pre></div>
+<p>インストールが終わったらバージョンを確認してみます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ vue --version
+3.10.0</code></pre></div>
+<h2 id="プロジェクトを作成する">プロジェクトを作成する<a href="#プロジェクトを作成する" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p><code>vue</code>コマンドを叩いてプロジェクトを作成します。なお、下記のコマンドを実行する際は、事前にプロジェクトを作成するフォルダに移動してください。ここではフォルダを<code>dummytextgen</code>とします。コマンドを実行すると対話形式で作成するプロジェクトの内容を設定します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">cd dummytextgen
+vue create dtg</code></pre></div>
+<ol>
+<li><p>プリセットの選択</p>
+
+<p>キーボードの上下キーで選択しますが、デフォルトで問題ないと思います。なお、vue routerやvuexを利用することが確定しているなら、<code>Manually select feature</code>を選択して手動で導入できます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">Vue CLI v3.10.0
+? Please pick a preset: (Use arrow keys)
+&gt; default (babel, eslint)
+Manually select features</code></pre></div></li>
+
+<li><p>パッケージマネージャの選択</p>
+
+<p>こちらもキーボードの上下キーで選択します。デフォルトでは<code>yarn</code>にカーソルが当たっていましたが、<code>npm</code>を利用しているので<code>Use NPM</code>を選択してエンターキーを押します。ちなみに、この選択肢が表示されるのはvue cliを起動した初回だけだと思われます（自分の環境だと今はもう出てこない）。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"><span class="nx">Vue</span> <span class="nx">CLI</span> <span class="nx">v3</span><span class="mf">.10.0</span>
+<span class="err">?</span> <span class="nx">Please</span> <span class="nx">pick</span> <span class="nx">a</span> <span class="nx">preset</span><span class="p">:</span> <span class="k">default</span> <span class="p">(</span><span class="nx">babel</span><span class="p">,</span> <span class="nx">eslint</span><span class="p">)</span>
+<span class="err">?</span> <span class="nx">Pick</span> <span class="nx">the</span> <span class="kn">package</span> <span class="nx">manager</span> <span class="nx">to</span> <span class="nx">use</span> <span class="nx">when</span> <span class="nx">installing</span> <span class="nx">dependencies</span><span class="p">:</span> <span class="p">(</span><span class="nx">Use</span> <span class="nx">arrow</span> <span class="nx">keys</span><span class="p">)</span>
+<span class="p">&gt;</span> <span class="nx">Use</span> <span class="nx">Yarn</span>
+<span class="nx">Use</span> <span class="nx">NPM</span></code></pre></div></li>
+
+<li><p>しばらく待ちます</p>
+
+<p>上記までの選択を行ったあとはしばらく待ちます。すると下記のようなメッセージが出力されるはずです。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">Successfully created project dtg.
+Get started with the following commands:
+
+$ cd dtg
+$ npm run serve</code></pre></div>
+<p>となったら、準備完了です。</p></li>
+
+<li><p>とりあえず実行してみる</p>
+
+<p>メッセージの通り、コマンドを実行してみます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">cd dtg
+npm run serve</code></pre></div>
+<p>正常に起動したらURLが表示されるはずなので、そのアドレスをブラウザにコピペしてアクセスしてみます。今回は<code>http://localhost:34201/</code>です。</p>
+
+<p><img src="2019-08-19-16-36-07.png" alt="pic" /></p>
+
+<p>プロジェクトが作成されて、開発のサーバーが起動していることがこれで確認できました。</p></li>
+</ol>
+
+<h2 id="プロジェクトの内容を見てみる">プロジェクトの内容を見てみる<a href="#プロジェクトの内容を見てみる" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>作成したプロジェクトの内容を見てみます。下記はフォルダ内容をVisual Studio Code（以下、vscode）で表示した様子です。</p>
+
+<p><img src="2019-08-20-14-02-40.png" alt="pic" /></p>
+
+<p><code>.js</code>や<code>.html</code>に混じって、<code>.vue</code>という見慣れない拡張子があります。これが<a href="https://jp.vuejs.org/v2/guide/single-file-components.html">Vue.jsの<strong>単一ファイルコンポーネント</strong></a>と呼ばれる機能です。</p>
+
+<p>これはHTML・JavaScript・CSSの3つを1ファイルにまとめ、1コンポーネントとして扱うVue.js独特の機能です。また、この単一ファイルコンポーネントは拡張子が上記の通り<code>.vue</code>です。とりあえず今回は触れずにそのまま行きます。</p>
+
+<h2 id="いろいろ導入する">いろいろ導入する<a href="#いろいろ導入する" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<h3 id="cssフレームワーク">CSSフレームワーク<a href="#cssフレームワーク" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>サイトを作るに当たって、画面のレイアウトはCSSフレームワーク（以下、FW）を使って楽をしたいところです。デザインセンスがないからね、仕方ないね_(:3」∠)_</p>
+
+<p>FW、と来たら必ず名前が挙がる大定番の<a href="https://getbootstrap.com/">Bootstrap</a>ですが、今回はこれ以外のFWを利用します。というのも、いまだにjQueryが絡んで来るので「Vue.js使ってるのにjQuery使うの？（白目）」ってことになるので。あとは単純に他のFWも使ってみたいなー、っていう素朴な欲求から来てます。</p>
+
+<p>というわけで、ここでは<a href="https://buefy.org/">Buefy</a>を利用します。これは<a href="https://bulma.io/">Bulma</a>をベースにした、Vue.jsの用のUIコンポーネントです。ちなみに、なんでBulmaよ？ってところなんですが下記のようなメリットがあります。</p>
+
+<ul>
+<li>シンプル</li>
+<li>主要なコンポーネントはだいたい揃ってる</li>
+<li>比較的軽量</li>
+<li>JavaScriptなし</li>
+</ul>
+
+<p>このうち、Bulmaの「JavaScriptなし」という部分を<strong>Vue.jsを組み合わせることで補完したのがBuefy</strong>、ということになります。</p>
+
+<p>とは言え、FWは結構好き嫌いがあると思うので、お気に入りのFWを導入するのが吉かと。個人的にはプロトタイプ作成に一時期<a href="https://ajusa.github.io/lit/">lit</a>を使ってました。めちゃくちゃ軽い（minifyかつgzip済みだと<strong>395バイト</strong>しかない！）のに、しっかりレスポンシブ対応なのはポイント高かったです。とは言え、軽量な分機能がそこそこ制限されちゃうんで、小規模なサイトかプロトタイプ作成でのみ利用してました。</p>
+
+<h4 id="buefyを導入する">Buefyを導入する<a href="#buefyを導入する" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+
+<p>まずは<a href="https://buefy.org/documentation/start">オフィシャル</a>の手順に則って、下記のコマンドを実行します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm install buefy</code></pre></div>
+<p>次は、main.jsを編集します。Vue CLIで<code>create</code>した直後は、下の画像のような内容になっていると思います。</p>
+
+<p><img src="2019-08-21-09-25-01.png" alt="pic" /></p>
+
+<p>そこに、下記のソースを追記します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span> <span class="c1">// この行はもともと記述されているはず
+</span><span class="c1"></span><span class="k">import</span> <span class="nx">Buefy</span> <span class="nx">from</span> <span class="s1">&#39;buefy&#39;</span>
+<span class="k">import</span> <span class="s1">&#39;buefy/dist/buefy.css&#39;</span>
+
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Buefy</span><span class="p">)</span>
+</code></pre></div>
+<p>なお、オフィシャルでは全機能のインポートを推奨していますが、下記のように「使用するコンポーネントだけインポートする」ことも可能です。</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Table</span><span class="p">,</span> <span class="nx">Input</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;buefy&#39;</span>
+<span class="k">import</span> <span class="s1">&#39;buefy/dist/buefy.css&#39;</span>
+
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Table</span><span class="p">)</span>
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Input</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="参考-vue-routerのインストール">（参考）vue routerのインストール<a href="#参考-vue-routerのインストール" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>環境のセットアップ時に導入せず、後になってvue routerが必要になった場合は下記の手順で導入します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm install vue-router</code></pre></div>
+<h3 id="参考-vuexのインストール">（参考）vuexのインストール<a href="#参考-vuexのインストール" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>環境のセットアップ時に導入せず、後になってvuexが必要になった場合は下記の手順で導入します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm install vuex</code></pre></div>
+<h2 id="ローカルで確認してみる">ローカルで確認してみる<a href="#ローカルで確認してみる" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>各種コンポーネントのインストールが終わったら、ここで確認してみます。</p>
+
+<p>ターミナルでプロジェクトのあるフォルダまで移動し、下記のコマンドを実行します。このコマンドを実行することでソースのコンパイルとローカルサーバの起動が行われます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm run serve</code></pre></div>
+<p>実行したときのログはこんな感じ。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">C:\hoge\dtg&gt;npm run serve
+
+&gt; dtg@0.1.0 serve C:\hoge\dtg
+&gt; vue-cli-service serve
+
+ INFO  Starting development server...
+ 98% after emitting CopyPlugin
+
+ DONE  Compiled successfully in 35564ms
+  App running at:
+  - Local:   http://localhost:20645/
+  - Network: http://***.***.***.***:20645/
+
+  Note that the development build is not optimized.
+  To create a production build, run npm run build.</code></pre></div>
+<p>表示されたアドレスにアクセスしてみると、Vue CLIで<code>create</code>した直後とはフォントが変わっていることがわかります・・・かねぇ？</p>
+
+<p><img src="2019-08-21-09-55-12.png" alt="pic" /></p>
+
+<p>ちなみに、たまに<code>npm run dev</code>を実行しろって書いてあるブログがあったりするんですが、これを実行すると自分の環境では下記の通りエラーになりました。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">C:\hoge\dtg&gt;npm run dev
+npm ERR! missing script: dev
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\hogehoge\AppData\Roaming\npm-cache\_logs\***debug.log</code></pre></div>
+<p>これは<code>package.json</code>に<code>dev</code>の記述がないためです。実際ない_(:3」∠)_</p>
+
+<p><img src="2019-08-21-10-11-13.png" alt="pic" /></p>
+
+<p><a href="https://github.com/zalmoxisus/crossbuilder/issues/30">某所のissuesにも挙がってたりする</a>んだけど、routerをインストールしたら<code>npm run dev</code>できるようになったっていう記述があったりしますが、その辺の因果関係は不明です_(:3」∠)_</p>
+
+<h2 id="おわりに">おわりに<a href="#おわりに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>今回の記事は自分の備忘録を兼ねているため、そこそこ詳細に内容を記述しましたが、文章にするとごちゃごちゃと長くなってしまいました。が、実際の作業時間で言えば10分程度です。「あー、こんなアプリ欲しいなー、作ってみたいなー」と思ったら、ちゃっちゃとコマンドをいくつか実行するだけで開発環境が揃います。</p>
+
+<p>自戒移行では<code>.vue</code>ファイルをいじって挙動を確認しつつ、webアプリの開発を進めてみようと思います。</p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/vuejs">vuejs</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>3456 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-08-19 06:23 &#43;0000</p>
+			</footer>
+		</article>
+		<aside id="toc">
+			<div class="toc-title">Table of Contents</div>
+			<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#はじめに">はじめに</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#インストール">インストール</a>
+<ul>
+<li><a href="#vue-jsのインストール手順">Vue.jsのインストール手順</a>
+<ul>
+<li><a href="#npmによるインストール">NPMによるインストール</a></li>
+<li><a href="#dockerによる環境構築">Dockerによる環境構築</a></li>
+<li><a href="#cdn">CDN</a></li>
+<li><a href="#vue-cliの導入">Vue CLIの導入</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#プロジェクトを作成する">プロジェクトを作成する</a></li>
+<li><a href="#プロジェクトの内容を見てみる">プロジェクトの内容を見てみる</a></li>
+<li><a href="#いろいろ導入する">いろいろ導入する</a>
+<ul>
+<li><a href="#cssフレームワーク">CSSフレームワーク</a>
+<ul>
+<li><a href="#buefyを導入する">Buefyを導入する</a></li>
+</ul></li>
+<li><a href="#参考-vue-routerのインストール">（参考）vue routerのインストール</a></li>
+<li><a href="#参考-vuexのインストール">（参考）vuexのインストール</a></li>
+</ul></li>
+<li><a href="#ローカルで確認してみる">ローカルで確認してみる</a></li>
+<li><a href="#おわりに">おわりに</a></li>
+</ul></li>
+</ul>
+</nav>
+		</aside>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://idontwannawork.github.io/posts/korg-volca-drum-review/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>Korgのvolca drumを買ったので軽くレビューしてみる</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "come-as-you-are" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2019 <a href="https://idontwannawork.github.io/">Tetsuya Katsuragi</a> Allrights reserved.</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://idontwannawork.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	<script src="https://idontwannawork.github.io/js/main.min.784417f5847151f848c339cf0acb13a06cbb648b1483435a28ed4556c4ead69b.js" integrity="sha256-eEQX9YRxUfhIwznPCssToGy7ZIsUg0NaKO1FVsTq1ps="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>

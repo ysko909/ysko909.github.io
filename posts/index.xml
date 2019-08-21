@@ -6,8 +6,223 @@
 		<description>Recent content in Posts on 頑張らないために頑張る</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Fri, 09 Aug 2019 16:03:40 +0900</lastBuildDate>
+		<lastBuildDate>Mon, 19 Aug 2019 15:23:26 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Vue cliとBuefyでシンプルに始めるVue.js - まずは環境の用意</title>
+			<link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs/</link>
+			<pubDate>Mon, 19 Aug 2019 15:23:26 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs/</guid>
+			<description>はじめに フロントの勉強としてVue.jsをいじってますが、Vue.jsのCLIを使ってシンプルなサイトを構築する際の手順についてまとめます。</description>
+			<content type="html"><![CDATA[
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>フロントの勉強としてVue.jsをいじってますが、Vue.jsのCLIを使ってシンプルなサイトを構築する際の手順についてまとめます。</p>
+
+<p>まずは構築するにあたって、開発環境の用意を行います。なお今回は<a href="https://nuxtjs.org/">Nuxt.js</a>を利用しない（あるいは利用するまでもない）、ライトな用途を想定しています。SSRする必要がある、とかならNuxt.jsの導入を検討してみるべきかと思います。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Windows 10</li>
+<li>vue/cli@3.10.0</li>
+<li>npm 6.4.1</li>
+</ul>
+
+<p><code>npm</code>を利用する場合は<a href="https://nodejs.org/ja/">Node.js</a>のインストールが必要です。</p>
+
+<h2 id="インストール">インストール</h2>
+
+<h3 id="vue-jsのインストール手順">Vue.jsのインストール手順</h3>
+
+<p>Vue.jsのインストールには、<code>npm</code>を利用してローカルの環境に展開しておくか、<a href="/posts/build-environment-of-vuejs-with-docker/">Dockerで環境を準備</a>するか、CDNを利用します。</p>
+
+<h4 id="npmによるインストール">NPMによるインストール</h4>
+
+<p>ローカル環境にインストールする場合は、<a href="https://jp.vuejs.org/v2/guide/installation.html">オフィシャルページ</a>に則って下記のコマンドを実行します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm install vue</code></pre></div>
+<p>なお、オフィシャルでは<a href="https://jp.vuejs.org/v2/guide/installation.html#NPM">大規模なアプリを構築する場合はNPMを利用しろ</a>、とのことです。</p>
+
+<blockquote>
+<p>Vue.js による大規模アプリケーションを構築するときには、NPM を利用したインストールを推奨しています。</p>
+</blockquote>
+
+<h4 id="dockerによる環境構築">Dockerによる環境構築</h4>
+
+<p><a href="/posts/build-environment-of-vuejs-with-docker/">こちら</a>をどうぞ。</p>
+
+<h4 id="cdn">CDN</h4>
+
+<p>NPMを利用したインストール以外にも<a href="https://unpkg.com/vue@2.6.10/dist/vue.js">unpkg</a>や<a href="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js">cdnjs</a>を利用することでVue.jsを利用できます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://cdn.jsdelivr.net/npm/vue/dist/vue.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span></code></pre></div>
+<p>なお、<a href="https://jp.vuejs.org/v2/guide/installation.html#CDN">本番環境ではバージョンを指定する</a>ことが推奨されています。</p>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://cdn.jsdelivr.net/npm/vue@2.6.0&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span></code></pre></div>
+<blockquote>
+<p>本番環境では、新しいバージョンによる意図しない不具合を避けるため、特定のバージョン番号とビルド番号にリンクすることをお勧めします</p>
+</blockquote>
+
+<h4 id="vue-cliの導入">Vue CLIの導入</h4>
+
+<p>Vue CLIはVue.jsを用いたサイトを生成する際に、環境のセットアップを肩代わりしてくれるコマンドラインのツールです。<a href="https://cli.vuejs.org/">オフィシャルページ</a>を参考にして導入します。とは言っても難しいことではなく、下記のコマンドを実行するだけです。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm install -g @vue/cli</code></pre></div>
+<p>インストールが終わったらバージョンを確認してみます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ vue --version
+3.10.0</code></pre></div>
+<h2 id="プロジェクトを作成する">プロジェクトを作成する</h2>
+
+<p><code>vue</code>コマンドを叩いてプロジェクトを作成します。なお、下記のコマンドを実行する際は、事前にプロジェクトを作成するフォルダに移動してください。ここではフォルダを<code>dummytextgen</code>とします。コマンドを実行すると対話形式で作成するプロジェクトの内容を設定します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">cd dummytextgen
+vue create dtg</code></pre></div>
+<ol>
+<li><p>プリセットの選択</p>
+
+<p>キーボードの上下キーで選択しますが、デフォルトで問題ないと思います。なお、vue routerやvuexを利用することが確定しているなら、<code>Manually select feature</code>を選択して手動で導入できます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">Vue CLI v3.10.0
+? Please pick a preset: (Use arrow keys)
+&gt; default (babel, eslint)
+Manually select features</code></pre></div></li>
+
+<li><p>パッケージマネージャの選択</p>
+
+<p>こちらもキーボードの上下キーで選択します。デフォルトでは<code>yarn</code>にカーソルが当たっていましたが、<code>npm</code>を利用しているので<code>Use NPM</code>を選択してエンターキーを押します。ちなみに、この選択肢が表示されるのはvue cliを起動した初回だけだと思われます（自分の環境だと今はもう出てこない）。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"><span class="nx">Vue</span> <span class="nx">CLI</span> <span class="nx">v3</span><span class="mf">.10.0</span>
+<span class="err">?</span> <span class="nx">Please</span> <span class="nx">pick</span> <span class="nx">a</span> <span class="nx">preset</span><span class="p">:</span> <span class="k">default</span> <span class="p">(</span><span class="nx">babel</span><span class="p">,</span> <span class="nx">eslint</span><span class="p">)</span>
+<span class="err">?</span> <span class="nx">Pick</span> <span class="nx">the</span> <span class="kn">package</span> <span class="nx">manager</span> <span class="nx">to</span> <span class="nx">use</span> <span class="nx">when</span> <span class="nx">installing</span> <span class="nx">dependencies</span><span class="p">:</span> <span class="p">(</span><span class="nx">Use</span> <span class="nx">arrow</span> <span class="nx">keys</span><span class="p">)</span>
+<span class="p">&gt;</span> <span class="nx">Use</span> <span class="nx">Yarn</span>
+<span class="nx">Use</span> <span class="nx">NPM</span></code></pre></div></li>
+
+<li><p>しばらく待ちます</p>
+
+<p>上記までの選択を行ったあとはしばらく待ちます。すると下記のようなメッセージが出力されるはずです。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">Successfully created project dtg.
+Get started with the following commands:
+
+$ cd dtg
+$ npm run serve</code></pre></div>
+<p>となったら、準備完了です。</p></li>
+
+<li><p>とりあえず実行してみる</p>
+
+<p>メッセージの通り、コマンドを実行してみます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">cd dtg
+npm run serve</code></pre></div>
+<p>正常に起動したらURLが表示されるはずなので、そのアドレスをブラウザにコピペしてアクセスしてみます。今回は<code>http://localhost:34201/</code>です。</p>
+
+<p><img src="2019-08-19-16-36-07.png" alt="pic" /></p>
+
+<p>プロジェクトが作成されて、開発のサーバーが起動していることがこれで確認できました。</p></li>
+</ol>
+
+<h2 id="プロジェクトの内容を見てみる">プロジェクトの内容を見てみる</h2>
+
+<p>作成したプロジェクトの内容を見てみます。下記はフォルダ内容をVisual Studio Code（以下、vscode）で表示した様子です。</p>
+
+<p><img src="2019-08-20-14-02-40.png" alt="pic" /></p>
+
+<p><code>.js</code>や<code>.html</code>に混じって、<code>.vue</code>という見慣れない拡張子があります。これが<a href="https://jp.vuejs.org/v2/guide/single-file-components.html">Vue.jsの<strong>単一ファイルコンポーネント</strong></a>と呼ばれる機能です。</p>
+
+<p>これはHTML・JavaScript・CSSの3つを1ファイルにまとめ、1コンポーネントとして扱うVue.js独特の機能です。また、この単一ファイルコンポーネントは拡張子が上記の通り<code>.vue</code>です。とりあえず今回は触れずにそのまま行きます。</p>
+
+<h2 id="いろいろ導入する">いろいろ導入する</h2>
+
+<h3 id="cssフレームワーク">CSSフレームワーク</h3>
+
+<p>サイトを作るに当たって、画面のレイアウトはCSSフレームワーク（以下、FW）を使って楽をしたいところです。デザインセンスがないからね、仕方ないね_(:3」∠)_</p>
+
+<p>FW、と来たら必ず名前が挙がる大定番の<a href="https://getbootstrap.com/">Bootstrap</a>ですが、今回はこれ以外のFWを利用します。というのも、いまだにjQueryが絡んで来るので「Vue.js使ってるのにjQuery使うの？（白目）」ってことになるので。あとは単純に他のFWも使ってみたいなー、っていう素朴な欲求から来てます。</p>
+
+<p>というわけで、ここでは<a href="https://buefy.org/">Buefy</a>を利用します。これは<a href="https://bulma.io/">Bulma</a>をベースにした、Vue.jsの用のUIコンポーネントです。ちなみに、なんでBulmaよ？ってところなんですが下記のようなメリットがあります。</p>
+
+<ul>
+<li>シンプル</li>
+<li>主要なコンポーネントはだいたい揃ってる</li>
+<li>比較的軽量</li>
+<li>JavaScriptなし</li>
+</ul>
+
+<p>このうち、Bulmaの「JavaScriptなし」という部分を<strong>Vue.jsを組み合わせることで補完したのがBuefy</strong>、ということになります。</p>
+
+<p>とは言え、FWは結構好き嫌いがあると思うので、お気に入りのFWを導入するのが吉かと。個人的にはプロトタイプ作成に一時期<a href="https://ajusa.github.io/lit/">lit</a>を使ってました。めちゃくちゃ軽い（minifyかつgzip済みだと<strong>395バイト</strong>しかない！）のに、しっかりレスポンシブ対応なのはポイント高かったです。とは言え、軽量な分機能がそこそこ制限されちゃうんで、小規模なサイトかプロトタイプ作成でのみ利用してました。</p>
+
+<h4 id="buefyを導入する">Buefyを導入する</h4>
+
+<p>まずは<a href="https://buefy.org/documentation/start">オフィシャル</a>の手順に則って、下記のコマンドを実行します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm install buefy</code></pre></div>
+<p>次は、main.jsを編集します。Vue CLIで<code>create</code>した直後は、下の画像のような内容になっていると思います。</p>
+
+<p><img src="2019-08-21-09-25-01.png" alt="pic" /></p>
+
+<p>そこに、下記のソースを追記します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span> <span class="c1">// この行はもともと記述されているはず
+</span><span class="c1"></span><span class="k">import</span> <span class="nx">Buefy</span> <span class="nx">from</span> <span class="s1">&#39;buefy&#39;</span>
+<span class="k">import</span> <span class="s1">&#39;buefy/dist/buefy.css&#39;</span>
+
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Buefy</span><span class="p">)</span>
+</code></pre></div>
+<p>なお、オフィシャルでは全機能のインポートを推奨していますが、下記のように「使用するコンポーネントだけインポートする」ことも可能です。</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Table</span><span class="p">,</span> <span class="nx">Input</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;buefy&#39;</span>
+<span class="k">import</span> <span class="s1">&#39;buefy/dist/buefy.css&#39;</span>
+
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Table</span><span class="p">)</span>
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Input</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="参考-vue-routerのインストール">（参考）vue routerのインストール</h3>
+
+<p>環境のセットアップ時に導入せず、後になってvue routerが必要になった場合は下記の手順で導入します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm install vue-router</code></pre></div>
+<h3 id="参考-vuexのインストール">（参考）vuexのインストール</h3>
+
+<p>環境のセットアップ時に導入せず、後になってvuexが必要になった場合は下記の手順で導入します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm install vuex</code></pre></div>
+<h2 id="ローカルで確認してみる">ローカルで確認してみる</h2>
+
+<p>各種コンポーネントのインストールが終わったら、ここで確認してみます。</p>
+
+<p>ターミナルでプロジェクトのあるフォルダまで移動し、下記のコマンドを実行します。このコマンドを実行することでソースのコンパイルとローカルサーバの起動が行われます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm run serve</code></pre></div>
+<p>実行したときのログはこんな感じ。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">C:\hoge\dtg&gt;npm run serve
+
+&gt; dtg@0.1.0 serve C:\hoge\dtg
+&gt; vue-cli-service serve
+
+ INFO  Starting development server...
+ 98% after emitting CopyPlugin
+
+ DONE  Compiled successfully in 35564ms
+  App running at:
+  - Local:   http://localhost:20645/
+  - Network: http://***.***.***.***:20645/
+
+  Note that the development build is not optimized.
+  To create a production build, run npm run build.</code></pre></div>
+<p>表示されたアドレスにアクセスしてみると、Vue CLIで<code>create</code>した直後とはフォントが変わっていることがわかります・・・かねぇ？</p>
+
+<p><img src="2019-08-21-09-55-12.png" alt="pic" /></p>
+
+<p>ちなみに、たまに<code>npm run dev</code>を実行しろって書いてあるブログがあったりするんですが、これを実行すると自分の環境では下記の通りエラーになりました。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">C:\hoge\dtg&gt;npm run dev
+npm ERR! missing script: dev
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\hogehoge\AppData\Roaming\npm-cache\_logs\***debug.log</code></pre></div>
+<p>これは<code>package.json</code>に<code>dev</code>の記述がないためです。実際ない_(:3」∠)_</p>
+
+<p><img src="2019-08-21-10-11-13.png" alt="pic" /></p>
+
+<p><a href="https://github.com/zalmoxisus/crossbuilder/issues/30">某所のissuesにも挙がってたりする</a>んだけど、routerをインストールしたら<code>npm run dev</code>できるようになったっていう記述があったりしますが、その辺の因果関係は不明です_(:3」∠)_</p>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>今回の記事は自分の備忘録を兼ねているため、そこそこ詳細に内容を記述しましたが、文章にするとごちゃごちゃと長くなってしまいました。が、実際の作業時間で言えば10分程度です。「あー、こんなアプリ欲しいなー、作ってみたいなー」と思ったら、ちゃっちゃとコマンドをいくつか実行するだけで開発環境が揃います。</p>
+
+<p>自戒移行では<code>.vue</code>ファイルをいじって挙動を確認しつつ、webアプリの開発を進めてみようと思います。</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>Korgのvolca drumを買ったので軽くレビューしてみる</title>
@@ -1104,154 +1319,6 @@ npm run serve</code></pre></div>
 <p>volcaも（2019年6月16日現在で）また<a href="https://www.korg.com/jp/products/dj/volca_nubass/">新しい機材がリリースされる</a>ことですし、このラックにセッティングしてプレイしてみるのも一興かなと思います。</p>
 
 <p>ああ、ウチのvolcaは今5台だからあと3台買えばもう1つラックにセッティングできるんだな・・・（ぐるぐる目</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>VS CodeでDockerコンテナーのPython開発環境にリモート接続する</title>
-			<link>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</link>
-			<pubDate>Mon, 10 Jun 2019 00:52:30 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</guid>
-			<description>はじめに Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、ptvsdでは</description>
-			<content type="html"><![CDATA[
-
-<h2 id="はじめに">はじめに</h2>
-
-<p>Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、<a href="https://github.com/microsoft/ptvsd">ptvsd</a>ではなく、vscodeの拡張機能である<a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers">Remote</a>を用いて接続します。</p>
-
-<h2 id="環境構築">環境構築</h2>
-
-<h3 id="環境">環境</h3>
-
-<ul>
-<li>macOS Mojave 10.14.5</li>
-<li>Docker version 18.09.2</li>
-<li>Visual Studio Code version 1.35</li>
-</ul>
-
-<h3 id="拡張機能">拡張機能</h3>
-
-<p>まずは何はなくとも下記の拡張機能をインストールします。</p>
-
-<ul>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers">Remote - Containers</a></li>
-</ul>
-
-<p><img src="2019-06-09-19-47-16.png" alt="pic" /></p>
-
-<p>RemoteはまだvscodeのInsider版でしか動作しなかった・・・のですが、6月6日にStable版でも対応しました。</p>
-
-<h2 id="接続手順">接続手順</h2>
-
-<p>基本的な手順は<a href="https://code.visualstudio.com/docs/remote/containers#_quick-start-try-a-dev-container">ここ</a>にあるものを参考にしています。</p>
-
-<ol>
-<li><p>Dockerアイコンをクリックして、メニュー中の「Preferences」をクリック。「File Sharing」を選択して、共有したいディレクトリが設定されているか確認する。</p>
-
-<p><img src="2019-06-09-19-55-27.png" alt="pic" /></p>
-
-<p>Dockerのメニュー中にPreferencesがあるはずなので、これをクリック。</p>
-
-<p><img src="2019-06-09-19-56-03.png" alt="pic" /></p>
-
-<p>表示されたディレクトリのうち、共有したいディレクトリが設定されていることを確認しておきます。</p></li>
-
-<li><p>任意のコンテナーを準備します。今回はPython用のサンプルプロジェクトを<a href="https://github.com/microsoft/vscode-remote-try-python">microsoftが準備している</a>ので、これをcloneしました。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">~/devp  git clone https://github.com/microsoft/vscode-remote-try-python.git
-Cloning into &#39;vscode-remote-try-python&#39;...
-remote: Enumerating objects: 94, done.
-remote: Counting objects: 100% (94/94), done.
-remote: Compressing objects: 100% (70/70), done.
-remote: Total 94 (delta 47), reused 51 (delta 18), pack-reused 0
-Unpacking objects: 100% (94/94), done.</code></pre></div>
-<p>ちなみに<a href="https://github.com/microsoft/vscode-remote-try-go">Golang用</a>やいろんな言語があったりします。</p>
-
-<p>ただし、現在（2019年5月30日）のところAlpine LinuxやWindowsベースのコンテナーは<a href="https://code.visualstudio.com/docs/remote/containers#_getting-started">サポート外</a>とのこと。</p>
-
-<blockquote>
-<p>Note: Alpine Linux and Windows based dev containers are not currently supported.</p>
-</blockquote></li>
-
-<li><p>cloneした資産を拡張機能のRemoteで開きます。</p>
-
-<p>vscodeを起動します。起動したら、vscodeの左下にある「&gt;&lt;」みたいな部分をクリックします。このとき、先ほどcloneしたディレクトリを開く必要はありません。</p>
-
-<p><img src="2019-06-09-21-05-44.png" alt="pic" /></p>
-
-<p>すると、vscode上部に4つほどコマンドがリストで表示されます。その中から<code>Remote-Containers: Open Folder in Container...</code>を選択します。</p>
-
-<p><img src="2019-06-09-21-07-42.png" alt="pic" /></p>
-
-<p>ディレクトリを選択するダイアログが表示されるので、先ほどcloneしたディレクトリを選択します。</p>
-
-<p>ディレクトリを選択すると、画面がリロードされます。このとき、初回起動でコンテナーが存在していない場合はvscodeが自動的に生成します。しばらく待って、右下の「処理中」メッセージが消えたら準備完了です。</p>
-
-<p><img src="2019-06-09-21-12-03.png" alt="pic" /></p>
-
-<p>とりあえずこの時点で、パッと見はあまり普段と変化は感じられませんが・・・。</p>
-
-<p><img src="2019-06-09-21-21-57.png" alt="pic" /></p>
-
-<p>左下の部分を見ると「Dev Container: Python Sample」と表示されており、コンテナーに接続していることがわかります。</p>
-
-<p><img src="2019-06-09-21-24-28.png" alt="pic" /></p>
-
-<p>この状態でターミナルを起動し<code>docker ps</code>してみると、下記のようにコンテナーが起動していることがわかります。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">~ ❯❯❯ docker ps
-CONTAINER ID        IMAGE                                                           COMMAND                  CREATED             STATUS              PORTS                      NAMES
-3afa6cb8f1e2        vsc-vscode-remote-try-python-f50dab769712249e3a925e9d880f74de   &#34;/bin/sh -c &#39;echo Co…&#34;   6 minutes ago       Up 6 minutes        127.0.0.1:9000-&gt;9000/tcp   nervous_dirac</code></pre></div>
-<p>こんな手順を踏めば、Dockerのコンテナー上で動作している開発環境にvscodeで接続できます。</p></li>
-</ol>
-
-<h2 id="デバッグしてみる">デバッグしてみる</h2>
-
-<p>とりあえず接続はできたわけなので、今度は実際に動作確認とデバッグをしてみます。</p>
-
-<p>コンテナーに接続しているvscode上でTERMINALタブを開きます。まずは、プロンプトが接続先のコンテナーであることを確認します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">root@3afa6cb8f1e2:/workspaces/vscode-remote-try-python# uname
-Linux</code></pre></div>
-<p>本来、macOSのターミナルで<code>uname</code>を実行した場合は「Darwin」と返ってくるので、「Linux」と返ってくるならmacOSのそれではなくコンテナー上のプロンプトであると判断できます。</p>
-
-<p>ここでデバッグが可能か確認するために、app.pyのソースで任意の行にブレークポイントを設定します。ちなみに、vscodeのデバッグメニューを見てみると<code>Flask</code>で設定済みだったりします。これはclone元ですでにlaunch.jsonが作成済みだからです。親切！</p>
-
-<p><img src="2019-06-09-23-24-34.png" alt="pic" /></p>
-
-<p>この状態で<code>F5</code>キーを押します。あるいはデバッグメニューから「Start Debugging」をクリックします。すると、コンテナーのプロンプトでPythonが実行され、下記のようなメッセージが表示されてFlaskが起動します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">※実行コマンドは省略
- * Serving Flask app &#34;app.py&#34;
- * Environment: development
- * Debug mode: off
- * Running on http://0.0.0.0:9000/ (Press CTRL+C to quit)</code></pre></div>
-<p>ブラウザを起動してローカルホストに9000ポートで接続します。この際、先ほど設定したブレークポイントで処理が一時的に停止するはずです。この状態で、ローカルで開発しているときと同様に変数値のチェックなどができます。vscodeはコンテナーにリモート接続していますが、それを意識することなく普段どおりの使い方が可能であるわけです。</p>
-
-<p>ブレークポイントで停止している処理を続行してやれば、ブラウザがwebページを表示します。</p>
-
-<p><img src="2019-06-10-00-03-10.png" alt="pic" /></p>
-
-<p>これで動作確認とデバッグができました。</p>
-
-<p>なお、実行を止めたい場合はいつもどおり<code>Shift + F5</code>を押せば止まります。</p>
-
-<p>ちなみに、vscodeを終了するとコンテナーは自動的に停止します。<code>docker ps</code>で確認すると表示されなくなっているはずです。</p>
-
-<h2 id="コンテナー設定を変更したらリビルドする">コンテナー設定を変更したらリビルドする</h2>
-
-<p>コンテナーの設定を変更した場合は、vscodeの左下をクリックしてコマンドの一覧を表示します。</p>
-
-<p><img src="2019-06-10-00-09-16.png" alt="pic" /></p>
-
-<p>表示された一覧の中から<code>Remote Containers: Rebuild Container</code>を選択します。</p>
-
-<p><img src="2019-06-10-00-10-13.png" alt="pic" /></p>
-
-<p>画面がリロードされてコンテナーが再度ビルドされます。ビルドが終了すれば普段通りコンテナーを利用できます。</p>
-
-<h2 id="まとめ">まとめ</h2>
-
-<p>Dockerをインストールして、vscodeを導入し拡張機能のRemoteをインストールすれば、あとは欲しい環境をコンテナーで用意するだけで開発環境が揃います。ローカルに開発のための環境を用意する必要がないので、下手にローカル環境を汚すこともなくなります。</p>
-
-<p>ベタなセリフですが、すごい時代になったものです、ホントに。</p>
 ]]></content>
 		</item>
 		

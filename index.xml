@@ -6,10 +6,19 @@
     <description>Recent content on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Fri, 09 Aug 2019 16:03:40 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 19 Aug 2019 15:23:26 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Vue cliとBuefyでシンプルに始めるVue.js - まずは環境の用意</title>
+      <link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs/</link>
+      <pubDate>Mon, 19 Aug 2019 15:23:26 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs/</guid>
+      <description>はじめに フロントの勉強としてVue.jsをいじってますが、Vue.jsのCLIを使ってシンプルなサイトを構築する際の手順についてまとめます。</description>
+    </item>
     
     <item>
       <title>Korgのvolca drumを買ったので軽くレビューしてみる</title>
@@ -90,15 +99,6 @@
       
       <guid>https://idontwannawork.github.io/posts/sequenz-volca-rack-review/</guid>
       <description>はじめに （個人的に）待望の、待望のvolca rackが来ました！ volca rack? volcaといえば、KORGの生み出した大ヒット商品でして、個人的にも大</description>
-    </item>
-    
-    <item>
-      <title>VS CodeでDockerコンテナーのPython開発環境にリモート接続する</title>
-      <link>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</link>
-      <pubDate>Mon, 10 Jun 2019 00:52:30 +0900</pubDate>
-      
-      <guid>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</guid>
-      <description>はじめに Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、ptvsdでは</description>
     </item>
     
   </channel>
