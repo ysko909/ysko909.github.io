@@ -109,7 +109,7 @@ $ npm run serve</code></pre></div>
 <p>メッセージの通り、コマンドを実行してみます。</p>
 <div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">cd dtg
 npm run serve</code></pre></div>
-<p>正常に起動したらURLが表示されるはずなので、そのアドレスをブラウザにコピペしてアクセスしてみます。今回は<code>http://localhost:34201/</code>です。</p>
+<p>正常に起動したらURLが表示されるはずなので、そのアドレスをブラウザにコピペしてアクセスしてみます。今回は<code>http://localhost:34201/</code>でした。</p>
 
 <p><img src="2019-08-19-16-36-07.png" alt="pic" /></p>
 
