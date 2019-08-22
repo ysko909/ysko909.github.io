@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-component/</loc>
+    <lastmod>2019-08-21T13:05:14+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs/</loc>
     <lastmod>2019-08-19T15:23:26+09:00</lastmod>
   </url>
@@ -224,7 +229,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/posts/</loc>
-    <lastmod>2019-08-19T15:23:26+09:00</lastmod>
+    <lastmod>2019-08-21T13:05:14+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -284,7 +289,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/tags/vuejs/</loc>
-    <lastmod>2019-08-19T15:23:26+09:00</lastmod>
+    <lastmod>2019-08-21T13:05:14+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -296,7 +301,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/</loc>
-    <lastmod>2019-08-19T15:23:26+09:00</lastmod>
+    <lastmod>2019-08-21T13:05:14+09:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -6,8 +6,263 @@
 		<description>Recent content in Posts on 頑張らないために頑張る</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Mon, 19 Aug 2019 15:23:26 +0900</lastBuildDate>
+		<lastBuildDate>Wed, 21 Aug 2019 13:05:14 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Vue cliとBuefyでシンプルに始めるVue.js - コンポーネントの中身を見てみる</title>
+			<link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-component/</link>
+			<pubDate>Wed, 21 Aug 2019 13:05:14 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-component/</guid>
+			<description>はじめに 前回は環境構築で終わってしまいましたが、今回から本格的に開発を始めていきます。取っ掛かりとして、Vue CLIで作った環境の内容を確認</description>
+			<content type="html"><![CDATA[
+
+<h2 id="はじめに">はじめに</h2>
+
+<p><a href="/posts/make-dummy-text-generator-site-with-vuejs/">前回</a>は環境構築で終わってしまいましたが、今回から本格的に開発を始めていきます。取っ掛かりとして、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーションを開発するかを確認します。</p>
+
+<h2 id="まずはプロジェクトを俯瞰する">まずはプロジェクトを俯瞰する</h2>
+
+<p>何はともあれ、Vue CLIで<code>create</code>した直後の環境を俯瞰してみます。</p>
+
+<p><img src="2019-08-21-13-31-41.png" alt="pic" /></p>
+
+<h3 id="なにはともあれindex">なにはともあれindex</h3>
+
+<p>とりあえずファイルの名前で判断して、<code>index.html</code>あたりを見てみます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en&#34;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&#34;utf-8&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&#34;X-UA-Compatible&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;IE=edge&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;viewport&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;width=device-width,initial-scale=1.0&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;icon&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;&lt;%= BASE_URL %&gt;favicon.ico&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>dtg<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">noscript</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">strong</span><span class="p">&gt;</span>We&#39;re sorry but dtg doesn&#39;t work properly without JavaScript enabled. Please enable it to continue.<span class="p">&lt;/</span><span class="nt">strong</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">noscript</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;app&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="c">&lt;!-- built files will be auto injected --&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span></code></pre></div>
+<p>なんとなく<code>&lt;div id=&quot;app&quot;&gt;</code>あたりが気になりますが、内容としてはあっさりしたものです。というかこれ、どこでVue.jsとか読み込んでるの・・・？CSSとかも全然記述ないけど・・・？</p>
+
+<p>結論から言えば、現状の状態は「動作する実体」では<strong>ありません</strong>。ただの生成元でありテンプレートです。というわけで、実体を生成・参照するためにビルドを行う必要がありますので、下記のコマンドを実行します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm run build</code></pre></div>
+<p>しばらく待つとメッセージが表示されるはずです。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"> DONE  Build complete. The dist directory is ready to be deployed.
+ INFO  Check out deployment instructions at https://cli.vuejs.org/guide/deployment.html</code></pre></div>
+<p>すると今までのフォルダ体系に、<code>dist</code>というフォルダが追加されていると思います。もう名前からしてそれっぽいですね。</p>
+
+<p><img src="2019-08-21-15-22-11.png" alt="pic" /></p>
+
+<p>ファイル名はともかく、フォルダ構成はなんか「それっぽい」ですよね。というわけで、改めて<code>index.html</code>を参照してみます。ただし、今度は<code>dist</code>配下にいる<code>index.html</code>です。ちなみに、下のソースは読みやすいように改行を入れてますが、元の状態は改行なしです。おいおい。</p>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">en</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">utf-8</span><span class="p">&gt;&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">X-UA-Compatible</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;IE=edge&#34;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">viewport</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;width=device-width,initial-scale=1&#34;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">icon</span> <span class="na">href</span><span class="o">=</span><span class="s">/favicon.ico</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>dtg<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">/css/app.e2713bb0.css</span> <span class="na">rel</span><span class="o">=</span><span class="s">preload</span> <span class="na">as</span><span class="o">=</span><span class="s">style</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">/css/chunk-vendors.17c0942e.css</span> <span class="na">rel</span><span class="o">=</span><span class="s">preload</span> <span class="na">as</span><span class="o">=</span><span class="s">style</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">/js/app.c471aa62.js</span> <span class="na">rel</span><span class="o">=</span><span class="s">preload</span> <span class="na">as</span><span class="o">=</span><span class="s">script</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">/js/chunk-vendors.68bf7d69.js</span> <span class="na">rel</span><span class="o">=</span><span class="s">preload</span> <span class="na">as</span><span class="o">=</span><span class="s">script</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">/css/chunk-vendors.17c0942e.css</span> <span class="na">rel</span><span class="o">=</span><span class="s">stylesheet</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">/css/app.e2713bb0.css</span> <span class="na">rel</span><span class="o">=</span><span class="s">stylesheet</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">noscript</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">strong</span><span class="p">&gt;</span>We&#39;re sorry but dtg doesn&#39;t work properly without JavaScript enabled. Please enable it to continue.<span class="p">&lt;/</span><span class="nt">strong</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">noscript</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">app</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">/js/chunk-vendors.68bf7d69.js</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">/js/app.c471aa62.js</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span></code></pre></div>
+<p>うんうん、ビルド前の<code>index.html</code>の比べると、JavaScriptやCSSが読み込まれているのが見て取れます。なるほど、とりあえずビルドすりゃいいんだな！（白目）読み込む対象のファイル名が明らかに<code>src</code>フォルダ内に存在するJavaScriptやvueファイルとは異なりますが、ビルドされた結果のファイルなので気にしないこととします。</p>
+
+<h3 id="javascriptを見てみる">JavaScriptを見てみる</h3>
+
+<p>JavaScriptのソースである<code>main.js</code>を参照してみます。ちなみに、<a href="/posts/make-dummy-text-generator-site-with-vuejs/#buefyを導入する">前回のBuefy導入</a>に伴い、このソースは書き換わっています。</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span>
+<span class="k">import</span> <span class="nx">Buefy</span> <span class="nx">from</span> <span class="s1">&#39;buefy&#39;</span>
+<span class="k">import</span> <span class="s1">&#39;buefy/dist/buefy.css&#39;</span>
+<span class="k">import</span> <span class="nx">App</span> <span class="nx">from</span> <span class="s1">&#39;./App.vue&#39;</span>
+
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Buefy</span><span class="p">)</span>
+
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">productionTip</span> <span class="o">=</span> <span class="kc">false</span>
+
+<span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+  <span class="nx">render</span><span class="o">:</span> <span class="nx">h</span> <span class="p">=&gt;</span> <span class="nx">h</span><span class="p">(</span><span class="nx">App</span><span class="p">),</span>
+<span class="p">}).</span><span class="nx">$mount</span><span class="p">(</span><span class="s1">&#39;#app&#39;</span><span class="p">)</span>
+</code></pre></div>
+<p>Vueインスタンスの生成時に<code>#app</code>を<a href="https://jp.vuejs.org/v2/api/#vm-mount">マウント</a>しています。<code>$mount</code>は、マウントされていないインスタンスに手動でマウントするためのメソッドです。上記の内容だとインスタンスに<code>el</code>オプションが存在しないので、<code>$mount</code>しないとマウントされていない状態になります。</p>
+
+<blockquote>
+<p>Vue インスタンスがインスタンス化において el オプションを受け取らない場合は、DOM 要素は関連付けなしで、”アンマウント(マウントされていない)” 状態になります。</p>
+</blockquote>
+
+<p>とは言え、これだけで何かをやっているわけでなく、<code>App.vue</code>をコンポーネントとして登録しているだけのようなので、今度は<code>App.vue</code>を参照してみます。</p>
+
+<p>なお、描画関数<code>render</code>の部分<code>h =&gt; h(App)</code>は<a href="https://github.com/vuejs-templates/webpack-simple/issues/29">このissues</a>にその由来がありました。興味深かったので、別記事ででも掘り下げようかな・・・。</p>
+
+<h3 id="app-vueを見てみる">App.vueを見てみる</h3>
+
+<p><code>App.vue</code>の内容は下記の通りです。上からHTML、JavaScript、CSSの順に記述されていることがわかります。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
+  &lt;div id=&#34;app&#34;&gt;
+    &lt;img alt=&#34;Vue logo&#34; src=&#34;./assets/logo.png&#34;&gt;
+    &lt;HelloWorld msg=&#34;Welcome to Your Vue.js App&#34;/&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import HelloWorld from &#39;./components/HelloWorld.vue&#39;
+
+export default {
+  name: &#39;app&#39;,
+  components: {
+    HelloWorld
+  }
+}
+&lt;/script&gt;
+
+&lt;style&gt;
+#app {
+  font-family: &#39;Avenir&#39;, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+&lt;/style&gt;</code></pre></div>
+<p>この中でJavaScriptの部分を参照してみると、<code>HelloWorld.vue</code>というコンポーネントを利用しています。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;script&gt;
+import HelloWorld from &#39;./components/HelloWorld.vue&#39;
+
+export default {
+  name: &#39;app&#39;,
+  components: {
+    HelloWorld
+  }
+}
+&lt;/script&gt;</code></pre></div>
+<p><code>HelloWorld</code>という文字はHTMLのソース部分にもあって、タグとして利用されています。ただ、この部分だけ見ると<code>msg</code>に値をセットしているだけで、それ以上の挙動はちょっと追えそうにありません。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">    &lt;HelloWorld msg=&#34;Welcome to Your Vue.js App&#34;/&gt;</code></pre></div>
+<p>ちなみに、この<code>msg</code>にセットされている文字列を変更すると出力した結果も変更されます。当たり前ですが。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">    &lt;HelloWorld msg=&#34;hoge fuga piyo&#34;/&gt;</code></pre></div>
+<p><img src="2019-08-22-15-30-41.png" alt="pic" /></p>
+
+<p>ということは、<code>HelloWorld.vue</code>ってコンポーネントを参照してみないと具体的なところはわからないな、という感じです。</p>
+
+<h3 id="満を持してhelloworld-vue">満を持してHelloWorld.vue</h3>
+
+<p>ではいよいよ<code>HelloWorld.vue</code>を参照します。今までのソースよりはHTMLの部分がいろいろ記述してあるため、ちょっとばっかり長いです。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
+  &lt;div class=&#34;hello&#34;&gt;
+    &lt;h1&gt;{{ msg }}&lt;/h1&gt;
+    &lt;p&gt;
+      For a guide and recipes on how to configure / customize this project,&lt;br&gt;
+      check out the
+      &lt;a href=&#34;https://cli.vuejs.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;vue-cli documentation&lt;/a&gt;.
+    &lt;/p&gt;
+    &lt;h3&gt;Installed CLI Plugins&lt;/h3&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&#34;https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;babel&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;eslint&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;h3&gt;Essential Links&lt;/h3&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&#34;https://vuejs.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Core Docs&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://forum.vuejs.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Forum&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://chat.vuejs.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Community Chat&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://twitter.com/vuejs&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Twitter&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://news.vuejs.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;News&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;h3&gt;Ecosystem&lt;/h3&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&#34;https://router.vuejs.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;vue-router&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://vuex.vuejs.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;vuex&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://github.com/vuejs/vue-devtools#vue-devtools&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;vue-devtools&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://vue-loader.vuejs.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;vue-loader&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://github.com/vuejs/awesome-vue&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;awesome-vue&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  name: &#39;HelloWorld&#39;,
+  props: {
+    msg: String
+  }
+}
+&lt;/script&gt;
+
+&lt;!-- Add &#34;scoped&#34; attribute to limit CSS to this component only --&gt;
+&lt;style scoped&gt;
+h3 {
+  margin: 40px 0 0;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+&lt;/style&gt;</code></pre></div>
+<p>冒頭のHTMLソースには<code>{{ msg }}</code>という文字があります。Mustache構文ってやつで、いかにもテンプレートとして利用できそうな見た目です。実際、Vue.jsにおいて<a href="https://v1-jp.vuejs.org/guide/syntax.html">テキストのデータバインディングで一番基本的ンな形式</a>がこれです。また、JavaScriptの部分にも<code>msg: String</code>という宣言が見て取れます。ということは、やっぱり<code>App.vue</code>で設定した文字列が<code>msg</code>に格納されるわけですね。そうなると下記のような入れ子構造になっていると推測できます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">|--index.html
+|  |--App.vue
+|  |  |--HelloWorld.vue</code></pre></div>
+<p><code>HelloWorld.vue</code>には出力するページのメイン部分を記述して、値を変更する（あるいは時間を表示するなど値が不定である）場合などはMustache構文でテンプレートとして記述。これはこれとして、1つのコンポーネントとして扱う。<code>App.vue</code>には、Mustacheタグに対応したデータオブジェクトのプロパティ（ここでは<code>msg</code>）に値を何かしら設定することでデータの更新を行う・・・って感じですかねぇ。</p>
+
+<p>とりあえず構造はなんとなくわかったような気がします。</p>
+
+<h3 id="ちなみに">ちなみに</h3>
+
+<p><code>asset</code>フォルダには現時点でロゴ（Vue.jsのロゴ）の画像ファイルが格納されているだけです。</p>
+
+<h3 id="となると">となると</h3>
+
+<p>Vue CLIで<code>create</code>したら下記の作業をすればよさそうです。</p>
+
+<ul>
+<li>index.htmlのタイトルを変更する。</li>
+<li>main.jsにBuefyを追加する。</li>
+<li>App.vueに機能を追加する。</li>
+<li>HelloWorld.vueは削除する。</li>
+<li>必要に応じてコンポーネントを追加する。</li>
+</ul>
+
+<p>機能ができあがってきたら<code>npm run serve</code>で挙動を確認したり<code>npm run build</code>でビルドしたりするわけですね。</p>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p><a href="/posts/make-dummy-text-generator-site-with-vuejs/">前回</a>の終わりはこんなくだりでした。</p>
+
+<blockquote>
+<p>次回以降では<code>.vue</code>ファイルをいじって挙動を確認しつつ、webアプリの開発を進めてみようと思います。</p>
+</blockquote>
+
+<p><strong>「機能の実装してないじゃん！中身見ただけじゃん！」</strong> ほげ_(:3」∠)_</p>
+
+<p>すいません、書いてたらずいぶん長くなってしまいました。それにしても、Vue.jsはオフィシャルのドキュメントが充実している上に、Vue CLIが出力したサンプルの内容も分かりやすい構造になっていて、とても好感が持てます。</p>
+
+<p>次から、次からはなんとか満を持して実装したいと思います。†悔い改めて†_(:3」∠)_</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>Vue cliとBuefyでシンプルに始めるVue.js - まずは環境の用意</title>
@@ -1194,131 +1449,6 @@ npm run serve</code></pre></div>
 <p>モジュラーシンセサイザーって、セミモジュラーシンセを含めてもそこそこの値段するので、2万円前後で買えるというのはもはや規格外と言ってしまっていいでしょう。それでいてモジュラーシンセの醍醐味をしっかり内包していて、サウンドもエキサイティングと、欠点らしい欠点がないです。</p>
 
 <p>さあ、これでモジュラーシンセサイザーにハマって、沼に沈みましょう。沼は楽しいですよ。ほら、レンズ沼とかあるじゃないですか（ぐるぐる目</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>SequenzのVolca Rackが来たのでレビューしてみる</title>
-			<link>https://idontwannawork.github.io/posts/sequenz-volca-rack-review/</link>
-			<pubDate>Sat, 15 Jun 2019 21:02:37 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/sequenz-volca-rack-review/</guid>
-			<description>はじめに （個人的に）待望の、待望のvolca rackが来ました！ volca rack? volcaといえば、KORGの生み出した大ヒット商品でして、個人的にも大</description>
-			<content type="html"><![CDATA[
-
-<h2 id="はじめに">はじめに</h2>
-
-<p>（個人的に）<strong>待望の、待望の<a href="https://sequenzmusicgear.com/products/volca_rack/">volca rack</a>が来ました！</strong></p>
-
-<h2 id="volca-rack">volca rack?</h2>
-
-<p>volcaといえば、KORGの生み出した大ヒット商品でして、個人的にも大好きなシリーズです。コンパクトな筐体にハイエンドモデル顔負けの要素をこれでもかと積み込んで、<a href="https://www.korg.com/jp/products/dj/volca_keys/">王道のポリフォニックなアナログシンセサイザー</a>だったり、かと思えば<a href="https://www.korg.com/jp/products/dj/volca_kick/">キック音に特化しまくった超絶ニッチだけどスゴく使えるキックジェネレーター</a>だったり、価格とサイズで<a href="https://www.korg.com/jp/products/dj/volca_modular/">攻めに攻めたセミモジュラーシンセサイザー</a>などなどを生み出してきたシリーズです。</p>
-
-<p>そんなvolcaなんですが、どの機種でも筐体のサイズは全部一緒です。なので「ラックに格納したら良さげだよねー」というのがvolcaユーザーの思いでした。実際、DIYでvolca用のラックを作ってしまった人もいるようで、YouTubeなんかを見てるとたまに自作っぽいラックでvolcaをプレイしている動画なんかがあったりします。</p>
-
-<p>そんな、多分誰もが「あったらいいよねー」と思っていたはずのラック。個人的にも結構欲しかったラック。それがこの度とうとう<strong>KORGオフィシャルで発売</strong>されました！</p>
-
-<p>前置きが長くなりましたが、そのvolca rackを購入しましたのでレビューしてみよう！という記事です。</p>
-
-<h2 id="開封の儀">開封の儀</h2>
-
-<p>まずはおなじみな開封風景をどうぞ。</p>
-
-<h3 id="外箱から">外箱から</h3>
-
-<p><img src="IMG_0687.png" alt="pic" /></p>
-
-<p>「取り扱いはていねいに」がデカデカと印字されておりますな。これに限りませんが、開封時のカッターは、品物本体を傷つけないよう気をつけたいものです。</p>
-
-<p><img src="IMG_0693.png" alt="pic" /></p>
-
-<p>箱側面には「2x2」と印字されています。そう、合計4つのvolcaを設置できるわけです。</p>
-
-<h3 id="開封">開封</h3>
-
-<p><img src="IMG_0694.png" alt="pic" /></p>
-
-<p>箱を開けた直後。簡単な組み立て説明書があります。</p>
-
-<p><img src="IMG_0695.png" alt="pic" /></p>
-
-<p>Sequenzの小さいステッカーが同梱されていました。</p>
-
-<p><img src="IMG_0696.png" alt="pic" /></p>
-
-<p>説明書などを取り出すと各パーツが収納されています。</p>
-
-<p><img src="IMG_0697.png" alt="pic" /></p>
-
-<p>組み立ては6角レンチを用いてネジで行います。</p>
-
-<p><img src="IMG_0699.png" alt="pic" /></p>
-
-<p>取説は英語表記ですがなんの問題もありません。というか、これは絵だけでもいいのでは、ってレベルです。簡単です、簡単。</p>
-
-<p><img src="IMG_0700.png" alt="pic" /></p>
-
-<p>各パーツです。サイドパネルが木製なの、シンセサイザーラック然といった雰囲気でいいですよね。</p>
-
-<p>なお、volcaを収納するメインパネルの内側には、滑り止めのゴムがあります。車のワイパーブレードみたいにはまっています。これのおかげでvolca本体の固定ができるわけですね。</p>
-
-<h2 id="完成">完成</h2>
-
-<p>5分くらいで組み立ては完成します。簡単です。</p>
-
-<p><img src="IMG_0703.png" alt="pic" /></p>
-
-<p>縦に設置するとこんな感じ。場所は取りませんが、この状態で操作するなら目線的には椅子が必須ですね。落ち着いて操作するにはこのポジションがいいかもしれません。</p>
-
-<p>個人的に、インテリアとして置いておくにはこのポジションがベストだと思います。</p>
-
-<p><img src="IMG_0704.png" alt="pic" /></p>
-
-<p>横に設置するとこんな感じ。立ちながら操作するなら、個人的にはこのポジションがベストです。</p>
-
-<p>なお、ご想像のとおりで、縦置きセッティングのまま横置きへと移行することは、ラックの天地が逆転してしまうためできません。移行するためには、一度volcaをぜんぶ引っこ抜いてセッティングし直す必要があります。まぁ、そこは仕方ないですね。</p>
-
-<p><img src="IMG_0705.png" alt="pic" /></p>
-
-<p>横から見るとこんな感じ。</p>
-
-<p><img src="IMG_0706.png" alt="pic" /></p>
-
-<p>Sequenzのロゴが手前側だと、横置きです。</p>
-
-<p><img src="IMG_0707.png" alt="pic" /></p>
-
-<p>縦置きにするとサイドはこんな感じ。</p>
-
-<h2 id="とりあえず仮セッティング">とりあえず仮セッティング</h2>
-
-<p><img src="IMG_0709.png" alt="pic" /></p>
-
-<p><strong>いいですねー！</strong></p>
-
-<p>単純に手持ちのvolcaを並べて見ましたが、それでもこの整然とした「ピッタリ感」はさすがオフィシャルと言えます。volcaをセッティングしたままインテリアとして置いておくとしても、なんの問題もない王道なデザインにグッときます。やっぱりこのサイドパネルが木製なのはいいですね（2回目</p>
-
-<p>volcaは全面からはめ込んでいきます。このとき、はめ込むのにもラックから外すのも滑り止めのゴムが絶妙に支えてくれます。ケーブルを抜くのと一緒にvolcaが引っこ抜ける、なんてことはありませんでした。ただし、MIDIケーブルだけは結構しっかり挿さるので、さすがに本体を固定しないとラックからvolcaが釣れます_(:3」∠)_</p>
-
-<p>自分はたまたまvolcaを4つ以上持っているので、問題ありませんでした。が、3つ以下しかなかったりするとラックに空きスペースができちゃうので、<strong>その空きスペースを埋めるためにまたvolcaシリーズを買うことになる</strong>でしょう。ええ、きっとそうなります（ぐるぐる目</p>
-
-<p><img src="IMG_0710.png" alt="pic" /></p>
-
-<p>ちなみに、<a href="https://www.korg.com/jp/products/dj/sq_1/">SQ-1</a>も設置できます。ただし、写真の通り、縦は少し足りません。縦が足りないため、滑り止めのゴムが仕事をしないので、縦置き時には下段に収納しないと、ふとした瞬間に落下しそうでちょっと怖いです。ただ、SQ-1の給電がUSBケーブルで、本体の上側麺にコネクターがあるのを考えると、上に多少スペースが開いてないとUSBケーブルが挿せなくて困るというのもあるのですが・・・。ケーブルをうまく回避しつつ、空きスペースをなにかで埋めればなんとかなりそうな気もします。あるいはもう電池駆動を前提にしちゃうとか。</p>
-
-<p><img src="IMG_0711.png" alt="pic" /></p>
-
-<p>ちょっと見にくくて申し訳ないですが、SQ-1でvolca modularをCVでコントロールしつつ、kickとsampleでドラムパターンを組めるようなセットアップにしてみました。<strong>イイですねー</strong>_(:3」∠)_</p>
-
-<h2 id="まとめ">まとめ</h2>
-
-<p><strong>volcaを複数台持っているようなvolcaファンには必須です！</strong></p>
-
-<p>手持ちのvolcaを自由にセッティングでき、SQ-1も設置可能。その上インテリアとしてちゃんと成立するデザイン。非常にイイです。</p>
-
-<p>volcaも（2019年6月16日現在で）また<a href="https://www.korg.com/jp/products/dj/volca_nubass/">新しい機材がリリースされる</a>ことですし、このラックにセッティングしてプレイしてみるのも一興かなと思います。</p>
-
-<p>ああ、ウチのvolcaは今5台だからあと3台買えばもう1つラックにセッティングできるんだな・・・（ぐるぐる目</p>
 ]]></content>
 		</item>
 		

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+
+<meta itemprop="name" content="Vue cliとBuefyでシンプルに始めるVue.js - コンポーネントの中身を見てみる">
+<meta itemprop="description" content="はじめに 前回は環境構築で終わってしまいましたが、今回から本格的に開発を始めていきます。取っ掛かりとして、Vue CLIで作った環境の内容を確認">
+
+
+<meta itemprop="datePublished" content="2019-08-21T13:05:14&#43;09:00" />
+<meta itemprop="dateModified" content="2019-08-21T13:05:14&#43;09:00" />
+<meta itemprop="wordCount" content="3033">
+
+
+
+<meta itemprop="keywords" content="vuejs," />
+<meta property="og:title" content="Vue cliとBuefyでシンプルに始めるVue.js - コンポーネントの中身を見てみる" />
+<meta property="og:description" content="はじめに 前回は環境構築で終わってしまいましたが、今回から本格的に開発を始めていきます。取っ掛かりとして、Vue CLIで作った環境の内容を確認" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-component/" /><meta property="article:published_time" content="2019-08-21T13:05:14&#43;09:00"/>
+<meta property="article:modified_time" content="2019-08-21T13:05:14&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Vue cliとBuefyでシンプルに始めるVue.js - コンポーネントの中身を見てみる"/>
+<meta name="twitter:description" content="はじめに 前回は環境構築で終わってしまいましたが、今回から本格的に開発を始めていきます。取っ掛かりとして、Vue CLIで作った環境の内容を確認"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Vue cliとBuefyでシンプルに始めるVue.js - コンポーネントの中身を見てみる</title>
+	<link rel="stylesheet" href="https://idontwannawork.github.io/css/style.min.e81f50049998463da8cdbf0f848b77d9797f27f249581a236a3161d386f310db.css" integrity="sha256-6B9QBJmYRj2ozb8PhIt32Xl/J/JJWBojajFh04bzENs=">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://idontwannawork.github.io/">頑張らないために頑張る</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					<a href="https://idontwannawork.github.io/about/">About</a>
+					<a href="https://idontwannawork.github.io/posts/">Posts</a>
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<button id="toc-btn" class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://twitter.com/unknown_strings" target="_blank" rel="noopener" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/idontwannawork" target="_blank" rel="noopener" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://codepen.io/idontwannawork/" target="_blank" rel="noopener" title="Codepen"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-codepen"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon><line x1="12" y1="22" x2="12" y2="15.5"></line><polyline points="22 8.5 12 15.5 2 8.5"></polyline><polyline points="2 15.5 12 8.5 22 15.5"></polyline><line x1="12" y1="2" x2="12" y2="8.5"></line></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://idontwannawork.github.io/about/">About</a></li>
+			<li><a href="https://idontwannawork.github.io/posts/">Posts</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Aug 21, 2019</span></div>
+				<h1>Vue cliとBuefyでシンプルに始めるVue.js - コンポーネントの中身を見てみる</h1>
+			</header>
+			<div class="content">
+				
+
+<h2 id="はじめに">はじめに<a href="#はじめに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p><a href="/posts/make-dummy-text-generator-site-with-vuejs/">前回</a>は環境構築で終わってしまいましたが、今回から本格的に開発を始めていきます。取っ掛かりとして、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーションを開発するかを確認します。</p>
+
+<h2 id="まずはプロジェクトを俯瞰する">まずはプロジェクトを俯瞰する<a href="#まずはプロジェクトを俯瞰する" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>何はともあれ、Vue CLIで<code>create</code>した直後の環境を俯瞰してみます。</p>
+
+<p><img src="2019-08-21-13-31-41.png" alt="pic" /></p>
+
+<h3 id="なにはともあれindex">なにはともあれindex<a href="#なにはともあれindex" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>とりあえずファイルの名前で判断して、<code>index.html</code>あたりを見てみます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en&#34;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&#34;utf-8&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&#34;X-UA-Compatible&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;IE=edge&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;viewport&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;width=device-width,initial-scale=1.0&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;icon&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;&lt;%= BASE_URL %&gt;favicon.ico&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>dtg<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">noscript</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">strong</span><span class="p">&gt;</span>We&#39;re sorry but dtg doesn&#39;t work properly without JavaScript enabled. Please enable it to continue.<span class="p">&lt;/</span><span class="nt">strong</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">noscript</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;app&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="c">&lt;!-- built files will be auto injected --&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span></code></pre></div>
+<p>なんとなく<code>&lt;div id=&quot;app&quot;&gt;</code>あたりが気になりますが、内容としてはあっさりしたものです。というかこれ、どこでVue.jsとか読み込んでるの・・・？CSSとかも全然記述ないけど・・・？</p>
+
+<p>結論から言えば、現状の状態は「動作する実体」では<strong>ありません</strong>。ただの生成元でありテンプレートです。というわけで、実体を生成・参照するためにビルドを行う必要がありますので、下記のコマンドを実行します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm run build</code></pre></div>
+<p>しばらく待つとメッセージが表示されるはずです。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"> DONE  Build complete. The dist directory is ready to be deployed.
+ INFO  Check out deployment instructions at https://cli.vuejs.org/guide/deployment.html</code></pre></div>
+<p>すると今までのフォルダ体系に、<code>dist</code>というフォルダが追加されていると思います。もう名前からしてそれっぽいですね。</p>
+
+<p><img src="2019-08-21-15-22-11.png" alt="pic" /></p>
+
+<p>ファイル名はともかく、フォルダ構成はなんか「それっぽい」ですよね。というわけで、改めて<code>index.html</code>を参照してみます。ただし、今度は<code>dist</code>配下にいる<code>index.html</code>です。ちなみに、下のソースは読みやすいように改行を入れてますが、元の状態は改行なしです。おいおい。</p>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">en</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">utf-8</span><span class="p">&gt;&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">X-UA-Compatible</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;IE=edge&#34;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">viewport</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;width=device-width,initial-scale=1&#34;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">icon</span> <span class="na">href</span><span class="o">=</span><span class="s">/favicon.ico</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>dtg<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">/css/app.e2713bb0.css</span> <span class="na">rel</span><span class="o">=</span><span class="s">preload</span> <span class="na">as</span><span class="o">=</span><span class="s">style</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">/css/chunk-vendors.17c0942e.css</span> <span class="na">rel</span><span class="o">=</span><span class="s">preload</span> <span class="na">as</span><span class="o">=</span><span class="s">style</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">/js/app.c471aa62.js</span> <span class="na">rel</span><span class="o">=</span><span class="s">preload</span> <span class="na">as</span><span class="o">=</span><span class="s">script</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">/js/chunk-vendors.68bf7d69.js</span> <span class="na">rel</span><span class="o">=</span><span class="s">preload</span> <span class="na">as</span><span class="o">=</span><span class="s">script</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">/css/chunk-vendors.17c0942e.css</span> <span class="na">rel</span><span class="o">=</span><span class="s">stylesheet</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">/css/app.e2713bb0.css</span> <span class="na">rel</span><span class="o">=</span><span class="s">stylesheet</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">noscript</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">strong</span><span class="p">&gt;</span>We&#39;re sorry but dtg doesn&#39;t work properly without JavaScript enabled. Please enable it to continue.<span class="p">&lt;/</span><span class="nt">strong</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">noscript</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">app</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">/js/chunk-vendors.68bf7d69.js</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">/js/app.c471aa62.js</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span></code></pre></div>
+<p>うんうん、ビルド前の<code>index.html</code>の比べると、JavaScriptやCSSが読み込まれているのが見て取れます。なるほど、とりあえずビルドすりゃいいんだな！（白目）読み込む対象のファイル名が明らかに<code>src</code>フォルダ内に存在するJavaScriptやvueファイルとは異なりますが、ビルドされた結果のファイルなので気にしないこととします。</p>
+
+<h3 id="javascriptを見てみる">JavaScriptを見てみる<a href="#javascriptを見てみる" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>JavaScriptのソースである<code>main.js</code>を参照してみます。ちなみに、<a href="/posts/make-dummy-text-generator-site-with-vuejs/#buefyを導入する">前回のBuefy導入</a>に伴い、このソースは書き換わっています。</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span>
+<span class="k">import</span> <span class="nx">Buefy</span> <span class="nx">from</span> <span class="s1">&#39;buefy&#39;</span>
+<span class="k">import</span> <span class="s1">&#39;buefy/dist/buefy.css&#39;</span>
+<span class="k">import</span> <span class="nx">App</span> <span class="nx">from</span> <span class="s1">&#39;./App.vue&#39;</span>
+
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Buefy</span><span class="p">)</span>
+
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">productionTip</span> <span class="o">=</span> <span class="kc">false</span>
+
+<span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+  <span class="nx">render</span><span class="o">:</span> <span class="nx">h</span> <span class="p">=&gt;</span> <span class="nx">h</span><span class="p">(</span><span class="nx">App</span><span class="p">),</span>
+<span class="p">}).</span><span class="nx">$mount</span><span class="p">(</span><span class="s1">&#39;#app&#39;</span><span class="p">)</span>
+</code></pre></div>
+<p>Vueインスタンスの生成時に<code>#app</code>を<a href="https://jp.vuejs.org/v2/api/#vm-mount">マウント</a>しています。<code>$mount</code>は、マウントされていないインスタンスに手動でマウントするためのメソッドです。上記の内容だとインスタンスに<code>el</code>オプションが存在しないので、<code>$mount</code>しないとマウントされていない状態になります。</p>
+
+<blockquote>
+<p>Vue インスタンスがインスタンス化において el オプションを受け取らない場合は、DOM 要素は関連付けなしで、”アンマウント(マウントされていない)” 状態になります。</p>
+</blockquote>
+
+<p>とは言え、これだけで何かをやっているわけでなく、<code>App.vue</code>をコンポーネントとして登録しているだけのようなので、今度は<code>App.vue</code>を参照してみます。</p>
+
+<p>なお、描画関数<code>render</code>の部分<code>h =&gt; h(App)</code>は<a href="https://github.com/vuejs-templates/webpack-simple/issues/29">このissues</a>にその由来がありました。興味深かったので、別記事ででも掘り下げようかな・・・。</p>
+
+<h3 id="app-vueを見てみる">App.vueを見てみる<a href="#app-vueを見てみる" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p><code>App.vue</code>の内容は下記の通りです。上からHTML、JavaScript、CSSの順に記述されていることがわかります。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
+  &lt;div id=&#34;app&#34;&gt;
+    &lt;img alt=&#34;Vue logo&#34; src=&#34;./assets/logo.png&#34;&gt;
+    &lt;HelloWorld msg=&#34;Welcome to Your Vue.js App&#34;/&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import HelloWorld from &#39;./components/HelloWorld.vue&#39;
+
+export default {
+  name: &#39;app&#39;,
+  components: {
+    HelloWorld
+  }
+}
+&lt;/script&gt;
+
+&lt;style&gt;
+#app {
+  font-family: &#39;Avenir&#39;, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+&lt;/style&gt;</code></pre></div>
+<p>この中でJavaScriptの部分を参照してみると、<code>HelloWorld.vue</code>というコンポーネントを利用しています。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;script&gt;
+import HelloWorld from &#39;./components/HelloWorld.vue&#39;
+
+export default {
+  name: &#39;app&#39;,
+  components: {
+    HelloWorld
+  }
+}
+&lt;/script&gt;</code></pre></div>
+<p><code>HelloWorld</code>という文字はHTMLのソース部分にもあって、タグとして利用されています。ただ、この部分だけ見ると<code>msg</code>に値をセットしているだけで、それ以上の挙動はちょっと追えそうにありません。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">    &lt;HelloWorld msg=&#34;Welcome to Your Vue.js App&#34;/&gt;</code></pre></div>
+<p>ちなみに、この<code>msg</code>にセットされている文字列を変更すると出力した結果も変更されます。当たり前ですが。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">    &lt;HelloWorld msg=&#34;hoge fuga piyo&#34;/&gt;</code></pre></div>
+<p><img src="2019-08-22-15-30-41.png" alt="pic" /></p>
+
+<p>ということは、<code>HelloWorld.vue</code>ってコンポーネントを参照してみないと具体的なところはわからないな、という感じです。</p>
+
+<h3 id="満を持してhelloworld-vue">満を持してHelloWorld.vue<a href="#満を持してhelloworld-vue" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>ではいよいよ<code>HelloWorld.vue</code>を参照します。今までのソースよりはHTMLの部分がいろいろ記述してあるため、ちょっとばっかり長いです。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
+  &lt;div class=&#34;hello&#34;&gt;
+    &lt;h1&gt;{{ msg }}&lt;/h1&gt;
+    &lt;p&gt;
+      For a guide and recipes on how to configure / customize this project,&lt;br&gt;
+      check out the
+      &lt;a href=&#34;https://cli.vuejs.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;vue-cli documentation&lt;/a&gt;.
+    &lt;/p&gt;
+    &lt;h3&gt;Installed CLI Plugins&lt;/h3&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&#34;https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;babel&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;eslint&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;h3&gt;Essential Links&lt;/h3&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&#34;https://vuejs.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Core Docs&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://forum.vuejs.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Forum&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://chat.vuejs.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Community Chat&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://twitter.com/vuejs&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Twitter&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://news.vuejs.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;News&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;h3&gt;Ecosystem&lt;/h3&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&#34;https://router.vuejs.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;vue-router&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://vuex.vuejs.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;vuex&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://github.com/vuejs/vue-devtools#vue-devtools&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;vue-devtools&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://vue-loader.vuejs.org&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;vue-loader&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&#34;https://github.com/vuejs/awesome-vue&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;awesome-vue&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  name: &#39;HelloWorld&#39;,
+  props: {
+    msg: String
+  }
+}
+&lt;/script&gt;
+
+&lt;!-- Add &#34;scoped&#34; attribute to limit CSS to this component only --&gt;
+&lt;style scoped&gt;
+h3 {
+  margin: 40px 0 0;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+&lt;/style&gt;</code></pre></div>
+<p>冒頭のHTMLソースには<code>{{ msg }}</code>という文字があります。Mustache構文ってやつで、いかにもテンプレートとして利用できそうな見た目です。実際、Vue.jsにおいて<a href="https://v1-jp.vuejs.org/guide/syntax.html">テキストのデータバインディングで一番基本的ンな形式</a>がこれです。また、JavaScriptの部分にも<code>msg: String</code>という宣言が見て取れます。ということは、やっぱり<code>App.vue</code>で設定した文字列が<code>msg</code>に格納されるわけですね。そうなると下記のような入れ子構造になっていると推測できます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">|--index.html
+|  |--App.vue
+|  |  |--HelloWorld.vue</code></pre></div>
+<p><code>HelloWorld.vue</code>には出力するページのメイン部分を記述して、値を変更する（あるいは時間を表示するなど値が不定である）場合などはMustache構文でテンプレートとして記述。これはこれとして、1つのコンポーネントとして扱う。<code>App.vue</code>には、Mustacheタグに対応したデータオブジェクトのプロパティ（ここでは<code>msg</code>）に値を何かしら設定することでデータの更新を行う・・・って感じですかねぇ。</p>
+
+<p>とりあえず構造はなんとなくわかったような気がします。</p>
+
+<h3 id="ちなみに">ちなみに<a href="#ちなみに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p><code>asset</code>フォルダには現時点でロゴ（Vue.jsのロゴ）の画像ファイルが格納されているだけです。</p>
+
+<h3 id="となると">となると<a href="#となると" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>Vue CLIで<code>create</code>したら下記の作業をすればよさそうです。</p>
+
+<ul>
+<li>index.htmlのタイトルを変更する。</li>
+<li>main.jsにBuefyを追加する。</li>
+<li>App.vueに機能を追加する。</li>
+<li>HelloWorld.vueは削除する。</li>
+<li>必要に応じてコンポーネントを追加する。</li>
+</ul>
+
+<p>機能ができあがってきたら<code>npm run serve</code>で挙動を確認したり<code>npm run build</code>でビルドしたりするわけですね。</p>
+
+<h2 id="おわりに">おわりに<a href="#おわりに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p><a href="/posts/make-dummy-text-generator-site-with-vuejs/">前回</a>の終わりはこんなくだりでした。</p>
+
+<blockquote>
+<p>次回以降では<code>.vue</code>ファイルをいじって挙動を確認しつつ、webアプリの開発を進めてみようと思います。</p>
+</blockquote>
+
+<p><strong>「機能の実装してないじゃん！中身見ただけじゃん！」</strong> ほげ_(:3」∠)_</p>
+
+<p>すいません、書いてたらずいぶん長くなってしまいました。それにしても、Vue.jsはオフィシャルのドキュメントが充実している上に、Vue CLIが出力したサンプルの内容も分かりやすい構造になっていて、とても好感が持てます。</p>
+
+<p>次から、次からはなんとか満を持して実装したいと思います。†悔い改めて†_(:3」∠)_</p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/vuejs">vuejs</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>3033 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-08-21 04:05 &#43;0000</p>
+			</footer>
+		</article>
+		<aside id="toc">
+			<div class="toc-title">Table of Contents</div>
+			<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#はじめに">はじめに</a></li>
+<li><a href="#まずはプロジェクトを俯瞰する">まずはプロジェクトを俯瞰する</a>
+<ul>
+<li><a href="#なにはともあれindex">なにはともあれindex</a></li>
+<li><a href="#javascriptを見てみる">JavaScriptを見てみる</a></li>
+<li><a href="#app-vueを見てみる">App.vueを見てみる</a></li>
+<li><a href="#満を持してhelloworld-vue">満を持してHelloWorld.vue</a></li>
+<li><a href="#ちなみに">ちなみに</a></li>
+<li><a href="#となると">となると</a></li>
+</ul></li>
+<li><a href="#おわりに">おわりに</a></li>
+</ul></li>
+</ul>
+</nav>
+		</aside>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>Vue cliとBuefyでシンプルに始めるVue.js - まずは環境の用意</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "come-as-you-are" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2019 <a href="https://idontwannawork.github.io/">Tetsuya Katsuragi</a> Allrights reserved.</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://idontwannawork.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	<script src="https://idontwannawork.github.io/js/main.min.784417f5847151f848c339cf0acb13a06cbb648b1483435a28ed4556c4ead69b.js" integrity="sha256-eEQX9YRxUfhIwznPCssToGy7ZIsUg0NaKO1FVsTq1ps="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>

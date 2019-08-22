@@ -6,10 +6,19 @@
     <description>Recent content on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Mon, 19 Aug 2019 15:23:26 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 21 Aug 2019 13:05:14 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Vue cliとBuefyでシンプルに始めるVue.js - コンポーネントの中身を見てみる</title>
+      <link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-component/</link>
+      <pubDate>Wed, 21 Aug 2019 13:05:14 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-component/</guid>
+      <description>はじめに 前回は環境構築で終わってしまいましたが、今回から本格的に開発を始めていきます。取っ掛かりとして、Vue CLIで作った環境の内容を確認</description>
+    </item>
     
     <item>
       <title>Vue cliとBuefyでシンプルに始めるVue.js - まずは環境の用意</title>
@@ -90,15 +99,6 @@
       
       <guid>https://idontwannawork.github.io/posts/korg-volca-modular-review/</guid>
       <description>買っちゃった volca modular、買っちゃったい。いやっほー_(:3」∠)_ volca modular？ volcaとは、KORGの生み出したシンセサイザー</description>
-    </item>
-    
-    <item>
-      <title>SequenzのVolca Rackが来たのでレビューしてみる</title>
-      <link>https://idontwannawork.github.io/posts/sequenz-volca-rack-review/</link>
-      <pubDate>Sat, 15 Jun 2019 21:02:37 +0900</pubDate>
-      
-      <guid>https://idontwannawork.github.io/posts/sequenz-volca-rack-review/</guid>
-      <description>はじめに （個人的に）待望の、待望のvolca rackが来ました！ volca rack? volcaといえば、KORGの生み出した大ヒット商品でして、個人的にも大</description>
     </item>
     
   </channel>
