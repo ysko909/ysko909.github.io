@@ -6,8 +6,59 @@
 		<description>Recent content in Posts on 頑張らないために頑張る</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Wed, 21 Aug 2019 13:05:14 +0900</lastBuildDate>
+		<lastBuildDate>Fri, 23 Aug 2019 20:59:07 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>vue-cli-service: command not foundと言われたらnode_modulesを削除</title>
+			<link>https://idontwannawork.github.io/posts/fix-vue-cli-service-command-not-found-error/</link>
+			<pubDate>Fri, 23 Aug 2019 20:59:07 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/fix-vue-cli-service-command-not-found-error/</guid>
+			<description>はじめに Vue.jsのツール「Vue CLI」にて作成したプロジェクトをクローンしてnpm run serveをしたところ、下記のようなエラーメッセー</description>
+			<content type="html"><![CDATA[
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>Vue.jsのツール「Vue CLI」にて作成したプロジェクトをクローンして<code>npm run serve</code>をしたところ、下記のようなエラーメッセージが出てきてしまいました。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">❯ npm run serve
+
+&gt; dtg@0.1.0 serve /Users/hoge/dummytextgen
+&gt; vue-cli-service serve
+
+sh: vue-cli-service: command not found
+npm ERR! file sh
+npm ERR! code ELIFECYCLE
+npm ERR! errno ENOENT
+npm ERR! syscall spawn
+npm ERR! dtg@0.1.0 serve: `vue-cli-service serve`
+npm ERR! spawn ENOENT
+npm ERR! 
+npm ERR! Failed at the dtg@0.1.0 serve script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+npm WARN Local package.json exists, but node_modules missing, did you mean to install?
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /Users/hoge/.npm/_logs/2019-08-23T11_44_05_763Z-debug.log</code></pre></div>
+<p><code>vue-cli-service: command not found</code>って言われてもなぁ・・・。とりあえず調べますか。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>macOS Mojave 10.14.6</li>
+<li>npm 6.9.2</li>
+<li>Vue CLI 3.11.0</li>
+<li>Visual Studio Code version 1.35</li>
+</ul>
+
+<p>ちなみに、これのクローン元のデータはWindowsで作成していました。基本的にnpmやVue CLIのバージョンは一緒だと思います。</p>
+
+<h2 id="結論">結論</h2>
+
+<p>下記のコマンドを実行しよう！</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">rm -rf node_modules package-lock.json &amp;&amp; npm install</code></pre></div>
+<p><a href="https://github.com/vuejs/vue-cli/issues/2404">ここのissues</a>に記載があった。助かった！</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>Vue cliとBuefyでシンプルに始めるVue.js - コンポーネントの中身を見てみる</title>
@@ -1365,90 +1416,6 @@ npm run serve</code></pre></div>
 <p>あとこれは蛇足ですが、<a href="https://developer.apple.com/videos/play/wwdc2019/604">ARKit3</a>はA12 Bionic、あるはそれ以上のチップ搭載デバイスでしか動作しません。ということは、ARで最大限楽しむ場合での最安値はXRの一択です。</p>
 
 <p>自分はこれを4年くらいは使い倒したいですが、はたして持つかどうか・・・。</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>Korgのvolca modular買ったので軽くレビューしてみる</title>
-			<link>https://idontwannawork.github.io/posts/korg-volca-modular-review/</link>
-			<pubDate>Sun, 16 Jun 2019 00:30:23 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/korg-volca-modular-review/</guid>
-			<description>買っちゃった volca modular、買っちゃったい。いやっほー_(:3」∠)_ volca modular？ volcaとは、KORGの生み出したシンセサイザー</description>
-			<content type="html"><![CDATA[
-
-<h2 id="買っちゃった">買っちゃった</h2>
-
-<p><img src="IMG_0707.png" alt="pic" /></p>
-
-<p><strong>volca modular、買っちゃったい</strong>。いやっほー_(:3」∠)_</p>
-
-<h2 id="volca-modular">volca modular？</h2>
-
-<p>volcaとは、KORGの生み出したシンセサイザーのシリーズでして、個人的にも大好きなシリーズです。コンパクトな筐体にハイエンドモデル顔負けの要素をこれでもかと積み込んで、<a href="https://www.korg.com/jp/products/dj/volca_fm/">FM音源を完全再現した上でUIをユーザーフレンドリーにして扱いやすくしたデジタルシンセサイザー</a>だったり、かと思えば<a href="https://www.korg.com/jp/products/dj/volca_kick/">キック音に特化しまくった超絶ニッチだけどスゴく使えるキックジェネレーター</a>だったり、<a href="https://www.korg.com/jp/products/dj/volca_keys/">王道のポリフォニックなアナログシンセサイザー</a>などなどを生み出してきたシリーズです。</p>
-
-<p>個人的にも今までに<a href="https://www.korg.com/jp/products/dj/volca_keys/index.php">keys</a>、<a href="https://www.korg.com/jp/products/dj/volca_bass/index.php">bass</a>、<a href="https://www.korg.com/jp/products/dj/volca_kick/index.php">kick</a>、<a href="https://www.korg.com/jp/products/dj/volca_sample/index.php">sample</a>を購入してきましたが、今回新たにセミモジュラーシンセである<a href="https://www.korg.com/jp/products/dj/volca_modular/index.php">volca modular</a>を購入しました！</p>
-
-<h2 id="ちなみにvolca-drumは">ちなみにvolca drumは</h2>
-
-<p>別途購入したリズムマシンである<a href="/posts/korg-volca-drum-review/">volca drumのレビューはこちら</a>です。</p>
-
-<h2 id="モジュラーシンセサイザーって何よ">モジュラーシンセサイザーって何よ？</h2>
-
-<p>モジュラーシンセサイザーはシンセサイザーの各機能をモジュールとして分割して、それぞれをパッチケーブルで接続します。利用するモジュールも接続の順番もその接続先もすべて自分でカスタマイズできる、非常に自由度の高いシンセサイザーの形式です。「ユーロラック規格」という統一規格があって、この規格に沿った設計のモジュールであれば異なるメーカーのモジュール間でもパッチケーブルで接続して使用する事ができます。</p>
-
-<p>逆に言えば自由度が高いゆえに難易度も高く、モジュール1個だけでは何もできず複数のモジュールが必要になりますが、そのモジュール1個あたりでウン万円したりします。また、モジュールが多くなればそれを格納するラックも大型の物が必要になり、異なるサイズのラックを用意しないといけないという難点もあります。ハマったらなかなか抜け出せない沼ですが、とっかかりにくいのでそもそも初心者向けとは言えません。</p>
-
-<p>多分、めちゃくちゃハマったら車1台分とかの金額を投入することになると思います_(:3」∠)_</p>
-
-<p>そんなモジュラーシンセサイザーを、そこそこの自由度を保ちつつ扱いやすくしたのが<strong>セミモジュラーシンセサイザー</strong>です。モジュラー構造を持ちつつもあらかじめ内部でパッチングされているため、一般的なシンセサイザーのようにも利用できます。もちろん、モジュラーシンセサイザーの醍醐味であるパッチングもできるようジャックがしっかりと用意され、外部でパッチングされると内部のパッチをバイパスするような仕組みになっています。</p>
-
-<p>このvolca modularはセミモジュラーシンセサイザーです。そう、パッチングなしに楽しむこともできますが、パッチングすることでモジュラー然とした見た目とサウンドを得られるのです。しかも、一般的なモジュラーシンセサイザーのモジュール1個分の価格で！ここまでの話で、いかにこのシンセが画期的であるかがおわかりいただけると思います。実際安い（忍殺語</p>
-
-<h2 id="開封の儀">開封の儀</h2>
-
-<p><img src="IMG_0701.png" alt="pic" /></p>
-
-<p>外箱から。volcaに限りませんが、KORGの箱のデザインってイイですよね。</p>
-
-<p><img src="IMG_0702.png" alt="pic" /></p>
-
-<p>箱を開封するとモジュールのリファレンスがまず目に入ります。多分、触り始めた当初はこれがないとにっちもさっちも行かないのでは・・・モジュラーシンセサイザーの知識がある人だったら問題ないのでしょうが、そういう人ってコレ買わないと思うしなー。</p>
-
-<p><img src="IMG_0703.png" alt="pic" /></p>
-
-<p>同梱されているのは、前述のリファレンスと取扱説明書などです。あと、ソフトシンセのプロダクトキーが記載された紙もありました・・・けど、使うかなぁこれ_(:3」∠)_</p>
-
-<p><img src="IMG_0704.png" alt="pic" /></p>
-
-<p>さて、書類などを出すと本体と電池、パッチケーブルなどが見えますね。</p>
-
-<p><img src="IMG_0705.png" alt="pic" /></p>
-
-<p>本体を取り出したところ。ところどころにある黒い四角い部分は、パッチケーブルを差し込むジャックです。</p>
-
-<p><img src="IMG_0707.png" alt="pic" /></p>
-
-<p>本体を真上から。白いラインは内部パッチングを表しています。1本もパッチケーブルを利用しない場合は、この白いラインで表された内部パッチングを通過して音が出力されます。</p>
-
-<h2 id="動作の様子など">動作の様子など</h2>
-
-<p>とりあえず、まずはパッチングなしでプレイしてみました。volcaシリーズで培われたシーケンサーは、相変わらず直感的でおもしろいです。</p>
-
-<p><blockquote class="twitter-tweet" data-lang="ja"><p lang="ja" dir="ltr">Korgのvolca modular、買ってしまったのですが、パッチなしで既にこの出音でエグい(褒め言葉<a href="https://twitter.com/hashtag/volca?src=hash&amp;ref_src=twsrc%5Etfw">#volca</a> <a href="https://t.co/tkItOYT7Nv">pic.twitter.com/tkItOYT7Nv</a></p>&mdash; ysko (@unknown_strings) <a href="https://twitter.com/unknown_strings/status/1136555987450511360?ref_src=twsrc%5Etfw">2019年6月6日</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
-
-<p>もともとこの手のシンセは、いい意味で結構アバンギャルドな音なんですが、コイツもご多分に漏れずかなりキテます。いわゆるMOOGだったり往年のRolandやYamaha的なシンセサイザーとは異なる音で、好みは少し分かれるかもしれません。</p>
-
-<p>コイツはいわゆる「ウエストコーストスタイル」なモジュラーシンセサイザーに分類されるのですが、前述のMOOGたちなどは「イーストコーストスタイル」なんですね。キーボードでの演奏を前提としているイーストコーストに比べると、ツマミでのパフォーマンスを前提にしているのか、とにかくツマミをグリグリやっているだけで時間が過ぎていきます。それぐらい楽しいです。ビキビキ言ってますぜ。</p>
-
-<h2 id="まとめ">まとめ</h2>
-
-<p><strong>良心的な値段とユーザーフレンドリーなUIに刺激的なサウンドを内包したアツいモジュラーシンセサイザー！</strong>です。</p>
-
-<p>モジュラーシンセサイザーって、セミモジュラーシンセを含めてもそこそこの値段するので、2万円前後で買えるというのはもはや規格外と言ってしまっていいでしょう。それでいてモジュラーシンセの醍醐味をしっかり内包していて、サウンドもエキサイティングと、欠点らしい欠点がないです。</p>
-
-<p>さあ、これでモジュラーシンセサイザーにハマって、沼に沈みましょう。沼は楽しいですよ。ほら、レンズ沼とかあるじゃないですか（ぐるぐる目</p>
 ]]></content>
 		</item>
 		
