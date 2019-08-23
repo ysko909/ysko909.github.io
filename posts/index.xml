@@ -222,7 +222,7 @@ a {
   color: #42b983;
 }
 &lt;/style&gt;</code></pre></div>
-<p>冒頭のHTMLソースには<code>{{ msg }}</code>という文字があります。Mustache構文ってやつで、いかにもテンプレートとして利用できそうな見た目です。実際、Vue.jsにおいて<a href="https://v1-jp.vuejs.org/guide/syntax.html">テキストのデータバインディングで一番基本的ンな形式</a>がこれです。また、JavaScriptの部分にも<code>msg: String</code>という宣言が見て取れます。ということは、やっぱり<code>App.vue</code>で設定した文字列が<code>msg</code>に格納されるわけですね。そうなると下記のような入れ子構造になっていると推測できます。</p>
+<p>冒頭のHTMLソースには<code>{{ msg }}</code>という文字があります。Mustache構文ってやつで、いかにもテンプレートとして利用できそうな見た目です。実際、Vue.jsにおいて<a href="https://v1-jp.vuejs.org/guide/syntax.html">テキストのデータバインディングで一番基本的な形式</a>がこれです。また、JavaScriptの部分にも<code>msg: String</code>という宣言が見て取れます。ということは、やっぱり<code>App.vue</code>で設定した文字列が<code>msg</code>に格納されるわけですね。そうなると下記のような入れ子構造になっていると推測できます。</p>
 <div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">|--index.html
 |  |--App.vue
 |  |  |--HelloWorld.vue</code></pre></div>
