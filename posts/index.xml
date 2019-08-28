@@ -6,8 +6,295 @@
 		<description>Recent content in Posts on 頑張らないために頑張る</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Fri, 23 Aug 2019 20:59:07 +0900</lastBuildDate>
+		<lastBuildDate>Tue, 27 Aug 2019 13:50:30 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Vue cliとBuefyでシンプルに始めるVue.js - UIのコンポーネントを作成する</title>
+			<link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-functions/</link>
+			<pubDate>Tue, 27 Aug 2019 13:50:30 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-functions/</guid>
+			<description>はじめに 前回は、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーシ</description>
+			<content type="html"><![CDATA[
+
+<h2 id="はじめに">はじめに</h2>
+
+<p><a href="/posts/make-dummy-text-generator-site-with-vuejs-edit-component/">前回</a>は、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーションを開発するかを確認しました。</p>
+
+<p>今回はやっとこさ、コーディングします。もう内容は見切った！もう完璧だ！（死亡フラグ）</p>
+
+<p>取っ掛かりにUI部分のコーディングをします。何はともあれ、まずは見た目です。</p>
+
+<h2 id="と-その前に">と、その前に</h2>
+
+<p>「そもそもどんなアプリケーション作るのよ？」ってところです。ここでは<strong>ダミーテキストを生成</strong>する機能を実装します。単純に、ちょっと今そういう機能が欲しいのです。</p>
+
+<p>ちなみに、Vue.jsに限らないと思いますが、この手のチュートリアルはToDoリストが鉄板だと思います。</p>
+
+<h2 id="コンポーネントの構成">コンポーネントの構成</h2>
+
+<h3 id="必要な項目">必要な項目</h3>
+
+<p>ダミーテキストジェネレータを実装するに当たって、ざっくりとどんなコンポーネント構成で実装するかを考えます。そこで、テキスト生成に必要なものはどんな機能か、ちょっと考えてみます。</p>
+
+<ul>
+<li>ダミーテキストの生成元を選択</li>
+<li>生成する文字数を指定</li>
+<li>その他オプション
+
+<ul>
+<li>各文章において改行の要否を選択</li>
+<li>英数字出力時の全角・半角を選択</li>
+<li>クリップボードへ出力結果をコピー</li>
+</ul></li>
+<li>条件はすべてお任せで一発生成</li>
+</ul>
+
+<p>こんなところでしょうか。ダミーテキストは青空文庫から入手するものとします。あと英文のダミーテキストが必要なら、<a href="https://ja.wikipedia.org/wiki/Lorem_ipsum">王道のアレ</a>ですかねぇ。</p>
+
+<p>クリップボードへのコピーは正確にはテキストの内容に影響はしませんが、単純に機能として存在するとうれしいかな、と思って実装します。だって、文字列を生成するだけなのに、その都度ボタンを押して生成されたテキストをマウスなんかで選択してコピーして・・・ってしたくありませんし。それと同じ発想で、「このボタンを押せば、条件はすべてお任せでテキスト生成できるよ」という機能も実装したいなー。</p>
+
+<p>ちなみに、意味のないただランダムに文字を並べただけの文字列が必要なシチュエーションを想定できなかったため、一応「読める文章」を生成するつもりです。なので、基本的には指定された文字数分、青空文庫の文章を切り出す感じに実装しようかと思います。適当に切り出したら文章の途中で終わっちゃうかもしれないから、その辺のケアは必要かもしれません。まぁ追々考えます。</p>
+
+<h3 id="コンポーネントの分割">コンポーネントの分割</h3>
+
+<p>必要があればコンポーネントを分割して疎結合にし、再利用が容易になるよう実装すべきでしょう。となると、分割できそうな、あるいは分割しても問題なさそうな部分はどのあたりかちょっと考えてみます。</p>
+
+<p>とは言ったものの、先述した機能は画面に表示されるオブジェクトとして1つのコンポーネントにまとめちゃってもいいかもしれません。もちろん、それぞれを別コンポーネントにしっかり分割する、という方法もあります。が、今回のような小規模なアプリケーションにおいては、あんまり細分化するのもイマイチだなぁと思っています。たった数行のHTMLやJavaScriptのためにいくつもコンポーネントを分割するのは、保守性の面から考えれば本末転倒です。</p>
+
+<p>というわけで、今回については1つのコンポーネントに<strong>全部乗せ</strong>することとします！（白目）あーでも、テキストの生成部分は別コンポーネントに分割するかもしれないなー・・・。</p>
+
+<p>重ねて強調しますが、規模によってコンポーネントを分割する方が絶対保守性高いから！じゃないと後で泣きを見るから！！_(:3」∠)_（経験則）</p>
+
+<h2 id="というわけで-uiの検討を">というわけで、UIの検討を</h2>
+
+<p>UIコンポーネントはBuefyを利用するつもりだったので、まずは<a href="https://buefy.org/">オフィシャル</a>のドキュメントを参考にどんなインターフェイスを実装するか検討します。</p>
+
+<h3 id="ダミーテキストの生成元の選択">ダミーテキストの生成元の選択</h3>
+
+<p>これはもう<a href="https://buefy.org/documentation/radio">Radio</a>一択でしょう。いくつかある選択肢のうち、1つだけ選ぶとなればRadioで決まりです。</p>
+
+<h3 id="生成する文字数">生成する文字数</h3>
+
+<p>デフォルトを100文字として、フォームに任意の数値を入力してもらう方法にしようかな・・・と思っていたら<a href="https://buefy.org/documentation/numberinput">Numberinput</a>という機能を発見。おお、これいいじゃん。ただ、デフォルトでは「＋」をクリックしたときに1しか増加しないので、「200文字出力したいから、スタートが100だとすると100回クリックすることに・・・？」ってなるからステップの調整は必須ですね。</p>
+
+<p>あるいは<a href="https://buefy.org/documentation/slider">Slider</a>でもいいかもしれません。この辺は実装してみてから使用感を比べて、どっちがいいか考えます。場合によっては両刀使いもいいかもしれません。</p>
+
+<h3 id="その他オプション">その他オプション</h3>
+
+<h4 id="各文章において改行の要否">各文章において改行の要否</h4>
+
+<p>これは単純にYes/Noなので<a href="https://buefy.org/documentation/switch">Switch</a>でいいと思います。</p>
+
+<h4 id="英数字出力時の全角-半角を選択">英数字出力時の全角・半角を選択</h4>
+
+<p>これも全角または半角のいずれかなので<a href="https://buefy.org/documentation/switch">Switch</a>でいいと思います。</p>
+
+<h4 id="必ず句点で終わる">必ず句点で終わる</h4>
+
+<p>これも単純にYes/Noのいずれかなので<a href="https://buefy.org/documentation/switch">Switch</a>でいいと思います。</p>
+
+<p>この機能ですが、任意の文字数を入力させた場合、文章を最後まで生成できず途中で終わってしまう可能性があります。そこで、「句点まではテキストを生成する」条件を設定しておきます。この条件を指定すると、入力された文字数プラスαのテキストが生成されることになります。なお、英文の場合はピリオドです。実装はJavaScript側のハナシなので、今回はあくまでも見た目です。</p>
+
+<h4 id="クリップボードへのコピー">クリップボードへのコピー</h4>
+
+<p>これはもう<a href="https://buefy.org/documentation/button">ボタン</a>かな。単純に「クリップボードへコピーする」みたいな文字列だけでもいいかもしれません。が、ボタンならより見やすく「これ押せば何かしら処理するだろう」感を演出するためにも、目立つオブジェクトはあった方がいいかと。</p>
+
+<h2 id="そんなわけでコーディング">そんなわけでコーディング</h2>
+
+<p>任意の名前で<code>.vue</code>ファイルを作成します。作成したvueファイルについてコーディングするとVisual Studio Code（以下vscode）が下画像のように補完してくれます。すごい助かる（小並感）</p>
+
+<p>ちなみに下画像にもあるように、<code>script</code>部分の記述にはTypeScriptを利用できます（上から2番目に<code>typescript</code>の文字が確認できますね）。ただ、今回は純粋にJavaScriptを利用しています。これは単純にいろいろ手を出しすぎると自分の頭では収集が付かなくなるからで、TypeScriptが書ける人はわざわざJavaScriptを記述する必要はないと思います。</p>
+
+<p><img src="2019-08-23-14-50-46.png" alt="pic" /></p>
+
+<h3 id="実際のコード">実際のコード</h3>
+
+<p>そこそこ長くなったので、折りたたみます。</p>
+
+<p><details>
+<summary>HTMLソース</summary></p>
+
+<pre><code>&lt;template&gt;
+    &lt;div id=&quot;generator&quot;&gt;
+        &lt;div class=&quot;tile is-ancestor&quot;&gt;
+            &lt;div class=&quot;tile is-parent is-6&quot;&gt;
+                &lt;div class=&quot;tile is-child box container&quot;&gt;
+                    &lt;div class=&quot;has-text-centered&quot;&gt;
+                        &lt;b-tooltip class=&quot;title is-4&quot; label=&quot;生成するテキストの引用元を選択してください。&quot; position=&quot;is-bottom&quot; dashed multilined&gt;引用元&lt;/b-tooltip&gt;
+                    &lt;/div&gt;
+                    &lt;p class=&quot;blank1em&quot;&gt;&lt;/p&gt;
+                    &lt;div class=&quot;field&quot;&gt;
+                        &lt;b-radio v-model=&quot;textName&quot;
+                            name=&quot;name&quot;
+                            native-value=&quot;Lorem Ipsum&quot;&gt;
+                            Lorem Ipsum
+                        &lt;/b-radio&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;field&quot;&gt;
+                        &lt;b-radio v-model=&quot;textName&quot;
+                            name=&quot;name&quot;
+                            native-value=&quot;Silver&quot;&gt;
+                            Silver
+                        &lt;/b-radio&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;field&quot;&gt;
+                        &lt;b-radio v-model=&quot;textName&quot;
+                            name=&quot;name&quot;
+                            native-value=&quot;Jack&quot;&gt;
+                            Jack
+                        &lt;/b-radio&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;field&quot;&gt;
+                        &lt;b-radio v-model=&quot;textName&quot;
+                            name=&quot;name&quot;
+                            native-value=&quot;Vane&quot;&gt;
+                            Vane
+                        &lt;/b-radio&gt;
+                    &lt;/div&gt;
+                    &lt;p class=&quot;radioValue&quot;&gt;
+                        &lt;b&gt;選択した元ネタ:&lt;/b&gt;
+                        {{ textName }}
+                    &lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;tile is-parent is-6&quot;&gt;
+                &lt;div class=&quot;tile is-child box&quot;&gt;
+                    &lt;div class=&quot;has-text-centered&quot;&gt;
+                        &lt;b-tooltip class=&quot;title is-4&quot; label=&quot;生成したい文字数を入力、またはスライドバーで選択してください。&quot; position=&quot;is-bottom&quot; dashed multilined&gt;出力する文字数&lt;/b-tooltip&gt;
+                    &lt;/div&gt;
+                    &lt;p class=&quot;blank2em&quot;&gt;&lt;/p&gt;
+                    &lt;b-field&gt;
+                        &lt;b-numberinput v-model=&quot;textNumber&quot; rounded controls-rounded&gt;
+                        &lt;/b-numberinput&gt;
+                    &lt;/b-field&gt;
+
+                    &lt;b-field&gt;
+                        &lt;b-slider v-model=&quot;textNumber&quot; max=&quot;300&quot;&gt;&lt;/b-slider&gt;
+                    &lt;/b-field&gt;
+                    &lt;p class=&quot;numberValue&quot;&gt;
+                        &lt;b&gt;文字数:&lt;/b&gt;
+                        {{ textNumber }}
+                    &lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;tile is-ancestor&quot;&gt;
+            &lt;div class=&quot;tile is-parent is-6&quot;&gt;
+                &lt;div class=&quot;tile is-child box&quot;&gt;
+                    &lt;div class=&quot;has-text-centered&quot;&gt;
+                        &lt;b-tooltip class=&quot;title is-4&quot; label=&quot;出力する際の条件を設定してください。&quot; position=&quot;is-bottom&quot; dashed multilined&gt;出力オプション&lt;/b-tooltip&gt;
+                    &lt;/div&gt;
+                    &lt;p class=&quot;blank1em&quot;&gt;&lt;/p&gt;
+                    &lt;div class=&quot;field&quot;&gt;
+                        &lt;b-checkbox v-model=&quot;selecedOptions&quot;
+                            native-value=&quot;Silverhoge&quot;&gt;
+                            Silverhoge
+                        &lt;/b-checkbox&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;field&quot;&gt;
+                        &lt;b-checkbox v-model=&quot;selecedOptions&quot;
+                            native-value=&quot;Flinthoge&quot;&gt;
+                            Flinthoge
+                        &lt;/b-checkbox&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;field&quot;&gt;
+                        &lt;b-checkbox v-model=&quot;selecedOptions&quot;
+                            native-value=&quot;Vanehoge&quot;&gt;
+                            Vanehoge
+                        &lt;/b-checkbox&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;field&quot;&gt;
+                        &lt;b-checkbox v-model=&quot;selecedOptions&quot;
+                            native-value=&quot;Billyhoge&quot;&gt;
+                            Billyhoge
+                        &lt;/b-checkbox&gt;
+                    &lt;/div&gt;
+                    &lt;p class=&quot;content&quot;&gt;
+                        &lt;b&gt;Selection:&lt;/b&gt;
+                        {{ selecedOptions }}
+                    &lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;tile is-parent is-6&quot;&gt;
+                &lt;div class=&quot;tile is-child box&quot;&gt;
+                    &lt;div class=&quot;has-text-centered&quot;&gt;
+                        &lt;b-tooltip class=&quot;title is-4&quot; label=&quot;テキストを生成してクリップボードへコピーします。&quot; position=&quot;is-bottom&quot; dashed multilined&gt;テキスト生成&lt;/b-tooltip&gt;
+                    &lt;/div&gt;
+                    &lt;p class=&quot;blank5em&quot;&gt;&lt;/p&gt;
+                    &lt;div class=&quot;has-text-centered&quot;&gt;
+                        &lt;b-button size=&quot;is-medium&quot; icon-left=&quot;clipboard-text&quot; @click=&quot;alert&quot;&gt;テキスト生成する&lt;/b-button&gt;
+                    &lt;/div&gt;
+                    &lt;h1&gt;{{ msg }}&lt;/h1&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;p class=&quot;blank1em&quot;&gt;&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+</code></pre>
+
+<p></details></p>
+
+<h3 id="uiの実装について">UIの実装について</h3>
+
+<h4 id="配置">配置</h4>
+
+<p>それぞれの配置は<a href="https://bulma.io/documentation/layout/tiles/">Tiles</a>で調整することにしました。これならPCで見てもモバイルで見ても問題ありません。</p>
+
+<p><img src="2019-08-27-16-30-01.png" alt="pic" /></p>
+
+<p><a href="https://bulma.io/documentation/columns/basics/">Grid</a>でもいいんじゃね？ってところなんですが、Tilesだと各要素の縦横サイズを自由に変更できます。この自由度の高さとタグの記述量でTilesを今回は採用しました。まぁ、結果から言えば縦横のサイズを変更する必要がなくなっちゃったんですけどね・・・_(:3」∠)_</p>
+
+<p><img src="2019-08-27-16-36-56.png" alt="pic" /></p>
+
+<p>ちなみに<a href="https://bulma.io/documentation/layout/tiles/">Tiles</a>は入れ子構造になのですが、単純に子タイルを並べるとタイルの間に隙間がありません。これで問題がないならいいのですが、今回はレイアウト的に隙間が欲しかったので、1つの親タイルに対し子タイルを1つのみ指定するようにしました。このように記述することで隙間の空いた配置を実装できます。</p>
+
+<p>実際にコードのコードは下記を参照してみてください。</p>
+
+<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="MWgmBye" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="Buefy-Tiles">
+  <span>See the Pen <a href="https://codepen.io/idontwannawork/pen/MWgmBye/">
+  Buefy-Tiles</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p>
+
+<h4 id="引用元">引用元</h4>
+
+<p>予定通り<a href="https://buefy.org/documentation/radio">Radio</a>で作成しました。</p>
+
+<h4 id="文字数">文字数</h4>
+
+<p><a href="https://buefy.org/documentation/numberinput">Numberinput</a>と<a href="https://buefy.org/documentation/slider">Slider</a>の併用で実装しました。細かい調整はNumberinputのボタンで、ざっくりとした調整はSliderでできます。もちろん、スマホなどでも問題ありません。それぞれのオブジェクトで同じデータをバインドしているので、片方で値を調整するともう片方も自動的に反映されます。</p>
+
+<p>ちなみにステップ数を設定すると、Numberinputのプラスあるいはマイナスをクリックした際に、指定したステップ数の分加減算してくれます。ただし、設定されたステップ数で割り切れない値はエラーになります。たとえばステップ数を10に設定した場合、「23」みたいな10で割り切れない値はエラーになってしまいます。しかも、ご丁寧に「有効な値」を提案までした上で。</p>
+
+<p><img src="2019-08-28-10-14-41.png" alt="pic" /></p>
+
+<p>入力値を制限したいのではなく、単純に入力の手間をを省きたかっただけなのでステップ数の指定は止めました。</p>
+
+<h4 id="出力オプション">出力オプション</h4>
+
+<p><a href="https://buefy.org/documentation/switch">Switch</a>で実装する予定だったんですが、そもそもそれぞれの条件は独立していて相関性がないことを考慮すると、わざわざSwitchで実装する意味はあまりないな、と考えなおしました。最終的には<a href="https://buefy.org/documentation/checkbox">CheckBox</a>で実装してます。質実剛健。</p>
+
+<h4 id="生成と出力">生成と出力</h4>
+
+<p><a href="https://buefy.org/documentation/button">Button</a>です。これも予定通りです。</p>
+
+<h4 id="その他">その他</h4>
+
+<p><a href="https://buefy.org/documentation/tooltip">Tooltip</a>を実装しました。機能の説明はしておきたいけど、あんまり画面がごちゃごちゃするのはイマイチという場合に使い勝手の良い機能です。ただ、複数行の表示は明示的に指定する必要があって、これを忘れると画面からメッセージが飛び出ます。さすがに、勝手に出現位置を調整する、とかはしてくれませんでした。仕方ないね_(:3」∠)_</p>
+
+<p><img src="2019-08-27-16-46-28.png" alt="pic" /></p>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>とりあえずこれでUIの実装は完了です。基本的には、Buefyのドキュメントページを参照しつつ、サンプルのHTMLソースをコピーして調整すれば実装が可能です。この手間のかからない感じがいいですね。しかも<code>npm run serve</code>を実行してブラウザで参照していると、ソースの変更を察知して自動的に反映してくれるので「ソース修正→保存→ブラウザで即確認」がスムーズにできます。とてもいい感じです。</p>
+
+<p>というわけで、次回はJavaScriptでテキスト生成機能を実装したいと思います。</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>vue-cli-service: command not foundと言われたらnode_modulesを削除</title>
@@ -1251,171 +1538,6 @@ npm run serve</code></pre></div>
 <h2 id="つらい">つらい</h2>
 
 <p>つらい。</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>iPhone XRを購入して半年経った感想</title>
-			<link>https://idontwannawork.github.io/posts/apple-iphone-xr-review/</link>
-			<pubDate>Fri, 28 Jun 2019 10:18:44 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/apple-iphone-xr-review/</guid>
-			<description>もともとiPhone 6Sだった iPhone XR（以下、XR）を購入する前はiPhone 6Sを使用していました。au版を中古で買ったのですがそのままau</description>
-			<content type="html"><![CDATA[
-
-<h2 id="もともとiphone-6sだった">もともとiPhone 6Sだった</h2>
-
-<p>iPhone XR（以下、XR）を購入する前はiPhone 6Sを使用していました。au版を中古で買ったのですがそのままauショップへ持ち込みSIMロックを解除してもらって、SIMフリーとして使っていました。当時刺していたSIMはIIJのデータ通信用SIMだった・・・ような気がします（この頃はSIMカードをコロコロ変えていたものでちゃんと覚えてない・・・）。</p>
-
-<p>ところが、iPhone 6Sの発売は2015年です。さすがに発売から数年も経過してくると、バッテリーのヘタりが目立つようになります。Googleマップのナビで長距離ドライブ、とハードに使用したわけでもないのに、1日を乗り切れないくらい持ちが悪くなってきました。遠出する場合は、もちろんモバイルバッテリー持参が必須。自転車に乗る際のナビ代わりに使用したら、それはもうアメ車のガソリンメーターのように、バッテリーがモリモリ減っていきます。ある意味、見ていておもしろいですが、使う分には恐ろしくてたまりません。</p>
-
-<p>「<strong>あ、こりゃダメだ</strong>」</p>
-
-<p>そう思っていたころでちょうどiPhone XSやXRが発表されました。これ幸いとばかりに、新機種の購入を検討し始めたわけです。</p>
-
-<h2 id="なんでxrよ">なんでXRよ</h2>
-
-<p><strong>一番の理由は値段・・・</strong>。</p>
-
-<p>当初はXS購入の検討をしました。とはいえ、さすがは最上位機種であるXS。おいそれと購入できるような金額ではありません。いや、わかるんですよ、メチャクチャハイスペックなら値段も相応に高くなるっていうのは十分に理解できます。</p>
-
-<p>でもね、XSってもうちょっとしたノートPC並みの値段してますよねぇ・・・。ノートPCなら、そこそこのスペックでもドキュメント書いたり軽めなプログラムを組めたりするわけですよ。そして、そういう長文が書けるにはやっぱりキーボードが必要なわけです。いくらスマホのスペックがすごいからって、わざわざ外部キーボード買ってまでスマホで文章書こうとは思わないし、まさかフリック入力で文章なんて書いたら腱鞘炎になりかねません。</p>
-
-<p><strong>そして、XSとXRは同じチップセットを搭載しています</strong>。</p>
-
-<p>もちろん細かい仕様ではXRはしっかりと廉価版という扱いですが、それでも頭脳であるチップセットは最上位機種A12 Bionicで、XSと同等であるわけです。その上で、XSと比べれば比較的手の届く金額。</p>
-
-<p>「もうXRでいいんじゃね？」</p>
-
-<p>この2点で、XRの購入を決定しました。</p>
-
-<p><img src="IMG_0683.png" alt="pic" /></p>
-
-<p>ラッキーだったことに、当時手元にMacBook Air（2011mid）や初代iPad miniがあったため、これらを<a href="https://www.apple.com/jp/trade-in/">Appleの下取りプログラム</a>に出してApple Storeのギフト券に換えて購入資金の一部にする（うろ覚えだけど、確か3万から4万くらいにはなったような気がする）ことで、多少安くXRを購入することができました。</p>
-
-<p><img src="IMG_0682.png" alt="pic" /></p>
-
-<p>ちなみに、XRのカラーは（PRODUCT）REDにしました。ケースは<a href="https://www.amazon.co.jp/%E3%80%90Spigen%E3%80%91-%E7%B1%B3%E8%BB%8DMIL%E8%A6%8F%E6%A0%BC%E5%8F%96%E5%BE%97-%E3%82%A6%E3%83%AB%E3%83%88%E3%83%A9%E3%83%BB%E3%83%8F%E3%82%A4%E3%83%96%E3%83%AA%E3%83%83%E3%83%89-064CS24873-%E3%82%AF%E3%83%AA%E3%82%B9%E3%82%BF%E3%83%AB%E3%83%BB%E3%82%AF%E3%83%AA%E3%82%A2/dp/B07GHMQDCJ/ref=sr_1_5?keywords=spigen+iphone+xr&amp;qid=1561786517&amp;s=gateway&amp;sr=8-5">Spigenのクリアケース</a>にしました。</p>
-
-<h2 id="メリット">メリット</h2>
-
-<p>以下のメリットは、<strong>iPhone 6Sと比較してのメリットです</strong>のでご了承ください。</p>
-
-<ol>
-<li><p>大画面ゆえの情報量</p>
-
-<p>ホームボタンなしのデザインとなり、ほぼ全面で情報が見られる大画面は、一度慣れると戻れないですね。ベゼルはXSに比べると若干太いです。が、このあたりは後述したいと思います。</p>
-
-<p>画面の上部にちょこっと出っ張っているノッチの好き嫌いはあるし、一部アプリはXシリーズの画面に対応してなかったりしますけど。</p></li>
-
-<li><p>FaceIDが手軽で便利</p>
-
-<p>iPhoneを取り出し、画面を見ればすぐに操作可能。TouchIDも登場から代を重ねるにつれ高速化していきましたが、「ホームボタンを触れる」アクションはどうしても必要だったわけです。それがFaceIDになることで、そのワンアクションすら必要ではなくなりました。</p>
-
-<p>ただ、朝起きた直後の「起き抜けの顔」でFaceIDやると、必ず認証エラーになるのはなぜなんですかね・・・自分だけですかそうですか。</p></li>
-
-<li><p>軽快なレスポンス</p>
-
-<p>もともと、iPhoneとiOSでストレスを感じたことはあまりありませんが、XRでもレスポンスの良さは相変わらずです。むしろ端末本体のレスポンス云々より、回線の速度だったりサーバー側のレスポンスの方が気になるくらいです。あと、iMovieで動画ファイルを編集して書き出すときなどは、高パフォーマンスの恩恵に預かれると思います。</p>
-
-<p>スマホで撮影しただけでは味気ないから、撮影した後にちょっとした動画編集をiMovieを使って行い、ムービーを書き出す。出力が終われば、ムービーはAirDropやAirPlayで共有する・・・なんてのも、全部iPhoneで完結できますし、さらにレスポンスよく作成できます。</p>
-
-<p>YouTuber、とまでは行かなくとも子供やペットのムービーを撮って、ちょっと手間をかけて見栄え良くしたい。そんなときはiPhoneで全部できます。</p></li>
-
-<li><p>長時間持つバッテリー</p>
-
-<p>もともとの購入動機だったバッテリーですが、さすがです。動画再生だったりナビだったりで酷使してもしっかり1日持ちます。ライトな使い方をするなら、2日くらいでも十分持つんじゃないでしょうか。</p>
-
-<p>機種変更してから、モバイルバッテリーの出番がすっかりなくなりました。</p></li>
-
-<li><p>高性能カメラ</p>
-
-<p>カメラはもう気軽にパシャパシャ撮るなら、もうデジカメを持ち出すまでもないですが、背景をボカしたポートレート撮影もソフトウェア処理で撮影できるようになりました。かなりきれいに背景がボケます。</p>
-
-<p>ムービーもお馴染みのタイムラプス動画などをしっかり常備しています。</p>
-
-<p>動画・静止画ともに手軽さとクオリティを両立させていて、ポイント高いです。</p></li>
-
-<li><p>カラーバリエーションが豊富</p>
-
-<p>派手な色いいよー_(┐「ε:)_</p></li>
-
-<li><p>耐水性能と防塵性能</p>
-
-<p>水深1メートルで最大30分間の耐水性能です。XS（水深2メートルで最大30分間の耐水性能）よりは少し弱いですが、それでも十分です。</p></li>
-</ol>
-
-<h2 id="デメリット">デメリット</h2>
-
-<p>以下のデメリットは、メリットと同様に<strong>iPhone 6Sと比較してのメリットです</strong>のでご了承ください。</p>
-
-<ol>
-<li><p>デカい、厚い</p>
-
-<p>iPhone6Sと比べるので、どうしても感じざるを得ません。「デカい」の大画面とほぼ同義語なので問題ないと言えばないのですが、厚いのはちょっとどうにもならないです。端末サイズのせいで、今まで利用していたスマホケースが軒並み利用できなくなりました。いやまぁ、サイズは理解した上で買ったのですが、ケースに入りそうでギリギリ入らなかったときの絶望感と来たら・・・。</p></li>
-
-<li><p>コントロールパネルと通知センターの呼び出し方法が似すぎ</p>
-
-<p>どちらも画面の上部から下方向にスワイプするのは共通しています。異なるのは右側で行うか、中央部分で行うか。</p></li>
-
-<li><p>カメラが出っ張りすぎ</p>
-
-<p>割と前からそうでしたが、カメラがどんどん出っ張ってます。ケースを着けないのであれば、机などにポンと置くとカメラのせいで必ず不安定です。カタカタ揺れるくらいにはバッチリ不安定です。こればっかりはいただけません。</p>
-
-<p>結局、カメラの出っ張りをカバーできるような厚みのあるケースを購入しました。</p></li>
-
-<li><p>ポートレートモードはまだ発展途上</p>
-
-<p>「さっきポートレート撮影いいよ！って言ってたじゃん」と言われそうですが、すいません、手放しで喜べるほどではありません。</p>
-
-<p>多分ポートレート撮影する対象って人物だと思うのです。ところがその人物をポートレートモードで撮影すると、後れ毛のような輪郭のはっきりしないものが背景と一緒にボケてしまうため、妙に輪郭がはっきりしたヘアスタイルに写ってしまいます。要は「不自然」なのです。</p>
-
-<p>さらに、「ポートレートモード」というだけあって、<strong>人の顔が判定できないと撮影できません</strong>。なのでポートレートモードで静物は撮影できないし、ペットも撮影できません。この場合は通常の撮影モードになります。</p>
-
-<p>一眼レフカメラなどだとボケ感がレンズと撮像素子（やフィルム）とのマッチングで処理されるのですが、XRの場合はソフトウェアが処理します。そのため、どうしてもソフト側の得手不得手が出てきてしまいます。このあたりは、ソフトウェアのアップデートでクオリティーが今後向上していくでしょう。</p>
-
-<p>ただし、個人的にXRのシングルカメラはどうしてもデュアルカメラには敵わないし、一眼レフカメラなどの「専門機器」には敵わないだろうな、という感想です。</p>
-
-<p>それをわかった上で、それぞれを使い分けるのが一番賢いと思います。</p></li>
-</ol>
-
-<h2 id="ちなみに">ちなみに</h2>
-
-<p>以下の点は、自分には気にならなかった（デメリットではなかった）のですが、人によってはデメリットとなってしまう点かもしれません。</p>
-
-<ul>
-<li><p>イヤホンジャックなし</p>
-
-<p>有線のイヤホンやヘッドホンを使用する人には、結構大きいデメリットじゃないでしょうか。</p>
-
-<p>なお、自分はヘッドホンやイヤホンのコードが邪魔でキライなので、数年前からBluetoothのヘッドホンを使用しています。なので、ヘッドホンジャックなしでも特段困ることはありませんでした。最近ではAirPodのように左右のイヤホン間すらケーブルなしという機種も増えてきましたし、イヤホンジャックの非搭載は個人的に仕方のないことだと思っています。</p></li>
-
-<li><p>スクリーンショット</p>
-
-<p>XRでスクリーンショットを撮るには、サイドボタンと音量ボタンを同時に押します。端末の上部をつまむ感じです。慣れないとちょっと戸惑うかもしれません。</p></li>
-
-<li><p>ベゼル幅</p>
-
-<p>購入前に少し自分も気になっていた部分です。</p>
-
-<p>XSと比較すると、XRのベゼル幅はやはり広いと言わざる得ません。また、国内外のハイスペックAndroid機でも薄いベゼルを実装した機種が発売されていますので、比べると気になると思います。</p>
-
-<p>ただ、「比べると気になる」は「比べなければ気にならない」ので、実際のところ普段使いにはまったく影響ありませんでした。</p></li>
-
-<li><p>3D touch</p>
-
-<p>自分は残念ながら3D touchを有効活用できていなかったので、XRに非搭載でもあまり影響ありませんでした。</p></li>
-</ul>
-
-<h2 id="まとめ">まとめ</h2>
-
-<p>XRは将来性を考慮すると<strong>妥当なスマホ</strong>です。</p>
-
-<p>玉石混交のAndroidと比べると、iPhoneシリーズに割高感を感じるのは否定できません。ただ、OSのアップデートは比較的古い機種までサポートされるので、ハードの故障などがなければ購入から長く使えるのがiPhoneの利点です。またリセールバリューが高いことも利点でしょう。</p>
-
-<p>あとこれは蛇足ですが、<a href="https://developer.apple.com/videos/play/wwdc2019/604">ARKit3</a>はA12 Bionic、あるはそれ以上のチップ搭載デバイスでしか動作しません。ということは、ARで最大限楽しむ場合での最安値はXRの一択です。</p>
-
-<p>自分はこれを4年くらいは使い倒したいですが、はたして持つかどうか・・・。</p>
 ]]></content>
 		</item>
 		

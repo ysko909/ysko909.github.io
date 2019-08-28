@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+
+<meta itemprop="name" content="Vue cliとBuefyでシンプルに始めるVue.js - UIのコンポーネントを作成する">
+<meta itemprop="description" content="はじめに 前回は、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーシ">
+
+
+<meta itemprop="datePublished" content="2019-08-27T13:50:30&#43;09:00" />
+<meta itemprop="dateModified" content="2019-08-27T13:50:30&#43;09:00" />
+<meta itemprop="wordCount" content="4533">
+
+
+
+<meta itemprop="keywords" content="vuejs,buefy," />
+<meta property="og:title" content="Vue cliとBuefyでシンプルに始めるVue.js - UIのコンポーネントを作成する" />
+<meta property="og:description" content="はじめに 前回は、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーシ" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-functions/" /><meta property="article:published_time" content="2019-08-27T13:50:30&#43;09:00"/>
+<meta property="article:modified_time" content="2019-08-27T13:50:30&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Vue cliとBuefyでシンプルに始めるVue.js - UIのコンポーネントを作成する"/>
+<meta name="twitter:description" content="はじめに 前回は、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーシ"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Vue cliとBuefyでシンプルに始めるVue.js - UIのコンポーネントを作成する</title>
+	<link rel="stylesheet" href="https://idontwannawork.github.io/css/style.min.e81f50049998463da8cdbf0f848b77d9797f27f249581a236a3161d386f310db.css" integrity="sha256-6B9QBJmYRj2ozb8PhIt32Xl/J/JJWBojajFh04bzENs=">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://idontwannawork.github.io/">頑張らないために頑張る</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					<a href="https://idontwannawork.github.io/about/">About</a>
+					<a href="https://idontwannawork.github.io/posts/">Posts</a>
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<button id="toc-btn" class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://twitter.com/unknown_strings" target="_blank" rel="noopener" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/idontwannawork" target="_blank" rel="noopener" title="Github"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://codepen.io/idontwannawork/" target="_blank" rel="noopener" title="Codepen"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-codepen"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon><line x1="12" y1="22" x2="12" y2="15.5"></line><polyline points="22 8.5 12 15.5 2 8.5"></polyline><polyline points="2 15.5 12 8.5 22 15.5"></polyline><line x1="12" y1="2" x2="12" y2="8.5"></line></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://idontwannawork.github.io/about/">About</a></li>
+			<li><a href="https://idontwannawork.github.io/posts/">Posts</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Aug 27, 2019</span></div>
+				<h1>Vue cliとBuefyでシンプルに始めるVue.js - UIのコンポーネントを作成する</h1>
+			</header>
+			<div class="content">
+				
+
+<h2 id="はじめに">はじめに<a href="#はじめに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p><a href="/posts/make-dummy-text-generator-site-with-vuejs-edit-component/">前回</a>は、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーションを開発するかを確認しました。</p>
+
+<p>今回はやっとこさ、コーディングします。もう内容は見切った！もう完璧だ！（死亡フラグ）</p>
+
+<p>取っ掛かりにUI部分のコーディングをします。何はともあれ、まずは見た目です。</p>
+
+<h2 id="と-その前に">と、その前に<a href="#と-その前に" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>「そもそもどんなアプリケーション作るのよ？」ってところです。ここでは<strong>ダミーテキストを生成</strong>する機能を実装します。単純に、ちょっと今そういう機能が欲しいのです。</p>
+
+<p>ちなみに、Vue.jsに限らないと思いますが、この手のチュートリアルはToDoリストが鉄板だと思います。</p>
+
+<h2 id="コンポーネントの構成">コンポーネントの構成<a href="#コンポーネントの構成" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<h3 id="必要な項目">必要な項目<a href="#必要な項目" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>ダミーテキストジェネレータを実装するに当たって、ざっくりとどんなコンポーネント構成で実装するかを考えます。そこで、テキスト生成に必要なものはどんな機能か、ちょっと考えてみます。</p>
+
+<ul>
+<li>ダミーテキストの生成元を選択</li>
+<li>生成する文字数を指定</li>
+<li>その他オプション
+
+<ul>
+<li>各文章において改行の要否を選択</li>
+<li>英数字出力時の全角・半角を選択</li>
+<li>クリップボードへ出力結果をコピー</li>
+</ul></li>
+<li>条件はすべてお任せで一発生成</li>
+</ul>
+
+<p>こんなところでしょうか。ダミーテキストは青空文庫から入手するものとします。あと英文のダミーテキストが必要なら、<a href="https://ja.wikipedia.org/wiki/Lorem_ipsum">王道のアレ</a>ですかねぇ。</p>
+
+<p>クリップボードへのコピーは正確にはテキストの内容に影響はしませんが、単純に機能として存在するとうれしいかな、と思って実装します。だって、文字列を生成するだけなのに、その都度ボタンを押して生成されたテキストをマウスなんかで選択してコピーして・・・ってしたくありませんし。それと同じ発想で、「このボタンを押せば、条件はすべてお任せでテキスト生成できるよ」という機能も実装したいなー。</p>
+
+<p>ちなみに、意味のないただランダムに文字を並べただけの文字列が必要なシチュエーションを想定できなかったため、一応「読める文章」を生成するつもりです。なので、基本的には指定された文字数分、青空文庫の文章を切り出す感じに実装しようかと思います。適当に切り出したら文章の途中で終わっちゃうかもしれないから、その辺のケアは必要かもしれません。まぁ追々考えます。</p>
+
+<h3 id="コンポーネントの分割">コンポーネントの分割<a href="#コンポーネントの分割" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>必要があればコンポーネントを分割して疎結合にし、再利用が容易になるよう実装すべきでしょう。となると、分割できそうな、あるいは分割しても問題なさそうな部分はどのあたりかちょっと考えてみます。</p>
+
+<p>とは言ったものの、先述した機能は画面に表示されるオブジェクトとして1つのコンポーネントにまとめちゃってもいいかもしれません。もちろん、それぞれを別コンポーネントにしっかり分割する、という方法もあります。が、今回のような小規模なアプリケーションにおいては、あんまり細分化するのもイマイチだなぁと思っています。たった数行のHTMLやJavaScriptのためにいくつもコンポーネントを分割するのは、保守性の面から考えれば本末転倒です。</p>
+
+<p>というわけで、今回については1つのコンポーネントに<strong>全部乗せ</strong>することとします！（白目）あーでも、テキストの生成部分は別コンポーネントに分割するかもしれないなー・・・。</p>
+
+<p>重ねて強調しますが、規模によってコンポーネントを分割する方が絶対保守性高いから！じゃないと後で泣きを見るから！！_(:3」∠)_（経験則）</p>
+
+<h2 id="というわけで-uiの検討を">というわけで、UIの検討を<a href="#というわけで-uiの検討を" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>UIコンポーネントはBuefyを利用するつもりだったので、まずは<a href="https://buefy.org/">オフィシャル</a>のドキュメントを参考にどんなインターフェイスを実装するか検討します。</p>
+
+<h3 id="ダミーテキストの生成元の選択">ダミーテキストの生成元の選択<a href="#ダミーテキストの生成元の選択" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>これはもう<a href="https://buefy.org/documentation/radio">Radio</a>一択でしょう。いくつかある選択肢のうち、1つだけ選ぶとなればRadioで決まりです。</p>
+
+<h3 id="生成する文字数">生成する文字数<a href="#生成する文字数" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>デフォルトを100文字として、フォームに任意の数値を入力してもらう方法にしようかな・・・と思っていたら<a href="https://buefy.org/documentation/numberinput">Numberinput</a>という機能を発見。おお、これいいじゃん。ただ、デフォルトでは「＋」をクリックしたときに1しか増加しないので、「200文字出力したいから、スタートが100だとすると100回クリックすることに・・・？」ってなるからステップの調整は必須ですね。</p>
+
+<p>あるいは<a href="https://buefy.org/documentation/slider">Slider</a>でもいいかもしれません。この辺は実装してみてから使用感を比べて、どっちがいいか考えます。場合によっては両刀使いもいいかもしれません。</p>
+
+<h3 id="その他オプション">その他オプション<a href="#その他オプション" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<h4 id="各文章において改行の要否">各文章において改行の要否<a href="#各文章において改行の要否" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+
+<p>これは単純にYes/Noなので<a href="https://buefy.org/documentation/switch">Switch</a>でいいと思います。</p>
+
+<h4 id="英数字出力時の全角-半角を選択">英数字出力時の全角・半角を選択<a href="#英数字出力時の全角-半角を選択" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+
+<p>これも全角または半角のいずれかなので<a href="https://buefy.org/documentation/switch">Switch</a>でいいと思います。</p>
+
+<h4 id="必ず句点で終わる">必ず句点で終わる<a href="#必ず句点で終わる" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+
+<p>これも単純にYes/Noのいずれかなので<a href="https://buefy.org/documentation/switch">Switch</a>でいいと思います。</p>
+
+<p>この機能ですが、任意の文字数を入力させた場合、文章を最後まで生成できず途中で終わってしまう可能性があります。そこで、「句点まではテキストを生成する」条件を設定しておきます。この条件を指定すると、入力された文字数プラスαのテキストが生成されることになります。なお、英文の場合はピリオドです。実装はJavaScript側のハナシなので、今回はあくまでも見た目です。</p>
+
+<h4 id="クリップボードへのコピー">クリップボードへのコピー<a href="#クリップボードへのコピー" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+
+<p>これはもう<a href="https://buefy.org/documentation/button">ボタン</a>かな。単純に「クリップボードへコピーする」みたいな文字列だけでもいいかもしれません。が、ボタンならより見やすく「これ押せば何かしら処理するだろう」感を演出するためにも、目立つオブジェクトはあった方がいいかと。</p>
+
+<h2 id="そんなわけでコーディング">そんなわけでコーディング<a href="#そんなわけでコーディング" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>任意の名前で<code>.vue</code>ファイルを作成します。作成したvueファイルについてコーディングするとVisual Studio Code（以下vscode）が下画像のように補完してくれます。すごい助かる（小並感）</p>
+
+<p>ちなみに下画像にもあるように、<code>script</code>部分の記述にはTypeScriptを利用できます（上から2番目に<code>typescript</code>の文字が確認できますね）。ただ、今回は純粋にJavaScriptを利用しています。これは単純にいろいろ手を出しすぎると自分の頭では収集が付かなくなるからで、TypeScriptが書ける人はわざわざJavaScriptを記述する必要はないと思います。</p>
+
+<p><img src="2019-08-23-14-50-46.png" alt="pic" /></p>
+
+<h3 id="実際のコード">実際のコード<a href="#実際のコード" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>そこそこ長くなったので、折りたたみます。</p>
+
+<p><details>
+<summary>HTMLソース</summary></p>
+
+<pre><code>&lt;template&gt;
+    &lt;div id=&quot;generator&quot;&gt;
+        &lt;div class=&quot;tile is-ancestor&quot;&gt;
+            &lt;div class=&quot;tile is-parent is-6&quot;&gt;
+                &lt;div class=&quot;tile is-child box container&quot;&gt;
+                    &lt;div class=&quot;has-text-centered&quot;&gt;
+                        &lt;b-tooltip class=&quot;title is-4&quot; label=&quot;生成するテキストの引用元を選択してください。&quot; position=&quot;is-bottom&quot; dashed multilined&gt;引用元&lt;/b-tooltip&gt;
+                    &lt;/div&gt;
+                    &lt;p class=&quot;blank1em&quot;&gt;&lt;/p&gt;
+                    &lt;div class=&quot;field&quot;&gt;
+                        &lt;b-radio v-model=&quot;textName&quot;
+                            name=&quot;name&quot;
+                            native-value=&quot;Lorem Ipsum&quot;&gt;
+                            Lorem Ipsum
+                        &lt;/b-radio&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;field&quot;&gt;
+                        &lt;b-radio v-model=&quot;textName&quot;
+                            name=&quot;name&quot;
+                            native-value=&quot;Silver&quot;&gt;
+                            Silver
+                        &lt;/b-radio&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;field&quot;&gt;
+                        &lt;b-radio v-model=&quot;textName&quot;
+                            name=&quot;name&quot;
+                            native-value=&quot;Jack&quot;&gt;
+                            Jack
+                        &lt;/b-radio&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;field&quot;&gt;
+                        &lt;b-radio v-model=&quot;textName&quot;
+                            name=&quot;name&quot;
+                            native-value=&quot;Vane&quot;&gt;
+                            Vane
+                        &lt;/b-radio&gt;
+                    &lt;/div&gt;
+                    &lt;p class=&quot;radioValue&quot;&gt;
+                        &lt;b&gt;選択した元ネタ:&lt;/b&gt;
+                        {{ textName }}
+                    &lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;tile is-parent is-6&quot;&gt;
+                &lt;div class=&quot;tile is-child box&quot;&gt;
+                    &lt;div class=&quot;has-text-centered&quot;&gt;
+                        &lt;b-tooltip class=&quot;title is-4&quot; label=&quot;生成したい文字数を入力、またはスライドバーで選択してください。&quot; position=&quot;is-bottom&quot; dashed multilined&gt;出力する文字数&lt;/b-tooltip&gt;
+                    &lt;/div&gt;
+                    &lt;p class=&quot;blank2em&quot;&gt;&lt;/p&gt;
+                    &lt;b-field&gt;
+                        &lt;b-numberinput v-model=&quot;textNumber&quot; rounded controls-rounded&gt;
+                        &lt;/b-numberinput&gt;
+                    &lt;/b-field&gt;
+
+                    &lt;b-field&gt;
+                        &lt;b-slider v-model=&quot;textNumber&quot; max=&quot;300&quot;&gt;&lt;/b-slider&gt;
+                    &lt;/b-field&gt;
+                    &lt;p class=&quot;numberValue&quot;&gt;
+                        &lt;b&gt;文字数:&lt;/b&gt;
+                        {{ textNumber }}
+                    &lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;tile is-ancestor&quot;&gt;
+            &lt;div class=&quot;tile is-parent is-6&quot;&gt;
+                &lt;div class=&quot;tile is-child box&quot;&gt;
+                    &lt;div class=&quot;has-text-centered&quot;&gt;
+                        &lt;b-tooltip class=&quot;title is-4&quot; label=&quot;出力する際の条件を設定してください。&quot; position=&quot;is-bottom&quot; dashed multilined&gt;出力オプション&lt;/b-tooltip&gt;
+                    &lt;/div&gt;
+                    &lt;p class=&quot;blank1em&quot;&gt;&lt;/p&gt;
+                    &lt;div class=&quot;field&quot;&gt;
+                        &lt;b-checkbox v-model=&quot;selecedOptions&quot;
+                            native-value=&quot;Silverhoge&quot;&gt;
+                            Silverhoge
+                        &lt;/b-checkbox&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;field&quot;&gt;
+                        &lt;b-checkbox v-model=&quot;selecedOptions&quot;
+                            native-value=&quot;Flinthoge&quot;&gt;
+                            Flinthoge
+                        &lt;/b-checkbox&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;field&quot;&gt;
+                        &lt;b-checkbox v-model=&quot;selecedOptions&quot;
+                            native-value=&quot;Vanehoge&quot;&gt;
+                            Vanehoge
+                        &lt;/b-checkbox&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;field&quot;&gt;
+                        &lt;b-checkbox v-model=&quot;selecedOptions&quot;
+                            native-value=&quot;Billyhoge&quot;&gt;
+                            Billyhoge
+                        &lt;/b-checkbox&gt;
+                    &lt;/div&gt;
+                    &lt;p class=&quot;content&quot;&gt;
+                        &lt;b&gt;Selection:&lt;/b&gt;
+                        {{ selecedOptions }}
+                    &lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;tile is-parent is-6&quot;&gt;
+                &lt;div class=&quot;tile is-child box&quot;&gt;
+                    &lt;div class=&quot;has-text-centered&quot;&gt;
+                        &lt;b-tooltip class=&quot;title is-4&quot; label=&quot;テキストを生成してクリップボードへコピーします。&quot; position=&quot;is-bottom&quot; dashed multilined&gt;テキスト生成&lt;/b-tooltip&gt;
+                    &lt;/div&gt;
+                    &lt;p class=&quot;blank5em&quot;&gt;&lt;/p&gt;
+                    &lt;div class=&quot;has-text-centered&quot;&gt;
+                        &lt;b-button size=&quot;is-medium&quot; icon-left=&quot;clipboard-text&quot; @click=&quot;alert&quot;&gt;テキスト生成する&lt;/b-button&gt;
+                    &lt;/div&gt;
+                    &lt;h1&gt;{{ msg }}&lt;/h1&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;p class=&quot;blank1em&quot;&gt;&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+</code></pre>
+
+<p></details></p>
+
+<h3 id="uiの実装について">UIの実装について<a href="#uiの実装について" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<h4 id="配置">配置<a href="#配置" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+
+<p>それぞれの配置は<a href="https://bulma.io/documentation/layout/tiles/">Tiles</a>で調整することにしました。これならPCで見てもモバイルで見ても問題ありません。</p>
+
+<p><img src="2019-08-27-16-30-01.png" alt="pic" /></p>
+
+<p><a href="https://bulma.io/documentation/columns/basics/">Grid</a>でもいいんじゃね？ってところなんですが、Tilesだと各要素の縦横サイズを自由に変更できます。この自由度の高さとタグの記述量でTilesを今回は採用しました。まぁ、結果から言えば縦横のサイズを変更する必要がなくなっちゃったんですけどね・・・_(:3」∠)_</p>
+
+<p><img src="2019-08-27-16-36-56.png" alt="pic" /></p>
+
+<p>ちなみに<a href="https://bulma.io/documentation/layout/tiles/">Tiles</a>は入れ子構造になのですが、単純に子タイルを並べるとタイルの間に隙間がありません。これで問題がないならいいのですが、今回はレイアウト的に隙間が欲しかったので、1つの親タイルに対し子タイルを1つのみ指定するようにしました。このように記述することで隙間の空いた配置を実装できます。</p>
+
+<p>実際にコードのコードは下記を参照してみてください。</p>
+
+<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="MWgmBye" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="Buefy-Tiles">
+  <span>See the Pen <a href="https://codepen.io/idontwannawork/pen/MWgmBye/">
+  Buefy-Tiles</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p>
+
+<h4 id="引用元">引用元<a href="#引用元" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+
+<p>予定通り<a href="https://buefy.org/documentation/radio">Radio</a>で作成しました。</p>
+
+<h4 id="文字数">文字数<a href="#文字数" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+
+<p><a href="https://buefy.org/documentation/numberinput">Numberinput</a>と<a href="https://buefy.org/documentation/slider">Slider</a>の併用で実装しました。細かい調整はNumberinputのボタンで、ざっくりとした調整はSliderでできます。もちろん、スマホなどでも問題ありません。それぞれのオブジェクトで同じデータをバインドしているので、片方で値を調整するともう片方も自動的に反映されます。</p>
+
+<p>ちなみにステップ数を設定すると、Numberinputのプラスあるいはマイナスをクリックした際に、指定したステップ数の分加減算してくれます。ただし、設定されたステップ数で割り切れない値はエラーになります。たとえばステップ数を10に設定した場合、「23」みたいな10で割り切れない値はエラーになってしまいます。しかも、ご丁寧に「有効な値」を提案までした上で。</p>
+
+<p><img src="2019-08-28-10-14-41.png" alt="pic" /></p>
+
+<p>入力値を制限したいのではなく、単純に入力の手間をを省きたかっただけなのでステップ数の指定は止めました。</p>
+
+<h4 id="出力オプション">出力オプション<a href="#出力オプション" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+
+<p><a href="https://buefy.org/documentation/switch">Switch</a>で実装する予定だったんですが、そもそもそれぞれの条件は独立していて相関性がないことを考慮すると、わざわざSwitchで実装する意味はあまりないな、と考えなおしました。最終的には<a href="https://buefy.org/documentation/checkbox">CheckBox</a>で実装してます。質実剛健。</p>
+
+<h4 id="生成と出力">生成と出力<a href="#生成と出力" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+
+<p><a href="https://buefy.org/documentation/button">Button</a>です。これも予定通りです。</p>
+
+<h4 id="その他">その他<a href="#その他" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+
+<p><a href="https://buefy.org/documentation/tooltip">Tooltip</a>を実装しました。機能の説明はしておきたいけど、あんまり画面がごちゃごちゃするのはイマイチという場合に使い勝手の良い機能です。ただ、複数行の表示は明示的に指定する必要があって、これを忘れると画面からメッセージが飛び出ます。さすがに、勝手に出現位置を調整する、とかはしてくれませんでした。仕方ないね_(:3」∠)_</p>
+
+<p><img src="2019-08-27-16-46-28.png" alt="pic" /></p>
+
+<h2 id="おわりに">おわりに<a href="#おわりに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<p>とりあえずこれでUIの実装は完了です。基本的には、Buefyのドキュメントページを参照しつつ、サンプルのHTMLソースをコピーして調整すれば実装が可能です。この手間のかからない感じがいいですね。しかも<code>npm run serve</code>を実行してブラウザで参照していると、ソースの変更を察知して自動的に反映してくれるので「ソース修正→保存→ブラウザで即確認」がスムーズにできます。とてもいい感じです。</p>
+
+<p>というわけで、次回はJavaScriptでテキスト生成機能を実装したいと思います。</p>
+
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/vuejs">vuejs</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/buefy">buefy</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>4533 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-08-27 04:50 &#43;0000</p>
+			</footer>
+		</article>
+		<aside id="toc">
+			<div class="toc-title">Table of Contents</div>
+			<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#はじめに">はじめに</a></li>
+<li><a href="#と-その前に">と、その前に</a></li>
+<li><a href="#コンポーネントの構成">コンポーネントの構成</a>
+<ul>
+<li><a href="#必要な項目">必要な項目</a></li>
+<li><a href="#コンポーネントの分割">コンポーネントの分割</a></li>
+</ul></li>
+<li><a href="#というわけで-uiの検討を">というわけで、UIの検討を</a>
+<ul>
+<li><a href="#ダミーテキストの生成元の選択">ダミーテキストの生成元の選択</a></li>
+<li><a href="#生成する文字数">生成する文字数</a></li>
+<li><a href="#その他オプション">その他オプション</a>
+<ul>
+<li><a href="#各文章において改行の要否">各文章において改行の要否</a></li>
+<li><a href="#英数字出力時の全角-半角を選択">英数字出力時の全角・半角を選択</a></li>
+<li><a href="#必ず句点で終わる">必ず句点で終わる</a></li>
+<li><a href="#クリップボードへのコピー">クリップボードへのコピー</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#そんなわけでコーディング">そんなわけでコーディング</a>
+<ul>
+<li><a href="#実際のコード">実際のコード</a></li>
+<li><a href="#uiの実装について">UIの実装について</a>
+<ul>
+<li><a href="#配置">配置</a></li>
+<li><a href="#引用元">引用元</a></li>
+<li><a href="#文字数">文字数</a></li>
+<li><a href="#出力オプション">出力オプション</a></li>
+<li><a href="#生成と出力">生成と出力</a></li>
+<li><a href="#その他">その他</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#おわりに">おわりに</a></li>
+</ul></li>
+</ul>
+</nav>
+		</aside>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://idontwannawork.github.io/posts/fix-vue-cli-service-command-not-found-error/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>vue-cli-service: command not foundと言われたらnode_modulesを削除</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "come-as-you-are" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2019 <a href="https://idontwannawork.github.io/">Tetsuya Katsuragi</a> Allrights reserved.</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://idontwannawork.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+	<script src="https://idontwannawork.github.io/js/main.min.784417f5847151f848c339cf0acb13a06cbb648b1483435a28ed4556c4ead69b.js" integrity="sha256-eEQX9YRxUfhIwznPCssToGy7ZIsUg0NaKO1FVsTq1ps="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>

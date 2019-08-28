@@ -6,10 +6,19 @@
     <description>Recent content in Vuejs on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Fri, 23 Aug 2019 20:59:07 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 27 Aug 2019 13:50:30 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/vuejs/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Vue cliとBuefyでシンプルに始めるVue.js - UIのコンポーネントを作成する</title>
+      <link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-functions/</link>
+      <pubDate>Tue, 27 Aug 2019 13:50:30 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-functions/</guid>
+      <description>はじめに 前回は、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーシ</description>
+    </item>
     
     <item>
       <title>vue-cli-service: command not foundと言われたらnode_modulesを削除</title>

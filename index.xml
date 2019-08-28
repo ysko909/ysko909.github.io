@@ -6,10 +6,19 @@
     <description>Recent content on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Fri, 23 Aug 2019 20:59:07 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 27 Aug 2019 13:50:30 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Vue cliとBuefyでシンプルに始めるVue.js - UIのコンポーネントを作成する</title>
+      <link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-functions/</link>
+      <pubDate>Tue, 27 Aug 2019 13:50:30 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-functions/</guid>
+      <description>はじめに 前回は、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーシ</description>
+    </item>
     
     <item>
       <title>vue-cli-service: command not foundと言われたらnode_modulesを削除</title>
@@ -90,15 +99,6 @@
       
       <guid>https://idontwannawork.github.io/posts/why-are-there-few-articles-of-java/</guid>
       <description>はじめに とある事情でJavaとJavaEE（今はJakartaEEか）を使用しないといけなくなってしまって、それはそれはさんざんな目にあった</description>
-    </item>
-    
-    <item>
-      <title>iPhone XRを購入して半年経った感想</title>
-      <link>https://idontwannawork.github.io/posts/apple-iphone-xr-review/</link>
-      <pubDate>Fri, 28 Jun 2019 10:18:44 +0900</pubDate>
-      
-      <guid>https://idontwannawork.github.io/posts/apple-iphone-xr-review/</guid>
-      <description>もともとiPhone 6Sだった iPhone XR（以下、XR）を購入する前はiPhone 6Sを使用していました。au版を中古で買ったのですがそのままau</description>
     </item>
     
   </channel>
