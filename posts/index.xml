@@ -11,10 +11,10 @@
 		
 		<item>
 			<title>Vue cliとBuefyでシンプルに始めるVue.js - UIのコンポーネントを作成する</title>
-			<link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-functions/</link>
+			<link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-ui/</link>
 			<pubDate>Tue, 27 Aug 2019 13:50:30 +0900</pubDate>
 			
-			<guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-functions/</guid>
+			<guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-ui/</guid>
 			<description>はじめに 前回は、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーシ</description>
 			<content type="html"><![CDATA[
 
