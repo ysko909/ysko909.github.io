@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://idontwannawork.github.io/posts/make-background-gradation-with-css/</loc>
+    <lastmod>2019-08-30T10:10:16+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-ui/</loc>
     <lastmod>2019-08-27T13:50:30+09:00</lastmod>
   </url>
@@ -172,6 +177,12 @@
   </url>
   
   <url>
+    <loc>https://idontwannawork.github.io/tags/css/</loc>
+    <lastmod>2019-08-30T10:10:16+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/tags/docker/</loc>
     <lastmod>2019-07-04T13:58:10+09:00</lastmod>
     <priority>0</priority>
@@ -245,7 +256,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/posts/</loc>
-    <lastmod>2019-08-27T13:50:30+09:00</lastmod>
+    <lastmod>2019-08-30T10:10:16+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -317,7 +328,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/</loc>
-    <lastmod>2019-08-27T13:50:30+09:00</lastmod>
+    <lastmod>2019-08-30T10:10:16+09:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -6,8 +6,61 @@
 		<description>Recent content in Posts on 頑張らないために頑張る</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Tue, 27 Aug 2019 13:50:30 +0900</lastBuildDate>
+		<lastBuildDate>Fri, 30 Aug 2019 10:10:16 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>CSSで背景をグラデーションにする</title>
+			<link>https://idontwannawork.github.io/posts/make-background-gradation-with-css/</link>
+			<pubDate>Fri, 30 Aug 2019 10:10:16 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/make-background-gradation-with-css/</guid>
+			<description>はじめに CSSでグラデーションを背景に、かつ固定する書き方についてです。 コード html,body { height: 100% } body:after { position: fixed; top: 0; left: 0; width: 100%; height: 100%; content: &amp;#34;&amp;#34;; z-index: -1; background: linear-gradient(to right bottom, #5dc4cb, #4ad8c6, #60e9b0, #92f78e, #d0ff66)fixed; }</description>
+			<content type="html"><![CDATA[
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>CSSでグラデーションを背景に、かつ固定する書き方についてです。</p>
+
+<h2 id="コード">コード</h2>
+<div class="highlight"><pre class="chroma"><code class="language-CSS" data-lang="CSS"><span class="nt">html</span><span class="o">,</span><span class="nt">body</span> <span class="p">{</span>
+
+    <span class="k">height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span>
+    
+<span class="p">}</span>
+
+<span class="nt">body</span><span class="p">:</span><span class="nd">after</span> <span class="p">{</span>
+
+    <span class="k">position</span><span class="p">:</span> <span class="kc">fixed</span><span class="p">;</span>
+    <span class="k">top</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span> <span class="k">left</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span> <span class="k">height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+    <span class="k">content</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">;</span>
+    <span class="k">z-index</span><span class="p">:</span> <span class="mi">-1</span><span class="p">;</span>
+    <span class="k">background</span><span class="p">:</span> <span class="nb">linear-gradient</span><span class="p">(</span><span class="kc">to</span> <span class="kc">right</span> <span class="kc">bottom</span><span class="p">,</span> <span class="mh">#5dc4cb</span><span class="p">,</span> <span class="mh">#4ad8c6</span><span class="p">,</span> <span class="mh">#60e9b0</span><span class="p">,</span> <span class="mh">#92f78e</span><span class="p">,</span> <span class="mh">#d0ff66</span><span class="p">)</span><span class="kc">fixed</span><span class="p">;</span>
+    
+<span class="p">}</span></code></pre></div>
+<h2 id="詳細">詳細</h2>
+
+<p>とりあえず高さは画面いっぱいにしておきたいので、<code>height: 100%</code>を指定。次の<code>body:after</code>の部分はあまり必要ない部分なのだけど、<code>body</code>に直書きだとiOSで背景が固定されないので、疑似要素を<code>fixed</code>で画面全体に背景として配置してグラデーションを記述しています。</p>
+
+<p>なお、<code>linear-gradient</code>の数値を変更するには<a href="https://mycolor.space/gradient">ジェネレーター</a>を使用するのが手っ取り早いのでオススメ。</p>
+
+<h2 id="動作サンプル">動作サンプル</h2>
+
+<p>codepen上で確認してみます。</p>
+
+<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="mYLpbd" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="webpage sample">
+  <span>See the Pen <a href="https://codepen.io/idontwannawork/pen/mYLpbd/">
+  webpage sample</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script></p>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>背景に限らずグラデーションは重宝するので、使い方を覚えておきたいものです。</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>Vue cliとBuefyでシンプルに始めるVue.js - UIのコンポーネントを作成する</title>
@@ -1360,184 +1413,6 @@ npm run serve</code></pre></div>
 <h2 id="まとめ">まとめ</h2>
 
 <p>Pythonに引き続き、Vue.jsもDockerで環境構築してみましたが、ローカルを汚さない・いざとなったら潰して新しく作ればいいってのはホントに気軽でいいですね。あとはコーディングするだけです（血涙</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>なんでJavaの記事って少ないの？</title>
-			<link>https://idontwannawork.github.io/posts/why-are-there-few-articles-of-java/</link>
-			<pubDate>Sun, 30 Jun 2019 16:40:00 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/why-are-there-few-articles-of-java/</guid>
-			<description>はじめに とある事情でJavaとJavaEE（今はJakartaEEか）を使用しないといけなくなってしまって、それはそれはさんざんな目にあった</description>
-			<content type="html"><![CDATA[
-
-<h2 id="はじめに">はじめに</h2>
-
-<p>とある事情でJavaとJavaEE（今はJakartaEEか）を使用しないといけなくなってしまって、それはそれはさんざんな目にあった（あっている）。</p>
-
-<p>そんな中で気づいたのだが、<strong>Javaって記事少なくない？</strong>ということ。</p>
-
-<h2 id="どういうこと">どういうこと？</h2>
-
-<p>JavaはブログのエントリーでもQiitaの記事でも、とにかく知名度の割りに数が少ない。検索してもエラい昔のエントリーがしれっと上位に表示される始末で、ホントに苦労した（している）。とくにJavaEEに関して言うと、例のEclipseへ移管されるニュースの方が検索上位に来てしまい、知りたい情報が埋没する。JSFについて調べたいなーと思ったら<a href="https://www.google.com/search?q=jsf&amp;ie=UTF-8">2013年の記事が検索上位にしれっと</a>紛れ込んできた。</p>
-
-<p><a href="https://www.codingdojo.com/blog/the-7-most-in-demand-programming-languages-of-2019">仕事の多いプログラミング言語の1位はJava</a>だそうだ。これはここ最近いきなり増加したわけじゃなく、何年も昔から同じ傾向だった。むしろ、Androidの開発はKotlinが普及する前はJavaで行われていたのだから、当然の結果と言える。それでもこの結果。</p>
-
-<p>どういうことだ。Javaに関する記事書いたら、黒服の男たちに記事ごと投稿者も消されるジンクスでもあるのか。東方算法騎士団もびっくりだぞ。</p>
-
-<h2 id="記事数を調べる">記事数を調べる</h2>
-
-<h3 id="qiita">Qiita</h3>
-
-<p>Qiitaでタグ検索すると、それぞれ下記のような結果になった。なお調べたのは2019年6月13日なので、下記の記事数はその時点でのものだ。</p>
-
-<table>
-<thead>
-<tr>
-<th align="center">名称</th>
-<th align="center">記事数</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td align="center">Java</td>
-<td align="center"><a href="https://qiita.com/tags/java">12022記事</a></td>
-</tr>
-
-<tr>
-<td align="center">Python</td>
-<td align="center"><a href="https://qiita.com/tags/python">28170記事</a></td>
-</tr>
-
-<tr>
-<td align="center">JavaScript</td>
-<td align="center"><a href="https://qiita.com/tags/javascript">26033記事</a></td>
-</tr>
-
-<tr>
-<td align="center">Ruby</td>
-<td align="center"><a href="https://qiita.com/tags/ruby">21669記事</a></td>
-</tr>
-
-<tr>
-<td align="center">PHP</td>
-<td align="center"><a href="https://qiita.com/tags/php">15987記事</a></td>
-</tr>
-
-<tr>
-<td align="center">Go</td>
-<td align="center"><a href="https://qiita.com/tags/go">6035記事</a></td>
-</tr>
-
-<tr>
-<td align="center">golang</td>
-<td align="center"><a href="https://qiita.com/tags/golang">2899記事</a></td>
-</tr>
-
-<tr>
-<td align="center">C#</td>
-<td align="center"><a href="https://qiita.com/tags/csharp">7342記事</a></td>
-</tr>
-</tbody>
-</table>
-
-<p>順不同。Goとgolangで別タグになっているのはちょっとよくわからない。</p>
-
-<p>ちなみに<a href="https://qiita.com/tags/javaee">JavaEEに至ってはたった217記事</a>だ。</p>
-
-<p>あくまでタグでの検索結果なのでノイズがそこそこあると思う。それでもPythonの突出具合はスゴい・・・のではなく、Javaの記事数が少ないのだ。Python（1991年発表）はJavaの先輩だが、RubyやPHPはほぼ同期（1995年発表）だ。なのにこの差。Python、JavaScriptにはダブルスコア以上の差がある。Rubyとも、ダブルスコアまで行かなくても、1.8倍だ。だいぶ後輩のGo（golang）やC#はさすがにJavaに及ばなかったが、もう数年頑張れば記事数も逆転できるんじゃない？というくらいの差だ。</p>
-
-<p>やっぱり少なくないか？Java。</p>
-
-<h3 id="stackoverflow">stackoverflow</h3>
-
-<p>stackoverflowでも各言語でタグ検索してみた。</p>
-
-<table>
-<thead>
-<tr>
-<th align="center">名称</th>
-<th align="center">記事数</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td align="center">Java</td>
-<td align="center"><a href="https://stackoverflow.com/questions/tagged/java">1556934</a></td>
-</tr>
-
-<tr>
-<td align="center">Python</td>
-<td align="center"><a href="https://stackoverflow.com/questions/tagged/python">1187632</a></td>
-</tr>
-
-<tr>
-<td align="center">JavaScript</td>
-<td align="center"><a href="https://stackoverflow.com/questions/tagged/javascript">1823840</a></td>
-</tr>
-
-<tr>
-<td align="center">Ruby</td>
-<td align="center"><a href="https://stackoverflow.com/questions/tagged/ruby">205187</a></td>
-</tr>
-
-<tr>
-<td align="center">PHP</td>
-<td align="center"><a href="https://stackoverflow.com/questions/tagged/php">1289292</a></td>
-</tr>
-
-<tr>
-<td align="center">Go</td>
-<td align="center"><a href="https://stackoverflow.com/questions/tagged/go">38620</a></td>
-</tr>
-
-<tr>
-<td align="center">C#</td>
-<td align="center"><a href="https://stackoverflow.com/questions/tagged/c%23">1319866</a></td>
-</tr>
-</tbody>
-</table>
-
-<p>こちらではJavaとPythonが逆転しているが、言うほどの極端な差はない。C#の質問数が結構多いのが気になる。</p>
-
-<p>Qiitaでの結果と同様にあくまでタグでの検索結果なので、完全に精緻ではないがJava・JavaScript・C#が頭一つ抜きん出ている感じ。それでもJavaはJavaScriptに質問数で負けている。</p>
-
-<p>やっぱり少なくないか？Java。</p>
-
-<h2 id="google">Google</h2>
-
-<p>Googleでの検索結果はそりゃもうめちゃくちゃ多くヒットするが、プログラミング言語以外の「Java」も引っかかってくるためヒット数の調査はしなかった。</p>
-
-<p>ただし、体感として「あー、これわからないなー」っていうときに調べて、パッと答えが出てくるのはPythonやJavaScriptが多い気がする（個人の感想なのであまり保障はできないが）。Javaは調べて一応解決するが、その元ネタがブログとかでなくどっかのホスティングサイトで、しかも歴史を感じさせるHTMLだったのは特筆すべきこと・・・なんだろうか。</p>
-
-<h2 id="qrunch">Qrunch</h2>
-
-<p>まだサービスが比較的生まれたばかりなので記事数を出すのは不平等かな、とは思うがやっぱりQrunchでも同様の結果だった。Java、少ない・・・。</p>
-
-<h2 id="考察-してもしょうがない">考察（してもしょうがない）</h2>
-
-<p><strong>さっぱりわからない</strong>。</p>
-
-<p>案件数が多く、現在Javaで動いているシステムもあり、モバイルアプリケーションもガラケーのころからJavaでの実装が多かった。それでこの記事数？って感じ。</p>
-
-<p>社内規定上、たとえ一部だったとしてもJavaのソースコードを外部に晒すことができなかったとか、そういう理由でもないと納得できないのだ。いくら大昔にブログやTwitterはなかっただろ？と言われても、PythonやPHPがゴリゴリ記事を書かれているに、Javaがそうならない理由がよくわからない。</p>
-
-<p>初心者向けじゃないのかな？と一瞬考えた。だが、よく「初心者向けな言語は？」みたいなページでは、いろんな理由でPythonを薦めてりするがJavaだって同様に推されている。機械学習したいからPythonの記事が多いのかなとも思ったが、さすがにプログラミングを始めるみんなが機械学習に興味があるとも思えない（ゲームだとUnityあたりとかなんだろうけど）。むしろ軽くバブルっぽかったモバイルアプリケーションは長らく主流がJavaだったのだから、少なくともこんなに体感的に少なく感じることはないはずなのだが。Javaを書く人たちはアウトプット志向ではない、とでも言うのか。</p>
-
-<h2 id="まとめ-まとまってない">まとめ（まとまってない）</h2>
-
-<p>記事が多ければいい、というわけではもちろんない。記事が多ければ、相対的にノイズも多くなるだろうし間違った記事も多くなるだろう。それでも、記事が多くなれば相対的に正解もまた多くなる。同じことを言っている記事がたくさんあるなら、それは正解なのだと判断できるようになる。</p>
-
-<p>そういう現状のを見るに、Javaには記事を書かないor書かせない力でも働いてるのだろうか？と思ってしまう。</p>
-
-<p>それとも「わざわざ記事にしなくても、Javaなんか一目見てわかるだろ言わせんな恥ずかしい」ってことなんだろうか。</p>
-
-<h2 id="つらい">つらい</h2>
-
-<p>つらい。</p>
 ]]></content>
 		</item>
 		

@@ -6,10 +6,19 @@
     <description>Recent content on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Tue, 27 Aug 2019 13:50:30 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 30 Aug 2019 10:10:16 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>CSSで背景をグラデーションにする</title>
+      <link>https://idontwannawork.github.io/posts/make-background-gradation-with-css/</link>
+      <pubDate>Fri, 30 Aug 2019 10:10:16 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/make-background-gradation-with-css/</guid>
+      <description>はじめに CSSでグラデーションを背景に、かつ固定する書き方についてです。 コード html,body { height: 100% } body:after { position: fixed; top: 0; left: 0; width: 100%; height: 100%; content: &amp;#34;&amp;#34;; z-index: -1; background: linear-gradient(to right bottom, #5dc4cb, #4ad8c6, #60e9b0, #92f78e, #d0ff66)fixed; }</description>
+    </item>
     
     <item>
       <title>Vue cliとBuefyでシンプルに始めるVue.js - UIのコンポーネントを作成する</title>
@@ -90,15 +99,6 @@
       
       <guid>https://idontwannawork.github.io/posts/build-environment-of-vuejs-with-docker/</guid>
       <description>概要 フロントの勉強としてVue.jsの開発環境を整備するときに、せっかくなのでDockerを使って環境を構築してみました。 環境 macOS Mojave 10.14.5 Docker version 18.09.2 Visual</description>
-    </item>
-    
-    <item>
-      <title>なんでJavaの記事って少ないの？</title>
-      <link>https://idontwannawork.github.io/posts/why-are-there-few-articles-of-java/</link>
-      <pubDate>Sun, 30 Jun 2019 16:40:00 +0900</pubDate>
-      
-      <guid>https://idontwannawork.github.io/posts/why-are-there-few-articles-of-java/</guid>
-      <description>はじめに とある事情でJavaとJavaEE（今はJakartaEEか）を使用しないといけなくなってしまって、それはそれはさんざんな目にあった</description>
     </item>
     
   </channel>
