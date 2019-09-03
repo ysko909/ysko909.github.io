@@ -6,8 +6,299 @@
 		<description>Recent content in Posts on 頑張らないために頑張る</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Fri, 30 Aug 2019 10:10:16 +0900</lastBuildDate>
+		<lastBuildDate>Mon, 02 Sep 2019 16:08:20 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>Vue cliとBuefyでシンプルに始めるVue.js - テキスト生成の機能を実装してデプロイまで</title>
+			<link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-function/</link>
+			<pubDate>Mon, 02 Sep 2019 16:08:20 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-function/</guid>
+			<description>はじめに 前回は、とりあえず見た目のコンポーネントを実装しました。今回はテキストを生成する機能を実装してデプロイまでしてしまいます。後述します</description>
+			<content type="html"><![CDATA[
+
+<h2 id="はじめに">はじめに</h2>
+
+<p><a href="/posts/make-dummy-text-generator-site-with-vuejs-add-ui/">前回</a>は、とりあえず見た目のコンポーネントを実装しました。今回はテキストを生成する機能を実装してデプロイまでしてしまいます。後述しますがデプロイ先はGitHub Pagesです。便利ですよね。</p>
+
+<h2 id="今回の成果物">今回の成果物</h2>
+
+<p><a href="https://idontwannawork.github.io/dummytextgenerator/">こちら</a>です。</p>
+
+<h2 id="vue-jsのオフィシャルを参考に">Vue.jsのオフィシャルを参考に</h2>
+
+<p>機能を実装するにあたっては何はともあれ、まずは<a href="https://jp.vuejs.org/v2/guide/">Vue.jsのガイド</a>を読みます。とくに<a href="https://jp.vuejs.org/v2/guide/components.html">コンポーネント</a>の部分はよく参照することになると思います。自分はここを見つつソースの編集をしてました。</p>
+
+<h2 id="実際書いたソース">実際書いたソース</h2>
+
+<p>結構長いので折りたたみます。</p>
+
+<p><details>
+<summary>JavaScriptのソース</summary></p>
+
+<pre><code>&lt;template&gt;
+&lt;div&gt;
+    &lt;b-button
+    size=&quot;is-medium&quot;
+    v-bind:icon-left=&quot;buttonIcon&quot;
+    @click=&quot;generateText(quoteTextname, outputNumber, genOptions)&quot;
+    &gt;{{ buttonMsg }}&lt;/b-button&gt;
+&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+name: &quot;GenerateText&quot;,
+props: {
+    buttonMsg: {
+    type: String,
+    required: true
+    },
+    buttonIcon: {
+    type: String,
+    required: true
+    },
+    quoteTextname: {
+    type: String,
+    required: true
+    },
+    outputNumber: {
+    type: Number,
+    required: true
+    },
+    genOptions: {
+    type: Array,
+    required: false
+    }
+},
+methods: {
+    generateText: function(quoteTextname, outputNumber, genOptions) {
+    // コピーのコマンドに対応しているか確認する
+    if (document.queryCommandSupported(&quot;copy&quot;)) {
+        // テキスト生成する元ネタから指定された数の分だけ文字列を切り出す
+        this.quoteTexts.forEach(quoteText =&gt; {
+        if (quoteTextname === quoteText[0]) {
+            this.returnText = quoteText[1].slice(0, outputNumber);
+        }
+        });
+
+        // 指定されたオプションに従って文字列を編集する
+        if (genOptions.length &gt; 0) {
+            const breakChar = &quot;\n&quot;;
+            let periodChar = &quot;。&quot;;
+            if (quoteTextname === &quot;Lorem&quot;) {
+                periodChar = &quot;. &quot;;
+            }
+
+            if (genOptions.find(genOption =&gt; genOption === &quot;needBreak&quot;)){
+                // 改行を付与する
+                this.returnText = this.returnText.split(periodChar).join(periodChar + breakChar);
+            }
+
+            if (genOptions.find(genOption =&gt; genOption === &quot;makeWide&quot;)){
+                // 全角に変換する
+                this.returnText = this.returnText.replace(/[A-Za-z0-9]/g, function(s) {
+                    return String.fromCharCode(s.charCodeAt(0) + 65248);
+                });
+            }
+
+            if (genOptions.find(genOption =&gt; genOption === &quot;endWithPeriod&quot;)){
+                // 句点あるいはピリオドで終わるよう編集する
+                const lastPeriodIndex = this.returnText.lastIndexOf(periodChar) + 1;
+                this.returnText = this.returnText.slice(0, lastPeriodIndex);
+            }
+
+            if (genOptions.find(genOption =&gt; genOption === &quot;addPtag&quot;)){
+                // 文章ごとにPタグを付与する
+                if (genOptions.find(genOption =&gt; genOption === &quot;needBreak&quot;)){
+                    // 改行コード付与済みの場合は、Pタグを付与後再度改行コードを付与する
+                    const splitedByBreak = this.returnText.split(breakChar);
+                    this.returnText = &quot;&quot;;
+                    splitedByBreak.forEach(word =&gt; {
+                        this.returnText = this.returnText + &quot;&lt;p&gt;&quot; + word + &quot;&lt;/p&gt;&quot; + breakChar;
+                    });
+                } else {
+                    const splitedByPeriod = this.returnText.split(periodChar);
+                    this.returnText = &quot;&quot;;
+                    splitedByPeriod.forEach(word =&gt; {
+                        this.returnText = this.returnText + &quot;&lt;p&gt;&quot; + word + periodChar + &quot;&lt;/p&gt;&quot;;
+                    });
+                }
+            }
+        }
+
+        // コピー実行の下準備として新規のテキストエリアを生成し配置する
+        const copyFrom = document.createElement(&quot;textarea&quot;);
+        copyFrom.textContent = this.returnText;
+        const bodyElm = document.getElementsByTagName(&quot;body&quot;)[0];
+        bodyElm.appendChild(copyFrom);
+
+        // テキストをクリップボードにコピーしてテキストエリアは破棄する
+        copyFrom.select();
+        const retVal = document.execCommand(&quot;copy&quot;);
+        bodyElm.removeChild(copyFrom);
+
+        // 正常に終わった旨を表示する
+        this.$buefy.toast.open({
+            message: &quot;クリップボードにコピーしました！&quot;,
+            type: &quot;is-success&quot;
+        });
+
+        this.$emit(&quot;child-event&quot;, this.returnText + retVal);
+    } else {
+        // コピー機能にブラウザが未対応または無効ならエラーメッセージを出力
+        this.$buefy.toast.open({
+        duration: 5000,
+        message: &quot;コピーに失敗しました。&quot;,
+        type: &quot;is-danger&quot;
+        });
+
+        this.$emit(&quot;child-event&quot;, this.returnText);
+    }
+    }
+},
+data: function() {
+    return {
+    returnText: &quot;nothing!&quot;,
+    quoteTexts: [
+        [
+        &quot;Lorem&quot;,
+        &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Dui id ornare arcu odio ut sem nulla pharetra diam. Risus viverra adipiscing at in. Augue lacus viverra vitae congue eu consequat ac felis donec. Volutpat sed cras ornare arcu dui. Vitae nunc sed velit dignissim sodales ut eu sem integer. Faucibus in ornare quam viverra orci. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper dignissim. Nulla facilisi nullam vehicula ipsum a arcu cursus vitae congue. Placerat in egestas erat imperdiet. Dolor sit amet consectetur adipiscing elit duis. Adipiscing commodo elit at imperdiet dui. Ut tellus elementum sagittis vitae et leo duis ut. Tristique magna sit amet purus. Commodo odio aenean sed adipiscing diam donec.&quot;
+        ],
+        [
+        &quot;Kokoro&quot;,
+        &quot;私はその人を常に先生と呼んでいた。だからここでもただ先生と書くだけで本名は打ち明けない。これは世間を憚かる遠慮というよりも、その方が私にとって自然だからである。私はその人の記憶を呼び起すごとに、すぐ「先生」といいたくなる。筆を執っても心持は同じ事である。よそよそしい頭文字などはとても使う気にならない。私が先生と知り合いになったのは鎌倉である。その時私はまだ若々しい書生であった。暑中休暇を利用して海水浴に行った友達からぜひ来いという端書を受け取ったので、私は多少の金を工面して、出掛ける事にした。私は金の工面に二、三日を費やした。ところが私が鎌倉に着いて三日と経たないうちに、私を呼び寄せた友達は、急に国元から帰れという電報を受け取った。電報には母が病気だからと断ってあったけれども友達はそれを信じなかった。友達はかねてから国元にいる親たちに勧まない結婚を強いられていた。彼は現代の習慣からいうと結婚するにはあまり年が若過ぎた。それに肝心の当人が気に入らなかった。それで夏休みに当然帰るべきところを、わざと避けて東京の近くで遊んでいたのである。彼は電報を私に見せてどうしようと相談をした。私にはどうしていいか分らなかった。けれども実際彼の母が病気であるとすれば彼は固より帰るべきはずであった。それで彼はとうとう帰る事になった。せっかく来た私は一人取り残された。学校の授業が始まるにはまだ大分日数があるので鎌倉におってもよし、帰ってもよいという境遇にいた私は、当分元の宿に留まる覚悟をした。友達は中国のある資産家の息子で金に不自由のない男であったけれども、学校が学校なのと年が年なので、生活の程度は私とそう変りもしなかった。したがって一人ぼっちになった私は別に恰好な宿を探す面倒ももたなかったのである。宿は鎌倉でも辺鄙な方角にあった。玉突きだのアイスクリームだのというハイカラなものには長い畷を一つ越さなければ手が届かなかった。車で行っても二十銭は取られた。けれども個人の別荘はそこここにいくつでも建てられていた。&quot;
+        ],
+        [
+        &quot;Galaxy&quot;,
+        &quot;「ではみなさんは、そういうふうに川だと言われたり、乳の流れたあとだと言われたりしていた、このぼんやりと白いものがほんとうは何かご承知ですか」先生は、黒板につるした大きな黒い星座の図の、上から下へ白くけぶった銀河帯のようなところを指しながら、みんなに問いをかけました。カムパネルラが手をあげました。それから四、五人手をあげました。ジョバンニも手をあげようとして、急いでそのままやめました。たしかにあれがみんな星だと、いつか雑誌で読んだのでしたが、このごろはジョバンニはまるで毎日教室でもねむく、本を読むひまも読む本もないので、なんだかどんなこともよくわからないという気持ちがするのでした。ところが先生は早くもそれを見つけたのでした。「ジョバンニさん。あなたはわかっているのでしょう」ジョバンニは勢いよく立ちあがりましたが、立ってみるともうはっきりとそれを答えることができないのでした。ザネリが前の席からふりかえって、ジョバンニを見てくすっとわらいました。ジョバンニはもうどぎまぎしてまっ赤になってしまいました。先生がまた言いました。「大きな望遠鏡で銀河をよっく調べると銀河はだいたい何でしょう」やっぱり星だとジョバンニは思いましたが、こんどもすぐに答えることができませんでした。先生はしばらく困ったようすでしたが、眼をカムパネルラの方へ向けて、「ではカムパネルラさん」と名指しました。するとあんなに元気に手をあげたカムパネルラが、やはりもじもじ立ち上がったままやはり答えができませんでした。先生は意外なようにしばらくじっとカムパネルラを見ていましたが、急いで、「では、よし」と言いながら、自分で星図を指しました。「このぼんやりと白い銀河を大きないい望遠鏡で見ますと、もうたくさんの小さな星に見えるのです。ジョバンニさんそうでしょう」ジョバンニはまっ赤になってうなずきました。けれどもいつかジョバンニの眼のなかには涙がいっぱいになりました。そうだ僕は知っていたのだ、もちろんカムパネルラも知っている、それはいつかカムパネルラのお父さんの博士のうちでカムパネルラといっしょに読んだ雑誌のなかにあったのだ。それどこでなくカムパネルラは、その雑誌を読むと、すぐお父さんの書斎から巨きな本をもってきて、ぎんがというところをひろげ、まっ黒な頁いっぱいに白に点々のある美しい写真を二人でいつまでも見たのでした。それをカムパネルラが忘れるはずもなかったのに、すぐに返事をしなかったのは、このごろぼくが、朝にも午後にも仕事がつらく、学校に出てももうみんなともはきはき遊ばず、カムパネルラともあんまり物を言わないようになったので、カムパネルラがそれを知ってきのどくがってわざと返事をしなかったのだ、そう考えるとたまらないほど、じぶんもカムパネルラもあわれなような気がするのでした。&quot;
+        ],
+        [
+        &quot;Wikipedia&quot;,
+        &quot;超弦理論が登場する以前に最も小さなスケールを記述した理論は場の量子論である。そこでは粒子を点、すなわち点粒子として扱ってきた（局所場の理論に代わる、広がりを持った粒子の概念を導入したS行列理論や非局所場理論などもあった）。一方、超弦理論では粒子を弦の振動として表す。1960年代、イタリアの物理学者、ガブリエーレ・ヴェネツィアーノが核子の内部で働く強い力の性質をベータ関数で表し、その式の示す構造が「弦 (string)」によって記述されることに南部陽一郎、レオナルド・サスキンド、ホルガー・ベック・ニールセンらが気付いたことから始まる。弦には「閉じた弦」と「開いた弦」の2種類を考えることができ、開いた弦はスピン1のゲージ粒子（光子、ウィークボソン、グルーオンなどに相当）を含み、閉じた弦はスピン2の重力子を含む。開いた弦の相互作用を考えるとどうしても閉じた弦、すなわち重力子を含まざるを得ない。そのため、強い力のみを記述する理論と捉えることは難しいことが分かった。逆に言えば、弦を基本要素と考えることで、自然に重力を量子化したものが得られると考えられる。そのため、超弦理論は万物の理論となりうる可能性がある。超弦理論は素粒子の標準模型の様々な粒子を導出しうる大きな自由度を持ち、それを元に現在までに様々なモデルが提案されている。このように極めて小さい弦を宇宙の最小基本要素と考え、自然界の全ての力を数学的に表現しようというのが、いわゆる弦理論（超弦理論、M理論を含む）の目指すところである。&quot;
+        ]
+    ]
+    };
+}
+};
+&lt;/script&gt;
+</code></pre>
+
+<p></details></p>
+
+<h2 id="機能の概要">機能の概要</h2>
+
+<h3 id="templateの部分">templateの部分</h3>
+
+<p>ダミーテキストを生成するボタンを表示します。実際のページでは、トップ部分と下位の部分にそれぞれボタンを1つずつ配置しています。これ、見た目は違いますが中身は同一のコンポーネントを指しています。Vue.jsが言うところの<a href="https://jp.vuejs.org/v2/guide/components.html#%E3%82%B3%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%8D%E3%83%B3%E3%83%88%E3%81%AE%E5%86%8D%E5%88%A9%E7%94%A8">コンポーネントの再利用</a>をしていると言っていいのでは。</p>
+
+<p>ちなみに、ボタンとアイコンは、任意のものに変更できるよう実装しています。趣味です_(:3」∠)_</p>
+
+<p><img src="2019-09-03-15-38-07.png" alt="pic" /></p>
+
+<p><img src="2019-09-03-15-39-19.png" alt="pic" /></p>
+
+<p>ちなみに、アイコンを指定している部分は<code>v-bind</code>しているのですが、省略記法を利用していません。「<code>v-on</code>の省略記法<code>@</code>を使っているのになんで？」ってところなんですが、なんとなく「<code>:</code>だけってのがしっくりこない」ってだけの理由です_(:3」∠)_</p>
+
+<h3 id="scriptの部分">scriptの部分</h3>
+
+<p>JavaScriptにまだそんなに慣れてないせいで、「こんな書き方しないよ！」っていう書き方をしている可能性が微レ存どころの騒ぎじゃないので、おかしかったらご指摘いただければ幸いです。</p>
+
+<h4 id="基本的にやっていること">基本的にやっていること</h4>
+
+<p>やっていることは至極単純で「ひたすら文字列操作」です。</p>
+
+<ul>
+<li>指定されたテキスト元を選択</li>
+<li>指定された分の文字数を切り出し</li>
+<li>オプションとして指定があれば改行コードを付与</li>
+<li>オプションとして指定があれば全角変換</li>
+<li>オプションとして指定があれば句点（英文の場合ピリオド）で終わるよう制御</li>
+<li>オプションとして指定があればPタグの付与</li>
+</ul>
+
+<p>自分でやっておいて何なんですが、オプションを複数選択可能にしたため「改行しつつPタグ付与」という場合と「単純にPタグ付与」する場合で、ちょっと条件分岐して処理内容を変える必要があったのは面倒くさかったです。まぁ、こういうのってやってみないと分からないので、いい経験になりました。</p>
+
+<h4 id="生成したテキストの処理">生成したテキストの処理</h4>
+
+<p>生成したテキストの処遇ですが、当初から考えていたように「クリップボードにコピーする」方法を採用しました。<code>execCommand</code>の<a href="https://developer.mozilla.org/ja/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard">MDN</a>を参考にしながら実装しました。なお、これのせいで<a href="https://developer.mozilla.org/ja/docs/Web/API/Document/execCommand#Browser_compatibility">古いInternet Explorerでは動作しません</a>。まぁ、そんなに困ることもないだろうと思ってそのままです。</p>
+
+<h4 id="テキスト生成後">テキスト生成後</h4>
+
+<p>ボタンを押して何の反応もないと正常に動作したのかわかりませんし、何よりつまらないです。なので、Buefyのドキュメントを見て気になっていた<a href="https://buefy.org/documentation/toast">Toast</a>を実装してみました。要は「正常に処理できたよ！」あるいは「できなかったよ！」というレスポンスを出力できるようにしました。「できなかったよ！」とエラーが返るのは<code>queryCommandSupported('copy')</code>でコマンドの実行ができないと判断された場合です。</p>
+
+<h4 id="その他">その他</h4>
+
+<p>テキストの元ネタをべた書きしているので、ちょっと不格好ですがあまり気にしても仕方ないかなーと思ってそのままです。</p>
+
+<p>なお、「句点まで生成する」を選択した際に出力文字数が少なすぎると、「クリップボードにコピーしたよ！」というメッセージが出力されるにもかかわらず、文章がコピーできない事象を確認しています。抽出元テキストの文章はものによって冒頭の1文がとても長いため、1文が終わる（始めての句点が来る）前に指定された出力文字数へ到達してしまうのが原因です。</p>
+
+<p>そのうち直そうと思います。ええ、そのうちに_(:3」∠)_</p>
+
+<h2 id="デプロイ先の選定">デプロイ先の選定</h2>
+
+<p>作成したアプリケーションをデプロイします。デプロイする先の候補としては下記のところがあげられると思います。</p>
+
+<ul>
+<li>GitHub Pages</li>
+<li>Netlify</li>
+<li>Heroku</li>
+<li>Firebase</li>
+</ul>
+
+<p>他にもたくさんありますが、だいたいこのあたりだと思います。今回はGitHub Pagesにデプロイします。手順は<a href="https://cli.vuejs.org/guide/deployment.html#github-pages">ここ</a>を参考にしました。</p>
+
+<h2 id="デプロイ">デプロイ</h2>
+
+<h3 id="vue-config-jsの準備">vue.config.jsの準備</h3>
+
+<p>GitHub Pagesにデプロイする場合で、デプロイ先のURLが<code>https://&lt;ユーザー名&gt;.github.io/&lt;リポジトリ名&gt;/</code>である場合は<code>vue.config.js</code>というファイルが必要です。もともと存在するファイルではないので、新規で作成する必要があります。内容はこんな感じ。</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">publicPath</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">===</span> <span class="s1">&#39;production&#39;</span>
+      <span class="o">?</span> <span class="s1">&#39;/リポジトリ名/&#39;</span>
+      <span class="o">:</span> <span class="s1">&#39;/&#39;</span>
+  <span class="p">}</span>
+</code></pre></div>
+<p>なお、デプロイ先のURLが<code>https://&lt;ユーザー名&gt;.github.io/</code>のタイプはこの作業を行わなくてOKです。</p>
+
+<h3 id="ビルドする">ビルドする</h3>
+
+<p>コンソールにて下記のコマンドを実行します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm run build</code></pre></div>
+<p>しばらく待っていると<code>dist</code>フォルダ中にファイルが生成されます。なお、このファイルをローカルで開いても、真っ白なページが表示されるだけで何も動作しません。これは<code>npm run build</code>で生成されたファイル達が「デプロイされた先で動作する」仕様にチューニングされているからです。なので、ローカルでは動作しないのですね。</p>
+
+<h3 id="githubにプッシュする">GitHubにプッシュする</h3>
+
+<p>先にGitHubにてリポジトリを作成しておきます。なお、ここで作成するリポジトリ名は、<code>vue.config.js</code>に記述したリポジトリ名と同一の名前でないといけません。</p>
+
+<p>ここでとあるシェルスクリプトを作成します。こんな感じ。作成するフォルダはプロジェクトフォルダ直下です。作成したらおもむろに実行します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/usr/bin/env sh
+</span><span class="cp"></span>
+<span class="nb">set</span> -e
+
+npm run build
+
+<span class="nb">cd</span> dist
+
+git init
+git add -A
+git commit -m <span class="s1">&#39;deploy&#39;</span>
+
+git push -f git@github.com:ユーザー名/リポジトリ名.git master:gh-pages
+
+<span class="nb">cd</span> -</code></pre></div>
+<p>最後の<code>git push</code>でデプロイ先を<code>gh-pages</code>ブランチにしてるのがミソですね。というのは、リポジトリを作成して<code>gh-pages</code>ブランチにプッシュするだけで、あとは勝手にGitHubが<a href="https://help.github.com/ja/articles/configuring-a-publishing-source-for-github-pages">サイトのソース設定を自動的に有効</a>へ設定してくれます。なので、「プッシュしてからリポジトリのSettingを変更する」という手間が省けるわけです。あとはURLにアクセスすればもう動作します。簡単！</p>
+
+<p>もちろん、<code>master</code>ブランチの<code>/docs</code>フォルダにファイルを配置して公開する、という方法もあります。こちらはリポジトリのSettingsでサイトのソース設定を変更する必要があるので注意。</p>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>これでVue.jsを利用した簡単なアプリケーションの実装ができました。今回は外部APIなどは利用しませんでしたが、<a href="https://jp.vuejs.org/v2/cookbook/using-axios-to-consume-apis.html">axios</a>を利用すればAPIからデータを取得し利用できます。次は外部APIの利用を含めて、もうちょっと機能や見た目について向上したアプリケーションを実装したいものです。</p>
+
+<p>頑張ります。_(:3」∠)_</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>CSSで背景をグラデーションにする</title>
@@ -1328,92 +1619,6 @@ You can view the license agreements in Xcode<span class="err">&#39;</span>s Abou
 
 $ git --version
 git version <span class="m">2</span>.20.1 <span class="o">(</span>Apple Git-117<span class="o">)</span></code></pre></div>]]></content>
-		</item>
-		
-		<item>
-			<title>DockerでVue.jsの開発環境を構築する</title>
-			<link>https://idontwannawork.github.io/posts/build-environment-of-vuejs-with-docker/</link>
-			<pubDate>Thu, 04 Jul 2019 13:58:10 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/build-environment-of-vuejs-with-docker/</guid>
-			<description>概要 フロントの勉強としてVue.jsの開発環境を整備するときに、せっかくなのでDockerを使って環境を構築してみました。 環境 macOS Mojave 10.14.5 Docker version 18.09.2 Visual</description>
-			<content type="html"><![CDATA[
-
-<h2 id="概要">概要</h2>
-
-<p>フロントの勉強としてVue.jsの開発環境を整備するときに、せっかくなのでDockerを使って環境を構築してみました。</p>
-
-<h2 id="環境">環境</h2>
-
-<ul>
-<li>macOS Mojave 10.14.5</li>
-<li>Docker version 18.09.2</li>
-<li>Visual Studio Code version 1.35</li>
-</ul>
-
-<h2 id="手順">手順</h2>
-
-<p>今回は勉強がてらdocker-composeを利用します。とは言っても「書くよ！」ってだけで複雑なことは全然やってないです。</p>
-
-<h3 id="dockerfileの作成">Dockerfileの作成</h3>
-<div class="highlight"><pre class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">FROM</span><span class="s"> node:lts-alpine</span><span class="err">
-</span><span class="err"></span><span class="k">WORKDIR</span><span class="s"> /app</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="k">RUN</span> apk update <span class="o">&amp;&amp;</span> <span class="se">\
-</span><span class="se"></span>    npm install -g npm @vue/cli</code></pre></div>
-<p>ただし、現時点（2019年7月3日）でVisual Studio CodeのRemoteはAlpine Linuxに対応していないので、Remoteを利用したい場合は別のイメージを使った方がいいと思われます（1敗）。<a href="/posts/connect-to-docker-with-vscode-extension/">以前記事にしていた</a>ので「Vue.jsの環境もリモートで開発だぁ！」とか思ってたんですけど出鼻をくじかれました。</p>
-
-<p>なお、Alpine Linuxは<a href="https://github.com/microsoft/vscode-remote-release/issues/54">VS Code Insidersではサポートされている</a>ため、そのうち正式対応するはずなので正座して待機しようと思います。</p>
-
-<h3 id="docker-compose-ymlの作成">docker-compose.ymlの作成</h3>
-<div class="highlight"><pre class="chroma"><code class="language-dockerfile" data-lang="dockerfile">version: <span class="s1">&#39;3&#39;</span><span class="err">
-</span><span class="err"></span>services:<span class="err">
-</span><span class="err"></span>  vue_app:<span class="err">
-</span><span class="err"></span>    build: .<span class="err">
-</span><span class="err"></span>    ports:<span class="err">
-</span><span class="err"></span>      - <span class="m">1234</span>:8080<span class="err">
-</span><span class="err"></span>    volumes:<span class="err">
-</span><span class="err"></span>      - .:/app<span class="err">
-</span><span class="err"></span>    stdin_open: true<span class="err">
-</span><span class="err"></span>    tty: true<span class="err">
-</span><span class="err"></span>    command: /bin/sh</code></pre></div>
-<h3 id="コンテナーのビルド">コンテナーのビルド</h3>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">docker-compose build</code></pre></div>
-<h3 id="コンテナーの起動">コンテナーの起動</h3>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">docker-compose up -d</code></pre></div>
-<p><code>docker ps</code>コマンドを叩くとコンテナーが起動しているはず。</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ docker ps
-CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
-9fcc61e05285        dockapp_vue_app     <span class="s2">&#34;docker-entrypoint.s…&#34;</span>   <span class="m">2</span> minutes ago       Up <span class="m">2</span> minutes        <span class="m">0</span>.0.0.0:9000-&gt;9000/tcp   dockapp_vue_app_1</code></pre></div>
-<h3 id="コンテナーに入る">コンテナーに入る</h3>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">docker <span class="nb">exec</span> vue_app sh</code></pre></div>
-<h3 id="vueプロジェクトの作成">vueプロジェクトの作成</h3>
-
-<p>コンテナーに入るとプロンプトが変わるので、<code>vue</code>コマンドを叩いてプロジェクトを作成します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">vue create vue_app</code></pre></div>
-<p>3系のvue cliをインストールしているので<code>create</code>を利用します（2.x系だと<code>init webpack hoge</code>だった）。とくにこだわりがなければエンターを連打。しばらくすると・・・</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">  Successfully created project vue_app.
-  Get started with the following commands:
-
- $ <span class="nb">cd</span> vue_app
- $ npm run serve</code></pre></div>
-<p>となり、準備完了です。</p>
-
-<h3 id="vueプロジェクトの起動とアクセス">vueプロジェクトの起動とアクセス</h3>
-
-<p>コンテナー上でフォルダを移動して<code>npm run</code>します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> vue_app
-npm run serve</code></pre></div>
-<p>正常に起動したら<code>http://localhost:1234/</code>にアクセスする。</p>
-
-<p><img src="pic1.jpg" alt="pic" /></p>
-
-<p>上記のようなページが表示されたら環境構築は完了です。</p>
-
-<h2 id="まとめ">まとめ</h2>
-
-<p>Pythonに引き続き、Vue.jsもDockerで環境構築してみましたが、ローカルを汚さない・いざとなったら潰して新しく作ればいいってのはホントに気軽でいいですね。あとはコーディングするだけです（血涙</p>
-]]></content>
 		</item>
 		
 	</channel>
