@@ -6,8 +6,77 @@
 		<description>Recent content in Posts on 頑張らないために頑張る</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Mon, 02 Sep 2019 16:08:20 +0900</lastBuildDate>
+		<lastBuildDate>Wed, 04 Sep 2019 09:22:56 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>detailsタグを使うと正常なコードブロックでmarkdownlintがエラーを吐く</title>
+			<link>https://idontwannawork.github.io/posts/can-not-live-together-markdownlint-and-details-tag/</link>
+			<pubDate>Wed, 04 Sep 2019 09:22:56 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/can-not-live-together-markdownlint-and-details-tag/</guid>
+			<description>はじめに とある記事で、そこそこ長いソースを記述するのに&amp;lt;details&amp;gt;タグを利用しました。すると、なぜか正常なコードブロックで</description>
+			<content type="html"><![CDATA[
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>とある<a href="/posts/make-dummy-text-generator-site-with-vuejs-edit-function/">記事</a>で、そこそこ長いソースを記述するのに<code>&lt;details&gt;</code>タグを利用しました。すると、なぜか<strong>正常なコードブロックでエラー<code>MD046/code-block-style</code>を吐く</strong>ようになってしまいました。なんでー_(:3」∠)_</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Windows 10</li>
+<li>Visual Studio Code 1.37.1</li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint">markdownlint</a> 0.30.2</li>
+</ul>
+
+<h2 id="実際のエラー">実際のエラー</h2>
+
+<p>上の2つの<code>MD033/no-inline-html</code>は、<code>&lt;details&gt;</code>タグをmarkdown中に<a href="https://github.com/markdownlint/markdownlint/blob/master/docs/RULES.md#md033---inline-html">直接記述しているために表示されるエラー</a>です。問題は下の3つの<code>MD046/code-block-style</code>。<a href="https://github.com/markdownlint/markdownlint/blob/master/docs/RULES.md#md046---code-block-style">「コードはインデントじゃなくてコードブロック使えよ！」ってエラー</a>なんですけど・・・。いや、<strong>コードブロック使ってるんですけどね？</strong></p>
+
+<p><img src="2019-09-04-09-30-11.png" alt="pic" /></p>
+
+<p>それぞれを見てみます。</p>
+
+<p><img src="2019-09-04-09-35-39.png" alt="pic" /></p>
+
+<p><img src="2019-09-04-09-36-18.png" alt="pic" /></p>
+
+<p><img src="2019-09-04-09-36-45.png" alt="pic" /></p>
+
+<p>うーん、なんか間違ってる感じしないんだけど？</p>
+
+<h2 id="detailsタグの部分を消してみる">detailsタグの部分を消してみる</h2>
+
+<p>思い切って<code>&lt;details&gt;</code>タグを消してみます。グリっと選択して・・・</p>
+
+<p><img src="2019-09-04-09-43-07.png" alt="pic" /></p>
+
+<p>えいっ。</p>
+
+<p><img src="2019-09-04-09-44-02.png" alt="pic" /></p>
+
+<p>さて、エラーメッセージはどんな感じでしょうか・・・って、ちょ、待て。「<strong>現時点で問題はワークスペースで検出されていません。</strong>」とな？</p>
+
+<p><img src="2019-09-04-09-44-32.png" alt="pic" /></p>
+
+<p><code>&lt;details&gt;</code>タグ消しただけだぞ？試しに消した<code>&lt;details&gt;</code>タグの部分を元の状態へ戻してみると・・・。</p>
+
+<p><img src="2019-09-04-09-47-45.png" alt="pic" /></p>
+
+<p>しっかりとエラーが復活しましたな。ほげ。</p>
+
+<h2 id="まぁ別に特段困らないんだけどね">まぁ別に特段困らないんだけどね</h2>
+
+<p>エラーエラーと言っていますが、実際はmarkdownlintのコレはワーニングなので無視しても問題ありません。</p>
+
+<p>markdownlintのエラーは表示されたところで、最終的にmarkdownがブラウザで正常に出力されればそれで問題ないので、あまり気にしなくていいのですね。実際、この<a href="/posts/make-dummy-text-generator-site-with-vuejs-edit-function/">記事</a>でも最終的には<code>&lt;details&gt;</code>タグの内容もコードブロックの内容もちゃんと出力されているので、実害ありませんでした。</p>
+
+<p>いや、もちろん修正できるなら<strong>lintに従うのが一番</strong>です、はい。</p>
+
+<p>しっかし、なんでMD033のエラーに引きずられてMD046のエラーまで出現するのかは不明です。マジで謎_(:3」∠)_</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>Vue cliとBuefyでシンプルに始めるVue.js - テキスト生成の機能を実装してデプロイまで</title>
@@ -289,6 +358,8 @@ git push -f git@github.com:ユーザー名/リポジトリ名.git master:gh-page
 
 <span class="nb">cd</span> -</code></pre></div>
 <p>最後の<code>git push</code>でデプロイ先を<code>gh-pages</code>ブランチにしてるのがミソですね。というのは、リポジトリを作成して<code>gh-pages</code>ブランチにプッシュするだけで、あとは勝手にGitHubが<a href="https://help.github.com/ja/articles/configuring-a-publishing-source-for-github-pages">サイトのソース設定を自動的に有効</a>へ設定してくれます。なので、「プッシュしてからリポジトリのSettingを変更する」という手間が省けるわけです。あとはURLにアクセスすればもう動作します。簡単！</p>
+
+<p>なお、アップロードしてから実際のページに反映されるまでは即時反映とは行かず、微妙に時間がかかります。とは言っても数十秒、遅くても数分ですが。</p>
 
 <p>もちろん、<code>master</code>ブランチの<code>/docs</code>フォルダにファイルを配置して公開する、という方法もあります。こちらはリポジトリのSettingsでサイトのソース設定を変更する必要があるので注意。</p>
 
@@ -1552,73 +1623,6 @@ npm ERR!     C:\Users\hogehoge\AppData\Roaming\npm-cache\_logs\***debug.log</cod
 
 <p>さあ、あとはコーディングするだけです。するだけです。するだけだってば。</p>
 ]]></content>
-		</item>
-		
-		<item>
-			<title>Visual Studio CodeでGitが見つからないと言われたら</title>
-			<link>https://idontwannawork.github.io/posts/fix-git-path-with-vscode/</link>
-			<pubDate>Sun, 07 Jul 2019 17:14:15 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/fix-git-path-with-vscode/</guid>
-			<description>VS Codeをアップデートしたらこんなメッセージが Visual Studio Code(以下、VS Code)をアップデートしたらこんな通知が出るようになりました。 「G</description>
-			<content type="html"><![CDATA[
-
-<h2 id="vs-codeをアップデートしたらこんなメッセージが">VS Codeをアップデートしたらこんなメッセージが</h2>
-
-<p>Visual Studio Code(以下、VS Code)をアップデートしたらこんな通知が出るようになりました。</p>
-
-<p><img src="2019-07-07-17-14-40.png" alt="pic" /></p>
-
-<p>「Gitが見つからないよ！」って・・・いや、君今までしこたまGit使ってたじゃないか。</p>
-
-<p>理由はともかく、このままではGitの各種コマンドが利用できないので、設定します。</p>
-
-<h2 id="環境">環境</h2>
-
-<ul>
-<li>macOS Mojave 10.14.5</li>
-<li>Visual Studio Code version 1.36</li>
-</ul>
-
-<h2 id="設定手順">設定手順</h2>
-
-<ol>
-<li><p>左下の歯車マークから、あるいは<code>Command + ,</code>で「Settings」画面を表示します。</p>
-
-<p><img src="2019-07-07-17-20-20.png" alt="pic" /></p></li>
-
-<li><p>出てきた画面に「git.path」と入力します。すると、「Settings.jsonで設定してね」と言われるのでSettings.jsonを開きます。</p>
-
-<p><img src="2019-07-07-17-25-35.png" alt="pic" /></p>
-
-<p>ごちゃごちゃしてますが、下のところに<code>&quot;git.path&quot;: &quot;/usr/bin&quot;</code>を追記しました。なお、gitのパスはコンソール画面にて<code>which git</code>すればわかります。</p></li>
-
-<li><p>編集が終わったら保存します。これで完了です。なお、いつのバージョン以降からかは失念しましたが、設定の変更を行ってもVS Codeを再起動する必要はなく即時反映されます。</p></li>
-</ol>
-
-<h2 id="番外編-xcodeをインストールしたらなぜかgitが使えないぞ">（番外編）XcodeをインストールしたらなぜかGitが使えないぞ</h2>
-
-<p>XcodeをインストールしたらGitが使えなくなりました。なんかライセンス契約に同意する必要があるみたいです。</p>
-
-<p>指示に従いコマンド発行および同意を行ったら、Gitが再び利用できるようになりました。</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ git --version
-
-Agreeing to the Xcode/iOS license requires admin privileges, please run “sudo xcodebuild -license” and <span class="k">then</span> retry this command.
-
-$ sudo xcodebuild -license
-
-You have not agreed to the Xcode license agreements. You must agree to both license agreements below in order to use Xcode.
-
-（中略）
-
-“Apple Developer Program License Agreement” means a separate agreement that may be entered into between You and Apple regarding the development and su
-
-By typing <span class="s1">&#39;agree&#39;</span> you are agreeing to the terms of the software license agreements. Type <span class="s1">&#39;print&#39;</span> to print them or anything <span class="k">else</span> to cancel, <span class="o">[</span>agree, print, cancel<span class="o">]</span> agree
-
-You can view the license agreements in Xcode<span class="err">&#39;</span>s About Box, or at /Applications/Xcode.app/Contents/Resources/English.lproj/License.rtf
-
-$ git --version
-git version <span class="m">2</span>.20.1 <span class="o">(</span>Apple Git-117<span class="o">)</span></code></pre></div>]]></content>
 		</item>
 		
 	</channel>

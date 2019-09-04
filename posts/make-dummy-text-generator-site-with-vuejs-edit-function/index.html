@@ -14,7 +14,7 @@
 
 <meta itemprop="datePublished" content="2019-09-02T16:08:20&#43;09:00" />
 <meta itemprop="dateModified" content="2019-09-02T16:08:20&#43;09:00" />
-<meta itemprop="wordCount" content="6299">
+<meta itemprop="wordCount" content="6369">
 
 
 
@@ -346,6 +346,8 @@ git push -f git@github.com:ユーザー名/リポジトリ名.git master:gh-page
 <span class="nb">cd</span> -</code></pre></div>
 <p>最後の<code>git push</code>でデプロイ先を<code>gh-pages</code>ブランチにしてるのがミソですね。というのは、リポジトリを作成して<code>gh-pages</code>ブランチにプッシュするだけで、あとは勝手にGitHubが<a href="https://help.github.com/ja/articles/configuring-a-publishing-source-for-github-pages">サイトのソース設定を自動的に有効</a>へ設定してくれます。なので、「プッシュしてからリポジトリのSettingを変更する」という手間が省けるわけです。あとはURLにアクセスすればもう動作します。簡単！</p>
 
+<p>なお、アップロードしてから実際のページに反映されるまでは即時反映とは行かず、微妙に時間がかかります。とは言っても数十秒、遅くても数分ですが。</p>
+
 <p>もちろん、<code>master</code>ブランチの<code>/docs</code>フォルダにファイルを配置して公開する、という方法もあります。こちらはリポジトリのSettingsでサイトのソース設定を変更する必要があるので注意。</p>
 
 <h2 id="おわりに">おわりに<a href="#おわりに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
@@ -360,7 +362,7 @@ git push -f git@github.com:ユーザー名/リポジトリ名.git master:gh-page
 				<p>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/vuejs">vuejs</a></span>
 				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>6299 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>6369 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-09-02 07:08 &#43;0000</p>
 			</footer>
 		</article>
@@ -398,6 +400,9 @@ git push -f git@github.com:ユーザー名/リポジトリ名.git master:gh-page
 </nav>
 		</aside>
 		<div class="post-nav thin">
+			<a class="next-post" href="https://idontwannawork.github.io/posts/can-not-live-together-markdownlint-and-details-tag/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>detailsタグを使うと正常なコードブロックでmarkdownlintがエラーを吐く</span>
+			</a>
 			<a class="prev-post" href="https://idontwannawork.github.io/posts/make-background-gradation-with-css/">
 				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>CSSで背景をグラデーションにする</span>
 			</a>
