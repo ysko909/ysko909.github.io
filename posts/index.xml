@@ -52,7 +52,7 @@
 &gt;&gt;&gt; app.books.open(r&#39;C:\\app\\hoge.xlsx&#39;)</code></pre></div>
 <h2 id="ファイルを閉じる">ファイルを閉じる</h2>
 
-<p>すでにオープンしたExcelファイルを閉じる。保存はせず、確認メッセージも出力されない。</p>
+<p>すでにオープンしたExcelファイルを閉じます。保存はせず、確認メッセージも出力されません。</p>
 <div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; xb = xw.Book()
 &gt;&gt;&gt; xb.close()</code></pre></div>
 <p>ちなみに、このコードはワークブックを閉じるだけなので、Excelの<strong>プロセスそのものは残る</strong>ことに注意。</p>
