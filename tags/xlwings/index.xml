@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Xlwings on 頑張らないために頑張る</title>
+    <link>https://idontwannawork.github.io/tags/xlwings/</link>
+    <description>Recent content in Xlwings on 頑張らないために頑張る</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Fri, 06 Sep 2019 15:14:51 +0900</lastBuildDate>
+    
+	<atom:link href="https://idontwannawork.github.io/tags/xlwings/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>PythonとxlwingsでExcelファイルをいじる</title>
+      <link>https://idontwannawork.github.io/posts/edit-excel-with-python-and-xlwings/</link>
+      <pubDate>Fri, 06 Sep 2019 15:14:51 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/edit-excel-with-python-and-xlwings/</guid>
+      <description>概要 xlwingsを利用して、PythonからExcelファイルをいじってみます。 環境 Python 3.6 xlwings 0.15.3 Windows 10 新規でワークブックを作成します 空のワークブ</description>
+    </item>
+    
+  </channel>
+</rss>

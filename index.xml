@@ -6,10 +6,19 @@
     <description>Recent content on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Wed, 04 Sep 2019 09:22:56 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 06 Sep 2019 15:14:51 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>PythonとxlwingsでExcelファイルをいじる</title>
+      <link>https://idontwannawork.github.io/posts/edit-excel-with-python-and-xlwings/</link>
+      <pubDate>Fri, 06 Sep 2019 15:14:51 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/edit-excel-with-python-and-xlwings/</guid>
+      <description>概要 xlwingsを利用して、PythonからExcelファイルをいじってみます。 環境 Python 3.6 xlwings 0.15.3 Windows 10 新規でワークブックを作成します 空のワークブ</description>
+    </item>
     
     <item>
       <title>detailsタグを使うと正常なコードブロックでmarkdownlintがエラーを吐く</title>
@@ -90,15 +99,6 @@
       
       <guid>https://idontwannawork.github.io/posts/run-jupyter-notebook-with-vscode/</guid>
       <description>はじめに Visual Studio Code（以下、vscode）ではDockerでPythonやVue.jsの開発環境を構築したり、あるいはMarkdownで書い</description>
-    </item>
-    
-    <item>
-      <title>Unity Hubを使ってUnityをインストールする</title>
-      <link>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</link>
-      <pubDate>Thu, 11 Jul 2019 16:41:00 +0900</pubDate>
-      
-      <guid>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</guid>
-      <description>Unityって何さ Unity 世界で最も広くつかわれているゲーム開発エンジン。 様々な機能を備えたエディターと、業界で最も幅広いプラットフォームへのサポ</description>
     </item>
     
   </channel>

@@ -6,10 +6,19 @@
     <description>Recent content in Python on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Fri, 02 Aug 2019 14:00:38 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 06 Sep 2019 15:14:51 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>PythonとxlwingsでExcelファイルをいじる</title>
+      <link>https://idontwannawork.github.io/posts/edit-excel-with-python-and-xlwings/</link>
+      <pubDate>Fri, 06 Sep 2019 15:14:51 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/edit-excel-with-python-and-xlwings/</guid>
+      <description>概要 xlwingsを利用して、PythonからExcelファイルをいじってみます。 環境 Python 3.6 xlwings 0.15.3 Windows 10 新規でワークブックを作成します 空のワークブ</description>
+    </item>
     
     <item>
       <title>Jupyter NotebookをVisual Studio Codeで実行する</title>

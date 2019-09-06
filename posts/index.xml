@@ -6,8 +6,166 @@
 		<description>Recent content in Posts on 頑張らないために頑張る</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Wed, 04 Sep 2019 09:22:56 +0900</lastBuildDate>
+		<lastBuildDate>Fri, 06 Sep 2019 15:14:51 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>PythonとxlwingsでExcelファイルをいじる</title>
+			<link>https://idontwannawork.github.io/posts/edit-excel-with-python-and-xlwings/</link>
+			<pubDate>Fri, 06 Sep 2019 15:14:51 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/edit-excel-with-python-and-xlwings/</guid>
+			<description>概要 xlwingsを利用して、PythonからExcelファイルをいじってみます。 環境 Python 3.6 xlwings 0.15.3 Windows 10 新規でワークブックを作成します 空のワークブ</description>
+			<content type="html"><![CDATA[
+
+<h2 id="概要">概要</h2>
+
+<p><a href="https://www.xlwings.org/">xlwings</a>を利用して、PythonからExcelファイルをいじってみます。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Python 3.6</li>
+<li>xlwings 0.15.3</li>
+<li>Windows 10</li>
+</ul>
+
+<h2 id="新規でワークブックを作成します">新規でワークブックを作成します</h2>
+
+<p>空のワークブックを作成します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; import xlwings as xw
+&gt;&gt;&gt; xb = xw.Book()
+&gt;&gt;&gt; xb.name
+&#39;Book1&#39;</code></pre></div>
+<p>次の方法でも作成できます。上記の方法は明示的に「ワークブックを作成」しますが、こっちの方法はアプリケーション（Excel）を起動しつつ新規ワークブックを<strong>アプリケーションに作成</strong>させます。スタートメニューなどから単純にExcelを起動した場合、空っぽのファイルを開いた状態でExcelが起動しますが、あれの状態をプログラムで再現している感じ。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; import xlwings as xw
+&gt;&gt;&gt; app = xw.App()
+&gt;&gt;&gt; app.books[0].name
+&#39;Book1&#39;</code></pre></div>
+<h2 id="既存のファイルを開く">既存のファイルを開く</h2>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">    &gt;&gt;&gt; xw.Book(r&#39;C:\\app\\hoge.xlsx&#39;)
+
+または
+
+```console
+&gt;&gt;&gt; app = xw.App()
+&gt;&gt;&gt; app.books.open(r&#39;C:\\app\\hoge.xlsx&#39;)</code></pre></div>
+<h2 id="ファイルを閉じる">ファイルを閉じる</h2>
+
+<p>すでにオープンしたExcelファイルを閉じる。保存はせず、確認メッセージも出力されない。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; xb = xw.Book()
+&gt;&gt;&gt; xb.close()</code></pre></div>
+<p>ちなみに、このコードはワークブックを閉じるだけなので、Excelの<strong>プロセスそのものは残る</strong>ことに注意。</p>
+
+<h2 id="excelを閉じる">Excelを閉じる</h2>
+
+<p>Excelのプロセスそのものを閉じる場合は、<code>kill</code>を利用します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; app = xw.App()
+&gt;&gt;&gt; app.kill()</code></pre></div>
+<h2 id="セルに値を設定-参照する">セルに値を設定・参照する</h2>
+
+<p><code>.value</code>を用いて値を設定あるいは参照します。文字列の場合はクオーテーションで囲います。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; xb = xw.Book()
+&gt;&gt;&gt; xw.Range((1,1)).value = &#34;hoge&#34;
+&gt;&gt;&gt; xw.Range((1,1)).value
+&#39;hoge&#39;
+&gt;&gt;&gt; xb.sheets(1).range(1,1).value = 1
+&gt;&gt;&gt; xb.sheets(1).range(1,1).value
+1</code></pre></div>
+<p>任意のセルを基準にして、配列形式で値を設定することもできます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; xb.sheets(1).range(1,1).value = [[&#34;hoge&#34;, &#34;fuga&#34;, &#34;piyo&#34;], [1, 2, 3]]</code></pre></div>
+<p>上記を実行するとワークシートには下記の状態でデータが格納されます。</p>
+
+<table>
+<thead>
+<tr>
+<th>行列</th>
+<th>A列</th>
+<th>B列</th>
+<th>C列</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1行目</td>
+<td>hoge</td>
+<td>fuga</td>
+<td>piyo</td>
+</tr>
+
+<tr>
+<td>2行目</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; xb.sheets(1).range(1,1).value
+&#39;hoge&#39;
+&gt;&gt;&gt; xb.sheets(1).range(1,2).value
+&#39;fuga&#39;
+&gt;&gt;&gt; xb.sheets(1).range(2,3).value
+3.0</code></pre></div>
+<p>なお、<code>App()</code>を使用してインスタンスを生成した場合でも、基本的な考え方は同じ。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; app = xw.App()
+&gt;&gt;&gt; app.books[0].sheets[0].range(1,1).value = &#34;hoge&#34;
+&gt;&gt;&gt; app.books[0].sheets[0].range(1,2).value = 1</code></pre></div>
+<p>なお、<code>Range</code>クラスはいろんな指定の仕方があって、行と列を数字で指定する（Excel VBAの<code>cells</code>みたいな）書き方もできるし、<code>A1</code>とかで指定する書き方も可能です。ただし、<code>Range</code>クラスを利用して行と列を数字で指定する場合はカッコを2重する必要があります。また、ぱっと見が似た要素の<code>range</code>（全部小文字の方）はSheetクラスなので<code>sheets(1)</code>などでシートを指定しないとエラーになります。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; wb = xw.Book()
+&gt;&gt;&gt; xw.Range(&#39;A1&#39;).value = [[None, 1], [2, 3]]
+&gt;&gt;&gt; xw.Range((1,1)).value = &#34;fuga&#34;
+&gt;&gt;&gt; xw.sheets(1).range(1,1).value = &#34;hoge&#34;
+&gt;&gt;&gt; xw.sheets(1).range(&#34;A1&#34;).value = &#34;fuga&#34;
+&gt;&gt;&gt; xw.Range(1,1).value = &#34;hoge&#34;    &lt;-- カッコが2重でない
+Traceback (most recent call last):
+    File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt;
+    File &#34;C:\app\Continuum\anaconda3\lib\site-packages\xlwings\main.py&#34;, line 1005, in __init__
+    raise ValueError(&#34;Invalid arguments&#34;)
+ValueError: Invalid arguments
+&gt;&gt;&gt; xw.range(1,1).value = &#34;hoge&#34;    &lt;-- シートが指定されていない
+Traceback (most recent call last):
+    File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt;
+AttributeError: module &#39;xlwings&#39; has no attribute &#39;range&#39;</code></pre></div>
+<h2 id="セルに計算式を設定-参照する">セルに計算式を設定・参照する</h2>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; xb.sheets(1).range(1,3).formula = &#34;=A1+B2&#34;
+&gt;&gt;&gt; xb.sheets(1).range(1,3).formula
+&#39;=A1+B2&#39;</code></pre></div>
+<p><code>.formula</code>を使用すれば計算式の設定および参照が可能。</p>
+
+<h2 id="セルの背景色を設定する">セルの背景色を設定する</h2>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; xb.sheets(1).range(1,2).color = (255,0,0)</code></pre></div>
+<p>RGBで指定します。上記のコードだと背景色が赤になります。</p>
+
+<h2 id="選択されたセルの個数を調べる">選択されたセルの個数を調べる</h2>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; xb.sheets(1).range((1,1),(3,3)).count
+9</code></pre></div>
+<p><code>.count</code>を利用します。</p>
+
+<h2 id="最終列または最終行を調べる">最終列または最終行を調べる</h2>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; xs = xb.sheets(1)
+&gt;&gt;&gt; xs.range((1,1),(5,5)).value = &#34;hoge&#34;
+&gt;&gt;&gt; xs.range(1,1).end(&#34;down&#34;)
+&lt;Range [Book2]Sheet1!$A$5&gt;
+&gt;&gt;&gt; xs.range(1,1).end(&#34;right&#34;)
+&lt;Range [Book2]Sheet1!$E$1&gt;</code></pre></div>
+<p><code>.end</code>を利用します。引き数には&rsquo;up&rsquo;、&rsquo;down&rsquo;、&rsquo;right&rsquo;、&rsquo;left&rsquo;のうちいずれかを指定します。Excelでの「<code>Ctrl</code>＋<code>End</code>」などの操作と同様の挙動をします。なので、下記のような場合は上手く動作しません。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; xs = xb.sheets(1)
+&gt;&gt;&gt; xs.range(1,3).value = 1
+&gt;&gt;&gt; xs.range(1,5).value = 1
+&gt;&gt;&gt; xs.range(1,1).end(&#34;right&#34;)
+&lt;Range [Book2]Sheet2!$C$1&gt;</code></pre></div>
+<p>セル「1,5（E1）」に値がセットされているので、本来は<code>.end</code>で<code>right</code>方向に最終列を調べるなら「E列」が返ってきてほしいところですが、C列とE列の間のD列は値がセットされていない列なので、「C列までデータがあるよ」としか返ってきてくれません。表形式でデータの欠落のないことが保証されているなら、使ってもいいかもしれない。</p>
+
+<h2 id="保存する">保存する</h2>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; wb = xw.Book()
+&gt;&gt;&gt; wb.save()</code></pre></div>
+<p>あるいは</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">&gt;&gt;&gt; wb.save(r&#39;C:\\app\\new_file.xlsx&#39;)</code></pre></div>
+<p>とします。</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>detailsタグを使うと正常なコードブロックでmarkdownlintがエラーを吐く</title>
@@ -1475,153 +1633,6 @@ npm ERR!     C:\Users\hogehoge\AppData\Roaming\npm-cache\_logs\***debug.log</cod
 <p>基本的にJupyterはブラウザ上で気軽にPythonを記述できる便利な環境でしたが、vscodeと組み合わせることでコードの補完機能を利用でき、より一層気軽かつ便利にコードを記述できます。</p>
 
 <p>ますますvscode依存が深まりそうです_:(´ཀ`」 ∠):_</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>Unity Hubを使ってUnityをインストールする</title>
-			<link>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</link>
-			<pubDate>Thu, 11 Jul 2019 16:41:00 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</guid>
-			<description>Unityって何さ Unity 世界で最も広くつかわれているゲーム開発エンジン。 様々な機能を備えたエディターと、業界で最も幅広いプラットフォームへのサポ</description>
-			<content type="html"><![CDATA[
-
-<h2 id="unityって何さ">Unityって何さ</h2>
-
-<p><a href="https://unity.com/">Unity</a></p>
-
-<blockquote>
-<p>世界で最も広くつかわれているゲーム開発エンジン。 様々な機能を備えたエディターと、業界で最も幅広いプラットフォームへのサポートを利用して、ゲームやインタラクティブなコンテンツを制作する方法を学びましょう。</p>
-</blockquote>
-
-<p>「ゲーム開発エンジン」とは、画面描写、効果音やBGMなどの音楽管理、ステータスなどの各種データ管理などを総合して開発できる環境のこと。ただ、昨今ではゲームだけでなく映像制作にも用いられてますし、3Dに強いという特徴を生かして建築設計にも活用されているようです。すげぇ。</p>
-
-<p>2Dを多用した映像制作ではちょっとアレかもしれませんが、3Dがメインならリアルタイムで3Dレンダリングが可能なUnityの強みを活用できそうです。<a href="https://unity.com/">Unityオフィシャル</a>を始めとしてナレッジも多いですし、販売されているテキストも充実しているのも、Unityの強みかもしれません。</p>
-
-<p>何はともあれ、まずは環境を整備しようと思います。今回はインストールについて。</p>
-
-<h2 id="環境">環境</h2>
-
-<ul>
-<li>macOS Mojave 10.14.5</li>
-</ul>
-
-<p>なお、インストールする対象は<a href="https://blogs.unity3d.com/jp/2019/04/16/introducing-unity-2019-1/">Unity 2019.1版</a>とします。</p>
-
-<h2 id="エディション">エディション</h2>
-
-<p>Unityには現在（2019年7月10日）エディションが3パターン存在します。</p>
-
-<table>
-<thead>
-<tr>
-<th align="center">名称</th>
-<th align="center">月額</th>
-<th align="center">条件</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td align="center">Personal</td>
-<td align="center">無料</td>
-<td align="center">収入ならびに資金調達（自己資金を含む）の合計が年間10万ドルを超えない場合</td>
-</tr>
-
-<tr>
-<td align="center">Pro with Teams Advanced</td>
-<td align="center">15,000円</td>
-<td align="center">条件なし</td>
-</tr>
-
-<tr>
-<td align="center">Plus</td>
-<td align="center">～3000円</td>
-<td align="center">個人・法人問わず、年間収益ならびに資金調達（自己資金を含む）の合計が20万米ドル以下の場合</td>
-</tr>
-</tbody>
-</table>
-
-<p>エディション構成あるいは月額は、ある程度のスパンで更新されると思うので、<a href="https://unity.com/">Unityオフィシャル</a>を参照していただくことを強くオススメします。</p>
-
-<p>とりあえずここでは、Personalエディションを選択します。</p>
-
-<h2 id="インストール手順">インストール手順</h2>
-
-<p>Unityは基本的に直接インストーラーをダウンロードせず、Unity Hubと呼ばれるソフトを経由してインストールします。まずはそのUnity Hubをインストールするところから。</p>
-
-<h3 id="unity-hubのダウンロード">Unity Hubのダウンロード</h3>
-
-<p><a href="https://unity.com/">Unityオフィシャル</a>から「はじめる」をクリックします。</p>
-
-<p><img src="2019-07-07-16-53-46.png" alt="pic" /></p>
-
-<p>プランが表示されます。ここではPersonalを選択します。</p>
-
-<p><img src="2019-07-07-17-42-45.png" alt="pic" /></p>
-
-<p>「利用規約および〜」の部分にチェックを入れると、ボタンが活性化されてUnity Hubのダウンロードができるようになります。</p>
-
-<p><img src="2019-07-07-16-56-51.png" alt="pic" /></p>
-
-<p>ダウンロードしたらインストールします。MacへのインストールはApplicationsのフォルダーにコピーするだけです。</p>
-
-<h3 id="ダウンロードするunityの選択">ダウンロードするUnityの選択</h3>
-
-<p>Unity Hubのインストールが終わったら、起動します。</p>
-
-<p><img src="2019-07-07-16-59-36.png" alt="pic" /></p>
-
-<p>この状態ではまだUnity本体はインストールされていません。ダウンロードもされていません。そこで、左の「インストール」をクリックします。</p>
-
-<p><img src="2019-07-07-17-00-45.png" alt="pic" /></p>
-
-<p>右上の「インストール」ボタンをクリックします。すると現時点（2019年7月）でインストールが可能なバージョンの一覧が表示されます。</p>
-
-<p><img src="2019-07-07-17-01-32.png" alt="pic" /></p>
-
-<p>とくにこだわりがなければ最新の安定版をインストールします。</p>
-
-<h3 id="一緒にインストールするモジュールの選択">一緒にインストールするモジュールの選択</h3>
-
-<p>本体のバージョンを選択し「次へ」をクリックすると、今度は本体と同時にインストールするモジュールを選択できます。自分は「Android Build Support」「iOS Build Support」の2つを選択しました。とくに深い意味はありません。なんとなく必要になりそうだな・・・と思ったので。なお、Dev toolsのVisual Studio for Macは最初から選択されています。</p>
-
-<p>なお、ここで選択しなくても後で追加できるので、必要性を感じなければ選択しなくても何ら問題ありません。</p>
-
-<p>選択し終わったら「次へ」をクリック。</p>
-
-<p><img src="2019-07-07-17-06-08.png" alt="pic" /></p>
-
-<h3 id="ライセンス契約">ライセンス契約</h3>
-
-<p>ライセンス契約の画面です。おもむろに同意します。そして「実行」をクリックします。</p>
-
-<p><img src="2019-07-07-17-06-55.png" alt="pic" /></p>
-
-<p>すると、自動的にダウンロードが始まります。</p>
-
-<p><img src="2019-07-07-17-08-06.png" alt="pic" /></p>
-
-<p>しばらく放置しておけばダウンロードとインストールが完了します。</p>
-
-<p><img src="2019-07-07-17-41-01.png" alt="pic" /></p>
-
-<h3 id="インストールが終わったら">インストールが終わったら</h3>
-
-<p>左側の「プロジェクト」から「新規作成」をクリックします。</p>
-
-<p><img src="2019-07-07-17-45-00.png" alt="pic" /></p>
-
-<p>するとテンプレート画面が開きます。ここから新規作成すればいいわけですね。</p>
-
-<p><img src="2019-07-07-17-45-17.png" alt="pic" /></p>
-
-<h2 id="まとめ">まとめ</h2>
-
-<p>Unityのインストールがこれで完了しました。なお、アップデートなどもUnity Hubを利用することになります。</p>
-
-<p>さあ、あとはコーディングするだけです。するだけです。するだけだってば。</p>
 ]]></content>
 		</item>
 		
