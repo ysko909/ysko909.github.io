@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Dummydata on 頑張らないために頑張る</title>
+    <link>https://idontwannawork.github.io/tags/dummydata/</link>
+    <description>Recent content in Dummydata on 頑張らないために頑張る</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Sat, 07 Sep 2019 10:31:55 +0900</lastBuildDate>
+    
+	<atom:link href="https://idontwannawork.github.io/tags/dummydata/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>ダミーデータをお手軽に調達する</title>
+      <link>https://idontwannawork.github.io/posts/make-random-data-easily/</link>
+      <pubDate>Sat, 07 Sep 2019 10:31:55 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/make-random-data-easily/</guid>
+      <description>テストデータは欲しいけど「hoge」とかじゃ困るときに 文書作成やレイアウト検討など、さまざまなシチュエーションでダミーデータは必要です。ただ</description>
+    </item>
+    
+  </channel>
+</rss>

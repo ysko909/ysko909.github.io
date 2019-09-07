@@ -6,8 +6,198 @@
 		<description>Recent content in Posts on 頑張らないために頑張る</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Fri, 06 Sep 2019 15:14:51 +0900</lastBuildDate>
+		<lastBuildDate>Sat, 07 Sep 2019 10:31:55 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>ダミーデータをお手軽に調達する</title>
+			<link>https://idontwannawork.github.io/posts/make-random-data-easily/</link>
+			<pubDate>Sat, 07 Sep 2019 10:31:55 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/make-random-data-easily/</guid>
+			<description>テストデータは欲しいけど「hoge」とかじゃ困るときに 文書作成やレイアウト検討など、さまざまなシチュエーションでダミーデータは必要です。ただ</description>
+			<content type="html"><![CDATA[
+
+<h2 id="テストデータは欲しいけど-hoge-とかじゃ困るときに">テストデータは欲しいけど「hoge」とかじゃ困るときに</h2>
+
+<p>文書作成やレイアウト検討など、さまざまなシチュエーションでダミーデータは必要です。ただ、あんまり「テストテストテスト・・・」のような単語の羅列だったり、同じ日付が繰り返し並んでいても、実際の動作がイメージしにくいです。かと言って、「hoge」「fuga」「piyo」「foo」「bar」「baz」ばっかりだと「そもそもどんなデータを想定してるんだかさっぱりだよ！」なんてこともあるかもしれません。</p>
+
+<p>そこで各種ダミーデータの作成方法をメモしておきます。なお、ここで言及する「ダミーデータ」とは以下のようなものを想定しています。</p>
+
+<ul>
+<li>テキストであれば<a href="https://ja.wikipedia.org/wiki/Lorem_ipsum">Lorem ipsum</a>など意味はないが読める（読めそうな）テキスト</li>
+<li>小数あるいは整数であれば適当な値</li>
+<li>時刻や日付であれば（任意の範囲で）適当な値</li>
+</ul>
+
+<p>よって、Linuxなどでランダムなデータを生成するのに利用する<code>urandom</code>のような機能は対象外です。また、VBAによるランダムなデータの生成もここでは対象外とします。プログラムを組むなら何でもアリになっちゃうしね_(:3」∠)_</p>
+
+<h2 id="fakerを使う">fakerを使う</h2>
+
+<p><a href="https://github.com/joke2k/faker">faker</a>はPythonパッケージの1つです。このパッケージのすごいところは人名、住所、会社名などを<a href="https://faker.readthedocs.io/en/master/locales/ja_JP.html">日本語で生成できる</a>ところ。またその機能もすこぶる多彩です。前述のプロフィール情報のほか、下記のようなダミーデータを生成できます。</p>
+
+<ul>
+<li>クレジットカード情報</li>
+<li>ファイル情報</li>
+<li>緯度経度情報</li>
+<li>メールアドレス（フリーメールか否か、なんていう細かい指定も可能）</li>
+<li>URL、ドメイン、ホスト名</li>
+<li>IPv4、v6のアドレス</li>
+</ul>
+
+<p>もう、とりあえずプロフィール系のダミーデータはこれ使っておけばいいんじゃね？っていうくらいに多彩です。ホントすごい_(:3」∠)_</p>
+
+<p>強いて難点をあげるなら、ダミーテキストも生成できるのですが、日本語として<a href="https://faker.readthedocs.io/en/master/locales/ja_JP.html#faker-providers-lorem">意味のない文章になる</a>ことくらい。「別に意味がなくてもいいよー」という場合は、このパッケージ1つあればもう完璧です。</p>
+
+<p>ちなみに紹介したこれはPythonのパッケージですが、<a href="https://github.com/fzaninotto/Faker">PHP</a>や<a href="https://github.com/faker-ruby/faker">Ruby</a>にもfakerという同名のライブラリが存在します。</p>
+
+<h2 id="ダミーデータを生成する">ダミーデータを生成する</h2>
+
+<p>ダミーデータを調達するには、web上で生成してくれるサイトを利用するのが手っ取り早いです。大抵は出力もCSVなどに対応しているので、わざわざwebページをコピペする必要もありません。なので、有名どころ（？）を紹介します。</p>
+
+<h3 id="疑似個人情報データ生成サービス">疑似個人情報データ生成サービス</h3>
+
+<p>もうページの名前からして期待できるのが<a href="https://hogehoge.tk/personal/">疑似個人情報データ生成サービス</a>です。出力できるダミーデータは一般的なプロフィール情報です。名前などのパターンが多い上、住所は出力したい都道府県を選択できる、男女比率を選択できる、出力する年齢の範囲も指定できるとあってなかなか多機能です。血液型も生成できるのですが、日本人の血液型の割合に合わせて生成されるというのも、「それっぽさ」を醸し出す一因かもしれません。</p>
+
+<p>JSONの出力はできませんがXMLの出力が可能で、他にxls、CSVでの出力ができます。</p>
+
+<p>難点は、メールアドレスのドメインが完全にランダムなこと。<a href="https://ja.wikipedia.org/wiki/%E3%82%B8%E3%82%A7%E3%83%8D%E3%83%AA%E3%83%83%E3%82%AF%E3%83%88%E3%83%83%E3%83%97%E3%83%AC%E3%83%99%E3%83%AB%E3%83%89%E3%83%A1%E3%82%A4%E3%83%B3">gTLD</a>にないような文字列なので、そこだけはケアが必要です。</p>
+
+<h3 id="mockaroo">mockaroo</h3>
+
+<p>日本語データではありませんが、ダミーのプロフィール情報のほかにBitcoinのアドレスや中国っぽい名前まで生成する、めちゃくちゃ多彩な機能を持ったサービスが<a href="https://www.mockaroo.com/">mockaroo</a>です。出力もCSV以外にJSON、xls形式など多彩。なお、1000件を超えるデータの出力についてはお金がかかるので注意。</p>
+
+<p>ただねぇ・・・<strong>日本語データが生成できない</strong>のは、唯一にして最大の弱点・・・。</p>
+
+<h3 id="namemaker">NameMaker</h3>
+
+<p>英語名やフランス語名など、それっぽい名前を生成できるのが<a href="http://www.elerl.com/elseeds/NameMaker/">Name Maker</a>です。NPC名とかに使えるかな？</p>
+
+<h2 id="ダミーテキストを生成する">ダミーテキストを生成する</h2>
+
+<p>前述のfakerではカバーしきれなかったのがダミーテキスト。そんなわけでダミーテキストを調達する方法について紹介します。</p>
+
+<h3 id="lorem-ipsum">Lorem Ipsum</h3>
+
+<p>英字のダミーテキストでは大御所の<a href="https://www.lipsum.com/">Lorem Ipsum</a>。とりあえずこれを使っておけば「それっぽくなる」のが便利。UIの出来がいいと、Lorem Ipsumを書いておくだけでなんかオサレっぽさが醸し出されます。</p>
+
+<h3 id="青空文庫">青空文庫</h3>
+
+<p>日本語のダミーテキストを調達するのについては、もうこれが一番なんじゃなかろうか、と。最終手段を最初に持ってきた感がありますが、青空文庫にある任意の本の一節を引用する方法があります。著作権はすでに切れているので利用については自由です。ネックは<strong>ルビ</strong>が振られていること。具体的には以下のように振られ方をしています。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">私《わたくし》はその人を常に先生と呼んでいた。
+だからここでもただ先生と書くだけで本名は打ち明けない。
+これは世間を憚《はば》かる遠慮というよりも、その方が私にとって自然だからである。</code></pre></div>
+<p>これを除外しないといけないのが手間です。ルビの削除についてはググると方法が出てたりするのですが、結論から言っちゃうと<strong>正規表現で条件に一致したところは消しちゃえ</strong>、です。</p>
+
+<h4 id="青空文庫のルビを削除する">青空文庫のルビを削除する</h4>
+
+<p>Visual Studio Codeなどのエディターで置換元を指定する際、下記のような正規表現で指定します。置換先には何も指定しません。これでルビの削除ができます。なお、置換元の条件に正規表現が指定できないエディターでは利用できません。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">《[^》]+》</code></pre></div>
+<p>なお、カッコの形が異なる場合は違った条件にする必要があります。たとえば「（～）」でルビが記述されていれば下記のように置換元を指定します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">([^)]+)</code></pre></div>
+<h3 id="各種ダミーテキスト生成サイト">各種ダミーテキスト生成サイト</h3>
+
+<p>ググると結構出てきます。手前味噌ですが、<a href="https://idontwannawork.github.io/dummytextgenerator/">こちら</a>でもダミーテキストを生成できます。</p>
+
+<h2 id="officeでは便利な関数があります">Officeでは便利な関数があります</h2>
+
+<p>Microsoft Officeでは、各アプリケーションにダミーデータを生成する関数などがもともと備わっています。</p>
+
+<h3 id="excel">Excel</h3>
+
+<p>以下はすべてExcel関数です。動作はOffice Professional 2016環境下にて確認しています。</p>
+
+<h4 id="randbetween-ランダムな値を生成">Randbetween()・・・ランダムな値を生成</h4>
+
+<p>最小値と最大値を指定すれば、勝手にランダムな値を生成してくれます。数値だけじゃなくて日付や時刻などもイケるのが素晴らしい。超絶便利。なお、値の指定は<strong>整数のみ</strong>有効です。</p>
+
+<p>たとえば、日付を生成したい場合は任意のセルにて下記のように記述します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">=Randbetween(&#34;2019/01/01&#34;,&#34;2019/12/31&#34;)</code></pre></div>
+<p>時刻はちょっとややこしいです。下記のように記述します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">=RANDBETWEEN(TIME(0,0,0)*100000, TIME(10, 10, 10)*100000) / 100000</code></pre></div>
+<p>なんでこうなるかなんですが、Excel上で時刻は<strong>小数で管理されているせい</strong>です。</p>
+
+<p>Excel関数である<code>time()</code>などは、ぱっと見だと時刻としてデータを返しているように見えます。ただし、実際は小数値を時刻にExcelが見た目だけ置き換えているだけなので、そのあたりを考慮しないといけません。さらに<code>randbetween()</code>は小数を扱えないため、実際のデータが小数である時刻とは相性がすこぶる悪いのです。よって、「<code>time()</code>の結果を一度整数にして生成した<code>randbetween()</code>の結果を小数に直す」という回りくどいことをしないといけないのでした。</p>
+
+<p>なお、日付や時刻の場合は<strong>シリアル値が生成される</strong>ので、実際の見た目を整えたい場合はセルの表示形式を日付や時刻に設定しておく必要があります。</p>
+
+<p>注意点というか、特筆すべき点があるとすれば、<code>randbetween()</code>関数による値の生成は、表示が更新されれば再計算されます。つまり、行・列の削除やオートフィル、セルへの値設定などの操作を行った場合、その操作の度に<strong>毎度毎度再計算されます</strong>。</p>
+
+<p>たとえばA1に<code>randbetween()</code>を記述しました。</p>
+
+<p><img src="2019-09-04-14-46-33.png" alt="pic" /></p>
+
+<p>このままF1までオートフィルすると、A1も再計算されます。</p>
+
+<p><img src="2019-09-04-14-48-52.png" alt="pic" /></p>
+
+<p>今度はA1をコピーしてA3からA5にペーストして見ます。コピー元のA1だけでなくB1からF1までもが再計算されました。</p>
+
+<p><img src="2019-09-04-14-50-14.png" alt="pic" /></p>
+
+<p>今度はD3に直接値をセットします。ただ単純に文字列を入力しただけでも<code>randbetween()</code>が再計算されていることがわかります。</p>
+
+<p><img src="2019-09-04-14-53-22.png" alt="pic" /></p>
+
+<p>このように、<code>randbetween()</code>を記述している限り再計算されます。なので、ある程度好みの値が生成できたらコピーして「値の貼り付け」を行って値を確定させるか、計算方法の設定を「手動」にすることで、余計な再計算を防ぐことができます。</p>
+
+<h4 id="rand-ランダムな小数を生成">rand()・・・ランダムな小数を生成</h4>
+
+<p>お馴染みランダム関数。小数を単純に生成するならこれ。ただ、整数なら<code>randbetween()</code>があるので、わざわざこちらを利用して整数に直す必要はないし、小数も任意の数で割ればいいわけです。なので、実はわざわざこちらを利用するシチュエーションってそんなにないのかも。</p>
+
+<h3 id="word">word</h3>
+
+<p>Wordは文書作成ソフトらしく、文章を生成してくれます。こちらも動作はOffice Professional 2016環境下にて確認しています。</p>
+
+<h4 id="rand-ランダムな文章を生成">rand()・・・ランダムな文章を生成</h4>
+
+<p>適当な文章を勝手に生成します。段落や1段落中の文章数も指定が可能で至れり尽くせり。もちろんちゃんと日本語として読める文章なのでご安心です。</p>
+
+<p>とりあえず文章を生成したい場合は、下記を任意の箇所に記述してエンターを押します。するといきなり文章が現れます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">=rand()</code></pre></div>
+<p>ちなみに引数を指定できます。形式は<code>rand(段落数, 1段落中の文章数)</code>です。</p>
+
+<h4 id="lorem-有名なダミーテキストを生成">lorem()・・・有名なダミーテキストを生成</h4>
+
+<p>英字のダミーテキストを生成したい場合はこちらを使用します。そう、英字のダミーテキストって言ったら<a href="https://ja.wikipedia.org/wiki/Lorem_ipsum">アレ</a>ですよね。使い方は、相変わらず任意の場所で下記の入力を行ったあとに、エンターキーを押すだけです。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">=lorem()</code></pre></div>
+<p>こっちも引数の指定が可能です。形式は<code>lorem(段落数, 1段落中の文章数)</code>です。</p>
+
+<h4 id="番外-rand-old-昔の機能なのでわざわざ使用するほどでもない">（番外）rand.old()・・・昔の機能なのでわざわざ使用するほどでもない</h4>
+
+<p>Word 2003あたりから実装されていた機能です。<code>rand()</code>と異なるのは<strong>生成される文章が短い</strong>ことです。これを実行すると下記のような文章が生成されます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。
+Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。
+Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。</code></pre></div>
+<p>・・・まぁ、いわゆる「ダミーテキストっぽい」データが生成されますが、前述の<code>rand()</code>があるのでわざわざこちらを利用することはあまりないな、と思います。</p>
+
+<h3 id="powerpoint">PowerPoint</h3>
+
+<p>同様にパワポでもテキストを生成する機能が、準備されています。<strong>一応ね</strong>！ただ、Excelほど多機能ではなく、Wordほど親切ではありませんが・・・。こちらも動作はOffice Professional 2016環境下にて確認しています。</p>
+
+<h4 id="rand-有名なパングラムを生成">rand()・・・有名なパングラムを生成</h4>
+
+<p>「The quick brown fox jumps over the lazy dog」という<a href="https://ja.wikipedia.org/wiki/The_quick_brown_fox_jumps_over_the_lazy_dog">有名なパングラム</a>を生成します。</p>
+
+<p>とりあえず文章を生成したい場合は、下記を任意のテキストフィールドに記述してエンターを押します。すると「The quick brown fox jumps over the lazy dog」という文章がいくつか生成されます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">=rand()</code></pre></div>
+<p>ちなみに引数を指定できます。形式は<code>rand(段落数, 繰り返しの数)</code>です。</p>
+
+<h4 id="lorem-パワポでも使えます">lorem()・・・パワポでも使えます</h4>
+
+<p>英字のダミーテキストを生成したい場合はこちらを使用します。使い方は、相変わらず任意の場所で下記の入力を行ったあとに、エンターキーを押すだけです。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">=lorem()</code></pre></div>
+<p>こっちも引数の指定が可能です。形式は<code>lorem(段落数, 1段落中の文章数)</code>です。</p>
+
+<h3 id="そもそもofficeが持つ機能を使わなくても良くないか">そもそもOfficeが持つ機能を使わなくても良くないか</h3>
+
+<p>というわけで、前述のテキストを含むダミーデータを生成できるサイトなどから、それ用のデータを取得すればより利便性がいいかもしれません。そこはケースバイケースで。</p>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>ダミーデータの調達方法についてまとめてみました。こういうデータってまとまった件数が必要なこともあるので、自動で気軽に調達できるならそれに越したことはありません。楽しよう！_(:3」∠)_</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>PythonとxlwingsでExcelファイルをいじる</title>
@@ -1492,147 +1682,6 @@ npm ERR!     C:\Users\hogehoge\AppData\Roaming\npm-cache\_logs\***debug.log</cod
 <p>volca beatsと異なり、各パートで自由に音作りできる分とっかかりにくい印象を受けますが、一度慣れてしまえば実際のドラム音に似た音もそうじゃない音もコレ1台でこなせる多彩な表現力を持ったリズムマシンです。</p>
 
 <p>個人的には変に実際のドラム音に近似した音を作るより、DSPの自由度に物言わせた「こんな音もリズムパターンに組み込んじゃうぜー！」みたいな奇抜な音をどんどん作って行きたいです。AutechreとかPlaidっぽいトラックを作るには最適なガジェットだと思います。</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>Jupyter NotebookをVisual Studio Codeで実行する</title>
-			<link>https://idontwannawork.github.io/posts/run-jupyter-notebook-with-vscode/</link>
-			<pubDate>Fri, 02 Aug 2019 14:00:38 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/run-jupyter-notebook-with-vscode/</guid>
-			<description>はじめに Visual Studio Code（以下、vscode）ではDockerでPythonやVue.jsの開発環境を構築したり、あるいはMarkdownで書い</description>
-			<content type="html"><![CDATA[
-
-<h2 id="はじめに">はじめに</h2>
-
-<p>Visual Studio Code（以下、vscode）ではDockerで<a href="/posts/connect-to-docker-with-vscode-extension/">Python</a>や<a href="/posts/build-environment-of-vuejs-with-docker/">Vue.js</a>の開発環境を構築したり、あるいは<a href="/posts/convert-markdown-to-pdf-with-vscode/">Markdownで書いたドキュメントを配布用にPDF変換</a>したりと、今までいろいろやってきました。今度は<a href="https://jupyter.org/">Jupyter Notebook</a>を動かします。いやー、vscodeってホントに多彩ですね。</p>
-
-<p>なお、今回においてはDockerを利用せず、単純にローカル環境でJupyterを使用します。</p>
-
-<h2 id="jupyter-notebookとは">Jupyter Notebookとは</h2>
-
-<p>Jupyter Notebook (なお、読み方は「ジュパイター・ノートブック」、または「ジュピター・ノートブック」。自分は「ジュピター」って言ってますが、どっちが一般的なんですかね？) とは、ブラウザ上で実行するデータ分析作業のためのツールです。特徴的なのは、<strong>実行結果を記録しながら</strong>プログラミングができる点です。<a href="https://jupyter.org/try">ここ</a>でブラウザから実行できます。</p>
-
-<p>プログラムそのものを記述しつつ、Markdownを利用して各種テキストや図表も同時に書き込んでいくことが可能です。つまり、プログラムのソースとその実行結果が、メモを含めて明確に紐づいた状態で確認できます。そのため、作業内容の振り返りに非常に便利ですし、複数人で作業を行う場合の共有にも有用です。また、Jupyterは<code>*.ipynb</code>形式のファイルで保存しますが、ソースコード部分を<code>*.py</code>のPythonコードとして出力することも可能ですし、実行結果をPDFやHTML形式で出力できるため、Jupyterの実行環境がなくても内容を共有できます。</p>
-
-<p>そんなJupyterをvscodeで使っちゃえ、というのが今回の趣旨です。</p>
-
-<h2 id="環境">環境</h2>
-
-<ul>
-<li>Windows 10</li>
-<li>Anaconda version 1.7.2</li>
-<li>vscode 1.36</li>
-</ul>
-
-<h2 id="インストール">インストール</h2>
-
-<p>Anacondaをインストールしている場合、基本的にはJupyterも一緒にインストールされているはずです。なお、Anacondaのインストールは、<a href="https://www.anaconda.com/">オフィシャルページ</a>からプラットフォームに合ったインストーラーをダウンロードして実行します。インストール後に下記のコマンドを実行すると、<code>conda</code>コマンドにてインストールされているリストが出力されます。表示されたリストの中に<code>jupyter</code>があればインストール済みであることがわかります。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">conda list</code></pre></div>
-<p>ちなみに、Anacondaを導入しないでJupyterを利用するには<code>pip</code>を利用します。下記のコマンドを実行するだけです。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">pip install jupyter</code></pre></div>
-<h2 id="vscodeで実行する">vscodeで実行する</h2>
-
-<h3 id="拡張機能のインストール">拡張機能のインストール</h3>
-
-<p>vscodeでJupyterを利用するには、Pythonの拡張機能をインストールする必要があります。</p>
-
-<p>拡張機能をインストールするには、vscodeの左側にあるメニュー中から拡張機能のアイコン（下画像の赤枠内）をクリックします。</p>
-
-<p><img src="2019-08-02-15-12-00.png" alt="pic" /></p>
-
-<p>検索窓に「python」と入力します。検索結果のうち、「Python」を選択し、インストールします。なお、下画像ではすでにインストール済みのため、歯車のアイコンが表示されています。</p>
-
-<p><img src="2019-08-02-15-15-04.png" alt="pic" /></p>
-
-<p>他にも導入すると便利な拡張機能はありますが、今回は割愛します。</p>
-
-<h3 id="vscodeでノートブックを書いてみる">vscodeでノートブックを書いてみる</h3>
-
-<p>まず任意のフォルダを作成します。今回は<code>workdir</code>としましたが、フォルダ名はなんでもいいです。次にvscodeで先ほど作成したフォルダを開きます。フォルダを開いたら、適当にファイルを作成します。ただし、この際に作成する<strong>ファイルの拡張子は<code>*.py</code>です</strong>。先ほどJupyterでは<code>*.ipynb</code>形式を用いると言いましたが、vscodeで実行する場合はPythonの拡張子でファイルを作成します。</p>
-
-<p>「だけど、それじゃあフツーのPythonコードを見分けがつかないじゃん！」と思ったあなたは正しい。つまりファイルの拡張子ではなく、ファイルの中身で見分けるわけです。</p>
-
-<p>ファイルを<code>*.py</code>形式で作成したら、下記のコードを入力してください。なお、「その2」部分はCSVファイルがないとコケちゃうので、適当なCSVファイルを作っておくかコードを削除してください。</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1">#%%</span>
-
-<span class="c1">## その１</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-
-<span class="c1">#%%</span>
-
-<span class="c1">## その２</span>
-
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&#34;C:</span><span class="se">\\</span><span class="s2">app</span><span class="se">\\</span><span class="s2">hoge.csv&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;cp932&#34;</span><span class="p">)</span>
-<span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-
-<span class="c1">#%%</span>
-
-<span class="c1">## その3</span>
-
-<span class="c1">### sin plot</span>
-
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">pl</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mp</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-<span class="n">pl</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="c1">### cos plot</span>
-
-<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-<span class="n">pl</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-<span class="n">pl</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">pl</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
-<span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="c1">### tan plot</span>
-
-<span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-<span class="n">pl</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-<span class="n">pl</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-<span class="n">pl</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-<span class="n">pl</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-<span class="n">pl</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
-<span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></div>
-<p>何か見慣れない<code>#%%</code>という文字列が含まれていますが、これが<strong>普通のPythonコードとJupyterを見分けるコード</strong>です。これが「セル」という、Jupyter Notebookにおける区切りを表しています。これで区切られた領域が1つの実行単位です。これをvscode上で記述すると、「Run cell」とか表示されます。このボタンを押下するとセル単位で実行するか、別のセルも一緒くたに実行するかが選べます。</p>
-
-<ul>
-<li><p>Run cell</p>
-
-<p>押下したセルのみ実行します。<code>Shift + Enter</code>を押下しても同様の結果が得られます。</p></li>
-
-<li><p>Run Above</p>
-
-<p>押下したセルの直前セルまで実行します。</p></li>
-
-<li><p>Run Below</p>
-
-<p>押下したセルから下のセルをすべて実行します。</p></li>
-</ul>
-
-<p>ちなみに、下画像で<code>#%%</code>の部分なんかに赤い波線が表示されていますが、これはflake8のlintに引っかかっているためです。ファイルの拡張子が<code>*.py</code>であるため、flake8が反応しちゃってるようです。「<code>import</code>はモジュールの冒頭に記述しろよぉ」とか言ってるわけですけど、ごめんね、これ<code>*.py</code>ファイルだけどJupyterなのよ_:(´ཀ`」 ∠):_</p>
-
-<p><img src="2019-08-02-15-27-20.png" alt="pic" /></p>
-
-<p>実行すると、右側に新しいタブで実行結果が表示されます。</p>
-
-<p><img src="2019-08-02-15-35-43.png" alt="pic" /></p>
-
-<p>なお、基本的にAnacondaをインストールしている場合は上記のコードがそのまま動作すると思います。が、Jupyterを<code>pip</code>でインストールした場合は、必要なパッケージを別途<code>pip install</code>してください。</p>
-
-<h2 id="まとめ">まとめ</h2>
-
-<p>基本的にJupyterはブラウザ上で気軽にPythonを記述できる便利な環境でしたが、vscodeと組み合わせることでコードの補完機能を利用でき、より一層気軽かつ便利にコードを記述できます。</p>
-
-<p>ますますvscode依存が深まりそうです_:(´ཀ`」 ∠):_</p>
 ]]></content>
 		</item>
 		
