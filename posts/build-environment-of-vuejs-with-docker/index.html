@@ -14,7 +14,7 @@
 
 <meta itemprop="datePublished" content="2019-07-04T13:58:10&#43;09:00" />
 <meta itemprop="dateModified" content="2019-07-04T13:58:10&#43;09:00" />
-<meta itemprop="wordCount" content="924">
+<meta itemprop="wordCount" content="1005">
 
 
 
@@ -98,7 +98,13 @@
 </span><span class="se"></span>    npm install -g npm @vue/cli</code></pre></div>
 <p>ただし、現時点（2019年7月3日）でVisual Studio CodeのRemoteはAlpine Linuxに対応していないので、Remoteを利用したい場合は別のイメージを使った方がいいと思われます（1敗）。<a href="/posts/connect-to-docker-with-vscode-extension/">以前記事にしていた</a>ので「Vue.jsの環境もリモートで開発だぁ！」とか思ってたんですけど出鼻をくじかれました。</p>
 
-<p>なお、Alpine Linuxは<a href="https://github.com/microsoft/vscode-remote-release/issues/54">VS Code Insidersではサポートされている</a>ため、そのうち正式対応するはずなので正座して待機しようと思います。</p>
+<p><del>なお、Alpine Linuxは<a href="https://github.com/microsoft/vscode-remote-release/issues/54">VS Code Insidersではサポートされている</a>ため、そのうち正式対応するはずなので正座して待機しようと思います。</del></p>
+
+<h4 id="alpine-linuxに対応しました-2019年9月8日追記">Alpine Linuxに対応しました（2019年9月8日追記）<a href="#alpine-linuxに対応しました-2019年9月8日追記" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+
+<p>vscodeのバージョン1.38にて<a href="https://code.visualstudio.com/updates/v1_38">Alpine Linux製コンテナへRemote接続できる</a>ようになりました！</p>
+
+<p><img src="2019-09-08-17-55-25.png" alt="pic" /></p>
 
 <h3 id="docker-compose-ymlの作成">docker-compose.ymlの作成<a href="#docker-compose-ymlの作成" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 <div class="highlight"><pre class="chroma"><code class="language-dockerfile" data-lang="dockerfile">version: <span class="s1">&#39;3&#39;</span><span class="err">
@@ -155,7 +161,7 @@ npm run serve</code></pre></div>
 				<p>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/vscode">vscode</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/docker">Docker</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/vue.js">Vue.js</a></span>
 				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>924 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1005 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-07-04 04:58 &#43;0000</p>
 			</footer>
 		</article>
@@ -169,7 +175,10 @@ npm run serve</code></pre></div>
 <li><a href="#環境">環境</a></li>
 <li><a href="#手順">手順</a>
 <ul>
-<li><a href="#dockerfileの作成">Dockerfileの作成</a></li>
+<li><a href="#dockerfileの作成">Dockerfileの作成</a>
+<ul>
+<li><a href="#alpine-linuxに対応しました-2019年9月8日追記">Alpine Linuxに対応しました（2019年9月8日追記）</a></li>
+</ul></li>
 <li><a href="#docker-compose-ymlの作成">docker-compose.ymlの作成</a></li>
 <li><a href="#コンテナーのビルド">コンテナーのビルド</a></li>
 <li><a href="#コンテナーの起動">コンテナーの起動</a></li>
