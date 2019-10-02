@@ -1583,6 +1583,10 @@ npm run serve</code></pre></div>
 <span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Table</span><span class="p">)</span>
 <span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Input</span><span class="p">)</span>
 </code></pre></div>
+<p>なお、アイコンを利用したい場合は下記のタグを記述する必要があります。<a href="https://materialdesignicons.com/">Material Design Icons</a>を利用したい場合はこれ。</p>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://cdn.materialdesignicons.com/2.5.94/css/materialdesignicons.min.css&#34;</span><span class="p">&gt;</span></code></pre></div>
+<p>もちろん、<a href="https://fontawesome.com/">Font Awesome</a>とか他のアイコンセットを利用したい、という場合はNPM経由なりCDNなりで導入する必要があります。</p>
+
 <h3 id="参考-vue-routerのインストール">（参考）vue routerのインストール</h3>
 
 <p>環境のセットアップ時に導入せず、後になってvue routerが必要になった場合は下記の手順で導入します。</p>
