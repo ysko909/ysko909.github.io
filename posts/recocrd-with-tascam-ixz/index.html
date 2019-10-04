@@ -14,7 +14,7 @@
 
 <meta itemprop="datePublished" content="2019-06-04T17:11:23&#43;09:00" />
 <meta itemprop="dateModified" content="2019-06-04T17:11:23&#43;09:00" />
-<meta itemprop="wordCount" content="3291">
+<meta itemprop="wordCount" content="3619">
 
 
 
@@ -128,11 +128,13 @@
 
 <p><strong>好きなアプリを使えばいいんじゃね？</strong>、です。</p>
 
-<p>そう言ってしまうと冗談に聞こえますが割とマジです。何せアナログの入力なので、プロテクトも何もないわけですから、極端なことを言えばスマホに標準搭載されているカメラアプリを使って録画してもいいわけです。あるいは、iOSであれば<a href="https://www.apple.com/jp/ios/garageband/">GarageBand</a>がパッと思い浮かぶところでしょうか。</p>
+<p>そう言ってしまうと冗談に聞こえますが割とマジです。何せアナログの入力なので、プロテクトも何もないわけですから、極端なことを言えばスマホに標準搭載されているカメラアプリを使って録画してもいいわけです。あるいは、iOSであれば<a href="https://www.apple.com/jp/ios/garageband/">GarageBand</a>がパッと思い浮かぶところでしょうか。外部入力が可能になった。<a href="https://www.korg.com/jp/products/software/korg_gadget/">Korg Gadget 2</a>でもいいかもしれません。ただ、Gadgetはちょっと問題があるかも（後述）。</p>
 
 <p><strong>慣れ親しんだアプリを使ってね</strong>という、TASCAMの思いやりなのかもしれないデスネ（ぐるぐる目）</p>
 
 <h2 id="つまづいたところ">つまづいたところ<a href="#つまづいたところ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<h3 id="音声入力のモニターができるか否かはアプリ次第">音声入力のモニターができるか否かはアプリ次第<a href="#音声入力のモニターができるか否かはアプリ次第" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 
 <p>単純明快なアナログ接続のiXZですが、スムーズに万事うまく行ったわけではありませんでした。というのが、<strong>音声入力のモニターができるか否かはアプリに依存</strong>する点です。</p>
 
@@ -142,13 +144,21 @@
 
 <p>少し調べてみたところ「モニターの可否は、レコーディングに利用するアプリが<strong>入力された音声を出力へ返してくれるかどうか</strong>に依存している」ということがわかりました。</p>
 
-<p>つまり、iXZは録音するデバイス（この場合iPhone）からの音声出力を単純にイヤホンに出力しているだけで、iXZ本体でイヤホンジャックに向けて配線しているわけではない、ということです。なので、モニタリングできるよう入力された音声を出力できるようなアプリを利用すればよい、ということになります。</p>
+<p>つまり、iXZは録音するデバイス（この場合iPhone）からの音声出力を単純にデバイスのイヤホンに出力しているだけで、<strong>iXZ本体のイヤホンジャックに向けて配線しているわけではない</strong>、ということです。なので、<strong>入力された音声をモニターできる機能を持ったアプリを利用すればよい</strong>、ということになります。</p>
 
-<p>ただし、GarageBandのようなアプリは動画ではなく音声のみを録音するので、「動画を取りつつ音声をモニターしたい」というニーズには残念ながら大抵のアプリが非対応、ということになります。</p>
+<h3 id="モニターできるアプリ">モニターできるアプリ<a href="#モニターできるアプリ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 
-<p>この場合、根本的な解決策はモニターできる録画アプリを探すことになります。が、今回は録画したかったものがKORGのvolcaをいじる場面だったので、ステレオミニプラグを分岐させるアダプターを利用しました。volcaのアウトプットに分岐アダプターを接続し、一方はiXZに接続しつつもう一方をイヤホンやスピーカーに接続することで、モニターしながら録画できる環境にしました。</p>
+<p><strong>Garagebandはモニター機能があります！</strong> なので、iOSデバイスをお持ちの方はiXZを購入すれば、すぐに手持ちのイヤホンをiXZにぶっ刺してモニター可能です。なお、Korg Gadget 2はレコーディングするガジェットが搭載されているのですが、モニター機能を終ぞ探しきれませんでした・・・まさか、そもそも存在しない？</p>
 
-<h2 id="使った感じはどうなのよ">使った感じはどうなのよ？<a href="#使った感じはどうなのよ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p>ただし、GarageBandのようなアプリは動画ではなく音声のみを録音するので、「動画を取りつつ音声をモニターしたい」というニーズには対応できない、ということになります。この場合、根本的な解決策は<strong>モニターできる録画アプリを探す</strong>ことになります。そんなのあるんですかね？</p>
+
+<h3 id="モニター非対応のアプリでモニターしながら録画するには">モニター非対応のアプリでモニターしながら録画するには<a href="#モニター非対応のアプリでモニターしながら録画するには" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+
+<p>プラグを<strong>分岐させるアダプターを用意する</strong>ことで、片側をiXZ側に流しながらもう片側でモニターする、という力技が実現可能です。</p>
+
+<p>今回は録画したかったものがKORGのvolcaをいじる場面だったので、ステレオミニプラグを分岐させるアダプターを利用しました。volcaのアウトプットに分岐アダプターを接続し、一方はiXZに接続しつつもう一方をイヤホンやスピーカーに接続することで、モニターしながら録画できる環境にしました。</p>
+
+<h2 id="使った感じはどうなのよ">使った感じはどうなのよ<a href="#使った感じはどうなのよ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p><strong>スゲーお手軽・・・！！</strong> _(┐「ε:)_</p>
 
@@ -177,7 +187,7 @@
 				<p>
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/iphone">iPhone</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/ixz">iXZ</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/review">review</a></span>
 				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>3291 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>3619 Words</p>
 				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-06-04 08:11 &#43;0000</p>
 			</footer>
 		</article>
@@ -196,8 +206,13 @@
 <li><a href="#さあレコーディング-あれ">さあレコーディング！・・・あれ？</a></li>
 <li><a href="#アプリは">アプリは？</a></li>
 </ul></li>
-<li><a href="#つまづいたところ">つまづいたところ</a></li>
-<li><a href="#使った感じはどうなのよ">使った感じはどうなのよ？</a></li>
+<li><a href="#つまづいたところ">つまづいたところ</a>
+<ul>
+<li><a href="#音声入力のモニターができるか否かはアプリ次第">音声入力のモニターができるか否かはアプリ次第</a></li>
+<li><a href="#モニターできるアプリ">モニターできるアプリ</a></li>
+<li><a href="#モニター非対応のアプリでモニターしながら録画するには">モニター非対応のアプリでモニターしながら録画するには</a></li>
+</ul></li>
+<li><a href="#使った感じはどうなのよ">使った感じはどうなのよ</a></li>
 <li><a href="#まとめ">まとめ</a></li>
 </ul></li>
 </ul>
