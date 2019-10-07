@@ -6,8 +6,535 @@
 		<description>Recent content in Posts on 頑張らないために頑張る</description>
 		<generator>Hugo -- gohugo.io</generator>
 		<language>ja</language>
-		<lastBuildDate>Wed, 25 Sep 2019 00:16:41 +0900</lastBuildDate>
+		<lastBuildDate>Mon, 07 Oct 2019 09:41:57 +0900</lastBuildDate>
 		<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+		
+		<item>
+			<title>VuexとVue Routerを使ってSPAを作るチュートリアルをやってみた</title>
+			<link>https://idontwannawork.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</link>
+			<pubDate>Mon, 07 Oct 2019 09:41:57 +0900</pubDate>
+			
+			<guid>https://idontwannawork.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</guid>
+			<description>はじめに 以前の記事ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したの</description>
+			<content type="html"><![CDATA[
+
+<h2 id="はじめに">はじめに</h2>
+
+<p><a href="/posts/make-dummy-text-generator-site-with-vuejs/">以前の記事</a>ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したのですが、デフォルトだと「<a href="https://vuex.vuejs.org/ja/">Vuex</a>」や「<a href="https://router.vuejs.org/ja/">Vue Router</a>」はOFFです。Vue.jsでなくとも<a href="https://ja.reactjs.org/">React</a>などのJavaScriptのライブラリやフレームワークを用いた環境でSPAを作成する場合、状態管理とルーティングは避けて通れない機能です。いや、別に利用しなくてもいいんですが、たぶん避けて通ったほうが後々面倒なこと（コンポーネント間でデータバケツリレーしたり、ページ遷移する必要が出てきたり・・・）になります。</p>
+
+<p>なので今回は「VuexとVue Routerを使用したSPAをざっくり作って、状態管理とルーティングに慣れておこうぜ」というのが趣旨です。基本的には<a href="https://vuex.vuejs.org/ja/guide/">Vuexのチュートリアル</a>を参考にしています。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Windows 10</li>
+<li>Visual Studio Code 1.38</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ vue --version
+3.10.0
+$ node --version
+v10.15.3</code></pre></div>
+<h2 id="なにはともあれ">なにはともあれ</h2>
+
+<p>まずはVue CLIで枠を作ります。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">vue create hogehoge</code></pre></div>
+<p>・・・いい名前が思いつかなかった_(:3」∠)_</p>
+
+<p>ここで注意が必要なのは、VuexとVue Routerを設定するのには<strong>デフォルト設定だとダメ</strong>ということです。マニュアル設定します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">? Please pick a preset: Manually select features  
+? Check the features needed for your project: (Press &lt;space&gt; to select, &lt;a&gt; to toggle all, &lt;i&gt; to invert selection)  
+&gt;(*) Babel  
+ ( ) TypeScript  
+ ( ) Progressive Web App (PWA) Support  
+ ( ) Router  
+ ( ) Vuex  
+ ( ) CSS Pre-processors  
+ (*) Linter / Formatter  
+ ( ) Unit Testing  
+ ( ) E2E Testing  </code></pre></div>
+<p>このうち、<code>Router</code>と<code>Vuex</code>を選択しておきます。もし必要なら他の項目もついでに選択してエンターキーを押します。</p>
+
+<p>ちなみに、<code>Router</code>を選択したときに下記の質問が表示されます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">? Use history mode for router? (Requires proper server setup for index fallback in production) (Y/n)</code></pre></div>
+<p>「Historyモードは使うかい？」と聞かれているわけですが、これには条件があります。その条件とはカッコ書きで「サーバー側の設定が必須だよ」と言っています。これはVue Routerの<a href="https://router.vuejs.org/ja/guide/essentials/history-mode.html">Historyモードに関するページ</a>に記載があります。サーバー側の設定が不可能である、あるいはhashモードでも問題ない場合はNoを選択してください。ここではYesを選択しました。</p>
+
+<p>Lintなどの設定はデフォルトのものを選択して環境設定を終わらせます。</p>
+
+<h3 id="そもそもhistoryモードって何よ">そもそもHistoryモードって何よ</h3>
+
+<p>Vue Routerには2つのモードがあります。</p>
+
+<ul>
+<li>hash</li>
+<li>history</li>
+</ul>
+
+<p>これはそれぞれ各ページのアドレスに違いが表れます。</p>
+
+<p>たとえばあるSPAには、トップページの他に<code>about</code>というページがあるとします。この場合、hashとhistoryでアドレスが下記のように異なります。</p>
+
+<ul>
+<li><p>hash</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">http://localhost:8080/#/about</code></pre></div></li>
+
+<li><p>history</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">http://localhost:8080/about</code></pre></div></li>
+</ul>
+
+<p>このように、Historyモードを使っているとアドレスバーに表示されるURLは、SPAであるにもかかわらず「普通」なURLです。つまりHistoryモードだとハッシュを取り除けるわけです。ただし、これはあくまで「普通っぽいURLが表示されているだけ」で、本来はシングルページのクライアントサイドアプリです。なので、サーバー側で適切なルーティング設定を施さないと、アドレスバーに直接<code>http://localhost:8080/about/</code>と入力してURLで直撃しようした場合<strong>404エラー</strong>になってしまいます。こんな場合は<code>index.html</code>で受け付けるように、サーバーへ設定を施してやる必要があります。なお、サーバー環境により設定内容は異なるため、詳細は<a href="https://router.vuejs.org/ja/guide/essentials/history-mode.html#%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC%E3%81%AE%E8%A8%AD%E5%AE%9A%E4%BE%8B">オフィシャル</a>を参照してください。</p>
+
+<h2 id="とりあえず実行してみる">とりあえず実行してみる</h2>
+
+<p>処理が終わるとプロジェクトが生成されたはずなので、とりあえず下記のコマンドを実行します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">cd hogehoge
+npm run serve</code></pre></div>
+<p>表示されたアドレスへアクセスしてみます。</p>
+
+<p><img src="2019-10-01-11-22-40.png" alt="pic" /></p>
+
+<p><code>Home</code>の他に、ここでは<code>About</code>というページが生成されています。アクセスしてみます。</p>
+
+<p><img src="2019-10-01-11-22-52.png" alt="pic" /></p>
+
+<p>ぱっと見は特段気になるようなことはありませんが、実は<code>Home</code>から<code>About</code>へ遷移する際に<strong>メインの表示部分だけを再描画</strong>しています。見た目は別ページに遷移したように見えますが、実際はシングルページ上の一部分がころころと再描画されて変わっています。これこそまさにSPAの挙動です。</p>
+
+<h2 id="プロジェクトの構成を俯瞰する">プロジェクトの構成を俯瞰する</h2>
+
+<p>Vue CLIで生成されたプロジェクトは下記のような構成です。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">hogehoge
+│  .gitignore
+│  babel.config.js
+│  package-lock.json
+│  package.json
+│  README.md
+│
+├─public
+│      favicon.ico
+│      index.html
+│
+├─node_modules
+│
+└─src
+    │  App.vue
+    │  main.js
+    │  router.js
+    │  store.js
+    │
+    ├─assets
+    │      logo.png
+    │
+    ├─components
+    │      HelloWorld.vue
+    │
+    └─views
+            About.vue
+            Home.vue</code></pre></div>
+<p>この中で、<code>node_modules</code>は依存するパッケージなんかがしこたま格納されているフォルダなので、内容は割愛します。</p>
+
+<h3 id="実際のところ何が違うのよ">実際のところ何が違うのよ</h3>
+
+<h4 id="vueファイル">vueファイル</h4>
+
+<p><a href="/posts/make-dummy-text-generator-site-with-vuejs-edit-component/">以前の記事</a>でもVue CLIを利用しましたが、今回はVuexとVue Routerを利用しているのでプロジェクト構造も変化しています。特徴的なのは<code>views</code>フォルダでしょう。これは以前Vue CLIをデフォルト設定でcreateした場合の<a href="/posts/make-dummy-text-generator-site-with-vuejs-edit-component/#まずはプロジェクトを俯瞰する">フォルダ構造</a>に存在しなかったフォルダです。そして、その中に格納されている<code>Home.vue</code>と<code>About.vue</code>というファイル。もう名前からしてわかりますが、それぞれ<code>Home</code>の画面と<code>About</code>の画面に対応しています。</p>
+
+<p>たとえば<code>Home.vue</code>はこんな内容です。<code>HelloWorld.vue</code>をインポートして、<code>msg</code>に文字列を設定しています。相変わらずこのメッセージがホームに表示されるのですが、前回と異なるのは<strong>この処理を<code>App.vue</code>でやっていない</strong>ことです。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
+  &lt;div class=&#34;home&#34;&gt;
+    &lt;img alt=&#34;Vue logo&#34; src=&#34;../assets/logo.png&#34;&gt;
+    &lt;HelloWorld msg=&#34;Welcome to Your Vue.js App&#34;/&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+// @ is an alias to /src
+import HelloWorld from &#39;@/components/HelloWorld.vue&#39;
+
+export default {
+  name: &#39;home&#39;,
+  components: {
+    HelloWorld
+  }
+}
+&lt;/script&gt;</code></pre></div>
+<p>そして<code>About.vue</code>はこんな感じ。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
+  &lt;div class=&#34;about&#34;&gt;
+    &lt;h1&gt;This is an about page&lt;/h1&gt;
+  &lt;/div&gt;
+&lt;/template&gt;</code></pre></div>
+<p>逆に<code>App.vue</code>はナビバーのメニューそれぞれにルーティング設定することだけで、機能らしい機能を保持していません。以前であればこのファイル内には<code>HelloWorld.vue</code>のインポートなどが記述されていましたが、前述の通り今回はそういう機能がすべて<code>Home.vue</code>にて保持されています。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
+  &lt;div id=&#34;app&#34;&gt;
+    &lt;div id=&#34;nav&#34;&gt;
+      &lt;router-link to=&#34;/&#34;&gt;Home&lt;/router-link&gt; |
+      &lt;router-link to=&#34;/about&#34;&gt;About&lt;/router-link&gt;
+    &lt;/div&gt;
+    &lt;router-view/&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;style&gt;
+#app {
+  font-family: &#39;Avenir&#39;, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+#nav {
+  padding: 30px;
+}
+
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
+}
+&lt;/style&gt;</code></pre></div>
+<p>以上のとおり、各ページはそれぞれのvueファイルにて記述されていることがわかります。</p>
+
+<h4 id="jsファイル">jsファイル</h4>
+
+<p>VuexやVue Routerを導入した影響はjsファイルにもあり、ファイル<code>router.js</code>と<code>store.js</code>が追加されています。が、とりあえずまずは<code>main.js</code>を見てみます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span>
+<span class="k">import</span> <span class="nx">App</span> <span class="nx">from</span> <span class="s1">&#39;./App.vue&#39;</span>
+<span class="k">import</span> <span class="nx">router</span> <span class="nx">from</span> <span class="s1">&#39;./router&#39;</span>
+<span class="k">import</span> <span class="nx">store</span> <span class="nx">from</span> <span class="s1">&#39;./store&#39;</span>
+
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">productionTip</span> <span class="o">=</span> <span class="kc">false</span>
+
+<span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+  <span class="nx">router</span><span class="p">,</span>
+  <span class="nx">store</span><span class="p">,</span>
+  <span class="nx">render</span><span class="o">:</span> <span class="nx">h</span> <span class="p">=&gt;</span> <span class="nx">h</span><span class="p">(</span><span class="nx">App</span><span class="p">)</span>
+<span class="p">}).</span><span class="nx">$mount</span><span class="p">(</span><span class="s1">&#39;#app&#39;</span><span class="p">)</span>
+</code></pre></div>
+<p><code>router</code>および<code>store</code>のインスタンスをインポートして、Vueインスタンスに設定しているのがわかります。これにより、別コンポーネントでも<code>$store.hoge</code>とすることでストア中のデータを参照できます。また、ルーティング設定を施すことで新しいコンポーネントを1つのページとして扱うことができます。</p>
+
+<p>次は<code>router.js</code>を見てみます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span>
+<span class="k">import</span> <span class="nx">Router</span> <span class="nx">from</span> <span class="s1">&#39;vue-router&#39;</span>
+<span class="k">import</span> <span class="nx">Home</span> <span class="nx">from</span> <span class="s1">&#39;./views/Home.vue&#39;</span>
+
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Router</span><span class="p">)</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="k">new</span> <span class="nx">Router</span><span class="p">({</span>
+  <span class="nx">mode</span><span class="o">:</span> <span class="s1">&#39;history&#39;</span><span class="p">,</span>
+  <span class="nx">base</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">BASE_URL</span><span class="p">,</span>
+  <span class="nx">routes</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nx">path</span><span class="o">:</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span>
+      <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;home&#39;</span><span class="p">,</span>
+      <span class="nx">component</span><span class="o">:</span> <span class="nx">Home</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nx">path</span><span class="o">:</span> <span class="s1">&#39;/about&#39;</span><span class="p">,</span>
+      <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;about&#39;</span><span class="p">,</span>
+      <span class="c1">// route level code-splitting
+</span><span class="c1"></span>      <span class="c1">// this generates a separate chunk (about.[hash].js) for this route
+</span><span class="c1"></span>      <span class="c1">// which is lazy-loaded when the route is visited.
+</span><span class="c1"></span>      <span class="nx">component</span><span class="o">:</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="k">import</span><span class="p">(</span><span class="cm">/* webpackChunkName: &#34;about&#34; */</span> <span class="s1">&#39;./views/About.vue&#39;</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">})</span>
+</code></pre></div>
+<p>Home画面には<code>Home.vue</code>が、About画面には<code>About.vue</code>が紐づけられています。パスとコンポーネントがそれぞれ紐づけられて、ルーティング設定されていることがわかります。</p>
+
+<p>次に<code>store.js</code>です。</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span>
+<span class="k">import</span> <span class="nx">Vuex</span> <span class="nx">from</span> <span class="s1">&#39;vuex&#39;</span>
+
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Vuex</span><span class="p">)</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="k">new</span> <span class="nx">Vuex</span><span class="p">.</span><span class="nx">Store</span><span class="p">({</span>
+  <span class="nx">state</span><span class="o">:</span> <span class="p">{</span>
+
+  <span class="p">},</span>
+  <span class="nx">mutations</span><span class="o">:</span> <span class="p">{</span>
+
+  <span class="p">},</span>
+  <span class="nx">actions</span><span class="o">:</span> <span class="p">{</span>
+
+  <span class="p">}</span>
+<span class="p">})</span>
+</code></pre></div>
+<p>本来はVuexで一元管理するデータの設定ファイルなのですが、デフォルトでは何もありません。</p>
+
+<h2 id="いじる">いじる</h2>
+
+<p>ざっくりと構造を俯瞰したところで、内容をちょっと変えてみましょう。内容は、お馴染みかと思いますが簡単なカウンターアプリを実装することにします。カウントの値はVuexで管理して、カウントするためのページを今の資産に追加します。ファイルの名前は<code>Count.vue</code>とかにしますかね。</p>
+
+<h3 id="既存ページの編集">既存ページの編集</h3>
+
+<p>現在のファイル内容が気にならなければ、このステップのうち<code>Count.vue</code>の追加以外は飛ばしていいと思います。が、個人的に「自分で手を加えた」感を出すために、ホーム画面はいじっておきたかったので最初に内容を編集します。と言ってもすることは、今の内容を削除して任意の内容に書き換えるだけです。まずは取っ掛かりとして<a href="https://buefy.org/">Buefy</a>を導入します。導入方法は<a href="/posts/make-dummy-text-generator-site-with-vuejs/">以前の記事</a>に書いてありますのでご参照ください。</p>
+
+<h4 id="ページの構成を書き換える">ページの構成を書き換える</h4>
+
+<p>書き換える対象のコンポーネントは<code>App.vue</code>と<code>Home.vue</code>、<code>HelloWorld.vue</code>です。このうち、<code>Home.vue</code>と<code>HelloWorld.vue</code>にはホームの主要な表示項目がこれらのコンポーネントに記述されていますが、それをごっそり適当に書き換えます。まずは<code>HelloWorld.vue</code>です。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
+  &lt;div class=&#34;hello&#34;&gt;
+    &lt;h2&gt;{{ msg }}&lt;/h2&gt;
+
+    &lt;a ref=&#34;https://idontwannawork.github.io/&#34;&gt;&lt;b-icon icon=&#34;home&#34; size=&#34;is-medium&#34;&gt;&lt;/b-icon&gt;&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  name: &#39;HelloWorld&#39;,
+  props: {
+    msg: String
+  }
+}
+&lt;/script&gt;
+
+&lt;!-- Add &#34;scoped&#34; attribute to limit CSS to this component only --&gt;
+&lt;style scoped&gt;
+h3 {
+  margin: 40px 0 0;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+&lt;/style&gt;</code></pre></div>
+<p>次に<code>Home.vue</code>です。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
+  &lt;div class=&#34;home&#34;&gt;
+    &lt;HelloWorld msg=&#34;ほげほげー&#34;/&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+// @ is an alias to /src
+import HelloWorld from &#39;@/components/HelloWorld.vue&#39;
+
+export default {
+  name: &#39;home&#39;,
+  components: {
+    HelloWorld
+  }
+}
+&lt;/script&gt;</code></pre></div>
+<h4 id="カウント用ページを追加する">カウント用ページを追加する</h4>
+
+<p>最後に<code>App.vue</code>です。新たに追加するカウント用ページのリンクを追加します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
+  &lt;div id=&#34;app&#34;&gt;
+    &lt;div id=&#34;nav&#34;&gt;
+      &lt;router-link to=&#34;/&#34;&gt;Home&lt;/router-link&gt; |
+      &lt;router-link to=&#34;/about&#34;&gt;About&lt;/router-link&gt; |
+      &lt;router-link to=&#34;/count&#34;&gt;Count&lt;/router-link&gt;
+    &lt;/div&gt;
+    &lt;router-view/&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;style&gt;
+#app {
+  font-family: &#39;Avenir&#39;, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+#nav {
+  padding: 30px;
+}
+
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
+}
+&lt;/style&gt;</code></pre></div>
+<p>ちなみに、ここでリンクを追加しただけでは<code>Count.vue</code>の表示ができません。後述する<code>router.js</code>の編集が必須だからです。</p>
+
+<h3 id="router-jsの編集">router.jsの編集</h3>
+
+<p><code>Count.vue</code>に<code>/count</code>というURLでアクセスできるように、router.jsを編集します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span>
+<span class="k">import</span> <span class="nx">Router</span> <span class="nx">from</span> <span class="s1">&#39;vue-router&#39;</span>
+<span class="k">import</span> <span class="nx">Home</span> <span class="nx">from</span> <span class="s1">&#39;./views/Home.vue&#39;</span>
+
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Router</span><span class="p">)</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="k">new</span> <span class="nx">Router</span><span class="p">({</span>
+  <span class="nx">mode</span><span class="o">:</span> <span class="s1">&#39;history&#39;</span><span class="p">,</span>
+  <span class="nx">base</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">BASE_URL</span><span class="p">,</span>
+  <span class="nx">routes</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nx">path</span><span class="o">:</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span>
+      <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;home&#39;</span><span class="p">,</span>
+      <span class="nx">component</span><span class="o">:</span> <span class="nx">Home</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nx">path</span><span class="o">:</span> <span class="s1">&#39;/about&#39;</span><span class="p">,</span>
+      <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;about&#39;</span><span class="p">,</span>
+      <span class="c1">// route level code-splitting
+</span><span class="c1"></span>      <span class="c1">// this generates a separate chunk (about.[hash].js) for this route
+</span><span class="c1"></span>      <span class="c1">// which is lazy-loaded when the route is visited.
+</span><span class="c1"></span>      <span class="nx">component</span><span class="o">:</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="k">import</span><span class="p">(</span><span class="cm">/* webpackChunkName: &#34;about&#34; */</span> <span class="s1">&#39;./views/About.vue&#39;</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nx">path</span><span class="o">:</span> <span class="s1">&#39;/count&#39;</span><span class="p">,</span>
+      <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;count&#39;</span><span class="p">,</span>
+      <span class="nx">component</span><span class="o">:</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="k">import</span><span class="p">(</span><span class="s1">&#39;./views/Count.vue&#39;</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">})</span>
+</code></pre></div>
+<p>これで「count」のリンクを押すと<code>Count.vue</code>が表示されるようになりました。</p>
+
+<h3 id="store-jsの編集">store.jsの編集</h3>
+
+<p>カウントしたデータを保持するため、<code>store.js</code>を編集します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span>
+<span class="k">import</span> <span class="nx">Vuex</span> <span class="nx">from</span> <span class="s1">&#39;vuex&#39;</span>
+
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Vuex</span><span class="p">)</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="k">new</span> <span class="nx">Vuex</span><span class="p">.</span><span class="nx">Store</span><span class="p">({</span>
+    <span class="nx">state</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">counter</span><span class="o">:</span> <span class="mi">10</span>
+    <span class="p">},</span>
+    <span class="nx">mutations</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">increment</span><span class="p">(</span><span class="nx">state</span><span class="p">){</span>
+            <span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="o">++</span>
+        <span class="p">},</span>
+        <span class="nx">decrement</span><span class="p">(</span><span class="nx">state</span><span class="p">){</span>
+            <span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="o">--</span>
+        <span class="p">}</span>
+
+    <span class="p">},</span>
+    <span class="nx">actions</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">increment</span><span class="o">:</span> <span class="p">({</span> <span class="nx">commit</span> <span class="p">})</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="nx">setTimeout</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                <span class="nx">commit</span><span class="p">(</span><span class="s1">&#39;decrement&#39;</span><span class="p">)</span>
+            <span class="p">},</span> <span class="mi">3000</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+</code></pre></div>
+<h4 id="ストア">ストア</h4>
+
+<p><a href="https://vuex.vuejs.org/ja/guide/state.html">Vuexでは単一ステートツリーを利用</a>しています。通常アプリケーション1つにおいては、ストアは1つしか持ちません。この単一なストアにはアプリの状態がすべて含まれています。なので、あるデータについて現在の状態を参照したい時などに便利です。また、ストアにはステート（状態）、ミューテーション、アクションの3つを記述します。</p>
+
+<p>何はともあれ、Vuexでストアを作ります。最低限必要なのは、ストアオブジェクトの初期状態とミューテーションです。なお、特段の必要がなければアクションに記述する必要はありませんが、ここではせっかくなので1つ機能を実装しています。</p>
+
+<p><code>counter</code>は初期値として10が格納されていますが、もちろんゼロでも問題ありません。なんとなくです。ここで定義されたステートは各コンポーネントから適切な方法を用いることで、コンポーネント間で値を授受しなくても値の参照および設定が可能です。</p>
+
+<p>ミューテーションには加算する<code>increment</code>と減算する<code>decrement</code>を用意しました。これでカウンターとしての機能は実装できています。</p>
+
+<p>アクションは減算を3秒待って行う機能を実装しています。見るとわかるのですがアクションは「状態を変更する（減算する）処理を実装している」のではなく、<strong>状態を変更する（減算する）ミューテーションをコミットしている</strong>だけです。あくまでも状態を変更するのはミューテーションであって、アクションではありません。また、3秒のインターバルを設けているように<strong>非同期処理が可能</strong>です。</p>
+
+<h4 id="余談-vuexを利用するかしないか">（余談）Vuexを利用するかしないか</h4>
+
+<p><code>store.js</code>に定義したステートは、各コンポーネントからアクセスが可能なことは前述の通りです。これがVuexの特徴であり、とくに「コンポーネントの数が多い」とか、「コンポーネントの親子関係が深いわりに値の受け渡しが多い」とかの場合に威力を発揮します。</p>
+
+<p>逆に言えば今回のチュートリアルで見ているような「コンポーネントの数が少なく、親子関係も浅い」という小規模なケースではVuexを利用するメリットはあまりありません。場合によっては、コンポーネント間で<code>props</code>経由のデータ授受を行ったほうが、コードの可読性が向上するケースもあるでしょう。なので、実装したい機能のコンポーネント構造が、将来的にどのくらい拡大するかを見極めておく必要があります。</p>
+
+<p>とは言っても、「最初に見極めろなんて言われてたって無理だよ！」っていうのはもっともな話です。なので、いっそのこと「とりあえずプロトタイプでも何でもVuexを利用しちゃう」ってルールにするのも全然ありだと思います。仮に規模が拡大していけばVuexがその威力を発揮してくれるでしょうし、たまたま小規模で完結するなら可読性に気をつけてコーディングすればいいだけの話です。</p>
+
+<p>まぁ、複数人で作業してると「定数なのにストアに書く」奴が出てくるとも限らないので、ある程度の開発ルール作りは必要だと思いますが、それはまた別な話ですね。</p>
+
+<h3 id="カウント用ページの追加">カウント用ページの追加</h3>
+
+<p><code>views</code>フォルダに<code>Count.vue</code>という名前でファイルを作成します。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
+    &lt;section&gt;
+        &lt;span class=&#34;title&#34;&gt;{{$store.state.counter}}&lt;/span&gt;
+        &lt;b-button @click=&#34;increment&#34;&gt;add&lt;/b-button&gt;
+        &lt;b-button @click=&#34;decrement&#34;&gt;sub&lt;/b-button&gt;
+    &lt;/section&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+    methods:{
+        increment(){
+            this.$store.commit(&#34;increment&#34;);
+        },
+        decrement(){
+            this.$store.commit(&#34;decrement&#34;);
+        }
+    }
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+
+&lt;/style&gt;</code></pre></div>
+<p>さらっとここで<code>$store.state.counter</code>とか書いてますが、この1文で<code>store.js</code>の<code>state</code>内に記述したデータ<code>counter</code>をアクセスしています。そして、<code>store.js</code>のステートは他のコンポーネントでも参照が可能です。なので、<code>HelloWorld.vue</code>のtemplate部分を下記のように書き換えてみても、やっぱりちゃんと参照できます。<code>Count.vue</code>で加算あるいは減算すると、計算結果はステートに反映されますが、その状態は<code>Count.vue</code>を表示しても<code>HelloWorld.vue</code>を表示しても同じ値が表示されるはずです。</p>
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
+  &lt;div class=&#34;hello&#34;&gt;
+    &lt;h2&gt;{{ msg }}&lt;/h2&gt;
+    &lt;p class=&#34;title&#34;&gt;{{$store.state.counter}}&lt;/p&gt;
+    &lt;a href=&#34;https://idontwannawork.github.io/&#34;&gt;&lt;b-icon icon=&#34;home&#34; size=&#34;is-medium&#34;&gt;&lt;/b-icon&gt;&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/template&gt;</code></pre></div>
+<p>たとえば<code>counter</code>の初期状態が「10」だとします。ホームでは「10」（初期状態）を表示しています。</p>
+
+<p><img src="2019-10-07-16-21-16.png" alt="pic" /></p>
+
+<p>カウント用ページでも「10」（初期状態）を表示しています。</p>
+
+<p><img src="2019-10-07-16-58-16.png" alt="pic" /></p>
+
+<p>ここで加算あるいは減算を行います。ここでは<code>counter</code>の値を「6」へ変更しました。</p>
+
+<p><img src="2019-10-07-16-58-41.png" alt="pic" /></p>
+
+<p>ホームでは最新の<code>counter</code>の値を参照し「6」が表示されます。</p>
+
+<p><img src="2019-10-07-16-21-54.png" alt="pic" /></p>
+
+<p>「え、そんなん当たり前じゃん」と思われるかもしれません。しかし、これこそが「<a href="https://vuex.vuejs.org/ja/guide/state.html">信頼できる唯一の情報源</a> (single source of truth)」なのです。今は作成した機能が小規模すぎてインパクトがあまりないですが、この「どのコンポーネントでも<code>store.js</code>のステートを参照すればいい」というのは、アプリケーションの規模が大きくなるほど威力を発揮します。</p>
+
+<h4 id="余談-ゲッターについて">（余談）ゲッターについて</h4>
+
+<p>Vuexを使うとストアにゲッターを定義できます。これはステートのデータを参照するためのものです。「参照なら<code>$store.state.hoge</code>でできるじゃん」と言われそうですが、ゲッターはさらに多彩です。言及すると1記事ができちゃうくらいなのでここでは割愛します。</p>
+
+<h2 id="実行してみる">実行してみる</h2>
+
+<p>編集後のプロジェクトで<code>npm run</code>してみます。</p>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm run serve</code></pre></div>
+<p>しばらく待って表示されたアドレスへアクセスしてみます。</p>
+
+<p><img src="2019-10-07-16-54-04.png" alt="pic" /></p>
+
+<p>カウント用ページはこんな感じ。</p>
+
+<p><img src="2019-10-07-16-59-44.png" alt="pic" /></p>
+
+<p>「add」は「sub」ボタンで値の編集も可能です。</p>
+
+<p><img src="2019-10-07-17-00-20.png" alt="pic" /></p>
+
+<p>編集済みのデータはHome側でも参照可能です。</p>
+
+<p><img src="2019-10-07-17-01-00.png" alt="pic" /></p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>Vuexのチュートリアルを参考にカウンターアプリを実装してみました。アプリと言うには機能が小規模過ぎますが、VuexとVue Routerを理解するのに良いサンプルだと思います。</p>
+
+<p>VuexとVue Routerを実装し、今回は割愛してしまいましたがゲッターの機能なども駆使することで、SPAの開発が容易になります。慣れるには数を作ることだと思うので、また別なアプリでも実装してみようかなー（フラグ</p>
+]]></content>
+		</item>
 		
 		<item>
 			<title>アルバムレビュー Cadans der getouwen「Cadans der getouwen」</title>
@@ -1419,225 +1946,6 @@ a {
 <p>すいません、書いてたらずいぶん長くなってしまいました。それにしても、Vue.jsはオフィシャルのドキュメントが充実している上に、Vue CLIが出力したサンプルの内容も分かりやすい構造になっていて、とても好感が持てます。</p>
 
 <p>次から、次からはなんとか満を持して実装したいと思います。†悔い改めて†_(:3」∠)_</p>
-]]></content>
-		</item>
-		
-		<item>
-			<title>Vue cliとBuefyでシンプルに始めるVue.js - まずは環境の用意</title>
-			<link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs/</link>
-			<pubDate>Mon, 19 Aug 2019 15:23:26 +0900</pubDate>
-			
-			<guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs/</guid>
-			<description>はじめに フロントの勉強としてVue.jsをいじってますが、Vue.jsのCLIを使ってシンプルなサイトを構築する際の手順についてまとめます。</description>
-			<content type="html"><![CDATA[
-
-<h2 id="はじめに">はじめに</h2>
-
-<p>フロントの勉強としてVue.jsをいじってますが、Vue.jsのCLIを使ってシンプルなサイトを構築する際の手順についてまとめます。</p>
-
-<p>まずは構築するにあたって、開発環境の用意を行います。なお今回は<a href="https://nuxtjs.org/">Nuxt.js</a>を利用しない（あるいは利用するまでもない）、ライトな用途を想定しています。SSRする必要がある、とかならNuxt.jsの導入を検討してみるべきかと思います。</p>
-
-<h2 id="環境">環境</h2>
-
-<ul>
-<li>Windows 10</li>
-<li>vue/cli@3.10.0</li>
-<li>npm 6.4.1</li>
-</ul>
-
-<p><code>npm</code>を利用する場合は<a href="https://nodejs.org/ja/">Node.js</a>のインストールが必要です。</p>
-
-<h2 id="インストール">インストール</h2>
-
-<h3 id="vue-jsのインストール手順">Vue.jsのインストール手順</h3>
-
-<p>Vue.jsのインストールには、<code>npm</code>を利用してローカルの環境に展開しておくか、<a href="/posts/build-environment-of-vuejs-with-docker/">Dockerで環境を準備</a>するか、CDNを利用します。</p>
-
-<h4 id="npmによるインストール">NPMによるインストール</h4>
-
-<p>ローカル環境にインストールする場合は、<a href="https://jp.vuejs.org/v2/guide/installation.html">オフィシャルページ</a>に則って下記のコマンドを実行します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm install vue</code></pre></div>
-<p>なお、オフィシャルでは<a href="https://jp.vuejs.org/v2/guide/installation.html#NPM">大規模なアプリを構築する場合はNPMを利用しろ</a>、とのことです。</p>
-
-<blockquote>
-<p>Vue.js による大規模アプリケーションを構築するときには、NPM を利用したインストールを推奨しています。</p>
-</blockquote>
-
-<h4 id="dockerによる環境構築">Dockerによる環境構築</h4>
-
-<p><a href="/posts/build-environment-of-vuejs-with-docker/">こちら</a>をどうぞ。</p>
-
-<h4 id="cdn">CDN</h4>
-
-<p>NPMを利用したインストール以外にも<a href="https://unpkg.com/vue@2.6.10/dist/vue.js">unpkg</a>や<a href="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js">cdnjs</a>を利用することでVue.jsを利用できます。</p>
-<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://cdn.jsdelivr.net/npm/vue/dist/vue.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span></code></pre></div>
-<p>なお、<a href="https://jp.vuejs.org/v2/guide/installation.html#CDN">本番環境ではバージョンを指定する</a>ことが推奨されています。</p>
-<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://cdn.jsdelivr.net/npm/vue@2.6.0&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span></code></pre></div>
-<blockquote>
-<p>本番環境では、新しいバージョンによる意図しない不具合を避けるため、特定のバージョン番号とビルド番号にリンクすることをお勧めします</p>
-</blockquote>
-
-<h4 id="vue-cliの導入">Vue CLIの導入</h4>
-
-<p>Vue CLIはVue.jsを用いたサイトを生成する際に、環境のセットアップを肩代わりしてくれるコマンドラインのツールです。<a href="https://cli.vuejs.org/">オフィシャルページ</a>を参考にして導入します。とは言っても難しいことではなく、下記のコマンドを実行するだけです。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm install -g @vue/cli</code></pre></div>
-<p>インストールが終わったらバージョンを確認してみます。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ vue --version
-3.10.0</code></pre></div>
-<h2 id="プロジェクトを作成する">プロジェクトを作成する</h2>
-
-<p><code>vue</code>コマンドを叩いてプロジェクトを作成します。なお、下記のコマンドを実行する際は、事前にプロジェクトを作成するフォルダに移動してください。ここではフォルダを<code>dummytextgen</code>とします。コマンドを実行すると対話形式で作成するプロジェクトの内容を設定します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">cd dummytextgen
-vue create dtg</code></pre></div>
-<ol>
-<li><p>プリセットの選択</p>
-
-<p>キーボードの上下キーで選択しますが、デフォルトで問題ないと思います。なお、vue routerやvuexを利用することが確定しているなら、<code>Manually select feature</code>を選択して手動で導入できます。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">Vue CLI v3.10.0
-? Please pick a preset: (Use arrow keys)
-&gt; default (babel, eslint)
-Manually select features</code></pre></div></li>
-
-<li><p>パッケージマネージャの選択</p>
-
-<p>こちらもキーボードの上下キーで選択します。デフォルトでは<code>yarn</code>にカーソルが当たっていましたが、<code>npm</code>を利用しているので<code>Use NPM</code>を選択してエンターキーを押します。ちなみに、この選択肢が表示されるのはvue cliを起動した初回だけだと思われます（自分の環境だと今はもう出てこない）。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"><span class="nx">Vue</span> <span class="nx">CLI</span> <span class="nx">v3</span><span class="mf">.10.0</span>
-<span class="err">?</span> <span class="nx">Please</span> <span class="nx">pick</span> <span class="nx">a</span> <span class="nx">preset</span><span class="p">:</span> <span class="k">default</span> <span class="p">(</span><span class="nx">babel</span><span class="p">,</span> <span class="nx">eslint</span><span class="p">)</span>
-<span class="err">?</span> <span class="nx">Pick</span> <span class="nx">the</span> <span class="kn">package</span> <span class="nx">manager</span> <span class="nx">to</span> <span class="nx">use</span> <span class="nx">when</span> <span class="nx">installing</span> <span class="nx">dependencies</span><span class="p">:</span> <span class="p">(</span><span class="nx">Use</span> <span class="nx">arrow</span> <span class="nx">keys</span><span class="p">)</span>
-<span class="p">&gt;</span> <span class="nx">Use</span> <span class="nx">Yarn</span>
-<span class="nx">Use</span> <span class="nx">NPM</span></code></pre></div></li>
-
-<li><p>しばらく待ちます</p>
-
-<p>上記までの選択を行ったあとはしばらく待ちます。すると下記のようなメッセージが出力されるはずです。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">Successfully created project dtg.
-Get started with the following commands:
-
-$ cd dtg
-$ npm run serve</code></pre></div>
-<p>となったら、準備完了です。</p></li>
-
-<li><p>とりあえず実行してみる</p>
-
-<p>メッセージの通り、コマンドを実行してみます。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">cd dtg
-npm run serve</code></pre></div>
-<p>正常に起動したらURLが表示されるはずなので、そのアドレスをブラウザにコピペしてアクセスしてみます。今回は<code>http://localhost:34201/</code>でした。</p>
-
-<p><img src="2019-08-19-16-36-07.png" alt="pic" /></p>
-
-<p>プロジェクトが作成されて、開発のサーバーが起動していることがこれで確認できました。</p></li>
-</ol>
-
-<h2 id="プロジェクトの内容を見てみる">プロジェクトの内容を見てみる</h2>
-
-<p>作成したプロジェクトの内容を見てみます。下記はフォルダ内容をVisual Studio Code（以下、vscode）で表示した様子です。</p>
-
-<p><img src="2019-08-20-14-02-40.png" alt="pic" /></p>
-
-<p><code>.js</code>や<code>.html</code>に混じって、<code>.vue</code>という見慣れない拡張子があります。これが<a href="https://jp.vuejs.org/v2/guide/single-file-components.html">Vue.jsの<strong>単一ファイルコンポーネント</strong></a>と呼ばれる機能です。</p>
-
-<p>これはHTML・JavaScript・CSSの3つを1ファイルにまとめ、1コンポーネントとして扱うVue.js独特の機能です。また、この単一ファイルコンポーネントは拡張子が上記の通り<code>.vue</code>です。とりあえず今回は触れずにそのまま行きます。</p>
-
-<h2 id="いろいろ導入する">いろいろ導入する</h2>
-
-<h3 id="cssフレームワーク">CSSフレームワーク</h3>
-
-<p>サイトを作るに当たって、画面のレイアウトはCSSフレームワーク（以下、FW）を使って楽をしたいところです。デザインセンスがないからね、仕方ないね_(:3」∠)_</p>
-
-<p>FW、と来たら必ず名前が挙がる大定番の<a href="https://getbootstrap.com/">Bootstrap</a>ですが、今回はこれ以外のFWを利用します。というのも、いまだにjQueryが絡んで来るので「Vue.js使ってるのにjQuery使うの？（白目）」ってことになるので。あとは単純に他のFWも使ってみたいなー、っていう素朴な欲求から来てます。</p>
-
-<p>というわけで、ここでは<a href="https://buefy.org/">Buefy</a>を利用します。これは<a href="https://bulma.io/">Bulma</a>をベースにした、Vue.jsの用のUIコンポーネントです。ちなみに、なんでBulmaよ？ってところなんですが下記のようなメリットがあります。</p>
-
-<ul>
-<li>シンプル</li>
-<li>主要なコンポーネントはだいたい揃ってる</li>
-<li>比較的軽量</li>
-<li>JavaScriptなし</li>
-</ul>
-
-<p>このうち、Bulmaの「JavaScriptなし」という部分を<strong>Vue.jsを組み合わせることで補完したのがBuefy</strong>、ということになります。</p>
-
-<p>とは言え、FWは結構好き嫌いがあると思うので、お気に入りのFWを導入するのが吉かと。個人的にはプロトタイプ作成に一時期<a href="https://ajusa.github.io/lit/">lit</a>を使ってました。めちゃくちゃ軽い（minifyかつgzip済みだと<strong>395バイト</strong>しかない！）のに、しっかりレスポンシブ対応なのはポイント高かったです。とは言え、軽量な分機能がそこそこ制限されちゃうんで、小規模なサイトかプロトタイプ作成でのみ利用してました。</p>
-
-<h4 id="buefyを導入する">Buefyを導入する</h4>
-
-<p>まずは<a href="https://buefy.org/documentation/start">オフィシャル</a>の手順に則って、下記のコマンドを実行します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm install buefy</code></pre></div>
-<p>次は、main.jsを編集します。Vue CLIで<code>create</code>した直後は、下の画像のような内容になっていると思います。</p>
-
-<p><img src="2019-08-21-09-25-01.png" alt="pic" /></p>
-
-<p>そこに、下記のソースを追記します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span> <span class="c1">// この行はもともと記述されているはず
-</span><span class="c1"></span><span class="k">import</span> <span class="nx">Buefy</span> <span class="nx">from</span> <span class="s1">&#39;buefy&#39;</span>
-<span class="k">import</span> <span class="s1">&#39;buefy/dist/buefy.css&#39;</span>
-
-<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Buefy</span><span class="p">)</span>
-</code></pre></div>
-<p>なお、オフィシャルでは全機能のインポートを推奨していますが、下記のように「使用するコンポーネントだけインポートする」ことも可能です。</p>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span>
-<span class="k">import</span> <span class="p">{</span> <span class="nx">Table</span><span class="p">,</span> <span class="nx">Input</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;buefy&#39;</span>
-<span class="k">import</span> <span class="s1">&#39;buefy/dist/buefy.css&#39;</span>
-
-<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Table</span><span class="p">)</span>
-<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Input</span><span class="p">)</span>
-</code></pre></div>
-<p>なお、アイコンを利用したい場合は下記のタグを記述する必要があります。<a href="https://materialdesignicons.com/">Material Design Icons</a>を利用したい場合はこれ。</p>
-<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://cdn.materialdesignicons.com/2.5.94/css/materialdesignicons.min.css&#34;</span><span class="p">&gt;</span></code></pre></div>
-<p>もちろん、<a href="https://fontawesome.com/">Font Awesome</a>とか他のアイコンセットを利用したい、という場合はNPM経由なりCDNなりで導入する必要があります。</p>
-
-<h3 id="参考-vue-routerのインストール">（参考）vue routerのインストール</h3>
-
-<p>環境のセットアップ時に導入せず、後になってvue routerが必要になった場合は下記の手順で導入します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm install vue-router</code></pre></div>
-<h3 id="参考-vuexのインストール">（参考）vuexのインストール</h3>
-
-<p>環境のセットアップ時に導入せず、後になってvuexが必要になった場合は下記の手順で導入します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm install vuex</code></pre></div>
-<h2 id="ローカルで確認してみる">ローカルで確認してみる</h2>
-
-<p>各種コンポーネントのインストールが終わったら、ここで確認してみます。</p>
-
-<p>ターミナルでプロジェクトのあるフォルダまで移動し、下記のコマンドを実行します。このコマンドを実行することでソースのコンパイルとローカルサーバの起動が行われます。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm run serve</code></pre></div>
-<p>実行したときのログはこんな感じ。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">C:\hoge\dtg&gt;npm run serve
-
-&gt; dtg@0.1.0 serve C:\hoge\dtg
-&gt; vue-cli-service serve
-
- INFO  Starting development server...
- 98% after emitting CopyPlugin
-
- DONE  Compiled successfully in 35564ms
-  App running at:
-  - Local:   http://localhost:20645/
-  - Network: http://***.***.***.***:20645/
-
-  Note that the development build is not optimized.
-  To create a production build, run npm run build.</code></pre></div>
-<p>表示されたアドレスにアクセスしてみると、Vue CLIで<code>create</code>した直後とはフォントが変わっていることがわかります・・・かねぇ？</p>
-
-<p><img src="2019-08-21-09-55-12.png" alt="pic" /></p>
-
-<p>ちなみに、たまに<code>npm run dev</code>を実行しろって書いてあるブログがあったりするんですが、これを実行すると自分の環境では下記の通りエラーになりました。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">C:\hoge\dtg&gt;npm run dev
-npm ERR! missing script: dev
-
-npm ERR! A complete log of this run can be found in:
-npm ERR!     C:\Users\hogehoge\AppData\Roaming\npm-cache\_logs\***debug.log</code></pre></div>
-<p>これは<code>package.json</code>に<code>dev</code>の記述がないためです。実際ない_(:3」∠)_</p>
-
-<p><img src="2019-08-21-10-11-13.png" alt="pic" /></p>
-
-<p><a href="https://github.com/zalmoxisus/crossbuilder/issues/30">某所のissuesにも挙がってたりする</a>んだけど、routerをインストールしたら<code>npm run dev</code>できるようになったっていう記述があったりしますが、その辺の因果関係は不明です_(:3」∠)_</p>
-
-<h2 id="おわりに">おわりに</h2>
-
-<p>今回の記事は自分の備忘録を兼ねているため、そこそこ詳細に内容を記述しましたが、文章にするとごちゃごちゃと長くなってしまいました。が、実際の作業時間で言えば10分程度です。「あー、こんなアプリ欲しいなー、作ってみたいなー」と思ったら、ちゃっちゃとコマンドをいくつか実行するだけで開発環境が揃います。</p>
-
-<p>次回以降では<code>.vue</code>ファイルをいじって挙動を確認しつつ、webアプリの開発を進めてみようと思います。</p>
 ]]></content>
 		</item>
 		

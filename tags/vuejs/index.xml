@@ -6,10 +6,19 @@
     <description>Recent content in Vuejs on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Mon, 02 Sep 2019 16:08:20 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 07 Oct 2019 09:41:57 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/vuejs/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>VuexとVue Routerを使ってSPAを作るチュートリアルをやってみた</title>
+      <link>https://idontwannawork.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</link>
+      <pubDate>Mon, 07 Oct 2019 09:41:57 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</guid>
+      <description>はじめに 以前の記事ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したの</description>
+    </item>
     
     <item>
       <title>Vue cliとBuefyでシンプルに始めるVue.js - テキスト生成の機能を実装してデプロイまで</title>
