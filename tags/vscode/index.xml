@@ -6,6 +6,7 @@
     <description>Recent content in Vscode on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
+    <copyright>© Copyright notice</copyright>
     <lastBuildDate>Fri, 02 Aug 2019 14:00:38 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/vscode/index.xml" rel="self" type="application/rss+xml" />
@@ -17,7 +18,21 @@
       <pubDate>Fri, 02 Aug 2019 14:00:38 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/run-jupyter-notebook-with-vscode/</guid>
-      <description>はじめに Visual Studio Code（以下、vscode）ではDockerでPythonやVue.jsの開発環境を構築したり、あるいはMarkdownで書い</description>
+      <description>はじめに Visual Studio Code（以下、vscode）ではDockerでPythonやVue.jsの開発環境を構築したり、あるいはMarkdownで書いたドキュメントを配布用にPDF変換したりと、今までいろいろやってきました。今度はJupyter Notebookを動かします。いやー、vscodeってホントに多彩ですね。
+なお、今回においてはDockerを利用せず、単純にローカル環境でJupyterを使用します。
+Jupyter Notebookとは Jupyter Notebook (なお、読み方は「ジュパイター・ノートブック」、または「ジュピター・ノートブック」。自分は「ジュピター」って言ってますが、どっちが一般的なんですかね？) とは、ブラウザ上で実行するデータ分析作業のためのツールです。特徴的なのは、実行結果を記録しながらプログラミングができる点です。ここでブラウザから実行できます。
+プログラムそのものを記述しつつ、Markdownを利用して各種テキストや図表も同時に書き込んでいくことが可能です。つまり、プログラムのソースとその実行結果が、メモを含めて明確に紐づいた状態で確認できます。そのため、作業内容の振り返りに非常に便利ですし、複数人で作業を行う場合の共有にも有用です。また、Jupyterは*.ipynb形式のファイルで保存しますが、ソースコード部分を*.pyのPythonコードとして出力することも可能ですし、実行結果をPDFやHTML形式で出力できるため、Jupyterの実行環境がなくても内容を共有できます。
+そんなJupyterをvscodeで使っちゃえ、というのが今回の趣旨です。
+環境  Windows 10 Anaconda version 1.7.2 vscode 1.36  インストール Anacondaをインストールしている場合、基本的にはJupyterも一緒にインストールされているはずです。なお、Anacondaのインストールは、オフィシャルページからプラットフォームに合ったインストーラーをダウンロードして実行します。インストール後に下記のコマンドを実行すると、condaコマンドにてインストールされているリストが出力されます。表示されたリストの中にjupyterがあればインストール済みであることがわかります。
+conda list ちなみに、Anacondaを導入しないでJupyterを利用するにはpipを利用します。下記のコマンドを実行するだけです。
+pip install jupyter vscodeで実行する 拡張機能のインストール vscodeでJupyterを利用するには、Pythonの拡張機能をインストールする必要があります。
+拡張機能をインストールするには、vscodeの左側にあるメニュー中から拡張機能のアイコン（下画像の赤枠内）をクリックします。
+検索窓に「python」と入力します。検索結果のうち、「Python」を選択し、インストールします。なお、下画像ではすでにインストール済みのため、歯車のアイコンが表示されています。
+他にも導入すると便利な拡張機能はありますが、今回は割愛します。
+vscodeでノートブックを書いてみる まず任意のフォルダを作成します。今回はworkdirとしましたが、フォルダ名はなんでもいいです。次にvscodeで先ほど作成したフォルダを開きます。フォルダを開いたら、適当にファイルを作成します。ただし、この際に作成するファイルの拡張子は*.pyです。先ほどJupyterでは*.ipynb形式を用いると言いましたが、vscodeで実行する場合はPythonの拡張子でファイルを作成します。
+「だけど、それじゃあフツーのPythonコードを見分けがつかないじゃん！」と思ったあなたは正しい。つまりファイルの拡張子ではなく、ファイルの中身で見分けるわけです。
+ファイルを*.py形式で作成したら、下記のコードを入力してください。なお、「その2」部分はCSVファイルがないとコケちゃうので、適当なCSVファイルを作っておくかコードを削除してください。
+#%% ## その１ import numpy as np x = np.arange(10) print(x) #%% ## その２ import pandas as pd data = pd.read_csv(&amp;#34;C:\\app\\hoge.csv&amp;#34;, encoding=&amp;#34;cp932&amp;#34;) data.head() #%% ## その3 ### sin plot import matplotlib.</description>
     </item>
     
     <item>
@@ -26,7 +41,16 @@
       <pubDate>Sun, 07 Jul 2019 17:14:15 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/fix-git-path-with-vscode/</guid>
-      <description>VS Codeをアップデートしたらこんなメッセージが Visual Studio Code(以下、VS Code)をアップデートしたらこんな通知が出るようになりました。 「G</description>
+      <description>VS Codeをアップデートしたらこんなメッセージが Visual Studio Code(以下、VS Code)をアップデートしたらこんな通知が出るようになりました。
+「Gitが見つからないよ！」って・・・いや、君今までしこたまGit使ってたじゃないか。
+理由はともかく、このままではGitの各種コマンドが利用できないので、設定します。
+環境  macOS Mojave 10.14.5 Visual Studio Code version 1.36  設定手順  左下の歯車マークから、あるいはCommand + ,で「Settings」画面を表示します。
+ 出てきた画面に「git.path」と入力します。すると、「Settings.jsonで設定してね」と言われるのでSettings.jsonを開きます。
+ごちゃごちゃしてますが、下のところに&amp;quot;git.path&amp;quot;: &amp;quot;/usr/bin&amp;quot;を追記しました。なお、gitのパスはコンソール画面にてwhich gitすればわかります。
+ 編集が終わったら保存します。これで完了です。なお、いつのバージョン以降からかは失念しましたが、設定の変更を行ってもVS Codeを再起動する必要はなく即時反映されます。
+  （番外編）XcodeをインストールしたらなぜかGitが使えないぞ XcodeをインストールしたらGitが使えなくなりました。なんかライセンス契約に同意する必要があるみたいです。
+指示に従いコマンド発行および同意を行ったら、Gitが再び利用できるようになりました。
+$ git --version Agreeing to the Xcode/iOS license requires admin privileges, please run “sudo xcodebuild -license” and then retry this command. $ sudo xcodebuild -license You have not agreed to the Xcode license agreements.</description>
     </item>
     
     <item>
@@ -35,7 +59,12 @@
       <pubDate>Thu, 04 Jul 2019 13:58:10 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/build-environment-of-vuejs-with-docker/</guid>
-      <description>概要 フロントの勉強としてVue.jsの開発環境を整備するときに、せっかくなのでDockerを使って環境を構築してみました。 環境 macOS Mojave 10.14.5 Docker version 18.09.2 Visual</description>
+      <description>概要 フロントの勉強としてVue.jsの開発環境を整備するときに、せっかくなのでDockerを使って環境を構築してみました。
+環境  macOS Mojave 10.14.5 Docker version 18.09.2 Visual Studio Code version 1.35  手順 今回は勉強がてらdocker-composeを利用します。とは言っても「書くよ！」ってだけで複雑なことは全然やってないです。
+Dockerfileの作成 FROMnode:lts-alpineWORKDIR/appRUN apk update &amp;amp;&amp;amp; \  npm install -g npm @vue/cli ただし、現時点（2019年7月3日）でVisual Studio CodeのRemoteはAlpine Linuxに対応していないので、Remoteを利用したい場合は別のイメージを使った方がいいと思われます（1敗）。以前記事にしていたので「Vue.jsの環境もリモートで開発だぁ！」とか思ってたんですけど出鼻をくじかれました。
+なお、Alpine LinuxはVS Code Insidersではサポートされているため、そのうち正式対応するはずなので正座して待機しようと思います。
+Alpine Linuxに対応しました（2019年9月8日追記） vscodeのバージョン1.38にてAlpine Linux製コンテナへRemote接続できるようになりました！
+docker-compose.ymlの作成 version: &amp;#39;3&amp;#39;services: vue_app: build: . ports: - 1234:8080 volumes: - .:/app stdin_open: true tty: true command: /bin/sh コンテナーのビルド docker-compose build コンテナーの起動 docker-compose up -d docker psコマンドを叩くとコンテナーが起動しているはず。</description>
     </item>
     
     <item>
@@ -44,7 +73,15 @@
       <pubDate>Mon, 10 Jun 2019 00:52:30 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</guid>
-      <description>はじめに Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、ptvsdでは</description>
+      <description>はじめに Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、ptvsdではなく、vscodeの拡張機能であるRemoteを用いて接続します。
+環境構築 環境  macOS Mojave 10.14.5 Docker version 18.09.2 Visual Studio Code version 1.35  拡張機能 まずは何はなくとも下記の拡張機能をインストールします。
+ Remote - Containers  RemoteはまだvscodeのInsider版でしか動作しなかった・・・のですが、6月6日にStable版でも対応しました。
+接続手順 基本的な手順はここにあるものを参考にしています。
+ Dockerアイコンをクリックして、メニュー中の「Preferences」をクリック。「File Sharing」を選択して、共有したいディレクトリが設定されているか確認する。
+Dockerのメニュー中にPreferencesがあるはずなので、これをクリック。
+表示されたディレクトリのうち、共有したいディレクトリが設定されていることを確認しておきます。
+ 任意のコンテナーを準備します。今回はPython用のサンプルプロジェクトをmicrosoftが準備しているので、これをcloneしました。
+~/devp git clone https://github.com/microsoft/vscode-remote-try-python.git Cloning into &amp;#39;vscode-remote-try-python&amp;#39;... remote: Enumerating objects: 94, done. remote: Counting objects: 100% (94/94), done. remote: Compressing objects: 100% (70/70), done. remote: Total 94 (delta 47), reused 51 (delta 18), pack-reused 0 Unpacking objects: 100% (94/94), done.</description>
     </item>
     
     <item>
@@ -53,7 +90,16 @@
       <pubDate>Wed, 15 May 2019 13:44:12 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</guid>
-      <description>はじめに Markdownで記述したmdファイルは、エンジニア間ではそのまま利用することが多いように思います（GitHubなどにREADME.</description>
+      <description>はじめに Markdownで記述したmdファイルは、エンジニア間ではそのまま利用することが多いように思います（GitHubなどにREADME.mdとしてアップするとか）。ところが、メールに添付したり印刷する等、外部へ持ち出す際はPDFに変換しておいた方がいろいろ安心。とくに「mdファイルって何？」みたいなお客さんにドキュメントを渡さないといけない場合とか・・・。
+MarkdownをPDF化するのは、Pandocを利用する方法もあるのですが、ここではVisual Studio Code（以下、VS Code）の拡張機能である「Markdown PDF」を利用します。
+環境  Windows 10 vscode  インストール VS Codeにて、Ctrl＋Shift＋Xで拡張機能の検索窓に「Markdown PDF」と入力するか、上記のリンクをクリックします。検索結果から「Markdown PDF」を選択し、インストールします。Markdown PDFをインストールしてから、VS Codeで適当なMarkdownファイルを最初に開いた際、Chromiumのダウンロードが自動で始まります。ちなみに、なんでChromiumが必要かというと、Markdown PDFがPDF変換するのに利用しているから。
+使い方  PDF化したいMarkdownファイルを開く。 F1キーを押すか、Ctrl+Shift+Pキーを押しコマンドパレットを表示させる。 exportと入力すると下記のメニューが表示される。
+ markdown-pdf: Export (settings.json) markdown-pdf: Export (pdf) markdown-pdf: Export (html) markdown-pdf: Export (png) markdown-pdf: Export (jpeg) markdown-pdf: Export (all: pdf, html, png, jpeg)  この中からExport (pdf)を選択する。
+ 少し待つと、Markdownと同一のフォルダーにPDFが生成される。
+  自動化 上記の使い方ではPDFへ変換するのに、毎回コマンドパレットを表示してコマンドを入力し、どのファイル形式でエクスポートするかを選択する必要があります。これを特定の変換先（今回はPDF）に限定して自動変換するよう設定します。
+ 「ファイル」メニュー＞「基本設定」＞「設定」を選択するか、Ctrl＋,で直接画面を開く。
+ setting.jsonファイルを開いて下記のように設定する。
+&amp;#34;markdown-pdf.convertOnSave&amp;#34;: true, &amp;#34;markdown-pdf.type&amp;#34;: [ &amp;#34;pdf&amp;#34; ], 設定内容を書き込んだらVS Codeを1度再起動する。</description>
     </item>
     
   </channel>

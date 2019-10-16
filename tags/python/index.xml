@@ -6,6 +6,7 @@
     <description>Recent content in Python on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
+    <copyright>© Copyright notice</copyright>
     <lastBuildDate>Fri, 06 Sep 2019 15:14:51 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
@@ -17,7 +18,14 @@
       <pubDate>Fri, 06 Sep 2019 15:14:51 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/edit-excel-with-python-and-xlwings/</guid>
-      <description>概要 xlwingsを利用して、PythonからExcelファイルをいじってみます。 環境 Python 3.6 xlwings 0.15.3 Windows 10 新規でワークブックを作成する 空のワークブッ</description>
+      <description>概要 xlwingsを利用して、PythonからExcelファイルをいじってみます。
+環境  Python 3.6 xlwings 0.15.3 Windows 10  新規でワークブックを作成する 空のワークブックを作成します。
+&amp;gt;&amp;gt;&amp;gt; import xlwings as xw &amp;gt;&amp;gt;&amp;gt; xb = xw.Book() &amp;gt;&amp;gt;&amp;gt; xb.name &amp;#39;Book1&amp;#39; 次の方法でも作成できます。上記の方法は明示的に「ワークブックを作成」しますが、こっちの方法はアプリケーション（Excel）を起動しつつ新規ワークブックをアプリケーションに作成させます。スタートメニューなどから単純にExcelを起動した場合、空っぽのファイルを開いた状態でExcelが起動しますが、あれの状態をプログラムで再現している感じ。
+&amp;gt;&amp;gt;&amp;gt; import xlwings as xw &amp;gt;&amp;gt;&amp;gt; app = xw.App() &amp;gt;&amp;gt;&amp;gt; app.books[0].name &amp;#39;Book1&amp;#39; 既存のファイルを開く &amp;gt;&amp;gt;&amp;gt; xw.Book(r&amp;#39;C:\\app\\hoge.xlsx&amp;#39;) または ```console &amp;gt;&amp;gt;&amp;gt; app = xw.App() &amp;gt;&amp;gt;&amp;gt; app.books.open(r&amp;#39;C:\\app\\hoge.xlsx&amp;#39;) ファイルを閉じる すでにオープンしたExcelファイルを閉じます。保存はせず、確認メッセージも出力されません。
+&amp;gt;&amp;gt;&amp;gt; xb = xw.Book() &amp;gt;&amp;gt;&amp;gt; xb.close() ちなみに、このコードはワークブックを閉じるだけなので、Excelのプロセスそのものは残ることに注意。
+Excelを閉じる Excelのプロセスそのものを閉じる場合は、killを利用します。
+&amp;gt;&amp;gt;&amp;gt; app = xw.App() &amp;gt;&amp;gt;&amp;gt; app.kill() セルに値を設定・参照する .valueを用いて値を設定あるいは参照します。文字列の場合はクオーテーションで囲います。
+&amp;gt;&amp;gt;&amp;gt; xb = xw.</description>
     </item>
     
     <item>
@@ -26,7 +34,21 @@
       <pubDate>Fri, 02 Aug 2019 14:00:38 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/run-jupyter-notebook-with-vscode/</guid>
-      <description>はじめに Visual Studio Code（以下、vscode）ではDockerでPythonやVue.jsの開発環境を構築したり、あるいはMarkdownで書い</description>
+      <description>はじめに Visual Studio Code（以下、vscode）ではDockerでPythonやVue.jsの開発環境を構築したり、あるいはMarkdownで書いたドキュメントを配布用にPDF変換したりと、今までいろいろやってきました。今度はJupyter Notebookを動かします。いやー、vscodeってホントに多彩ですね。
+なお、今回においてはDockerを利用せず、単純にローカル環境でJupyterを使用します。
+Jupyter Notebookとは Jupyter Notebook (なお、読み方は「ジュパイター・ノートブック」、または「ジュピター・ノートブック」。自分は「ジュピター」って言ってますが、どっちが一般的なんですかね？) とは、ブラウザ上で実行するデータ分析作業のためのツールです。特徴的なのは、実行結果を記録しながらプログラミングができる点です。ここでブラウザから実行できます。
+プログラムそのものを記述しつつ、Markdownを利用して各種テキストや図表も同時に書き込んでいくことが可能です。つまり、プログラムのソースとその実行結果が、メモを含めて明確に紐づいた状態で確認できます。そのため、作業内容の振り返りに非常に便利ですし、複数人で作業を行う場合の共有にも有用です。また、Jupyterは*.ipynb形式のファイルで保存しますが、ソースコード部分を*.pyのPythonコードとして出力することも可能ですし、実行結果をPDFやHTML形式で出力できるため、Jupyterの実行環境がなくても内容を共有できます。
+そんなJupyterをvscodeで使っちゃえ、というのが今回の趣旨です。
+環境  Windows 10 Anaconda version 1.7.2 vscode 1.36  インストール Anacondaをインストールしている場合、基本的にはJupyterも一緒にインストールされているはずです。なお、Anacondaのインストールは、オフィシャルページからプラットフォームに合ったインストーラーをダウンロードして実行します。インストール後に下記のコマンドを実行すると、condaコマンドにてインストールされているリストが出力されます。表示されたリストの中にjupyterがあればインストール済みであることがわかります。
+conda list ちなみに、Anacondaを導入しないでJupyterを利用するにはpipを利用します。下記のコマンドを実行するだけです。
+pip install jupyter vscodeで実行する 拡張機能のインストール vscodeでJupyterを利用するには、Pythonの拡張機能をインストールする必要があります。
+拡張機能をインストールするには、vscodeの左側にあるメニュー中から拡張機能のアイコン（下画像の赤枠内）をクリックします。
+検索窓に「python」と入力します。検索結果のうち、「Python」を選択し、インストールします。なお、下画像ではすでにインストール済みのため、歯車のアイコンが表示されています。
+他にも導入すると便利な拡張機能はありますが、今回は割愛します。
+vscodeでノートブックを書いてみる まず任意のフォルダを作成します。今回はworkdirとしましたが、フォルダ名はなんでもいいです。次にvscodeで先ほど作成したフォルダを開きます。フォルダを開いたら、適当にファイルを作成します。ただし、この際に作成するファイルの拡張子は*.pyです。先ほどJupyterでは*.ipynb形式を用いると言いましたが、vscodeで実行する場合はPythonの拡張子でファイルを作成します。
+「だけど、それじゃあフツーのPythonコードを見分けがつかないじゃん！」と思ったあなたは正しい。つまりファイルの拡張子ではなく、ファイルの中身で見分けるわけです。
+ファイルを*.py形式で作成したら、下記のコードを入力してください。なお、「その2」部分はCSVファイルがないとコケちゃうので、適当なCSVファイルを作っておくかコードを削除してください。
+#%% ## その１ import numpy as np x = np.arange(10) print(x) #%% ## その２ import pandas as pd data = pd.read_csv(&amp;#34;C:\\app\\hoge.csv&amp;#34;, encoding=&amp;#34;cp932&amp;#34;) data.head() #%% ## その3 ### sin plot import matplotlib.</description>
     </item>
     
     <item>
@@ -35,7 +57,15 @@
       <pubDate>Mon, 10 Jun 2019 00:52:30 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</guid>
-      <description>はじめに Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、ptvsdでは</description>
+      <description>はじめに Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、ptvsdではなく、vscodeの拡張機能であるRemoteを用いて接続します。
+環境構築 環境  macOS Mojave 10.14.5 Docker version 18.09.2 Visual Studio Code version 1.35  拡張機能 まずは何はなくとも下記の拡張機能をインストールします。
+ Remote - Containers  RemoteはまだvscodeのInsider版でしか動作しなかった・・・のですが、6月6日にStable版でも対応しました。
+接続手順 基本的な手順はここにあるものを参考にしています。
+ Dockerアイコンをクリックして、メニュー中の「Preferences」をクリック。「File Sharing」を選択して、共有したいディレクトリが設定されているか確認する。
+Dockerのメニュー中にPreferencesがあるはずなので、これをクリック。
+表示されたディレクトリのうち、共有したいディレクトリが設定されていることを確認しておきます。
+ 任意のコンテナーを準備します。今回はPython用のサンプルプロジェクトをmicrosoftが準備しているので、これをcloneしました。
+~/devp git clone https://github.com/microsoft/vscode-remote-try-python.git Cloning into &amp;#39;vscode-remote-try-python&amp;#39;... remote: Enumerating objects: 94, done. remote: Counting objects: 100% (94/94), done. remote: Compressing objects: 100% (70/70), done. remote: Total 94 (delta 47), reused 51 (delta 18), pack-reused 0 Unpacking objects: 100% (94/94), done.</description>
     </item>
     
     <item>
@@ -44,7 +74,20 @@
       <pubDate>Fri, 24 May 2019 14:50:30 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/convert-markdown-to-html-with-python/</guid>
-      <description>はじめに 以前、VS CodeでMarkdownをPDFに自動で変換する方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので</description>
+      <description>はじめに 以前、VS CodeでMarkdownをPDFに自動で変換する方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので勉強がてら、Pythonで書くことにしました。と言っても難しい処理では全然ないんだけど・・・_(┐「ε:)_
+ちなみに、前の記事で紹介した拡張機能Markdown PDFを使えばHTMLにも変換できます。ただ、今回はVS Codeがないというシチュエーションでファイル変換したいのと、自分が作成したスタイルシートでHTMLファイルを生成したかったため、VS Codeの拡張機能を頼らない方法を取りました。
+というわけで、Pythonを使ったMarkdownファイルをHTMLへ変換する手順について書きます。
+リポジトリ こちらにソースコード一式を置いてあります。
+環境  Python ※3.x系 Markdown  Markdownは事前にpipしておく。
+pip install Markdown 一応プラットフォームに関しては、MacやWindowsに限らず動作する・・・はず_(┐「ε:)_
+概要 フォルダ中に存在するmdファイルを取得して、HTMLファイルに変換します。
+詳細 ファイル  mdtohtml.py
+Pythonで記述された本体。実行の際は当ファイルを指定します。
+ style.css
+CSSが書かれたファイル。生成されたHTMLファイルに&amp;lt;style&amp;gt;タグで記述されます。スタイルの変更を行いたい場合、当ファイルを書き換えてHTMLを生成してください。
+  使い方  変換したいmdファイルがあるフォルダに上記の2ファイルを配置します。
+$ ls README.md iamacat.md main.css mdtohtml.py 配置したら、そのフォルダにて下記のコマンドを実行します。
+$ python mdtohtml.py iamacat.md の変換を開始します ----------------------------------- iamacat.md を iamacat.html へ変換しました README.md の変換を開始します ----------------------------------- README.md を README.html へ変換しました $ ls README.html README.md iamacat.html iamacat.md main.css mdtohtml.py  処理内容 実行されたフォルダ中に存在するmdファイルを取得して、HTMLファイルに変換して同じフォルダーに出力します。mdファイルが複数ある場合は、すべてHTML化します。</description>
     </item>
     
     <item>
@@ -53,7 +96,13 @@
       <pubDate>Wed, 15 May 2019 11:57:24 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/iterator-will-return-blank-with-loop-twice/</guid>
-      <description>なんのこっちゃ？ 実行しようとしていたのはこんなコードでした。 &amp;gt;&amp;gt;&amp;gt; import re &amp;gt;&amp;gt;&amp;gt; s = &amp;quot;hogefugapiyofoobarbaz1234567890abc987efg654hij321&amp;quot; &amp;gt;&amp;gt;&amp;gt; iter = re.finditer(&amp;quot;b..&amp;quot;, s) ← finditer()は結果をイテレータで返す &amp;gt;&amp;gt;&amp;gt; for i in iter:</description>
+      <description>なんのこっちゃ？ 実行しようとしていたのはこんなコードでした。
+&amp;gt;&amp;gt;&amp;gt; import re &amp;gt;&amp;gt;&amp;gt; s = &amp;#34;hogefugapiyofoobarbaz1234567890abc987efg654hij321&amp;#34; &amp;gt;&amp;gt;&amp;gt; iter = re.finditer(&amp;#34;b..&amp;#34;, s) ← finditer()は結果をイテレータで返す &amp;gt;&amp;gt;&amp;gt; for i in iter: ... print(i.start()) ... 15 18 32 &amp;gt;&amp;gt;&amp;gt; for i in iter: ... print(i.start()) ... &amp;gt;&amp;gt;&amp;gt; ← 同じループを実行しても最初のループと異なり結果が返ってこない このように、同一のイテレータに対しループ処理を複数回行うと、2回目以降のループは結果が空になってしまいます。
+ちなみにジェネレータでも上記のような複数回のループ処理を行おうとすると、2回目以降のループで結果が空になるらしいですが、ジェネレータについては別途まとめて記事にしようと思います（まだ勉強中）。
+なんでこーなるの？ イテレータが持つ要素を取得したい場合、__next__() メソッド（または組み込み関数のnext()）を繰り返し呼び出すと、イテレータ中の要素を1つずつ返します。このメソッドは集合から1つずつ要素を取り出しています。取り出しているので、すべて取り出し終わったら元の集合には要素が存在しません。よって2回目以降のループは空っぽになります（要素がない場合は、StopIteration例外を返す）。
+※「取り出す」という表現が正確かどうかはちょっと自信がありません。メソッドや関数の「next」という名前の通り「次の要素へ」という挙動と、同じ要素を複数回取得できないことから「取り出す」という表現を使っています。
+なお、直接関係はありませんが、map()やfilter()はイテレータを返す（Python3での話）ので、返されたオブジェクトについてlist()などを複数回実行すると、上記のように2回目以降は空っぽになってしまうようです。
+&amp;gt;&amp;gt;&amp;gt; list = [1, 2, 3] &amp;gt;&amp;gt;&amp;gt; f = filter(None, list) &amp;gt;&amp;gt;&amp;gt; list(list) [1, 2, 3] &amp;gt;&amp;gt;&amp;gt; list(list) [1, 2, 3] ← リストlistに複数回listしても結果が返ってくる &amp;gt;&amp;gt;&amp;gt; list(f) [1, 2, 3] &amp;gt;&amp;gt;&amp;gt; list(f) [] ← イテレータに複数回listすると2回目以降ブランクになる &amp;gt;&amp;gt;&amp;gt; そもそもイテレータって？ iteratorとはオブジェクトの一種で、データの走査方法について表現するものです。なんのこっちゃ、という感じですが「要素を1つずつ繰り返し取得できる構造を持っていて（iterable）、実際に順次取得ができる」オブジェクトっていう感じかと。</description>
     </item>
     
     <item>
@@ -62,7 +111,21 @@
       <pubDate>Thu, 25 Apr 2019 10:57:12 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/encode-error-with-open-function/</guid>
-      <description>結論 WindowsでPythonのopen関数を使うなら、encoding引数を指定しよう（血涙 何があったのさ WindowsにてPython</description>
+      <description>結論 WindowsでPythonのopen関数を使うなら、encoding引数を指定しよう（血涙
+何があったのさ WindowsにてPythonを用いて、テキストファイルの書き出しと読み込みをしようとしたんです。
+そうしたら憎きアイツが出てきたわけです。
+出たよ、UnicodeDecodeError・・・。
+環境  Windows 10 Python 3.6 Visual Studio Code  コード s = &amp;#39;\x85&amp;#39; print(s) with open(&amp;#39;C:/app/hoge.txt&amp;#39;, mode=&amp;#39;w&amp;#39;, encoding=&amp;#39;utf-8&amp;#39;) as f: f.write(s) with open(&amp;#39;C:/app/hoge.txt&amp;#39;, mode=&amp;#39;r&amp;#39;) as g: print(g.read()) # UnicodeDecodeError`でエラー  ※問題の部分だけ抜粋しています。本来のソースは入力の文字列がもっとごちゃごちゃしてました。
+ 原因 つまるところ、読み込み時のopenで引数のencodingを指定していなかったからでした_:(´ཀ`」∠):_
+書き出しの際には下記のようにencodingを指定していました。
+with open(&amp;#39;C:/app/hoge.json&amp;#39;, mode=&amp;#39;w&amp;#39;, encoding=&amp;#39;utf-8&amp;#39;) as f: ただ、書き出したファイルを読み込む際に、encodingの指定を失念していました。
+with open(&amp;#39;C:/app/hoge.json&amp;#39;, mode=&amp;#39;r&amp;#39;) as g: encodingの指定がない場合については、オフィシャルだと下記のように説明されています。
+ encoding が指定されていない場合に使われるエンコーディングはプラットフォームに依存します
+ Windowsだと利用されるエンコーディングはCP932です。Pythonから入出力する際、CP932に変換できない文字が存在したため、「変換できないよ！」とエラーになったわけです。
+ちなみに Python内部では文字列型はUnicodeで保持されています。そして、入出力の際はPythonがシステムのエンコーディングに自動で変換してくれます。この場合、もともとUTF-8で保持されていたものをCP932に変換します。
+この変換をユーザーが意識する必要はありません。逆に言えば、知らない間に勝手に変換されます。そして、この自動変換の際に何かしらの「変換できない文字」があるとエラーになる、というわけです。
+解消方法 エラーを解消するには、書き出し時と同様に読み込み時にもencodingを指定する必要があります。
+with open(&amp;#39;C:/app/hoge.json&amp;#39;, mode=&amp;#39;r&amp;#39;, encoding=&amp;#34;utf-8) as f: j = json.</description>
     </item>
     
     <item>
@@ -71,7 +134,9 @@
       <pubDate>Wed, 24 Apr 2019 10:38:54 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/garbled-text-with-json-dumps/</guid>
-      <description>概要 Pythonでjson.dumps()した際に、日本語が文字化けするのを防ぐメモ。 環境 Windows 10 Python 3.6 実際のコード &amp;gt;&amp;gt;&amp;gt; import json &amp;gt;&amp;gt;&amp;gt; dic = {&amp;quot;hoge&amp;quot;:&amp;quot;foo&amp;quot;, &amp;quot;fuga&amp;quot;:&amp;quot;bar&amp;quot;, &amp;quot;piyo&amp;quot;:&amp;quot;baz&amp;quot;} &amp;gt;&amp;gt;&amp;gt; json.dumps(dic) &#39;{&amp;quot;hoge&amp;quot;: &amp;quot;foo&amp;quot;, &amp;quot;fuga&amp;quot;: &amp;quot;bar&amp;quot;,</description>
+      <description>概要 Pythonでjson.dumps()した際に、日本語が文字化けするのを防ぐメモ。
+環境  Windows 10 Python 3.6  実際のコード &amp;gt;&amp;gt;&amp;gt; import json &amp;gt;&amp;gt;&amp;gt; dic = {&amp;#34;hoge&amp;#34;:&amp;#34;foo&amp;#34;, &amp;#34;fuga&amp;#34;:&amp;#34;bar&amp;#34;, &amp;#34;piyo&amp;#34;:&amp;#34;baz&amp;#34;} &amp;gt;&amp;gt;&amp;gt; json.dumps(dic) &amp;#39;{&amp;#34;hoge&amp;#34;: &amp;#34;foo&amp;#34;, &amp;#34;fuga&amp;#34;: &amp;#34;bar&amp;#34;, &amp;#34;piyo&amp;#34;: &amp;#34;baz&amp;#34;}&amp;#39; &amp;gt;&amp;gt;&amp;gt; dicj = {&amp;#34;日本語&amp;#34;:&amp;#34;項目名&amp;#34;, &amp;#34;にほんご&amp;#34;:&amp;#34;こうもくめい&amp;#34;} &amp;gt;&amp;gt;&amp;gt; json.dumps(dicj) &amp;#39;{&amp;#34;\\u65e5\\u672c\\u8a9e&amp;#34;: &amp;#34;\\u9805\\u76ee\\u540d&amp;#34;, &amp;#34;\\u306b\\u307b\\u3093\\u3054&amp;#34;: &amp;#34;\\u3053\\u3046\\u3082\\u304f\\u3081\\u3044&amp;#34;}&amp;#39; こんな感じで、単純にjson.dumps()すると文字化けしてしまいます。この場合、ensure_asciiオプションでFalseを指定します。
+&amp;gt;&amp;gt;&amp;gt; json.dumps(dicj, ensure_ascii=False) &amp;#39;{&amp;#34;日本語&amp;#34;: &amp;#34;項目名&amp;#34;, &amp;#34;にほんご&amp;#34;: &amp;#34;こうもくめい&amp;#34;}&amp;#39; すると、上記のように文字化けが解消されました。</description>
     </item>
     
     <item>
@@ -80,7 +145,9 @@
       <pubDate>Fri, 12 Apr 2019 15:27:02 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/python-naming-conventions/</guid>
-      <description>命名規約のメモ PEP8に準拠。何番煎じかわからないけども自学用に。 推奨される命名規約 命名対象 ルール 例 備考 パッケージ、モジュール すべて小文字で</description>
+      <description>命名規約のメモ PEP8に準拠。何番煎じかわからないけども自学用に。
+推奨される命名規約    命名対象 ルール 例 備考     パッケージ、モジュール すべて小文字で短く flask, os アンダースコアの利用は非推奨   クラス （アッパー）キャメルケース MyClass    型変数 （アッパー）キャメルケース MyClass    例外 （アッパー）キャメルケース、最後に「Error」 MyExcepError 例外はクラスであるべき、とのこと   グローバル変数 すべて小文字でアンダースコア区切り、2つアンダースコアを付与 __all__ グローバル変数をエクスポートするのを防ぐ   関数、変数 すべて小文字でアンダースコア区切り my_funcion    メソッド、インスタンス変数 すべて小文字でアンダースコア区切り my_method    定数 すべて大文字でアンダースコア区切り MY_CONST     ポピュラーな命名 上記の基本的なルールに準拠して、実際にはどんな感じで命名をされているか、について。
+1文字のみ b 小文字1文字。</description>
     </item>
     
   </channel>

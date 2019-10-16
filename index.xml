@@ -6,6 +6,7 @@
     <description>Recent content on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
+    <copyright>© Copyright notice</copyright>
     <lastBuildDate>Mon, 07 Oct 2019 09:41:57 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
@@ -17,7 +18,12 @@
       <pubDate>Mon, 07 Oct 2019 09:41:57 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</guid>
-      <description>はじめに 以前の記事ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したの</description>
+      <description>はじめに 以前の記事ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したのですが、デフォルトだと「Vuex」や「Vue Router」はOFFです。Vue.jsでなくともReactなどのJavaScriptのライブラリやフレームワークを用いた環境でSPAを作成する場合、状態管理とルーティングは避けて通れない機能です。いや、別に利用しなくてもいいんですが、たぶん避けて通ったほうが後々面倒なこと（コンポーネント間でデータバケツリレーしたり、ページ遷移する必要が出てきたり・・・）になります。
+なので今回は「VuexとVue Routerを使用したSPAをざっくり作って、状態管理とルーティングに慣れておこうぜ」というのが趣旨です。基本的にはVuexのチュートリアルを参考にしています。
+環境  Windows 10 Visual Studio Code 1.38  $ vue --version 3.10.0 $ node --version v10.15.3 なにはともあれ まずはVue CLIで枠を作ります。
+vue create hogehoge ・・・いい名前が思いつかなかった_(:3」∠)_
+ここで注意が必要なのは、VuexとVue Routerを設定するのにはデフォルト設定だとダメということです。マニュアル設定します。
+? Please pick a preset: Manually select features ? Check the features needed for your project: (Press &amp;lt;space&amp;gt; to select, &amp;lt;a&amp;gt; to toggle all, &amp;lt;i&amp;gt; to invert selection) &amp;gt;(*) Babel ( ) TypeScript ( ) Progressive Web App (PWA) Support ( ) Router ( ) Vuex ( ) CSS Pre-processors (*) Linter / Formatter ( ) Unit Testing ( ) E2E Testing  このうち、RouterとVuexを選択しておきます。もし必要なら他の項目もついでに選択してエンターキーを押します。</description>
     </item>
     
     <item>
@@ -26,7 +32,22 @@
       <pubDate>Wed, 25 Sep 2019 00:16:41 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/disk-review-cadans-der-getouwen-cadans-der-getouwen/</guid>
-      <description>Cadans der getouwenとは オランダのカントリー・フォークグループ。Guy Roelofsが中心となり結成。活動時期は2000年前後ごろ。現在は解</description>
+      <description>Cadans der getouwenとは オランダのカントリー・フォークグループ。Guy Roelofsが中心となり結成。活動時期は2000年前後ごろ。現在は解散しており、Tjaneに活動が引き継がれています。
+・・・基本情報少な過ぎるんじゃないかって？いえいえ。何せオフィシャルサイトがオランダ語でさっぱり、リーダーのGuy Roelofsをインタビューした記事は英語（とりあえずなんとか読める内容ではあるけど）。検索して出てくるとしたらオランダ語のレコード店のページ。あとはDiscogs。日本語のページは皆無・・・。むしろ、下手したらこのページが日本語記事でサジェストされる勢い。まぁ、ホントに情報ないです。
+とは言え、情報が少ないことと、アーティストの音楽性やアルバムのクオリティに関係はまったくありません。えぇ、とにかく絶品です（ちなみに試聴は後述のとおりYouTubeでも可能です。ググっても出てきます）。
+アルバムの内容とか どの曲も基本的には、フォークとかトラッドミュージックをベースにしています。そこにポップとかカントリー、イージーリスニングっぽい要素が絡んで、郷愁を誘うような懐かしい曲調でありつつも現代的なエッセンスを盛り込んで、非常に聴きやすいアルバムになってます。
+1曲目の「Rom Rom Mij Wielken」とか2曲目の「De Linnenwevers」なんて、すごくポップで「トラッドミュージック」って感じはあんまりしなかったりします。むしろ、ちょっとしたAORって感じ。
+とは言え4曲目の「Spotlied – Polka」では、いかにもフォーク！トラッド！って感じの曲が出てきたりして。後半になればなるほどトラッドさで主張するような曲が多くなってたりして、しっかりカントリー好きもワールドミュージック好きも喜ばせてくれます。アルバム前半では聴きやすく現代的な曲調で揃えつつ、そのままトラッド色の強い後半まで引っ張って行くような構成です。なので、個人的には後半まで通して聴かせるために、前半に「掴み」になりそうな曲を配置したのかなー、と思ったりもします。
+基本的にリズム隊はエレキベースとベーシックなドラムセットなので、そこだけ聴くととても馴染みやすくポップです。ただ、各々の曲のイントロや間奏に顔を出すフルートやアコーディオンのおかげでただのポップやAORにならず、カントリーやトラッドさがブレンドされて、いいスパイスになってます。とくに特徴的なのが「ブズーキ」と呼ばれる、バルカン半島方面で用いられるギターやマンドリンのような弦楽器です。一聴するとシングルコイルのピックアップ搭載のギターっぽい硬質な響きなのですが、この「ギターっぽいけど、でもなんか違う」というのがいい味を出しています。
+どの方面にもウケる、高次元でバランスの取れた構成になっていると思います。
+ちょっと難点があるのよ 難点なのは全曲通じて歌詞がオランダ語なので、内容がさっぱりなこと。全然わからん。オランダ語を解する人でカントリーやトラッドミュージックが好きで、しかもSpotifyなどのサービスを利用している人は、今すぐ歌詞の内容を理解しつつ聴けます・・・って、難易度が高すぎるっての_(:3」∠)_
+それとCDをはじめとするフィジカルな音源が入手困難なこと。ただ、Spotifyなどではストリーミング配信されているため、こういったサービスを利用している人で「別にCDとかモノで持ってなきゃいけない必要はないよ」っていう人には問題ないと思います。
+どこで聴けるかって言うと Spotifyにはありますが、Amazom music unlimitedにはありませんでした。Apple Musicでは配信されているのかな？ちょっと調べきれてないです。誰かご存じないですかね？
+ちなみに、YouTubeに音源がアップロードされているのですが、これオフィシャルなんですかね？
+ちなみに グループ名である「Cadans der getouwen」。これはオランダ語で、翻訳すると「織機のリズム」。なんで織機か、というと中心人物のGuy Roelofsの両親がテキスタイルの工場オーナーだったからだとか。
+ちなみに2 そもそも自分がこのアーティストを知ったのは、タワレコかHMVかディスクユニオンのどこか店舗でセールされてた輸入盤を買い漁ってたときなんですよね。たぶん2000年代後半のどこかで買いました。この頃は、とにかく何でもいいからいろんなアルバム買ってたな・・・。このアルバムに関しても、「とりあえず中身わからないし、そもそも何語なのかすらわからないけど、なんとなくジャケットからして良さそうだから買ってみようか」みたいな。たしか、そんなノリだったと思います。よくぞ買っておいた、私。いやー、数百円をケチったりしないで買っておいて、ホントよかった。
+今ではもう記憶も定かではないですが、たぶん中古盤ではなかった覚えがあるので、そもそもバイヤーは何でこのアルバムを仕入れたのか、とても興味があります。ヨーロッパカントリー好きなバイヤーだったのだろうか。でも、なかなか売れないだろ、こんなの。いや中身はいいんだけどさ、ニッチすぎるでしょ。
+郷愁の田園風景を彷彿とさせる曲たち。帰省する旅路でのBGMにいかがでしょう。</description>
     </item>
     
     <item>
@@ -35,7 +56,33 @@
       <pubDate>Sat, 07 Sep 2019 10:31:55 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/make-random-data-easily/</guid>
-      <description>テストデータは欲しいけど「hoge」とかじゃ困るときに 文書作成やレイアウト検討など、さまざまなシチュエーションでダミーデータは必要です。ただ</description>
+      <description>テストデータは欲しいけど「hoge」とかじゃ困るときに 文書作成やレイアウト検討など、さまざまなシチュエーションでダミーデータは必要です。ただ、あんまり「テストテストテスト・・・」のような単語の羅列だったり、同じ日付が繰り返し並んでいても、実際の動作がイメージしにくいです。かと言って、「hoge」「fuga」「piyo」「foo」「bar」「baz」ばっかりだと「そもそもどんなデータを想定してるんだかさっぱりだよ！」なんてこともあるかもしれません。
+そこで各種ダミーデータの作成方法をメモしておきます。なお、ここで言及する「ダミーデータ」とは以下のようなものを想定しています。
+ テキストであればLorem ipsumなど意味はないが読める（読めそうな）テキスト 小数あるいは整数であれば適当な値 時刻や日付であれば（任意の範囲で）適当な値  よって、Linuxなどでランダムなデータを生成するのに利用するurandomのような機能は対象外です。また、VBAによるランダムなデータの生成もここでは対象外とします。プログラムを組むなら何でもアリになっちゃうしね_(:3」∠)_
+fakerを使う fakerはPythonパッケージの1つです。このパッケージのすごいところは人名、住所、会社名などを日本語で生成できるところ。またその機能もすこぶる多彩です。前述のプロフィール情報のほか、下記のようなダミーデータを生成できます。
+ クレジットカード情報 ファイル情報 緯度経度情報 メールアドレス（フリーメールか否か、なんていう細かい指定も可能） URL、ドメイン、ホスト名 IPv4、v6のアドレス  もう、とりあえずプロフィール系のダミーデータはこれ使っておけばいいんじゃね？っていうくらいに多彩です。ホントすごい_(:3」∠)_
+強いて難点をあげるなら、ダミーテキストも生成できるのですが、日本語として意味のない文章になることくらい。「別に意味がなくてもいいよー」という場合は、このパッケージ1つあればもう完璧です。
+ちなみに紹介したこれはPythonのパッケージですが、PHPやRubyにもfakerという同名のライブラリが存在します。
+ダミーデータを生成するサービスを利用する ダミーデータを調達するには、web上で生成してくれるサイトを利用するのが手っ取り早いです。大抵は出力もCSVなどに対応しているので、わざわざwebページをコピペする必要もありません。なので、有名どころ（？）を紹介します。
+疑似個人情報データ生成サービス もうページの名前からして期待できるのが疑似個人情報データ生成サービスです。出力できるダミーデータは一般的なプロフィール情報です。名前などのパターンが多い上、住所は出力したい都道府県を選択できる、男女比率を選択できる、出力する年齢の範囲も指定できるとあってなかなか多機能です。血液型も生成できるのですが、日本人の血液型の割合に合わせて生成されるというのも、「それっぽさ」を醸し出す一因かもしれません。
+JSONの出力はできませんがXMLの出力が可能で、他にxls、CSVでの出力ができます。
+難点は、メールアドレスのドメインが完全にランダムなこと。gTLDにないような文字列なので、そこだけはケアが必要です。
+mockaroo 日本語データではありませんが、ダミーのプロフィール情報のほかにBitcoinのアドレスや中国っぽい名前まで生成する、めちゃくちゃ多彩な機能を持ったサービスがmockarooです。出力もCSV以外にJSON、xls形式など多彩。なお、1000件を超えるデータの出力についてはお金がかかるので注意。
+ただねぇ・・・日本語データが生成できないのは、唯一にして最大の弱点・・・。
+NameMaker 英語名やフランス語名など、それっぽい名前を生成できるのがName Makerです。NPC名とかに使えるかな？
+ダミーテキストを生成する 前述のfakerではカバーしきれなかったのがダミーテキスト。そんなわけでダミーテキストを調達する方法について紹介します。
+Lorem Ipsum 英字のダミーテキストでは大御所のLorem Ipsum。とりあえずこれを使っておけば「それっぽくなる」のが便利。UIの出来がいいと、Lorem Ipsumを書いておくだけでなんかオサレっぽさが醸し出されます。
+青空文庫 日本語のダミーテキストを調達するのについては、もうこれが一番なんじゃなかろうか、と。最終手段を最初に持ってきた感がありますが、青空文庫にある任意の本の一節を引用する方法があります。著作権はすでに切れているので利用については自由です。
+ネックはルビが振られていること。具体的には以下のように振られ方をしています。
+私《わたくし》はその人を常に先生と呼んでいた。 だからここでもただ先生と書くだけで本名は打ち明けない。 これは世間を憚《はば》かる遠慮というよりも、その方が私にとって自然だからである。 これを除外しないといけないのが手間です。ルビの削除についてはググると方法が出てたりするのですが、結論から言っちゃうと正規表現で条件に一致したところは消しちゃえ、です。
+青空文庫のルビを削除する Visual Studio Codeなどのエディターで置換元を指定する際、下記のような正規表現で指定します。置換先には何も指定しません。これでルビの削除ができます。なお、置換元の条件に正規表現が指定できないエディターでは利用できません。
+《[^》]+》 なお、カッコの形が異なる場合は違った条件にする必要があります。たとえば「（～）」でルビが記述されていれば下記のように置換元を指定します。
+([^)]+) 各種ダミーテキスト生成サイト ググると結構出てきます。手前味噌ですが、こちらでもダミーテキストを生成できます。
+Officeでは便利な関数があります Microsoft Officeでは、各アプリケーションにダミーデータを生成する関数などがもともと備わっています。
+Excel 以下はすべてExcel関数です。動作はOffice Professional 2016環境下にて確認しています。
+Randbetween()・・・ランダムな値を生成 最小値と最大値を指定すれば、勝手にランダムな値を生成してくれます。数値だけじゃなくて日付や時刻などもイケるのが素晴らしい。超絶便利。なお、値の指定は整数のみ有効です。
+たとえば、日付を生成したい場合は任意のセルにて下記のように記述します。
+=Randbetween(&amp;#34;2019/01/01&amp;#34;,&amp;#34;2019/12/31&amp;#34;) 時刻はちょっとややこしいです。下記のように記述します。</description>
     </item>
     
     <item>
@@ -44,7 +91,14 @@
       <pubDate>Fri, 06 Sep 2019 15:14:51 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/edit-excel-with-python-and-xlwings/</guid>
-      <description>概要 xlwingsを利用して、PythonからExcelファイルをいじってみます。 環境 Python 3.6 xlwings 0.15.3 Windows 10 新規でワークブックを作成する 空のワークブッ</description>
+      <description>概要 xlwingsを利用して、PythonからExcelファイルをいじってみます。
+環境  Python 3.6 xlwings 0.15.3 Windows 10  新規でワークブックを作成する 空のワークブックを作成します。
+&amp;gt;&amp;gt;&amp;gt; import xlwings as xw &amp;gt;&amp;gt;&amp;gt; xb = xw.Book() &amp;gt;&amp;gt;&amp;gt; xb.name &amp;#39;Book1&amp;#39; 次の方法でも作成できます。上記の方法は明示的に「ワークブックを作成」しますが、こっちの方法はアプリケーション（Excel）を起動しつつ新規ワークブックをアプリケーションに作成させます。スタートメニューなどから単純にExcelを起動した場合、空っぽのファイルを開いた状態でExcelが起動しますが、あれの状態をプログラムで再現している感じ。
+&amp;gt;&amp;gt;&amp;gt; import xlwings as xw &amp;gt;&amp;gt;&amp;gt; app = xw.App() &amp;gt;&amp;gt;&amp;gt; app.books[0].name &amp;#39;Book1&amp;#39; 既存のファイルを開く &amp;gt;&amp;gt;&amp;gt; xw.Book(r&amp;#39;C:\\app\\hoge.xlsx&amp;#39;) または ```console &amp;gt;&amp;gt;&amp;gt; app = xw.App() &amp;gt;&amp;gt;&amp;gt; app.books.open(r&amp;#39;C:\\app\\hoge.xlsx&amp;#39;) ファイルを閉じる すでにオープンしたExcelファイルを閉じます。保存はせず、確認メッセージも出力されません。
+&amp;gt;&amp;gt;&amp;gt; xb = xw.Book() &amp;gt;&amp;gt;&amp;gt; xb.close() ちなみに、このコードはワークブックを閉じるだけなので、Excelのプロセスそのものは残ることに注意。
+Excelを閉じる Excelのプロセスそのものを閉じる場合は、killを利用します。
+&amp;gt;&amp;gt;&amp;gt; app = xw.App() &amp;gt;&amp;gt;&amp;gt; app.kill() セルに値を設定・参照する .valueを用いて値を設定あるいは参照します。文字列の場合はクオーテーションで囲います。
+&amp;gt;&amp;gt;&amp;gt; xb = xw.</description>
     </item>
     
     <item>
@@ -53,7 +107,19 @@
       <pubDate>Wed, 04 Sep 2019 09:22:56 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/can-not-live-together-markdownlint-and-details-tag/</guid>
-      <description>はじめに とある記事で、そこそこ長いソースを記述するのに&amp;lt;details&amp;gt;タグを利用しました。すると、なぜか正常なコードブロックで</description>
+      <description>はじめに とある記事で、そこそこ長いソースを記述するのに&amp;lt;details&amp;gt;タグを利用しました。すると、なぜか正常なコードブロックでエラーMD046/code-block-styleを吐くようになってしまいました。なんでー_(:3」∠)_
+環境  Windows 10 Visual Studio Code 1.37.1 markdownlint 0.30.2  実際のエラー 上の2つのMD033/no-inline-htmlは、&amp;lt;details&amp;gt;タグをmarkdown中に直接記述しているために表示されるエラーです。問題は下の3つのMD046/code-block-style。「コードはインデントじゃなくてコードブロック使えよ！」ってエラーなんですけど・・・。いや、コードブロック使ってるんですけどね？
+それぞれを見てみます。
+うーん、なんか間違ってる感じしないんだけど？
+detailsタグの部分を消してみる 思い切って&amp;lt;details&amp;gt;タグを消してみます。グリっと選択して・・・
+えいっ。
+さて、エラーメッセージはどんな感じでしょうか・・・って、ちょ、待て。「現時点で問題はワークスペースで検出されていません。」とな？
+&amp;lt;details&amp;gt;タグ消しただけだぞ？試しに消した&amp;lt;details&amp;gt;タグの部分を元の状態へ戻してみると・・・。
+しっかりとエラーが復活しましたな。ほげ。
+まぁ別に特段困らないんだけどね エラーエラーと言っていますが、実際はmarkdownlintのコレはワーニングなので無視しても問題ありません。
+markdownlintのエラーは表示されたところで、最終的にmarkdownがブラウザで正常に出力されればそれで問題ないので、あまり気にしなくていいのですね。実際、この記事でも最終的には&amp;lt;details&amp;gt;タグの内容もコードブロックの内容もちゃんと出力されているので、実害ありませんでした。
+いや、もちろん修正できるならlintに従うのが一番です、はい。
+しっかし、なんでMD033のエラーに引きずられてMD046のエラーまで出現するのかは不明です。マジで謎_(:3」∠)_</description>
     </item>
     
     <item>
@@ -62,7 +128,12 @@
       <pubDate>Mon, 02 Sep 2019 16:08:20 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-function/</guid>
-      <description>はじめに 前回は、とりあえず見た目のコンポーネントを実装しました。今回はテキストを生成する機能を実装してデプロイまでしてしまいます。後述します</description>
+      <description>はじめに 前回は、とりあえず見た目のコンポーネントを実装しました。今回はテキストを生成する機能を実装してデプロイまでしてしまいます。後述しますがデプロイ先はGitHub Pagesです。便利ですよね。
+今回の成果物 こちらです。
+Vue.jsのオフィシャルを参考に 機能を実装するにあたっては何はともあれ、まずはVue.jsのガイドを読みます。とくにコンポーネントの部分はよく参照することになると思います。自分はここを見つつソースの編集をしてました。
+実際書いたソース 結構長いので折りたたみます。
+ JavaScriptのソース
+&amp;lt;template&amp;gt; &amp;lt;div&amp;gt; &amp;lt;b-button size=&amp;#34;is-medium&amp;#34; v-bind:icon-left=&amp;#34;buttonIcon&amp;#34; @click=&amp;#34;generateText(quoteTextname, outputNumber, genOptions)&amp;#34; &amp;gt;{{ buttonMsg }}&amp;lt;/b-button&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/template&amp;gt; &amp;lt;script&amp;gt; export default { name: &amp;#34;GenerateText&amp;#34;, props: { buttonMsg: { type: String, required: true }, buttonIcon: { type: String, required: true }, quoteTextname: { type: String, required: true }, outputNumber: { type: Number, required: true }, genOptions: { type: Array, required: false } }, methods: { generateText: function(quoteTextname, outputNumber, genOptions) { // コピーのコマンドに対応しているか確認する if (document.</description>
     </item>
     
     <item>
@@ -71,7 +142,12 @@
       <pubDate>Fri, 30 Aug 2019 10:10:16 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/make-background-gradation-with-css/</guid>
-      <description>はじめに CSSでグラデーションを背景に、かつ固定する書き方についてです。 コード html,body { height: 100% } body:after { position: fixed; top: 0; left: 0; width: 100%; height: 100%; content: &amp;#34;&amp;#34;; z-index: -1; background: linear-gradient(to right bottom, #5dc4cb, #4ad8c6, #60e9b0, #92f78e, #d0ff66)fixed; }</description>
+      <description>はじめに CSSでグラデーションを背景に、かつ固定する書き方についてです。
+コード html,body { height: 100% } body:after { position: fixed; top: 0; left: 0; width: 100%; height: 100%; content: &amp;#34;&amp;#34;; z-index: -1; background: linear-gradient(to right bottom, #5dc4cb, #4ad8c6, #60e9b0, #92f78e, #d0ff66)fixed; } 詳細 とりあえず高さは画面いっぱいにしておきたいので、height: 100%を指定。次のbody:afterの部分はあまり必要ない部分なのだけど、bodyに直書きだとiOSで背景が固定されないので、疑似要素をfixedで画面全体に背景として配置してグラデーションを記述しています。
+なお、linear-gradientの数値を変更するにはジェネレーターを使用するのが手っ取り早いのでオススメ。
+動作サンプル codepen上で確認してみます。
+See the Pen webpage sample by idontwannawork (@idontwannawork) on CodePen. 
+おわりに 背景に限らずグラデーションは重宝するので、使い方を覚えておきたいものです。</description>
     </item>
     
     <item>
@@ -80,7 +156,33 @@
       <pubDate>Tue, 27 Aug 2019 13:50:30 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-ui/</guid>
-      <description>はじめに 前回は、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーシ</description>
+      <description>はじめに 前回は、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーションを開発するかを確認しました。
+今回はやっとこさ、コーディングします。もう内容は見切った！もう完璧だ！（死亡フラグ）
+取っ掛かりにUI部分のコーディングをします。何はともあれ、まずは見た目です。
+と、その前に 「そもそもどんなアプリケーション作るのよ？」ってところです。ここではダミーテキストを生成する機能を実装します。単純に、ちょっと今そういう機能が欲しいのです。
+ちなみに、Vue.jsに限らないと思いますが、この手のチュートリアルはToDoリストが鉄板だと思います。
+コンポーネントの構成 必要な項目 ダミーテキストジェネレータを実装するに当たって、ざっくりとどんなコンポーネント構成で実装するかを考えます。そこで、テキスト生成に必要なものはどんな機能か、ちょっと考えてみます。
+ ダミーテキストの生成元を選択 生成する文字数を指定 その他オプション  各文章において改行の要否を選択 英数字出力時の全角・半角を選択 クリップボードへ出力結果をコピー  条件はすべてお任せで一発生成  こんなところでしょうか。ダミーテキストは青空文庫から入手するものとします。あと英文のダミーテキストが必要なら、王道のアレですかねぇ。
+クリップボードへのコピーは正確にはテキストの内容に影響はしませんが、単純に機能として存在するとうれしいかな、と思って実装します。だって、文字列を生成するだけなのに、その都度ボタンを押して生成されたテキストをマウスなんかで選択してコピーして・・・ってしたくありませんし。それと同じ発想で、「このボタンを押せば、条件はすべてお任せでテキスト生成できるよ」という機能も実装したいなー。
+ちなみに、意味のないただランダムに文字を並べただけの文字列が必要なシチュエーションを想定できなかったため、一応「読める文章」を生成するつもりです。なので、基本的には指定された文字数分、青空文庫の文章を切り出す感じに実装しようかと思います。適当に切り出したら文章の途中で終わっちゃうかもしれないから、その辺のケアは必要かもしれません。まぁ追々考えます。
+コンポーネントの分割 必要があればコンポーネントを分割して疎結合にし、再利用が容易になるよう実装すべきでしょう。となると、分割できそうな、あるいは分割しても問題なさそうな部分はどのあたりかちょっと考えてみます。
+とは言ったものの、先述した機能は画面に表示されるオブジェクトとして1つのコンポーネントにまとめちゃってもいいかもしれません。もちろん、それぞれを別コンポーネントにしっかり分割する、という方法もあります。が、今回のような小規模なアプリケーションにおいては、あんまり細分化するのもイマイチだなぁと思っています。たった数行のHTMLやJavaScriptのためにいくつもコンポーネントを分割するのは、保守性の面から考えれば本末転倒です。
+というわけで、今回については1つのコンポーネントに全部乗せすることとします！（白目）あーでも、テキストの生成部分は別コンポーネントに分割するかもしれないなー・・・。
+重ねて強調しますが、規模によってコンポーネントを分割する方が絶対保守性高いから！じゃないと後で泣きを見るから！！_(:3」∠)_（経験則）
+というわけで、UIの検討を UIコンポーネントはBuefyを利用するつもりだったので、まずはオフィシャルのドキュメントを参考にどんなインターフェイスを実装するか検討します。
+ダミーテキストの生成元の選択 これはもうRadio一択でしょう。いくつかある選択肢のうち、1つだけ選ぶとなればRadioで決まりです。
+生成する文字数 デフォルトを100文字として、フォームに任意の数値を入力してもらう方法にしようかな・・・と思っていたらNumberinputという機能を発見。おお、これいいじゃん。ただ、デフォルトでは「＋」をクリックしたときに1しか増加しないので、「200文字出力したいから、スタートが100だとすると100回クリックすることに・・・？」ってなるからステップの調整は必須ですね。
+あるいはSliderでもいいかもしれません。この辺は実装してみてから使用感を比べて、どっちがいいか考えます。場合によっては両刀使いもいいかもしれません。
+その他オプション 各文章において改行の要否 これは単純にYes/NoなのでSwitchでいいと思います。
+英数字出力時の全角・半角を選択 これも全角または半角のいずれかなのでSwitchでいいと思います。
+必ず句点で終わる これも単純にYes/NoのいずれかなのでSwitchでいいと思います。
+この機能ですが、任意の文字数を入力させた場合、文章を最後まで生成できず途中で終わってしまう可能性があります。そこで、「句点まではテキストを生成する」条件を設定しておきます。この条件を指定すると、入力された文字数プラスαのテキストが生成されることになります。なお、英文の場合はピリオドです。実装はJavaScript側のハナシなので、今回はあくまでも見た目です。
+クリップボードへのコピー これはもうボタンかな。単純に「クリップボードへコピーする」みたいな文字列だけでもいいかもしれません。が、ボタンならより見やすく「これ押せば何かしら処理するだろう」感を演出するためにも、目立つオブジェクトはあった方がいいかと。
+そんなわけでコーディング 任意の名前で.vueファイルを作成します。作成したvueファイルについてコーディングするとVisual Studio Code（以下vscode）が下画像のように補完してくれます。すごい助かる（小並感）
+ちなみに下画像にもあるように、script部分の記述にはTypeScriptを利用できます（上から2番目にtypescriptの文字が確認できますね）。ただ、今回は純粋にJavaScriptを利用しています。これは単純にいろいろ手を出しすぎると自分の頭では収集が付かなくなるからで、TypeScriptが書ける人はわざわざJavaScriptを記述する必要はないと思います。
+実際のコード そこそこ長くなったので、折りたたみます。
+ HTMLソース
+&amp;lt;template&amp;gt; &amp;lt;div id=&amp;#34;generator&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;tile is-ancestor&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;tile is-parent is-6&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;tile is-child box container&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;has-text-centered&amp;#34;&amp;gt; &amp;lt;b-tooltip class=&amp;#34;title is-4&amp;#34; label=&amp;#34;生成するテキストの引用元を選択してください。&amp;#34; position=&amp;#34;is-bottom&amp;#34; dashed multilined&amp;gt;引用元&amp;lt;/b-tooltip&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p class=&amp;#34;blank1em&amp;#34;&amp;gt;&amp;lt;/p&amp;gt; &amp;lt;div class=&amp;#34;field&amp;#34;&amp;gt; &amp;lt;b-radio v-model=&amp;#34;textName&amp;#34; name=&amp;#34;name&amp;#34; native-value=&amp;#34;Lorem Ipsum&amp;#34;&amp;gt; Lorem Ipsum &amp;lt;/b-radio&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;field&amp;#34;&amp;gt; &amp;lt;b-radio v-model=&amp;#34;textName&amp;#34; name=&amp;#34;name&amp;#34; native-value=&amp;#34;Silver&amp;#34;&amp;gt; Silver &amp;lt;/b-radio&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;field&amp;#34;&amp;gt; &amp;lt;b-radio v-model=&amp;#34;textName&amp;#34; name=&amp;#34;name&amp;#34; native-value=&amp;#34;Jack&amp;#34;&amp;gt; Jack &amp;lt;/b-radio&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;field&amp;#34;&amp;gt; &amp;lt;b-radio v-model=&amp;#34;textName&amp;#34; name=&amp;#34;name&amp;#34; native-value=&amp;#34;Vane&amp;#34;&amp;gt; Vane &amp;lt;/b-radio&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p class=&amp;#34;radioValue&amp;#34;&amp;gt; &amp;lt;b&amp;gt;選択した元ネタ:&amp;lt;/b&amp;gt; {{ textName }} &amp;lt;/p&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;tile is-parent is-6&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;tile is-child box&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;has-text-centered&amp;#34;&amp;gt; &amp;lt;b-tooltip class=&amp;#34;title is-4&amp;#34; label=&amp;#34;生成したい文字数を入力、またはスライドバーで選択してください。&amp;#34; position=&amp;#34;is-bottom&amp;#34; dashed multilined&amp;gt;出力する文字数&amp;lt;/b-tooltip&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p class=&amp;#34;blank2em&amp;#34;&amp;gt;&amp;lt;/p&amp;gt; &amp;lt;b-field&amp;gt; &amp;lt;b-numberinput v-model=&amp;#34;textNumber&amp;#34; rounded controls-rounded&amp;gt; &amp;lt;/b-numberinput&amp;gt; &amp;lt;/b-field&amp;gt; &amp;lt;b-field&amp;gt; &amp;lt;b-slider v-model=&amp;#34;textNumber&amp;#34; max=&amp;#34;300&amp;#34;&amp;gt;&amp;lt;/b-slider&amp;gt; &amp;lt;/b-field&amp;gt; &amp;lt;p class=&amp;#34;numberValue&amp;#34;&amp;gt; &amp;lt;b&amp;gt;文字数:&amp;lt;/b&amp;gt; {{ textNumber }} &amp;lt;/p&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;tile is-ancestor&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;tile is-parent is-6&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;tile is-child box&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;has-text-centered&amp;#34;&amp;gt; &amp;lt;b-tooltip class=&amp;#34;title is-4&amp;#34; label=&amp;#34;出力する際の条件を設定してください。&amp;#34; position=&amp;#34;is-bottom&amp;#34; dashed multilined&amp;gt;出力オプション&amp;lt;/b-tooltip&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p class=&amp;#34;blank1em&amp;#34;&amp;gt;&amp;lt;/p&amp;gt; &amp;lt;div class=&amp;#34;field&amp;#34;&amp;gt; &amp;lt;b-checkbox v-model=&amp;#34;selecedOptions&amp;#34; native-value=&amp;#34;Silverhoge&amp;#34;&amp;gt; Silverhoge &amp;lt;/b-checkbox&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;field&amp;#34;&amp;gt; &amp;lt;b-checkbox v-model=&amp;#34;selecedOptions&amp;#34; native-value=&amp;#34;Flinthoge&amp;#34;&amp;gt; Flinthoge &amp;lt;/b-checkbox&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;field&amp;#34;&amp;gt; &amp;lt;b-checkbox v-model=&amp;#34;selecedOptions&amp;#34; native-value=&amp;#34;Vanehoge&amp;#34;&amp;gt; Vanehoge &amp;lt;/b-checkbox&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;field&amp;#34;&amp;gt; &amp;lt;b-checkbox v-model=&amp;#34;selecedOptions&amp;#34; native-value=&amp;#34;Billyhoge&amp;#34;&amp;gt; Billyhoge &amp;lt;/b-checkbox&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p class=&amp;#34;content&amp;#34;&amp;gt; &amp;lt;b&amp;gt;Selection:&amp;lt;/b&amp;gt; {{ selecedOptions }} &amp;lt;/p&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;tile is-parent is-6&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;tile is-child box&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;has-text-centered&amp;#34;&amp;gt; &amp;lt;b-tooltip class=&amp;#34;title is-4&amp;#34; label=&amp;#34;テキストを生成してクリップボードへコピーします。&amp;#34; position=&amp;#34;is-bottom&amp;#34; dashed multilined&amp;gt;テキスト生成&amp;lt;/b-tooltip&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p class=&amp;#34;blank5em&amp;#34;&amp;gt;&amp;lt;/p&amp;gt; &amp;lt;div class=&amp;#34;has-text-centered&amp;#34;&amp;gt; &amp;lt;b-button size=&amp;#34;is-medium&amp;#34; icon-left=&amp;#34;clipboard-text&amp;#34; @click=&amp;#34;alert&amp;#34;&amp;gt;テキスト生成する&amp;lt;/b-button&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;h1&amp;gt;{{ msg }}&amp;lt;/h1&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p class=&amp;#34;blank1em&amp;#34;&amp;gt;&amp;lt;/p&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/template&amp;gt;</description>
     </item>
     
     <item>
@@ -89,7 +191,8 @@
       <pubDate>Fri, 23 Aug 2019 20:59:07 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/fix-vue-cli-service-command-not-found-error/</guid>
-      <description>はじめに Vue.jsのツール「Vue CLI」にて作成したプロジェクトをクローンしてnpm run serveをしたところ、下記のようなエラーメッセー</description>
+      <description>はじめに Vue.jsのツール「Vue CLI」にて作成したプロジェクトをクローンしてnpm run serveをしたところ、下記のようなエラーメッセージが出てきてしまいました。
+❯ npm run serve &amp;gt; dtg@0.1.0 serve /Users/hoge/dummytextgen &amp;gt; vue-cli-service serve sh: vue-cli-service: command not found npm ERR! file sh npm ERR! code ELIFECYCLE npm ERR! errno ENOENT npm ERR! syscall spawn npm ERR! dtg@0.1.0 serve: `vue-cli-service serve` npm ERR! spawn ENOENT npm ERR! npm ERR! Failed at the dtg@0.1.0 serve script. npm ERR! This is probably not a problem with npm. There is likely additional logging output above.</description>
     </item>
     
     <item>
@@ -98,7 +201,613 @@
       <pubDate>Wed, 21 Aug 2019 13:05:14 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-component/</guid>
-      <description>はじめに 前回は環境構築で終わってしまいましたが、今回から本格的に開発を始めていきます。取っ掛かりとして、Vue CLIで作った環境の内容を確認</description>
+      <description>はじめに 前回は環境構築で終わってしまいましたが、今回から本格的に開発を始めていきます。取っ掛かりとして、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーションを開発するかを確認します。
+まずはプロジェクトを俯瞰する 何はともあれ、Vue CLIでcreateした直後の環境を俯瞰してみます。
+なにはともあれindex とりあえずファイルの名前で判断して、index.htmlあたりを見てみます。
+&amp;lt;!DOCTYPE html&amp;gt; &amp;lt;html lang=&amp;#34;en&amp;#34;&amp;gt; &amp;lt;head&amp;gt; &amp;lt;meta charset=&amp;#34;utf-8&amp;#34;&amp;gt; &amp;lt;meta http-equiv=&amp;#34;X-UA-Compatible&amp;#34; content=&amp;#34;IE=edge&amp;#34;&amp;gt; &amp;lt;meta name=&amp;#34;viewport&amp;#34; content=&amp;#34;width=device-width,initial-scale=1.0&amp;#34;&amp;gt; &amp;lt;link rel=&amp;#34;icon&amp;#34; href=&amp;#34;&amp;lt;%= BASE_URL %&amp;gt;favicon.ico&amp;#34;&amp;gt; &amp;lt;title&amp;gt;dtg&amp;lt;/title&amp;gt; &amp;lt;/head&amp;gt; &amp;lt;body&amp;gt; &amp;lt;noscript&amp;gt; &amp;lt;strong&amp;gt;We&amp;#39;re sorry but dtg doesn&amp;#39;t work properly without JavaScript enabled. Please enable it to continue.&amp;lt;/strong&amp;gt; &amp;lt;/noscript&amp;gt; &amp;lt;div id=&amp;#34;app&amp;#34;&amp;gt;&amp;lt;/div&amp;gt; &amp;lt;!-- built files will be auto injected --&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt; なんとなく&amp;lt;div id=&amp;quot;app&amp;quot;&amp;gt;あたりが気になりますが、内容としてはあっさりしたものです。というかこれ、どこでVue.jsとか読み込んでるの・・・？CSSとかも全然記述ないけど・・・？
+結論から言えば、現状の状態は「動作する実体」ではありません。ただの生成元でありテンプレートです。というわけで、実体を生成・参照するためにビルドを行う必要がありますので、下記のコマンドを実行します。
+npm run build しばらく待つとメッセージが表示されるはずです。
+DONE Build complete. The dist directory is ready to be deployed.</description>
+    </item>
+    
+    <item>
+      <title>Vue cliとBuefyでシンプルに始めるVue.js - まずは環境の用意</title>
+      <link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs/</link>
+      <pubDate>Mon, 19 Aug 2019 15:23:26 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs/</guid>
+      <description>はじめに フロントの勉強としてVue.jsをいじってますが、Vue.jsのCLIを使ってシンプルなサイトを構築する際の手順についてまとめます。
+まずは構築するにあたって、開発環境の用意を行います。なお今回はNuxt.jsを利用しない（あるいは利用するまでもない）、ライトな用途を想定しています。SSRする必要がある、とかならNuxt.jsの導入を検討してみるべきかと思います。
+環境  Windows 10 vue/cli@3.10.0 npm 6.4.1  npmを利用する場合はNode.jsのインストールが必要です。
+インストール Vue.jsのインストール手順 Vue.jsのインストールには、npmを利用してローカルの環境に展開しておくか、Dockerで環境を準備するか、CDNを利用します。
+NPMによるインストール ローカル環境にインストールする場合は、オフィシャルページに則って下記のコマンドを実行します。
+npm install vue なお、オフィシャルでは大規模なアプリを構築する場合はNPMを利用しろ、とのことです。
+ Vue.js による大規模アプリケーションを構築するときには、NPM を利用したインストールを推奨しています。
+ Dockerによる環境構築 こちらをどうぞ。
+CDN NPMを利用したインストール以外にもunpkgやcdnjsを利用することでVue.jsを利用できます。
+&amp;lt;script src=&amp;#34;https://cdn.jsdelivr.net/npm/vue/dist/vue.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; なお、本番環境ではバージョンを指定することが推奨されています。
+&amp;lt;script src=&amp;#34;https://cdn.jsdelivr.net/npm/vue@2.6.0&amp;#34;&amp;gt;&amp;lt;/script&amp;gt;  本番環境では、新しいバージョンによる意図しない不具合を避けるため、特定のバージョン番号とビルド番号にリンクすることをお勧めします
+ Vue CLIの導入 Vue CLIはVue.jsを用いたサイトを生成する際に、環境のセットアップを肩代わりしてくれるコマンドラインのツールです。オフィシャルページを参考にして導入します。とは言っても難しいことではなく、下記のコマンドを実行するだけです。
+npm install -g @vue/cli インストールが終わったらバージョンを確認してみます。
+$ vue --version 3.10.0 プロジェクトを作成する vueコマンドを叩いてプロジェクトを作成します。なお、下記のコマンドを実行する際は、事前にプロジェクトを作成するフォルダに移動してください。ここではフォルダをdummytextgenとします。コマンドを実行すると対話形式で作成するプロジェクトの内容を設定します。
+cd dummytextgen vue create dtg  プリセットの選択
+キーボードの上下キーで選択しますが、デフォルトで問題ないと思います。なお、vue routerやvuexを利用することが確定しているなら、Manually select featureを選択して手動で導入できます。
+Vue CLI v3.10.0 ? Please pick a preset: (Use arrow keys) &amp;gt; default (babel, eslint) Manually select features パッケージマネージャの選択</description>
+    </item>
+    
+    <item>
+      <title>Korgのvolca drumを買ったので軽くレビューしてみる</title>
+      <link>https://idontwannawork.github.io/posts/korg-volca-drum-review/</link>
+      <pubDate>Fri, 09 Aug 2019 16:03:40 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/korg-volca-drum-review/</guid>
+      <description>まーた買っちゃった modularに引き続き、volca drumも買っちゃったい_(:3」∠)_
+volcaとは volcaとは、KORGの生み出したシンセサイザーのシリーズでして、個人的にも大好きなシリーズです。コンパクトな筐体にハイエンドモデル顔負けの要素をこれでもかと積み込んで、美味しいところをコンパクトな筐体に詰め込んだセミモジュラーシンセだったり、かと思えばキック音に特化しまくった超絶ニッチだけどスゴく使えるキックジェネレーターだったり、王道のポリフォニックなアナログシンセサイザーなどなどを生み出してきたシリーズです。
+個人的にも今までにkeys、bass、kick、sampleなどなど購入してきましたが、今回新たにリズムマシン・パーカッションシンセサイザーであるvolca drumを購入しました！
+ちなみにvolca modularは 以前に購入したセミモジュラーシンセであるvolca modularのレビューはこちらです。
+volca drumとは volca drum（以下、drum）はKORGがデジタル・パーカッション・シンセサイザーと銘打っているとおり、デジタルのリズムマシンです。すでにリリースされているvolca beatsやvolca kickがアナログのリズムマシンであることを考えると、今までにない新機軸の機種であることがわかります。ちなみに、volca sampleも同様にデジタルですが、こちらはサンプラーなので基本的にプレイバックが主な利用用途で、音作りに関しては限界があります。要は元のサンプルから大いに逸脱した音は作れないわけです。
+対して、drumではDSPによるアナログモデリングによって音を編集して、volcaシリーズでお馴染みのシーケンサーでリズムパターンを組み立てます。drumのDSPは、オシレーター波形にサイン波、のこぎり波、ノイズなどを採用しています。オシレーターから出力された音にいろんな変化を加えることで、本物の打楽器に近似した音からデジタル特有の独特な音まで、ドラムだけにはとどまらず、幅広いバリエーションのパーカッション・サウンドを生成できます。
+パートの仕様 volca drumは合計で6つのパートを保持しています。また、これらのパートはそれぞれ個別に2つのレイヤーを持っています。これらのパートはそれぞれ同じ仕様です。「同じ仕様」とは各パートが同じオシレーター、モジュレーター、EGを保持していることを指しています。つまり「ここはバス・ドラム、ここはシンバル・・・」といったルールや制限はないため、バスドラムやスネアドラムを抜いたパターンを構築したり、全パートでそれぞれ微妙に異なるシンバル音を生成したりすることも可能です。極端なことを言えば、全パートで同じ音を生成することも可能なわけです。まぁ、実用性があるかどうかは、とりあえず別にして。
+なお、パターンは最大16個まで保存が可能です。
+各パートはそれぞれ2レイヤーを保持しています。各レイヤーのパラメーターは個別でも同時でも編集が可能なので、2つのレイヤーに同じ音を重ねて厚みを持たせることができます。
+ウェーブガイド・リゾネーター エフェクト部は、物理モデリングをベースとしたウェーブガイド・レゾネーターを搭載しています。これは、太鼓の胴や長いパイプのような筒状の残響音を加えるチューブと、スネアの音っぽいメタリックな感じの弦の響きを加えるストリングスの2タイプが選択可能です。パネル中央部の3つのツマミによりDECAY（減衰量）、BODY（音のキャラクター）、TUNE（ピッチ）の設定が可能で、TUNEを小さな値にすればショートディレイにもなります。これらのツマミはモーションシーケンスの対象です。
+シーケンサーなど シーケンサーは他のvolcaシリーズやリズムマシンでもおなじみな、16ステップがベースのシーケンサーです。16ステップを1小節としてパターンを組み立てていきます。その中でdrumには即興性と表現力に優れた機能がいくつかあります。
+ACTIVE STEP ACTIVE STEPは各パートにおいて再生したいステップを任意に設定できる機能です。各パートごとに設定できるので、全体のうち1パートだけリアルタイムに再生するステップを変えたいっていう場合にも利用可能です。
+SLICE たとえばスネアドラムのロールは、シーケンサーが16ステップである場合これより細かいステップでビートを設定はできません。ところが、SLICE機能を利用することで、16ステップよりさらに細かいステップを設定でき、さらにSLICEするレベルはツマミで変更可能です。
+ACCENT アクセントです。これが設定されたステップは強拍になり、リズムのニュアンスを多彩に表現することが可能です。
+CHOKE 複数パートのうち、発音を優先させたいパートを設定できるのがCHOKE機能です。チョークを有効にしたパートは同時には発音せず、パート番号の小さい1パートの発音が優先されます。要はサイドチェイン、あるいはダッキングのような感じです。
+開封の儀 さて、いつもの如く開封の儀です。
+相変わらず、ひと目見てそれとわかるKORGのガジェット特有のデザインであるパッケージがとても良いです。
+こちらもいつもの如く開封してすぐ出てくるマニュアル類。
+中の蓋を外すとdrum本体が出てきます。
+本体です。黒とゴールドの彩色で、高級感のあるデザインです。あまりこの価格帯でのガジェットにはない色彩ですよね。
+実際の動作の様子 volca drum買いました。特有の出音がクセになりそうな面白いガジェットですね#volca#korg pic.twitter.com/D2VT1rgejD
+&amp;mdash; ysko (@unknown_strings) August 9, 2019 
+いかにもダンストラック的な4つ打ちです。drumのDSPが出力する音は、結構特徴的であることがわかりますね。
+他も#volca #korg pic.twitter.com/eLEP0L5UON
+&amp;mdash; ysko (@unknown_strings) August 9, 2019 
+ドラムンベースのようなリズムパターン。スネアドラムにSLICE機能でロールを入れています。さらに「ぴょーん」という飛び道具的な音も組み込んでみました。
+なお、このパターンではSwing機能の値をマイナス方向に設定しています。そうすることで、前のめりなノリになっていることがわかります。ちなみに、Swingをマイナス方向に設定するには、FUNCキーを押しながらSwingのツマミをいじることで、設定可能です。
+まとめ 音作りの底なし沼。馴染みな音も奇抜な音もなんでもござれな個性的リズムマシン！です。</description>
+    </item>
+    
+    <item>
+      <title>Jupyter NotebookをVisual Studio Codeで実行する</title>
+      <link>https://idontwannawork.github.io/posts/run-jupyter-notebook-with-vscode/</link>
+      <pubDate>Fri, 02 Aug 2019 14:00:38 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/run-jupyter-notebook-with-vscode/</guid>
+      <description>はじめに Visual Studio Code（以下、vscode）ではDockerでPythonやVue.jsの開発環境を構築したり、あるいはMarkdownで書いたドキュメントを配布用にPDF変換したりと、今までいろいろやってきました。今度はJupyter Notebookを動かします。いやー、vscodeってホントに多彩ですね。
+なお、今回においてはDockerを利用せず、単純にローカル環境でJupyterを使用します。
+Jupyter Notebookとは Jupyter Notebook (なお、読み方は「ジュパイター・ノートブック」、または「ジュピター・ノートブック」。自分は「ジュピター」って言ってますが、どっちが一般的なんですかね？) とは、ブラウザ上で実行するデータ分析作業のためのツールです。特徴的なのは、実行結果を記録しながらプログラミングができる点です。ここでブラウザから実行できます。
+プログラムそのものを記述しつつ、Markdownを利用して各種テキストや図表も同時に書き込んでいくことが可能です。つまり、プログラムのソースとその実行結果が、メモを含めて明確に紐づいた状態で確認できます。そのため、作業内容の振り返りに非常に便利ですし、複数人で作業を行う場合の共有にも有用です。また、Jupyterは*.ipynb形式のファイルで保存しますが、ソースコード部分を*.pyのPythonコードとして出力することも可能ですし、実行結果をPDFやHTML形式で出力できるため、Jupyterの実行環境がなくても内容を共有できます。
+そんなJupyterをvscodeで使っちゃえ、というのが今回の趣旨です。
+環境  Windows 10 Anaconda version 1.7.2 vscode 1.36  インストール Anacondaをインストールしている場合、基本的にはJupyterも一緒にインストールされているはずです。なお、Anacondaのインストールは、オフィシャルページからプラットフォームに合ったインストーラーをダウンロードして実行します。インストール後に下記のコマンドを実行すると、condaコマンドにてインストールされているリストが出力されます。表示されたリストの中にjupyterがあればインストール済みであることがわかります。
+conda list ちなみに、Anacondaを導入しないでJupyterを利用するにはpipを利用します。下記のコマンドを実行するだけです。
+pip install jupyter vscodeで実行する 拡張機能のインストール vscodeでJupyterを利用するには、Pythonの拡張機能をインストールする必要があります。
+拡張機能をインストールするには、vscodeの左側にあるメニュー中から拡張機能のアイコン（下画像の赤枠内）をクリックします。
+検索窓に「python」と入力します。検索結果のうち、「Python」を選択し、インストールします。なお、下画像ではすでにインストール済みのため、歯車のアイコンが表示されています。
+他にも導入すると便利な拡張機能はありますが、今回は割愛します。
+vscodeでノートブックを書いてみる まず任意のフォルダを作成します。今回はworkdirとしましたが、フォルダ名はなんでもいいです。次にvscodeで先ほど作成したフォルダを開きます。フォルダを開いたら、適当にファイルを作成します。ただし、この際に作成するファイルの拡張子は*.pyです。先ほどJupyterでは*.ipynb形式を用いると言いましたが、vscodeで実行する場合はPythonの拡張子でファイルを作成します。
+「だけど、それじゃあフツーのPythonコードを見分けがつかないじゃん！」と思ったあなたは正しい。つまりファイルの拡張子ではなく、ファイルの中身で見分けるわけです。
+ファイルを*.py形式で作成したら、下記のコードを入力してください。なお、「その2」部分はCSVファイルがないとコケちゃうので、適当なCSVファイルを作っておくかコードを削除してください。
+#%% ## その１ import numpy as np x = np.arange(10) print(x) #%% ## その２ import pandas as pd data = pd.read_csv(&amp;#34;C:\\app\\hoge.csv&amp;#34;, encoding=&amp;#34;cp932&amp;#34;) data.head() #%% ## その3 ### sin plot import matplotlib.</description>
+    </item>
+    
+    <item>
+      <title>Unity Hubを使ってUnityをインストールする</title>
+      <link>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</link>
+      <pubDate>Thu, 11 Jul 2019 16:41:00 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</guid>
+      <description>Unityって何さ Unity
+ 世界で最も広くつかわれているゲーム開発エンジン。 様々な機能を備えたエディターと、業界で最も幅広いプラットフォームへのサポートを利用して、ゲームやインタラクティブなコンテンツを制作する方法を学びましょう。
+ 「ゲーム開発エンジン」とは、画面描写、効果音やBGMなどの音楽管理、ステータスなどの各種データ管理などを総合して開発できる環境のこと。ただ、昨今ではゲームだけでなく映像制作にも用いられてますし、3Dに強いという特徴を生かして建築設計にも活用されているようです。すげぇ。
+2Dを多用した映像制作ではちょっとアレかもしれませんが、3Dがメインならリアルタイムで3Dレンダリングが可能なUnityの強みを活用できそうです。Unityオフィシャルを始めとしてナレッジも多いですし、販売されているテキストも充実しているのも、Unityの強みかもしれません。
+何はともあれ、まずは環境を整備しようと思います。今回はインストールについて。
+環境  macOS Mojave 10.14.5  なお、インストールする対象はUnity 2019.1版とします。
+エディション Unityには現在（2019年7月10日）エディションが3パターン存在します。
+   名称 月額 条件     Personal 無料 収入ならびに資金調達（自己資金を含む）の合計が年間10万ドルを超えない場合   Pro with Teams Advanced 15,000円 条件なし   Plus ～3000円 個人・法人問わず、年間収益ならびに資金調達（自己資金を含む）の合計が20万米ドル以下の場合    エディション構成あるいは月額は、ある程度のスパンで更新されると思うので、Unityオフィシャルを参照していただくことを強くオススメします。
+とりあえずここでは、Personalエディションを選択します。
+インストール手順 Unityは基本的に直接インストーラーをダウンロードせず、Unity Hubと呼ばれるソフトを経由してインストールします。まずはそのUnity Hubをインストールするところから。
+Unity Hubのダウンロード Unityオフィシャルから「はじめる」をクリックします。
+プランが表示されます。ここではPersonalを選択します。
+「利用規約および〜」の部分にチェックを入れると、ボタンが活性化されてUnity Hubのダウンロードができるようになります。
+ダウンロードしたらインストールします。MacへのインストールはApplicationsのフォルダーにコピーするだけです。
+ダウンロードするUnityの選択 Unity Hubのインストールが終わったら、起動します。
+この状態ではまだUnity本体はインストールされていません。ダウンロードもされていません。そこで、左の「インストール」をクリックします。
+右上の「インストール」ボタンをクリックします。すると現時点（2019年7月）でインストールが可能なバージョンの一覧が表示されます。
+とくにこだわりがなければ最新の安定版をインストールします。
+一緒にインストールするモジュールの選択 本体のバージョンを選択し「次へ」をクリックすると、今度は本体と同時にインストールするモジュールを選択できます。自分は「Android Build Support」「iOS Build Support」の2つを選択しました。とくに深い意味はありません。なんとなく必要になりそうだな・・・と思ったので。なお、Dev toolsのVisual Studio for Macは最初から選択されています。</description>
+    </item>
+    
+    <item>
+      <title>Visual Studio CodeでGitが見つからないと言われたら</title>
+      <link>https://idontwannawork.github.io/posts/fix-git-path-with-vscode/</link>
+      <pubDate>Sun, 07 Jul 2019 17:14:15 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/fix-git-path-with-vscode/</guid>
+      <description>VS Codeをアップデートしたらこんなメッセージが Visual Studio Code(以下、VS Code)をアップデートしたらこんな通知が出るようになりました。
+「Gitが見つからないよ！」って・・・いや、君今までしこたまGit使ってたじゃないか。
+理由はともかく、このままではGitの各種コマンドが利用できないので、設定します。
+環境  macOS Mojave 10.14.5 Visual Studio Code version 1.36  設定手順  左下の歯車マークから、あるいはCommand + ,で「Settings」画面を表示します。
+ 出てきた画面に「git.path」と入力します。すると、「Settings.jsonで設定してね」と言われるのでSettings.jsonを開きます。
+ごちゃごちゃしてますが、下のところに&amp;quot;git.path&amp;quot;: &amp;quot;/usr/bin&amp;quot;を追記しました。なお、gitのパスはコンソール画面にてwhich gitすればわかります。
+ 編集が終わったら保存します。これで完了です。なお、いつのバージョン以降からかは失念しましたが、設定の変更を行ってもVS Codeを再起動する必要はなく即時反映されます。
+  （番外編）XcodeをインストールしたらなぜかGitが使えないぞ XcodeをインストールしたらGitが使えなくなりました。なんかライセンス契約に同意する必要があるみたいです。
+指示に従いコマンド発行および同意を行ったら、Gitが再び利用できるようになりました。
+$ git --version Agreeing to the Xcode/iOS license requires admin privileges, please run “sudo xcodebuild -license” and then retry this command. $ sudo xcodebuild -license You have not agreed to the Xcode license agreements.</description>
+    </item>
+    
+    <item>
+      <title>DockerでVue.jsの開発環境を構築する</title>
+      <link>https://idontwannawork.github.io/posts/build-environment-of-vuejs-with-docker/</link>
+      <pubDate>Thu, 04 Jul 2019 13:58:10 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/build-environment-of-vuejs-with-docker/</guid>
+      <description>概要 フロントの勉強としてVue.jsの開発環境を整備するときに、せっかくなのでDockerを使って環境を構築してみました。
+環境  macOS Mojave 10.14.5 Docker version 18.09.2 Visual Studio Code version 1.35  手順 今回は勉強がてらdocker-composeを利用します。とは言っても「書くよ！」ってだけで複雑なことは全然やってないです。
+Dockerfileの作成 FROMnode:lts-alpineWORKDIR/appRUN apk update &amp;amp;&amp;amp; \  npm install -g npm @vue/cli ただし、現時点（2019年7月3日）でVisual Studio CodeのRemoteはAlpine Linuxに対応していないので、Remoteを利用したい場合は別のイメージを使った方がいいと思われます（1敗）。以前記事にしていたので「Vue.jsの環境もリモートで開発だぁ！」とか思ってたんですけど出鼻をくじかれました。
+なお、Alpine LinuxはVS Code Insidersではサポートされているため、そのうち正式対応するはずなので正座して待機しようと思います。
+Alpine Linuxに対応しました（2019年9月8日追記） vscodeのバージョン1.38にてAlpine Linux製コンテナへRemote接続できるようになりました！
+docker-compose.ymlの作成 version: &amp;#39;3&amp;#39;services: vue_app: build: . ports: - 1234:8080 volumes: - .:/app stdin_open: true tty: true command: /bin/sh コンテナーのビルド docker-compose build コンテナーの起動 docker-compose up -d docker psコマンドを叩くとコンテナーが起動しているはず。</description>
+    </item>
+    
+    <item>
+      <title>なんでJavaの記事って少ないの？</title>
+      <link>https://idontwannawork.github.io/posts/why-are-there-few-articles-of-java/</link>
+      <pubDate>Sun, 30 Jun 2019 16:40:00 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/why-are-there-few-articles-of-java/</guid>
+      <description>はじめに とある事情でJavaとJavaEE（今はJakartaEEか）を使用しないといけなくなってしまって、それはそれはさんざんな目にあった（あっている）。
+そんな中で気づいたのだが、Javaって記事少なくない？ということ。
+どういうこと？ JavaはブログのエントリーでもQiitaの記事でも、とにかく知名度の割りに数が少ない。検索してもエラい昔のエントリーがしれっと上位に表示される始末で、ホントに苦労した（している）。とくにJavaEEに関して言うと、例のEclipseへ移管されるニュースの方が検索上位に来てしまい、知りたい情報が埋没する。JSFについて調べたいなーと思ったら2013年の記事が検索上位にしれっと紛れ込んできた。
+仕事の多いプログラミング言語の1位はJavaだそうだ。これはここ最近いきなり増加したわけじゃなく、何年も昔から同じ傾向だった。むしろ、Androidの開発はKotlinが普及する前はJavaで行われていたのだから、当然の結果と言える。それでもこの結果。
+どういうことだ。Javaに関する記事書いたら、黒服の男たちに記事ごと投稿者も消されるジンクスでもあるのか。東方算法騎士団もびっくりだぞ。
+記事数を調べる Qiita Qiitaでタグ検索すると、それぞれ下記のような結果になった。なお調べたのは2019年6月13日なので、下記の記事数はその時点でのものだ。
+   名称 記事数     Java 12022記事   Python 28170記事   JavaScript 26033記事   Ruby 21669記事   PHP 15987記事   Go 6035記事   golang 2899記事   C# 7342記事    順不同。Goとgolangで別タグになっているのはちょっとよくわからない。
+ちなみにJavaEEに至ってはたった217記事だ。
+あくまでタグでの検索結果なのでノイズがそこそこあると思う。それでもPythonの突出具合はスゴい・・・のではなく、Javaの記事数が少ないのだ。Python（1991年発表）はJavaの先輩だが、RubyやPHPはほぼ同期（1995年発表）だ。なのにこの差。Python、JavaScriptにはダブルスコア以上の差がある。Rubyとも、ダブルスコアまで行かなくても、1.8倍だ。だいぶ後輩のGo（golang）やC#はさすがにJavaに及ばなかったが、もう数年頑張れば記事数も逆転できるんじゃない？というくらいの差だ。
+やっぱり少なくないか？Java。
+stackoverflow stackoverflowでも各言語でタグ検索してみた。
+   名称 記事数     Java 1556934   Python 1187632   JavaScript 1823840   Ruby 205187   PHP 1289292   Go 38620   C# 1319866    こちらではJavaとPythonが逆転しているが、言うほどの極端な差はない。C#の質問数が結構多いのが気になる。</description>
+    </item>
+    
+    <item>
+      <title>iPhone XRを購入して半年経った感想</title>
+      <link>https://idontwannawork.github.io/posts/apple-iphone-xr-review/</link>
+      <pubDate>Fri, 28 Jun 2019 10:18:44 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/apple-iphone-xr-review/</guid>
+      <description>もともとiPhone 6Sだった iPhone XR（以下、XR）を購入する前はiPhone 6Sを使用していました。au版を中古で買ったのですがそのままauショップへ持ち込みSIMロックを解除してもらって、SIMフリーとして使っていました。当時刺していたSIMはIIJのデータ通信用SIMだった・・・ような気がします（この頃はSIMカードをコロコロ変えていたものでちゃんと覚えてない・・・）。
+ところが、iPhone 6Sの発売は2015年です。さすがに発売から数年も経過してくると、バッテリーのヘタりが目立つようになります。Googleマップのナビで長距離ドライブ、とハードに使用したわけでもないのに、1日を乗り切れないくらい持ちが悪くなってきました。遠出する場合は、もちろんモバイルバッテリー持参が必須。自転車に乗る際のナビ代わりに使用したら、それはもうアメ車のガソリンメーターのように、バッテリーがモリモリ減っていきます。ある意味、見ていておもしろいですが、使う分には恐ろしくてたまりません。
+「あ、こりゃダメだ」
+そう思っていたころでちょうどiPhone XSやXRが発表されました。これ幸いとばかりに、新機種の購入を検討し始めたわけです。
+なんでXRよ 一番の理由は値段・・・。
+当初はXS購入の検討をしました。とはいえ、さすがは最上位機種であるXS。おいそれと購入できるような金額ではありません。いや、わかるんですよ、メチャクチャハイスペックなら値段も相応に高くなるっていうのは十分に理解できます。
+でもね、XSってもうちょっとしたノートPC並みの値段してますよねぇ・・・。ノートPCなら、そこそこのスペックでもドキュメント書いたり軽めなプログラムを組めたりするわけですよ。そして、そういう長文が書けるにはやっぱりキーボードが必要なわけです。いくらスマホのスペックがすごいからって、わざわざ外部キーボード買ってまでスマホで文章書こうとは思わないし、まさかフリック入力で文章なんて書いたら腱鞘炎になりかねません。
+そして、XSとXRは同じチップセットを搭載しています。
+もちろん細かい仕様ではXRはしっかりと廉価版という扱いですが、それでも頭脳であるチップセットは最上位機種A12 Bionicで、XSと同等であるわけです。その上で、XSと比べれば比較的手の届く金額。
+「もうXRでいいんじゃね？」
+この2点で、XRの購入を決定しました。
+ラッキーだったことに、当時手元にMacBook Air（2011mid）や初代iPad miniがあったため、これらをAppleの下取りプログラムに出してApple Storeのギフト券に換えて購入資金の一部にする（うろ覚えだけど、確か3万から4万くらいにはなったような気がする）ことで、多少安くXRを購入することができました。
+ちなみに、XRのカラーは（PRODUCT）REDにしました。ケースはSpigenのクリアケースにしました。
+メリット 以下のメリットは、iPhone 6Sと比較してのメリットですのでご了承ください。
+ 大画面ゆえの情報量
+ホームボタンなしのデザインとなり、ほぼ全面で情報が見られる大画面は、一度慣れると戻れないですね。ベゼルはXSに比べると若干太いです。が、このあたりは後述したいと思います。
+画面の上部にちょこっと出っ張っているノッチの好き嫌いはあるし、一部アプリはXシリーズの画面に対応してなかったりしますけど。
+ FaceIDが手軽で便利
+iPhoneを取り出し、画面を見ればすぐに操作可能。TouchIDも登場から代を重ねるにつれ高速化していきましたが、「ホームボタンを触れる」アクションはどうしても必要だったわけです。それがFaceIDになることで、そのワンアクションすら必要ではなくなりました。
+ただ、朝起きた直後の「起き抜けの顔」でFaceIDやると、必ず認証エラーになるのはなぜなんですかね・・・自分だけですかそうですか。
+ 軽快なレスポンス
+もともと、iPhoneとiOSでストレスを感じたことはあまりありませんが、XRでもレスポンスの良さは相変わらずです。むしろ端末本体のレスポンス云々より、回線の速度だったりサーバー側のレスポンスの方が気になるくらいです。あと、iMovieで動画ファイルを編集して書き出すときなどは、高パフォーマンスの恩恵に預かれると思います。
+スマホで撮影しただけでは味気ないから、撮影した後にちょっとした動画編集をiMovieを使って行い、ムービーを書き出す。出力が終われば、ムービーはAirDropやAirPlayで共有する・・・なんてのも、全部iPhoneで完結できますし、さらにレスポンスよく作成できます。
+YouTuber、とまでは行かなくとも子供やペットのムービーを撮って、ちょっと手間をかけて見栄え良くしたい。そんなときはiPhoneで全部できます。
+ 長時間持つバッテリー
+もともとの購入動機だったバッテリーですが、さすがです。動画再生だったりナビだったりで酷使してもしっかり1日持ちます。ライトな使い方をするなら、2日くらいでも十分持つんじゃないでしょうか。
+機種変更してから、モバイルバッテリーの出番がすっかりなくなりました。
+ 高性能カメラ
+カメラはもう気軽にパシャパシャ撮るなら、もうデジカメを持ち出すまでもないですが、背景をボカしたポートレート撮影もソフトウェア処理で撮影できるようになりました。かなりきれいに背景がボケます。
+ムービーもお馴染みのタイムラプス動画などをしっかり常備しています。
+動画・静止画ともに手軽さとクオリティを両立させていて、ポイント高いです。
+ カラーバリエーションが豊富
+派手な色いいよー_(┐「ε:)_
+ 耐水性能と防塵性能
+水深1メートルで最大30分間の耐水性能です。XS（水深2メートルで最大30分間の耐水性能）よりは少し弱いですが、それでも十分です。
+  デメリット 以下のデメリットは、メリットと同様にiPhone 6Sと比較してのメリットですのでご了承ください。
+ デカい、厚い
+iPhone6Sと比べるので、どうしても感じざるを得ません。「デカい」の大画面とほぼ同義語なので問題ないと言えばないのですが、厚いのはちょっとどうにもならないです。端末サイズのせいで、今まで利用していたスマホケースが軒並み利用できなくなりました。いやまぁ、サイズは理解した上で買ったのですが、ケースに入りそうでギリギリ入らなかったときの絶望感と来たら・・・。
+ コントロールパネルと通知センターの呼び出し方法が似すぎ
+どちらも画面の上部から下方向にスワイプするのは共通しています。異なるのは右側で行うか、中央部分で行うか。
+ カメラが出っ張りすぎ
+割と前からそうでしたが、カメラがどんどん出っ張ってます。ケースを着けないのであれば、机などにポンと置くとカメラのせいで必ず不安定です。カタカタ揺れるくらいにはバッチリ不安定です。こればっかりはいただけません。</description>
+    </item>
+    
+    <item>
+      <title>Korgのvolca modular買ったので軽くレビューしてみる</title>
+      <link>https://idontwannawork.github.io/posts/korg-volca-modular-review/</link>
+      <pubDate>Sun, 16 Jun 2019 00:30:23 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/korg-volca-modular-review/</guid>
+      <description>買っちゃった volca modular、買っちゃったい。いやっほー_(:3」∠)_
+volca modular？ volcaとは、KORGの生み出したシンセサイザーのシリーズでして、個人的にも大好きなシリーズです。コンパクトな筐体にハイエンドモデル顔負けの要素をこれでもかと積み込んで、FM音源を完全再現した上でUIをユーザーフレンドリーにして扱いやすくしたデジタルシンセサイザーだったり、かと思えばキック音に特化しまくった超絶ニッチだけどスゴく使えるキックジェネレーターだったり、王道のポリフォニックなアナログシンセサイザーなどなどを生み出してきたシリーズです。
+個人的にも今までにkeys、bass、kick、sampleを購入してきましたが、今回新たにセミモジュラーシンセであるvolca modularを購入しました！
+ちなみにvolca drumは 別途購入したリズムマシンであるvolca drumのレビューはこちらです。
+モジュラーシンセサイザーって何よ？ モジュラーシンセサイザーはシンセサイザーの各機能をモジュールとして分割して、それぞれをパッチケーブルで接続します。利用するモジュールも接続の順番もその接続先もすべて自分でカスタマイズできる、非常に自由度の高いシンセサイザーの形式です。「ユーロラック規格」という統一規格があって、この規格に沿った設計のモジュールであれば異なるメーカーのモジュール間でもパッチケーブルで接続して使用する事ができます。
+逆に言えば自由度が高いゆえに難易度も高く、モジュール1個だけでは何もできず複数のモジュールが必要になりますが、そのモジュール1個あたりでウン万円したりします。また、モジュールが多くなればそれを格納するラックも大型の物が必要になり、異なるサイズのラックを用意しないといけないという難点もあります。ハマったらなかなか抜け出せない沼ですが、とっかかりにくいのでそもそも初心者向けとは言えません。
+多分、めちゃくちゃハマったら車1台分とかの金額を投入することになると思います_(:3」∠)_
+そんなモジュラーシンセサイザーを、そこそこの自由度を保ちつつ扱いやすくしたのがセミモジュラーシンセサイザーです。モジュラー構造を持ちつつもあらかじめ内部でパッチングされているため、一般的なシンセサイザーのようにも利用できます。もちろん、モジュラーシンセサイザーの醍醐味であるパッチングもできるようジャックがしっかりと用意され、外部でパッチングされると内部のパッチをバイパスするような仕組みになっています。
+このvolca modularはセミモジュラーシンセサイザーです。そう、パッチングなしに楽しむこともできますが、パッチングすることでモジュラー然とした見た目とサウンドを得られるのです。しかも、一般的なモジュラーシンセサイザーのモジュール1個分の価格で！ここまでの話で、いかにこのシンセが画期的であるかがおわかりいただけると思います。実際安い（忍殺語
+開封の儀 外箱から。volcaに限りませんが、KORGの箱のデザインってイイですよね。
+箱を開封するとモジュールのリファレンスがまず目に入ります。多分、触り始めた当初はこれがないとにっちもさっちも行かないのでは・・・モジュラーシンセサイザーの知識がある人だったら問題ないのでしょうが、そういう人ってコレ買わないと思うしなー。
+同梱されているのは、前述のリファレンスと取扱説明書などです。あと、ソフトシンセのプロダクトキーが記載された紙もありました・・・けど、使うかなぁこれ_(:3」∠)_
+さて、書類などを出すと本体と電池、パッチケーブルなどが見えますね。
+本体を取り出したところ。ところどころにある黒い四角い部分は、パッチケーブルを差し込むジャックです。
+本体を真上から。白いラインは内部パッチングを表しています。1本もパッチケーブルを利用しない場合は、この白いラインで表された内部パッチングを通過して音が出力されます。
+動作の様子など とりあえず、まずはパッチングなしでプレイしてみました。volcaシリーズで培われたシーケンサーは、相変わらず直感的でおもしろいです。
+Korgのvolca modular、買ってしまったのですが、パッチなしで既にこの出音でエグい(褒め言葉#volca pic.twitter.com/tkItOYT7Nv
+&amp;mdash; ysko (@unknown_strings) 2019年6月6日 
+もともとこの手のシンセは、いい意味で結構アバンギャルドな音なんですが、コイツもご多分に漏れずかなりキテます。いわゆるMOOGだったり往年のRolandやYamaha的なシンセサイザーとは異なる音で、好みは少し分かれるかもしれません。
+コイツはいわゆる「ウエストコーストスタイル」なモジュラーシンセサイザーに分類されるのですが、前述のMOOGたちなどは「イーストコーストスタイル」なんですね。キーボードでの演奏を前提としているイーストコーストに比べると、ツマミでのパフォーマンスを前提にしているのか、とにかくツマミをグリグリやっているだけで時間が過ぎていきます。それぐらい楽しいです。ビキビキ言ってますぜ。
+まとめ 良心的な値段とユーザーフレンドリーなUIに刺激的なサウンドを内包したアツいモジュラーシンセサイザー！です。
+モジュラーシンセサイザーって、セミモジュラーシンセを含めてもそこそこの値段するので、2万円前後で買えるというのはもはや規格外と言ってしまっていいでしょう。それでいてモジュラーシンセの醍醐味をしっかり内包していて、サウンドもエキサイティングと、欠点らしい欠点がないです。
+さあ、これでモジュラーシンセサイザーにハマって、沼に沈みましょう。沼は楽しいですよ。ほら、レンズ沼とかあるじゃないですか（ぐるぐる目</description>
+    </item>
+    
+    <item>
+      <title>SequenzのVolca Rackが来たのでレビューしてみる</title>
+      <link>https://idontwannawork.github.io/posts/sequenz-volca-rack-review/</link>
+      <pubDate>Sat, 15 Jun 2019 21:02:37 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/sequenz-volca-rack-review/</guid>
+      <description>はじめに （個人的に）待望の、待望のvolca rackが来ました！
+volca rack? volcaといえば、KORGの生み出した大ヒット商品でして、個人的にも大好きなシリーズです。コンパクトな筐体にハイエンドモデル顔負けの要素をこれでもかと積み込んで、王道のポリフォニックなアナログシンセサイザーだったり、かと思えばキック音に特化しまくった超絶ニッチだけどスゴく使えるキックジェネレーターだったり、価格とサイズで攻めに攻めたセミモジュラーシンセサイザーなどなどを生み出してきたシリーズです。
+そんなvolcaなんですが、どの機種でも筐体のサイズは全部一緒です。なので「ラックに格納したら良さげだよねー」というのがvolcaユーザーの思いでした。実際、DIYでvolca用のラックを作ってしまった人もいるようで、YouTubeなんかを見てるとたまに自作っぽいラックでvolcaをプレイしている動画なんかがあったりします。
+そんな、多分誰もが「あったらいいよねー」と思っていたはずのラック。個人的にも結構欲しかったラック。それがこの度とうとうKORGオフィシャルで発売されました！
+前置きが長くなりましたが、そのvolca rackを購入しましたのでレビューしてみよう！という記事です。
+開封の儀 まずはおなじみな開封風景をどうぞ。
+外箱から 「取り扱いはていねいに」がデカデカと印字されておりますな。これに限りませんが、開封時のカッターは、品物本体を傷つけないよう気をつけたいものです。
+箱側面には「2x2」と印字されています。そう、合計4つのvolcaを設置できるわけです。
+開封 箱を開けた直後。簡単な組み立て説明書があります。
+Sequenzの小さいステッカーが同梱されていました。
+説明書などを取り出すと各パーツが収納されています。
+組み立ては6角レンチを用いてネジで行います。
+取説は英語表記ですがなんの問題もありません。というか、これは絵だけでもいいのでは、ってレベルです。簡単です、簡単。
+各パーツです。サイドパネルが木製なの、シンセサイザーラック然といった雰囲気でいいですよね。
+なお、volcaを収納するメインパネルの内側には、滑り止めのゴムがあります。車のワイパーブレードみたいにはまっています。これのおかげでvolca本体の固定ができるわけですね。
+完成 5分くらいで組み立ては完成します。簡単です。
+縦に設置するとこんな感じ。場所は取りませんが、この状態で操作するなら目線的には椅子が必須ですね。落ち着いて操作するにはこのポジションがいいかもしれません。
+個人的に、インテリアとして置いておくにはこのポジションがベストだと思います。
+横に設置するとこんな感じ。立ちながら操作するなら、個人的にはこのポジションがベストです。
+なお、ご想像のとおりで、縦置きセッティングのまま横置きへと移行することは、ラックの天地が逆転してしまうためできません。移行するためには、一度volcaをぜんぶ引っこ抜いてセッティングし直す必要があります。まぁ、そこは仕方ないですね。
+横から見るとこんな感じ。
+Sequenzのロゴが手前側だと、横置きです。
+縦置きにするとサイドはこんな感じ。
+とりあえず仮セッティング いいですねー！
+単純に手持ちのvolcaを並べて見ましたが、それでもこの整然とした「ピッタリ感」はさすがオフィシャルと言えます。volcaをセッティングしたままインテリアとして置いておくとしても、なんの問題もない王道なデザインにグッときます。やっぱりこのサイドパネルが木製なのはいいですね（2回目
+volcaは全面からはめ込んでいきます。このとき、はめ込むのにもラックから外すのも滑り止めのゴムが絶妙に支えてくれます。ケーブルを抜くのと一緒にvolcaが引っこ抜ける、なんてことはありませんでした。ただし、MIDIケーブルだけは結構しっかり挿さるので、さすがに本体を固定しないとラックからvolcaが釣れます_(:3」∠)_
+自分はたまたまvolcaを4つ以上持っているので、問題ありませんでした。が、3つ以下しかなかったりするとラックに空きスペースができちゃうので、その空きスペースを埋めるためにまたvolcaシリーズを買うことになるでしょう。ええ、きっとそうなります（ぐるぐる目
+ちなみに、SQ-1も設置できます。ただし、写真の通り、縦は少し足りません。縦が足りないため、滑り止めのゴムが仕事をしないので、縦置き時には下段に収納しないと、ふとした瞬間に落下しそうでちょっと怖いです。ただ、SQ-1の給電がUSBケーブルで、本体の上側麺にコネクターがあるのを考えると、上に多少スペースが開いてないとUSBケーブルが挿せなくて困るというのもあるのですが・・・。ケーブルをうまく回避しつつ、空きスペースをなにかで埋めればなんとかなりそうな気もします。あるいはもう電池駆動を前提にしちゃうとか。
+ちょっと見にくくて申し訳ないですが、SQ-1でvolca modularをCVでコントロールしつつ、kickとsampleでドラムパターンを組めるようなセットアップにしてみました。イイですねー_(:3」∠)_
+まとめ volcaを複数台持っているようなvolcaファンには必須です！
+手持ちのvolcaを自由にセッティングでき、SQ-1も設置可能。その上インテリアとしてちゃんと成立するデザイン。非常にイイです。
+volcaも（2019年6月16日現在で）また新しい機材がリリースされることですし、このラックにセッティングしてプレイしてみるのも一興かなと思います。
+ああ、ウチのvolcaは今5台だからあと3台買えばもう1つラックにセッティングできるんだな・・・（ぐるぐる目</description>
+    </item>
+    
+    <item>
+      <title>VS CodeでDockerコンテナーのPython開発環境にリモート接続する</title>
+      <link>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</link>
+      <pubDate>Mon, 10 Jun 2019 00:52:30 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</guid>
+      <description>はじめに Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、ptvsdではなく、vscodeの拡張機能であるRemoteを用いて接続します。
+環境構築 環境  macOS Mojave 10.14.5 Docker version 18.09.2 Visual Studio Code version 1.35  拡張機能 まずは何はなくとも下記の拡張機能をインストールします。
+ Remote - Containers  RemoteはまだvscodeのInsider版でしか動作しなかった・・・のですが、6月6日にStable版でも対応しました。
+接続手順 基本的な手順はここにあるものを参考にしています。
+ Dockerアイコンをクリックして、メニュー中の「Preferences」をクリック。「File Sharing」を選択して、共有したいディレクトリが設定されているか確認する。
+Dockerのメニュー中にPreferencesがあるはずなので、これをクリック。
+表示されたディレクトリのうち、共有したいディレクトリが設定されていることを確認しておきます。
+ 任意のコンテナーを準備します。今回はPython用のサンプルプロジェクトをmicrosoftが準備しているので、これをcloneしました。
+~/devp git clone https://github.com/microsoft/vscode-remote-try-python.git Cloning into &amp;#39;vscode-remote-try-python&amp;#39;... remote: Enumerating objects: 94, done. remote: Counting objects: 100% (94/94), done. remote: Compressing objects: 100% (70/70), done. remote: Total 94 (delta 47), reused 51 (delta 18), pack-reused 0 Unpacking objects: 100% (94/94), done.</description>
+    </item>
+    
+    <item>
+      <title>macOSアップデート後のxcrunエラーはxcodeをインストールする</title>
+      <link>https://idontwannawork.github.io/posts/xcrun-error-after-macos-update/</link>
+      <pubDate>Sun, 09 Jun 2019 19:29:47 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/xcrun-error-after-macos-update/</guid>
+      <description>macOSあるある？ macOSのアップデート（High SierraからMojave）後にgitを実行するとxcrunが見つからないよ！というエラー内容が出現しました。
+経験上このエラーメッセージが出現するのってmacOSのアップデート直後なんですよね・・・。そんなわけで毎度調べるのもアレなのでメモしておきます。
+エラー内容 macOSをアップデートした際に、gitを実行しようとすると下記のようなエラーになることがあります。
+~ ❯❯❯ git xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun 他のコマンドでも同じようなエラーメッセージが出現するのかな？
+解消法 下記のコマンドを発行します。
+xcode-select --install  「インストールしますか？」という旨のメッセージが表示されたらOKします。インストールは十数秒で終わると思います。インストールが終わればgitは使えるようになります。</description>
+    </item>
+    
+    <item>
+      <title>TASCAMのiXZを使ってiPhoneでレコーディングする</title>
+      <link>https://idontwannawork.github.io/posts/recocrd-with-tascam-ixz/</link>
+      <pubDate>Tue, 04 Jun 2019 17:11:23 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/recocrd-with-tascam-ixz/</guid>
+      <description>そもそもiXZって何ぞや TASCAMが販売しているスマートフォン・タブレット端末用オーディオインターフェイスです。発売は2011年とめちゃくちゃ昔なのですが現役で販売されていることからもわかる通り、スマートフォン・タブレット端末で利用できる手軽なインターフェイスの王道です。
+特徴としては、スマートフォンなどに「アナログで接続する」という点。そして、ギター専用のiRigのような「スマートフォンに直接接続する」仕様であるにもかかわらず、ギターだけじゃなくコンデンサーマイクの利用も可能な点でしょうか。
+仕様 サイズは106（W）× 40（H）× 45（D）mmと、最近大型化しているスマートフォンと比べると厚さ以外は割とコンパクト。単3電池2本がセット可能ですが、電池を含めないと100gを切るくらいの軽量さ。
+入力端子はハイインピーダンス入力に対応していて、ギターなどを直接接続できます。また、端子がXLR/TSコンボジャック仕様で、ギター・ベースやシンセサイザーなどの標準プラグだけでなく、XLR端子をもつマイクも接続可能です。さらに、単3電池2本によるファントム電源の供給が可能で、コンデンサーマイクの接続もできるとあって、実売価格が4000円前後の商品としては割と充実した装備です。
+スマートフォンやタブレットへの接続には、本体から「ニョキッ」と生えている4極端子を用います。デバイスのヘッドホン端子に接続することで、アナログでのレコーディングができるようになるわけです。最近だとLightning端子などに接続してデジタルでレコーディングする機種もありますが、ヘッドホン端子でのアナログ接続ならAndroidとiOSの双方で利用できるので、ありがたいです。まぁ、最近はそもそもヘッドホン端子が存在しないスマホもゴロゴロありますけどね・・・。
+ちなみに、説明書などにはこの機種が利用できるデバイスを「4極端子（CTIA規格）を搭載した端末に限ります」としているのですが、4極端子を装備していないデバイスって最近あるんですかね？
+また、本体背面の3.5mmステレオミニジャックにイヤホンやヘッドホンを接続することで、音声出力をモニターしながらレコーディングできます。まぁ、この「モニターしながらレコーディングできる」って言うのが、ちょっとした罠 になっているんですけどね・・・_(┐「ε:)_（後述）
+なお、当機種はiOSにおける動作検証の対象機材となっておりサポートページでiOS12における動作が確認されていることから、今後もしばらくは安心して使用できます。ただ、Lightning端子に接続するようなデジタル仕様じゃないので、OSの変更で影響が出てくるのか？と問われると、「ぶっちゃけ関係ないんじゃないの？」と首をかしげるところではありますが。
+ちなみに、細かいところにツッコミを入れるなら、多分USBオーディオインターフェイスじゃないと思うんですけど（名推理）
+使い方 接続 使い方は、正面の入力端子にギターやシンセを接続し、背面の4極ミニプラグケーブルをスマートフォンやタブレットのヘッドホンを接続します。また、本体の背面にあるヘッドホン端子へ対しヘッドホンなどを接続して音声出力をモニターします。
+このとき、標準ジャックを利用するのであれば電池は不要です。電池は、コンデンサーマイクを接続する際のファントム電源の供給にのみ利用するからです。
+音量調整 音量はデバイスのボリュームを調整することで操作します。
+さあレコーディング！・・・あれ？ 接続はこれで終わりです。ただこれだけではレコーディングできません。そう、アプリが必要なのですよ・・・！
+アプリは？ iXZ用のアプリというものはリリースされていません。じゃあどうするか？
+好きなアプリを使えばいいんじゃね？、です。
+そう言ってしまうと冗談に聞こえますが割とマジです。何せアナログの入力なので、プロテクトも何もないわけですから、極端なことを言えばスマホに標準搭載されているカメラアプリを使って録画してもいいわけです。あるいは、iOSであればGarageBandがパッと思い浮かぶところでしょうか。外部入力が可能になった。Korg Gadget 2でもいいかもしれません。ただ、Gadgetはちょっと問題があるかも（後述）。
+慣れ親しんだアプリを使ってねという、TASCAMの思いやりなのかもしれないデスネ（ぐるぐる目）
+つまづいたところ 音声入力のモニターができるか否かはアプリ次第 単純明快なアナログ接続のiXZですが、スムーズに万事うまく行ったわけではありませんでした。というのが、音声入力のモニターができるか否かはアプリに依存する点です。
+当初、この機種の動作確認を行うのに、iPhoneのカメラアプリを利用しました。ところが、接続したイヤホンから音声のモニターができないのです。かすかな「サー」というホワイトノイズが彼方に聞こえるのみで、INPUTのダイヤルをひねろうとiPhoneの音量を調整しようと一向に音声をモニターできません。
+「あちゃー、初期不良かなー」と思いましたが、録画した動画を再生してみるとしっかりと入力した音声が録画されていました。つまり、音声入力は取得できているけど、それをモニターできないわけでした。
+少し調べてみたところ「モニターの可否は、レコーディングに利用するアプリが入力された音声を出力へ返してくれるかどうかに依存している」ということがわかりました。
+つまり、iXZは録音するデバイス（この場合iPhone）からの音声出力を単純にデバイスのイヤホンに出力しているだけで、iXZ本体のイヤホンジャックに向けて配線しているわけではない、ということです。なので、入力された音声をモニターできる機能を持ったアプリを利用すればよい、ということになります。
+モニターできるアプリ Garagebandはモニター機能があります！ なので、iOSデバイスをお持ちの方はiXZを購入すれば、すぐに手持ちのイヤホンをiXZにぶっ刺してモニター可能です。なお、Korg Gadget 2はレコーディングするガジェットが搭載されているのですが、モニター機能を終ぞ探しきれませんでした・・・まさか、そもそも存在しない？
+ただし、GarageBandのようなアプリは動画ではなく音声のみを録音するので、「動画を取りつつ音声をモニターしたい」というニーズには対応できない、ということになります。この場合、根本的な解決策はモニターできる録画アプリを探すことになります。そんなのあるんですかね？
+モニター非対応のアプリでモニターしながら録画するには プラグを分岐させるアダプターを用意することで、片側をiXZ側に流しながらもう片側でモニターする、という力技が実現可能です。
+今回は録画したかったものがKORGのvolcaをいじる場面だったので、ステレオミニプラグを分岐させるアダプターを利用しました。volcaのアウトプットに分岐アダプターを接続し、一方はiXZに接続しつつもう一方をイヤホンやスピーカーに接続することで、モニターしながら録画できる環境にしました。
+使った感じはどうなのよ スゲーお手軽・・・！！ _(┐「ε:)_
+これなんですよねぇ。レコーディングしたい機材をパパッと接続して、アプリを起動して録音するだけ。それ以上の操作は必要ないうえ、どこへでも持って行けるサイズ。ギターなどを接続するなら電池も不要で、とにかく身軽かつ気軽。
+アナログ特有のノイズはどうしてもありますが、言うほど気にはなりません。これ以上を望むならもう少し出費してデジタルのオーディオインターフェイスを準備するほうが、精神衛生上よろしいかと思います。
+というか、この手のインターフェイスでギターとマイクが接続できるものはiXZが今の所最安値です。より良い環境を求めるなら自動的に出費する以外にはありません。強いて言えばiRigですけど、あれはギターとかの標準プラグのみ対応してる機種ですしね。
+気になったと言えば、iXZ本体にイヤホンを接続してモニターする場合、原音と比べて若干音がマイルドになるというか、少しハリがなくなるというか、そんな気がします。良く言えば「角が取れて落ち着く」、悪く言えば「ヌケが悪くなってダルい」。ただし、イヤホンはあくまでもモニター用ですしiPhone本体にはそこそこのヌケで録音されているので問題ないでしょう。
+そして何よりこの値段設定が素晴らしい。コストパフォーマンスとしては、100点満点じゃないでしょうか。
+まとめ 身軽でお手軽な上、コスパまで備えた働き者です。
+スマートフォンやタブレットを利用してレコーディングしたい、ギターだけじゃなくてマイクも使いたい、小難しいのはいいからとにかく気軽にやりたい。
+そんな人にぜひオススメしたい、良質なインターフェイスです。</description>
+    </item>
+    
+    <item>
+      <title>PythonでMarkdownファイルをHTMLへ変換する</title>
+      <link>https://idontwannawork.github.io/posts/convert-markdown-to-html-with-python/</link>
+      <pubDate>Fri, 24 May 2019 14:50:30 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/convert-markdown-to-html-with-python/</guid>
+      <description>はじめに 以前、VS CodeでMarkdownをPDFに自動で変換する方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので勉強がてら、Pythonで書くことにしました。と言っても難しい処理では全然ないんだけど・・・_(┐「ε:)_
+ちなみに、前の記事で紹介した拡張機能Markdown PDFを使えばHTMLにも変換できます。ただ、今回はVS Codeがないというシチュエーションでファイル変換したいのと、自分が作成したスタイルシートでHTMLファイルを生成したかったため、VS Codeの拡張機能を頼らない方法を取りました。
+というわけで、Pythonを使ったMarkdownファイルをHTMLへ変換する手順について書きます。
+リポジトリ こちらにソースコード一式を置いてあります。
+環境  Python ※3.x系 Markdown  Markdownは事前にpipしておく。
+pip install Markdown 一応プラットフォームに関しては、MacやWindowsに限らず動作する・・・はず_(┐「ε:)_
+概要 フォルダ中に存在するmdファイルを取得して、HTMLファイルに変換します。
+詳細 ファイル  mdtohtml.py
+Pythonで記述された本体。実行の際は当ファイルを指定します。
+ style.css
+CSSが書かれたファイル。生成されたHTMLファイルに&amp;lt;style&amp;gt;タグで記述されます。スタイルの変更を行いたい場合、当ファイルを書き換えてHTMLを生成してください。
+  使い方  変換したいmdファイルがあるフォルダに上記の2ファイルを配置します。
+$ ls README.md iamacat.md main.css mdtohtml.py 配置したら、そのフォルダにて下記のコマンドを実行します。
+$ python mdtohtml.py iamacat.md の変換を開始します ----------------------------------- iamacat.md を iamacat.html へ変換しました README.md の変換を開始します ----------------------------------- README.md を README.html へ変換しました $ ls README.html README.md iamacat.html iamacat.md main.css mdtohtml.py  処理内容 実行されたフォルダ中に存在するmdファイルを取得して、HTMLファイルに変換して同じフォルダーに出力します。mdファイルが複数ある場合は、すべてHTML化します。</description>
+    </item>
+    
+    <item>
+      <title>VS CodeでMarkdownをPDFに自動で変換する</title>
+      <link>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</link>
+      <pubDate>Wed, 15 May 2019 13:44:12 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</guid>
+      <description>はじめに Markdownで記述したmdファイルは、エンジニア間ではそのまま利用することが多いように思います（GitHubなどにREADME.mdとしてアップするとか）。ところが、メールに添付したり印刷する等、外部へ持ち出す際はPDFに変換しておいた方がいろいろ安心。とくに「mdファイルって何？」みたいなお客さんにドキュメントを渡さないといけない場合とか・・・。
+MarkdownをPDF化するのは、Pandocを利用する方法もあるのですが、ここではVisual Studio Code（以下、VS Code）の拡張機能である「Markdown PDF」を利用します。
+環境  Windows 10 vscode  インストール VS Codeにて、Ctrl＋Shift＋Xで拡張機能の検索窓に「Markdown PDF」と入力するか、上記のリンクをクリックします。検索結果から「Markdown PDF」を選択し、インストールします。Markdown PDFをインストールしてから、VS Codeで適当なMarkdownファイルを最初に開いた際、Chromiumのダウンロードが自動で始まります。ちなみに、なんでChromiumが必要かというと、Markdown PDFがPDF変換するのに利用しているから。
+使い方  PDF化したいMarkdownファイルを開く。 F1キーを押すか、Ctrl+Shift+Pキーを押しコマンドパレットを表示させる。 exportと入力すると下記のメニューが表示される。
+ markdown-pdf: Export (settings.json) markdown-pdf: Export (pdf) markdown-pdf: Export (html) markdown-pdf: Export (png) markdown-pdf: Export (jpeg) markdown-pdf: Export (all: pdf, html, png, jpeg)  この中からExport (pdf)を選択する。
+ 少し待つと、Markdownと同一のフォルダーにPDFが生成される。
+  自動化 上記の使い方ではPDFへ変換するのに、毎回コマンドパレットを表示してコマンドを入力し、どのファイル形式でエクスポートするかを選択する必要があります。これを特定の変換先（今回はPDF）に限定して自動変換するよう設定します。
+ 「ファイル」メニュー＞「基本設定」＞「設定」を選択するか、Ctrl＋,で直接画面を開く。
+ setting.jsonファイルを開いて下記のように設定する。
+&amp;#34;markdown-pdf.convertOnSave&amp;#34;: true, &amp;#34;markdown-pdf.type&amp;#34;: [ &amp;#34;pdf&amp;#34; ], 設定内容を書き込んだらVS Codeを1度再起動する。</description>
+    </item>
+    
+    <item>
+      <title>イテレータを複数回ループしたい</title>
+      <link>https://idontwannawork.github.io/posts/iterator-will-return-blank-with-loop-twice/</link>
+      <pubDate>Wed, 15 May 2019 11:57:24 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/iterator-will-return-blank-with-loop-twice/</guid>
+      <description>なんのこっちゃ？ 実行しようとしていたのはこんなコードでした。
+&amp;gt;&amp;gt;&amp;gt; import re &amp;gt;&amp;gt;&amp;gt; s = &amp;#34;hogefugapiyofoobarbaz1234567890abc987efg654hij321&amp;#34; &amp;gt;&amp;gt;&amp;gt; iter = re.finditer(&amp;#34;b..&amp;#34;, s) ← finditer()は結果をイテレータで返す &amp;gt;&amp;gt;&amp;gt; for i in iter: ... print(i.start()) ... 15 18 32 &amp;gt;&amp;gt;&amp;gt; for i in iter: ... print(i.start()) ... &amp;gt;&amp;gt;&amp;gt; ← 同じループを実行しても最初のループと異なり結果が返ってこない このように、同一のイテレータに対しループ処理を複数回行うと、2回目以降のループは結果が空になってしまいます。
+ちなみにジェネレータでも上記のような複数回のループ処理を行おうとすると、2回目以降のループで結果が空になるらしいですが、ジェネレータについては別途まとめて記事にしようと思います（まだ勉強中）。
+なんでこーなるの？ イテレータが持つ要素を取得したい場合、__next__() メソッド（または組み込み関数のnext()）を繰り返し呼び出すと、イテレータ中の要素を1つずつ返します。このメソッドは集合から1つずつ要素を取り出しています。取り出しているので、すべて取り出し終わったら元の集合には要素が存在しません。よって2回目以降のループは空っぽになります（要素がない場合は、StopIteration例外を返す）。
+※「取り出す」という表現が正確かどうかはちょっと自信がありません。メソッドや関数の「next」という名前の通り「次の要素へ」という挙動と、同じ要素を複数回取得できないことから「取り出す」という表現を使っています。
+なお、直接関係はありませんが、map()やfilter()はイテレータを返す（Python3での話）ので、返されたオブジェクトについてlist()などを複数回実行すると、上記のように2回目以降は空っぽになってしまうようです。
+&amp;gt;&amp;gt;&amp;gt; list = [1, 2, 3] &amp;gt;&amp;gt;&amp;gt; f = filter(None, list) &amp;gt;&amp;gt;&amp;gt; list(list) [1, 2, 3] &amp;gt;&amp;gt;&amp;gt; list(list) [1, 2, 3] ← リストlistに複数回listしても結果が返ってくる &amp;gt;&amp;gt;&amp;gt; list(f) [1, 2, 3] &amp;gt;&amp;gt;&amp;gt; list(f) [] ← イテレータに複数回listすると2回目以降ブランクになる &amp;gt;&amp;gt;&amp;gt; そもそもイテレータって？ iteratorとはオブジェクトの一種で、データの走査方法について表現するものです。なんのこっちゃ、という感じですが「要素を1つずつ繰り返し取得できる構造を持っていて（iterable）、実際に順次取得ができる」オブジェクトっていう感じかと。</description>
+    </item>
+    
+    <item>
+      <title>Vue.jsでデータの内容を開発ツールを使わないで確認する</title>
+      <link>https://idontwannawork.github.io/posts/show-data-without-tools/</link>
+      <pubDate>Sun, 05 May 2019 17:38:31 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/show-data-without-tools/</guid>
+      <description>小ネタです Vue.jsは、ブラウザの開発ツールやVue.js用の拡張機能を利用しなくても、HTMLファイルにとあるタグを記述することで、データの内容をJSON形式で確認できます。
+記述方法 HTMLファイル内に「{{ $data }}」を任意の場所に記述します。
+&amp;lt;html&amp;gt; &amp;lt;head&amp;gt; &amp;lt;/head&amp;gt; &amp;lt;body&amp;gt; &amp;lt;div id=&amp;#34;app&amp;#34;&amp;gt; &amp;lt;p&amp;gt;{{ message.v }}&amp;lt;/p&amp;gt; &amp;lt;p&amp;gt;{{ message.v.length }}&amp;lt;/p&amp;gt; &amp;lt;p&amp;gt;{{ l[2] }}&amp;lt;/p&amp;gt; &amp;lt;p&amp;gt;{{ l[n] }}&amp;lt;/p&amp;gt; &amp;lt;pre&amp;gt;{{ $data }}&amp;lt;/pre&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;script src=&amp;#34;https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;main.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt; 仮にJavaScript側が下記の内容だった場合、
+var app = new Vue({ el: &amp;#39;#app&amp;#39;, data: { message: { v: &amp;#39;Hello Vue World!&amp;#39; }, l: [&amp;#39;hoge&amp;#39;, &amp;#39;ふが&amp;#39;, &amp;#39;ぴyo&amp;#39;], n: 1 } }) 表示内容は下記の通り。
+CodePenでやってみました。
+See the Pen vuejs_type by idontwannawork (@idontwannawork) on CodePen.</description>
+    </item>
+    
+    <item>
+      <title>Pythonのopen関数はencoding引数を指定しよう</title>
+      <link>https://idontwannawork.github.io/posts/encode-error-with-open-function/</link>
+      <pubDate>Thu, 25 Apr 2019 10:57:12 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/encode-error-with-open-function/</guid>
+      <description>結論 WindowsでPythonのopen関数を使うなら、encoding引数を指定しよう（血涙
+何があったのさ WindowsにてPythonを用いて、テキストファイルの書き出しと読み込みをしようとしたんです。
+そうしたら憎きアイツが出てきたわけです。
+出たよ、UnicodeDecodeError・・・。
+環境  Windows 10 Python 3.6 Visual Studio Code  コード s = &amp;#39;\x85&amp;#39; print(s) with open(&amp;#39;C:/app/hoge.txt&amp;#39;, mode=&amp;#39;w&amp;#39;, encoding=&amp;#39;utf-8&amp;#39;) as f: f.write(s) with open(&amp;#39;C:/app/hoge.txt&amp;#39;, mode=&amp;#39;r&amp;#39;) as g: print(g.read()) # UnicodeDecodeError`でエラー  ※問題の部分だけ抜粋しています。本来のソースは入力の文字列がもっとごちゃごちゃしてました。
+ 原因 つまるところ、読み込み時のopenで引数のencodingを指定していなかったからでした_:(´ཀ`」∠):_
+書き出しの際には下記のようにencodingを指定していました。
+with open(&amp;#39;C:/app/hoge.json&amp;#39;, mode=&amp;#39;w&amp;#39;, encoding=&amp;#39;utf-8&amp;#39;) as f: ただ、書き出したファイルを読み込む際に、encodingの指定を失念していました。
+with open(&amp;#39;C:/app/hoge.json&amp;#39;, mode=&amp;#39;r&amp;#39;) as g: encodingの指定がない場合については、オフィシャルだと下記のように説明されています。
+ encoding が指定されていない場合に使われるエンコーディングはプラットフォームに依存します
+ Windowsだと利用されるエンコーディングはCP932です。Pythonから入出力する際、CP932に変換できない文字が存在したため、「変換できないよ！」とエラーになったわけです。
+ちなみに Python内部では文字列型はUnicodeで保持されています。そして、入出力の際はPythonがシステムのエンコーディングに自動で変換してくれます。この場合、もともとUTF-8で保持されていたものをCP932に変換します。
+この変換をユーザーが意識する必要はありません。逆に言えば、知らない間に勝手に変換されます。そして、この自動変換の際に何かしらの「変換できない文字」があるとエラーになる、というわけです。
+解消方法 エラーを解消するには、書き出し時と同様に読み込み時にもencodingを指定する必要があります。
+with open(&amp;#39;C:/app/hoge.json&amp;#39;, mode=&amp;#39;r&amp;#39;, encoding=&amp;#34;utf-8) as f: j = json.</description>
+    </item>
+    
+    <item>
+      <title>json.dumpsでの文字化けを解消する</title>
+      <link>https://idontwannawork.github.io/posts/garbled-text-with-json-dumps/</link>
+      <pubDate>Wed, 24 Apr 2019 10:38:54 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/garbled-text-with-json-dumps/</guid>
+      <description>概要 Pythonでjson.dumps()した際に、日本語が文字化けするのを防ぐメモ。
+環境  Windows 10 Python 3.6  実際のコード &amp;gt;&amp;gt;&amp;gt; import json &amp;gt;&amp;gt;&amp;gt; dic = {&amp;#34;hoge&amp;#34;:&amp;#34;foo&amp;#34;, &amp;#34;fuga&amp;#34;:&amp;#34;bar&amp;#34;, &amp;#34;piyo&amp;#34;:&amp;#34;baz&amp;#34;} &amp;gt;&amp;gt;&amp;gt; json.dumps(dic) &amp;#39;{&amp;#34;hoge&amp;#34;: &amp;#34;foo&amp;#34;, &amp;#34;fuga&amp;#34;: &amp;#34;bar&amp;#34;, &amp;#34;piyo&amp;#34;: &amp;#34;baz&amp;#34;}&amp;#39; &amp;gt;&amp;gt;&amp;gt; dicj = {&amp;#34;日本語&amp;#34;:&amp;#34;項目名&amp;#34;, &amp;#34;にほんご&amp;#34;:&amp;#34;こうもくめい&amp;#34;} &amp;gt;&amp;gt;&amp;gt; json.dumps(dicj) &amp;#39;{&amp;#34;\\u65e5\\u672c\\u8a9e&amp;#34;: &amp;#34;\\u9805\\u76ee\\u540d&amp;#34;, &amp;#34;\\u306b\\u307b\\u3093\\u3054&amp;#34;: &amp;#34;\\u3053\\u3046\\u3082\\u304f\\u3081\\u3044&amp;#34;}&amp;#39; こんな感じで、単純にjson.dumps()すると文字化けしてしまいます。この場合、ensure_asciiオプションでFalseを指定します。
+&amp;gt;&amp;gt;&amp;gt; json.dumps(dicj, ensure_ascii=False) &amp;#39;{&amp;#34;日本語&amp;#34;: &amp;#34;項目名&amp;#34;, &amp;#34;にほんご&amp;#34;: &amp;#34;こうもくめい&amp;#34;}&amp;#39; すると、上記のように文字化けが解消されました。</description>
+    </item>
+    
+    <item>
+      <title>Windowsでドット付ファイルを作成する</title>
+      <link>https://idontwannawork.github.io/posts/make-file-with-dot-on-windows/</link>
+      <pubDate>Mon, 22 Apr 2019 13:06:22 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/make-file-with-dot-on-windows/</guid>
+      <description>結論 ファイル名の冒頭および語尾の両方にドットを付与！
+小ネタです .gitignoreとか.bashrcのように、何かの設定ファイルは冒頭に「.（ドット）」が付いて拡張子なしであるような名前だったりします。
+ところが、Windowsのexplorer上でドット付のファイルを作成しようとしたらエラーになりました。
+たとえば.hogeという名前のファイルを作成しようとします。
+こんな名前のファイルを作成しようとすると・・・
+エラー！
+対策 そういう場合は、下記のようにファイル名の冒頭および語尾の両方にドットを付与してやるとファイルを作成できます。
+.hoge. すると・・・
+「はい」を押せばドット付ファイルのできあがりです。</description>
+    </item>
+    
+    <item>
+      <title>WindowsでLinuxのコマンドが使える「BusyBox」</title>
+      <link>https://idontwannawork.github.io/posts/busybox-on-windows/</link>
+      <pubDate>Tue, 16 Apr 2019 09:38:26 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/busybox-on-windows/</guid>
+      <description>結論 普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、BusyBoxを使えばいいよ！
+はじめに 仕事ではWindows、プライベートではMacまたはLinuxなんて人もいるかもしれません。そこな貴方、こんなシチュエーションがありませんでしょうか？
+ ふと仕事中に「grep使いたいなー」とか「awk使いたいなー」とかなっても、Windowsのコマンドプロンプトじゃ足りないし、PowerShellはあの文法がいまいち性に合わない。ガッツリ使うわけじゃないから、わざわざ端末や仮想環境を用意するというわけにもいかない。
+ とか、
+ Windows使ってるのに普段のMacのノリでlsって入力しちゃって、Windowsに「そんなコマンドないよ」と言われた経験がある。
+ そんな貴方（私）のため、BusyBoxが十徳ナイフのごとく活躍してくれます。
+この記事の対象者 以下に当てはまる方は、BusyBoxで幸せになれるかもしれません。
+ Windowsを利用しているがUnixのコマンドを使いたい 管理者権限ではなくインストールができない Hyper-Vなどの仮想環境がない  （余談1）Win10だとLinux使えなかったっけ？ Windows 10だとWSL（Windows Subsystem for Linux）で、UbuntuなどのLinuxディストリビューションを利用できます・・・が、リリースモデルの1つ、Enterprise LTSC（Long Term Servicing Channel）だとWSLが利用できません。企業によっては、「安定性などを確保するために、OSに対する頻繁な変更は行いたくない」場合、このモデルが採用されている可能性があります。
+この場合も、やっぱりBusyBoxの出番です。
+ ※以前は「Long Term Servicing Branch（LTSB）」という名前でリリースされていましたが、現在は「Long Term Servicing Channel（LTSC）」に名称変更されました。
+ （余談2）Cygwinとかじゃダメなの？ ダメじゃないです、全然大丈夫です。ただ、「ちょっとsed使いたいなー」っていう場合には、機能てんこ盛りなCygwinだとオーバースペックだったりします。
+VMwareなどの仮想環境が利用できるなら、そっちの方がいろいろ便利です。ただ、マシンスペックがイマイチだったり記憶容量があまりない場合は却ってストレスになるでしょうし、やっぱりちょっとだけ使うという用途に対してオーバースペックと言わざるを得ません。
+インストール  サイトからバイナリをダウンロードして、任意のフォルダーにて展開する。 展開したフォルダーを環境変数に登録する（利用するだけなら必須ではないけど、登録しておくと後が楽）。  終わりです。ダウンロードして展開すればいい実行ファイルなので、インストール権限は必要ないです。しかもめちゃくちゃ軽量なので、記憶容量をガツガツ食っちゃうこともありません。
+なお、ソースもダウンロードが可能ですが、あまりニーズはないだろうと判断し、この記事の中では触れません。
+使い方 とりあえず実行してみる BusyBox64.exeと入力して実行してみます。
+C:\hoge&amp;gt;BusyBox64.exe BusyBox v1.31.0-FRP-2910-ge92596d0b (2019-01-10 14:16:45 GMT) multi-call binary (mingw64-gcc 8.2.0-3.fc29; mingw64-crt 5.0.4-2.fc29) BusyBox is copyrighted by many authors between 1998-2018.</description>
+    </item>
+    
+    <item>
+      <title>Pythonの命名規約</title>
+      <link>https://idontwannawork.github.io/posts/python-naming-conventions/</link>
+      <pubDate>Fri, 12 Apr 2019 15:27:02 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/python-naming-conventions/</guid>
+      <description>命名規約のメモ PEP8に準拠。何番煎じかわからないけども自学用に。
+推奨される命名規約    命名対象 ルール 例 備考     パッケージ、モジュール すべて小文字で短く flask, os アンダースコアの利用は非推奨   クラス （アッパー）キャメルケース MyClass    型変数 （アッパー）キャメルケース MyClass    例外 （アッパー）キャメルケース、最後に「Error」 MyExcepError 例外はクラスであるべき、とのこと   グローバル変数 すべて小文字でアンダースコア区切り、2つアンダースコアを付与 __all__ グローバル変数をエクスポートするのを防ぐ   関数、変数 すべて小文字でアンダースコア区切り my_funcion    メソッド、インスタンス変数 すべて小文字でアンダースコア区切り my_method    定数 すべて大文字でアンダースコア区切り MY_CONST     ポピュラーな命名 上記の基本的なルールに準拠して、実際にはどんな感じで命名をされているか、について。
+1文字のみ b 小文字1文字。</description>
+    </item>
+    
+    <item>
+      <title>A-Frameでいろいろ降らせる</title>
+      <link>https://idontwannawork.github.io/posts/aframe-particle/</link>
+      <pubDate>Thu, 11 Apr 2019 09:47:58 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/aframe-particle/</guid>
+      <description>降らせるって何を？ こんな感じ。
+See the Pen aframe_particle_star by idontwannawork (@idontwannawork) on CodePen. 
+結論 これを使います。
+概要 webVR用のフレームワークA-Frameにはさまざまなサードパーティーのコンポーネントが存在します。その中で、「いろいろ降らせる」コンポーネントを実装します。これを実装することで「雪の降る町」や「チリの舞う荒野」なんかの表現ができます。
+設定値 preset presetの値で粒子の形を変えて降らせることができます。
+ stars（デフォルト） 星が降ってきます。デフォルトではrainとsnowの中間くらいの落下速度で、粒度がrainより粗いです。そして、粒子が星形。他と異なり、後方で噴水のように噴き出しています。
+See the Pen aframe_particle_star by idontwannawork (@idontwannawork) on CodePen. 
+ dust チリっぽい何か。この設定値が一番ゆっくり降ってきます。というか、舞ってます。粒度は以下の2つと同様で、細かいです。チリっていうよりも「ホコリ」っていった方が正確かもしれない。
+See the Pen aframe_particle_dust by idontwannawork (@idontwannawork) on CodePen. 
+ snow その名の通り、雪。rainよりゆっくり降ってきます。粒度と粒子はデフォルトではdustと同じっぽく見えます。これはしっかり上から「降って」きます。
+See the Pen aframe_particle_snow by idontwannawork (@idontwannawork) on CodePen. 
+ rain その名の通り、雨。snowより早く降ってきます。粒子はいわゆるティアドロップっぽい形。これもしっかり上から「降って」きます。
+See the Pen aframe_particle_rain by idontwannawork (@idontwannawork) on CodePen.</description>
+    </item>
+    
+    <item>
+      <title>Hugoで静的サイトを生成してみる</title>
+      <link>https://idontwannawork.github.io/posts/make-site-with-hugo/</link>
+      <pubDate>Fri, 05 Apr 2019 10:15:49 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/make-site-with-hugo/</guid>
+      <description>Hugoとは Golangで作られている、静的サイトジェネレーター。なんでも、生成が速いらしいです。
+今回はコイツを使って、サイトを生成し公開してみようと思います。
+この記事が役立つであろう人 サイトを立ち上げたくて、ターミナルでの作業が苦でない人。また、自分でCSSなどをいじったりしてデザインするなら、記事を書くほうに労力を割きたい人。
+手順 基本的にはここを参考にしています。以下の手順はWindows 10にて行っているが、多分Macとかでも同様なはずです。
+なお、個人的な好みでWindowsのコマンドプロンプトではなくbusyboxで実行しているが、普通にコマンドプロンプトやPowerShellで実行しても問題ないと思います。
+ Hugoのインストール
+HugoのGithubから、自分が利用するプラットフォーム用のインストーラーをダウンロードして展開します。この記事を書いている現在での最新は0.54.0。
+インストール後、Hugoのbin（実行ファイルが格納されているアドレス）を環境変数に追加します。GUIでもいいし、setxコマンドを実行しても問題ありません。インストールしたあとで、下記コマンドを実行してみます。
+$ hugo version Hugo Static Site Generator v0.54.0-B1A82C61 windows/amd64 BuildDate: 2019-02-01T09:42:02Z 上記のように返ってくれば完了です。
+ サイトを生成
+以下のコマンドを実行してサイトを生成します。hogeの部分は任意で、自分が生成したいサイト名でOKです。実行したら生成されたフォルダーに移動します。
+hugo new site hoge cd hoge テーマを決定
+Hugoのテーマを集めたページを参照して、好みのテーマを探します。カスタマイズしたり、自力で作成することももちろん可能ですが今回は割愛いたします。今回はミニマムなデザインが気に入ったので、Hermitにしてみました。
+テーマを決めたら下記のコマンドを実行して、gitでGitHubから必要なファイルをダウンロードします。なお、導入手順はテーマのページにしっかり記述されていました。親切！
+git init git submodule add https://github.com/Track3/hermit.git themes/hermit ここまで実行すると、下記のようなフォルダーとファイルの構成ができ上がっているはずです。
+. ├── archetypes ├── config.toml ├── content ├── data ├── layouts ├── static └── themes この時点で下記のコマンドを実行すると、publicという名前でフォルダーが作成されて、その中に生成されたHTMLファイルなどが格納されるはずです。ただし、この時点ではコンテンツを作成していないため、トップページだけで中身はなにもありません。
+hugo 設定ファイルを変更
+ファイルconfig.tomlに設定を追記します。
+オフィシャルでは下記のコマンドを実行するだけでいい、としています。要はテーマの名前を追加しています。なぜかというと、生成直後の設定ファイルの中身では、何のテーマを利用するか記述がないためわからないから追記してやる必要があるわけです。
+echo &amp;#39;theme = &amp;#34;ananke&amp;#34;&amp;#39; &amp;gt;&amp;gt; config.</description>
+    </item>
+    
+    <item>
+      <title>このページについて</title>
+      <link>https://idontwannawork.github.io/about/</link>
+      <pubDate>Thu, 04 Apr 2019 19:32:06 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/about/</guid>
+      <description>はじめに このページは日々の学習内容を書いたりトラブルをメモったり、たまに全然関係ない記事を書いたりする予定。
+どうぞ、よしなに。
+サイトポリシー 当サイトが使用しているアクセス解析ツールについて 当サイトはアクセス解析サービスとして、「Google Analytics」を利用しています。トラフィックデータの収集のために「Cookie（クッキー）」が使用されていますが、このトラフィックデータは匿名で収集されており、個人を特定するものではありません。
+この機能は、Cookieを無効にすることで収集を拒否できます。お使いのブラウザの設定をご確認ください。この規約に関して、詳しくはこちらのページをご確認ください。</description>
+    </item>
+    
+    <item>
+      <title>チュートリアルを卒業したくらいが一番ツラい</title>
+      <link>https://idontwannawork.github.io/posts/after-tutorial/</link>
+      <pubDate>Thu, 04 Apr 2019 18:38:04 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/after-tutorial/</guid>
+      <description>チュートリアルってあるよね どんなプログラミング言語やライブラリやフレームワークでもあるもの、チュートリアル。「Getting Started」とか書かれたりもする。そして大抵の人がチュートリアルに触れて、場合によってはちょっと値を自分流に編集したりして、対象の雰囲気をざっくり掴むのに使う。そして、そこから「自分が作りたいもの」を目指していく。
+文章として記述するとこれだけなんだけど、自分はチュートリアルをやった直後にモチベーションがガクッと下がる。折れるまでは行かなくとも、再起するのに苦労する。
+なぜなんだぜ 結論から言ってしまえば、チュートリアル卒業レベルでは作りたいものは作れないから。
+何言ってんだ 「チュートリアル」は基本的にほんの触りだけ。だから内容としては薄かったり、しょぼかったりする。仕方ない、「触り」だもの。 「自分が作りたいもの」は、既存の製品やサービスだったり「すでに稼働しているスゲーやつ」を見た後で、「特定の問題やニーズを解消したい」あるいは「似たものを作りたい」という風に発生する感情だったりする。
+大抵はこの感情が発露する時点で、中途半端に目が肥えていたり、利用する側としての経験値を得てしまっている。
+たぶん、これが問題なんだ。
+だからどういうことだってばよ 中途半端に目が肥えてしまった上に、なまじ既存サービスが利用できてしまうため、チュートリアルに毛が生えたレベルでは下記の感情に対処しにくい。
+ 見た目がしょぼい 機能少ない そもそも自分が作る必要あるの？  あー・・・なんて言えばいいのかな こんな例えはどうだろう。
+ふと、「アクションゲームを作りたい」と思ったあなた。そう、そこのあなた。どうして作りたいと思った？アサシ〇クリードとかプレイして、「面白えー！すげー！俺も作ってみてー！」って、そう思ったんじゃない？「これで俺も『クリエイター』で『ミリオネア』だぜー！うひょー！」とか、人と場合によっちゃ思ったんじゃない？ そして、その感情迸るままUnityのチュートリアルに触れたりしちゃってるんじゃない？
+あるいはTwit〇erにほんのちょっとした不満のあるあなた。そう、あなた。確かにTwit〇erは、興味のあるカテゴリだけ抽出してタイムラインに流すのは難しい。うん、その通りだ。プログラミング関係でフォローした人が、プログラミングのことだけツイートすることってあんまりないよね。場合によっては旅行のことだったり、引退するスポーツ選手のことをツイートしてたりする。 だから「カテゴライズして必要な情報だけタイムラインに流したいな。そういうサービス作ろうかな」って思ったりするんじゃない？そして「動作が軽いって評判のGolangやってみるかな」って思ったりして、Gopherに見守られながらチュートリアルをやってみたりしてるんだよね？
+オーライ、そこで質問なんだけど、そのチュートリアルってアレク〇オスが画面を縦横無尽に動き回るような、そんなアグレッシブで派手なチュートリアルかな？ あるいは、Bo〇tstrapなんかのフレームワークよろしく美しくデザインされたUIにいろんな機能がモリモリ実装できるような、そんな洗練されたチュートリアルかな？
+そして何より、チュートリアルを卒業したあなたは、卒業したての今、まさにこの瞬間、どんなものを作れるのかな？見た人が、利用した人が、プレイした人があっと驚き感動し熱中するようなものだろうか？
+そんな訳がない。そんな訳がないのだ。
+現実に立ち返る 昨今あらゆる機能や情報が提供されるwebサービスにおいても、ジャンルが細分化されまくってるゲームもスマートフォンのアプリにおいても同様のことが言える。 自分よりずっと知識も経験も技術も熱意も、場合によっては将来の時間すらも持ち合わせた先人たちがいる。そんな一騎当千の偉人たちが綿々と作り上げてきた実績を見た、一介の雑兵ができることなどたかが知れているんだ。
+どうしろって言うんだ。
+オーライ、わかった。やればいいんだろ、やれば。とにかくやるしかないんだ、悩んでる時間も惜しいんだ、おっさんはさ。
+・・・というわけで、日々の学習内容を書いたりトラブルをメモったり、たまに全然関係ない記事を書いたりする予定。どうぞ、よしなに。</description>
     </item>
     
   </channel>

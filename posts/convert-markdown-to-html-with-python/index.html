@@ -1,83 +1,94 @@
 <!DOCTYPE html>
-<html lang="ja">
-
+<html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<meta name="theme-color" content="#494f5c">
-	<meta name="msapplication-TileColor" content="#494f5c">
-
-<meta itemprop="name" content="PythonでMarkdownファイルをHTMLへ変換する">
-<meta itemprop="description" content="はじめに 以前、VS CodeでMarkdownをPDFに自動で変換する方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので">
-
-
-<meta itemprop="datePublished" content="2019-05-24T14:50:30&#43;09:00" />
-<meta itemprop="dateModified" content="2019-05-24T14:50:30&#43;09:00" />
-<meta itemprop="wordCount" content="1290">
-
-
-
-<meta itemprop="keywords" content="Python,Markdown," />
-<meta property="og:title" content="PythonでMarkdownファイルをHTMLへ変換する" />
-<meta property="og:description" content="はじめに 以前、VS CodeでMarkdownをPDFに自動で変換する方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので" />
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>PythonでMarkdownファイルをHTMLへ変換する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="PythonでMarkdownファイルをHTMLへ変換する" />
+<meta property="og:description" content="はじめに 以前、VS CodeでMarkdownをPDFに自動で変換する方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので勉強がてら、Pythonで書くことにしました。と言っても難しい処理では全然ないんだけど・・・_(┐「ε:)_
+ちなみに、前の記事で紹介した拡張機能Markdown PDFを使えばHTMLにも変換できます。ただ、今回はVS Codeがないというシチュエーションでファイル変換したいのと、自分が作成したスタイルシートでHTMLファイルを生成したかったため、VS Codeの拡張機能を頼らない方法を取りました。
+というわけで、Pythonを使ったMarkdownファイルをHTMLへ変換する手順について書きます。
+リポジトリ こちらにソースコード一式を置いてあります。
+環境  Python ※3.x系 Markdown  Markdownは事前にpipしておく。
+pip install Markdown 一応プラットフォームに関しては、MacやWindowsに限らず動作する・・・はず_(┐「ε:)_
+概要 フォルダ中に存在するmdファイルを取得して、HTMLファイルに変換します。
+詳細 ファイル  mdtohtml.py
+Pythonで記述された本体。実行の際は当ファイルを指定します。
+ style.css
+CSSが書かれたファイル。生成されたHTMLファイルに&lt;style&gt;タグで記述されます。スタイルの変更を行いたい場合、当ファイルを書き換えてHTMLを生成してください。
+  使い方  変換したいmdファイルがあるフォルダに上記の2ファイルを配置します。
+$ ls README.md iamacat.md main.css mdtohtml.py 配置したら、そのフォルダにて下記のコマンドを実行します。
+$ python mdtohtml.py iamacat.md の変換を開始します ----------------------------------- iamacat.md を iamacat.html へ変換しました README.md の変換を開始します ----------------------------------- README.md を README.html へ変換しました $ ls README.html README.md iamacat.html iamacat.md main.css mdtohtml.py  処理内容 実行されたフォルダ中に存在するmdファイルを取得して、HTMLファイルに変換して同じフォルダーに出力します。mdファイルが複数ある場合は、すべてHTML化します。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://idontwannawork.github.io/posts/convert-markdown-to-html-with-python/" /><meta property="article:published_time" content="2019-05-24T14:50:30&#43;09:00"/>
 <meta property="article:modified_time" content="2019-05-24T14:50:30&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="PythonでMarkdownファイルをHTMLへ変換する"/>
-<meta name="twitter:description" content="はじめに 以前、VS CodeでMarkdownをPDFに自動で変換する方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので"/>
+<meta name="twitter:description" content="はじめに 以前、VS CodeでMarkdownをPDFに自動で変換する方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので勉強がてら、Pythonで書くことにしました。と言っても難しい処理では全然ないんだけど・・・_(┐「ε:)_
+ちなみに、前の記事で紹介した拡張機能Markdown PDFを使えばHTMLにも変換できます。ただ、今回はVS Codeがないというシチュエーションでファイル変換したいのと、自分が作成したスタイルシートでHTMLファイルを生成したかったため、VS Codeの拡張機能を頼らない方法を取りました。
+というわけで、Pythonを使ったMarkdownファイルをHTMLへ変換する手順について書きます。
+リポジトリ こちらにソースコード一式を置いてあります。
+環境  Python ※3.x系 Markdown  Markdownは事前にpipしておく。
+pip install Markdown 一応プラットフォームに関しては、MacやWindowsに限らず動作する・・・はず_(┐「ε:)_
+概要 フォルダ中に存在するmdファイルを取得して、HTMLファイルに変換します。
+詳細 ファイル  mdtohtml.py
+Pythonで記述された本体。実行の際は当ファイルを指定します。
+ style.css
+CSSが書かれたファイル。生成されたHTMLファイルに&lt;style&gt;タグで記述されます。スタイルの変更を行いたい場合、当ファイルを書き換えてHTMLを生成してください。
+  使い方  変換したいmdファイルがあるフォルダに上記の2ファイルを配置します。
+$ ls README.md iamacat.md main.css mdtohtml.py 配置したら、そのフォルダにて下記のコマンドを実行します。
+$ python mdtohtml.py iamacat.md の変換を開始します ----------------------------------- iamacat.md を iamacat.html へ変換しました README.md の変換を開始します ----------------------------------- README.md を README.html へ変換しました $ ls README.html README.md iamacat.html iamacat.md main.css mdtohtml.py  処理内容 実行されたフォルダ中に存在するmdファイルを取得して、HTMLファイルに変換して同じフォルダーに出力します。mdファイルが複数ある場合は、すべてHTML化します。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
 
-	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-	<link rel="manifest" href="/site.webmanifest">
-	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
-	<link rel="shortcut icon" href="/favicon.ico">
-
-	<title>PythonでMarkdownファイルをHTMLへ変換する</title>
-	<link rel="stylesheet" href="https://idontwannawork.github.io/css/style.min.9151acf769c9b64924e76b2f7d12f6b7e5b0ba72326658132047e1e8802deb6d.css" integrity="sha256-kVGs92nJtkkk52svfRL2t+WwunIyZlgTIEfh6IAt620=" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://idontwannawork.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://idontwannawork.github.io/js/main.js"></script>
 	<script data-ad-client="ca-pub-3892592238252869" async
-    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 </head>
-
-<body id="page">
-	
-	<header id="site-header" class="animated slideInUp faster">
-		<div class="hdr-wrapper section-inner">
-			<div class="hdr-left">
-				<div class="site-branding">
-					<a href="https://idontwannawork.github.io/">頑張らないために頑張る</a>
-				</div>
-				<nav class="site-nav hide-in-mobile">
-					
-				<a href="https://idontwannawork.github.io/about/">About</a>
-				<a href="https://idontwannawork.github.io/posts/">Posts</a>
-
-				</nav>
-			</div>
-			<div class="hdr-right hdr-icons">
-				<span class="hdr-social hide-in-mobile"><a href="https://twitter.com/unknown_strings" target="_blank" rel="noopener me" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/idontwannawork" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://codepen.io/idontwannawork/" target="_blank" rel="noopener me" title="Codepen"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon><line x1="12" y1="22" x2="12" y2="15.5"></line><polyline points="22 8.5 12 15.5 2 8.5"></polyline><polyline points="2 15.5 12 8.5 22 15.5"></polyline><line x1="12" y1="2" x2="12" y2="8.5"></line></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
-			</div>
-		</div>
-	</header>
-	<div id="mobile-menu" class="animated fast">
-		<ul>
-			<li><a href="https://idontwannawork.github.io/about/">About</a></li>
-			<li><a href="https://idontwannawork.github.io/posts/">Posts</a></li>
-		</ul>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>tetsuya katsuragi&rsquo;s tech blog</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/idontwannawork" title="Github"><i data-feather="github"></i></a><a href="https://codepen.io/idontwannawork/" title="Codepen"><i data-feather="codepen"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
 	</div>
 
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/posts">All posts</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="/tags">Tags</a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
 
-	<main class="site-main section-inner animated fadeIn faster">
-		<article class="thin">
-			<header class="post-header">
-				<div class="post-meta"><span>May 24, 2019</span></div>
-				<h1>PythonでMarkdownファイルをHTMLへ変換する</h1>
-			</header>
-			<div class="content">
-				
 
-<h2 id="はじめに">はじめに<a href="#はじめに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+		<div class="post-header">
+			<h1 class="title">PythonでMarkdownファイルをHTMLへ変換する</h1>
+			<div class="meta">Posted at &mdash; May 24, 2019</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="はじめに">はじめに</h2>
 
 <p>以前、<a href="/posts/convert-markdown-to-pdf-with-vscode/">VS CodeでMarkdownをPDFに自動で変換する</a>方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので勉強がてら、Pythonで書くことにしました。と言っても難しい処理では全然ないんだけど・・・_(┐「ε:)_</p>
 
@@ -85,11 +96,11 @@
 
 <p>というわけで、Pythonを使ったMarkdownファイルをHTMLへ変換する手順について書きます。</p>
 
-<h2 id="リポジトリ">リポジトリ<a href="#リポジトリ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="リポジトリ">リポジトリ</h2>
 
 <p><a href="https://github.com/idontwannawork/markdowntohtml">こちら</a>にソースコード一式を置いてあります。</p>
 
-<h2 id="環境">環境<a href="#環境" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="環境">環境</h2>
 
 <ul>
 <li>Python ※3.x系</li>
@@ -97,16 +108,16 @@
 </ul>
 
 <p><a href="https://python-markdown.github.io/">Markdown</a>は事前に<code>pip</code>しておく。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">pip install Markdown</code></pre></div>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">pip install Markdown</code></pre></div>
 <p>一応プラットフォームに関しては、MacやWindowsに限らず動作する・・・はず_(┐「ε:)_</p>
 
-<h2 id="概要">概要<a href="#概要" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="概要">概要</h2>
 
 <p>フォルダ中に存在するmdファイルを取得して、HTMLファイルに変換します。</p>
 
-<h2 id="詳細">詳細<a href="#詳細" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="詳細">詳細</h2>
 
-<h3 id="ファイル">ファイル<a href="#ファイル" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="ファイル">ファイル</h3>
 
 <ul>
 <li><p>mdtohtml.py</p>
@@ -118,15 +129,15 @@
 <p>CSSが書かれたファイル。生成されたHTMLファイルに<code>&lt;style&gt;</code>タグで記述されます。スタイルの変更を行いたい場合、当ファイルを書き換えてHTMLを生成してください。</p></li>
 </ul>
 
-<h3 id="使い方">使い方<a href="#使い方" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="使い方">使い方</h3>
 
 <ol>
 <li><p>変換したいmdファイルがあるフォルダに上記の2ファイルを配置します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ ls
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ ls
 README.md    iamacat.md   main.css     mdtohtml.py</code></pre></div></li>
 
 <li><p>配置したら、そのフォルダにて下記のコマンドを実行します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ python mdtohtml.py
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ python mdtohtml.py
 iamacat.md の変換を開始します
 -----------------------------------
 iamacat.md を iamacat.html へ変換しました
@@ -137,160 +148,114 @@ $ ls
 README.html   README.md     iamacat.html  iamacat.md    main.css      mdtohtml.py</code></pre></div></li>
 </ol>
 
-<h3 id="処理内容">処理内容<a href="#処理内容" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="処理内容">処理内容</h3>
 
 <p>実行されたフォルダ中に存在するmdファイルを取得して、HTMLファイルに変換して同じフォルダーに出力します。mdファイルが複数ある場合は、すべてHTML化します。</p>
 
-<h2 id="コード">コード<a href="#コード" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="コード">コード</h2>
 
 <p>基本的には、HTML化はMarkdownに丸投げしています。丸投げした後、必要な<code>&lt;html&gt;</code>タグなどを付与しているだけです。</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">markdown</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">glob</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> markdown
+<span style="color:#00f">import</span> re
+<span style="color:#00f">import</span> glob
 
-<span class="c1"># Markdown拡張</span>
-<span class="n">mdextensions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;tables&#34;</span><span class="p">]</span>
-
-
-<span class="c1"># mdファイルの変換</span>
-<span class="k">def</span> <span class="nf">convertHtml</span><span class="p">(</span><span class="n">mdpath</span><span class="p">,</span> <span class="n">htmlpath</span><span class="p">,</span> <span class="n">style</span><span class="p">):</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mdpath</span><span class="p">,</span> <span class="s1">&#39;rt&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="c1"># Markdown の import 文を除去</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;@import &#34;.+&#34;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
-        <span class="c1"># HTMLに変換</span>
-        <span class="n">body</span> <span class="o">=</span> <span class="n">markdown</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="n">extensions</span><span class="o">=</span><span class="n">mdextensions</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-
-        <span class="n">html</span> <span class="o">=</span> <span class="s1">&#39;&lt;html lang=&#34;ja&#34;&gt;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;</span>
-        <span class="n">html</span> <span class="o">+=</span> <span class="s1">&#39;&lt;style&gt;&#39;</span> <span class="o">+</span> <span class="n">style</span> <span class="o">+</span> <span class="s1">&#39;&lt;/style&gt;&#39;</span>
-        <span class="n">html</span> <span class="o">+=</span> <span class="s1">&#39;&lt;body&gt;&#39;</span> <span class="o">+</span> <span class="n">body</span> <span class="o">+</span> <span class="s1">&#39;&lt;/body&gt;&lt;/html&gt;&#39;</span>
-
-        <span class="c1"># HTMLで出力</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">((</span><span class="n">htmlpath</span><span class="p">),</span> <span class="s2">&#34;w&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">g</span><span class="p">:</span>
-            <span class="n">g</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span style="color:#008000"># Markdown拡張</span>
+mdextensions = [<span style="color:#a31515">&#34;tables&#34;</span>]
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span style="color:#008000"># mdファイルの変換</span>
+<span style="color:#00f">def</span> convertHtml(mdpath, htmlpath, style):
+    <span style="color:#00f">with</span> open(mdpath, <span style="color:#a31515">&#39;rt&#39;</span>, encoding=<span style="color:#a31515">&#34;utf-8&#34;</span>) <span style="color:#00f">as</span> f:
+        text = f.read()
+        <span style="color:#008000"># Markdown の import 文を除去</span>
+        text = re.sub(<span style="color:#a31515">&#39;@import &#34;.+&#34;</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#39;</span>, <span style="color:#a31515">&#39;&#39;</span>, text)
+        <span style="color:#008000"># HTMLに変換</span>
+        body = markdown.Markdown(extensions=mdextensions).convert(text)
 
-    <span class="c1"># スタイルは、style.cssを参照する</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./style.css&#39;</span><span class="p">,</span> <span class="s1">&#39;rt&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">style</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">mdfile</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&#34;*.md&#34;</span><span class="p">):</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">%s</span><span class="s2"> の変換を開始します&#34;</span> <span class="o">%</span> <span class="n">mdfile</span><span class="p">)</span>
-            <span class="n">htmlname</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;.md$&#39;</span><span class="p">,</span> <span class="s1">&#39;.html&#39;</span><span class="p">,</span> <span class="n">mdfile</span><span class="p">)</span>
-            <span class="n">convertHtml</span><span class="p">(</span><span class="n">mdfile</span><span class="p">,</span> <span class="n">htmlname</span><span class="p">,</span> <span class="n">style</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&#34;-----------------------------------&#34;</span><span class="p">)</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">%s</span><span class="s2"> を </span><span class="si">%s</span><span class="s2"> へ変換しました&#34;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mdfile</span><span class="p">,</span> <span class="n">htmlname</span><span class="p">))</span></code></pre></div>
+        html = <span style="color:#a31515">&#39;&lt;html lang=&#34;ja&#34;&gt;&lt;meta charset=&#34;utf-8&#34;&gt;&#39;</span>
+        html += <span style="color:#a31515">&#39;&lt;style&gt;&#39;</span> + style + <span style="color:#a31515">&#39;&lt;/style&gt;&#39;</span>
+        html += <span style="color:#a31515">&#39;&lt;body&gt;&#39;</span> + body + <span style="color:#a31515">&#39;&lt;/body&gt;&lt;/html&gt;&#39;</span>
+
+        <span style="color:#008000"># HTMLで出力</span>
+        <span style="color:#00f">with</span> open((htmlpath), <span style="color:#a31515">&#34;w&#34;</span>, encoding=<span style="color:#a31515">&#34;utf-8&#34;</span>) <span style="color:#00f">as</span> g:
+            g.write(html)
+
+
+<span style="color:#00f">if</span> __name__ == <span style="color:#a31515">&#39;__main__&#39;</span>:
+
+    <span style="color:#008000"># スタイルは、style.cssを参照する</span>
+    <span style="color:#00f">with</span> open(<span style="color:#a31515">&#39;./style.css&#39;</span>, <span style="color:#a31515">&#39;rt&#39;</span>, encoding=<span style="color:#a31515">&#34;utf-8&#34;</span>) <span style="color:#00f">as</span> f:
+        style = f.read()
+        <span style="color:#00f">for</span> mdfile <span style="color:#00f">in</span> glob.glob(<span style="color:#a31515">&#34;*.md&#34;</span>):
+            <span style="color:#00f">print</span>(<span style="color:#a31515">&#34;</span><span style="color:#a31515">%s</span><span style="color:#a31515"> の変換を開始します&#34;</span> % mdfile)
+            htmlname = re.sub(<span style="color:#a31515">r</span><span style="color:#a31515">&#39;.md$&#39;</span>, <span style="color:#a31515">&#39;.html&#39;</span>, mdfile)
+            convertHtml(mdfile, htmlname, style)
+            <span style="color:#00f">print</span>(<span style="color:#a31515">&#34;-----------------------------------&#34;</span>)
+            <span style="color:#00f">print</span>(<span style="color:#a31515">&#34;</span><span style="color:#a31515">%s</span><span style="color:#a31515"> を </span><span style="color:#a31515">%s</span><span style="color:#a31515"> へ変換しました&#34;</span> % (mdfile, htmlname))</code></pre></div>
 <p>途中の<code>style.css</code>は任意のスタイルを記述したファイルを、pyファイルと同じフォルダに格納しておきます。</p>
 
 <p>なお、style.cssの内容はとりあえず下記の内容を記述しています。用途に応じて、追記したり別のcssファイルに置き換えてもらえればいいかと思います。</p>
-<div class="highlight"><pre class="chroma"><code class="language-css" data-lang="css"><span class="nt">body</span> <span class="p">{</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">body {
 
-  <span class="k">font-family</span><span class="p">:</span> <span class="s2">&#34;Hiragino Kaku Gothic Pro&#34;</span><span class="p">,</span><span class="kc">sans-serif</span><span class="p">;</span>
-  <span class="k">font-size</span><span class="p">:</span> <span class="mi">14</span><span class="kt">px</span><span class="p">;</span>
-  <span class="k">padding</span><span class="p">:</span> <span class="mi">0</span> <span class="mi">12</span><span class="kt">px</span><span class="p">;</span>
-  <span class="k">line-height</span><span class="p">:</span> <span class="mi">23</span><span class="kt">px</span><span class="p">;</span>
-<span class="p">}</span>
+  <span style="color:#00f">font-family</span>: <span style="color:#a31515">&#34;Hiragino Kaku Gothic Pro&#34;</span>,<span style="color:#00f">sans-serif</span>;
+  <span style="color:#00f">font-size</span>: 14<span style="color:#2b91af">px</span>;
+  <span style="color:#00f">padding</span>: 0 12<span style="color:#2b91af">px</span>;
+  <span style="color:#00f">line-height</span>: 23<span style="color:#2b91af">px</span>;
+}
 
-<span class="nt">img</span> <span class="p">{</span>
-  <span class="k">max-width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
-  <span class="k">max-height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
-<span class="p">}</span>
+img {
+  <span style="color:#00f">max-width</span>: 100<span style="color:#2b91af">%</span>;
+  <span style="color:#00f">max-height</span>: 100<span style="color:#2b91af">%</span>;
+}
 
-<span class="nt">hr</span> <span class="p">{</span>
-  <span class="k">border</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">height</span><span class="p">:</span> <span class="mi">2</span><span class="kt">px</span><span class="p">;</span>
-  <span class="k">border-bottom-width</span><span class="p">:</span> <span class="mi">2</span><span class="kt">px</span><span class="p">;</span>
-  <span class="k">border-bottom-style</span><span class="p">:</span> <span class="kc">dotted</span><span class="p">;</span>
-<span class="p">}</span>
+hr {
+  <span style="color:#00f">border</span>: 0;
+  <span style="color:#00f">height</span>: 2<span style="color:#2b91af">px</span>;
+  <span style="color:#00f">border-bottom-width</span>: 2<span style="color:#2b91af">px</span>;
+  <span style="color:#00f">border-bottom-style</span>: <span style="color:#00f">dotted</span>;
+}
 
-<span class="nt">h1</span> <span class="p">{</span>
-  <span class="k">padding-bottom</span><span class="p">:</span> <span class="mf">0.4</span><span class="kt">em</span><span class="p">;</span>
-  <span class="k">line-height</span><span class="p">:</span> <span class="mf">1.2</span><span class="p">;</span>
-  <span class="k">border-bottom-width</span><span class="p">:</span> <span class="mi">1</span><span class="kt">px</span><span class="p">;</span>
-  <span class="k">border-bottom-style</span><span class="p">:</span> <span class="kc">solid</span><span class="p">;</span>
-<span class="p">}</span>
+h1 {
+  <span style="color:#00f">padding-bottom</span>: 0.4<span style="color:#2b91af">em</span>;
+  <span style="color:#00f">line-height</span>: 1.2;
+  <span style="color:#00f">border-bottom-width</span>: 1<span style="color:#2b91af">px</span>;
+  <span style="color:#00f">border-bottom-style</span>: <span style="color:#00f">solid</span>;
+}
 
-<span class="nt">h1</span><span class="o">,</span> <span class="nt">h2</span><span class="o">,</span> <span class="nt">h3</span><span class="o">,</span> <span class="nt">h4</span><span class="o">,</span> <span class="nt">h5</span><span class="o">,</span> <span class="nt">h6</span> <span class="p">{</span>
-  <span class="k">font-weight</span><span class="p">:</span> <span class="kc">normal</span><span class="p">;</span>
-<span class="p">}</span></code></pre></div>
-<h2 id="参考文献">参考文献<a href="#参考文献" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+h1, h2, h3, h4, h5, h6 {
+  <span style="color:#00f">font-weight</span>: <span style="color:#00f">normal</span>;
+}</code></pre></div>
+<h2 id="参考文献">参考文献</h2>
 
 <p><a href="https://python-markdown.github.io/">Python-Markdown</a></p>
 
 <p><a href="http://oboe2uran.hatenablog.com/entry/2019/01/25/150934">Markdownファイルを Python で PDF にする</a></p>
 
-			</div>
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
 
-<div class="related-posts thin">
-	<h2>See Also</h2>
-	<ul>
-	
-	<li><a href="/posts/convert-markdown-to-pdf-with-vscode/">VS CodeでMarkdownをPDFに自動で変換する</a></li>
-	
-	<li><a href="/posts/iterator-will-return-blank-with-loop-twice/">イテレータを複数回ループしたい</a></li>
-	
-	<li><a href="/posts/encode-error-with-open-function/">Pythonのopen関数はencoding引数を指定しよう</a></li>
-	
-	<li><a href="/posts/garbled-text-with-json-dumps/">json.dumpsでの文字化けを解消する</a></li>
-	
-	<li><a href="/posts/python-naming-conventions/">Pythonの命名規約</a></li>
-	
-	</ul>
-</div>
-
-			<hr class="post-end">
-			<footer class="post-info">
-				<p>
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/python">Python</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/markdown">Markdown</a></span>
-				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1290 Words</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-05-24 05:50 &#43;0000</p>
-			</footer>
-		</article>
-		<div class="post-nav thin">
-			<a class="next-post" href="https://idontwannawork.github.io/posts/recocrd-with-tascam-ixz/">
-				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>TASCAMのiXZを使ってiPhoneでレコーディングする</span>
-			</a>
-			<a class="prev-post" href="https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/">
-				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>VS CodeでMarkdownをPDFに自動で変換する</span>
-			</a>
-		</div>
-		<div id="comments" class="thin">
-<div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "come-as-you-are" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
 </script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 </div>
-	</main>
-
-	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
-		<p>&copy; 2019 <a href="https://idontwannawork.github.io/">Tetsuya Katsuragi</a> Allrights reserved.</p>
-		<p>
-			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://idontwannawork.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
-		</p>
-	</footer>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright notice |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
 
 
-
-	<script src="https://idontwannawork.github.io/js/main.min.35ccbf1cdceb91e4c64c06b5d009d6e2977fafe56beda7762febd4e67528d2ac.js" integrity="sha256-Ncy/HNzrkeTGTAa10AnW4pd/r+Vr7ad2L+vU5nUo0qw=" crossorigin="anonymous"></script>
-	
 <script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
@@ -301,8 +266,6 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
-
-
+<script>feather.replace()</script>
 </body>
-
 </html>

@@ -6,6 +6,7 @@
     <description>Recent content in Buefy on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
+    <copyright>© Copyright notice</copyright>
     <lastBuildDate>Mon, 02 Sep 2019 16:08:20 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/buefy/index.xml" rel="self" type="application/rss+xml" />
@@ -17,7 +18,12 @@
       <pubDate>Mon, 02 Sep 2019 16:08:20 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-function/</guid>
-      <description>はじめに 前回は、とりあえず見た目のコンポーネントを実装しました。今回はテキストを生成する機能を実装してデプロイまでしてしまいます。後述します</description>
+      <description>はじめに 前回は、とりあえず見た目のコンポーネントを実装しました。今回はテキストを生成する機能を実装してデプロイまでしてしまいます。後述しますがデプロイ先はGitHub Pagesです。便利ですよね。
+今回の成果物 こちらです。
+Vue.jsのオフィシャルを参考に 機能を実装するにあたっては何はともあれ、まずはVue.jsのガイドを読みます。とくにコンポーネントの部分はよく参照することになると思います。自分はここを見つつソースの編集をしてました。
+実際書いたソース 結構長いので折りたたみます。
+ JavaScriptのソース
+&amp;lt;template&amp;gt; &amp;lt;div&amp;gt; &amp;lt;b-button size=&amp;#34;is-medium&amp;#34; v-bind:icon-left=&amp;#34;buttonIcon&amp;#34; @click=&amp;#34;generateText(quoteTextname, outputNumber, genOptions)&amp;#34; &amp;gt;{{ buttonMsg }}&amp;lt;/b-button&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/template&amp;gt; &amp;lt;script&amp;gt; export default { name: &amp;#34;GenerateText&amp;#34;, props: { buttonMsg: { type: String, required: true }, buttonIcon: { type: String, required: true }, quoteTextname: { type: String, required: true }, outputNumber: { type: Number, required: true }, genOptions: { type: Array, required: false } }, methods: { generateText: function(quoteTextname, outputNumber, genOptions) { // コピーのコマンドに対応しているか確認する if (document.</description>
     </item>
     
     <item>
@@ -26,7 +32,33 @@
       <pubDate>Tue, 27 Aug 2019 13:50:30 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-ui/</guid>
-      <description>はじめに 前回は、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーシ</description>
+      <description>はじめに 前回は、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーションを開発するかを確認しました。
+今回はやっとこさ、コーディングします。もう内容は見切った！もう完璧だ！（死亡フラグ）
+取っ掛かりにUI部分のコーディングをします。何はともあれ、まずは見た目です。
+と、その前に 「そもそもどんなアプリケーション作るのよ？」ってところです。ここではダミーテキストを生成する機能を実装します。単純に、ちょっと今そういう機能が欲しいのです。
+ちなみに、Vue.jsに限らないと思いますが、この手のチュートリアルはToDoリストが鉄板だと思います。
+コンポーネントの構成 必要な項目 ダミーテキストジェネレータを実装するに当たって、ざっくりとどんなコンポーネント構成で実装するかを考えます。そこで、テキスト生成に必要なものはどんな機能か、ちょっと考えてみます。
+ ダミーテキストの生成元を選択 生成する文字数を指定 その他オプション  各文章において改行の要否を選択 英数字出力時の全角・半角を選択 クリップボードへ出力結果をコピー  条件はすべてお任せで一発生成  こんなところでしょうか。ダミーテキストは青空文庫から入手するものとします。あと英文のダミーテキストが必要なら、王道のアレですかねぇ。
+クリップボードへのコピーは正確にはテキストの内容に影響はしませんが、単純に機能として存在するとうれしいかな、と思って実装します。だって、文字列を生成するだけなのに、その都度ボタンを押して生成されたテキストをマウスなんかで選択してコピーして・・・ってしたくありませんし。それと同じ発想で、「このボタンを押せば、条件はすべてお任せでテキスト生成できるよ」という機能も実装したいなー。
+ちなみに、意味のないただランダムに文字を並べただけの文字列が必要なシチュエーションを想定できなかったため、一応「読める文章」を生成するつもりです。なので、基本的には指定された文字数分、青空文庫の文章を切り出す感じに実装しようかと思います。適当に切り出したら文章の途中で終わっちゃうかもしれないから、その辺のケアは必要かもしれません。まぁ追々考えます。
+コンポーネントの分割 必要があればコンポーネントを分割して疎結合にし、再利用が容易になるよう実装すべきでしょう。となると、分割できそうな、あるいは分割しても問題なさそうな部分はどのあたりかちょっと考えてみます。
+とは言ったものの、先述した機能は画面に表示されるオブジェクトとして1つのコンポーネントにまとめちゃってもいいかもしれません。もちろん、それぞれを別コンポーネントにしっかり分割する、という方法もあります。が、今回のような小規模なアプリケーションにおいては、あんまり細分化するのもイマイチだなぁと思っています。たった数行のHTMLやJavaScriptのためにいくつもコンポーネントを分割するのは、保守性の面から考えれば本末転倒です。
+というわけで、今回については1つのコンポーネントに全部乗せすることとします！（白目）あーでも、テキストの生成部分は別コンポーネントに分割するかもしれないなー・・・。
+重ねて強調しますが、規模によってコンポーネントを分割する方が絶対保守性高いから！じゃないと後で泣きを見るから！！_(:3」∠)_（経験則）
+というわけで、UIの検討を UIコンポーネントはBuefyを利用するつもりだったので、まずはオフィシャルのドキュメントを参考にどんなインターフェイスを実装するか検討します。
+ダミーテキストの生成元の選択 これはもうRadio一択でしょう。いくつかある選択肢のうち、1つだけ選ぶとなればRadioで決まりです。
+生成する文字数 デフォルトを100文字として、フォームに任意の数値を入力してもらう方法にしようかな・・・と思っていたらNumberinputという機能を発見。おお、これいいじゃん。ただ、デフォルトでは「＋」をクリックしたときに1しか増加しないので、「200文字出力したいから、スタートが100だとすると100回クリックすることに・・・？」ってなるからステップの調整は必須ですね。
+あるいはSliderでもいいかもしれません。この辺は実装してみてから使用感を比べて、どっちがいいか考えます。場合によっては両刀使いもいいかもしれません。
+その他オプション 各文章において改行の要否 これは単純にYes/NoなのでSwitchでいいと思います。
+英数字出力時の全角・半角を選択 これも全角または半角のいずれかなのでSwitchでいいと思います。
+必ず句点で終わる これも単純にYes/NoのいずれかなのでSwitchでいいと思います。
+この機能ですが、任意の文字数を入力させた場合、文章を最後まで生成できず途中で終わってしまう可能性があります。そこで、「句点まではテキストを生成する」条件を設定しておきます。この条件を指定すると、入力された文字数プラスαのテキストが生成されることになります。なお、英文の場合はピリオドです。実装はJavaScript側のハナシなので、今回はあくまでも見た目です。
+クリップボードへのコピー これはもうボタンかな。単純に「クリップボードへコピーする」みたいな文字列だけでもいいかもしれません。が、ボタンならより見やすく「これ押せば何かしら処理するだろう」感を演出するためにも、目立つオブジェクトはあった方がいいかと。
+そんなわけでコーディング 任意の名前で.vueファイルを作成します。作成したvueファイルについてコーディングするとVisual Studio Code（以下vscode）が下画像のように補完してくれます。すごい助かる（小並感）
+ちなみに下画像にもあるように、script部分の記述にはTypeScriptを利用できます（上から2番目にtypescriptの文字が確認できますね）。ただ、今回は純粋にJavaScriptを利用しています。これは単純にいろいろ手を出しすぎると自分の頭では収集が付かなくなるからで、TypeScriptが書ける人はわざわざJavaScriptを記述する必要はないと思います。
+実際のコード そこそこ長くなったので、折りたたみます。
+ HTMLソース
+&amp;lt;template&amp;gt; &amp;lt;div id=&amp;#34;generator&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;tile is-ancestor&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;tile is-parent is-6&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;tile is-child box container&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;has-text-centered&amp;#34;&amp;gt; &amp;lt;b-tooltip class=&amp;#34;title is-4&amp;#34; label=&amp;#34;生成するテキストの引用元を選択してください。&amp;#34; position=&amp;#34;is-bottom&amp;#34; dashed multilined&amp;gt;引用元&amp;lt;/b-tooltip&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p class=&amp;#34;blank1em&amp;#34;&amp;gt;&amp;lt;/p&amp;gt; &amp;lt;div class=&amp;#34;field&amp;#34;&amp;gt; &amp;lt;b-radio v-model=&amp;#34;textName&amp;#34; name=&amp;#34;name&amp;#34; native-value=&amp;#34;Lorem Ipsum&amp;#34;&amp;gt; Lorem Ipsum &amp;lt;/b-radio&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;field&amp;#34;&amp;gt; &amp;lt;b-radio v-model=&amp;#34;textName&amp;#34; name=&amp;#34;name&amp;#34; native-value=&amp;#34;Silver&amp;#34;&amp;gt; Silver &amp;lt;/b-radio&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;field&amp;#34;&amp;gt; &amp;lt;b-radio v-model=&amp;#34;textName&amp;#34; name=&amp;#34;name&amp;#34; native-value=&amp;#34;Jack&amp;#34;&amp;gt; Jack &amp;lt;/b-radio&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;field&amp;#34;&amp;gt; &amp;lt;b-radio v-model=&amp;#34;textName&amp;#34; name=&amp;#34;name&amp;#34; native-value=&amp;#34;Vane&amp;#34;&amp;gt; Vane &amp;lt;/b-radio&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p class=&amp;#34;radioValue&amp;#34;&amp;gt; &amp;lt;b&amp;gt;選択した元ネタ:&amp;lt;/b&amp;gt; {{ textName }} &amp;lt;/p&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;tile is-parent is-6&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;tile is-child box&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;has-text-centered&amp;#34;&amp;gt; &amp;lt;b-tooltip class=&amp;#34;title is-4&amp;#34; label=&amp;#34;生成したい文字数を入力、またはスライドバーで選択してください。&amp;#34; position=&amp;#34;is-bottom&amp;#34; dashed multilined&amp;gt;出力する文字数&amp;lt;/b-tooltip&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p class=&amp;#34;blank2em&amp;#34;&amp;gt;&amp;lt;/p&amp;gt; &amp;lt;b-field&amp;gt; &amp;lt;b-numberinput v-model=&amp;#34;textNumber&amp;#34; rounded controls-rounded&amp;gt; &amp;lt;/b-numberinput&amp;gt; &amp;lt;/b-field&amp;gt; &amp;lt;b-field&amp;gt; &amp;lt;b-slider v-model=&amp;#34;textNumber&amp;#34; max=&amp;#34;300&amp;#34;&amp;gt;&amp;lt;/b-slider&amp;gt; &amp;lt;/b-field&amp;gt; &amp;lt;p class=&amp;#34;numberValue&amp;#34;&amp;gt; &amp;lt;b&amp;gt;文字数:&amp;lt;/b&amp;gt; {{ textNumber }} &amp;lt;/p&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;tile is-ancestor&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;tile is-parent is-6&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;tile is-child box&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;has-text-centered&amp;#34;&amp;gt; &amp;lt;b-tooltip class=&amp;#34;title is-4&amp;#34; label=&amp;#34;出力する際の条件を設定してください。&amp;#34; position=&amp;#34;is-bottom&amp;#34; dashed multilined&amp;gt;出力オプション&amp;lt;/b-tooltip&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p class=&amp;#34;blank1em&amp;#34;&amp;gt;&amp;lt;/p&amp;gt; &amp;lt;div class=&amp;#34;field&amp;#34;&amp;gt; &amp;lt;b-checkbox v-model=&amp;#34;selecedOptions&amp;#34; native-value=&amp;#34;Silverhoge&amp;#34;&amp;gt; Silverhoge &amp;lt;/b-checkbox&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;field&amp;#34;&amp;gt; &amp;lt;b-checkbox v-model=&amp;#34;selecedOptions&amp;#34; native-value=&amp;#34;Flinthoge&amp;#34;&amp;gt; Flinthoge &amp;lt;/b-checkbox&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;field&amp;#34;&amp;gt; &amp;lt;b-checkbox v-model=&amp;#34;selecedOptions&amp;#34; native-value=&amp;#34;Vanehoge&amp;#34;&amp;gt; Vanehoge &amp;lt;/b-checkbox&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;field&amp;#34;&amp;gt; &amp;lt;b-checkbox v-model=&amp;#34;selecedOptions&amp;#34; native-value=&amp;#34;Billyhoge&amp;#34;&amp;gt; Billyhoge &amp;lt;/b-checkbox&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p class=&amp;#34;content&amp;#34;&amp;gt; &amp;lt;b&amp;gt;Selection:&amp;lt;/b&amp;gt; {{ selecedOptions }} &amp;lt;/p&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&amp;#34;tile is-parent is-6&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;tile is-child box&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;has-text-centered&amp;#34;&amp;gt; &amp;lt;b-tooltip class=&amp;#34;title is-4&amp;#34; label=&amp;#34;テキストを生成してクリップボードへコピーします。&amp;#34; position=&amp;#34;is-bottom&amp;#34; dashed multilined&amp;gt;テキスト生成&amp;lt;/b-tooltip&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p class=&amp;#34;blank5em&amp;#34;&amp;gt;&amp;lt;/p&amp;gt; &amp;lt;div class=&amp;#34;has-text-centered&amp;#34;&amp;gt; &amp;lt;b-button size=&amp;#34;is-medium&amp;#34; icon-left=&amp;#34;clipboard-text&amp;#34; @click=&amp;#34;alert&amp;#34;&amp;gt;テキスト生成する&amp;lt;/b-button&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;h1&amp;gt;{{ msg }}&amp;lt;/h1&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p class=&amp;#34;blank1em&amp;#34;&amp;gt;&amp;lt;/p&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/template&amp;gt;</description>
     </item>
     
     <item>
@@ -35,7 +67,13 @@
       <pubDate>Wed, 21 Aug 2019 13:05:14 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-component/</guid>
-      <description>はじめに 前回は環境構築で終わってしまいましたが、今回から本格的に開発を始めていきます。取っ掛かりとして、Vue CLIで作った環境の内容を確認</description>
+      <description>はじめに 前回は環境構築で終わってしまいましたが、今回から本格的に開発を始めていきます。取っ掛かりとして、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーションを開発するかを確認します。
+まずはプロジェクトを俯瞰する 何はともあれ、Vue CLIでcreateした直後の環境を俯瞰してみます。
+なにはともあれindex とりあえずファイルの名前で判断して、index.htmlあたりを見てみます。
+&amp;lt;!DOCTYPE html&amp;gt; &amp;lt;html lang=&amp;#34;en&amp;#34;&amp;gt; &amp;lt;head&amp;gt; &amp;lt;meta charset=&amp;#34;utf-8&amp;#34;&amp;gt; &amp;lt;meta http-equiv=&amp;#34;X-UA-Compatible&amp;#34; content=&amp;#34;IE=edge&amp;#34;&amp;gt; &amp;lt;meta name=&amp;#34;viewport&amp;#34; content=&amp;#34;width=device-width,initial-scale=1.0&amp;#34;&amp;gt; &amp;lt;link rel=&amp;#34;icon&amp;#34; href=&amp;#34;&amp;lt;%= BASE_URL %&amp;gt;favicon.ico&amp;#34;&amp;gt; &amp;lt;title&amp;gt;dtg&amp;lt;/title&amp;gt; &amp;lt;/head&amp;gt; &amp;lt;body&amp;gt; &amp;lt;noscript&amp;gt; &amp;lt;strong&amp;gt;We&amp;#39;re sorry but dtg doesn&amp;#39;t work properly without JavaScript enabled. Please enable it to continue.&amp;lt;/strong&amp;gt; &amp;lt;/noscript&amp;gt; &amp;lt;div id=&amp;#34;app&amp;#34;&amp;gt;&amp;lt;/div&amp;gt; &amp;lt;!-- built files will be auto injected --&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt; なんとなく&amp;lt;div id=&amp;quot;app&amp;quot;&amp;gt;あたりが気になりますが、内容としてはあっさりしたものです。というかこれ、どこでVue.jsとか読み込んでるの・・・？CSSとかも全然記述ないけど・・・？
+結論から言えば、現状の状態は「動作する実体」ではありません。ただの生成元でありテンプレートです。というわけで、実体を生成・参照するためにビルドを行う必要がありますので、下記のコマンドを実行します。
+npm run build しばらく待つとメッセージが表示されるはずです。
+DONE Build complete. The dist directory is ready to be deployed.</description>
     </item>
     
     <item>
@@ -44,7 +82,23 @@
       <pubDate>Mon, 19 Aug 2019 15:23:26 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs/</guid>
-      <description>はじめに フロントの勉強としてVue.jsをいじってますが、Vue.jsのCLIを使ってシンプルなサイトを構築する際の手順についてまとめます。</description>
+      <description>はじめに フロントの勉強としてVue.jsをいじってますが、Vue.jsのCLIを使ってシンプルなサイトを構築する際の手順についてまとめます。
+まずは構築するにあたって、開発環境の用意を行います。なお今回はNuxt.jsを利用しない（あるいは利用するまでもない）、ライトな用途を想定しています。SSRする必要がある、とかならNuxt.jsの導入を検討してみるべきかと思います。
+環境  Windows 10 vue/cli@3.10.0 npm 6.4.1  npmを利用する場合はNode.jsのインストールが必要です。
+インストール Vue.jsのインストール手順 Vue.jsのインストールには、npmを利用してローカルの環境に展開しておくか、Dockerで環境を準備するか、CDNを利用します。
+NPMによるインストール ローカル環境にインストールする場合は、オフィシャルページに則って下記のコマンドを実行します。
+npm install vue なお、オフィシャルでは大規模なアプリを構築する場合はNPMを利用しろ、とのことです。
+ Vue.js による大規模アプリケーションを構築するときには、NPM を利用したインストールを推奨しています。
+ Dockerによる環境構築 こちらをどうぞ。
+CDN NPMを利用したインストール以外にもunpkgやcdnjsを利用することでVue.jsを利用できます。
+&amp;lt;script src=&amp;#34;https://cdn.jsdelivr.net/npm/vue/dist/vue.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; なお、本番環境ではバージョンを指定することが推奨されています。
+&amp;lt;script src=&amp;#34;https://cdn.jsdelivr.net/npm/vue@2.6.0&amp;#34;&amp;gt;&amp;lt;/script&amp;gt;  本番環境では、新しいバージョンによる意図しない不具合を避けるため、特定のバージョン番号とビルド番号にリンクすることをお勧めします
+ Vue CLIの導入 Vue CLIはVue.jsを用いたサイトを生成する際に、環境のセットアップを肩代わりしてくれるコマンドラインのツールです。オフィシャルページを参考にして導入します。とは言っても難しいことではなく、下記のコマンドを実行するだけです。
+npm install -g @vue/cli インストールが終わったらバージョンを確認してみます。
+$ vue --version 3.10.0 プロジェクトを作成する vueコマンドを叩いてプロジェクトを作成します。なお、下記のコマンドを実行する際は、事前にプロジェクトを作成するフォルダに移動してください。ここではフォルダをdummytextgenとします。コマンドを実行すると対話形式で作成するプロジェクトの内容を設定します。
+cd dummytextgen vue create dtg  プリセットの選択
+キーボードの上下キーで選択しますが、デフォルトで問題ないと思います。なお、vue routerやvuexを利用することが確定しているなら、Manually select featureを選択して手動で導入できます。
+Vue CLI v3.10.0 ? Please pick a preset: (Use arrow keys) &amp;gt; default (babel, eslint) Manually select features パッケージマネージャの選択</description>
     </item>
     
   </channel>

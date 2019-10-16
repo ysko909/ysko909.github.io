@@ -6,6 +6,7 @@
     <description>Recent content in Windows on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
+    <copyright>© Copyright notice</copyright>
     <lastBuildDate>Mon, 22 Apr 2019 13:06:22 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/windows/index.xml" rel="self" type="application/rss+xml" />
@@ -17,7 +18,15 @@
       <pubDate>Mon, 22 Apr 2019 13:06:22 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/make-file-with-dot-on-windows/</guid>
-      <description>結論 ファイル名の冒頭および語尾の両方にドットを付与！ 小ネタです .gitignoreとか.bashrcのように、何かの設定ファイルは冒頭に「.</description>
+      <description>結論 ファイル名の冒頭および語尾の両方にドットを付与！
+小ネタです .gitignoreとか.bashrcのように、何かの設定ファイルは冒頭に「.（ドット）」が付いて拡張子なしであるような名前だったりします。
+ところが、Windowsのexplorer上でドット付のファイルを作成しようとしたらエラーになりました。
+たとえば.hogeという名前のファイルを作成しようとします。
+こんな名前のファイルを作成しようとすると・・・
+エラー！
+対策 そういう場合は、下記のようにファイル名の冒頭および語尾の両方にドットを付与してやるとファイルを作成できます。
+.hoge. すると・・・
+「はい」を押せばドット付ファイルのできあがりです。</description>
     </item>
     
   </channel>

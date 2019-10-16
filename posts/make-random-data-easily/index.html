@@ -1,83 +1,120 @@
 <!DOCTYPE html>
-<html lang="ja">
-
+<html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<meta name="theme-color" content="#494f5c">
-	<meta name="msapplication-TileColor" content="#494f5c">
-
-<meta itemprop="name" content="ダミーデータをお手軽に調達する">
-<meta itemprop="description" content="テストデータは欲しいけど「hoge」とかじゃ困るときに 文書作成やレイアウト検討など、さまざまなシチュエーションでダミーデータは必要です。ただ">
-
-
-<meta itemprop="datePublished" content="2019-09-07T10:31:55&#43;09:00" />
-<meta itemprop="dateModified" content="2019-09-07T10:31:55&#43;09:00" />
-<meta itemprop="wordCount" content="5051">
-
-
-
-<meta itemprop="keywords" content="office,excel,word,powerpoint,dummydata,faker," />
-<meta property="og:title" content="ダミーデータをお手軽に調達する" />
-<meta property="og:description" content="テストデータは欲しいけど「hoge」とかじゃ困るときに 文書作成やレイアウト検討など、さまざまなシチュエーションでダミーデータは必要です。ただ" />
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>ダミーデータをお手軽に調達する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="ダミーデータをお手軽に調達する" />
+<meta property="og:description" content="テストデータは欲しいけど「hoge」とかじゃ困るときに 文書作成やレイアウト検討など、さまざまなシチュエーションでダミーデータは必要です。ただ、あんまり「テストテストテスト・・・」のような単語の羅列だったり、同じ日付が繰り返し並んでいても、実際の動作がイメージしにくいです。かと言って、「hoge」「fuga」「piyo」「foo」「bar」「baz」ばっかりだと「そもそもどんなデータを想定してるんだかさっぱりだよ！」なんてこともあるかもしれません。
+そこで各種ダミーデータの作成方法をメモしておきます。なお、ここで言及する「ダミーデータ」とは以下のようなものを想定しています。
+ テキストであればLorem ipsumなど意味はないが読める（読めそうな）テキスト 小数あるいは整数であれば適当な値 時刻や日付であれば（任意の範囲で）適当な値  よって、Linuxなどでランダムなデータを生成するのに利用するurandomのような機能は対象外です。また、VBAによるランダムなデータの生成もここでは対象外とします。プログラムを組むなら何でもアリになっちゃうしね_(:3」∠)_
+fakerを使う fakerはPythonパッケージの1つです。このパッケージのすごいところは人名、住所、会社名などを日本語で生成できるところ。またその機能もすこぶる多彩です。前述のプロフィール情報のほか、下記のようなダミーデータを生成できます。
+ クレジットカード情報 ファイル情報 緯度経度情報 メールアドレス（フリーメールか否か、なんていう細かい指定も可能） URL、ドメイン、ホスト名 IPv4、v6のアドレス  もう、とりあえずプロフィール系のダミーデータはこれ使っておけばいいんじゃね？っていうくらいに多彩です。ホントすごい_(:3」∠)_
+強いて難点をあげるなら、ダミーテキストも生成できるのですが、日本語として意味のない文章になることくらい。「別に意味がなくてもいいよー」という場合は、このパッケージ1つあればもう完璧です。
+ちなみに紹介したこれはPythonのパッケージですが、PHPやRubyにもfakerという同名のライブラリが存在します。
+ダミーデータを生成するサービスを利用する ダミーデータを調達するには、web上で生成してくれるサイトを利用するのが手っ取り早いです。大抵は出力もCSVなどに対応しているので、わざわざwebページをコピペする必要もありません。なので、有名どころ（？）を紹介します。
+疑似個人情報データ生成サービス もうページの名前からして期待できるのが疑似個人情報データ生成サービスです。出力できるダミーデータは一般的なプロフィール情報です。名前などのパターンが多い上、住所は出力したい都道府県を選択できる、男女比率を選択できる、出力する年齢の範囲も指定できるとあってなかなか多機能です。血液型も生成できるのですが、日本人の血液型の割合に合わせて生成されるというのも、「それっぽさ」を醸し出す一因かもしれません。
+JSONの出力はできませんがXMLの出力が可能で、他にxls、CSVでの出力ができます。
+難点は、メールアドレスのドメインが完全にランダムなこと。gTLDにないような文字列なので、そこだけはケアが必要です。
+mockaroo 日本語データではありませんが、ダミーのプロフィール情報のほかにBitcoinのアドレスや中国っぽい名前まで生成する、めちゃくちゃ多彩な機能を持ったサービスがmockarooです。出力もCSV以外にJSON、xls形式など多彩。なお、1000件を超えるデータの出力についてはお金がかかるので注意。
+ただねぇ・・・日本語データが生成できないのは、唯一にして最大の弱点・・・。
+NameMaker 英語名やフランス語名など、それっぽい名前を生成できるのがName Makerです。NPC名とかに使えるかな？
+ダミーテキストを生成する 前述のfakerではカバーしきれなかったのがダミーテキスト。そんなわけでダミーテキストを調達する方法について紹介します。
+Lorem Ipsum 英字のダミーテキストでは大御所のLorem Ipsum。とりあえずこれを使っておけば「それっぽくなる」のが便利。UIの出来がいいと、Lorem Ipsumを書いておくだけでなんかオサレっぽさが醸し出されます。
+青空文庫 日本語のダミーテキストを調達するのについては、もうこれが一番なんじゃなかろうか、と。最終手段を最初に持ってきた感がありますが、青空文庫にある任意の本の一節を引用する方法があります。著作権はすでに切れているので利用については自由です。
+ネックはルビが振られていること。具体的には以下のように振られ方をしています。
+私《わたくし》はその人を常に先生と呼んでいた。 だからここでもただ先生と書くだけで本名は打ち明けない。 これは世間を憚《はば》かる遠慮というよりも、その方が私にとって自然だからである。 これを除外しないといけないのが手間です。ルビの削除についてはググると方法が出てたりするのですが、結論から言っちゃうと正規表現で条件に一致したところは消しちゃえ、です。
+青空文庫のルビを削除する Visual Studio Codeなどのエディターで置換元を指定する際、下記のような正規表現で指定します。置換先には何も指定しません。これでルビの削除ができます。なお、置換元の条件に正規表現が指定できないエディターでは利用できません。
+《[^》]&#43;》 なお、カッコの形が異なる場合は違った条件にする必要があります。たとえば「（～）」でルビが記述されていれば下記のように置換元を指定します。
+([^)]&#43;) 各種ダミーテキスト生成サイト ググると結構出てきます。手前味噌ですが、こちらでもダミーテキストを生成できます。
+Officeでは便利な関数があります Microsoft Officeでは、各アプリケーションにダミーデータを生成する関数などがもともと備わっています。
+Excel 以下はすべてExcel関数です。動作はOffice Professional 2016環境下にて確認しています。
+Randbetween()・・・ランダムな値を生成 最小値と最大値を指定すれば、勝手にランダムな値を生成してくれます。数値だけじゃなくて日付や時刻などもイケるのが素晴らしい。超絶便利。なお、値の指定は整数のみ有効です。
+たとえば、日付を生成したい場合は任意のセルにて下記のように記述します。
+=Randbetween(&#34;2019/01/01&#34;,&#34;2019/12/31&#34;) 時刻はちょっとややこしいです。下記のように記述します。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://idontwannawork.github.io/posts/make-random-data-easily/" /><meta property="article:published_time" content="2019-09-07T10:31:55&#43;09:00"/>
 <meta property="article:modified_time" content="2019-09-07T10:31:55&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="ダミーデータをお手軽に調達する"/>
-<meta name="twitter:description" content="テストデータは欲しいけど「hoge」とかじゃ困るときに 文書作成やレイアウト検討など、さまざまなシチュエーションでダミーデータは必要です。ただ"/>
+<meta name="twitter:description" content="テストデータは欲しいけど「hoge」とかじゃ困るときに 文書作成やレイアウト検討など、さまざまなシチュエーションでダミーデータは必要です。ただ、あんまり「テストテストテスト・・・」のような単語の羅列だったり、同じ日付が繰り返し並んでいても、実際の動作がイメージしにくいです。かと言って、「hoge」「fuga」「piyo」「foo」「bar」「baz」ばっかりだと「そもそもどんなデータを想定してるんだかさっぱりだよ！」なんてこともあるかもしれません。
+そこで各種ダミーデータの作成方法をメモしておきます。なお、ここで言及する「ダミーデータ」とは以下のようなものを想定しています。
+ テキストであればLorem ipsumなど意味はないが読める（読めそうな）テキスト 小数あるいは整数であれば適当な値 時刻や日付であれば（任意の範囲で）適当な値  よって、Linuxなどでランダムなデータを生成するのに利用するurandomのような機能は対象外です。また、VBAによるランダムなデータの生成もここでは対象外とします。プログラムを組むなら何でもアリになっちゃうしね_(:3」∠)_
+fakerを使う fakerはPythonパッケージの1つです。このパッケージのすごいところは人名、住所、会社名などを日本語で生成できるところ。またその機能もすこぶる多彩です。前述のプロフィール情報のほか、下記のようなダミーデータを生成できます。
+ クレジットカード情報 ファイル情報 緯度経度情報 メールアドレス（フリーメールか否か、なんていう細かい指定も可能） URL、ドメイン、ホスト名 IPv4、v6のアドレス  もう、とりあえずプロフィール系のダミーデータはこれ使っておけばいいんじゃね？っていうくらいに多彩です。ホントすごい_(:3」∠)_
+強いて難点をあげるなら、ダミーテキストも生成できるのですが、日本語として意味のない文章になることくらい。「別に意味がなくてもいいよー」という場合は、このパッケージ1つあればもう完璧です。
+ちなみに紹介したこれはPythonのパッケージですが、PHPやRubyにもfakerという同名のライブラリが存在します。
+ダミーデータを生成するサービスを利用する ダミーデータを調達するには、web上で生成してくれるサイトを利用するのが手っ取り早いです。大抵は出力もCSVなどに対応しているので、わざわざwebページをコピペする必要もありません。なので、有名どころ（？）を紹介します。
+疑似個人情報データ生成サービス もうページの名前からして期待できるのが疑似個人情報データ生成サービスです。出力できるダミーデータは一般的なプロフィール情報です。名前などのパターンが多い上、住所は出力したい都道府県を選択できる、男女比率を選択できる、出力する年齢の範囲も指定できるとあってなかなか多機能です。血液型も生成できるのですが、日本人の血液型の割合に合わせて生成されるというのも、「それっぽさ」を醸し出す一因かもしれません。
+JSONの出力はできませんがXMLの出力が可能で、他にxls、CSVでの出力ができます。
+難点は、メールアドレスのドメインが完全にランダムなこと。gTLDにないような文字列なので、そこだけはケアが必要です。
+mockaroo 日本語データではありませんが、ダミーのプロフィール情報のほかにBitcoinのアドレスや中国っぽい名前まで生成する、めちゃくちゃ多彩な機能を持ったサービスがmockarooです。出力もCSV以外にJSON、xls形式など多彩。なお、1000件を超えるデータの出力についてはお金がかかるので注意。
+ただねぇ・・・日本語データが生成できないのは、唯一にして最大の弱点・・・。
+NameMaker 英語名やフランス語名など、それっぽい名前を生成できるのがName Makerです。NPC名とかに使えるかな？
+ダミーテキストを生成する 前述のfakerではカバーしきれなかったのがダミーテキスト。そんなわけでダミーテキストを調達する方法について紹介します。
+Lorem Ipsum 英字のダミーテキストでは大御所のLorem Ipsum。とりあえずこれを使っておけば「それっぽくなる」のが便利。UIの出来がいいと、Lorem Ipsumを書いておくだけでなんかオサレっぽさが醸し出されます。
+青空文庫 日本語のダミーテキストを調達するのについては、もうこれが一番なんじゃなかろうか、と。最終手段を最初に持ってきた感がありますが、青空文庫にある任意の本の一節を引用する方法があります。著作権はすでに切れているので利用については自由です。
+ネックはルビが振られていること。具体的には以下のように振られ方をしています。
+私《わたくし》はその人を常に先生と呼んでいた。 だからここでもただ先生と書くだけで本名は打ち明けない。 これは世間を憚《はば》かる遠慮というよりも、その方が私にとって自然だからである。 これを除外しないといけないのが手間です。ルビの削除についてはググると方法が出てたりするのですが、結論から言っちゃうと正規表現で条件に一致したところは消しちゃえ、です。
+青空文庫のルビを削除する Visual Studio Codeなどのエディターで置換元を指定する際、下記のような正規表現で指定します。置換先には何も指定しません。これでルビの削除ができます。なお、置換元の条件に正規表現が指定できないエディターでは利用できません。
+《[^》]&#43;》 なお、カッコの形が異なる場合は違った条件にする必要があります。たとえば「（～）」でルビが記述されていれば下記のように置換元を指定します。
+([^)]&#43;) 各種ダミーテキスト生成サイト ググると結構出てきます。手前味噌ですが、こちらでもダミーテキストを生成できます。
+Officeでは便利な関数があります Microsoft Officeでは、各アプリケーションにダミーデータを生成する関数などがもともと備わっています。
+Excel 以下はすべてExcel関数です。動作はOffice Professional 2016環境下にて確認しています。
+Randbetween()・・・ランダムな値を生成 最小値と最大値を指定すれば、勝手にランダムな値を生成してくれます。数値だけじゃなくて日付や時刻などもイケるのが素晴らしい。超絶便利。なお、値の指定は整数のみ有効です。
+たとえば、日付を生成したい場合は任意のセルにて下記のように記述します。
+=Randbetween(&#34;2019/01/01&#34;,&#34;2019/12/31&#34;) 時刻はちょっとややこしいです。下記のように記述します。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
 
-	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-	<link rel="manifest" href="/site.webmanifest">
-	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
-	<link rel="shortcut icon" href="/favicon.ico">
-
-	<title>ダミーデータをお手軽に調達する</title>
-	<link rel="stylesheet" href="https://idontwannawork.github.io/css/style.min.9151acf769c9b64924e76b2f7d12f6b7e5b0ba72326658132047e1e8802deb6d.css" integrity="sha256-kVGs92nJtkkk52svfRL2t+WwunIyZlgTIEfh6IAt620=" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://idontwannawork.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://idontwannawork.github.io/js/main.js"></script>
 	<script data-ad-client="ca-pub-3892592238252869" async
-    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 </head>
-
-<body id="page">
-	
-	<header id="site-header" class="animated slideInUp faster">
-		<div class="hdr-wrapper section-inner">
-			<div class="hdr-left">
-				<div class="site-branding">
-					<a href="https://idontwannawork.github.io/">頑張らないために頑張る</a>
-				</div>
-				<nav class="site-nav hide-in-mobile">
-					
-				<a href="https://idontwannawork.github.io/about/">About</a>
-				<a href="https://idontwannawork.github.io/posts/">Posts</a>
-
-				</nav>
-			</div>
-			<div class="hdr-right hdr-icons">
-				<button id="toc-btn" class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://twitter.com/unknown_strings" target="_blank" rel="noopener me" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/idontwannawork" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://codepen.io/idontwannawork/" target="_blank" rel="noopener me" title="Codepen"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon><line x1="12" y1="22" x2="12" y2="15.5"></line><polyline points="22 8.5 12 15.5 2 8.5"></polyline><polyline points="2 15.5 12 8.5 22 15.5"></polyline><line x1="12" y1="2" x2="12" y2="8.5"></line></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
-			</div>
-		</div>
-	</header>
-	<div id="mobile-menu" class="animated fast">
-		<ul>
-			<li><a href="https://idontwannawork.github.io/about/">About</a></li>
-			<li><a href="https://idontwannawork.github.io/posts/">Posts</a></li>
-		</ul>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>tetsuya katsuragi&rsquo;s tech blog</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/idontwannawork" title="Github"><i data-feather="github"></i></a><a href="https://codepen.io/idontwannawork/" title="Codepen"><i data-feather="codepen"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
 	</div>
 
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/posts">All posts</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="/tags">Tags</a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
 
-	<main class="site-main section-inner animated fadeIn faster">
-		<article class="thin">
-			<header class="post-header">
-				<div class="post-meta"><span>Sep 7, 2019</span></div>
-				<h1>ダミーデータをお手軽に調達する</h1>
-			</header>
-			<div class="content">
-				
 
-<h2 id="テストデータは欲しいけど-hoge-とかじゃ困るときに">テストデータは欲しいけど「hoge」とかじゃ困るときに<a href="#テストデータは欲しいけど-hoge-とかじゃ困るときに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+		<div class="post-header">
+			<h1 class="title">ダミーデータをお手軽に調達する</h1>
+			<div class="meta">Posted at &mdash; Sep 7, 2019</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="テストデータは欲しいけど-hoge-とかじゃ困るときに">テストデータは欲しいけど「hoge」とかじゃ困るときに</h2>
 
 <p>文書作成やレイアウト検討など、さまざまなシチュエーションでダミーデータは必要です。ただ、あんまり「テストテストテスト・・・」のような単語の羅列だったり、同じ日付が繰り返し並んでいても、実際の動作がイメージしにくいです。かと言って、「hoge」「fuga」「piyo」「foo」「bar」「baz」ばっかりだと「そもそもどんなデータを想定してるんだかさっぱりだよ！」なんてこともあるかもしれません。</p>
 
@@ -91,7 +128,7 @@
 
 <p>よって、Linuxなどでランダムなデータを生成するのに利用する<code>urandom</code>のような機能は対象外です。また、VBAによるランダムなデータの生成もここでは対象外とします。プログラムを組むなら何でもアリになっちゃうしね_(:3」∠)_</p>
 
-<h2 id="fakerを使う">fakerを使う<a href="#fakerを使う" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="fakerを使う">fakerを使う</h2>
 
 <p><a href="https://github.com/joke2k/faker">faker</a>はPythonパッケージの1つです。このパッケージのすごいところは人名、住所、会社名などを<a href="https://faker.readthedocs.io/en/master/locales/ja_JP.html">日本語で生成できる</a>ところ。またその機能もすこぶる多彩です。前述のプロフィール情報のほか、下記のようなダミーデータを生成できます。</p>
 
@@ -110,11 +147,11 @@
 
 <p>ちなみに紹介したこれはPythonのパッケージですが、<a href="https://github.com/fzaninotto/Faker">PHP</a>や<a href="https://github.com/faker-ruby/faker">Ruby</a>にもfakerという同名のライブラリが存在します。</p>
 
-<h2 id="ダミーデータを生成するサービスを利用する">ダミーデータを生成するサービスを利用する<a href="#ダミーデータを生成するサービスを利用する" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="ダミーデータを生成するサービスを利用する">ダミーデータを生成するサービスを利用する</h2>
 
 <p>ダミーデータを調達するには、web上で生成してくれるサイトを利用するのが手っ取り早いです。大抵は出力もCSVなどに対応しているので、わざわざwebページをコピペする必要もありません。なので、有名どころ（？）を紹介します。</p>
 
-<h3 id="疑似個人情報データ生成サービス">疑似個人情報データ生成サービス<a href="#疑似個人情報データ生成サービス" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="疑似個人情報データ生成サービス">疑似個人情報データ生成サービス</h3>
 
 <p>もうページの名前からして期待できるのが<a href="https://hogehoge.tk/personal/">疑似個人情報データ生成サービス</a>です。出力できるダミーデータは一般的なプロフィール情報です。名前などのパターンが多い上、住所は出力したい都道府県を選択できる、男女比率を選択できる、出力する年齢の範囲も指定できるとあってなかなか多機能です。血液型も生成できるのですが、日本人の血液型の割合に合わせて生成されるというのも、「それっぽさ」を醸し出す一因かもしれません。</p>
 
@@ -122,60 +159,60 @@
 
 <p>難点は、メールアドレスのドメインが完全にランダムなこと。<a href="https://ja.wikipedia.org/wiki/%E3%82%B8%E3%82%A7%E3%83%8D%E3%83%AA%E3%83%83%E3%82%AF%E3%83%88%E3%83%83%E3%83%97%E3%83%AC%E3%83%99%E3%83%AB%E3%83%89%E3%83%A1%E3%82%A4%E3%83%B3">gTLD</a>にないような文字列なので、そこだけはケアが必要です。</p>
 
-<h3 id="mockaroo">mockaroo<a href="#mockaroo" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="mockaroo">mockaroo</h3>
 
 <p>日本語データではありませんが、ダミーのプロフィール情報のほかにBitcoinのアドレスや中国っぽい名前まで生成する、めちゃくちゃ多彩な機能を持ったサービスが<a href="https://www.mockaroo.com/">mockaroo</a>です。出力もCSV以外にJSON、xls形式など多彩。なお、1000件を超えるデータの出力についてはお金がかかるので注意。</p>
 
 <p>ただねぇ・・・<strong>日本語データが生成できない</strong>のは、唯一にして最大の弱点・・・。</p>
 
-<h3 id="namemaker">NameMaker<a href="#namemaker" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="namemaker">NameMaker</h3>
 
 <p>英語名やフランス語名など、それっぽい名前を生成できるのが<a href="http://www.elerl.com/elseeds/NameMaker/">Name Maker</a>です。NPC名とかに使えるかな？</p>
 
-<h2 id="ダミーテキストを生成する">ダミーテキストを生成する<a href="#ダミーテキストを生成する" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="ダミーテキストを生成する">ダミーテキストを生成する</h2>
 
 <p>前述のfakerではカバーしきれなかったのがダミーテキスト。そんなわけでダミーテキストを調達する方法について紹介します。</p>
 
-<h3 id="lorem-ipsum">Lorem Ipsum<a href="#lorem-ipsum" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="lorem-ipsum">Lorem Ipsum</h3>
 
 <p>英字のダミーテキストでは大御所の<a href="https://www.lipsum.com/">Lorem Ipsum</a>。とりあえずこれを使っておけば「それっぽくなる」のが便利。UIの出来がいいと、Lorem Ipsumを書いておくだけでなんかオサレっぽさが醸し出されます。</p>
 
-<h3 id="青空文庫">青空文庫<a href="#青空文庫" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="青空文庫">青空文庫</h3>
 
 <p>日本語のダミーテキストを調達するのについては、もうこれが一番なんじゃなかろうか、と。最終手段を最初に持ってきた感がありますが、青空文庫にある任意の本の一節を引用する方法があります。著作権はすでに切れているので利用については自由です。</p>
 
 <p>ネックは<strong>ルビ</strong>が振られていること。具体的には以下のように振られ方をしています。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">私《わたくし》はその人を常に先生と呼んでいた。
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">私《わたくし》はその人を常に先生と呼んでいた。
 だからここでもただ先生と書くだけで本名は打ち明けない。
 これは世間を憚《はば》かる遠慮というよりも、その方が私にとって自然だからである。</code></pre></div>
 <p>これを除外しないといけないのが手間です。ルビの削除についてはググると方法が出てたりするのですが、結論から言っちゃうと<strong>正規表現で条件に一致したところは消しちゃえ</strong>、です。</p>
 
-<h4 id="青空文庫のルビを削除する">青空文庫のルビを削除する<a href="#青空文庫のルビを削除する" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<h4 id="青空文庫のルビを削除する">青空文庫のルビを削除する</h4>
 
 <p>Visual Studio Codeなどのエディターで置換元を指定する際、下記のような正規表現で指定します。置換先には何も指定しません。これでルビの削除ができます。なお、置換元の条件に正規表現が指定できないエディターでは利用できません。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">《[^》]+》</code></pre></div>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">《[^》]+》</code></pre></div>
 <p>なお、カッコの形が異なる場合は違った条件にする必要があります。たとえば「（～）」でルビが記述されていれば下記のように置換元を指定します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">([^)]+)</code></pre></div>
-<h3 id="各種ダミーテキスト生成サイト">各種ダミーテキスト生成サイト<a href="#各種ダミーテキスト生成サイト" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">([^)]+)</code></pre></div>
+<h3 id="各種ダミーテキスト生成サイト">各種ダミーテキスト生成サイト</h3>
 
 <p>ググると結構出てきます。手前味噌ですが、<a href="https://idontwannawork.github.io/dummytextgenerator/">こちら</a>でもダミーテキストを生成できます。</p>
 
-<h2 id="officeでは便利な関数があります">Officeでは便利な関数があります<a href="#officeでは便利な関数があります" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="officeでは便利な関数があります">Officeでは便利な関数があります</h2>
 
 <p>Microsoft Officeでは、各アプリケーションにダミーデータを生成する関数などがもともと備わっています。</p>
 
-<h3 id="excel">Excel<a href="#excel" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="excel">Excel</h3>
 
 <p>以下はすべてExcel関数です。動作はOffice Professional 2016環境下にて確認しています。</p>
 
-<h4 id="randbetween-ランダムな値を生成">Randbetween()・・・ランダムな値を生成<a href="#randbetween-ランダムな値を生成" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<h4 id="randbetween-ランダムな値を生成">Randbetween()・・・ランダムな値を生成</h4>
 
 <p>最小値と最大値を指定すれば、勝手にランダムな値を生成してくれます。数値だけじゃなくて日付や時刻などもイケるのが素晴らしい。超絶便利。なお、値の指定は<strong>整数のみ</strong>有効です。</p>
 
 <p>たとえば、日付を生成したい場合は任意のセルにて下記のように記述します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">=Randbetween(&#34;2019/01/01&#34;,&#34;2019/12/31&#34;)</code></pre></div>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">=Randbetween(&#34;2019/01/01&#34;,&#34;2019/12/31&#34;)</code></pre></div>
 <p>時刻はちょっとややこしいです。下記のように記述します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">=RANDBETWEEN(TIME(0,0,0)*100000, TIME(10, 10, 10)*100000) / 100000</code></pre></div>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">=RANDBETWEEN(TIME(0,0,0)*100000, TIME(10, 10, 10)*100000) / 100000</code></pre></div>
 <p>なんでこうなるかなんですが、Excel上で時刻は<strong>小数で管理されているせい</strong>です。</p>
 
 <p>Excel関数である<code>time()</code>などは、ぱっと見だと時刻としてデータを返しているように見えます。ただし、実際は小数値を時刻にExcelが見た目だけ置き換えているだけなので、そのあたりを考慮しないといけません。さらに<code>randbetween()</code>は小数を扱えないため、実際のデータが小数である時刻とは相性がすこぶる悪いのです。よって、「<code>time()</code>の結果を一度整数にして生成した<code>randbetween()</code>の結果を小数に直す」という回りくどいことをしないといけないのでした。</p>
@@ -202,173 +239,87 @@
 
 <p>このように、<code>randbetween()</code>を記述している限り再計算されます。なので、ある程度好みの値が生成できたらコピーして「値の貼り付け」を行って値を確定させるか、計算方法の設定を「手動」にすることで、余計な再計算を防ぐことができます。</p>
 
-<h4 id="rand-ランダムな小数を生成">rand()・・・ランダムな小数を生成<a href="#rand-ランダムな小数を生成" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<h4 id="rand-ランダムな小数を生成">rand()・・・ランダムな小数を生成</h4>
 
 <p>お馴染みランダム関数。小数を単純に生成するならこれ。ただ、整数なら<code>randbetween()</code>があるので、わざわざこちらを利用して整数に直す必要はないし、小数も任意の数で割ればいいわけです。なので、実はわざわざこちらを利用するシチュエーションってそんなにないのかも。</p>
 
-<h3 id="word">word<a href="#word" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="word">word</h3>
 
 <p>Wordは文書作成ソフトらしく、文章を生成してくれます。こちらも動作はOffice Professional 2016環境下にて確認しています。</p>
 
-<h4 id="rand-ランダムな文章を生成">rand()・・・ランダムな文章を生成<a href="#rand-ランダムな文章を生成" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<h4 id="rand-ランダムな文章を生成">rand()・・・ランダムな文章を生成</h4>
 
 <p>適当な文章を勝手に生成します。段落や1段落中の文章数も指定が可能で至れり尽くせり。もちろんちゃんと日本語として読める文章なのでご安心です。</p>
 
 <p>とりあえず文章を生成したい場合は、下記を任意の箇所に記述してエンターを押します。するといきなり文章が現れます。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">=rand()</code></pre></div>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">=rand()</code></pre></div>
 <p>ちなみに引数を指定できます。形式は<code>rand(段落数, 1段落中の文章数)</code>です。</p>
 
-<h4 id="lorem-有名なダミーテキストを生成">lorem()・・・有名なダミーテキストを生成<a href="#lorem-有名なダミーテキストを生成" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<h4 id="lorem-有名なダミーテキストを生成">lorem()・・・有名なダミーテキストを生成</h4>
 
 <p>英字のダミーテキストを生成したい場合はこちらを使用します。そう、英字のダミーテキストって言ったら<a href="https://ja.wikipedia.org/wiki/Lorem_ipsum">アレ</a>ですよね。使い方は、相変わらず任意の場所で下記の入力を行ったあとに、エンターキーを押すだけです。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">=lorem()</code></pre></div>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">=lorem()</code></pre></div>
 <p>こっちも引数の指定が可能です。形式は<code>lorem(段落数, 1段落中の文章数)</code>です。</p>
 
-<h4 id="備考-rand-old-昔の機能なのでわざわざ使用するほどでもない">（備考）rand.old()・・・昔の機能なのでわざわざ使用するほどでもない<a href="#備考-rand-old-昔の機能なのでわざわざ使用するほどでもない" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<h4 id="備考-rand-old-昔の機能なのでわざわざ使用するほどでもない">（備考）rand.old()・・・昔の機能なのでわざわざ使用するほどでもない</h4>
 
 <p>Word 2003あたりから実装されていた機能です。<code>rand()</code>と異なるのは<strong>生成される文章が短い</strong>ことです。これを実行すると下記のような文章が生成されます。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。
 Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。
 Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。Word 2003 は、画期的な日本語入力・編集環境を実現した日本語ワープロです。</code></pre></div>
 <p>・・・まぁ、いわゆる「ダミーテキストっぽい」データが生成されますが、前述の<code>rand()</code>があるのでわざわざこちらを利用することはあまりないな、と思います。</p>
 
-<h3 id="powerpoint">PowerPoint<a href="#powerpoint" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="powerpoint">PowerPoint</h3>
 
 <p>同様にパワポでもテキストを生成する機能が、準備されています。<strong>一応ね</strong>！ただ、Excelほど多機能ではなく、Wordほど親切ではありませんが・・・。こちらも動作はOffice Professional 2016環境下にて確認しています。</p>
 
-<h4 id="rand-有名なパングラムを生成">rand()・・・有名なパングラムを生成<a href="#rand-有名なパングラムを生成" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<h4 id="rand-有名なパングラムを生成">rand()・・・有名なパングラムを生成</h4>
 
 <p>「The quick brown fox jumps over the lazy dog」という<a href="https://ja.wikipedia.org/wiki/The_quick_brown_fox_jumps_over_the_lazy_dog">有名なパングラム</a>を生成します。</p>
 
 <p>とりあえず文章を生成したい場合は、下記を任意のテキストフィールドに記述してエンターを押します。すると「The quick brown fox jumps over the lazy dog」という文章がいくつか生成されます。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">=rand()</code></pre></div>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">=rand()</code></pre></div>
 <p>ちなみに引数を指定できます。形式は<code>rand(段落数, 繰り返しの数)</code>です。</p>
 
-<h4 id="lorem-パワポでも使えます">lorem()・・・パワポでも使えます<a href="#lorem-パワポでも使えます" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<h4 id="lorem-パワポでも使えます">lorem()・・・パワポでも使えます</h4>
 
 <p>英字のダミーテキストを生成したい場合はこちらを使用します。使い方は、相変わらず任意の場所で下記の入力を行ったあとに、エンターキーを押すだけです。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">=lorem()</code></pre></div>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">=lorem()</code></pre></div>
 <p>こっちも引数の指定が可能です。形式は<code>lorem(段落数, 1段落中の文章数)</code>です。</p>
 
-<h3 id="そもそもofficeが持つ機能を使わなくても良くないか">そもそもOfficeが持つ機能を使わなくても良くないか<a href="#そもそもofficeが持つ機能を使わなくても良くないか" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="そもそもofficeが持つ機能を使わなくても良くないか">そもそもOfficeが持つ機能を使わなくても良くないか</h3>
 
 <p>というわけで、前述のテキストを含むダミーデータを生成できるサイトなどから、それ用のデータを取得すればより利便性がいいかもしれません。そこはケースバイケースで。</p>
 
-<h2 id="おわりに">おわりに<a href="#おわりに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="おわりに">おわりに</h2>
 
 <p>ダミーデータの調達方法についてまとめてみました。こういうデータってまとまった件数が必要なこともあるので、自動で気軽に調達できるならそれに越したことはありません。楽しよう！_(:3」∠)_</p>
 
-			</div>
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
 
-<div class="related-posts thin">
-	<h2>See Also</h2>
-	<ul>
-	
-	<li><a href="/posts/edit-excel-with-python-and-xlwings/">PythonとxlwingsでExcelファイルをいじる</a></li>
-	
-	</ul>
-</div>
-
-			<hr class="post-end">
-			<footer class="post-info">
-				<p>
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/office">office</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/excel">excel</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/word">word</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/powerpoint">powerpoint</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/dummydata">dummydata</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/faker">faker</a></span>
-				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>5051 Words</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-09-07 01:31 &#43;0000</p>
-			</footer>
-		</article>
-		<aside id="toc">
-			<div class="toc-title">Table of Contents</div>
-			<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#テストデータは欲しいけど-hoge-とかじゃ困るときに">テストデータは欲しいけど「hoge」とかじゃ困るときに</a></li>
-<li><a href="#fakerを使う">fakerを使う</a></li>
-<li><a href="#ダミーデータを生成するサービスを利用する">ダミーデータを生成するサービスを利用する</a>
-<ul>
-<li><a href="#疑似個人情報データ生成サービス">疑似個人情報データ生成サービス</a></li>
-<li><a href="#mockaroo">mockaroo</a></li>
-<li><a href="#namemaker">NameMaker</a></li>
-</ul></li>
-<li><a href="#ダミーテキストを生成する">ダミーテキストを生成する</a>
-<ul>
-<li><a href="#lorem-ipsum">Lorem Ipsum</a></li>
-<li><a href="#青空文庫">青空文庫</a>
-<ul>
-<li><a href="#青空文庫のルビを削除する">青空文庫のルビを削除する</a></li>
-</ul></li>
-<li><a href="#各種ダミーテキスト生成サイト">各種ダミーテキスト生成サイト</a></li>
-</ul></li>
-<li><a href="#officeでは便利な関数があります">Officeでは便利な関数があります</a>
-<ul>
-<li><a href="#excel">Excel</a>
-<ul>
-<li><a href="#randbetween-ランダムな値を生成">Randbetween()・・・ランダムな値を生成</a></li>
-<li><a href="#rand-ランダムな小数を生成">rand()・・・ランダムな小数を生成</a></li>
-</ul></li>
-<li><a href="#word">word</a>
-<ul>
-<li><a href="#rand-ランダムな文章を生成">rand()・・・ランダムな文章を生成</a></li>
-<li><a href="#lorem-有名なダミーテキストを生成">lorem()・・・有名なダミーテキストを生成</a></li>
-<li><a href="#備考-rand-old-昔の機能なのでわざわざ使用するほどでもない">（備考）rand.old()・・・昔の機能なのでわざわざ使用するほどでもない</a></li>
-</ul></li>
-<li><a href="#powerpoint">PowerPoint</a>
-<ul>
-<li><a href="#rand-有名なパングラムを生成">rand()・・・有名なパングラムを生成</a></li>
-<li><a href="#lorem-パワポでも使えます">lorem()・・・パワポでも使えます</a></li>
-</ul></li>
-<li><a href="#そもそもofficeが持つ機能を使わなくても良くないか">そもそもOfficeが持つ機能を使わなくても良くないか</a></li>
-</ul></li>
-<li><a href="#おわりに">おわりに</a></li>
-</ul></li>
-</ul>
-</nav>
-		</aside>
-		<div class="post-nav thin">
-			<a class="next-post" href="https://idontwannawork.github.io/posts/disk-review-cadans-der-getouwen-cadans-der-getouwen/">
-				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>アルバムレビュー Cadans der getouwen「Cadans der getouwen」</span>
-			</a>
-			<a class="prev-post" href="https://idontwannawork.github.io/posts/edit-excel-with-python-and-xlwings/">
-				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>PythonとxlwingsでExcelファイルをいじる</span>
-			</a>
-		</div>
-		<div id="comments" class="thin">
-<div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "come-as-you-are" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
 </script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 </div>
-	</main>
-
-	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
-		<p>&copy; 2019 <a href="https://idontwannawork.github.io/">Tetsuya Katsuragi</a> Allrights reserved.</p>
-		<p>
-			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://idontwannawork.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
-		</p>
-	</footer>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright notice |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
 
 
-
-	<script src="https://idontwannawork.github.io/js/main.min.35ccbf1cdceb91e4c64c06b5d009d6e2977fafe56beda7762febd4e67528d2ac.js" integrity="sha256-Ncy/HNzrkeTGTAa10AnW4pd/r+Vr7ad2L+vU5nUo0qw=" crossorigin="anonymous"></script>
-	
 <script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
@@ -379,8 +330,6 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
-
-
+<script>feather.replace()</script>
 </body>
-
 </html>
