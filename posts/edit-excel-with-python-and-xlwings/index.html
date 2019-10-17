@@ -4,7 +4,7 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>PythonとxlwingsでExcelファイルをいじる - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta property="og:title" content="PythonとxlwingsでExcelファイルをいじる" />
-<meta property="og:description" content="概要 xlwingsを利用して、PythonからExcelファイルをいじってみます。
+<meta property="og:description" content="概要 xlwingsを利用して、PythonからExcelファイルをいじってみます。下記の例はインタプリタですが、*.py形式のファイルでも同様に利用できます。
 環境  Python 3.6 xlwings 0.15.3 Windows 10  新規でワークブックを作成する 空のワークブックを作成します。
 &gt;&gt;&gt; import xlwings as xw &gt;&gt;&gt; xb = xw.Book() &gt;&gt;&gt; xb.name &#39;Book1&#39; 次の方法でも作成できます。上記の方法は明示的に「ワークブックを作成」しますが、こっちの方法はアプリケーション（Excel）を起動しつつ新規ワークブックをアプリケーションに作成させます。スタートメニューなどから単純にExcelを起動した場合、空っぽのファイルを開いた状態でExcelが起動しますが、あれの状態をプログラムで再現している感じ。
 &gt;&gt;&gt; import xlwings as xw &gt;&gt;&gt; app = xw.App() &gt;&gt;&gt; app.books[0].name &#39;Book1&#39; 既存のファイルを開く &gt;&gt;&gt; xw.Book(r&#39;C:\\app\\hoge.xlsx&#39;) または ```console &gt;&gt;&gt; app = xw.App() &gt;&gt;&gt; app.books.open(r&#39;C:\\app\\hoge.xlsx&#39;) ファイルを閉じる すでにオープンしたExcelファイルを閉じます。保存はせず、確認メッセージも出力されません。
@@ -16,7 +16,7 @@ Excelを閉じる Excelのプロセスそのものを閉じる場合は、kill�
 <meta property="og:url" content="https://idontwannawork.github.io/posts/edit-excel-with-python-and-xlwings/" /><meta property="article:published_time" content="2019-09-06T15:14:51&#43;09:00"/>
 <meta property="article:modified_time" content="2019-09-06T15:14:51&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="PythonとxlwingsでExcelファイルをいじる"/>
-<meta name="twitter:description" content="概要 xlwingsを利用して、PythonからExcelファイルをいじってみます。
+<meta name="twitter:description" content="概要 xlwingsを利用して、PythonからExcelファイルをいじってみます。下記の例はインタプリタですが、*.py形式のファイルでも同様に利用できます。
 環境  Python 3.6 xlwings 0.15.3 Windows 10  新規でワークブックを作成する 空のワークブックを作成します。
 &gt;&gt;&gt; import xlwings as xw &gt;&gt;&gt; xb = xw.Book() &gt;&gt;&gt; xb.name &#39;Book1&#39; 次の方法でも作成できます。上記の方法は明示的に「ワークブックを作成」しますが、こっちの方法はアプリケーション（Excel）を起動しつつ新規ワークブックをアプリケーションに作成させます。スタートメニューなどから単純にExcelを起動した場合、空っぽのファイルを開いた状態でExcelが起動しますが、あれの状態をプログラムで再現している感じ。
 &gt;&gt;&gt; import xlwings as xw &gt;&gt;&gt; app = xw.App() &gt;&gt;&gt; app.books[0].name &#39;Book1&#39; 既存のファイルを開く &gt;&gt;&gt; xw.Book(r&#39;C:\\app\\hoge.xlsx&#39;) または ```console &gt;&gt;&gt; app = xw.App() &gt;&gt;&gt; app.books.open(r&#39;C:\\app\\hoge.xlsx&#39;) ファイルを閉じる すでにオープンしたExcelファイルを閉じます。保存はせず、確認メッセージも出力されません。
@@ -32,7 +32,7 @@ Excelを閉じる Excelのプロセスそのものを閉じる場合は、kill�
 	<link rel="stylesheet" type="text/css" href="https://idontwannawork.github.io/css/dark.css"
 		 />
 	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://idontwannawork.github.io/js/main.js"></script>
-	<script data-ad-client="ca-pub-3892592238252869" async
+	<script data-ad-client="ca-pub-2615583270378842" async
 		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 </head>
 <body>
@@ -78,7 +78,7 @@ Excelを閉じる Excelのプロセスそのものを閉じる場合は、kill�
 
 <h2 id="概要">概要</h2>
 
-<p><a href="https://www.xlwings.org/">xlwings</a>を利用して、PythonからExcelファイルをいじってみます。</p>
+<p><a href="https://www.xlwings.org/">xlwings</a>を利用して、PythonからExcelファイルをいじってみます。下記の例はインタプリタですが、<code>*.py</code>形式のファイルでも同様に利用できます。</p>
 
 <h2 id="環境">環境</h2>
 
