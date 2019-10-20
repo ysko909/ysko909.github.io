@@ -6,6 +6,7 @@
     <description>Recent content in Css on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
+    <copyright>© Copyright notice</copyright>
     <lastBuildDate>Fri, 30 Aug 2019 10:10:16 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/css/index.xml" rel="self" type="application/rss+xml" />
@@ -17,7 +18,12 @@
       <pubDate>Fri, 30 Aug 2019 10:10:16 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/make-background-gradation-with-css/</guid>
-      <description>はじめに CSSでグラデーションを背景に、かつ固定する書き方についてです。 コード html,body { height: 100% } body:after { position: fixed; top: 0; left: 0; width: 100%; height: 100%; content: &amp;#34;&amp;#34;; z-index: -1; background: linear-gradient(to right bottom, #5dc4cb, #4ad8c6, #60e9b0, #92f78e, #d0ff66)fixed; }</description>
+      <description>はじめに CSSでグラデーションを背景に、かつ固定する書き方についてです。
+コード html,body { height: 100% } body:after { position: fixed; top: 0; left: 0; width: 100%; height: 100%; content: &amp;#34;&amp;#34;; z-index: -1; background: linear-gradient(to right bottom, #5dc4cb, #4ad8c6, #60e9b0, #92f78e, #d0ff66)fixed; } 詳細 とりあえず高さは画面いっぱいにしておきたいので、height: 100%を指定。次のbody:afterの部分はあまり必要ない部分なのだけど、bodyに直書きだとiOSで背景が固定されないので、疑似要素をfixedで画面全体に背景として配置してグラデーションを記述しています。
+なお、linear-gradientの数値を変更するにはジェネレーターを使用するのが手っ取り早いのでオススメ。
+動作サンプル codepen上で確認してみます。
+See the Pen webpage sample by idontwannawork (@idontwannawork) on CodePen. 
+おわりに 背景に限らずグラデーションは重宝するので、使い方を覚えておきたいものです。</description>
     </item>
     
   </channel>

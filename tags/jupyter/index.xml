@@ -6,6 +6,7 @@
     <description>Recent content in Jupyter on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
+    <copyright>© Copyright notice</copyright>
     <lastBuildDate>Fri, 02 Aug 2019 14:00:38 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/jupyter/index.xml" rel="self" type="application/rss+xml" />
@@ -17,7 +18,21 @@
       <pubDate>Fri, 02 Aug 2019 14:00:38 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/run-jupyter-notebook-with-vscode/</guid>
-      <description>はじめに Visual Studio Code（以下、vscode）ではDockerでPythonやVue.jsの開発環境を構築したり、あるいはMarkdownで書い</description>
+      <description>はじめに Visual Studio Code（以下、vscode）ではDockerでPythonやVue.jsの開発環境を構築したり、あるいはMarkdownで書いたドキュメントを配布用にPDF変換したりと、今までいろいろやってきました。今度はJupyter Notebookを動かします。いやー、vscodeってホントに多彩ですね。
+なお、今回においてはDockerを利用せず、単純にローカル環境でJupyterを使用します。
+Jupyter Notebookとは Jupyter Notebook (なお、読み方は「ジュパイター・ノートブック」、または「ジュピター・ノートブック」。自分は「ジュピター」って言ってますが、どっちが一般的なんですかね？) とは、ブラウザ上で実行するデータ分析作業のためのツールです。特徴的なのは、実行結果を記録しながらプログラミングができる点です。ここでブラウザから実行できます。
+プログラムそのものを記述しつつ、Markdownを利用して各種テキストや図表も同時に書き込んでいくことが可能です。つまり、プログラムのソースとその実行結果が、メモを含めて明確に紐づいた状態で確認できます。そのため、作業内容の振り返りに非常に便利ですし、複数人で作業を行う場合の共有にも有用です。また、Jupyterは*.ipynb形式のファイルで保存しますが、ソースコード部分を*.pyのPythonコードとして出力することも可能ですし、実行結果をPDFやHTML形式で出力できるため、Jupyterの実行環境がなくても内容を共有できます。
+そんなJupyterをvscodeで使っちゃえ、というのが今回の趣旨です。
+環境  Windows 10 Anaconda version 1.7.2 vscode 1.36  インストール Anacondaをインストールしている場合、基本的にはJupyterも一緒にインストールされているはずです。なお、Anacondaのインストールは、オフィシャルページからプラットフォームに合ったインストーラーをダウンロードして実行します。インストール後に下記のコマンドを実行すると、condaコマンドにてインストールされているリストが出力されます。表示されたリストの中にjupyterがあればインストール済みであることがわかります。
+conda list ちなみに、Anacondaを導入しないでJupyterを利用するにはpipを利用します。下記のコマンドを実行するだけです。
+pip install jupyter vscodeで実行する 拡張機能のインストール vscodeでJupyterを利用するには、Pythonの拡張機能をインストールする必要があります。
+拡張機能をインストールするには、vscodeの左側にあるメニュー中から拡張機能のアイコン（下画像の赤枠内）をクリックします。
+検索窓に「python」と入力します。検索結果のうち、「Python」を選択し、インストールします。なお、下画像ではすでにインストール済みのため、歯車のアイコンが表示されています。
+他にも導入すると便利な拡張機能はありますが、今回は割愛します。
+vscodeでノートブックを書いてみる まず任意のフォルダを作成します。今回はworkdirとしましたが、フォルダ名はなんでもいいです。次にvscodeで先ほど作成したフォルダを開きます。フォルダを開いたら、適当にファイルを作成します。ただし、この際に作成するファイルの拡張子は*.pyです。先ほどJupyterでは*.ipynb形式を用いると言いましたが、vscodeで実行する場合はPythonの拡張子でファイルを作成します。
+「だけど、それじゃあフツーのPythonコードを見分けがつかないじゃん！」と思ったあなたは正しい。つまりファイルの拡張子ではなく、ファイルの中身で見分けるわけです。
+ファイルを*.py形式で作成したら、下記のコードを入力してください。なお、「その2」部分はCSVファイルがないとコケちゃうので、適当なCSVファイルを作っておくかコードを削除してください。
+#%% ## その１ import numpy as np x = np.arange(10) print(x) #%% ## その２ import pandas as pd data = pd.read_csv(&amp;#34;C:\\app\\hoge.csv&amp;#34;, encoding=&amp;#34;cp932&amp;#34;) data.head() #%% ## その3 ### sin plot import matplotlib.</description>
     </item>
     
   </channel>

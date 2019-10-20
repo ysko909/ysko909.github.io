@@ -6,6 +6,7 @@
     <description>Recent content in Docker on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
+    <copyright>© Copyright notice</copyright>
     <lastBuildDate>Thu, 04 Jul 2019 13:58:10 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml" />
@@ -17,7 +18,12 @@
       <pubDate>Thu, 04 Jul 2019 13:58:10 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/build-environment-of-vuejs-with-docker/</guid>
-      <description>概要 フロントの勉強としてVue.jsの開発環境を整備するときに、せっかくなのでDockerを使って環境を構築してみました。 環境 macOS Mojave 10.14.5 Docker version 18.09.2 Visual</description>
+      <description>概要 フロントの勉強としてVue.jsの開発環境を整備するときに、せっかくなのでDockerを使って環境を構築してみました。
+環境  macOS Mojave 10.14.5 Docker version 18.09.2 Visual Studio Code version 1.35  手順 今回は勉強がてらdocker-composeを利用します。とは言っても「書くよ！」ってだけで複雑なことは全然やってないです。
+Dockerfileの作成 FROMnode:lts-alpineWORKDIR/appRUN apk update &amp;amp;&amp;amp; \  npm install -g npm @vue/cli ただし、現時点（2019年7月3日）でVisual Studio CodeのRemoteはAlpine Linuxに対応していないので、Remoteを利用したい場合は別のイメージを使った方がいいと思われます（1敗）。以前記事にしていたので「Vue.jsの環境もリモートで開発だぁ！」とか思ってたんですけど出鼻をくじかれました。
+なお、Alpine LinuxはVS Code Insidersではサポートされているため、そのうち正式対応するはずなので正座して待機しようと思います。
+Alpine Linuxに対応しました（2019年9月8日追記） vscodeのバージョン1.38にてAlpine Linux製コンテナへRemote接続できるようになりました！
+docker-compose.ymlの作成 version: &amp;#39;3&amp;#39;services: vue_app: build: . ports: - 1234:8080 volumes: - .:/app stdin_open: true tty: true command: /bin/sh コンテナーのビルド docker-compose build コンテナーの起動 docker-compose up -d docker psコマンドを叩くとコンテナーが起動しているはず。</description>
     </item>
     
     <item>
@@ -26,7 +32,15 @@
       <pubDate>Mon, 10 Jun 2019 00:52:30 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</guid>
-      <description>はじめに Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、ptvsdでは</description>
+      <description>はじめに Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、ptvsdではなく、vscodeの拡張機能であるRemoteを用いて接続します。
+環境構築 環境  macOS Mojave 10.14.5 Docker version 18.09.2 Visual Studio Code version 1.35  拡張機能 まずは何はなくとも下記の拡張機能をインストールします。
+ Remote - Containers  RemoteはまだvscodeのInsider版でしか動作しなかった・・・のですが、6月6日にStable版でも対応しました。
+接続手順 基本的な手順はここにあるものを参考にしています。
+ Dockerアイコンをクリックして、メニュー中の「Preferences」をクリック。「File Sharing」を選択して、共有したいディレクトリが設定されているか確認する。
+Dockerのメニュー中にPreferencesがあるはずなので、これをクリック。
+表示されたディレクトリのうち、共有したいディレクトリが設定されていることを確認しておきます。
+ 任意のコンテナーを準備します。今回はPython用のサンプルプロジェクトをmicrosoftが準備しているので、これをcloneしました。
+~/devp git clone https://github.com/microsoft/vscode-remote-try-python.git Cloning into &amp;#39;vscode-remote-try-python&amp;#39;... remote: Enumerating objects: 94, done. remote: Counting objects: 100% (94/94), done. remote: Compressing objects: 100% (70/70), done. remote: Total 94 (delta 47), reused 51 (delta 18), pack-reused 0 Unpacking objects: 100% (94/94), done.</description>
     </item>
     
   </channel>

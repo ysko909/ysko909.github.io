@@ -1,116 +1,124 @@
 <!DOCTYPE html>
-<html lang="ja">
-
+<html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<meta name="theme-color" content="#494f5c">
-	<meta name="msapplication-TileColor" content="#494f5c">
-
-<meta itemprop="name" content="Vue cliとBuefyでシンプルに始めるVue.js - テキスト生成の機能を実装してデプロイまで">
-<meta itemprop="description" content="はじめに 前回は、とりあえず見た目のコンポーネントを実装しました。今回はテキストを生成する機能を実装してデプロイまでしてしまいます。後述します">
-
-
-<meta itemprop="datePublished" content="2019-09-02T16:08:20&#43;09:00" />
-<meta itemprop="dateModified" content="2019-09-02T16:08:20&#43;09:00" />
-<meta itemprop="wordCount" content="6369">
-
-
-
-<meta itemprop="keywords" content="vuejs,buefy," />
-<meta property="og:title" content="Vue cliとBuefyでシンプルに始めるVue.js - テキスト生成の機能を実装してデプロイまで" />
-<meta property="og:description" content="はじめに 前回は、とりあえず見た目のコンポーネントを実装しました。今回はテキストを生成する機能を実装してデプロイまでしてしまいます。後述します" />
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Vue cliとBuefyでシンプルに始めるVue.js - テキスト生成の機能を実装してデプロイまで - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Vue cliとBuefyでシンプルに始めるVue.js - テキスト生成の機能を実装してデプロイまで" />
+<meta property="og:description" content="はじめに 前回は、とりあえず見た目のコンポーネントを実装しました。今回はテキストを生成する機能を実装してデプロイまでしてしまいます。後述しますがデプロイ先はGitHub Pagesです。便利ですよね。
+今回の成果物 こちらです。
+Vue.jsのオフィシャルを参考に 機能を実装するにあたっては何はともあれ、まずはVue.jsのガイドを読みます。とくにコンポーネントの部分はよく参照することになると思います。自分はここを見つつソースの編集をしてました。
+実際書いたソース 結構長いので折りたたみます。
+ JavaScriptのソース
+&lt;template&gt; &lt;div&gt; &lt;b-button size=&#34;is-medium&#34; v-bind:icon-left=&#34;buttonIcon&#34; @click=&#34;generateText(quoteTextname, outputNumber, genOptions)&#34; &gt;{{ buttonMsg }}&lt;/b-button&gt; &lt;/div&gt; &lt;/template&gt; &lt;script&gt; export default { name: &#34;GenerateText&#34;, props: { buttonMsg: { type: String, required: true }, buttonIcon: { type: String, required: true }, quoteTextname: { type: String, required: true }, outputNumber: { type: Number, required: true }, genOptions: { type: Array, required: false } }, methods: { generateText: function(quoteTextname, outputNumber, genOptions) { // コピーのコマンドに対応しているか確認する if (document." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-function/" /><meta property="article:published_time" content="2019-09-02T16:08:20&#43;09:00"/>
 <meta property="article:modified_time" content="2019-09-02T16:08:20&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Vue cliとBuefyでシンプルに始めるVue.js - テキスト生成の機能を実装してデプロイまで"/>
-<meta name="twitter:description" content="はじめに 前回は、とりあえず見た目のコンポーネントを実装しました。今回はテキストを生成する機能を実装してデプロイまでしてしまいます。後述します"/>
+<meta name="twitter:description" content="はじめに 前回は、とりあえず見た目のコンポーネントを実装しました。今回はテキストを生成する機能を実装してデプロイまでしてしまいます。後述しますがデプロイ先はGitHub Pagesです。便利ですよね。
+今回の成果物 こちらです。
+Vue.jsのオフィシャルを参考に 機能を実装するにあたっては何はともあれ、まずはVue.jsのガイドを読みます。とくにコンポーネントの部分はよく参照することになると思います。自分はここを見つつソースの編集をしてました。
+実際書いたソース 結構長いので折りたたみます。
+ JavaScriptのソース
+&lt;template&gt; &lt;div&gt; &lt;b-button size=&#34;is-medium&#34; v-bind:icon-left=&#34;buttonIcon&#34; @click=&#34;generateText(quoteTextname, outputNumber, genOptions)&#34; &gt;{{ buttonMsg }}&lt;/b-button&gt; &lt;/div&gt; &lt;/template&gt; &lt;script&gt; export default { name: &#34;GenerateText&#34;, props: { buttonMsg: { type: String, required: true }, buttonIcon: { type: String, required: true }, quoteTextname: { type: String, required: true }, outputNumber: { type: Number, required: true }, genOptions: { type: Array, required: false } }, methods: { generateText: function(quoteTextname, outputNumber, genOptions) { // コピーのコマンドに対応しているか確認する if (document."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
 
-	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-	<link rel="manifest" href="/site.webmanifest">
-	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
-	<link rel="shortcut icon" href="/favicon.ico">
+	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://idontwannawork.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://idontwannawork.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
-	<title>Vue cliとBuefyでシンプルに始めるVue.js - テキスト生成の機能を実装してデプロイまで</title>
-	<link rel="stylesheet" href="https://idontwannawork.github.io/css/style.min.9151acf769c9b64924e76b2f7d12f6b7e5b0ba72326658132047e1e8802deb6d.css" integrity="sha256-kVGs92nJtkkk52svfRL2t+WwunIyZlgTIEfh6IAt620=" crossorigin="anonymous">
-	<script data-ad-client="ca-pub-3892592238252869" async
-    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({
+			google_ad_client: "pub-2615583270378842",
+			enable_page_level_ads: true
+		});
+	</script>
 </head>
-
-<body id="page">
-	
-	<header id="site-header" class="animated slideInUp faster">
-		<div class="hdr-wrapper section-inner">
-			<div class="hdr-left">
-				<div class="site-branding">
-					<a href="https://idontwannawork.github.io/">頑張らないために頑張る</a>
-				</div>
-				<nav class="site-nav hide-in-mobile">
-					
-				<a href="https://idontwannawork.github.io/about/">About</a>
-				<a href="https://idontwannawork.github.io/posts/">Posts</a>
-				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
-
-				</nav>
-			</div>
-			<div class="hdr-right hdr-icons">
-				<button id="toc-btn" class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://twitter.com/unknown_strings" target="_blank" rel="noopener me" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/idontwannawork" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://codepen.io/idontwannawork/" target="_blank" rel="noopener me" title="Codepen"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon><line x1="12" y1="22" x2="12" y2="15.5"></line><polyline points="22 8.5 12 15.5 2 8.5"></polyline><polyline points="2 15.5 12 8.5 22 15.5"></polyline><line x1="12" y1="2" x2="12" y2="8.5"></line></svg></a><a href="/index.xml" target="_blank" rel="noopener me" title="R s s"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
-			</div>
-		</div>
-	</header>
-	<div id="mobile-menu" class="animated fast">
-		<ul>
-			<li><a href="https://idontwannawork.github.io/about/">About</a></li>
-			<li><a href="https://idontwannawork.github.io/posts/">Posts</a></li>
-			<li><a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a></li>
-		</ul>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>頑張りたくないので楽できるように頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/idontwannawork" title="Github"><i data-feather="github"></i></a><a href="https://codepen.io/idontwannawork/" title="Codepen"><i data-feather="codepen"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
 	</div>
 
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/posts">All posts</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="/tags">Tags</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
 
-	<main class="site-main section-inner animated fadeIn faster">
-		<article class="thin">
-			<header class="post-header">
-				<div class="post-meta"><span>Sep 2, 2019</span></div>
-				<h1>Vue cliとBuefyでシンプルに始めるVue.js - テキスト生成の機能を実装してデプロイまで</h1>
-			</header>
-			<div class="content">
-				
 
-<h2 id="はじめに">はじめに<a href="#はじめに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+		<div class="post-header">
+			<h1 class="title">Vue cliとBuefyでシンプルに始めるVue.js - テキスト生成の機能を実装してデプロイまで</h1>
+			<div class="meta">Posted at &mdash; Sep 2, 2019</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="はじめに">はじめに</h2>
 
 <p><a href="/posts/make-dummy-text-generator-site-with-vuejs-add-ui/">前回</a>は、とりあえず見た目のコンポーネントを実装しました。今回はテキストを生成する機能を実装してデプロイまでしてしまいます。後述しますがデプロイ先はGitHub Pagesです。便利ですよね。</p>
 
-<h2 id="今回の成果物">今回の成果物<a href="#今回の成果物" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="今回の成果物">今回の成果物</h2>
 
 <p><a href="https://idontwannawork.github.io/dummytextgenerator/">こちら</a>です。</p>
 
-<h2 id="vue-jsのオフィシャルを参考に">Vue.jsのオフィシャルを参考に<a href="#vue-jsのオフィシャルを参考に" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="vue-jsのオフィシャルを参考に">Vue.jsのオフィシャルを参考に</h2>
 
 <p>機能を実装するにあたっては何はともあれ、まずは<a href="https://jp.vuejs.org/v2/guide/">Vue.jsのガイド</a>を読みます。とくに<a href="https://jp.vuejs.org/v2/guide/components.html">コンポーネント</a>の部分はよく参照することになると思います。自分はここを見つつソースの編集をしてました。</p>
 
-<h2 id="実際書いたソース">実際書いたソース<a href="#実際書いたソース" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="実際書いたソース">実際書いたソース</h2>
 
 <p>結構長いので折りたたみます。</p>
 
 <p><details>
 <summary>JavaScriptのソース</summary></p>
-
-<pre><code>&lt;template&gt;
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;template&gt;
 &lt;div&gt;
     &lt;b-button
-    size=&quot;is-medium&quot;
-    v-bind:icon-left=&quot;buttonIcon&quot;
-    @click=&quot;generateText(quoteTextname, outputNumber, genOptions)&quot;
+    size=&#34;is-medium&#34;
+    v-bind:icon-left=&#34;buttonIcon&#34;
+    @click=&#34;generateText(quoteTextname, outputNumber, genOptions)&#34;
     &gt;{{ buttonMsg }}&lt;/b-button&gt;
 &lt;/div&gt;
 &lt;/template&gt;
 
 &lt;script&gt;
 export default {
-name: &quot;GenerateText&quot;,
+name: &#34;GenerateText&#34;,
 props: {
     buttonMsg: {
     type: String,
@@ -136,7 +144,7 @@ props: {
 methods: {
     generateText: function(quoteTextname, outputNumber, genOptions) {
     // コピーのコマンドに対応しているか確認する
-    if (document.queryCommandSupported(&quot;copy&quot;)) {
+    if (document.queryCommandSupported(&#34;copy&#34;)) {
         // テキスト生成する元ネタから指定された数の分だけ文字列を切り出す
         this.quoteTexts.forEach(quoteText =&gt; {
         if (quoteTextname === quoteText[0]) {
@@ -146,111 +154,109 @@ methods: {
 
         // 指定されたオプションに従って文字列を編集する
         if (genOptions.length &gt; 0) {
-            const breakChar = &quot;\n&quot;;
-            let periodChar = &quot;。&quot;;
-            if (quoteTextname === &quot;Lorem&quot;) {
-                periodChar = &quot;. &quot;;
+            const breakChar = &#34;\n&#34;;
+            let periodChar = &#34;。&#34;;
+            if (quoteTextname === &#34;Lorem&#34;) {
+                periodChar = &#34;. &#34;;
             }
 
-            if (genOptions.find(genOption =&gt; genOption === &quot;needBreak&quot;)){
+            if (genOptions.find(genOption =&gt; genOption === &#34;needBreak&#34;)){
                 // 改行を付与する
                 this.returnText = this.returnText.split(periodChar).join(periodChar + breakChar);
             }
 
-            if (genOptions.find(genOption =&gt; genOption === &quot;makeWide&quot;)){
+            if (genOptions.find(genOption =&gt; genOption === &#34;makeWide&#34;)){
                 // 全角に変換する
                 this.returnText = this.returnText.replace(/[A-Za-z0-9]/g, function(s) {
                     return String.fromCharCode(s.charCodeAt(0) + 65248);
                 });
             }
 
-            if (genOptions.find(genOption =&gt; genOption === &quot;endWithPeriod&quot;)){
+            if (genOptions.find(genOption =&gt; genOption === &#34;endWithPeriod&#34;)){
                 // 句点あるいはピリオドで終わるよう編集する
                 const lastPeriodIndex = this.returnText.lastIndexOf(periodChar) + 1;
                 this.returnText = this.returnText.slice(0, lastPeriodIndex);
             }
 
-            if (genOptions.find(genOption =&gt; genOption === &quot;addPtag&quot;)){
+            if (genOptions.find(genOption =&gt; genOption === &#34;addPtag&#34;)){
                 // 文章ごとにPタグを付与する
-                if (genOptions.find(genOption =&gt; genOption === &quot;needBreak&quot;)){
+                if (genOptions.find(genOption =&gt; genOption === &#34;needBreak&#34;)){
                     // 改行コード付与済みの場合は、Pタグを付与後再度改行コードを付与する
                     const splitedByBreak = this.returnText.split(breakChar);
-                    this.returnText = &quot;&quot;;
+                    this.returnText = &#34;&#34;;
                     splitedByBreak.forEach(word =&gt; {
-                        this.returnText = this.returnText + &quot;&lt;p&gt;&quot; + word + &quot;&lt;/p&gt;&quot; + breakChar;
+                        this.returnText = this.returnText + &#34;&lt;p&gt;&#34; + word + &#34;&lt;/p&gt;&#34; + breakChar;
                     });
                 } else {
                     const splitedByPeriod = this.returnText.split(periodChar);
-                    this.returnText = &quot;&quot;;
+                    this.returnText = &#34;&#34;;
                     splitedByPeriod.forEach(word =&gt; {
-                        this.returnText = this.returnText + &quot;&lt;p&gt;&quot; + word + periodChar + &quot;&lt;/p&gt;&quot;;
+                        this.returnText = this.returnText + &#34;&lt;p&gt;&#34; + word + periodChar + &#34;&lt;/p&gt;&#34;;
                     });
                 }
             }
         }
 
         // コピー実行の下準備として新規のテキストエリアを生成し配置する
-        const copyFrom = document.createElement(&quot;textarea&quot;);
+        const copyFrom = document.createElement(&#34;textarea&#34;);
         copyFrom.textContent = this.returnText;
-        const bodyElm = document.getElementsByTagName(&quot;body&quot;)[0];
+        const bodyElm = document.getElementsByTagName(&#34;body&#34;)[0];
         bodyElm.appendChild(copyFrom);
 
         // テキストをクリップボードにコピーしてテキストエリアは破棄する
         copyFrom.select();
-        const retVal = document.execCommand(&quot;copy&quot;);
+        const retVal = document.execCommand(&#34;copy&#34;);
         bodyElm.removeChild(copyFrom);
 
         // 正常に終わった旨を表示する
         this.$buefy.toast.open({
-            message: &quot;クリップボードにコピーしました！&quot;,
-            type: &quot;is-success&quot;
+            message: &#34;クリップボードにコピーしました！&#34;,
+            type: &#34;is-success&#34;
         });
 
-        this.$emit(&quot;child-event&quot;, this.returnText + retVal);
+        this.$emit(&#34;child-event&#34;, this.returnText + retVal);
     } else {
         // コピー機能にブラウザが未対応または無効ならエラーメッセージを出力
         this.$buefy.toast.open({
         duration: 5000,
-        message: &quot;コピーに失敗しました。&quot;,
-        type: &quot;is-danger&quot;
+        message: &#34;コピーに失敗しました。&#34;,
+        type: &#34;is-danger&#34;
         });
 
-        this.$emit(&quot;child-event&quot;, this.returnText);
+        this.$emit(&#34;child-event&#34;, this.returnText);
     }
     }
 },
 data: function() {
     return {
-    returnText: &quot;nothing!&quot;,
+    returnText: &#34;nothing!&#34;,
     quoteTexts: [
         [
-        &quot;Lorem&quot;,
-        &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Dui id ornare arcu odio ut sem nulla pharetra diam. Risus viverra adipiscing at in. Augue lacus viverra vitae congue eu consequat ac felis donec. Volutpat sed cras ornare arcu dui. Vitae nunc sed velit dignissim sodales ut eu sem integer. Faucibus in ornare quam viverra orci. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper dignissim. Nulla facilisi nullam vehicula ipsum a arcu cursus vitae congue. Placerat in egestas erat imperdiet. Dolor sit amet consectetur adipiscing elit duis. Adipiscing commodo elit at imperdiet dui. Ut tellus elementum sagittis vitae et leo duis ut. Tristique magna sit amet purus. Commodo odio aenean sed adipiscing diam donec.&quot;
+        &#34;Lorem&#34;,
+        &#34;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Dui id ornare arcu odio ut sem nulla pharetra diam. Risus viverra adipiscing at in. Augue lacus viverra vitae congue eu consequat ac felis donec. Volutpat sed cras ornare arcu dui. Vitae nunc sed velit dignissim sodales ut eu sem integer. Faucibus in ornare quam viverra orci. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper dignissim. Nulla facilisi nullam vehicula ipsum a arcu cursus vitae congue. Placerat in egestas erat imperdiet. Dolor sit amet consectetur adipiscing elit duis. Adipiscing commodo elit at imperdiet dui. Ut tellus elementum sagittis vitae et leo duis ut. Tristique magna sit amet purus. Commodo odio aenean sed adipiscing diam donec.&#34;
         ],
         [
-        &quot;Kokoro&quot;,
-        &quot;私はその人を常に先生と呼んでいた。だからここでもただ先生と書くだけで本名は打ち明けない。これは世間を憚かる遠慮というよりも、その方が私にとって自然だからである。私はその人の記憶を呼び起すごとに、すぐ「先生」といいたくなる。筆を執っても心持は同じ事である。よそよそしい頭文字などはとても使う気にならない。私が先生と知り合いになったのは鎌倉である。その時私はまだ若々しい書生であった。暑中休暇を利用して海水浴に行った友達からぜひ来いという端書を受け取ったので、私は多少の金を工面して、出掛ける事にした。私は金の工面に二、三日を費やした。ところが私が鎌倉に着いて三日と経たないうちに、私を呼び寄せた友達は、急に国元から帰れという電報を受け取った。電報には母が病気だからと断ってあったけれども友達はそれを信じなかった。友達はかねてから国元にいる親たちに勧まない結婚を強いられていた。彼は現代の習慣からいうと結婚するにはあまり年が若過ぎた。それに肝心の当人が気に入らなかった。それで夏休みに当然帰るべきところを、わざと避けて東京の近くで遊んでいたのである。彼は電報を私に見せてどうしようと相談をした。私にはどうしていいか分らなかった。けれども実際彼の母が病気であるとすれば彼は固より帰るべきはずであった。それで彼はとうとう帰る事になった。せっかく来た私は一人取り残された。学校の授業が始まるにはまだ大分日数があるので鎌倉におってもよし、帰ってもよいという境遇にいた私は、当分元の宿に留まる覚悟をした。友達は中国のある資産家の息子で金に不自由のない男であったけれども、学校が学校なのと年が年なので、生活の程度は私とそう変りもしなかった。したがって一人ぼっちになった私は別に恰好な宿を探す面倒ももたなかったのである。宿は鎌倉でも辺鄙な方角にあった。玉突きだのアイスクリームだのというハイカラなものには長い畷を一つ越さなければ手が届かなかった。車で行っても二十銭は取られた。けれども個人の別荘はそこここにいくつでも建てられていた。&quot;
+        &#34;Kokoro&#34;,
+        &#34;私はその人を常に先生と呼んでいた。だからここでもただ先生と書くだけで本名は打ち明けない。これは世間を憚かる遠慮というよりも、その方が私にとって自然だからである。私はその人の記憶を呼び起すごとに、すぐ「先生」といいたくなる。筆を執っても心持は同じ事である。よそよそしい頭文字などはとても使う気にならない。私が先生と知り合いになったのは鎌倉である。その時私はまだ若々しい書生であった。暑中休暇を利用して海水浴に行った友達からぜひ来いという端書を受け取ったので、私は多少の金を工面して、出掛ける事にした。私は金の工面に二、三日を費やした。ところが私が鎌倉に着いて三日と経たないうちに、私を呼び寄せた友達は、急に国元から帰れという電報を受け取った。電報には母が病気だからと断ってあったけれども友達はそれを信じなかった。友達はかねてから国元にいる親たちに勧まない結婚を強いられていた。彼は現代の習慣からいうと結婚するにはあまり年が若過ぎた。それに肝心の当人が気に入らなかった。それで夏休みに当然帰るべきところを、わざと避けて東京の近くで遊んでいたのである。彼は電報を私に見せてどうしようと相談をした。私にはどうしていいか分らなかった。けれども実際彼の母が病気であるとすれば彼は固より帰るべきはずであった。それで彼はとうとう帰る事になった。せっかく来た私は一人取り残された。学校の授業が始まるにはまだ大分日数があるので鎌倉におってもよし、帰ってもよいという境遇にいた私は、当分元の宿に留まる覚悟をした。友達は中国のある資産家の息子で金に不自由のない男であったけれども、学校が学校なのと年が年なので、生活の程度は私とそう変りもしなかった。したがって一人ぼっちになった私は別に恰好な宿を探す面倒ももたなかったのである。宿は鎌倉でも辺鄙な方角にあった。玉突きだのアイスクリームだのというハイカラなものには長い畷を一つ越さなければ手が届かなかった。車で行っても二十銭は取られた。けれども個人の別荘はそこここにいくつでも建てられていた。&#34;
         ],
         [
-        &quot;Galaxy&quot;,
-        &quot;「ではみなさんは、そういうふうに川だと言われたり、乳の流れたあとだと言われたりしていた、このぼんやりと白いものがほんとうは何かご承知ですか」先生は、黒板につるした大きな黒い星座の図の、上から下へ白くけぶった銀河帯のようなところを指しながら、みんなに問いをかけました。カムパネルラが手をあげました。それから四、五人手をあげました。ジョバンニも手をあげようとして、急いでそのままやめました。たしかにあれがみんな星だと、いつか雑誌で読んだのでしたが、このごろはジョバンニはまるで毎日教室でもねむく、本を読むひまも読む本もないので、なんだかどんなこともよくわからないという気持ちがするのでした。ところが先生は早くもそれを見つけたのでした。「ジョバンニさん。あなたはわかっているのでしょう」ジョバンニは勢いよく立ちあがりましたが、立ってみるともうはっきりとそれを答えることができないのでした。ザネリが前の席からふりかえって、ジョバンニを見てくすっとわらいました。ジョバンニはもうどぎまぎしてまっ赤になってしまいました。先生がまた言いました。「大きな望遠鏡で銀河をよっく調べると銀河はだいたい何でしょう」やっぱり星だとジョバンニは思いましたが、こんどもすぐに答えることができませんでした。先生はしばらく困ったようすでしたが、眼をカムパネルラの方へ向けて、「ではカムパネルラさん」と名指しました。するとあんなに元気に手をあげたカムパネルラが、やはりもじもじ立ち上がったままやはり答えができませんでした。先生は意外なようにしばらくじっとカムパネルラを見ていましたが、急いで、「では、よし」と言いながら、自分で星図を指しました。「このぼんやりと白い銀河を大きないい望遠鏡で見ますと、もうたくさんの小さな星に見えるのです。ジョバンニさんそうでしょう」ジョバンニはまっ赤になってうなずきました。けれどもいつかジョバンニの眼のなかには涙がいっぱいになりました。そうだ僕は知っていたのだ、もちろんカムパネルラも知っている、それはいつかカムパネルラのお父さんの博士のうちでカムパネルラといっしょに読んだ雑誌のなかにあったのだ。それどこでなくカムパネルラは、その雑誌を読むと、すぐお父さんの書斎から巨きな本をもってきて、ぎんがというところをひろげ、まっ黒な頁いっぱいに白に点々のある美しい写真を二人でいつまでも見たのでした。それをカムパネルラが忘れるはずもなかったのに、すぐに返事をしなかったのは、このごろぼくが、朝にも午後にも仕事がつらく、学校に出てももうみんなともはきはき遊ばず、カムパネルラともあんまり物を言わないようになったので、カムパネルラがそれを知ってきのどくがってわざと返事をしなかったのだ、そう考えるとたまらないほど、じぶんもカムパネルラもあわれなような気がするのでした。&quot;
+        &#34;Galaxy&#34;,
+        &#34;「ではみなさんは、そういうふうに川だと言われたり、乳の流れたあとだと言われたりしていた、このぼんやりと白いものがほんとうは何かご承知ですか」先生は、黒板につるした大きな黒い星座の図の、上から下へ白くけぶった銀河帯のようなところを指しながら、みんなに問いをかけました。カムパネルラが手をあげました。それから四、五人手をあげました。ジョバンニも手をあげようとして、急いでそのままやめました。たしかにあれがみんな星だと、いつか雑誌で読んだのでしたが、このごろはジョバンニはまるで毎日教室でもねむく、本を読むひまも読む本もないので、なんだかどんなこともよくわからないという気持ちがするのでした。ところが先生は早くもそれを見つけたのでした。「ジョバンニさん。あなたはわかっているのでしょう」ジョバンニは勢いよく立ちあがりましたが、立ってみるともうはっきりとそれを答えることができないのでした。ザネリが前の席からふりかえって、ジョバンニを見てくすっとわらいました。ジョバンニはもうどぎまぎしてまっ赤になってしまいました。先生がまた言いました。「大きな望遠鏡で銀河をよっく調べると銀河はだいたい何でしょう」やっぱり星だとジョバンニは思いましたが、こんどもすぐに答えることができませんでした。先生はしばらく困ったようすでしたが、眼をカムパネルラの方へ向けて、「ではカムパネルラさん」と名指しました。するとあんなに元気に手をあげたカムパネルラが、やはりもじもじ立ち上がったままやはり答えができませんでした。先生は意外なようにしばらくじっとカムパネルラを見ていましたが、急いで、「では、よし」と言いながら、自分で星図を指しました。「このぼんやりと白い銀河を大きないい望遠鏡で見ますと、もうたくさんの小さな星に見えるのです。ジョバンニさんそうでしょう」ジョバンニはまっ赤になってうなずきました。けれどもいつかジョバンニの眼のなかには涙がいっぱいになりました。そうだ僕は知っていたのだ、もちろんカムパネルラも知っている、それはいつかカムパネルラのお父さんの博士のうちでカムパネルラといっしょに読んだ雑誌のなかにあったのだ。それどこでなくカムパネルラは、その雑誌を読むと、すぐお父さんの書斎から巨きな本をもってきて、ぎんがというところをひろげ、まっ黒な頁いっぱいに白に点々のある美しい写真を二人でいつまでも見たのでした。それをカムパネルラが忘れるはずもなかったのに、すぐに返事をしなかったのは、このごろぼくが、朝にも午後にも仕事がつらく、学校に出てももうみんなともはきはき遊ばず、カムパネルラともあんまり物を言わないようになったので、カムパネルラがそれを知ってきのどくがってわざと返事をしなかったのだ、そう考えるとたまらないほど、じぶんもカムパネルラもあわれなような気がするのでした。&#34;
         ],
         [
-        &quot;Wikipedia&quot;,
-        &quot;超弦理論が登場する以前に最も小さなスケールを記述した理論は場の量子論である。そこでは粒子を点、すなわち点粒子として扱ってきた（局所場の理論に代わる、広がりを持った粒子の概念を導入したS行列理論や非局所場理論などもあった）。一方、超弦理論では粒子を弦の振動として表す。1960年代、イタリアの物理学者、ガブリエーレ・ヴェネツィアーノが核子の内部で働く強い力の性質をベータ関数で表し、その式の示す構造が「弦 (string)」によって記述されることに南部陽一郎、レオナルド・サスキンド、ホルガー・ベック・ニールセンらが気付いたことから始まる。弦には「閉じた弦」と「開いた弦」の2種類を考えることができ、開いた弦はスピン1のゲージ粒子（光子、ウィークボソン、グルーオンなどに相当）を含み、閉じた弦はスピン2の重力子を含む。開いた弦の相互作用を考えるとどうしても閉じた弦、すなわち重力子を含まざるを得ない。そのため、強い力のみを記述する理論と捉えることは難しいことが分かった。逆に言えば、弦を基本要素と考えることで、自然に重力を量子化したものが得られると考えられる。そのため、超弦理論は万物の理論となりうる可能性がある。超弦理論は素粒子の標準模型の様々な粒子を導出しうる大きな自由度を持ち、それを元に現在までに様々なモデルが提案されている。このように極めて小さい弦を宇宙の最小基本要素と考え、自然界の全ての力を数学的に表現しようというのが、いわゆる弦理論（超弦理論、M理論を含む）の目指すところである。&quot;
+        &#34;Wikipedia&#34;,
+        &#34;超弦理論が登場する以前に最も小さなスケールを記述した理論は場の量子論である。そこでは粒子を点、すなわち点粒子として扱ってきた（局所場の理論に代わる、広がりを持った粒子の概念を導入したS行列理論や非局所場理論などもあった）。一方、超弦理論では粒子を弦の振動として表す。1960年代、イタリアの物理学者、ガブリエーレ・ヴェネツィアーノが核子の内部で働く強い力の性質をベータ関数で表し、その式の示す構造が「弦 (string)」によって記述されることに南部陽一郎、レオナルド・サスキンド、ホルガー・ベック・ニールセンらが気付いたことから始まる。弦には「閉じた弦」と「開いた弦」の2種類を考えることができ、開いた弦はスピン1のゲージ粒子（光子、ウィークボソン、グルーオンなどに相当）を含み、閉じた弦はスピン2の重力子を含む。開いた弦の相互作用を考えるとどうしても閉じた弦、すなわち重力子を含まざるを得ない。そのため、強い力のみを記述する理論と捉えることは難しいことが分かった。逆に言えば、弦を基本要素と考えることで、自然に重力を量子化したものが得られると考えられる。そのため、超弦理論は万物の理論となりうる可能性がある。超弦理論は素粒子の標準模型の様々な粒子を導出しうる大きな自由度を持ち、それを元に現在までに様々なモデルが提案されている。このように極めて小さい弦を宇宙の最小基本要素と考え、自然界の全ての力を数学的に表現しようというのが、いわゆる弦理論（超弦理論、M理論を含む）の目指すところである。&#34;
         ]
     ]
     };
 }
 };
-&lt;/script&gt;
-</code></pre>
-
+&lt;/script&gt;</pre></div>
 <p></details></p>
 
-<h2 id="機能の概要">機能の概要<a href="#機能の概要" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="機能の概要">機能の概要</h2>
 
-<h3 id="templateの部分">templateの部分<a href="#templateの部分" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="templateの部分">templateの部分</h3>
 
 <p>ダミーテキストを生成するボタンを表示します。実際のページでは、トップ部分と下位の部分にそれぞれボタンを1つずつ配置しています。これ、見た目は違いますが中身は同一のコンポーネントを指しています。Vue.jsが言うところの<a href="https://jp.vuejs.org/v2/guide/components.html#%E3%82%B3%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%8D%E3%83%B3%E3%83%88%E3%81%AE%E5%86%8D%E5%88%A9%E7%94%A8">コンポーネントの再利用</a>をしていると言っていいのでは。</p>
 
@@ -262,11 +268,11 @@ data: function() {
 
 <p>ちなみに、アイコンを指定している部分は<code>v-bind</code>しているのですが、省略記法を利用していません。「<code>v-on</code>の省略記法<code>@</code>を使っているのになんで？」ってところなんですが、なんとなく「<code>:</code>だけってのがしっくりこない」ってだけの理由です_(:3」∠)_</p>
 
-<h3 id="scriptの部分">scriptの部分<a href="#scriptの部分" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="scriptの部分">scriptの部分</h3>
 
 <p>JavaScriptにまだそんなに慣れてないせいで、「こんな書き方しないよ！」っていう書き方をしている可能性が微レ存どころの騒ぎじゃないので、おかしかったらご指摘いただければ幸いです。</p>
 
-<h4 id="基本的にやっていること">基本的にやっていること<a href="#基本的にやっていること" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<h4 id="基本的にやっていること">基本的にやっていること</h4>
 
 <p>やっていることは至極単純で「ひたすら文字列操作」です。</p>
 
@@ -281,15 +287,15 @@ data: function() {
 
 <p>自分でやっておいて何なんですが、オプションを複数選択可能にしたため「改行しつつPタグ付与」という場合と「単純にPタグ付与」する場合で、ちょっと条件分岐して処理内容を変える必要があったのは面倒くさかったです。まぁ、こういうのってやってみないと分からないので、いい経験になりました。</p>
 
-<h4 id="生成したテキストの処理">生成したテキストの処理<a href="#生成したテキストの処理" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<h4 id="生成したテキストの処理">生成したテキストの処理</h4>
 
 <p>生成したテキストの処遇ですが、当初から考えていたように「クリップボードにコピーする」方法を採用しました。<code>execCommand</code>の<a href="https://developer.mozilla.org/ja/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard">MDN</a>を参考にしながら実装しました。なお、これのせいで<a href="https://developer.mozilla.org/ja/docs/Web/API/Document/execCommand#Browser_compatibility">古いInternet Explorerでは動作しません</a>。まぁ、そんなに困ることもないだろうと思ってそのままです。</p>
 
-<h4 id="テキスト生成後">テキスト生成後<a href="#テキスト生成後" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<h4 id="テキスト生成後">テキスト生成後</h4>
 
 <p>ボタンを押して何の反応もないと正常に動作したのかわかりませんし、何よりつまらないです。なので、Buefyのドキュメントを見て気になっていた<a href="https://buefy.org/documentation/toast">Toast</a>を実装してみました。要は「正常に処理できたよ！」あるいは「できなかったよ！」というレスポンスを出力できるようにしました。「できなかったよ！」とエラーが返るのは<code>queryCommandSupported('copy')</code>でコマンドの実行ができないと判断された場合です。</p>
 
-<h4 id="その他">その他<a href="#その他" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<h4 id="その他">その他</h4>
 
 <p>テキストの元ネタをべた書きしているので、ちょっと不格好ですがあまり気にしても仕方ないかなーと思ってそのままです。</p>
 
@@ -297,7 +303,7 @@ data: function() {
 
 <p>そのうち直そうと思います。ええ、そのうちに_(:3」∠)_</p>
 
-<h2 id="デプロイ先の選定">デプロイ先の選定<a href="#デプロイ先の選定" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="デプロイ先の選定">デプロイ先の選定</h2>
 
 <p>作成したアプリケーションをデプロイします。デプロイする先の候補としては下記のところがあげられると思います。</p>
 
@@ -310,159 +316,82 @@ data: function() {
 
 <p>他にもたくさんありますが、だいたいこのあたりだと思います。今回はGitHub Pagesにデプロイします。手順は<a href="https://cli.vuejs.org/guide/deployment.html#github-pages">ここ</a>を参考にしました。</p>
 
-<h2 id="デプロイ">デプロイ<a href="#デプロイ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="デプロイ">デプロイ</h2>
 
-<h3 id="vue-config-jsの準備">vue.config.jsの準備<a href="#vue-config-jsの準備" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="vue-config-jsの準備">vue.config.jsの準備</h3>
 
 <p>GitHub Pagesにデプロイする場合で、デプロイ先のURLが<code>https://&lt;ユーザー名&gt;.github.io/&lt;リポジトリ名&gt;/</code>である場合は<code>vue.config.js</code>というファイルが必要です。もともと存在するファイルではないので、新規で作成する必要があります。内容はこんな感じ。</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">publicPath</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">===</span> <span class="s1">&#39;production&#39;</span>
-      <span class="o">?</span> <span class="s1">&#39;/リポジトリ名/&#39;</span>
-      <span class="o">:</span> <span class="s1">&#39;/&#39;</span>
-  <span class="p">}</span>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">module.exports = {
+    publicPath: process.env.NODE_ENV === <span style="color:#a31515">&#39;production&#39;</span>
+      ? <span style="color:#a31515">&#39;/リポジトリ名/&#39;</span>
+      : <span style="color:#a31515">&#39;/&#39;</span>
+  }
 </code></pre></div>
 <p>なお、デプロイ先のURLが<code>https://&lt;ユーザー名&gt;.github.io/</code>のタイプはこの作業を行わなくてOKです。</p>
 
-<h3 id="ビルドする">ビルドする<a href="#ビルドする" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="ビルドする">ビルドする</h3>
 
 <p>コンソールにて下記のコマンドを実行します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm run build</code></pre></div>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">npm run build</code></pre></div>
 <p>しばらく待っていると<code>dist</code>フォルダ中にファイルが生成されます。なお、このファイルをローカルで開いても、真っ白なページが表示されるだけで何も動作しません。これは<code>npm run build</code>で生成されたファイル達が「デプロイされた先で動作する」仕様にチューニングされているからです。なので、ローカルでは動作しないのですね。</p>
 
-<h3 id="githubにプッシュする">GitHubにプッシュする<a href="#githubにプッシュする" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h3 id="githubにプッシュする">GitHubにプッシュする</h3>
 
 <p>先にGitHubにてリポジトリを作成しておきます。なお、ここで作成するリポジトリ名は、<code>vue.config.js</code>に記述したリポジトリ名と同一の名前でないといけません。</p>
 
 <p>ここでとあるシェルスクリプトを作成します。こんな感じ。作成するフォルダはプロジェクトフォルダ直下です。作成したらおもむろに実行します。</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/usr/bin/env sh
-</span><span class="cp"></span>
-<span class="nb">set</span> -e
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#00f">#!/usr/bin/env sh
+</span><span style="color:#00f"></span>
+set -e
 
 npm run build
 
-<span class="nb">cd</span> dist
+cd dist
 
 git init
 git add -A
-git commit -m <span class="s1">&#39;deploy&#39;</span>
+git commit -m <span style="color:#a31515">&#39;deploy&#39;</span>
 
 git push -f git@github.com:ユーザー名/リポジトリ名.git master:gh-pages
 
-<span class="nb">cd</span> -</code></pre></div>
+cd -</code></pre></div>
 <p>最後の<code>git push</code>でデプロイ先を<code>gh-pages</code>ブランチにしてるのがミソですね。というのは、リポジトリを作成して<code>gh-pages</code>ブランチにプッシュするだけで、あとは勝手にGitHubが<a href="https://help.github.com/ja/articles/configuring-a-publishing-source-for-github-pages">サイトのソース設定を自動的に有効</a>へ設定してくれます。なので、「プッシュしてからリポジトリのSettingを変更する」という手間が省けるわけです。あとはURLにアクセスすればもう動作します。簡単！</p>
 
 <p>なお、アップロードしてから実際のページに反映されるまでは即時反映とは行かず、微妙に時間がかかります。とは言っても数十秒、遅くても数分ですが。</p>
 
 <p>もちろん、<code>master</code>ブランチの<code>/docs</code>フォルダにファイルを配置して公開する、という方法もあります。こちらはリポジトリのSettingsでサイトのソース設定を変更する必要があるので注意。</p>
 
-<h2 id="おわりに">おわりに<a href="#おわりに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h2 id="おわりに">おわりに</h2>
 
 <p>これでVue.jsを利用した簡単なアプリケーションの実装ができました。今回は外部APIなどは利用しませんでしたが、<a href="https://jp.vuejs.org/v2/cookbook/using-axios-to-consume-apis.html">axios</a>を利用すればAPIからデータを取得し利用できます。次は外部APIの利用を含めて、もうちょっと機能や見た目について向上したアプリケーションを実装したいものです。</p>
 
 <p>頑張ります。_(:3」∠)_</p>
 
-			</div>
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
 
-<div class="related-posts thin">
-	<h2>See Also</h2>
-	<ul>
-	
-	<li><a href="/posts/make-dummy-text-generator-site-with-vuejs-add-ui/">Vue cliとBuefyでシンプルに始めるVue.js - UIのコンポーネントを作成する</a></li>
-	
-	<li><a href="/posts/make-dummy-text-generator-site-with-vuejs-edit-component/">Vue cliとBuefyでシンプルに始めるVue.js - コンポーネントの中身を見てみる</a></li>
-	
-	<li><a href="/posts/make-dummy-text-generator-site-with-vuejs/">Vue cliとBuefyでシンプルに始めるVue.js - まずは環境の用意</a></li>
-	
-	<li><a href="/posts/fix-vue-cli-service-command-not-found-error/">vue-cli-service: command not foundと言われたらnode_modulesを削除</a></li>
-	
-	</ul>
-</div>
-
-			<hr class="post-end">
-			<footer class="post-info">
-				<p>
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/vuejs">vuejs</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/buefy">buefy</a></span>
-				</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>6369 Words</p>
-				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-09-02 07:08 &#43;0000</p>
-			</footer>
-		</article>
-		<aside id="toc">
-			<div class="toc-title">Table of Contents</div>
-			<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#はじめに">はじめに</a></li>
-<li><a href="#今回の成果物">今回の成果物</a></li>
-<li><a href="#vue-jsのオフィシャルを参考に">Vue.jsのオフィシャルを参考に</a></li>
-<li><a href="#実際書いたソース">実際書いたソース</a></li>
-<li><a href="#機能の概要">機能の概要</a>
-<ul>
-<li><a href="#templateの部分">templateの部分</a></li>
-<li><a href="#scriptの部分">scriptの部分</a>
-<ul>
-<li><a href="#基本的にやっていること">基本的にやっていること</a></li>
-<li><a href="#生成したテキストの処理">生成したテキストの処理</a></li>
-<li><a href="#テキスト生成後">テキスト生成後</a></li>
-<li><a href="#その他">その他</a></li>
-</ul></li>
-</ul></li>
-<li><a href="#デプロイ先の選定">デプロイ先の選定</a></li>
-<li><a href="#デプロイ">デプロイ</a>
-<ul>
-<li><a href="#vue-config-jsの準備">vue.config.jsの準備</a></li>
-<li><a href="#ビルドする">ビルドする</a></li>
-<li><a href="#githubにプッシュする">GitHubにプッシュする</a></li>
-</ul></li>
-<li><a href="#おわりに">おわりに</a></li>
-</ul></li>
-</ul>
-</nav>
-		</aside>
-		<div class="post-nav thin">
-			<a class="next-post" href="https://idontwannawork.github.io/posts/can-not-live-together-markdownlint-and-details-tag/">
-				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>detailsタグを使うと正常なコードブロックでmarkdownlintがエラーを吐く</span>
-			</a>
-			<a class="prev-post" href="https://idontwannawork.github.io/posts/make-background-gradation-with-css/">
-				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>CSSで背景をグラデーションにする</span>
-			</a>
-		</div>
-		<div id="comments" class="thin">
-<div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "come-as-you-are" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
 </script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 </div>
-	</main>
-
-	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
-		<p>&copy; 2019 <a href="https://idontwannawork.github.io/"></a> Allrights reserved.</p>
-		<p>
-			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://idontwannawork.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
-		</p>
-	</footer>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright notice |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
 
 
-
-	<script src="https://idontwannawork.github.io/js/main.min.35ccbf1cdceb91e4c64c06b5d009d6e2977fafe56beda7762febd4e67528d2ac.js" integrity="sha256-Ncy/HNzrkeTGTAa10AnW4pd/r+Vr7ad2L+vU5nUo0qw=" crossorigin="anonymous"></script>
-	
 <script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
@@ -473,8 +402,6 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
-
-
+<script>feather.replace()</script>
 </body>
-
 </html>

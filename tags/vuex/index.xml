@@ -6,6 +6,7 @@
     <description>Recent content in Vuex on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
+    <copyright>© Copyright notice</copyright>
     <lastBuildDate>Mon, 07 Oct 2019 09:41:57 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/vuex/index.xml" rel="self" type="application/rss+xml" />
@@ -17,7 +18,13 @@
       <pubDate>Mon, 07 Oct 2019 09:41:57 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</guid>
-      <description>はじめに 以前の記事ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したの</description>
+      <description>はじめに 以前の記事ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したのですが、デフォルトだと「Vuex」や「Vue Router」はOFFです。Vue.jsでなくともReactなどのJavaScriptのライブラリやフレームワークを用いた環境でSPAを作成する場合、状態管理とルーティングは避けて通れない機能です。いや、別に利用しなくてもいいんですが、たぶん避けて通ったほうが後々面倒なこと（コンポーネント間でデータバケツリレーしたり、ページ遷移する必要が出てきたり・・・）になります。
+なので今回は「VuexとVue Routerを使用したSPAをざっくり作って、状態管理とルーティングに慣れておこうぜ」というのが趣旨です。基本的にはVuexのチュートリアルを参考にしています。
+また、基本的にはVue.jsのオフィシャルドキュメントを見つつ、通称「猫本」と呼ばれる「基礎から学ぶVue.js」の記述に沿っています。相変わらず完全に読み切ってないのですが、サンプルコードが参照できるサイトもあってとても親切です。
+環境  Windows 10 Visual Studio Code 1.38  $ vue --version 3.10.0 $ node --version v10.15.3 なにはともあれ まずはVue CLIで枠を作ります。
+vue create hogehoge ・・・いい名前が思いつかなかった_(:3」∠)_
+ここで注意が必要なのは、VuexとVue Routerを設定するのにはデフォルト設定だとダメということです。マニュアル設定します。
+? Please pick a preset: Manually select features ? Check the features needed for your project: (Press &amp;lt;space&amp;gt; to select, &amp;lt;a&amp;gt; to toggle all, &amp;lt;i&amp;gt; to invert selection) &amp;gt;(*) Babel ( ) TypeScript ( ) Progressive Web App (PWA) Support ( ) Router ( ) Vuex ( ) CSS Pre-processors (*) Linter / Formatter ( ) Unit Testing ( ) E2E Testing  このうち、RouterとVuexを選択しておきます。もし必要なら他の項目もついでに選択してエンターキーを押します。</description>
     </item>
     
   </channel>
