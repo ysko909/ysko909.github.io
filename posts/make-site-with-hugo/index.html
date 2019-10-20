@@ -1,124 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
+
 <head>
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Hugoで静的サイトを生成してみる - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta property="og:title" content="Hugoで静的サイトを生成してみる" />
-<meta property="og:description" content="Hugoとは Golangで作られている、静的サイトジェネレーター。なんでも、生成が速いらしいです。
-今回はコイツを使って、サイトを生成し公開してみようと思います。
-この記事が役立つであろう人 サイトを立ち上げたくて、ターミナルでの作業が苦でない人。また、自分でCSSなどをいじったりしてデザインするなら、記事を書くほうに労力を割きたい人。
-手順 基本的にはここを参考にしています。以下の手順はWindows 10にて行っているが、多分Macとかでも同様なはずです。
-なお、個人的な好みでWindowsのコマンドプロンプトではなくbusyboxで実行しているが、普通にコマンドプロンプトやPowerShellで実行しても問題ないと思います。
- Hugoのインストール
-HugoのGithubから、自分が利用するプラットフォーム用のインストーラーをダウンロードして展開します。この記事を書いている現在での最新は0.54.0。
-インストール後、Hugoのbin（実行ファイルが格納されているアドレス）を環境変数に追加します。GUIでもいいし、setxコマンドを実行しても問題ありません。インストールしたあとで、下記コマンドを実行してみます。
-$ hugo version Hugo Static Site Generator v0.54.0-B1A82C61 windows/amd64 BuildDate: 2019-02-01T09:42:02Z 上記のように返ってくれば完了です。
- サイトを生成
-以下のコマンドを実行してサイトを生成します。hogeの部分は任意で、自分が生成したいサイト名でOKです。実行したら生成されたフォルダーに移動します。
-hugo new site hoge cd hoge テーマを決定
-Hugoのテーマを集めたページを参照して、好みのテーマを探します。カスタマイズしたり、自力で作成することももちろん可能ですが今回は割愛いたします。今回はミニマムなデザインが気に入ったので、Hermitにしてみました。
-テーマを決めたら下記のコマンドを実行して、gitでGitHubから必要なファイルをダウンロードします。なお、導入手順はテーマのページにしっかり記述されていました。親切！
-git init git submodule add https://github.com/Track3/hermit.git themes/hermit ここまで実行すると、下記のようなフォルダーとファイルの構成ができ上がっているはずです。
-. ├── archetypes ├── config.toml ├── content ├── data ├── layouts ├── static └── themes この時点で下記のコマンドを実行すると、publicという名前でフォルダーが作成されて、その中に生成されたHTMLファイルなどが格納されるはずです。ただし、この時点ではコンテンツを作成していないため、トップページだけで中身はなにもありません。
-hugo 設定ファイルを変更
-ファイルconfig.tomlに設定を追記します。
-オフィシャルでは下記のコマンドを実行するだけでいい、としています。要はテーマの名前を追加しています。なぜかというと、生成直後の設定ファイルの中身では、何のテーマを利用するか記述がないためわからないから追記してやる必要があるわけです。
-echo &#39;theme = &#34;ananke&#34;&#39; &gt;&gt; config." />
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+
+<meta itemprop="name" content="Hugoで静的サイトを生成してみる">
+<meta itemprop="description" content="Hugoとは Golangで作られている、静的サイトジェネレーター。なんでも、生成が速いらしいです。 今回はコイツを使って、サイトを生成し公開し">
+
+
+<meta itemprop="datePublished" content="2019-04-05T10:15:49&#43;09:00" />
+<meta itemprop="dateModified" content="2019-04-05T10:15:49&#43;09:00" />
+<meta itemprop="wordCount" content="2776">
+
+
+
+<meta itemprop="keywords" content="Hugo," />
+<meta property="og:title" content="Hugoで静的サイトを生成してみる" />
+<meta property="og:description" content="Hugoとは Golangで作られている、静的サイトジェネレーター。なんでも、生成が速いらしいです。 今回はコイツを使って、サイトを生成し公開し" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://idontwannawork.github.io/posts/make-site-with-hugo/" /><meta property="article:published_time" content="2019-04-05T10:15:49&#43;09:00"/>
 <meta property="article:modified_time" content="2019-04-05T10:15:49&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Hugoで静的サイトを生成してみる"/>
-<meta name="twitter:description" content="Hugoとは Golangで作られている、静的サイトジェネレーター。なんでも、生成が速いらしいです。
-今回はコイツを使って、サイトを生成し公開してみようと思います。
-この記事が役立つであろう人 サイトを立ち上げたくて、ターミナルでの作業が苦でない人。また、自分でCSSなどをいじったりしてデザインするなら、記事を書くほうに労力を割きたい人。
-手順 基本的にはここを参考にしています。以下の手順はWindows 10にて行っているが、多分Macとかでも同様なはずです。
-なお、個人的な好みでWindowsのコマンドプロンプトではなくbusyboxで実行しているが、普通にコマンドプロンプトやPowerShellで実行しても問題ないと思います。
- Hugoのインストール
-HugoのGithubから、自分が利用するプラットフォーム用のインストーラーをダウンロードして展開します。この記事を書いている現在での最新は0.54.0。
-インストール後、Hugoのbin（実行ファイルが格納されているアドレス）を環境変数に追加します。GUIでもいいし、setxコマンドを実行しても問題ありません。インストールしたあとで、下記コマンドを実行してみます。
-$ hugo version Hugo Static Site Generator v0.54.0-B1A82C61 windows/amd64 BuildDate: 2019-02-01T09:42:02Z 上記のように返ってくれば完了です。
- サイトを生成
-以下のコマンドを実行してサイトを生成します。hogeの部分は任意で、自分が生成したいサイト名でOKです。実行したら生成されたフォルダーに移動します。
-hugo new site hoge cd hoge テーマを決定
-Hugoのテーマを集めたページを参照して、好みのテーマを探します。カスタマイズしたり、自力で作成することももちろん可能ですが今回は割愛いたします。今回はミニマムなデザインが気に入ったので、Hermitにしてみました。
-テーマを決めたら下記のコマンドを実行して、gitでGitHubから必要なファイルをダウンロードします。なお、導入手順はテーマのページにしっかり記述されていました。親切！
-git init git submodule add https://github.com/Track3/hermit.git themes/hermit ここまで実行すると、下記のようなフォルダーとファイルの構成ができ上がっているはずです。
-. ├── archetypes ├── config.toml ├── content ├── data ├── layouts ├── static └── themes この時点で下記のコマンドを実行すると、publicという名前でフォルダーが作成されて、その中に生成されたHTMLファイルなどが格納されるはずです。ただし、この時点ではコンテンツを作成していないため、トップページだけで中身はなにもありません。
-hugo 設定ファイルを変更
-ファイルconfig.tomlに設定を追記します。
-オフィシャルでは下記のコマンドを実行するだけでいい、としています。要はテーマの名前を追加しています。なぜかというと、生成直後の設定ファイルの中身では、何のテーマを利用するか記述がないためわからないから追記してやる必要があるわけです。
-echo &#39;theme = &#34;ananke&#34;&#39; &gt;&gt; config."/>
-<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
-		rel="stylesheet">
+<meta name="twitter:description" content="Hugoとは Golangで作られている、静的サイトジェネレーター。なんでも、生成が速いらしいです。 今回はコイツを使って、サイトを生成し公開し"/>
 
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/normalize.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="https://idontwannawork.github.io/css/dark.css"
-		 />
-	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://idontwannawork.github.io/js/main.js"></script>
-	<script data-ad-client="ca-pub-2615583270378842" async
-		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
 
-	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-	<script>
-		(adsbygoogle = window.adsbygoogle || []).push({
-			google_ad_client: "pub-2615583270378842",
-			enable_page_level_ads: true
-		});
-	</script>
+	<title>Hugoで静的サイトを生成してみる</title>
+	<link rel="stylesheet" href="https://idontwannawork.github.io/css/style.min.9151acf769c9b64924e76b2f7d12f6b7e5b0ba72326658132047e1e8802deb6d.css" integrity="sha256-kVGs92nJtkkk52svfRL2t+WwunIyZlgTIEfh6IAt620=" crossorigin="anonymous">
+	<script data-ad-client="ca-pub-3892592238252869" async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 </head>
-<body>
-	<div class="container wrapper post">
-		<div class="header">
-	<h1 class="site-title">頑張らないために頑張る</h1>
-	<div class="site-description"><h2>頑張りたくないので楽できるように頑張ります</h2><nav class="nav social">
-			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/idontwannawork" title="Github"><i data-feather="github"></i></a><a href="https://codepen.io/idontwannawork/" title="Codepen"><i data-feather="codepen"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
-		</nav>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://idontwannawork.github.io/">頑張らないために頑張る</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://idontwannawork.github.io/about/">About</a>
+				<a href="https://idontwannawork.github.io/posts/">Posts</a>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://twitter.com/unknown_strings" target="_blank" rel="noopener me" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/idontwannawork" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://codepen.io/idontwannawork/" target="_blank" rel="noopener me" title="Codepen"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon><line x1="12" y1="22" x2="12" y2="15.5"></line><polyline points="22 8.5 12 15.5 2 8.5"></polyline><polyline points="2 15.5 12 8.5 22 15.5"></polyline><line x1="12" y1="2" x2="12" y2="8.5"></line></svg></a><a href="/index.xml" target="_blank" rel="noopener me" title="R s s"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://idontwannawork.github.io/about/">About</a></li>
+			<li><a href="https://idontwannawork.github.io/posts/">Posts</a></li>
+			<li><a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a></li>
+		</ul>
 	</div>
 
-	<nav class="nav">
-		<ul class="flat">
-			
-			<li>
-				<a href="/">Home</a>
-			</li>
-			
-			<li>
-				<a href="/posts">All posts</a>
-			</li>
-			
-			<li>
-				<a href="/about">About</a>
-			</li>
-			
-			<li>
-				<a href="/tags">Tags</a>
-			</li>
-			
-		</ul>
-	</nav>
-</div>
 
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Apr 5, 2019</span></div>
+				<h1>Hugoで静的サイトを生成してみる</h1>
+			</header>
+			<div class="content">
+				
 
-		<div class="post-header">
-			<h1 class="title">Hugoで静的サイトを生成してみる</h1>
-			<div class="meta">Posted at &mdash; Apr 5, 2019</div>
-		</div>
-
-		<div class="markdown">
-			
-
-<h2 id="hugoとは">Hugoとは</h2>
+<h2 id="hugoとは">Hugoとは<a href="#hugoとは" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>Golangで作られている、静的サイトジェネレーター。なんでも、生成が速いらしいです。</p>
 
 <p>今回はコイツを使って、サイトを生成し公開してみようと思います。</p>
 
-<h2 id="この記事が役立つであろう人">この記事が役立つであろう人</h2>
+<h2 id="この記事が役立つであろう人">この記事が役立つであろう人<a href="#この記事が役立つであろう人" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>サイトを立ち上げたくて、ターミナルでの作業が苦でない人。また、自分でCSSなどをいじったりしてデザインするなら、記事を書くほうに労力を割きたい人。</p>
 
-<h2 id="手順">手順</h2>
+<h2 id="手順">手順<a href="#手順" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>基本的には<a href="https://gohugo.io/getting-started/quick-start/">ここ</a>を参考にしています。以下の手順はWindows 10にて行っているが、多分Macとかでも同様なはずです。</p>
 
@@ -130,15 +101,20 @@ echo &#39;theme = &#34;ananke&#34;&#39; &gt;&gt; config."/>
 <p>Hugoの<a href="https://github.com/gohugoio/hugo/releases">Github</a>から、自分が利用するプラットフォーム用のインストーラーをダウンロードして展開します。この記事を書いている現在での最新は0.54.0。</p>
 
 <p>インストール後、Hugoのbin（実行ファイルが格納されているアドレス）を環境変数に追加します。GUIでもいいし、<code>setx</code>コマンドを実行しても問題ありません。インストールしたあとで、下記コマンドを実行してみます。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ hugo version
-Hugo Static Site Generator v0.54.0-B1A82C61 windows/amd64 BuildDate: 2019-02-01T09:42:02Z</pre></div>
+
+<pre><code>$ hugo version
+Hugo Static Site Generator v0.54.0-B1A82C61 windows/amd64 BuildDate: 2019-02-01T09:42:02Z
+</code></pre>
+
 <p>上記のように返ってくれば完了です。</p></li>
 
 <li><p>サイトを生成</p>
 
 <p>以下のコマンドを実行してサイトを生成します。<code>hoge</code>の部分は任意で、自分が生成したいサイト名でOKです。実行したら生成されたフォルダーに移動します。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">hugo new site hoge
-cd hoge</pre></div></li>
+
+<pre><code>hugo new site hoge
+cd hoge
+</code></pre></li>
 
 <li><p>テーマを決定</p>
 
@@ -147,40 +123,60 @@ cd hoge</pre></div></li>
 <p><img src="/images/hermit.png" alt="Hermit" /></p>
 
 <p>テーマを決めたら下記のコマンドを実行して、gitでGitHubから必要なファイルをダウンロードします。なお、導入手順はテーマのページにしっかり記述されていました。親切！</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">git init
-git submodule add https://github.com/Track3/hermit.git themes/hermit</pre></div>
+
+<pre><code>git init
+git submodule add https://github.com/Track3/hermit.git themes/hermit
+</code></pre>
+
 <p>ここまで実行すると、下記のようなフォルダーとファイルの構成ができ上がっているはずです。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">.
+
+<pre><code>.
 ├── archetypes
 ├── config.toml
 ├── content
 ├── data
 ├── layouts
 ├── static
-└── themes</pre></div>
+└── themes
+</code></pre>
+
 <p>この時点で下記のコマンドを実行すると、<code>public</code>という名前でフォルダーが作成されて、その中に生成されたHTMLファイルなどが格納されるはずです。ただし、この時点ではコンテンツを作成していないため、トップページだけで中身はなにもありません。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">hugo</pre></div></li>
+
+<pre><code>hugo
+</code></pre></li>
 
 <li><p>設定ファイルを変更</p>
 
 <p>ファイル<code>config.toml</code>に設定を追記します。</p>
 
 <p>オフィシャルでは下記のコマンドを実行するだけでいい、としています。要はテーマの名前を追加しています。なぜかというと、生成直後の設定ファイルの中身では、何のテーマを利用するか記述がないためわからないから追記してやる必要があるわけです。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">echo &#39;theme = &#34;ananke&#34;&#39; &gt;&gt; config.toml</pre></div>
+
+<pre><code>echo 'theme = &quot;ananke&quot;' &gt;&gt; config.toml
+</code></pre>
+
 <p>ただ、一応これ以外にも後々修正や追記したりする部分があるので、この時点で編集してしまっても問題ありません。それと、他のテーマについては不明ですがHermitに関して言えば、<code>config.toml</code>は自分で記述するのではなくて、<a href="https://github.com/Track3/hermit/blob/master/exampleSite/config.toml">用意されたもの</a>を流用して中身を編集した方が便利です。というのは、テーマによってはこの設定ファイル中に特定の設定値がないと、<code>hugo</code>コマンドでのサイト生成の際エラーになる可能性があるから・・・実際、それで30分ほどムダにしました_(┐「ε:)_</p></li>
 
 <li><p>記事を作成</p>
 
 <p>下記のコマンドを実行すると<code>content</code>フォルダー配下にファイルを生成します。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">hugo new hoge.md</pre></div>
+
+<pre><code>hugo new hoge.md
+</code></pre>
+
 <p>この際、出力先のフォルダーを指定できます。下記のコマンドでは、<code>content</code>フォルダー配下に<code>posts</code>フォルダーが存在しなければ自動的に生成してから、ファイルを生成します。カテゴリだとかジャンル別にファイルを分別したい場合に有効な方法。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">hugo new posts/hoge.md</pre></div>
+
+<pre><code>hugo new posts/hoge.md
+</code></pre>
+
 <p>生成された直後のファイルの中身は下記のような感じ。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">---
-title: &#34;Hoge&#34;
+
+<pre><code>---
+title: &quot;Hoge&quot;
 date: 2019-04-04T18:21:09+09:00
 draft: true
----</pre></div>
+---
+</code></pre>
+
 <p>ここに記事をMarkdown形式で記述します。ちなみに、ファイル冒頭の<code>draft</code>はtrueだと下書き扱いになります。<code>hugo server</code>とかでファイル生成すると内容の確認はできるんだけど、<code>public</code>フォルダーには出力されません（下書きだから）。なので、サイト公開時には忘れずに<code>draft: false</code>としておく必要があります。じゃないと、地味に30分くらいハマることになるので_(┐「ε:)_</p>
 
 <p>なお、Windowsあるある・・・かどうかはよくわからないけど、UTF-8でファイルを保存しておかないとコマンド<code>hugo</code>の実行の際エラーになるので注意が必要です。</p></li>
@@ -188,7 +184,10 @@ draft: true
 <li><p>サーバーを起動して確認</p>
 
 <p>下記のコマンドを実行します。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">hugo server -D</pre></div>
+
+<pre><code>hugo server -D
+</code></pre>
+
 <p>その後ブラウザで<a href="http://localhost:1313/"><code>http://localhost:1313/</code></a>にアクセスします。</p>
 
 <p>なお、ブラウザで生成したサイトを表示させたまま<code>config.toml</code>や記事の内容をいじったりすると、そのまま反映されます。スゲェ。</p>
@@ -200,66 +199,101 @@ draft: true
 <p>ここからの作業は任意ですが、大抵のblogにはコンテンツ以外に「このページについて」みたいな固定ページが存在します。そういった、コンテンツ以外のページも必要に応じて追加します。</p>
 
 <p>追加する手順は基本的に記事を生成する際と何ら変わりません。注意するのは<code>content</code>フォルダー配下の構成と<code>config.toml</code>ファイルの設定内容。たとえば、<code>content</code>フォルダーの内容が下記の通りだったとします。<code>page</code>と<code>posts</code>はフォルダーです。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">.
+
+<pre><code>.
 ├── page
 │    └── hoge-page.md
 ├── posts
 │    ├── content1.md
 │    ├── content2.md
 │    └── content3.md
-└── about.md</pre></div>
+└── about.md
+</code></pre>
+
 <p>この場合、設定ファイルの<code>config.toml</code>の内容を下記の通り記述することで、ファイルと生成後の出力内容を紐づけることができます。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">## コンテンツ用設定
+
+<pre><code>## コンテンツ用設定
   [[menu.main]]
-    name = &#34;Posts&#34;
-    url = &#34;posts/&#34;
+    name = &quot;Posts&quot;
+    url = &quot;posts/&quot;
     weight = 10
 
 ## 固定ページ用設定。
   [[menu.main]]
-    name = &#34;pages&#34;
-    url = &#34;page/&#34;
+    name = &quot;pages&quot;
+    url = &quot;page/&quot;
     weight = 10
 
 ## 「このページについて」ページの設定。
   [[menu.main]]
-    name = &#34;About&#34;
-    url = &#34;about/&#34;
-    weight = 10</pre></div>
+    name = &quot;About&quot;
+    url = &quot;about/&quot;
+    weight = 10
+</code></pre>
+
 <p>なお、ここで<code>*.md</code>ファイルを単体で置いておくと1枚の単体ページとしてHTMLファイル生成されます。が、1つ以上の<code>*.md</code>ファイルをフォルダー配下に格納しておくと、各記事をHTMLファイルに変換するのと同時に、自動的にリストページを生成してくれます。便利。</p>
 
 <p>ただし、前述の下書き設定<code>draft</code>がtrueになっていたりすると、Markdownファイルがあっても下書き扱いとなるのでHTMLファイルが生成されません（ローカルでの内容確認はできるが、<code>public</code>フォルダーに出力されない）。そのため、メニューに項目があってもファイルが存在せず404になってしまうので、そこだけは注意が必要です。</p></li>
 </ol>
 
-<h2 id="というわけで">というわけで</h2>
+<h2 id="というわけで">というわけで<a href="#というわけで" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>当ページは<a href="https://gohugo.io/">Hugo</a>と<a href="https://github.com/Track3/hermit">Hermit</a>で作成されています_(┐「ε:)_</p>
 
-		</div><div id="disqus_thread"></div>
-<script type="text/javascript">
-	(function () {
-		
-		
-		if (window.location.hostname == "localhost")
-			return;
+			</div>
 
-		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-		var disqus_shortname = 'come-as-you-are';
-		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	})();
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/hugo">Hugo</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>2776 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-04-05 01:15 &#43;0000</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="next-post" href="https://idontwannawork.github.io/posts/aframe-particle/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>A-Frameでいろいろ降らせる</span>
+			</a>
+			<a class="prev-post" href="https://idontwannawork.github.io/posts/after-tutorial/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>チュートリアルを卒業したくらいが一番ツラい</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "come-as-you-are" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
-		Disqus.</a></noscript>
-<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 </div>
-	<div class="footer wrapper">
-	<nav class="nav">
-		<div> © Copyright notice |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
-	</nav>
-</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2019 <a href="https://idontwannawork.github.io/"></a> Allrights reserved.</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://idontwannawork.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
 
 
+
+	<script src="https://idontwannawork.github.io/js/main.min.35ccbf1cdceb91e4c64c06b5d009d6e2977fafe56beda7762febd4e67528d2ac.js" integrity="sha256-Ncy/HNzrkeTGTAa10AnW4pd/r+Vr7ad2L+vU5nUo0qw=" crossorigin="anonymous"></script>
+	
 <script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
@@ -270,6 +304,8 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
-<script>feather.replace()</script>
+
+
 </body>
+
 </html>

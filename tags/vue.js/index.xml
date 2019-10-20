@@ -6,7 +6,6 @@
     <description>Recent content in Vue.js on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <copyright>© Copyright notice</copyright>
     <lastBuildDate>Thu, 04 Jul 2019 13:58:10 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/vue.js/index.xml" rel="self" type="application/rss+xml" />
@@ -18,12 +17,7 @@
       <pubDate>Thu, 04 Jul 2019 13:58:10 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/build-environment-of-vuejs-with-docker/</guid>
-      <description>概要 フロントの勉強としてVue.jsの開発環境を整備するときに、せっかくなのでDockerを使って環境を構築してみました。
-環境  macOS Mojave 10.14.5 Docker version 18.09.2 Visual Studio Code version 1.35  手順 今回は勉強がてらdocker-composeを利用します。とは言っても「書くよ！」ってだけで複雑なことは全然やってないです。
-Dockerfileの作成 FROMnode:lts-alpineWORKDIR/appRUN apk update &amp;amp;&amp;amp; \  npm install -g npm @vue/cli ただし、現時点（2019年7月3日）でVisual Studio CodeのRemoteはAlpine Linuxに対応していないので、Remoteを利用したい場合は別のイメージを使った方がいいと思われます（1敗）。以前記事にしていたので「Vue.jsの環境もリモートで開発だぁ！」とか思ってたんですけど出鼻をくじかれました。
-なお、Alpine LinuxはVS Code Insidersではサポートされているため、そのうち正式対応するはずなので正座して待機しようと思います。
-Alpine Linuxに対応しました（2019年9月8日追記） vscodeのバージョン1.38にてAlpine Linux製コンテナへRemote接続できるようになりました！
-docker-compose.ymlの作成 version: &amp;#39;3&amp;#39;services: vue_app: build: . ports: - 1234:8080 volumes: - .:/app stdin_open: true tty: true command: /bin/sh コンテナーのビルド docker-compose build コンテナーの起動 docker-compose up -d docker psコマンドを叩くとコンテナーが起動しているはず。</description>
+      <description>概要 フロントの勉強としてVue.jsの開発環境を整備するときに、せっかくなのでDockerを使って環境を構築してみました。 環境 macOS Mojave 10.14.5 Docker version 18.09.2 Visual</description>
     </item>
     
   </channel>

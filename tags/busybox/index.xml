@@ -6,7 +6,6 @@
     <description>Recent content in Busybox on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <copyright>© Copyright notice</copyright>
     <lastBuildDate>Tue, 16 Apr 2019 09:38:26 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/busybox/index.xml" rel="self" type="application/rss+xml" />
@@ -18,22 +17,7 @@
       <pubDate>Tue, 16 Apr 2019 09:38:26 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/busybox-on-windows/</guid>
-      <description>結論 普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、BusyBoxを使えばいいよ！
-はじめに 仕事ではWindows、プライベートではMacまたはLinuxなんて人もいるかもしれません。そこな貴方、こんなシチュエーションがありませんでしょうか？
- ふと仕事中に「grep使いたいなー」とか「awk使いたいなー」とかなっても、Windowsのコマンドプロンプトじゃ足りないし、PowerShellはあの文法がいまいち性に合わない。ガッツリ使うわけじゃないから、わざわざ端末や仮想環境を用意するというわけにもいかない。
- とか、
- Windows使ってるのに普段のMacのノリでlsって入力しちゃって、Windowsに「そんなコマンドないよ」と言われた経験がある。
- そんな貴方（私）のため、BusyBoxが十徳ナイフのごとく活躍してくれます。
-この記事の対象者 以下に当てはまる方は、BusyBoxで幸せになれるかもしれません。
- Windowsを利用しているがUnixのコマンドを使いたい 管理者権限ではなくインストールができない Hyper-Vなどの仮想環境がない  （余談1）Win10だとLinux使えなかったっけ？ Windows 10だとWSL（Windows Subsystem for Linux）で、UbuntuなどのLinuxディストリビューションを利用できます・・・が、リリースモデルの1つ、Enterprise LTSC（Long Term Servicing Channel）だとWSLが利用できません。企業によっては、「安定性などを確保するために、OSに対する頻繁な変更は行いたくない」場合、このモデルが採用されている可能性があります。
-この場合も、やっぱりBusyBoxの出番です。
- ※以前は「Long Term Servicing Branch（LTSB）」という名前でリリースされていましたが、現在は「Long Term Servicing Channel（LTSC）」に名称変更されました。
- （余談2）Cygwinとかじゃダメなの？ ダメじゃないです、全然大丈夫です。ただ、「ちょっとsed使いたいなー」っていう場合には、機能てんこ盛りなCygwinだとオーバースペックだったりします。
-VMwareなどの仮想環境が利用できるなら、そっちの方がいろいろ便利です。ただ、マシンスペックがイマイチだったり記憶容量があまりない場合は却ってストレスになるでしょうし、やっぱりちょっとだけ使うという用途に対してオーバースペックと言わざるを得ません。
-インストール  サイトからバイナリをダウンロードして、任意のフォルダーにて展開する。 展開したフォルダーを環境変数に登録する（利用するだけなら必須ではないけど、登録しておくと後が楽）。  終わりです。ダウンロードして展開すればいい実行ファイルなので、インストール権限は必要ないです。しかもめちゃくちゃ軽量なので、記憶容量をガツガツ食っちゃうこともありません。
-なお、ソースもダウンロードが可能ですが、あまりニーズはないだろうと判断し、この記事の中では触れません。
-使い方 とりあえず実行してみる BusyBox64.exeと入力して実行してみます。
-C:\hoge&amp;gt;BusyBox64.exe BusyBox v1.31.0-FRP-2910-ge92596d0b (2019-01-10 14:16:45 GMT) multi-call binary (mingw64-gcc 8.2.0-3.fc29; mingw64-crt 5.0.4-2.fc29) BusyBox is copyrighted by many authors between 1998-2018.</description>
+      <description>結論 普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、BusyBoxを使えばいいよ</description>
     </item>
     
   </channel>

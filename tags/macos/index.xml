@@ -6,7 +6,6 @@
     <description>Recent content in Macos on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <copyright>© Copyright notice</copyright>
     <lastBuildDate>Sun, 09 Jun 2019 19:29:47 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/macos/index.xml" rel="self" type="application/rss+xml" />
@@ -18,12 +17,7 @@
       <pubDate>Sun, 09 Jun 2019 19:29:47 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/xcrun-error-after-macos-update/</guid>
-      <description>macOSあるある？ macOSのアップデート（High SierraからMojave）後にgitを実行するとxcrunが見つからないよ！というエラー内容が出現しました。
-経験上このエラーメッセージが出現するのってmacOSのアップデート直後なんですよね・・・。そんなわけで毎度調べるのもアレなのでメモしておきます。
-エラー内容 macOSをアップデートした際に、gitを実行しようとすると下記のようなエラーになることがあります。
-~ ❯❯❯ git xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun 他のコマンドでも同じようなエラーメッセージが出現するのかな？
-解消法 下記のコマンドを発行します。
-xcode-select --install  「インストールしますか？」という旨のメッセージが表示されたらOKします。インストールは十数秒で終わると思います。インストールが終わればgitは使えるようになります。</description>
+      <description>macOSあるある？ macOSのアップデート（High SierraからMojave）後にgitを実行するとxcrunが見つからないよ！という</description>
     </item>
     
   </channel>

@@ -6,7 +6,6 @@
     <description>Recent content in Java on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <copyright>© Copyright notice</copyright>
     <lastBuildDate>Sun, 30 Jun 2019 16:40:00 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/java/index.xml" rel="self" type="application/rss+xml" />
@@ -18,18 +17,7 @@
       <pubDate>Sun, 30 Jun 2019 16:40:00 +0900</pubDate>
       
       <guid>https://idontwannawork.github.io/posts/why-are-there-few-articles-of-java/</guid>
-      <description>はじめに とある事情でJavaとJavaEE（今はJakartaEEか）を使用しないといけなくなってしまって、それはそれはさんざんな目にあった（あっている）。
-そんな中で気づいたのだが、Javaって記事少なくない？ということ。
-どういうこと？ JavaはブログのエントリーでもQiitaの記事でも、とにかく知名度の割りに数が少ない。検索してもエラい昔のエントリーがしれっと上位に表示される始末で、ホントに苦労した（している）。とくにJavaEEに関して言うと、例のEclipseへ移管されるニュースの方が検索上位に来てしまい、知りたい情報が埋没する。JSFについて調べたいなーと思ったら2013年の記事が検索上位にしれっと紛れ込んできた。
-仕事の多いプログラミング言語の1位はJavaだそうだ。これはここ最近いきなり増加したわけじゃなく、何年も昔から同じ傾向だった。むしろ、Androidの開発はKotlinが普及する前はJavaで行われていたのだから、当然の結果と言える。それでもこの結果。
-どういうことだ。Javaに関する記事書いたら、黒服の男たちに記事ごと投稿者も消されるジンクスでもあるのか。東方算法騎士団もびっくりだぞ。
-記事数を調べる Qiita Qiitaでタグ検索すると、それぞれ下記のような結果になった。なお調べたのは2019年6月13日なので、下記の記事数はその時点でのものだ。
-   名称 記事数     Java 12022記事   Python 28170記事   JavaScript 26033記事   Ruby 21669記事   PHP 15987記事   Go 6035記事   golang 2899記事   C# 7342記事    順不同。Goとgolangで別タグになっているのはちょっとよくわからない。
-ちなみにJavaEEに至ってはたった217記事だ。
-あくまでタグでの検索結果なのでノイズがそこそこあると思う。それでもPythonの突出具合はスゴい・・・のではなく、Javaの記事数が少ないのだ。Python（1991年発表）はJavaの先輩だが、RubyやPHPはほぼ同期（1995年発表）だ。なのにこの差。Python、JavaScriptにはダブルスコア以上の差がある。Rubyとも、ダブルスコアまで行かなくても、1.8倍だ。だいぶ後輩のGo（golang）やC#はさすがにJavaに及ばなかったが、もう数年頑張れば記事数も逆転できるんじゃない？というくらいの差だ。
-やっぱり少なくないか？Java。
-stackoverflow stackoverflowでも各言語でタグ検索してみた。
-   名称 記事数     Java 1556934   Python 1187632   JavaScript 1823840   Ruby 205187   PHP 1289292   Go 38620   C# 1319866    こちらではJavaとPythonが逆転しているが、言うほどの極端な差はない。C#の質問数が結構多いのが気になる。</description>
+      <description>はじめに とある事情でJavaとJavaEE（今はJakartaEEか）を使用しないといけなくなってしまって、それはそれはさんざんな目にあった</description>
     </item>
     
   </channel>

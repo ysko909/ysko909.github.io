@@ -1,109 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
+
 <head>
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>VuexとVue Routerを使ってSPAを作るチュートリアルをやってみた - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta property="og:title" content="VuexとVue Routerを使ってSPAを作るチュートリアルをやってみた" />
-<meta property="og:description" content="はじめに 以前の記事ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したのですが、デフォルトだと「Vuex」や「Vue Router」はOFFです。Vue.jsでなくともReactなどのJavaScriptのライブラリやフレームワークを用いた環境でSPAを作成する場合、状態管理とルーティングは避けて通れない機能です。いや、別に利用しなくてもいいんですが、たぶん避けて通ったほうが後々面倒なこと（コンポーネント間でデータバケツリレーしたり、ページ遷移する必要が出てきたり・・・）になります。
-なので今回は「VuexとVue Routerを使用したSPAをざっくり作って、状態管理とルーティングに慣れておこうぜ」というのが趣旨です。基本的にはVuexのチュートリアルを参考にしています。
-環境  Windows 10 Visual Studio Code 1.38  $ vue --version 3.10.0 $ node --version v10.15.3 なにはともあれ まずはVue CLIで枠を作ります。
-vue create hogehoge ・・・いい名前が思いつかなかった_(:3」∠)_
-ここで注意が必要なのは、VuexとVue Routerを設定するのにはデフォルト設定だとダメということです。マニュアル設定します。
-? Please pick a preset: Manually select features ? Check the features needed for your project: (Press &lt;space&gt; to select, &lt;a&gt; to toggle all, &lt;i&gt; to invert selection) &gt;(*) Babel ( ) TypeScript ( ) Progressive Web App (PWA) Support ( ) Router ( ) Vuex ( ) CSS Pre-processors (*) Linter / Formatter ( ) Unit Testing ( ) E2E Testing  このうち、RouterとVuexを選択しておきます。もし必要なら他の項目もついでに選択してエンターキーを押します。" />
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+
+<meta itemprop="name" content="VuexとVue Routerを使ってSPAを作るチュートリアルをやってみた">
+<meta itemprop="description" content="はじめに 以前の記事ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したの">
+
+
+<meta itemprop="datePublished" content="2019-10-07T09:41:57&#43;09:00" />
+<meta itemprop="dateModified" content="2019-10-07T09:41:57&#43;09:00" />
+<meta itemprop="wordCount" content="6603">
+
+
+
+<meta itemprop="keywords" content="vuejs,vuex,vuerouter," />
+<meta property="og:title" content="VuexとVue Routerを使ってSPAを作るチュートリアルをやってみた" />
+<meta property="og:description" content="はじめに 以前の記事ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したの" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://idontwannawork.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/" /><meta property="article:published_time" content="2019-10-07T09:41:57&#43;09:00"/>
 <meta property="article:modified_time" content="2019-10-07T09:41:57&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="VuexとVue Routerを使ってSPAを作るチュートリアルをやってみた"/>
-<meta name="twitter:description" content="はじめに 以前の記事ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したのですが、デフォルトだと「Vuex」や「Vue Router」はOFFです。Vue.jsでなくともReactなどのJavaScriptのライブラリやフレームワークを用いた環境でSPAを作成する場合、状態管理とルーティングは避けて通れない機能です。いや、別に利用しなくてもいいんですが、たぶん避けて通ったほうが後々面倒なこと（コンポーネント間でデータバケツリレーしたり、ページ遷移する必要が出てきたり・・・）になります。
-なので今回は「VuexとVue Routerを使用したSPAをざっくり作って、状態管理とルーティングに慣れておこうぜ」というのが趣旨です。基本的にはVuexのチュートリアルを参考にしています。
-環境  Windows 10 Visual Studio Code 1.38  $ vue --version 3.10.0 $ node --version v10.15.3 なにはともあれ まずはVue CLIで枠を作ります。
-vue create hogehoge ・・・いい名前が思いつかなかった_(:3」∠)_
-ここで注意が必要なのは、VuexとVue Routerを設定するのにはデフォルト設定だとダメということです。マニュアル設定します。
-? Please pick a preset: Manually select features ? Check the features needed for your project: (Press &lt;space&gt; to select, &lt;a&gt; to toggle all, &lt;i&gt; to invert selection) &gt;(*) Babel ( ) TypeScript ( ) Progressive Web App (PWA) Support ( ) Router ( ) Vuex ( ) CSS Pre-processors (*) Linter / Formatter ( ) Unit Testing ( ) E2E Testing  このうち、RouterとVuexを選択しておきます。もし必要なら他の項目もついでに選択してエンターキーを押します。"/>
-<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
-		rel="stylesheet">
+<meta name="twitter:description" content="はじめに 以前の記事ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したの"/>
 
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/normalize.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="https://idontwannawork.github.io/css/dark.css"
-		 />
-	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://idontwannawork.github.io/js/main.js"></script>
-	<script data-ad-client="ca-pub-2615583270378842" async
-		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
 
-	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-	<script>
-		(adsbygoogle = window.adsbygoogle || []).push({
-			google_ad_client: "pub-2615583270378842",
-			enable_page_level_ads: true
-		});
-	</script>
+	<title>VuexとVue Routerを使ってSPAを作るチュートリアルをやってみた</title>
+	<link rel="stylesheet" href="https://idontwannawork.github.io/css/style.min.9151acf769c9b64924e76b2f7d12f6b7e5b0ba72326658132047e1e8802deb6d.css" integrity="sha256-kVGs92nJtkkk52svfRL2t+WwunIyZlgTIEfh6IAt620=" crossorigin="anonymous">
+	<script data-ad-client="ca-pub-3892592238252869" async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 </head>
-<body>
-	<div class="container wrapper post">
-		<div class="header">
-	<h1 class="site-title">頑張らないために頑張る</h1>
-	<div class="site-description"><h2>頑張りたくないので楽できるように頑張ります</h2><nav class="nav social">
-			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/idontwannawork" title="Github"><i data-feather="github"></i></a><a href="https://codepen.io/idontwannawork/" title="Codepen"><i data-feather="codepen"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
-		</nav>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://idontwannawork.github.io/">頑張らないために頑張る</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://idontwannawork.github.io/about/">About</a>
+				<a href="https://idontwannawork.github.io/posts/">Posts</a>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<button id="toc-btn" class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://twitter.com/unknown_strings" target="_blank" rel="noopener me" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/idontwannawork" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://codepen.io/idontwannawork/" target="_blank" rel="noopener me" title="Codepen"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon><line x1="12" y1="22" x2="12" y2="15.5"></line><polyline points="22 8.5 12 15.5 2 8.5"></polyline><polyline points="2 15.5 12 8.5 22 15.5"></polyline><line x1="12" y1="2" x2="12" y2="8.5"></line></svg></a><a href="/index.xml" target="_blank" rel="noopener me" title="R s s"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://idontwannawork.github.io/about/">About</a></li>
+			<li><a href="https://idontwannawork.github.io/posts/">Posts</a></li>
+			<li><a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a></li>
+		</ul>
 	</div>
 
-	<nav class="nav">
-		<ul class="flat">
-			
-			<li>
-				<a href="/">Home</a>
-			</li>
-			
-			<li>
-				<a href="/posts">All posts</a>
-			</li>
-			
-			<li>
-				<a href="/about">About</a>
-			</li>
-			
-			<li>
-				<a href="/tags">Tags</a>
-			</li>
-			
-		</ul>
-	</nav>
-</div>
 
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Oct 7, 2019</span></div>
+				<h1>VuexとVue Routerを使ってSPAを作るチュートリアルをやってみた</h1>
+			</header>
+			<div class="content">
+				
 
-		<div class="post-header">
-			<h1 class="title">VuexとVue Routerを使ってSPAを作るチュートリアルをやってみた</h1>
-			<div class="meta">Posted at &mdash; Oct 7, 2019</div>
-		</div>
-
-		<div class="markdown">
-			
-
-<h2 id="はじめに">はじめに</h2>
+<h2 id="はじめに">はじめに<a href="#はじめに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p><a href="/posts/make-dummy-text-generator-site-with-vuejs/">以前の記事</a>ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したのですが、デフォルトだと「<a href="https://vuex.vuejs.org/ja/">Vuex</a>」や「<a href="https://router.vuejs.org/ja/">Vue Router</a>」はOFFです。Vue.jsでなくとも<a href="https://ja.reactjs.org/">React</a>などのJavaScriptのライブラリやフレームワークを用いた環境でSPAを作成する場合、状態管理とルーティングは避けて通れない機能です。いや、別に利用しなくてもいいんですが、たぶん避けて通ったほうが後々面倒なこと（コンポーネント間でデータバケツリレーしたり、ページ遷移する必要が出てきたり・・・）になります。</p>
 
 <p>なので今回は「VuexとVue Routerを使用したSPAをざっくり作って、状態管理とルーティングに慣れておこうぜ」というのが趣旨です。基本的には<a href="https://vuex.vuejs.org/ja/guide/">Vuexのチュートリアル</a>を参考にしています。</p>
 
-<h2 id="環境">環境</h2>
+<p>また、基本的にはVue.jsのオフィシャルドキュメントを見つつ、通称「猫本」と呼ばれる「基礎から学ぶVue.js」の記述に沿っています。相変わらず完全に読み切ってないのですが、<a href="https://cr-vue.mio3io.com/">サンプルコードが参照できるサイト</a>もあってとても親切です。</p>
+
+<h2 id="環境">環境<a href="#環境" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <ul>
 <li>Windows 10</li>
 <li>Visual Studio Code 1.38</li>
 </ul>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ vue --version
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">$ vue --version
 3.10.0
 $ node --version
 v10.15.3</code></pre></div>
-<h2 id="なにはともあれ">なにはともあれ</h2>
+<h2 id="なにはともあれ">なにはともあれ<a href="#なにはともあれ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>まずはVue CLIで枠を作ります。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">vue create hogehoge</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">vue create hogehoge</code></pre></div>
 <p>・・・いい名前が思いつかなかった_(:3」∠)_</p>
 
 <p>ここで注意が必要なのは、VuexとVue Routerを設定するのには<strong>デフォルト設定だとダメ</strong>ということです。マニュアル設定します。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">? Please pick a preset: Manually select features  
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">? Please pick a preset: Manually select features  
 ? Check the features needed for your project: (Press &lt;space&gt; to select, &lt;a&gt; to toggle all, &lt;i&gt; to invert selection)  
 &gt;(*) Babel  
  ( ) TypeScript  
@@ -117,12 +118,12 @@ v10.15.3</code></pre></div>
 <p>このうち、<code>Router</code>と<code>Vuex</code>を選択しておきます。もし必要なら他の項目もついでに選択してエンターキーを押します。</p>
 
 <p>ちなみに、<code>Router</code>を選択したときに下記の質問が表示されます。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">? Use history mode for router? (Requires proper server setup for index fallback in production) (Y/n)</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">? Use history mode for router? (Requires proper server setup for index fallback in production) (Y/n)</code></pre></div>
 <p>「Historyモードは使うかい？」と聞かれているわけですが、これには条件があります。その条件とはカッコ書きで「サーバー側の設定が必須だよ」と言っています。これはVue Routerの<a href="https://router.vuejs.org/ja/guide/essentials/history-mode.html">Historyモードに関するページ</a>に記載があります。サーバー側の設定が不可能である、あるいはhashモードでも問題ない場合はNoを選択してください。ここではYesを選択しました。</p>
 
 <p>Lintなどの設定はデフォルトのものを選択して環境設定を終わらせます。</p>
 
-<h3 id="そもそもhistoryモードって何よ">そもそもHistoryモードって何よ</h3>
+<h3 id="そもそもhistoryモードって何よ">そもそもHistoryモードって何よ<a href="#そもそもhistoryモードって何よ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 
 <p>Vue Routerには2つのモードがあります。</p>
 
@@ -137,18 +138,18 @@ v10.15.3</code></pre></div>
 
 <ul>
 <li><p>hash</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">http://localhost:8080/#/about</code></pre></div></li>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">http://localhost:8080/#/about</code></pre></div></li>
 
 <li><p>history</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">http://localhost:8080/about</code></pre></div></li>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">http://localhost:8080/about</code></pre></div></li>
 </ul>
 
 <p>このように、Historyモードを使っているとアドレスバーに表示されるURLは、SPAであるにもかかわらず「普通」なURLです。つまりHistoryモードだとハッシュを取り除けるわけです。ただし、これはあくまで「普通っぽいURLが表示されているだけ」で、本来はシングルページのクライアントサイドアプリです。なので、サーバー側で適切なルーティング設定を施さないと、アドレスバーに直接<code>http://localhost:8080/about/</code>と入力してURLで直撃しようした場合<strong>404エラー</strong>になってしまいます。こんな場合は<code>index.html</code>で受け付けるように、サーバーへ設定を施してやる必要があります。なお、サーバー環境により設定内容は異なるため、詳細は<a href="https://router.vuejs.org/ja/guide/essentials/history-mode.html#%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC%E3%81%AE%E8%A8%AD%E5%AE%9A%E4%BE%8B">オフィシャル</a>を参照してください。</p>
 
-<h2 id="とりあえず実行してみる">とりあえず実行してみる</h2>
+<h2 id="とりあえず実行してみる">とりあえず実行してみる<a href="#とりあえず実行してみる" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>処理が終わるとプロジェクトが生成されたはずなので、とりあえず下記のコマンドを実行します。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">cd hogehoge
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">cd hogehoge
 npm run serve</code></pre></div>
 <p>表示されたアドレスへアクセスしてみます。</p>
 
@@ -160,10 +161,10 @@ npm run serve</code></pre></div>
 
 <p>ぱっと見は特段気になるようなことはありませんが、実は<code>Home</code>から<code>About</code>へ遷移する際に<strong>メインの表示部分だけを再描画</strong>しています。見た目は別ページに遷移したように見えますが、実際はシングルページ上の一部分がころころと再描画されて変わっています。これこそまさにSPAの挙動です。</p>
 
-<h2 id="プロジェクトの構成を俯瞰する">プロジェクトの構成を俯瞰する</h2>
+<h2 id="プロジェクトの構成を俯瞰する">プロジェクトの構成を俯瞰する<a href="#プロジェクトの構成を俯瞰する" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>Vue CLIで生成されたプロジェクトは下記のような構成です。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">hogehoge
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">hogehoge
 │  .gitignore
 │  babel.config.js
 │  package-lock.json
@@ -193,14 +194,14 @@ npm run serve</code></pre></div>
             Home.vue</code></pre></div>
 <p>この中で、<code>node_modules</code>は依存するパッケージなんかがしこたま格納されているフォルダなので、内容は割愛します。</p>
 
-<h3 id="実際のところ何が違うのよ">実際のところ何が違うのよ</h3>
+<h3 id="実際のところ何が違うのよ">実際のところ何が違うのよ<a href="#実際のところ何が違うのよ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 
-<h4 id="vueファイル">vueファイル</h4>
+<h4 id="vueファイル">vueファイル<a href="#vueファイル" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 
 <p><a href="/posts/make-dummy-text-generator-site-with-vuejs-edit-component/">以前の記事</a>でもVue CLIを利用しましたが、今回はVuexとVue Routerを利用しているのでプロジェクト構造も変化しています。特徴的なのは<code>views</code>フォルダでしょう。これは以前Vue CLIをデフォルト設定でcreateした場合の<a href="/posts/make-dummy-text-generator-site-with-vuejs-edit-component/#まずはプロジェクトを俯瞰する">フォルダ構造</a>に存在しなかったフォルダです。そして、その中に格納されている<code>Home.vue</code>と<code>About.vue</code>というファイル。もう名前からしてわかりますが、それぞれ<code>Home</code>の画面と<code>About</code>の画面に対応しています。</p>
 
 <p>たとえば<code>Home.vue</code>はこんな内容です。<code>HelloWorld.vue</code>をインポートして、<code>msg</code>に文字列を設定しています。相変わらずこのメッセージがホームに表示されるのですが、前回と異なるのは<strong>この処理を<code>App.vue</code>でやっていない</strong>ことです。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue">&lt;template&gt;
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
   &lt;div class=&#34;home&#34;&gt;
     &lt;img alt=&#34;Vue logo&#34; src=&#34;../assets/logo.png&#34;&gt;
     &lt;HelloWorld msg=&#34;Welcome to Your Vue.js App&#34;/&gt;
@@ -219,13 +220,13 @@ export default {
 }
 &lt;/script&gt;</code></pre></div>
 <p>そして<code>About.vue</code>はこんな感じ。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue">&lt;template&gt;
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
   &lt;div class=&#34;about&#34;&gt;
     &lt;h1&gt;This is an about page&lt;/h1&gt;
   &lt;/div&gt;
 &lt;/template&gt;</code></pre></div>
 <p>逆に<code>App.vue</code>はナビバーのメニューそれぞれにルーティング設定することだけで、機能らしい機能を保持していません。以前であればこのファイル内には<code>HelloWorld.vue</code>のインポートなどが記述されていましたが、前述の通り今回はそういう機能がすべて<code>Home.vue</code>にて保持されています。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue">&lt;template&gt;
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
   &lt;div id=&#34;app&#34;&gt;
     &lt;div id=&#34;nav&#34;&gt;
       &lt;router-link to=&#34;/&#34;&gt;Home&lt;/router-link&gt; |
@@ -258,85 +259,85 @@ export default {
 &lt;/style&gt;</code></pre></div>
 <p>以上のとおり、各ページはそれぞれのvueファイルにて記述されていることがわかります。</p>
 
-<h4 id="jsファイル">jsファイル</h4>
+<h4 id="jsファイル">jsファイル<a href="#jsファイル" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 
 <p>VuexやVue Routerを導入した影響はjsファイルにもあり、ファイル<code>router.js</code>と<code>store.js</code>が追加されています。が、とりあえずまずは<code>main.js</code>を見てみます。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#00f">import</span> Vue from <span style="color:#a31515">&#39;vue&#39;</span>
-<span style="color:#00f">import</span> App from <span style="color:#a31515">&#39;./App.vue&#39;</span>
-<span style="color:#00f">import</span> router from <span style="color:#a31515">&#39;./router&#39;</span>
-<span style="color:#00f">import</span> store from <span style="color:#a31515">&#39;./store&#39;</span>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span>
+<span class="k">import</span> <span class="nx">App</span> <span class="nx">from</span> <span class="s1">&#39;./App.vue&#39;</span>
+<span class="k">import</span> <span class="nx">router</span> <span class="nx">from</span> <span class="s1">&#39;./router&#39;</span>
+<span class="k">import</span> <span class="nx">store</span> <span class="nx">from</span> <span class="s1">&#39;./store&#39;</span>
 
-Vue.config.productionTip = <span style="color:#00f">false</span>
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">productionTip</span> <span class="o">=</span> <span class="kc">false</span>
 
-<span style="color:#00f">new</span> Vue({
-  router,
-  store,
-  render: h =&gt; h(App)
-}).$mount(<span style="color:#a31515">&#39;#app&#39;</span>)
+<span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+  <span class="nx">router</span><span class="p">,</span>
+  <span class="nx">store</span><span class="p">,</span>
+  <span class="nx">render</span><span class="o">:</span> <span class="nx">h</span> <span class="p">=&gt;</span> <span class="nx">h</span><span class="p">(</span><span class="nx">App</span><span class="p">)</span>
+<span class="p">}).</span><span class="nx">$mount</span><span class="p">(</span><span class="s1">&#39;#app&#39;</span><span class="p">)</span>
 </code></pre></div>
 <p><code>router</code>および<code>store</code>のインスタンスをインポートして、Vueインスタンスに設定しているのがわかります。これにより、別コンポーネントでも<code>$store.hoge</code>とすることでストア中のデータを参照できます。また、ルーティング設定を施すことで新しいコンポーネントを1つのページとして扱うことができます。</p>
 
 <p>次は<code>router.js</code>を見てみます。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#00f">import</span> Vue from <span style="color:#a31515">&#39;vue&#39;</span>
-<span style="color:#00f">import</span> Router from <span style="color:#a31515">&#39;vue-router&#39;</span>
-<span style="color:#00f">import</span> Home from <span style="color:#a31515">&#39;./views/Home.vue&#39;</span>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span>
+<span class="k">import</span> <span class="nx">Router</span> <span class="nx">from</span> <span class="s1">&#39;vue-router&#39;</span>
+<span class="k">import</span> <span class="nx">Home</span> <span class="nx">from</span> <span class="s1">&#39;./views/Home.vue&#39;</span>
 
-Vue.use(Router)
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Router</span><span class="p">)</span>
 
-<span style="color:#00f">export</span> <span style="color:#00f">default</span> <span style="color:#00f">new</span> Router({
-  mode: <span style="color:#a31515">&#39;history&#39;</span>,
-  base: process.env.BASE_URL,
-  routes: [
-    {
-      path: <span style="color:#a31515">&#39;/&#39;</span>,
-      name: <span style="color:#a31515">&#39;home&#39;</span>,
-      component: Home
-    },
-    {
-      path: <span style="color:#a31515">&#39;/about&#39;</span>,
-      name: <span style="color:#a31515">&#39;about&#39;</span>,
-      <span style="color:#008000">// route level code-splitting
-</span><span style="color:#008000"></span>      <span style="color:#008000">// this generates a separate chunk (about.[hash].js) for this route
-</span><span style="color:#008000"></span>      <span style="color:#008000">// which is lazy-loaded when the route is visited.
-</span><span style="color:#008000"></span>      component: () =&gt; <span style="color:#00f">import</span>(<span style="color:#008000">/* webpackChunkName: &#34;about&#34; */</span> <span style="color:#a31515">&#39;./views/About.vue&#39;</span>)
-    }
-  ]
-})
+<span class="k">export</span> <span class="k">default</span> <span class="k">new</span> <span class="nx">Router</span><span class="p">({</span>
+  <span class="nx">mode</span><span class="o">:</span> <span class="s1">&#39;history&#39;</span><span class="p">,</span>
+  <span class="nx">base</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">BASE_URL</span><span class="p">,</span>
+  <span class="nx">routes</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nx">path</span><span class="o">:</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span>
+      <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;home&#39;</span><span class="p">,</span>
+      <span class="nx">component</span><span class="o">:</span> <span class="nx">Home</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nx">path</span><span class="o">:</span> <span class="s1">&#39;/about&#39;</span><span class="p">,</span>
+      <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;about&#39;</span><span class="p">,</span>
+      <span class="c1">// route level code-splitting
+</span><span class="c1"></span>      <span class="c1">// this generates a separate chunk (about.[hash].js) for this route
+</span><span class="c1"></span>      <span class="c1">// which is lazy-loaded when the route is visited.
+</span><span class="c1"></span>      <span class="nx">component</span><span class="o">:</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="k">import</span><span class="p">(</span><span class="cm">/* webpackChunkName: &#34;about&#34; */</span> <span class="s1">&#39;./views/About.vue&#39;</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">})</span>
 </code></pre></div>
 <p>Home画面には<code>Home.vue</code>が、About画面には<code>About.vue</code>が紐づけられています。パスとコンポーネントがそれぞれ紐づけられて、ルーティング設定されていることがわかります。</p>
 
 <p>次に<code>store.js</code>です。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#00f">import</span> Vue from <span style="color:#a31515">&#39;vue&#39;</span>
-<span style="color:#00f">import</span> Vuex from <span style="color:#a31515">&#39;vuex&#39;</span>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span>
+<span class="k">import</span> <span class="nx">Vuex</span> <span class="nx">from</span> <span class="s1">&#39;vuex&#39;</span>
 
-Vue.use(Vuex)
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Vuex</span><span class="p">)</span>
 
-<span style="color:#00f">export</span> <span style="color:#00f">default</span> <span style="color:#00f">new</span> Vuex.Store({
-  state: {
+<span class="k">export</span> <span class="k">default</span> <span class="k">new</span> <span class="nx">Vuex</span><span class="p">.</span><span class="nx">Store</span><span class="p">({</span>
+  <span class="nx">state</span><span class="o">:</span> <span class="p">{</span>
 
-  },
-  mutations: {
+  <span class="p">},</span>
+  <span class="nx">mutations</span><span class="o">:</span> <span class="p">{</span>
 
-  },
-  actions: {
+  <span class="p">},</span>
+  <span class="nx">actions</span><span class="o">:</span> <span class="p">{</span>
 
-  }
-})
+  <span class="p">}</span>
+<span class="p">})</span>
 </code></pre></div>
 <p>本来はVuexで一元管理するデータの設定ファイルなのですが、デフォルトでは何もありません。</p>
 
-<h2 id="いじる">いじる</h2>
+<h2 id="いじる">いじる<a href="#いじる" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>ざっくりと構造を俯瞰したところで、内容をちょっと変えてみましょう。内容は、お馴染みかと思いますが簡単なカウンターアプリを実装することにします。カウントの値はVuexで管理して、カウントするためのページを今の資産に追加します。ファイルの名前は<code>Count.vue</code>とかにしますかね。</p>
 
-<h3 id="既存ページの編集">既存ページの編集</h3>
+<h3 id="既存ページの編集">既存ページの編集<a href="#既存ページの編集" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 
 <p>現在のファイル内容が気にならなければ、このステップのうち<code>Count.vue</code>の追加以外は飛ばしていいと思います。が、個人的に「自分で手を加えた」感を出すために、ホーム画面はいじっておきたかったので最初に内容を編集します。と言ってもすることは、今の内容を削除して任意の内容に書き換えるだけです。まずは取っ掛かりとして<a href="https://buefy.org/">Buefy</a>を導入します。導入方法は<a href="/posts/make-dummy-text-generator-site-with-vuejs/">以前の記事</a>に書いてありますのでご参照ください。</p>
 
-<h4 id="ページの構成を書き換える">ページの構成を書き換える</h4>
+<h4 id="ページの構成を書き換える">ページの構成を書き換える<a href="#ページの構成を書き換える" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 
 <p>書き換える対象のコンポーネントは<code>App.vue</code>と<code>Home.vue</code>、<code>HelloWorld.vue</code>です。このうち、<code>Home.vue</code>と<code>HelloWorld.vue</code>にはホームの主要な表示項目がこれらのコンポーネントに記述されていますが、それをごっそり適当に書き換えます。まずは<code>HelloWorld.vue</code>です。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue">&lt;template&gt;
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
   &lt;div class=&#34;hello&#34;&gt;
     &lt;h2&gt;{{ msg }}&lt;/h2&gt;
 
@@ -371,7 +372,7 @@ a {
 }
 &lt;/style&gt;</code></pre></div>
 <p>次に<code>Home.vue</code>です。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue">&lt;template&gt;
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
   &lt;div class=&#34;home&#34;&gt;
     &lt;HelloWorld msg=&#34;ほげほげー&#34;/&gt;
   &lt;/div&gt;
@@ -388,10 +389,10 @@ export default {
   }
 }
 &lt;/script&gt;</code></pre></div>
-<h4 id="カウント用ページを追加する">カウント用ページを追加する</h4>
+<h4 id="カウント用ページを追加する">カウント用ページを追加する<a href="#カウント用ページを追加する" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 
 <p>最後に<code>App.vue</code>です。新たに追加するカウント用ページのリンクを追加します。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue">&lt;template&gt;
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
   &lt;div id=&#34;app&#34;&gt;
     &lt;div id=&#34;nav&#34;&gt;
       &lt;router-link to=&#34;/&#34;&gt;Home&lt;/router-link&gt; |
@@ -425,73 +426,73 @@ export default {
 &lt;/style&gt;</code></pre></div>
 <p>ちなみに、ここでリンクを追加しただけでは<code>Count.vue</code>の表示ができません。後述する<code>router.js</code>の編集が必須だからです。</p>
 
-<h3 id="router-jsの編集">router.jsの編集</h3>
+<h3 id="router-jsの編集">router.jsの編集<a href="#router-jsの編集" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 
 <p><code>Count.vue</code>に<code>/count</code>というURLでアクセスできるように、router.jsを編集します。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#00f">import</span> Vue from <span style="color:#a31515">&#39;vue&#39;</span>
-<span style="color:#00f">import</span> Router from <span style="color:#a31515">&#39;vue-router&#39;</span>
-<span style="color:#00f">import</span> Home from <span style="color:#a31515">&#39;./views/Home.vue&#39;</span>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span>
+<span class="k">import</span> <span class="nx">Router</span> <span class="nx">from</span> <span class="s1">&#39;vue-router&#39;</span>
+<span class="k">import</span> <span class="nx">Home</span> <span class="nx">from</span> <span class="s1">&#39;./views/Home.vue&#39;</span>
 
-Vue.use(Router)
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Router</span><span class="p">)</span>
 
-<span style="color:#00f">export</span> <span style="color:#00f">default</span> <span style="color:#00f">new</span> Router({
-  mode: <span style="color:#a31515">&#39;history&#39;</span>,
-  base: process.env.BASE_URL,
-  routes: [
-    {
-      path: <span style="color:#a31515">&#39;/&#39;</span>,
-      name: <span style="color:#a31515">&#39;home&#39;</span>,
-      component: Home
-    },
-    {
-      path: <span style="color:#a31515">&#39;/about&#39;</span>,
-      name: <span style="color:#a31515">&#39;about&#39;</span>,
-      <span style="color:#008000">// route level code-splitting
-</span><span style="color:#008000"></span>      <span style="color:#008000">// this generates a separate chunk (about.[hash].js) for this route
-</span><span style="color:#008000"></span>      <span style="color:#008000">// which is lazy-loaded when the route is visited.
-</span><span style="color:#008000"></span>      component: () =&gt; <span style="color:#00f">import</span>(<span style="color:#008000">/* webpackChunkName: &#34;about&#34; */</span> <span style="color:#a31515">&#39;./views/About.vue&#39;</span>)
-    },
-    {
-      path: <span style="color:#a31515">&#39;/count&#39;</span>,
-      name: <span style="color:#a31515">&#39;count&#39;</span>,
-      component: () =&gt; <span style="color:#00f">import</span>(<span style="color:#a31515">&#39;./views/Count.vue&#39;</span>)
-    }
-  ]
-})
+<span class="k">export</span> <span class="k">default</span> <span class="k">new</span> <span class="nx">Router</span><span class="p">({</span>
+  <span class="nx">mode</span><span class="o">:</span> <span class="s1">&#39;history&#39;</span><span class="p">,</span>
+  <span class="nx">base</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">BASE_URL</span><span class="p">,</span>
+  <span class="nx">routes</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nx">path</span><span class="o">:</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span>
+      <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;home&#39;</span><span class="p">,</span>
+      <span class="nx">component</span><span class="o">:</span> <span class="nx">Home</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nx">path</span><span class="o">:</span> <span class="s1">&#39;/about&#39;</span><span class="p">,</span>
+      <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;about&#39;</span><span class="p">,</span>
+      <span class="c1">// route level code-splitting
+</span><span class="c1"></span>      <span class="c1">// this generates a separate chunk (about.[hash].js) for this route
+</span><span class="c1"></span>      <span class="c1">// which is lazy-loaded when the route is visited.
+</span><span class="c1"></span>      <span class="nx">component</span><span class="o">:</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="k">import</span><span class="p">(</span><span class="cm">/* webpackChunkName: &#34;about&#34; */</span> <span class="s1">&#39;./views/About.vue&#39;</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nx">path</span><span class="o">:</span> <span class="s1">&#39;/count&#39;</span><span class="p">,</span>
+      <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;count&#39;</span><span class="p">,</span>
+      <span class="nx">component</span><span class="o">:</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="k">import</span><span class="p">(</span><span class="s1">&#39;./views/Count.vue&#39;</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">})</span>
 </code></pre></div>
 <p>これで「count」のリンクを押すと<code>Count.vue</code>が表示されるようになりました。</p>
 
-<h3 id="store-jsの編集">store.jsの編集</h3>
+<h3 id="store-jsの編集">store.jsの編集<a href="#store-jsの編集" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 
 <p>カウントしたデータを保持するため、<code>store.js</code>を編集します。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#00f">import</span> Vue from <span style="color:#a31515">&#39;vue&#39;</span>
-<span style="color:#00f">import</span> Vuex from <span style="color:#a31515">&#39;vuex&#39;</span>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="k">import</span> <span class="nx">Vue</span> <span class="nx">from</span> <span class="s1">&#39;vue&#39;</span>
+<span class="k">import</span> <span class="nx">Vuex</span> <span class="nx">from</span> <span class="s1">&#39;vuex&#39;</span>
 
-Vue.use(Vuex)
+<span class="nx">Vue</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">Vuex</span><span class="p">)</span>
 
-<span style="color:#00f">export</span> <span style="color:#00f">default</span> <span style="color:#00f">new</span> Vuex.Store({
-    state: {
-    counter: 10
-    },
-    mutations: {
-        increment(state){
-            state.counter++
-        },
-        decrement(state){
-            state.counter--
-        }
+<span class="k">export</span> <span class="k">default</span> <span class="k">new</span> <span class="nx">Vuex</span><span class="p">.</span><span class="nx">Store</span><span class="p">({</span>
+    <span class="nx">state</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">counter</span><span class="o">:</span> <span class="mi">10</span>
+    <span class="p">},</span>
+    <span class="nx">mutations</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">increment</span><span class="p">(</span><span class="nx">state</span><span class="p">){</span>
+            <span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="o">++</span>
+        <span class="p">},</span>
+        <span class="nx">decrement</span><span class="p">(</span><span class="nx">state</span><span class="p">){</span>
+            <span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="o">--</span>
+        <span class="p">}</span>
 
-    },
-    actions: {
-        increment: ({ commit }) =&gt; {
-            setTimeout(() =&gt; {
-                commit(<span style="color:#a31515">&#39;decrement&#39;</span>)
-            }, 3000);
-        }
-    }
-})
+    <span class="p">},</span>
+    <span class="nx">actions</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">increment</span><span class="o">:</span> <span class="p">({</span> <span class="nx">commit</span> <span class="p">})</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="nx">setTimeout</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                <span class="nx">commit</span><span class="p">(</span><span class="s1">&#39;decrement&#39;</span><span class="p">)</span>
+            <span class="p">},</span> <span class="mi">3000</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">})</span>
 </code></pre></div>
-<h4 id="ストア">ストア</h4>
+<h4 id="ストア">ストア<a href="#ストア" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 
 <p><a href="https://vuex.vuejs.org/ja/guide/state.html">Vuexでは単一ステートツリーを利用</a>しています。通常アプリケーション1つにおいては、ストアは1つしか持ちません。この単一なストアにはアプリの状態がすべて含まれています。なので、あるデータについて現在の状態を参照したい時などに便利です。また、ストアにはステート（状態）、ミューテーション、アクションの3つを記述します。</p>
 
@@ -503,7 +504,7 @@ Vue.use(Vuex)
 
 <p>アクションは減算を3秒待って行う機能を実装しています。見るとわかるのですがアクションは「状態を変更する（減算する）処理を実装している」のではなく、<strong>状態を変更する（減算する）ミューテーションをコミットしている</strong>だけです。あくまでも状態を変更するのはミューテーションであって、アクションではありません。また、3秒のインターバルを設けているように<strong>非同期処理が可能</strong>です。</p>
 
-<h4 id="余談-vuexを利用するかしないか">（余談）Vuexを利用するかしないか</h4>
+<h4 id="余談-vuexを利用するかしないか">（余談）Vuexを利用するかしないか<a href="#余談-vuexを利用するかしないか" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 
 <p><code>store.js</code>に定義したステートは、各コンポーネントからアクセスが可能なことは前述の通りです。これがVuexの特徴であり、とくに「コンポーネントの数が多い」とか、「コンポーネントの親子関係が深いわりに値の受け渡しが多い」とかの場合に威力を発揮します。</p>
 
@@ -513,10 +514,10 @@ Vue.use(Vuex)
 
 <p>まぁ、複数人で作業してると「定数なのにストアに書く」ようなメンバーが出てくるとも限らないので、ある程度の開発ルール作りは必要だと思います。が、それはまた別な話ですね。</p>
 
-<h3 id="カウント用ページの追加">カウント用ページの追加</h3>
+<h3 id="カウント用ページの追加">カウント用ページの追加<a href="#カウント用ページの追加" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
 
 <p><code>views</code>フォルダに<code>Count.vue</code>という名前でファイルを作成します。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue">&lt;template&gt;
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
     &lt;section&gt;
         &lt;span class=&#34;title&#34;&gt;{{$store.state.counter}}&lt;/span&gt;
         &lt;b-button @click=&#34;increment&#34;&gt;add&lt;/b-button&gt;
@@ -541,7 +542,7 @@ export default {
 
 &lt;/style&gt;</code></pre></div>
 <p>さらっとここで<code>$store.state.counter</code>とか書いてますが、この1文で<code>store.js</code>の<code>state</code>内に記述したデータ<code>counter</code>をアクセスしています。そして、<code>store.js</code>のステートは他のコンポーネントでも参照が可能です。なので、<code>HelloWorld.vue</code>のtemplate部分を下記のように書き換えてみても、やっぱりちゃんと参照できます。<code>Count.vue</code>で加算あるいは減算すると、計算結果はステートに反映されますが、その状態は<code>Count.vue</code>を表示しても<code>HelloWorld.vue</code>を表示しても同じ値が表示されるはずです。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue">&lt;template&gt;
+<div class="highlight"><pre class="chroma"><code class="language-vue" data-lang="vue">&lt;template&gt;
   &lt;div class=&#34;hello&#34;&gt;
     &lt;h2&gt;{{ msg }}&lt;/h2&gt;
     &lt;p class=&#34;title&#34;&gt;{{$store.state.counter}}&lt;/p&gt;
@@ -566,14 +567,14 @@ export default {
 
 <p>「え、そんなん当たり前じゃん」と思われるかもしれません。しかし、これこそが「<a href="https://vuex.vuejs.org/ja/guide/state.html">信頼できる唯一の情報源</a> (single source of truth)」なのです。今は作成した機能が小規模すぎてインパクトがあまりないですが、この「どのコンポーネントでも<code>store.js</code>のステートを参照すればいい」というのは、アプリケーションの規模が大きくなるほど威力を発揮します。</p>
 
-<h4 id="余談-ゲッターについて">（余談）ゲッターについて</h4>
+<h4 id="余談-ゲッターについて">（余談）ゲッターについて<a href="#余談-ゲッターについて" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
 
 <p>Vuexを使うとストアにゲッターを定義できます。これはステートのデータを参照するためのものです。「参照なら<code>$store.state.hoge</code>でできるじゃん」と言われそうですが、ゲッターはさらに多彩です。言及すると1記事ができちゃうくらいなのでここでは割愛します。</p>
 
-<h2 id="実行してみる">実行してみる</h2>
+<h2 id="実行してみる">実行してみる<a href="#実行してみる" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>編集後のプロジェクトで<code>npm run</code>してみます。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">npm run serve</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console">npm run serve</code></pre></div>
 <p>しばらく待って表示されたアドレスへアクセスしてみます。</p>
 
 <p><img src="2019-10-07-16-54-04.png" alt="pic" /></p>
@@ -590,37 +591,125 @@ export default {
 
 <p><img src="2019-10-07-17-01-00.png" alt="pic" /></p>
 
-<h2 id="まとめ">まとめ</h2>
+<h2 id="まとめ">まとめ<a href="#まとめ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>Vuexのチュートリアルを参考にカウンターアプリを実装してみました。アプリと言うには機能が小規模過ぎますが、VuexとVue Routerを理解するのに良いサンプルだと思います。</p>
 
 <p>VuexとVue Routerを実装し、今回は割愛してしまいましたがゲッターの機能なども駆使することで、SPAの開発が容易になります。慣れるには数を作ることだと思うので、また別なアプリでも実装してみようかなー（フラグ</p>
 
-		</div><div id="disqus_thread"></div>
-<script type="text/javascript">
-	(function () {
-		
-		
-		if (window.location.hostname == "localhost")
-			return;
+			</div>
 
-		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-		var disqus_shortname = 'come-as-you-are';
-		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	})();
+<div class="related-posts thin">
+	<h2>See Also</h2>
+	<ul>
+	
+	<li><a href="/posts/make-dummy-text-generator-site-with-vuejs-edit-function/">Vue cliとBuefyでシンプルに始めるVue.js - テキスト生成の機能を実装してデプロイまで</a></li>
+	
+	<li><a href="/posts/make-dummy-text-generator-site-with-vuejs-add-ui/">Vue cliとBuefyでシンプルに始めるVue.js - UIのコンポーネントを作成する</a></li>
+	
+	<li><a href="/posts/fix-vue-cli-service-command-not-found-error/">vue-cli-service: command not foundと言われたらnode_modulesを削除</a></li>
+	
+	<li><a href="/posts/make-dummy-text-generator-site-with-vuejs-edit-component/">Vue cliとBuefyでシンプルに始めるVue.js - コンポーネントの中身を見てみる</a></li>
+	
+	<li><a href="/posts/make-dummy-text-generator-site-with-vuejs/">Vue cliとBuefyでシンプルに始めるVue.js - まずは環境の用意</a></li>
+	
+	</ul>
+</div>
+
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/vuejs">vuejs</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/vuex">vuex</a></span><span class="tag"><a href="https://idontwannawork.github.io/tags/vuerouter">vuerouter</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>6603 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-10-07 00:41 &#43;0000</p>
+			</footer>
+		</article>
+		<aside id="toc">
+			<div class="toc-title">Table of Contents</div>
+			<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#はじめに">はじめに</a></li>
+<li><a href="#環境">環境</a></li>
+<li><a href="#なにはともあれ">なにはともあれ</a>
+<ul>
+<li><a href="#そもそもhistoryモードって何よ">そもそもHistoryモードって何よ</a></li>
+</ul></li>
+<li><a href="#とりあえず実行してみる">とりあえず実行してみる</a></li>
+<li><a href="#プロジェクトの構成を俯瞰する">プロジェクトの構成を俯瞰する</a>
+<ul>
+<li><a href="#実際のところ何が違うのよ">実際のところ何が違うのよ</a>
+<ul>
+<li><a href="#vueファイル">vueファイル</a></li>
+<li><a href="#jsファイル">jsファイル</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#いじる">いじる</a>
+<ul>
+<li><a href="#既存ページの編集">既存ページの編集</a>
+<ul>
+<li><a href="#ページの構成を書き換える">ページの構成を書き換える</a></li>
+<li><a href="#カウント用ページを追加する">カウント用ページを追加する</a></li>
+</ul></li>
+<li><a href="#router-jsの編集">router.jsの編集</a></li>
+<li><a href="#store-jsの編集">store.jsの編集</a>
+<ul>
+<li><a href="#ストア">ストア</a></li>
+<li><a href="#余談-vuexを利用するかしないか">（余談）Vuexを利用するかしないか</a></li>
+</ul></li>
+<li><a href="#カウント用ページの追加">カウント用ページの追加</a>
+<ul>
+<li><a href="#余談-ゲッターについて">（余談）ゲッターについて</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#実行してみる">実行してみる</a></li>
+<li><a href="#まとめ">まとめ</a></li>
+</ul></li>
+</ul>
+</nav>
+		</aside>
+		<div class="post-nav thin">
+			<a class="prev-post" href="https://idontwannawork.github.io/posts/disk-review-cadans-der-getouwen-cadans-der-getouwen/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>アルバムレビュー Cadans der getouwen「Cadans der getouwen」</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "come-as-you-are" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
-		Disqus.</a></noscript>
-<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 </div>
-	<div class="footer wrapper">
-	<nav class="nav">
-		<div> © Copyright notice |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
-	</nav>
-</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2019 <a href="https://idontwannawork.github.io/"></a> Allrights reserved.</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://idontwannawork.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
 
 
+
+	<script src="https://idontwannawork.github.io/js/main.min.35ccbf1cdceb91e4c64c06b5d009d6e2977fafe56beda7762febd4e67528d2ac.js" integrity="sha256-Ncy/HNzrkeTGTAa10AnW4pd/r+Vr7ad2L+vU5nUo0qw=" crossorigin="anonymous"></script>
+	
 <script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
@@ -631,6 +720,8 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
-<script>feather.replace()</script>
+
+
 </body>
+
 </html>

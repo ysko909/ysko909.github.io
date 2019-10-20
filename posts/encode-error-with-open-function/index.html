@@ -1,108 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
+
 <head>
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Pythonのopen関数はencoding引数を指定しよう - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta property="og:title" content="Pythonのopen関数はencoding引数を指定しよう" />
-<meta property="og:description" content="結論 WindowsでPythonのopen関数を使うなら、encoding引数を指定しよう（血涙
-何があったのさ WindowsにてPythonを用いて、テキストファイルの書き出しと読み込みをしようとしたんです。
-そうしたら憎きアイツが出てきたわけです。
-出たよ、UnicodeDecodeError・・・。
-環境  Windows 10 Python 3.6 Visual Studio Code  コード s = &#39;\x85&#39; print(s) with open(&#39;C:/app/hoge.txt&#39;, mode=&#39;w&#39;, encoding=&#39;utf-8&#39;) as f: f.write(s) with open(&#39;C:/app/hoge.txt&#39;, mode=&#39;r&#39;) as g: print(g.read()) # UnicodeDecodeError`でエラー  ※問題の部分だけ抜粋しています。本来のソースは入力の文字列がもっとごちゃごちゃしてました。
- 原因 つまるところ、読み込み時のopenで引数のencodingを指定していなかったからでした_:(´ཀ`」∠):_
-書き出しの際には下記のようにencodingを指定していました。
-with open(&#39;C:/app/hoge.json&#39;, mode=&#39;w&#39;, encoding=&#39;utf-8&#39;) as f: ただ、書き出したファイルを読み込む際に、encodingの指定を失念していました。
-with open(&#39;C:/app/hoge.json&#39;, mode=&#39;r&#39;) as g: encodingの指定がない場合については、オフィシャルだと下記のように説明されています。
- encoding が指定されていない場合に使われるエンコーディングはプラットフォームに依存します
- Windowsだと利用されるエンコーディングはCP932です。Pythonから入出力する際、CP932に変換できない文字が存在したため、「変換できないよ！」とエラーになったわけです。
-ちなみに Python内部では文字列型はUnicodeで保持されています。そして、入出力の際はPythonがシステムのエンコーディングに自動で変換してくれます。この場合、もともとUTF-8で保持されていたものをCP932に変換します。
-この変換をユーザーが意識する必要はありません。逆に言えば、知らない間に勝手に変換されます。そして、この自動変換の際に何かしらの「変換できない文字」があるとエラーになる、というわけです。
-解消方法 エラーを解消するには、書き出し時と同様に読み込み時にもencodingを指定する必要があります。
-with open(&#39;C:/app/hoge.json&#39;, mode=&#39;r&#39;, encoding=&#34;utf-8) as f: j = json." />
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+
+<meta itemprop="name" content="Pythonのopen関数はencoding引数を指定しよう">
+<meta itemprop="description" content="結論 WindowsでPythonのopen関数を使うなら、encoding引数を指定しよう（血涙 何があったのさ WindowsにてPython">
+
+
+<meta itemprop="datePublished" content="2019-04-25T10:57:12&#43;09:00" />
+<meta itemprop="dateModified" content="2019-04-25T10:57:12&#43;09:00" />
+<meta itemprop="wordCount" content="1018">
+
+
+
+<meta itemprop="keywords" content="Python," />
+<meta property="og:title" content="Pythonのopen関数はencoding引数を指定しよう" />
+<meta property="og:description" content="結論 WindowsでPythonのopen関数を使うなら、encoding引数を指定しよう（血涙 何があったのさ WindowsにてPython" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://idontwannawork.github.io/posts/encode-error-with-open-function/" /><meta property="article:published_time" content="2019-04-25T10:57:12&#43;09:00"/>
 <meta property="article:modified_time" content="2019-04-25T10:57:12&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Pythonのopen関数はencoding引数を指定しよう"/>
-<meta name="twitter:description" content="結論 WindowsでPythonのopen関数を使うなら、encoding引数を指定しよう（血涙
-何があったのさ WindowsにてPythonを用いて、テキストファイルの書き出しと読み込みをしようとしたんです。
-そうしたら憎きアイツが出てきたわけです。
-出たよ、UnicodeDecodeError・・・。
-環境  Windows 10 Python 3.6 Visual Studio Code  コード s = &#39;\x85&#39; print(s) with open(&#39;C:/app/hoge.txt&#39;, mode=&#39;w&#39;, encoding=&#39;utf-8&#39;) as f: f.write(s) with open(&#39;C:/app/hoge.txt&#39;, mode=&#39;r&#39;) as g: print(g.read()) # UnicodeDecodeError`でエラー  ※問題の部分だけ抜粋しています。本来のソースは入力の文字列がもっとごちゃごちゃしてました。
- 原因 つまるところ、読み込み時のopenで引数のencodingを指定していなかったからでした_:(´ཀ`」∠):_
-書き出しの際には下記のようにencodingを指定していました。
-with open(&#39;C:/app/hoge.json&#39;, mode=&#39;w&#39;, encoding=&#39;utf-8&#39;) as f: ただ、書き出したファイルを読み込む際に、encodingの指定を失念していました。
-with open(&#39;C:/app/hoge.json&#39;, mode=&#39;r&#39;) as g: encodingの指定がない場合については、オフィシャルだと下記のように説明されています。
- encoding が指定されていない場合に使われるエンコーディングはプラットフォームに依存します
- Windowsだと利用されるエンコーディングはCP932です。Pythonから入出力する際、CP932に変換できない文字が存在したため、「変換できないよ！」とエラーになったわけです。
-ちなみに Python内部では文字列型はUnicodeで保持されています。そして、入出力の際はPythonがシステムのエンコーディングに自動で変換してくれます。この場合、もともとUTF-8で保持されていたものをCP932に変換します。
-この変換をユーザーが意識する必要はありません。逆に言えば、知らない間に勝手に変換されます。そして、この自動変換の際に何かしらの「変換できない文字」があるとエラーになる、というわけです。
-解消方法 エラーを解消するには、書き出し時と同様に読み込み時にもencodingを指定する必要があります。
-with open(&#39;C:/app/hoge.json&#39;, mode=&#39;r&#39;, encoding=&#34;utf-8) as f: j = json."/>
-<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
-		rel="stylesheet">
+<meta name="twitter:description" content="結論 WindowsでPythonのopen関数を使うなら、encoding引数を指定しよう（血涙 何があったのさ WindowsにてPython"/>
 
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/normalize.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="https://idontwannawork.github.io/css/dark.css"
-		 />
-	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://idontwannawork.github.io/js/main.js"></script>
-	<script data-ad-client="ca-pub-2615583270378842" async
-		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
 
-	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-	<script>
-		(adsbygoogle = window.adsbygoogle || []).push({
-			google_ad_client: "pub-2615583270378842",
-			enable_page_level_ads: true
-		});
-	</script>
+	<title>Pythonのopen関数はencoding引数を指定しよう</title>
+	<link rel="stylesheet" href="https://idontwannawork.github.io/css/style.min.9151acf769c9b64924e76b2f7d12f6b7e5b0ba72326658132047e1e8802deb6d.css" integrity="sha256-kVGs92nJtkkk52svfRL2t+WwunIyZlgTIEfh6IAt620=" crossorigin="anonymous">
+	<script data-ad-client="ca-pub-3892592238252869" async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 </head>
-<body>
-	<div class="container wrapper post">
-		<div class="header">
-	<h1 class="site-title">頑張らないために頑張る</h1>
-	<div class="site-description"><h2>頑張りたくないので楽できるように頑張ります</h2><nav class="nav social">
-			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/idontwannawork" title="Github"><i data-feather="github"></i></a><a href="https://codepen.io/idontwannawork/" title="Codepen"><i data-feather="codepen"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
-		</nav>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp faster">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="https://idontwannawork.github.io/">頑張らないために頑張る</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="https://idontwannawork.github.io/about/">About</a>
+				<a href="https://idontwannawork.github.io/posts/">Posts</a>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<span class="hdr-social hide-in-mobile"><a href="https://twitter.com/unknown_strings" target="_blank" rel="noopener me" title="Twitter"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a><a href="https://github.com/idontwannawork" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a href="https://codepen.io/idontwannawork/" target="_blank" rel="noopener me" title="Codepen"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon><line x1="12" y1="22" x2="12" y2="15.5"></line><polyline points="22 8.5 12 15.5 2 8.5"></polyline><polyline points="2 15.5 12 8.5 22 15.5"></polyline><line x1="12" y1="2" x2="12" y2="8.5"></line></svg></a><a href="/index.xml" target="_blank" rel="noopener me" title="R s s"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="Menu"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="https://idontwannawork.github.io/about/">About</a></li>
+			<li><a href="https://idontwannawork.github.io/posts/">Posts</a></li>
+			<li><a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a></li>
+		</ul>
 	</div>
 
-	<nav class="nav">
-		<ul class="flat">
-			
-			<li>
-				<a href="/">Home</a>
-			</li>
-			
-			<li>
-				<a href="/posts">All posts</a>
-			</li>
-			
-			<li>
-				<a href="/about">About</a>
-			</li>
-			
-			<li>
-				<a href="/tags">Tags</a>
-			</li>
-			
-		</ul>
-	</nav>
-</div>
 
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>Apr 25, 2019</span></div>
+				<h1>Pythonのopen関数はencoding引数を指定しよう</h1>
+			</header>
+			<div class="content">
+				
 
-		<div class="post-header">
-			<h1 class="title">Pythonのopen関数はencoding引数を指定しよう</h1>
-			<div class="meta">Posted at &mdash; Apr 25, 2019</div>
-		</div>
-
-		<div class="markdown">
-			
-
-<h2 id="結論">結論</h2>
+<h2 id="結論">結論<a href="#結論" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>WindowsでPythonのopen関数を使うなら、<strong>encoding引数を指定しよう</strong>（血涙</p>
 
-<h2 id="何があったのさ">何があったのさ</h2>
+<h2 id="何があったのさ">何があったのさ<a href="#何があったのさ" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>WindowsにてPythonを用いて、テキストファイルの書き出しと読み込みをしようとしたんです。</p>
 
@@ -112,7 +93,7 @@ with open(&#39;C:/app/hoge.json&#39;, mode=&#39;r&#39;, encoding=&#34;utf-8) as 
 
 <p>出たよ、<code>UnicodeDecodeError</code>・・・。</p>
 
-<h2 id="環境">環境</h2>
+<h2 id="環境">環境<a href="#環境" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <ul>
 <li>Windows 10</li>
@@ -120,27 +101,36 @@ with open(&#39;C:/app/hoge.json&#39;, mode=&#39;r&#39;, encoding=&#34;utf-8) as 
 <li>Visual Studio Code</li>
 </ul>
 
-<h2 id="コード">コード</h2>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">s = &#39;\x85&#39;
+<h2 id="コード">コード<a href="#コード" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+
+<pre><code>s = '\x85'
 print(s)
 
-with open(&#39;C:/app/hoge.txt&#39;, mode=&#39;w&#39;, encoding=&#39;utf-8&#39;) as f:
+with open('C:/app/hoge.txt', mode='w', encoding='utf-8') as f:
     f.write(s)
 
-with open(&#39;C:/app/hoge.txt&#39;, mode=&#39;r&#39;) as g:
-    print(g.read())        # UnicodeDecodeError`でエラー</pre></div>
+with open('C:/app/hoge.txt', mode='r') as g:
+    print(g.read())        # UnicodeDecodeError`でエラー
+</code></pre>
+
 <blockquote>
 <p>※問題の部分だけ抜粋しています。本来のソースは入力の文字列がもっとごちゃごちゃしてました。</p>
 </blockquote>
 
-<h2 id="原因">原因</h2>
+<h2 id="原因">原因<a href="#原因" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>つまるところ、読み込み時の<code>open</code>で引数の<code>encoding</code>を指定していなかったからでした_:(´ཀ`」∠):_</p>
 
 <p>書き出しの際には下記のように<code>encoding</code>を指定していました。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">with open(&#39;C:/app/hoge.json&#39;, mode=&#39;w&#39;, encoding=&#39;utf-8&#39;) as f:</pre></div>
+
+<pre><code>with open('C:/app/hoge.json', mode='w', encoding='utf-8') as f:
+</code></pre>
+
 <p>ただ、書き出したファイルを読み込む際に、<code>encoding</code>の指定を失念していました。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">with open(&#39;C:/app/hoge.json&#39;, mode=&#39;r&#39;) as g:</pre></div>
+
+<pre><code>with open('C:/app/hoge.json', mode='r') as g:
+</code></pre>
+
 <p><code>encoding</code>の指定がない場合については、<a href="https://docs.python.org/ja/3/library/functions.html#open">オフィシャル</a>だと下記のように説明されています。</p>
 
 <blockquote>
@@ -149,59 +139,102 @@ with open(&#39;C:/app/hoge.txt&#39;, mode=&#39;r&#39;) as g:
 
 <p>Windowsだと利用されるエンコーディングはCP932です。Pythonから入出力する際、CP932に変換できない文字が存在したため、「変換できないよ！」とエラーになったわけです。</p>
 
-<h2 id="ちなみに">ちなみに</h2>
+<h2 id="ちなみに">ちなみに<a href="#ちなみに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>Python内部では文字列型は<a href="https://docs.python.org/ja/3/library/stdtypes.html#text-sequence-type-str">Unicodeで保持</a>されています。そして、入出力の際はPythonがシステムのエンコーディングに<strong>自動で変換</strong>してくれます。この場合、もともとUTF-8で保持されていたものをCP932に変換します。</p>
 
 <p>この変換をユーザーが意識する必要はありません。逆に言えば、知らない間に<strong>勝手に</strong>変換されます。そして、この自動変換の際に何かしらの「変換できない文字」があるとエラーになる、というわけです。</p>
 
-<h2 id="解消方法">解消方法</h2>
+<h2 id="解消方法">解消方法<a href="#解消方法" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p>エラーを解消するには、書き出し時と同様に読み込み時にも<code>encoding</code>を指定する必要があります。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">with open(&#39;C:/app/hoge.json&#39;, mode=&#39;r&#39;, encoding=&#34;utf-8) as f:
-    j = json.load(g)</pre></div>
+
+<pre><code>with open('C:/app/hoge.json', mode='r', encoding=&quot;utf-8) as f:
+    j = json.load(g)
+</code></pre>
+
 <p>ちなみに、書き出しの際に<code>encoding</code>を指定しなかった場合も、読み込みと同様にエラーになります。当然っちゃ当然ですね。</p>
 
 <p><img src="2019-04-25-13-13-57.png" alt="pic" /></p>
 
 <p>とりあえず今回は、両方に<code>encoding</code>を指定する方法を取りました。</p>
 
-<h2 id="おわりに">おわりに</h2>
+<h2 id="おわりに">おわりに<a href="#おわりに" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <p><code>encoding</code>を指定のは、手癖にしておくべきだと思いました（小並感</p>
 
-<h2 id="参考文献">参考文献</h2>
+<h2 id="参考文献">参考文献<a href="#参考文献" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
 
 <ul>
 <li><a href="https://docs.python.org/ja/3.7/index.html">Pythonドキュメント</a></li>
 <li><a href="https://qiita.com/butada/items/33db39ced989c2ebf644">(Windows) Python3でのUnicodeEncodeErrorの原因と回避方法</a></li>
 </ul>
 
-		</div><div id="disqus_thread"></div>
-<script type="text/javascript">
-	(function () {
-		
-		
-		if (window.location.hostname == "localhost")
-			return;
+			</div>
 
-		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-		var disqus_shortname = 'come-as-you-are';
-		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	})();
+<div class="related-posts thin">
+	<h2>See Also</h2>
+	<ul>
+	
+	<li><a href="/posts/garbled-text-with-json-dumps/">json.dumpsでの文字化けを解消する</a></li>
+	
+	<li><a href="/posts/python-naming-conventions/">Pythonの命名規約</a></li>
+	
+	</ul>
+</div>
+
+			<hr class="post-end">
+			<footer class="post-info">
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="https://idontwannawork.github.io/tags/python">Python</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1018 Words</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2019-04-25 01:57 &#43;0000</p>
+			</footer>
+		</article>
+		<div class="post-nav thin">
+			<a class="next-post" href="https://idontwannawork.github.io/posts/show-data-without-tools/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;Newer</span><br><span>Vue.jsでデータの内容を開発ツールを使わないで確認する</span>
+			</a>
+			<a class="prev-post" href="https://idontwannawork.github.io/posts/garbled-text-with-json-dumps/">
+				<span class="post-nav-label">Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>json.dumpsでの文字化けを解消する</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "come-as-you-are" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
-		Disqus.</a></noscript>
-<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 </div>
-	<div class="footer wrapper">
-	<nav class="nav">
-		<div> © Copyright notice |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
-	</nav>
-</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2019 <a href="https://idontwannawork.github.io/"></a> Allrights reserved.</p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="https://idontwannawork.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
 
 
+
+	<script src="https://idontwannawork.github.io/js/main.min.35ccbf1cdceb91e4c64c06b5d009d6e2977fafe56beda7762febd4e67528d2ac.js" integrity="sha256-Ncy/HNzrkeTGTAa10AnW4pd/r+Vr7ad2L+vU5nUo0qw=" crossorigin="anonymous"></script>
+	
 <script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
@@ -212,6 +245,8 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
-<script>feather.replace()</script>
+
+
 </body>
+
 </html>
