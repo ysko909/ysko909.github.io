@@ -49,15 +49,7 @@
 			</li>
 			
 			<li>
-				<a href="/posts">All posts</a>
-			</li>
-			
-			<li>
 				<a href="/about">About</a>
-			</li>
-			
-			<li>
-				<a href="/tags">Tags</a>
 			</li>
 			
 			<li>
@@ -66,6 +58,10 @@
 			
 			<li>
 				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
 			</li>
 			
 		</ul>
@@ -368,18 +364,236 @@ volcaとい...
 					</span>
 				</div>
 				
-				
+				<div class="post">
+					<div class="meta">Jun 10, 2019</div>
+					<a class="title" href="/posts/connect-to-docker-with-vscode-extension/">VS CodeでDockerコンテナーのPython開発環境にリモート接続する</a> &mdash;
+					<span class="description">
+						
+						## はじめに
 
-<ul class="pagination">
-	<li class="page-item page-prev">
-	
-	</li>
-	<li class="page-item page-next">
-	
-    <a href="/page/2/" class="page-link" aria-label="Next"><span aria-hidden="true">Next page →</span></a>
-	
-	</li>
-</ul>
+Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、[ptvsd](https://github.com/microsoft/ptv...
+						
+					</span>
+				</div>
+				
+				<div class="post">
+					<div class="meta">Jun 9, 2019</div>
+					<a class="title" href="/posts/xcrun-error-after-macos-update/">macOSアップデート後のxcrunエラーはxcodeをインストールする</a> &mdash;
+					<span class="description">
+						
+						## macOSあるある？
+
+macOSのアップデート（High SierraからMojave）後にgitを実行すると`xcrun`が見つからないよ！というエラー内容が出現しました。
+
+経験上このエラーメッセージが出現するのってmacOSの...
+						
+					</span>
+				</div>
+				
+				<div class="post">
+					<div class="meta">Jun 4, 2019</div>
+					<a class="title" href="/posts/recocrd-with-tascam-ixz/">TASCAMのiXZを使ってiPhoneでレコーディングする</a> &mdash;
+					<span class="description">
+						
+						## そもそもiXZって何ぞや
+
+![pic](IMG_0671.png)
+
+[TASCAMが販売している](https://tascam.jp/jp/product/ixz/top)スマートフォン・タブレット端末用オーディオインターフェイ...
+						
+					</span>
+				</div>
+				
+				<div class="post">
+					<div class="meta">May 24, 2019</div>
+					<a class="title" href="/posts/convert-markdown-to-html-with-python/">PythonでMarkdownファイルをHTMLへ変換する</a> &mdash;
+					<span class="description">
+						
+						## はじめに
+
+以前、[VS CodeでMarkdownをPDFに自動で変換する]({{&lt; relref &#34;/posts/convert-markdown-to-pdf-with-vscode/index.md&#34; &gt;}})方法を書いたのだ...
+						
+					</span>
+				</div>
+				
+				<div class="post">
+					<div class="meta">May 15, 2019</div>
+					<a class="title" href="/posts/convert-markdown-to-pdf-with-vscode/">VS CodeでMarkdownをPDFに自動で変換する</a> &mdash;
+					<span class="description">
+						
+						## はじめに
+
+Markdownで記述したmdファイルは、エンジニア間ではそのまま利用することが多いように思います（GitHubなどにREADME.mdとしてアップするとか）。ところが、メールに添付したり印刷する等、外部へ持ち出す際はPD...
+						
+					</span>
+				</div>
+				
+				<div class="post">
+					<div class="meta">May 15, 2019</div>
+					<a class="title" href="/posts/iterator-will-return-blank-with-loop-twice/">イテレータを複数回ループしたい</a> &mdash;
+					<span class="description">
+						
+						## なんのこっちゃ？
+
+実行しようとしていたのはこんなコードでした。
+
+    &gt;&gt;&gt; import re
+    &gt;&gt;&gt; s = &#34;hogefugapiyofoobarbaz1234567890abc987efg654hij321&#34;
+ ...
+						
+					</span>
+				</div>
+				
+				<div class="post">
+					<div class="meta">May 5, 2019</div>
+					<a class="title" href="/posts/show-data-without-tools/">Vue.jsでデータの内容を開発ツールを使わないで確認する</a> &mdash;
+					<span class="description">
+						
+						## 小ネタです
+
+Vue.jsは、ブラウザの開発ツールやVue.js用の拡張機能を利用しなくても、HTMLファイルに**とあるタグ**を記述することで、データの内容をJSON形式で確認できます。
+
+### 記述方法
+
+HTMLファイル内に...
+						
+					</span>
+				</div>
+				
+				<div class="post">
+					<div class="meta">Apr 25, 2019</div>
+					<a class="title" href="/posts/encode-error-with-open-function/">Pythonのopen関数はencoding引数を指定しよう</a> &mdash;
+					<span class="description">
+						
+						## 結論
+
+WindowsでPythonのopen関数を使うなら、**encoding引数を指定しよう**（血涙
+
+## 何があったのさ
+
+WindowsにてPythonを用いて、テキストファイルの書き出しと読み込みをしようとしたんです。...
+						
+					</span>
+				</div>
+				
+				<div class="post">
+					<div class="meta">Apr 24, 2019</div>
+					<a class="title" href="/posts/garbled-text-with-json-dumps/">json.dumpsでの文字化けを解消する</a> &mdash;
+					<span class="description">
+						
+						## 概要
+
+Pythonで`json.dumps()`した際に、日本語が文字化けするのを防ぐメモ。
+
+## 環境
+
+- Windows 10
+- Python 3.6
+
+## 実際のコード
+
+    &gt;&gt;&gt; import json
+   ...
+						
+					</span>
+				</div>
+				
+				<div class="post">
+					<div class="meta">Apr 22, 2019</div>
+					<a class="title" href="/posts/make-file-with-dot-on-windows/">Windowsでドット付ファイルを作成する</a> &mdash;
+					<span class="description">
+						
+						## 結論
+
+ファイル名の冒頭および語尾の両方にドットを付与！
+
+## 小ネタです
+
+`.gitignore`とか`.bashrc`のように、何かの設定ファイルは冒頭に「.（ドット）」が付いて拡張子なしであるような名前だったりします。
+
+と...
+						
+					</span>
+				</div>
+				
+				<div class="post">
+					<div class="meta">Apr 16, 2019</div>
+					<a class="title" href="/posts/busybox-on-windows/">WindowsでLinuxのコマンドが使える「BusyBox」</a> &mdash;
+					<span class="description">
+						
+						## 結論
+
+普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、[BusyBox](https://BusyBox.net/)を使えばいいよ！
+
+## はじめに
+
+仕事ではWindo...
+						
+					</span>
+				</div>
+				
+				<div class="post">
+					<div class="meta">Apr 12, 2019</div>
+					<a class="title" href="/posts/python-naming-conventions/">Pythonの命名規約</a> &mdash;
+					<span class="description">
+						
+						## 命名規約のメモ
+
+[PEP8](https://www.python.org/dev/peps/pep-0008/)に準拠。何番煎じかわからないけども自学用に。
+
+### 推奨される命名規約
+
+|命名対象|ルール|例|備考|
+|:-:...
+						
+					</span>
+				</div>
+				
+				<div class="post">
+					<div class="meta">Apr 11, 2019</div>
+					<a class="title" href="/posts/aframe-particle/">A-Frameでいろいろ降らせる</a> &mdash;
+					<span class="description">
+						
+						## 降らせるって何を？
+
+こんな感じ。
+
+&lt;p class=&#34;codepen&#34; data-height=&#34;265&#34; data-theme-id=&#34;0&#34; data-default-tab=&#34;html,result&#34; data-user=&#34;i...
+						
+					</span>
+				</div>
+				
+				<div class="post">
+					<div class="meta">Apr 5, 2019</div>
+					<a class="title" href="/posts/make-site-with-hugo/">Hugoで静的サイトを生成してみる</a> &mdash;
+					<span class="description">
+						
+						## Hugoとは
+
+Golangで作られている、静的サイトジェネレーター。なんでも、生成が速いらしいです。
+
+今回はコイツを使って、サイトを生成し公開してみようと思います。
+
+## この記事が役立つであろう人
+
+サイトを立ち上げたくて、タ...
+						
+					</span>
+				</div>
+				
+				<div class="post">
+					<div class="meta">Apr 4, 2019</div>
+					<a class="title" href="/posts/after-tutorial/">チュートリアルを卒業したくらいが一番ツラい</a> &mdash;
+					<span class="description">
+						
+						## チュートリアルってあるよね
+
+どんなプログラミング言語やライブラリやフレームワークでもあるもの、チュートリアル。「Getting Started」とか書かれたりもする。そして大抵の人がチュートリアルに触れて、場合によってはちょっと...
+						
+					</span>
+				</div>
+				
+				
 
 
 			</div>
@@ -387,7 +601,7 @@ volcaとい...
 	</div>
 	<div class="footer wrapper">
 	<nav class="nav">
-		<div> © Copyright Tetsuya K. |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+		<div> © Copyright Katsuragi |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
 	</nav>
 </div>
 
