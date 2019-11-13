@@ -7,10 +7,28 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright Katsuragi</copyright>
-    <lastBuildDate>Mon, 07 Oct 2019 09:41:57 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 13 Nov 2019 15:14:28 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Headless ChromeをPythonで使おうとしたら空っぽのページが返ってきた</title>
+      <link>https://idontwannawork.github.io/posts/chrome-headless-returns-emply-page-with-python/</link>
+      <pubDate>Wed, 13 Nov 2019 15:14:28 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/chrome-headless-returns-emply-page-with-python/</guid>
+      <description>はじめに Python、SeleniumにChromeの組み合わせは、PhantomJSが息絶えてしまった今では自動化の王道だと思います。そんな王道の組み合わせをWindowsで試してたら、Headlessモードの時だけページの取得が上手くできない事象を目撃しましたので、メモしておきます。Headlessモードじゃないなら正常なのに、Headlessモードへ変更した途端におかしくなってしまいました。
+環境  Windows 10 Python 3.6.8 ChromeDriver 2.38.552522 Google Chrome 80.0.3965.0（Official Build）canary （64 ビット）  現象 どんなURLを指定しても、HeadlessモードではSeleniumで取得した結果が空っぽのHTMLになってしまいます。Headlessモードを外すだけで、ちゃんと取得します。謎。
+Chrome用ソース Chromedriverは、インストール先のパスが通っている前提です。
+import time from selenium import webdriver from selenium.webdriver.chrome.options import Options options = Options() options.add_argument(&amp;#39;--headless&amp;#39;) options.add_argument(&amp;#39;--disable-gpu&amp;#39;) options.binary_location = &amp;#39;Chrome Canaryのアドレス&amp;#39; driver = webdriver.Chrome(options=options) driver.get(&amp;#39;https://www.yahoo.co.jp/&amp;#39;) time.sleep(3) html = driver.page_source print(html) driver.save_screenshot(&amp;#34;hoge.png&amp;#34;) driver.quit() 多分、極端に変なことはしてないと思うんですが、これが動作するとコンソールには下記のHTMLソースが表示されます。
+&amp;lt;html xmlns=&amp;#34;http://www.w3.org/1999/xhtml&amp;#34;&amp;gt;&amp;lt;head&amp;gt;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt; 中身空っぽじゃねーかよ！
+実際save_screenshotで生成されるファイルを見てみると下記の通りです。
+オドロキの白さ！
+まぁそうですわな、HTMLファイル中に何もないんだから。
+Headlessモードを外してみる ソースはこんな感じ。Headlessモードをコメントで外しただけです。
+import time from selenium import webdriver from selenium.webdriver.chrome.options import Options options = Options() # options.</description>
+    </item>
     
     <item>
       <title>VuexとVue Routerを使ってSPAを作るチュートリアルをやってみた</title>
