@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://idontwannawork.github.io/posts/behringer-release-analog-bass-synth-clone-tb303/</loc>
+    <lastmod>2019-11-15T18:38:56+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/posts/chrome-headless-returns-emply-page-with-python/</loc>
     <lastmod>2019-11-13T15:14:28+09:00</lastmod>
   </url>
@@ -211,6 +216,12 @@
   </url>
   
   <url>
+    <loc>https://idontwannawork.github.io/tags/behringer/</loc>
+    <lastmod>2019-11-15T18:38:56+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/tags/buefy/</loc>
     <lastmod>2019-09-02T16:08:20+09:00</lastmod>
     <priority>0</priority>
@@ -350,7 +361,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/posts/</loc>
-    <lastmod>2019-11-13T15:14:28+09:00</lastmod>
+    <lastmod>2019-11-15T18:38:56+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -393,6 +404,18 @@
   <url>
     <loc>https://idontwannawork.github.io/tags/</loc>
     <lastmod>2019-04-11T09:47:58+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://idontwannawork.github.io/tags/tb303/</loc>
+    <lastmod>2019-11-15T18:38:56+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://idontwannawork.github.io/tags/td3/</loc>
+    <lastmod>2019-11-15T18:38:56+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -458,7 +481,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/</loc>
-    <lastmod>2019-11-13T15:14:28+09:00</lastmod>
+    <lastmod>2019-11-15T18:38:56+09:00</lastmod>
     <priority>0</priority>
   </url>
   
