@@ -141,7 +141,8 @@ Randbetween()・・・ランダムな値を生成 最小値と最大値を指定
       <description>概要 xlwingsを利用して、PythonからExcelファイルをいじってみます。下記の例はインタプリタですが、*.py形式のファイルでも同様に利用できます。
 環境  Python 3.6 xlwings 0.15.3 Windows 10  新規でワークブックを作成する 空のワークブックを作成します。
 &amp;gt;&amp;gt;&amp;gt; import xlwings as xw &amp;gt;&amp;gt;&amp;gt; xb = xw.Book() &amp;gt;&amp;gt;&amp;gt; xb.name &amp;#39;Book1&amp;#39; 次の方法でも作成できます。上記の方法は明示的に「ワークブックを作成」しますが、こっちの方法はアプリケーション（Excel）を起動しつつ新規ワークブックをアプリケーションに作成させます。スタートメニューなどから単純にExcelを起動した場合、空っぽのファイルを開いた状態でExcelが起動しますが、あれの状態をプログラムで再現している感じ。
-&amp;gt;&amp;gt;&amp;gt; import xlwings as xw &amp;gt;&amp;gt;&amp;gt; app = xw.App() &amp;gt;&amp;gt;&amp;gt; app.books[0].name &amp;#39;Book1&amp;#39; 既存のファイルを開く &amp;gt;&amp;gt;&amp;gt; xw.Book(r&amp;#39;C:\\app\\hoge.xlsx&amp;#39;) または ```console &amp;gt;&amp;gt;&amp;gt; app = xw.App() &amp;gt;&amp;gt;&amp;gt; app.books.open(r&amp;#39;C:\\app\\hoge.xlsx&amp;#39;) ファイルを閉じる すでにオープンしたExcelファイルを閉じます。保存はせず、確認メッセージも出力されません。
+&amp;gt;&amp;gt;&amp;gt; import xlwings as xw &amp;gt;&amp;gt;&amp;gt; app = xw.App() &amp;gt;&amp;gt;&amp;gt; app.books[0].name &amp;#39;Book1&amp;#39; 既存のファイルを開く &amp;gt;&amp;gt;&amp;gt; xw.Book(r&amp;#39;C:\\app\\hoge.xlsx&amp;#39;) または
+&amp;gt;&amp;gt;&amp;gt; app = xw.App() &amp;gt;&amp;gt;&amp;gt; app.books.open(r&amp;#39;C:\\app\\hoge.xlsx&amp;#39;) ファイルを閉じる すでにオープンしたExcelファイルを閉じます。保存はせず、確認メッセージも出力されません。
 &amp;gt;&amp;gt;&amp;gt; xb = xw.Book() &amp;gt;&amp;gt;&amp;gt; xb.close() ちなみに、このコードはワークブックを閉じるだけなので、Excelのプロセスそのものは残ることに注意。
 Excelを閉じる Excelのプロセスそのものを閉じる場合は、killを利用します。
 &amp;gt;&amp;gt;&amp;gt; app = xw.App() &amp;gt;&amp;gt;&amp;gt; app.kill() セルに値を設定・参照する .valueを用いて値を設定あるいは参照します。文字列の場合はクオーテーションで囲います。
