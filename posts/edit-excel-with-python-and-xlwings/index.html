@@ -179,6 +179,15 @@ Excelを閉じる Excelのプロセスそのものを閉じる場合は、kill�
 &#39;fuga&#39;
 &gt;&gt;&gt; xb.sheets(1).range(2,3).value
 3.0</code></pre></div>
+<p>逆に指定した範囲のデータを参照することもできます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">&gt;&gt;&gt; xb.sheets(1).range((1,1), (2,3)).value
+[[&#39;hoge&#39;, &#39;fuga&#39;, &#39;piyo&#39;], [1.0, 2.0, 3.0]]
+&gt;&gt;&gt; xb.sheets(1).range(&#34;A1:C2&#34;).value
+[[&#39;hoge&#39;, &#39;fuga&#39;, &#39;piyo&#39;], [1.0, 2.0, 3.0]]
+&gt;&gt;&gt; xb.sheets(1).range(&#34;A1:B3&#34;).value
+[[&#39;hoge&#39;, &#39;fuga&#39;], [1.0, 2.0], [None, None]]</code></pre></div>
+<p>選択した範囲にデータが存在しない場合は、上記のとおり<code>None</code>表示になります。</p>
+
 <p>なお、<code>App()</code>を使用してインスタンスを生成した場合でも、基本的な考え方は同じ。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">&gt;&gt;&gt; app = xw.App()
 &gt;&gt;&gt; app.books[0].sheets[0].range(1,1).value = &#34;hoge&#34;
