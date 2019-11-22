@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>PythonでExcelファイルのキーワードを参照して自動的にGoogle検索し結果を保存する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="PythonでExcelファイルのキーワードを参照して自動的にGoogle検索し結果を保存する" />
+<meta property="og:description" content="職場からExcelが駆逐される日は来るのだろうか Excel。
+いいアプリケーションだと思います。実力に裏打ちされた歴史もあるしね。とはいえ、こと日本においては単なる表計算ソフトに留まらず、エゲツない「1セルにつき1文字」という縛りでDTPの真似事までやらされる姿を見るに、個人的には落涙を禁じえません。「ネ申Excel」なんていう話もあるわけで、日本のExcelがいわれのない誹りを受けずに本来の表計算作業を全うする日は来るのか、という思いを抱かずにはいられません。
+また、前述のようなリッチな使い方とはまったく逆のベクトルで利用されることがあります。何はなくとも「とりあえずExcelファイルでやります」とExcelを立ち上げるケースです。今日も、テキストファイルでいいのにわざわざExcelファイルに箇条書きする、サラリーマンの姿がどこかで見られるかもしれません。そしてそのExcelファイルを送り付けられて、しかもいろんな情報までてんこ盛りだったりすると、「何この・・・何・・・？」などと口走りながらエンジニアが頭を抱えることになるでしょう。「テキストでいいじゃん」って言いたいところなのですが、相手側にはその発想がそもそもないわけです。
+となれば ExcelファイルをそのままCSVなどのテキスト形式にエクスポートすればいいわけです。文字列だとダブルクォーテーションが付与されたりだとか、いろいろExcelが余計なことをしてくれるかもしれませんが、とりあえずテキストまで落とせればどうにでもなります。
+ところが必要な情報が一部の列だけで他は必要ない、という場合にはテキストファイルにエクスポートしたせいで却って利用しにくくなってしまう場合もあります。たとえば下記のような感じ。
+いくつかある列のうち、「項目名」の列に含まれる値のみを利用するとしましょう。テキスト出力した場合、CSVならカンマで各項目が区切られているので、カンマでsplitして必要な要素だけ利用する、という方法も可能です。この場合では各行を最初の要素のみを参照し、他のデータは捨てる、という処理をループするわけです。ですが、それなら最初からExcelファイルの必要な列だけを参照すればいいんじゃね？という気がします。「読み込むだけは読むけど使わない」なら、最初から読み込まなければいいわけですから。
+というわけで実現したい内容を 送り付けられたExcelファイルの必要な部分だけを参照しつつ、ついでに別の処理を行うこととしましょう。とりあえず下記のようなことを要求されていると仮定します。
+ Excelファイルの一部分をキーワードとして参照する 検索のキーワードとして利用したいセルの場所は確定している 検索時に追加したいキーワードがあれば事前に追加できる キーワードは複数件存在する そのキーワードを利用してGoogle検索する 検索結果はとりあえずテキストファイルに出力する  こんなところでしょうか。
+なお、検索結果について解析したりアクセスしその内容を取得するのは、Beautiful SoupやScrapyなどを用いて検索結果を解析する必要があります。ここではそこまでは要求されていない、として割愛します。
+また、数字が格納されている特定の列に対して何かしらの計算を行いたい場合も、Excelファイルを読み込む処理までは同様に考えることができます。読み込んで値を参照しながら、行いたい計算をPythonで記述すればいいわけです。
+環境  Windows 10 Python 3.6.8 selenium 3.141.0  結論から こんなソースを書きました。
+import time from selenium import webdriver from selenium.webdriver.chrome.options import Options import xlwings as xw # 時間計測 start = time.time() options = Options() # options.add_argument(&#39;--headless&#39;) # ChromeのWebDriverオブジェクトを作成(ヘッドレスモードの場合) # ノーヘッドレスの場合は引数なしで実行する driver = webdriver.Chrome(chrome_options=options) driver.command_executor._commands[&#34;send_command&#34;] = ( &#34;POST&#34;, &#39;/session/$sessionId/chromium/send_command&#39; ) params = { &#39;cmd&#39;: &#39;Page." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://idontwannawork.github.io/posts/search-keyword-in-excel-book-with-python/" /><meta property="article:published_time" content="2019-11-22T09:50:35&#43;09:00"/>
+<meta property="article:modified_time" content="2019-11-22T09:50:35&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="PythonでExcelファイルのキーワードを参照して自動的にGoogle検索し結果を保存する"/>
+<meta name="twitter:description" content="職場からExcelが駆逐される日は来るのだろうか Excel。
+いいアプリケーションだと思います。実力に裏打ちされた歴史もあるしね。とはいえ、こと日本においては単なる表計算ソフトに留まらず、エゲツない「1セルにつき1文字」という縛りでDTPの真似事までやらされる姿を見るに、個人的には落涙を禁じえません。「ネ申Excel」なんていう話もあるわけで、日本のExcelがいわれのない誹りを受けずに本来の表計算作業を全うする日は来るのか、という思いを抱かずにはいられません。
+また、前述のようなリッチな使い方とはまったく逆のベクトルで利用されることがあります。何はなくとも「とりあえずExcelファイルでやります」とExcelを立ち上げるケースです。今日も、テキストファイルでいいのにわざわざExcelファイルに箇条書きする、サラリーマンの姿がどこかで見られるかもしれません。そしてそのExcelファイルを送り付けられて、しかもいろんな情報までてんこ盛りだったりすると、「何この・・・何・・・？」などと口走りながらエンジニアが頭を抱えることになるでしょう。「テキストでいいじゃん」って言いたいところなのですが、相手側にはその発想がそもそもないわけです。
+となれば ExcelファイルをそのままCSVなどのテキスト形式にエクスポートすればいいわけです。文字列だとダブルクォーテーションが付与されたりだとか、いろいろExcelが余計なことをしてくれるかもしれませんが、とりあえずテキストまで落とせればどうにでもなります。
+ところが必要な情報が一部の列だけで他は必要ない、という場合にはテキストファイルにエクスポートしたせいで却って利用しにくくなってしまう場合もあります。たとえば下記のような感じ。
+いくつかある列のうち、「項目名」の列に含まれる値のみを利用するとしましょう。テキスト出力した場合、CSVならカンマで各項目が区切られているので、カンマでsplitして必要な要素だけ利用する、という方法も可能です。この場合では各行を最初の要素のみを参照し、他のデータは捨てる、という処理をループするわけです。ですが、それなら最初からExcelファイルの必要な列だけを参照すればいいんじゃね？という気がします。「読み込むだけは読むけど使わない」なら、最初から読み込まなければいいわけですから。
+というわけで実現したい内容を 送り付けられたExcelファイルの必要な部分だけを参照しつつ、ついでに別の処理を行うこととしましょう。とりあえず下記のようなことを要求されていると仮定します。
+ Excelファイルの一部分をキーワードとして参照する 検索のキーワードとして利用したいセルの場所は確定している 検索時に追加したいキーワードがあれば事前に追加できる キーワードは複数件存在する そのキーワードを利用してGoogle検索する 検索結果はとりあえずテキストファイルに出力する  こんなところでしょうか。
+なお、検索結果について解析したりアクセスしその内容を取得するのは、Beautiful SoupやScrapyなどを用いて検索結果を解析する必要があります。ここではそこまでは要求されていない、として割愛します。
+また、数字が格納されている特定の列に対して何かしらの計算を行いたい場合も、Excelファイルを読み込む処理までは同様に考えることができます。読み込んで値を参照しながら、行いたい計算をPythonで記述すればいいわけです。
+環境  Windows 10 Python 3.6.8 selenium 3.141.0  結論から こんなソースを書きました。
+import time from selenium import webdriver from selenium.webdriver.chrome.options import Options import xlwings as xw # 時間計測 start = time.time() options = Options() # options.add_argument(&#39;--headless&#39;) # ChromeのWebDriverオブジェクトを作成(ヘッドレスモードの場合) # ノーヘッドレスの場合は引数なしで実行する driver = webdriver.Chrome(chrome_options=options) driver.command_executor._commands[&#34;send_command&#34;] = ( &#34;POST&#34;, &#39;/session/$sessionId/chromium/send_command&#39; ) params = { &#39;cmd&#39;: &#39;Page."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://idontwannawork.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://idontwannawork.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script async src="//pagead2.googlesyndication.com/
+		pagead/js/adsbygoogle.js"></script>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({
+			google_ad_client: "pub-2615583270378842",
+			enable_page_level_ads: true
+		});
+	</script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>頑張りたくないので楽できるように頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/idontwannawork" title="Github"><i data-feather="github"></i></a><a href="https://codepen.io/idontwannawork/" title="Codepen"><i data-feather="codepen"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">PythonでExcelファイルのキーワードを参照して自動的にGoogle検索し結果を保存する</h1>
+			<div class="meta">Posted at &mdash; Nov 22, 2019</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="職場からexcelが駆逐される日は来るのだろうか">職場からExcelが駆逐される日は来るのだろうか</h2>
+
+<p><strong>Excel</strong>。</p>
+
+<p>いいアプリケーションだと思います。実力に裏打ちされた歴史もあるしね。とはいえ、こと日本においては単なる表計算ソフトに留まらず、エゲツない「1セルにつき1文字」という縛りでDTPの真似事までやらされる姿を見るに、個人的には落涙を禁じえません。「<a href="https://dic.nicovideo.jp/a/%E3%83%8D%E7%94%B3excel">ネ申Excel</a>」なんていう話もあるわけで、日本のExcelがいわれのない誹りを受けずに本来の表計算作業を全うする日は来るのか、という思いを抱かずにはいられません。</p>
+
+<p>また、前述のようなリッチな使い方とはまったく逆のベクトルで利用されることがあります。何はなくとも「とりあえずExcelファイルでやります」とExcelを立ち上げるケースです。今日も、テキストファイルでいいのにわざわざExcelファイルに箇条書きする、サラリーマンの姿がどこかで見られるかもしれません。そしてそのExcelファイルを送り付けられて、しかもいろんな情報までてんこ盛りだったりすると、「何この・・・何・・・？」などと口走りながらエンジニアが頭を抱えることになるでしょう。「テキストでいいじゃん」って言いたいところなのですが、相手側にはその発想がそもそもないわけです。</p>
+
+<h2 id="となれば">となれば</h2>
+
+<p>ExcelファイルをそのままCSVなどのテキスト形式にエクスポートすればいいわけです。文字列だとダブルクォーテーションが付与されたりだとか、いろいろExcelが余計なことをしてくれるかもしれませんが、とりあえずテキストまで落とせればどうにでもなります。</p>
+
+<p>ところが<strong>必要な情報が一部の列だけ</strong>で他は必要ない、という場合にはテキストファイルにエクスポートしたせいで却って利用しにくくなってしまう場合もあります。たとえば下記のような感じ。</p>
+
+<p><img src="2019-11-22-14-41-26.png" alt="pic" /></p>
+
+<p>いくつかある列のうち、「項目名」の列に含まれる値のみを利用するとしましょう。テキスト出力した場合、CSVならカンマで各項目が区切られているので、カンマで<code>split</code>して必要な要素だけ利用する、という方法も可能です。この場合では各行を最初の要素のみを参照し、他のデータは捨てる、という処理をループするわけです。ですが、それなら最初からExcelファイルの必要な列だけを参照すればいいんじゃね？という気がします。「読み込むだけは読むけど使わない」なら、最初から読み込まなければいいわけですから。</p>
+
+<h2 id="というわけで実現したい内容を">というわけで実現したい内容を</h2>
+
+<p>送り付けられたExcelファイルの必要な部分だけを参照しつつ、ついでに別の処理を行うこととしましょう。とりあえず下記のようなことを要求されていると仮定します。</p>
+
+<ul>
+<li>Excelファイルの一部分をキーワードとして参照する</li>
+<li>検索のキーワードとして利用したいセルの場所は確定している</li>
+<li>検索時に追加したいキーワードがあれば事前に追加できる</li>
+<li>キーワードは複数件存在する</li>
+<li>そのキーワードを利用してGoogle検索する</li>
+<li>検索結果はとりあえずテキストファイルに出力する</li>
+</ul>
+
+<p>こんなところでしょうか。</p>
+
+<p>なお、検索結果について解析したりアクセスしその内容を取得するのは、<a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">Beautiful Soup</a>や<a href="https://scrapy.org/">Scrapy</a>などを用いて検索結果を解析する必要があります。ここではそこまでは要求されていない、として割愛します。</p>
+
+<p>また、数字が格納されている特定の列に対して何かしらの計算を行いたい場合も、Excelファイルを読み込む処理までは同様に考えることができます。読み込んで値を参照しながら、行いたい計算をPythonで記述すればいいわけです。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Windows 10</li>
+<li>Python 3.6.8</li>
+<li>selenium 3.141.0</li>
+</ul>
+
+<h2 id="結論から">結論から</h2>
+
+<p>こんなソースを書きました。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> time
+<span style="color:#00f">from</span> selenium <span style="color:#00f">import</span> webdriver
+<span style="color:#00f">from</span> selenium.webdriver.chrome.options <span style="color:#00f">import</span> Options
+<span style="color:#00f">import</span> xlwings <span style="color:#00f">as</span> xw
+
+
+<span style="color:#008000"># 時間計測</span>
+start = time.time()
+
+options = Options()
+<span style="color:#008000"># options.add_argument(&#39;--headless&#39;)</span>
+
+<span style="color:#008000"># ChromeのWebDriverオブジェクトを作成(ヘッドレスモードの場合)</span>
+<span style="color:#008000"># ノーヘッドレスの場合は引数なしで実行する</span>
+driver = webdriver.Chrome(chrome_options=options)
+
+driver.command_executor._commands[<span style="color:#a31515">&#34;send_command&#34;</span>] = (
+    <span style="color:#a31515">&#34;POST&#34;</span>,
+    <span style="color:#a31515">&#39;/session/$sessionId/chromium/send_command&#39;</span>
+)
+params = {
+    <span style="color:#a31515">&#39;cmd&#39;</span>: <span style="color:#a31515">&#39;Page.setDownloadBehavior&#39;</span>,
+    <span style="color:#a31515">&#39;params&#39;</span>: {
+        <span style="color:#a31515">&#39;behavior&#39;</span>: <span style="color:#a31515">&#39;allow&#39;</span>
+    }
+}
+
+
+<span style="color:#00f">def</span> getCorpName():
+    b = xw.Book(<span style="color:#a31515">r</span><span style="color:#a31515">&#34;C:</span><span style="color:#a31515">\\</span><span style="color:#a31515">app</span><span style="color:#a31515">\\</span><span style="color:#a31515">input.xlsx&#34;</span>)
+    sh = b.sheets(1)
+    <span style="color:#00f">return</span> sh.range((5, 1), (sh.range(5, 1).end(<span style="color:#a31515">&#34;down&#34;</span>).row, 1)).value
+
+
+names = getCorpName()
+<span style="color:#008000"># キーワード順を逆転させたい場合はreverse()</span>
+<span style="color:#008000"># names.reverse()</span>
+
+<span style="color:#008000"># 保存先ファイル</span>
+filepath = <span style="color:#a31515">r</span><span style="color:#a31515">&#34;C:</span><span style="color:#a31515">\\</span><span style="color:#a31515">app</span><span style="color:#a31515">\\</span><span style="color:#a31515">searchresult.txt&#34;</span>
+
+<span style="color:#008000"># 追加キーワードがあれば</span>
+add_words = [<span style="color:#a31515">&#34;由来&#34;</span>, <span style="color:#a31515">&#34;使い方&#34;</span>]
+<span style="color:#00f">if</span> len(add_words) &gt; 0:
+    add_words.insert(0, <span style="color:#a31515">&#34;&#34;</span>)
+
+words = <span style="color:#a31515">&#34; &#34;</span>.join(add_words)
+
+<span style="color:#00f">with</span> open(filepath, mode=<span style="color:#a31515">&#34;w&#34;</span>, encoding=<span style="color:#a31515">&#34;utf-8&#34;</span>) <span style="color:#00f">as</span> f:
+    <span style="color:#00f">for</span> name <span style="color:#00f">in</span> names:
+        url = <span style="color:#a31515">&#34;https://www.google.com/search?q={}&amp;safe=off&#34;</span>.format(name + words)
+        driver.get(url)
+        time.sleep(2)
+
+        elem_titles = driver.find_elements_by_class_name(<span style="color:#a31515">&#34;LC20lb&#34;</span>)
+        elem_details = driver.find_elements_by_class_name(<span style="color:#a31515">&#34;st&#34;</span>)
+
+        <span style="color:#00f">for</span> title, detail <span style="color:#00f">in</span> zip(elem_titles, elem_details):
+
+            f.write(title.text + <span style="color:#a31515">&#34;</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>)
+            f.write(detail.text + <span style="color:#a31515">&#34;</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>)
+
+            f.write(<span style="color:#a31515">&#34;=====================================&#34;</span> + <span style="color:#a31515">&#34;</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>)
+
+<span style="color:#00f">print</span>(<span style="color:#a31515">&#34;処理時間： &#34;</span> + str(time.time() - start))
+driver.quit()</code></pre></div>
+<p>上記のExcelファイルを入力にした場合、実行結果であるテキストファイルには下記のように出力されます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">「バズる」の意味や使い方 Weblio辞書
+Weblio辞書では「バズる」の意味や使い方、用例、類似表現などを解説しています。 ... バズる」の由来は英語の動詞 buzz を日本語化した語と捉えられる。語尾「る」を活用することで「バズっている」「バズった」という風に文脈に応じた使い方ができる。 バズる話題 ...
+=====================================
+ネット用語「バズる」の意味とその由来を解説！「バズった」とは ...
+バズる」の使い方 に移動 - 「バズる」はネット上で急に話題になり、注目を集めている状態を意味します。 ネット上で宣伝活動をしている担当者にとっては、自社の商品やサービスを意図的に「バズらせる」ことが業務の目的であり、「バズった」ら ...
+=====================================
+・・・（以下省略）</code></pre></div>
+<p>大したことはやっていないのですが、少し補足したいともいます。</p>
+
+<h2 id="補足">補足</h2>
+
+<h3 id="headlessモードにはしていない">Headlessモードにはしていない</h3>
+
+<p>以前の記事において「HeadlessモードのChromeでは検索結果が正常に取得できなかった」ことを書きましたが、相変わらず今回も同様だったのでHeadlessモードを外してあります。</p>
+
+<h3 id="excelファイルの読み込み">Excelファイルの読み込み</h3>
+
+<p>Excelファイルの読み込みは<a href="https://www.xlwings.org/">xlwings</a>を利用しています。そして抽出したいセルの領域を指定しています。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> getCorpName():
+    b = xw.Book(<span style="color:#a31515">r</span><span style="color:#a31515">&#34;C:</span><span style="color:#a31515">\\</span><span style="color:#a31515">app</span><span style="color:#a31515">\\</span><span style="color:#a31515">input.xlsx&#34;</span>)
+    sh = b.sheets(1)
+    <span style="color:#00f">return</span> sh.range((5, 1), (sh.range(5, 1).end(<span style="color:#a31515">&#34;down&#34;</span>).row, 1)).value</code></pre></div>
+<p>上記の例では、A列の5行目からデータが複数件あり、空のデータは存在しないという前提です。空データがあると<code>end()</code>が正常に動作しないからです。</p>
+
+<h3 id="検索結果の取得">検索結果の取得</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">        elem_titles = driver.find_elements_by_class_name(<span style="color:#a31515">&#34;LC20lb&#34;</span>)
+        elem_details = driver.find_elements_by_class_name(<span style="color:#a31515">&#34;st&#34;</span>)</code></pre></div>
+<p>この部分で得られる情報には、実際のテキスト以外にもタグなどの余計な情報を含まれています。そのため、次のループ文において<code>title.text</code>などとし、テキストのみを出力しています。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p><strong>Excelくんは悪くないよ</strong>・・・。</p>
+
+<p>まぁ、使い方が悪いのだよね。ビールよろしく「とりあえずExcel」のように、何でもかんでもExcelでどうにかしようとする文化はなくなってほしいものです。</p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright Katsuragi |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

@@ -7,10 +7,30 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright Katsuragi</copyright>
-    <lastBuildDate>Wed, 13 Nov 2019 15:14:28 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 22 Nov 2019 09:50:35 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>PythonでExcelファイルのキーワードを参照して自動的にGoogle検索し結果を保存する</title>
+      <link>https://idontwannawork.github.io/posts/search-keyword-in-excel-book-with-python/</link>
+      <pubDate>Fri, 22 Nov 2019 09:50:35 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/search-keyword-in-excel-book-with-python/</guid>
+      <description>職場からExcelが駆逐される日は来るのだろうか Excel。
+いいアプリケーションだと思います。実力に裏打ちされた歴史もあるしね。とはいえ、こと日本においては単なる表計算ソフトに留まらず、エゲツない「1セルにつき1文字」という縛りでDTPの真似事までやらされる姿を見るに、個人的には落涙を禁じえません。「ネ申Excel」なんていう話もあるわけで、日本のExcelがいわれのない誹りを受けずに本来の表計算作業を全うする日は来るのか、という思いを抱かずにはいられません。
+また、前述のようなリッチな使い方とはまったく逆のベクトルで利用されることがあります。何はなくとも「とりあえずExcelファイルでやります」とExcelを立ち上げるケースです。今日も、テキストファイルでいいのにわざわざExcelファイルに箇条書きする、サラリーマンの姿がどこかで見られるかもしれません。そしてそのExcelファイルを送り付けられて、しかもいろんな情報までてんこ盛りだったりすると、「何この・・・何・・・？」などと口走りながらエンジニアが頭を抱えることになるでしょう。「テキストでいいじゃん」って言いたいところなのですが、相手側にはその発想がそもそもないわけです。
+となれば ExcelファイルをそのままCSVなどのテキスト形式にエクスポートすればいいわけです。文字列だとダブルクォーテーションが付与されたりだとか、いろいろExcelが余計なことをしてくれるかもしれませんが、とりあえずテキストまで落とせればどうにでもなります。
+ところが必要な情報が一部の列だけで他は必要ない、という場合にはテキストファイルにエクスポートしたせいで却って利用しにくくなってしまう場合もあります。たとえば下記のような感じ。
+いくつかある列のうち、「項目名」の列に含まれる値のみを利用するとしましょう。テキスト出力した場合、CSVならカンマで各項目が区切られているので、カンマでsplitして必要な要素だけ利用する、という方法も可能です。この場合では各行を最初の要素のみを参照し、他のデータは捨てる、という処理をループするわけです。ですが、それなら最初からExcelファイルの必要な列だけを参照すればいいんじゃね？という気がします。「読み込むだけは読むけど使わない」なら、最初から読み込まなければいいわけですから。
+というわけで実現したい内容を 送り付けられたExcelファイルの必要な部分だけを参照しつつ、ついでに別の処理を行うこととしましょう。とりあえず下記のようなことを要求されていると仮定します。
+ Excelファイルの一部分をキーワードとして参照する 検索のキーワードとして利用したいセルの場所は確定している 検索時に追加したいキーワードがあれば事前に追加できる キーワードは複数件存在する そのキーワードを利用してGoogle検索する 検索結果はとりあえずテキストファイルに出力する  こんなところでしょうか。
+なお、検索結果について解析したりアクセスしその内容を取得するのは、Beautiful SoupやScrapyなどを用いて検索結果を解析する必要があります。ここではそこまでは要求されていない、として割愛します。
+また、数字が格納されている特定の列に対して何かしらの計算を行いたい場合も、Excelファイルを読み込む処理までは同様に考えることができます。読み込んで値を参照しながら、行いたい計算をPythonで記述すればいいわけです。
+環境  Windows 10 Python 3.6.8 selenium 3.141.0  結論から こんなソースを書きました。
+import time from selenium import webdriver from selenium.webdriver.chrome.options import Options import xlwings as xw # 時間計測 start = time.time() options = Options() # options.add_argument(&amp;#39;--headless&amp;#39;) # ChromeのWebDriverオブジェクトを作成(ヘッドレスモードの場合) # ノーヘッドレスの場合は引数なしで実行する driver = webdriver.Chrome(chrome_options=options) driver.command_executor._commands[&amp;#34;send_command&amp;#34;] = ( &amp;#34;POST&amp;#34;, &amp;#39;/session/$sessionId/chromium/send_command&amp;#39; ) params = { &amp;#39;cmd&amp;#39;: &amp;#39;Page.</description>
+    </item>
     
     <item>
       <title>Headless ChromeをPythonで使おうとしたら空っぽのページが返ってきた</title>
