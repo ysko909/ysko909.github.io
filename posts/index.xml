@@ -7,10 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright Katsuragi</copyright>
-    <lastBuildDate>Fri, 22 Nov 2019 09:50:35 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 06 Dec 2019 09:15:20 +0900</lastBuildDate>
     
 	<atom:link href="https://idontwannawork.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>phina.jsを使ってゲーム用のテンプレートを作る</title>
+      <link>https://idontwannawork.github.io/posts/install-and-make-some-deliverables-with-phinajs/</link>
+      <pubDate>Fri, 06 Dec 2019 09:15:20 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/install-and-make-some-deliverables-with-phinajs/</guid>
+      <description>phina.jsとはなんぞや phina.jsとは「ゲームやツールを簡単に作る事ができるJavaScript製のゲームライブラリ」（オフィシャルより）です。詳細はオフィシャルページを見てもらうとわかりやすいと思いますが、JavaScriptでできているため、PCやスマートフォンなどを問わずブラウザ上で実行できる、便利なライブラリです。たとえばこれとかおもしろいですよね。とくに2Dのブラウザ上で動くゲームを作りたいってなったら、結構イケると思います。
+ちなみに ゲームライブラリでJavaScriptって言ったらPhaserあたりが有名だと思うのですが、今回は「国産」ってところでphina.jsを贔屓しています。もちろんPhaserもいいライブラリなので、また別の機会に触ってみたいと思います。
+何作るのよ いきなり出鼻をくじくようでアレなんですが、今回は触りってことでテンプレートとして使える簡単なデモ用のスクリプトです。クリックでランダムに「何か」が変わるようなもの、っていう簡単なテンプレートです。
+完成形 いきなりですが完成形です。
+See the Pen phina.js sample by idontwannawork (@idontwannawork) on CodePen. 
+画面のテキトーな場所をクリックすると、文字色が変わります。なんかそれっぽいボタンがありますが、画面のどこでも反応するので関係ないです。
+ソース // 戦闘画面サンプル  // 画面サイズ const W = 960; const H = 640; // 素材asset const ASSETS = { font: { digiFont: &amp;#34;https://db.onlinewebfonts.com/t/55ea8f43f01d7f6e293a0b84be8861eb.woff2&amp;#34; } }; phina.globalize(); /* * メインシーン */ phina.define(&amp;#34;MainScene&amp;#34;, { // 継承  superClass: &amp;#39;DisplayScene&amp;#39;, // 初期化  init(param) { // 親クラス初期化  this.superInit({ width: W, height: H, }); // 背景色  this.</description>
+    </item>
     
     <item>
       <title>PythonでExcelファイルのキーワードを参照して自動的にGoogle検索し結果を保存する</title>
