@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Logisticregression on 頑張らないために頑張る</title>
+    <link>https://idontwannawork.github.io/tags/logisticregression/</link>
+    <description>Recent content in Logisticregression on 頑張らないために頑張る</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© Copyright Katsuragi</copyright>
+    <lastBuildDate>Sun, 15 Dec 2019 14:43:33 +0900</lastBuildDate>
+    
+	<atom:link href="https://idontwannawork.github.io/tags/logisticregression/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>LogisticRegressionのsolverパラメータはデフォルト値が変わってた</title>
+      <link>https://idontwannawork.github.io/posts/default-solver-param-of-logisticregression-is-changed/</link>
+      <pubDate>Sun, 15 Dec 2019 14:43:33 +0900</pubDate>
+      
+      <guid>https://idontwannawork.github.io/posts/default-solver-param-of-logisticregression-is-changed/</guid>
+      <description>はじめに scikit-learnライブラリのロジスティック回帰（LogisticRegression）を使っていたときに気づいた事象です。
+まあまあこの界隈ではありがちですが、「過去に動作していたコードがライブラリ（やパッケージ）のアップデートで動作しなくなる」パターンのお話です。
+具体的な現象 下記のようなコードでエラーが発生します。具体的にはLogisticRegression()実行時にL1正規化を行うと「L1正規化はサポートしてないぜ！」っていうエラーになります。
+lr_l1 = LogisticRegression(C=C, penalty=&amp;#39;l1&amp;#39;).fit(X_train, y_train) エラーの内容はこんな感じ。
+--------------------------------------------------------------------------- ValueError Traceback (most recent call last) ~/devp/learning/intro_to_ml_with_python/2_3_linear_model.py in 1 for C, marker in zip([0.001, 1, 100], [&amp;#39;o&amp;#39;, &amp;#39;^&amp;#39;, &amp;#39;v&amp;#39;]): ----&amp;gt; 2 lr_l1 = LogisticRegression(C=C, penalty=&amp;#39;l1&amp;#39;).fit(X_train, y_train) 3 print(&amp;#39;Training accuracy of l1 logreg with C={:.f3}: {:.2f}&amp;#39;.format(C, lr_l1.score(X_train, y_train))) 4 print(&amp;#39;Test accuracy of l1 logreg with C={:.f3}: {:.2f}&amp;#39;.format(C, lr_l1.score(X_test, y_test))) 5 plt.plot(lr_l1.coef_.T, marker, label=&amp;#39;C={:.3f}&amp;#39;.format(C)) /usr/local/lib/python3.7/site-packages/sklearn/linear_model/_logistic.py in fit(self, X, y, sample_weight) 1484 The SAGA solver supports both float64 and float32 bit arrays.</description>
+    </item>
+    
+  </channel>
+</rss>

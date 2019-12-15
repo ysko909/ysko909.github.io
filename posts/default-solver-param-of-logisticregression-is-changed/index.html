@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>LogisticRegressionのsolverパラメータはデフォルト値が変わってた - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="LogisticRegressionのsolverパラメータはデフォルト値が変わってた" />
+<meta property="og:description" content="はじめに scikit-learnライブラリのロジスティック回帰（LogisticRegression）を使っていたときに気づいた事象です。
+まあまあこの界隈ではありがちですが、「過去に動作していたコードがライブラリ（やパッケージ）のアップデートで動作しなくなる」パターンのお話です。
+具体的な現象 下記のようなコードでエラーが発生します。具体的にはLogisticRegression()実行時にL1正規化を行うと「L1正規化はサポートしてないぜ！」っていうエラーになります。
+lr_l1 = LogisticRegression(C=C, penalty=&#39;l1&#39;).fit(X_train, y_train) エラーの内容はこんな感じ。
+--------------------------------------------------------------------------- ValueError Traceback (most recent call last) ~/devp/learning/intro_to_ml_with_python/2_3_linear_model.py in 1 for C, marker in zip([0.001, 1, 100], [&#39;o&#39;, &#39;^&#39;, &#39;v&#39;]): ----&gt; 2 lr_l1 = LogisticRegression(C=C, penalty=&#39;l1&#39;).fit(X_train, y_train) 3 print(&#39;Training accuracy of l1 logreg with C={:.f3}: {:.2f}&#39;.format(C, lr_l1.score(X_train, y_train))) 4 print(&#39;Test accuracy of l1 logreg with C={:.f3}: {:.2f}&#39;.format(C, lr_l1.score(X_test, y_test))) 5 plt.plot(lr_l1.coef_.T, marker, label=&#39;C={:.3f}&#39;.format(C)) /usr/local/lib/python3.7/site-packages/sklearn/linear_model/_logistic.py in fit(self, X, y, sample_weight) 1484 The SAGA solver supports both float64 and float32 bit arrays." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://idontwannawork.github.io/posts/default-solver-param-of-logisticregression-is-changed/" /><meta property="article:published_time" content="2019-12-15T14:43:33&#43;09:00"/>
+<meta property="article:modified_time" content="2019-12-15T14:43:33&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="LogisticRegressionのsolverパラメータはデフォルト値が変わってた"/>
+<meta name="twitter:description" content="はじめに scikit-learnライブラリのロジスティック回帰（LogisticRegression）を使っていたときに気づいた事象です。
+まあまあこの界隈ではありがちですが、「過去に動作していたコードがライブラリ（やパッケージ）のアップデートで動作しなくなる」パターンのお話です。
+具体的な現象 下記のようなコードでエラーが発生します。具体的にはLogisticRegression()実行時にL1正規化を行うと「L1正規化はサポートしてないぜ！」っていうエラーになります。
+lr_l1 = LogisticRegression(C=C, penalty=&#39;l1&#39;).fit(X_train, y_train) エラーの内容はこんな感じ。
+--------------------------------------------------------------------------- ValueError Traceback (most recent call last) ~/devp/learning/intro_to_ml_with_python/2_3_linear_model.py in 1 for C, marker in zip([0.001, 1, 100], [&#39;o&#39;, &#39;^&#39;, &#39;v&#39;]): ----&gt; 2 lr_l1 = LogisticRegression(C=C, penalty=&#39;l1&#39;).fit(X_train, y_train) 3 print(&#39;Training accuracy of l1 logreg with C={:.f3}: {:.2f}&#39;.format(C, lr_l1.score(X_train, y_train))) 4 print(&#39;Test accuracy of l1 logreg with C={:.f3}: {:.2f}&#39;.format(C, lr_l1.score(X_test, y_test))) 5 plt.plot(lr_l1.coef_.T, marker, label=&#39;C={:.3f}&#39;.format(C)) /usr/local/lib/python3.7/site-packages/sklearn/linear_model/_logistic.py in fit(self, X, y, sample_weight) 1484 The SAGA solver supports both float64 and float32 bit arrays."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://idontwannawork.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://idontwannawork.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script async src="//pagead2.googlesyndication.com/
+		pagead/js/adsbygoogle.js"></script>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({
+			google_ad_client: "pub-2615583270378842",
+			enable_page_level_ads: true
+		});
+	</script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>頑張りたくないので楽できるように頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/idontwannawork" title="Github"><i data-feather="github"></i></a><a href="https://codepen.io/idontwannawork/" title="Codepen"><i data-feather="codepen"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">LogisticRegressionのsolverパラメータはデフォルト値が変わってた</h1>
+			<div class="meta">Posted at &mdash; Dec 15, 2019</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>scikit-learnライブラリの<a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">ロジスティック回帰</a>（LogisticRegression）を使っていたときに気づいた事象です。</p>
+
+<p>まあまあこの界隈ではありがちですが、「過去に動作していたコードがライブラリ（やパッケージ）のアップデートで動作しなくなる」パターンのお話です。</p>
+
+<h2 id="具体的な現象">具体的な現象</h2>
+
+<p>下記のようなコードでエラーが発生します。具体的には<code>LogisticRegression()</code>実行時にL1正規化を行うと「L1正規化はサポートしてないぜ！」っていうエラーになります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">lr_l1 = LogisticRegression(C=C, penalty=<span style="color:#a31515">&#39;l1&#39;</span>).fit(X_train, y_train)</code></pre></div>
+<p>エラーの内容はこんな感じ。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">---------------------------------------------------------------------------
+ValueError                                Traceback (most recent call last)
+~/devp/learning/intro_to_ml_with_python/2_3_linear_model.py in 
+      1 for C, marker in zip([0.001, 1, 100], [&#39;o&#39;, &#39;^&#39;, &#39;v&#39;]):
+----&gt; 2     lr_l1 = LogisticRegression(C=C, penalty=&#39;l1&#39;).fit(X_train, y_train)
+      3     print(&#39;Training accuracy of l1 logreg with C={:.f3}: {:.2f}&#39;.format(C, lr_l1.score(X_train, y_train)))
+      4     print(&#39;Test accuracy of l1 logreg with C={:.f3}: {:.2f}&#39;.format(C, lr_l1.score(X_test, y_test)))
+      5     plt.plot(lr_l1.coef_.T, marker, label=&#39;C={:.3f}&#39;.format(C))
+
+/usr/local/lib/python3.7/site-packages/sklearn/linear_model/_logistic.py in fit(self, X, y, sample_weight)
+   1484         The SAGA solver supports both float64 and float32 bit arrays.
+   1485         &#34;&#34;&#34;
+-&gt; 1486         solver = _check_solver(self.solver, self.penalty, self.dual)
+   1487 
+   1488         if not isinstance(self.C, numbers.Number) or self.C &lt; 0:
+
+/usr/local/lib/python3.7/site-packages/sklearn/linear_model/_logistic.py in _check_solver(solver, penalty, dual)
+    443     if solver not in [&#39;liblinear&#39;, &#39;saga&#39;] and penalty not in (&#39;l2&#39;, &#39;none&#39;):
+    444         raise ValueError(&#34;Solver %s supports only &#39;l2&#39; or &#39;none&#39; penalties, &#34;
+--&gt; 445                          &#34;got %s penalty.&#34; % (solver, penalty))
+    446     if solver != &#39;liblinear&#39; and dual:
+    447         raise ValueError(&#34;Solver %s supports only &#34;
+
+ValueError: Solver lbfgs supports only &#39;l2&#39; or &#39;none&#39; penalties, got l1 penalty.</code></pre></div>
+<p><code>solver</code>の<code>lbfgs</code>は<code>l2</code>か<code>none</code>しかサポートしてないよ、っていうエラーですね。<code>lbfgs</code>なんてコードのどこにも書いてないぞ、ってところなんですが、これは<code>solver</code>のデフォルト値です。</p>
+
+<h2 id="結論から">結論から</h2>
+
+<p>下記のように記述するのが正解です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">lr_l1 = LogisticRegression(C=C, penalty=<span style="color:#a31515">&#39;l1&#39;</span>, solver=<span style="color:#a31515">&#39;liblinear&#39;</span>).fit(X_train, y_train)</code></pre></div>
+<p><code>solver</code>に<code>liblinear</code>を指定するとエラーを解消できます。</p>
+
+<h2 id="原因はなによ">原因はなによ</h2>
+
+<p><a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">ここ</a>に書いてあるのですが、<code>LogisticRegression</code>の<code>solver</code>のデフォルト値がアップデートにより変更されたせいです。</p>
+
+<blockquote>
+<p>Changed in version 0.22: The default solver changed from ‘liblinear’ to ‘lbfgs’ in 0.22.</p>
+</blockquote>
+
+<p>これにより本来<code>solver</code>のデフォルト値を<code>liblinear</code>だと想定して、<code>solver</code>の設定を記述していないソースコードが軒並み影響を受けて、実行結果が異なったりエラーを吐いたりしているわけです。</p>
+
+<p>scikit-learnの<a href="https://scikit-learn.org/stable/whats_new/v0.22.html">バージョン0.22</a>が公開されたのは2019年12月3日なんですが、それより前に書かれた本だとかブログなんかのソースで<code>solver</code>が<code>liblinear</code>を想定しているものは注意が必要です。</p>
+
+<h2 id="備考">備考</h2>
+
+<p>そもそも「<a href="https://www.oreilly.co.jp/books/9784873117980/">Pythonではじめる機械学習</a>」って言う本のソースコードを、最近改めて写経しているときに気づいたんですよね。テキストに書いてあるコードをそのまま記述して実行しているにもかかわらず、実行結果が異なったり実行そのものがエラーになるケースが、この<code>LogisticRegression</code>を実行しているときに頻発しました。</p>
+
+<p>実行結果が異なるのは、なんかトレーニングデータでの訓練時に<code>random_state</code>の値設定が間違っているかなー、とかプログラムのミス（というか写経ミス）を疑っていたんですが、エラーが出力された時点で「これライブラリ側のせいなんじゃ？」と考えるに至りました。調査してみたらやっぱりライブラリ側の原因じゃん、という話で。</p>
+
+<p>こういう「ライブラリ側の原因で動作が変わる、あるいは動作しなくなる」ケースって、scikit-learnに限った話では全然なくて、この界隈あるあるなんですよね。自分のコーディングミスだと思って調べていた時間が若干もったいなかったなぁ、という感じ。</p>
+
+<p>よく利用するライブラリのバージョンアップは、欠かさずキャッチアップしておきたいものです。</p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright Katsuragi |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

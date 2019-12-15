@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://idontwannawork.github.io/posts/default-solver-param-of-logisticregression-is-changed/</loc>
+    <lastmod>2019-12-15T14:43:33+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/posts/install-and-make-some-deliverables-with-phinajs/</loc>
     <lastmod>2019-12-06T09:15:20+09:00</lastmod>
   </url>
@@ -346,6 +351,12 @@
   </url>
   
   <url>
+    <loc>https://idontwannawork.github.io/tags/logisticregression/</loc>
+    <lastmod>2019-12-15T14:43:33+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://idontwannawork.github.io/tags/macos/</loc>
     <lastmod>2019-06-09T19:29:47+09:00</lastmod>
     <priority>0</priority>
@@ -389,7 +400,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/posts/</loc>
-    <lastmod>2019-12-06T09:15:20+09:00</lastmod>
+    <lastmod>2019-12-15T14:43:33+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -401,7 +412,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/tags/python/</loc>
-    <lastmod>2019-11-22T09:50:35+09:00</lastmod>
+    <lastmod>2019-12-15T14:43:33+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -414,6 +425,12 @@
   <url>
     <loc>https://idontwannawork.github.io/tags/review/</loc>
     <lastmod>2019-09-25T00:16:41+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://idontwannawork.github.io/tags/scikit-learn/</loc>
+    <lastmod>2019-12-15T14:43:33+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -509,7 +526,7 @@
   
   <url>
     <loc>https://idontwannawork.github.io/</loc>
-    <lastmod>2019-12-06T09:15:20+09:00</lastmod>
+    <lastmod>2019-12-15T14:43:33+09:00</lastmod>
     <priority>0</priority>
   </url>
   
