@@ -12,7 +12,7 @@ vue create hogehoge ・・・いい名前が思いつかなかった_(:3」∠)_
 ここで注意が必要なのは、VuexとVue Routerを設定するのにはデフォルト設定だとダメということです。マニュアル設定します。
 ? Please pick a preset: Manually select features ? Check the features needed for your project: (Press &lt;space&gt; to select, &lt;a&gt; to toggle all, &lt;i&gt; to invert selection) &gt;(*) Babel ( ) TypeScript ( ) Progressive Web App (PWA) Support ( ) Router ( ) Vuex ( ) CSS Pre-processors (*) Linter / Formatter ( ) Unit Testing ( ) E2E Testing  このうち、RouterとVuexを選択しておきます。もし必要なら他の項目もついでに選択してエンターキーを押します。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://idontwannawork.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/" /><meta property="article:published_time" content="2019-10-07T09:41:57&#43;09:00"/>
+<meta property="og:url" content="https://ysko909.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/" /><meta property="article:published_time" content="2019-10-07T09:41:57&#43;09:00"/>
 <meta property="article:modified_time" content="2019-10-07T09:41:57&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="VuexとVue Routerを使ってSPAを作るチュートリアルをやってみた"/>
 <meta name="twitter:description" content="はじめに 以前の記事ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したのですが、デフォルトだと「Vuex」や「Vue Router」はOFFです。Vue.jsでなくともReactなどのJavaScriptのライブラリやフレームワークを用いた環境でSPAを作成する場合、状態管理とルーティングは避けて通れない機能です。いや、別に利用しなくてもいいんですが、たぶん避けて通ったほうが後々面倒なこと（コンポーネント間でデータバケツリレーしたり、ページ遷移する必要が出てきたり・・・）になります。
@@ -25,11 +25,11 @@ vue create hogehoge ・・・いい名前が思いつかなかった_(:3」∠)_
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
 
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/normalize.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="https://idontwannawork.github.io/css/dark.css"
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
 		 />
-	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://idontwannawork.github.io/js/main.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
 	<script data-ad-client="ca-pub-2615583270378842" async
 		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
@@ -41,7 +41,7 @@ vue create hogehoge ・・・いい名前が思いつかなかった_(:3」∠)_
 		<div class="header">
 	<h1 class="site-title">頑張らないために頑張る</h1>
 	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
-			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/idontwannawork" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
 		</nav>
 	</div>
 
@@ -343,7 +343,7 @@ Vue.use(Vuex)
   &lt;div class=&#34;hello&#34;&gt;
     &lt;h2&gt;{{ msg }}&lt;/h2&gt;
 
-    &lt;a ref=&#34;https://idontwannawork.github.io/&#34;&gt;&lt;b-icon icon=&#34;home&#34; size=&#34;is-medium&#34;&gt;&lt;/b-icon&gt;&lt;/a&gt;
+    &lt;a ref=&#34;https://ysko909.github.io/&#34;&gt;&lt;b-icon icon=&#34;home&#34; size=&#34;is-medium&#34;&gt;&lt;/b-icon&gt;&lt;/a&gt;
   &lt;/div&gt;
 &lt;/template&gt;
 
@@ -548,7 +548,7 @@ export default {
   &lt;div class=&#34;hello&#34;&gt;
     &lt;h2&gt;{{ msg }}&lt;/h2&gt;
     &lt;p class=&#34;title&#34;&gt;{{$store.state.counter}}&lt;/p&gt;
-    &lt;a href=&#34;https://idontwannawork.github.io/&#34;&gt;&lt;b-icon icon=&#34;home&#34; size=&#34;is-medium&#34;&gt;&lt;/b-icon&gt;&lt;/a&gt;
+    &lt;a href=&#34;https://ysko909.github.io/&#34;&gt;&lt;b-icon icon=&#34;home&#34; size=&#34;is-medium&#34;&gt;&lt;/b-icon&gt;&lt;/a&gt;
   &lt;/div&gt;
 &lt;/template&gt;</code></pre></div>
 <p>たとえば<code>counter</code>の初期状態が「10」だとします。ホームでは「10」（初期状態）を表示しています。</p>

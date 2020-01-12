@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Unity on 頑張らないために頑張る</title>
-    <link>https://idontwannawork.github.io/tags/unity/</link>
+    <link>https://ysko909.github.io/tags/unity/</link>
     <description>Recent content in Unity on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Thu, 11 Jul 2019 16:41:00 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/unity/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/unity/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Unity Hubを使ってUnityをインストールする</title>
-      <link>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</link>
+      <link>https://ysko909.github.io/posts/install-unity-with-unity-hub/</link>
       <pubDate>Thu, 11 Jul 2019 16:41:00 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</guid>
+      <guid>https://ysko909.github.io/posts/install-unity-with-unity-hub/</guid>
       <description>Unityって何さ Unity
  世界で最も広くつかわれているゲーム開発エンジン。 様々な機能を備えたエディターと、業界で最も幅広いプラットフォームへのサポートを利用して、ゲームやインタラクティブなコンテンツを制作する方法を学びましょう。
  「ゲーム開発エンジン」とは、画面描写、効果音やBGMなどの音楽管理、ステータスなどの各種データ管理などを総合して開発できる環境のこと。ただ、昨今ではゲームだけでなく映像制作にも用いられてますし、3Dに強いという特徴を生かして建築設計にも活用されているようです。すげぇ。

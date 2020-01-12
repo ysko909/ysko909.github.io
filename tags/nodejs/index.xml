@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Nodejs on 頑張らないために頑張る</title>
-    <link>https://idontwannawork.github.io/tags/nodejs/</link>
+    <link>https://ysko909.github.io/tags/nodejs/</link>
     <description>Recent content in Nodejs on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Fri, 23 Aug 2019 20:59:07 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/nodejs/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/nodejs/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>vue-cli-service: command not foundと言われたらnode_modulesを削除</title>
-      <link>https://idontwannawork.github.io/posts/fix-vue-cli-service-command-not-found-error/</link>
+      <link>https://ysko909.github.io/posts/fix-vue-cli-service-command-not-found-error/</link>
       <pubDate>Fri, 23 Aug 2019 20:59:07 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/fix-vue-cli-service-command-not-found-error/</guid>
+      <guid>https://ysko909.github.io/posts/fix-vue-cli-service-command-not-found-error/</guid>
       <description>はじめに Vue.jsのツール「Vue CLI」にて作成したプロジェクトをクローンしてnpm run serveをしたところ、下記のようなエラーメッセージが出てきてしまいました。
 ❯ npm run serve &amp;gt; dtg@0.1.0 serve /Users/hoge/dummytextgen &amp;gt; vue-cli-service serve sh: vue-cli-service: command not found npm ERR! file sh npm ERR! code ELIFECYCLE npm ERR! errno ENOENT npm ERR! syscall spawn npm ERR! dtg@0.1.0 serve: `vue-cli-service serve` npm ERR! spawn ENOENT npm ERR! npm ERR! Failed at the dtg@0.1.0 serve script. npm ERR! This is probably not a problem with npm. There is likely additional logging output above.</description>
     </item>

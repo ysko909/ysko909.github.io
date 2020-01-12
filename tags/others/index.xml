@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Others on 頑張らないために頑張る</title>
-    <link>https://idontwannawork.github.io/tags/others/</link>
+    <link>https://ysko909.github.io/tags/others/</link>
     <description>Recent content in Others on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Sun, 30 Jun 2019 16:40:00 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/others/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/others/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>なんでJavaの記事って少ないの？</title>
-      <link>https://idontwannawork.github.io/posts/why-are-there-few-articles-of-java/</link>
+      <link>https://ysko909.github.io/posts/why-are-there-few-articles-of-java/</link>
       <pubDate>Sun, 30 Jun 2019 16:40:00 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/why-are-there-few-articles-of-java/</guid>
+      <guid>https://ysko909.github.io/posts/why-are-there-few-articles-of-java/</guid>
       <description>はじめに とある事情でJavaとJavaEE（今はJakartaEEか）を使用しないといけなくなってしまって、それはそれはさんざんな目にあった（あっている）。
 そんな中で気づいたのだが、Javaって記事少なくない？ということ。
 どういうこと？ JavaはブログのエントリーでもQiitaの記事でも、とにかく知名度の割りに数が少ない。検索してもエラい昔のエントリーがしれっと上位に表示される始末で、ホントに苦労した（している）。とくにJavaEEに関して言うと、例のEclipseへ移管されるニュースの方が検索上位に来てしまい、知りたい情報が埋没する。JSFについて調べたいなーと思ったら2013年の記事が検索上位にしれっと紛れ込んできた。
@@ -34,10 +34,10 @@ stackoverflow stackoverflowでも各言語でタグ検索してみた。
     
     <item>
       <title>チュートリアルを卒業したくらいが一番ツラい</title>
-      <link>https://idontwannawork.github.io/posts/after-tutorial/</link>
+      <link>https://ysko909.github.io/posts/after-tutorial/</link>
       <pubDate>Thu, 04 Apr 2019 18:38:04 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/after-tutorial/</guid>
+      <guid>https://ysko909.github.io/posts/after-tutorial/</guid>
       <description>チュートリアルってあるよね どんなプログラミング言語やライブラリやフレームワークでもあるもの、チュートリアル。「Getting Started」とか書かれたりもする。そして大抵の人がチュートリアルに触れて、場合によってはちょっと値を自分流に編集したりして、対象の雰囲気をざっくり掴むのに使う。そして、そこから「自分が作りたいもの」を目指していく。
 文章として記述するとこれだけなんだけど、自分はチュートリアルをやった直後にモチベーションがガクッと下がる。折れるまでは行かなくとも、再起するのに苦労する。
 なぜなんだぜ 結論から言ってしまえば、チュートリアル卒業レベルでは作りたいものは作れないから。

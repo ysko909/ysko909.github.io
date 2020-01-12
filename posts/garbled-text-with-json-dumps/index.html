@@ -8,7 +8,7 @@
 環境  Windows 10 Python 3.6  実際のコード &gt;&gt;&gt; import json &gt;&gt;&gt; dic = {&#34;hoge&#34;:&#34;foo&#34;, &#34;fuga&#34;:&#34;bar&#34;, &#34;piyo&#34;:&#34;baz&#34;} &gt;&gt;&gt; json.dumps(dic) &#39;{&#34;hoge&#34;: &#34;foo&#34;, &#34;fuga&#34;: &#34;bar&#34;, &#34;piyo&#34;: &#34;baz&#34;}&#39; &gt;&gt;&gt; dicj = {&#34;日本語&#34;:&#34;項目名&#34;, &#34;にほんご&#34;:&#34;こうもくめい&#34;} &gt;&gt;&gt; json.dumps(dicj) &#39;{&#34;\\u65e5\\u672c\\u8a9e&#34;: &#34;\\u9805\\u76ee\\u540d&#34;, &#34;\\u306b\\u307b\\u3093\\u3054&#34;: &#34;\\u3053\\u3046\\u3082\\u304f\\u3081\\u3044&#34;}&#39; こんな感じで、単純にjson.dumps()すると文字化けしてしまいます。この場合、ensure_asciiオプションでFalseを指定します。
 &gt;&gt;&gt; json.dumps(dicj, ensure_ascii=False) &#39;{&#34;日本語&#34;: &#34;項目名&#34;, &#34;にほんご&#34;: &#34;こうもくめい&#34;}&#39; すると、上記のように文字化けが解消されました。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://idontwannawork.github.io/posts/garbled-text-with-json-dumps/" /><meta property="article:published_time" content="2019-04-24T10:38:54&#43;09:00"/>
+<meta property="og:url" content="https://ysko909.github.io/posts/garbled-text-with-json-dumps/" /><meta property="article:published_time" content="2019-04-24T10:38:54&#43;09:00"/>
 <meta property="article:modified_time" content="2019-04-24T10:38:54&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="json.dumpsでの文字化けを解消する"/>
 <meta name="twitter:description" content="概要 Pythonでjson.dumps()した際に、日本語が文字化けするのを防ぐメモ。
@@ -17,11 +17,11 @@
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
 
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/normalize.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="https://idontwannawork.github.io/css/dark.css"
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
 		 />
-	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://idontwannawork.github.io/js/main.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
 	<script data-ad-client="ca-pub-2615583270378842" async
 		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
@@ -33,7 +33,7 @@
 		<div class="header">
 	<h1 class="site-title">頑張らないために頑張る</h1>
 	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
-			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/idontwannawork" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
 		</nav>
 	</div>
 

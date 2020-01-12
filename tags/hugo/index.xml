@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Hugo on 頑張らないために頑張る</title>
-    <link>https://idontwannawork.github.io/tags/hugo/</link>
+    <link>https://ysko909.github.io/tags/hugo/</link>
     <description>Recent content in Hugo on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Fri, 05 Apr 2019 10:15:49 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Hugoで静的サイトを生成してみる</title>
-      <link>https://idontwannawork.github.io/posts/make-site-with-hugo/</link>
+      <link>https://ysko909.github.io/posts/make-site-with-hugo/</link>
       <pubDate>Fri, 05 Apr 2019 10:15:49 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-site-with-hugo/</guid>
+      <guid>https://ysko909.github.io/posts/make-site-with-hugo/</guid>
       <description>Hugoとは Golangで作られている、静的サイトジェネレーター。なんでも、生成が速いらしいです。
 今回はコイツを使って、サイトを生成し公開してみようと思います。
 この記事が役立つであろう人 サイトを立ち上げたくて、ターミナルでの作業が苦でない人。また、自分でCSSなどをいじったりしてデザインするなら、記事を書くほうに労力を割きたい人。

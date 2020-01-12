@@ -17,7 +17,7 @@
 環境  Windows 10 Python 3.6.8 selenium 3.141.0  結論から こんなソースを書きました。
 import time from selenium import webdriver from selenium.webdriver.chrome.options import Options import xlwings as xw # 時間計測 start = time.time() options = Options() # options.add_argument(&#39;--headless&#39;) # ChromeのWebDriverオブジェクトを作成(ヘッドレスモードの場合) # ノーヘッドレスの場合は引数なしで実行する driver = webdriver.Chrome(chrome_options=options) driver.command_executor._commands[&#34;send_command&#34;] = ( &#34;POST&#34;, &#39;/session/$sessionId/chromium/send_command&#39; ) params = { &#39;cmd&#39;: &#39;Page." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://idontwannawork.github.io/posts/search-keyword-in-excel-book-with-python/" /><meta property="article:published_time" content="2019-11-22T09:50:35&#43;09:00"/>
+<meta property="og:url" content="https://ysko909.github.io/posts/search-keyword-in-excel-book-with-python/" /><meta property="article:published_time" content="2019-11-22T09:50:35&#43;09:00"/>
 <meta property="article:modified_time" content="2019-11-22T09:50:35&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="PythonでExcelファイルのキーワードを参照して自動的にGoogle検索し結果を保存する"/>
 <meta name="twitter:description" content="職場からExcelが駆逐される日は来るのだろうか Excel。
@@ -35,11 +35,11 @@ import time from selenium import webdriver from selenium.webdriver.chrome.option
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
 
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/normalize.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="https://idontwannawork.github.io/css/dark.css"
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
 		 />
-	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://idontwannawork.github.io/js/main.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
 	<script data-ad-client="ca-pub-2615583270378842" async
 		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
@@ -51,7 +51,7 @@ import time from selenium import webdriver from selenium.webdriver.chrome.option
 		<div class="header">
 	<h1 class="site-title">頑張らないために頑張る</h1>
 	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
-			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/idontwannawork" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
 		</nav>
 	</div>
 

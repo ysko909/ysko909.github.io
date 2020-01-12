@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Busybox on 頑張らないために頑張る</title>
-    <link>https://idontwannawork.github.io/tags/busybox/</link>
+    <link>https://ysko909.github.io/tags/busybox/</link>
     <description>Recent content in Busybox on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Tue, 16 Apr 2019 09:38:26 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/busybox/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/busybox/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>WindowsでLinuxのコマンドが使える「BusyBox」</title>
-      <link>https://idontwannawork.github.io/posts/busybox-on-windows/</link>
+      <link>https://ysko909.github.io/posts/busybox-on-windows/</link>
       <pubDate>Tue, 16 Apr 2019 09:38:26 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/busybox-on-windows/</guid>
+      <guid>https://ysko909.github.io/posts/busybox-on-windows/</guid>
       <description>結論 普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、BusyBoxを使えばいいよ！
 はじめに 仕事ではWindows、プライベートではMacまたはLinuxなんて人もいるかもしれません。そこな貴方、こんなシチュエーションがありませんでしょうか？
  ふと仕事中に「grep使いたいなー」とか「awk使いたいなー」とかなっても、Windowsのコマンドプロンプトじゃ足りないし、PowerShellはあの文法がいまいち性に合わない。ガッツリ使うわけじゃないから、わざわざ端末や仮想環境を用意するというわけにもいかない。

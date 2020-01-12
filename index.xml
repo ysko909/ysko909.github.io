@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>頑張らないために頑張る</title>
-    <link>https://idontwannawork.github.io/</link>
+    <link>https://ysko909.github.io/</link>
     <description>Recent content on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Sun, 15 Dec 2019 14:43:33 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>LogisticRegressionのsolverパラメータはデフォルト値が変わってた</title>
-      <link>https://idontwannawork.github.io/posts/default-solver-param-of-logisticregression-is-changed/</link>
+      <link>https://ysko909.github.io/posts/default-solver-param-of-logisticregression-is-changed/</link>
       <pubDate>Sun, 15 Dec 2019 14:43:33 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/default-solver-param-of-logisticregression-is-changed/</guid>
+      <guid>https://ysko909.github.io/posts/default-solver-param-of-logisticregression-is-changed/</guid>
       <description>はじめに scikit-learnライブラリのロジスティック回帰（LogisticRegression）を使っていたときに気づいた事象です。
 まあまあこの界隈ではありがちですが、「過去に動作していたコードがライブラリ（やパッケージ）のアップデートで動作しなくなる」パターンのお話です。
 具体的な現象 下記のようなコードでエラーが発生します。具体的にはLogisticRegression()実行時にL1正規化を行うと「L1正規化はサポートしてないぜ！」っていうエラーになります。
@@ -27,25 +27,25 @@ lr_l1 = LogisticRegression(C=C, penalty=&amp;#39;l1&amp;#39;).fit(X_train, y_tra
     
     <item>
       <title>phina.jsを使ってゲーム用のテンプレートを作る</title>
-      <link>https://idontwannawork.github.io/posts/install-and-make-some-deliverables-with-phinajs/</link>
+      <link>https://ysko909.github.io/posts/install-and-make-some-deliverables-with-phinajs/</link>
       <pubDate>Fri, 06 Dec 2019 09:15:20 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/install-and-make-some-deliverables-with-phinajs/</guid>
+      <guid>https://ysko909.github.io/posts/install-and-make-some-deliverables-with-phinajs/</guid>
       <description>phina.jsとはなんぞや phina.jsとは「ゲームやツールを簡単に作る事ができるJavaScript製のゲームライブラリ」（オフィシャルより）です。詳細はオフィシャルページを見てもらうとわかりやすいと思いますが、JavaScriptでできているため、PCやスマートフォンなどを問わずブラウザ上で実行できる、便利なライブラリです。たとえばこれとかおもしろいですよね。とくに2Dのブラウザ上で動くゲームを作りたいってなったら、結構イケると思います。
 ちなみに ゲームライブラリでJavaScriptって言ったらPhaserあたりが有名だと思うのですが、今回は「国産」ってところでphina.jsを贔屓しています。もちろんPhaserもいいライブラリなので、また別の機会に触ってみたいと思います。
 何作るのよ いきなり出鼻をくじくようでアレなんですが、今回は触りってことでテンプレートとして使える簡単なデモ用のスクリプトです。クリックでランダムに「何か」が変わるようなもの、っていう簡単なテンプレートです。
 完成形 いきなりですが完成形です。
-See the Pen phina.js sample by idontwannawork (@idontwannawork) on CodePen. 
+See the Pen phina.js sample by ysko909 (@ysko909) on CodePen. 
 画面のテキトーな場所をクリックすると、文字色が変わります。なんかそれっぽいボタンがありますが、画面のどこでも反応するので関係ないです。
 ソース // 戦闘画面サンプル  // 画面サイズ const W = 960; const H = 640; // 素材asset const ASSETS = { font: { digiFont: &amp;#34;https://db.onlinewebfonts.com/t/55ea8f43f01d7f6e293a0b84be8861eb.woff2&amp;#34; } }; phina.globalize(); /* * メインシーン */ phina.define(&amp;#34;MainScene&amp;#34;, { // 継承  superClass: &amp;#39;DisplayScene&amp;#39;, // 初期化  init(param) { // 親クラス初期化  this.superInit({ width: W, height: H, }); // 背景色  this.</description>
     </item>
     
     <item>
       <title>PythonでExcelファイルのキーワードを参照して自動的にGoogle検索し結果を保存する</title>
-      <link>https://idontwannawork.github.io/posts/search-keyword-in-excel-book-with-python/</link>
+      <link>https://ysko909.github.io/posts/search-keyword-in-excel-book-with-python/</link>
       <pubDate>Fri, 22 Nov 2019 09:50:35 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/search-keyword-in-excel-book-with-python/</guid>
+      <guid>https://ysko909.github.io/posts/search-keyword-in-excel-book-with-python/</guid>
       <description>職場からExcelが駆逐される日は来るのだろうか Excel。
 いいアプリケーションだと思います。実力に裏打ちされた歴史もあるしね。とはいえ、こと日本においては単なる表計算ソフトに留まらず、エゲツない「1セルにつき1文字」という縛りでDTPの真似事までやらされる姿を見るに、個人的には落涙を禁じえません。「ネ申Excel」なんていう話もあるわけで、日本のExcelがいわれのない誹りを受けずに本来の表計算作業を全うする日は来るのか、という思いを抱かずにはいられません。
 また、前述のようなリッチな使い方とはまったく逆のベクトルで利用されることがあります。何はなくとも「とりあえずExcelファイルでやります」とExcelを立ち上げるケースです。今日も、テキストファイルでいいのにわざわざExcelファイルに箇条書きする、サラリーマンの姿がどこかで見られるかもしれません。そしてそのExcelファイルを送り付けられて、しかもいろんな情報までてんこ盛りだったりすると、「何この・・・何・・・？」などと口走りながらエンジニアが頭を抱えることになるでしょう。「テキストでいいじゃん」って言いたいところなのですが、相手側にはその発想がそもそもないわけです。
@@ -62,10 +62,10 @@ import time from selenium import webdriver from selenium.webdriver.chrome.option
     
     <item>
       <title>BehringerがTB303クローンのTD-3を発売するぞ、という話（BOSSのDS-1も参考にしてるよ）（追記もあるよ）</title>
-      <link>https://idontwannawork.github.io/posts/behringer-release-analog-bass-synth-clone-tb303/</link>
+      <link>https://ysko909.github.io/posts/behringer-release-analog-bass-synth-clone-tb303/</link>
       <pubDate>Fri, 15 Nov 2019 18:38:56 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/behringer-release-analog-bass-synth-clone-tb303/</guid>
+      <guid>https://ysko909.github.io/posts/behringer-release-analog-bass-synth-clone-tb303/</guid>
       <description>むしろ今まで売ってなかったんだね 実を言うとむしろ今まで作ってなかったの？って感じです。そう思えるくらい、Behringerといえば「往年のシンセやエフェクターなんかのクローンを安価で売る」っていうイメージでしたので（失礼）。
 とはいえ、TB-303って言ったらもうレジェンドと言ってもいいくらい、ダンスミュージックには欠かせない機材（というか音）なので、「BehringerがTB-303のクローンを売るらしい」って言う話を聞いたらどうしても期待しちゃうわけです。
 そしたらこれよ behringer/TD-3が発表されました。
@@ -93,10 +93,10 @@ TD-3には、RE-303などのクローンが搭載しなかったディストー�
     
     <item>
       <title>Headless ChromeをPythonで使おうとしたら空っぽのページが返ってきた</title>
-      <link>https://idontwannawork.github.io/posts/chrome-headless-returns-emply-page-with-python/</link>
+      <link>https://ysko909.github.io/posts/chrome-headless-returns-emply-page-with-python/</link>
       <pubDate>Wed, 13 Nov 2019 15:14:28 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/chrome-headless-returns-emply-page-with-python/</guid>
+      <guid>https://ysko909.github.io/posts/chrome-headless-returns-emply-page-with-python/</guid>
       <description>はじめに Python、SeleniumにChromeの組み合わせは、PhantomJSが息絶えてしまった今では自動化の王道だと思います。そんな王道の組み合わせをWindowsで試してたら、Headlessモードの時だけページの取得が上手くできない事象を目撃しましたので、メモしておきます。Headlessモードじゃないなら正常なのに、Headlessモードへ変更した途端におかしくなってしまいました。
 環境  Windows 10 Python 3.6.8 ChromeDriver 2.38.552522 Google Chrome 80.0.3965.0（Official Build）canary （64 ビット）  現象 どんなURLを指定しても、HeadlessモードではSeleniumで取得した結果が空っぽのHTMLになってしまいます。Headlessモードを外すだけで、ちゃんと取得します。謎。
 Chrome用ソース Chromedriverは、インストール先のパスが通っている前提です。
@@ -111,10 +111,10 @@ import time from selenium import webdriver from selenium.webdriver.chrome.option
     
     <item>
       <title>VuexとVue Routerを使ってSPAを作るチュートリアルをやってみた</title>
-      <link>https://idontwannawork.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</link>
+      <link>https://ysko909.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</link>
       <pubDate>Mon, 07 Oct 2019 09:41:57 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</guid>
+      <guid>https://ysko909.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</guid>
       <description>はじめに 以前の記事ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したのですが、デフォルトだと「Vuex」や「Vue Router」はOFFです。Vue.jsでなくともReactなどのJavaScriptのライブラリやフレームワークを用いた環境でSPAを作成する場合、状態管理とルーティングは避けて通れない機能です。いや、別に利用しなくてもいいんですが、たぶん避けて通ったほうが後々面倒なこと（コンポーネント間でデータバケツリレーしたり、ページ遷移する必要が出てきたり・・・）になります。
 なので今回は「VuexとVue Routerを使用したSPAをざっくり作って、状態管理とルーティングに慣れておこうぜ」というのが趣旨です。基本的にはVuexのチュートリアルを参考にしています。
 また、基本的にはVue.jsのオフィシャルドキュメントを見つつ、通称「猫本」と呼ばれる「基礎から学ぶVue.js」の記述に沿っています。相変わらず完全に読み切ってないのですが、サンプルコードが参照できるサイトもあってとても親切です。
@@ -126,10 +126,10 @@ vue create hogehoge ・・・いい名前が思いつかなかった_(:3」∠)_
     
     <item>
       <title>アルバムレビュー Cadans der getouwen「Cadans der getouwen」</title>
-      <link>https://idontwannawork.github.io/posts/disk-review-cadans-der-getouwen-cadans-der-getouwen/</link>
+      <link>https://ysko909.github.io/posts/disk-review-cadans-der-getouwen-cadans-der-getouwen/</link>
       <pubDate>Wed, 25 Sep 2019 00:16:41 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/disk-review-cadans-der-getouwen-cadans-der-getouwen/</guid>
+      <guid>https://ysko909.github.io/posts/disk-review-cadans-der-getouwen-cadans-der-getouwen/</guid>
       <description>Cadans der getouwenとは オランダのカントリー・フォークグループ。Guy Roelofsが中心となり結成。活動時期は2000年前後ごろ。現在は解散しており、Tjaneに活動が引き継がれています。
 ・・・基本情報少な過ぎるんじゃないかって？いえいえ。何せオフィシャルサイトがオランダ語でさっぱり、リーダーのGuy Roelofsをインタビューした記事は英語（とりあえずなんとか読める内容ではあるけど）。検索して出てくるとしたらオランダ語のレコード店のページ。あとはDiscogs。日本語のページは皆無・・・。むしろ、下手したらこのページが日本語記事でサジェストされる勢い。まぁ、ホントに情報ないです。
 とは言え、情報が少ないことと、アーティストの音楽性やアルバムのクオリティに関係はまったくありません。えぇ、とにかく絶品です（ちなみに試聴は後述のとおりYouTubeでも可能です。ググっても出てきます）。
@@ -150,10 +150,10 @@ vue create hogehoge ・・・いい名前が思いつかなかった_(:3」∠)_
     
     <item>
       <title>ダミーデータをお手軽に調達する</title>
-      <link>https://idontwannawork.github.io/posts/make-random-data-easily/</link>
+      <link>https://ysko909.github.io/posts/make-random-data-easily/</link>
       <pubDate>Sat, 07 Sep 2019 10:31:55 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-random-data-easily/</guid>
+      <guid>https://ysko909.github.io/posts/make-random-data-easily/</guid>
       <description>テストデータは欲しいけど「hoge」とかじゃ困るときに 文書作成やレイアウト検討など、さまざまなシチュエーションでダミーデータは必要です。ただ、あんまり「テストテストテスト・・・」のような単語の羅列だったり、同じ日付が繰り返し並んでいても、実際の動作がイメージしにくいです。かと言って、「hoge」「fuga」「piyo」「foo」「bar」「baz」ばっかりだと「そもそもどんなデータを想定してるんだかさっぱりだよ！」なんてこともあるかもしれません。
 そこで各種ダミーデータの作成方法をメモしておきます。なお、ここで言及する「ダミーデータ」とは以下のようなものを想定しています。
  テキストであればLorem ipsumなど意味はないが読める（読めそうな）テキスト 小数あるいは整数であれば適当な値 時刻や日付であれば（任意の範囲で）適当な値  よって、Linuxなどでランダムなデータを生成するのに利用するurandomのような機能は対象外です。また、VBAによるランダムなデータの生成もここでは対象外とします。プログラムを組むなら何でもアリになっちゃうしね_(:3」∠)_
@@ -185,10 +185,10 @@ Randbetween()・・・ランダムな値を生成 最小値と最大値を指定
     
     <item>
       <title>PythonとxlwingsでExcelファイルをいじる</title>
-      <link>https://idontwannawork.github.io/posts/edit-excel-with-python-and-xlwings/</link>
+      <link>https://ysko909.github.io/posts/edit-excel-with-python-and-xlwings/</link>
       <pubDate>Fri, 06 Sep 2019 15:14:51 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/edit-excel-with-python-and-xlwings/</guid>
+      <guid>https://ysko909.github.io/posts/edit-excel-with-python-and-xlwings/</guid>
       <description>概要 xlwingsを利用して、PythonからExcelファイルをいじってみます。下記の例はインタプリタですが、*.py形式のファイルでも同様に利用できます。
 環境  Python 3.6 xlwings 0.15.3 Windows 10  新規でワークブックを作成する 空のワークブックを作成します。
 &amp;gt;&amp;gt;&amp;gt; import xlwings as xw &amp;gt;&amp;gt;&amp;gt; xb = xw.Book() &amp;gt;&amp;gt;&amp;gt; xb.name &amp;#39;Book1&amp;#39; 次の方法でも作成できます。上記の方法は明示的に「ワークブックを作成」しますが、こっちの方法はアプリケーション（Excel）を起動しつつ新規ワークブックをアプリケーションに作成させます。スタートメニューなどから単純にExcelを起動した場合、空っぽのファイルを開いた状態でExcelが起動しますが、あれの状態をプログラムで再現している感じ。
@@ -202,10 +202,10 @@ Excelを閉じる Excelのプロセスそのものを閉じる場合は、kill�
     
     <item>
       <title>detailsタグを使うと正常なコードブロックでmarkdownlintがエラーを吐く</title>
-      <link>https://idontwannawork.github.io/posts/can-not-live-together-markdownlint-and-details-tag/</link>
+      <link>https://ysko909.github.io/posts/can-not-live-together-markdownlint-and-details-tag/</link>
       <pubDate>Wed, 04 Sep 2019 09:22:56 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/can-not-live-together-markdownlint-and-details-tag/</guid>
+      <guid>https://ysko909.github.io/posts/can-not-live-together-markdownlint-and-details-tag/</guid>
       <description>はじめに とある記事で、そこそこ長いソースを記述するのに&amp;lt;details&amp;gt;タグを利用しました。すると、なぜか正常なコードブロックでエラーMD046/code-block-styleを吐くようになってしまいました。なんでー_(:3」∠)_
 環境  Windows 10 Visual Studio Code 1.37.1 markdownlint 0.30.2  実際のエラー 上の2つのMD033/no-inline-htmlは、&amp;lt;details&amp;gt;タグをmarkdown中に直接記述しているために表示されるエラーです。問題は下の3つのMD046/code-block-style。「コードはインデントじゃなくてコードブロック使えよ！」ってエラーなんですけど・・・。いや、コードブロック使ってるんですけどね？
 それぞれを見てみます。
@@ -223,10 +223,10 @@ markdownlintのエラーは表示されたところで、最終的にmarkdownが
     
     <item>
       <title>Vue cliとBuefyでシンプルに始めるVue.js - テキスト生成の機能を実装してデプロイまで</title>
-      <link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-function/</link>
+      <link>https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-function/</link>
       <pubDate>Mon, 02 Sep 2019 16:08:20 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-function/</guid>
+      <guid>https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-function/</guid>
       <description>はじめに 前回は、とりあえず見た目のコンポーネントを実装しました。今回はテキストを生成する機能を実装してデプロイまでしてしまいます。後述しますがデプロイ先はGitHub Pagesです。便利ですよね。
 今回の成果物 こちらです。
 Vue.jsのオフィシャルを参考に 機能を実装するにあたっては何はともあれ、まずはVue.jsのガイドを読みます。とくにコンポーネントの部分はよく参照することになると思います。自分はここを見つつソースの編集をしてました。
@@ -237,24 +237,24 @@ Vue.jsのオフィシャルを参考に 機能を実装するにあたっては�
     
     <item>
       <title>CSSで背景をグラデーションにする</title>
-      <link>https://idontwannawork.github.io/posts/make-background-gradation-with-css/</link>
+      <link>https://ysko909.github.io/posts/make-background-gradation-with-css/</link>
       <pubDate>Fri, 30 Aug 2019 10:10:16 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-background-gradation-with-css/</guid>
+      <guid>https://ysko909.github.io/posts/make-background-gradation-with-css/</guid>
       <description>はじめに CSSでグラデーションを背景に、かつ固定する書き方についてです。
 コード html,body { height: 100% } body:after { position: fixed; top: 0; left: 0; width: 100%; height: 100%; content: &amp;#34;&amp;#34;; z-index: -1; background: linear-gradient(to right bottom, #5dc4cb, #4ad8c6, #60e9b0, #92f78e, #d0ff66)fixed; } 詳細 とりあえず高さは画面いっぱいにしておきたいので、height: 100%を指定。次のbody:afterの部分はあまり必要ない部分なのだけど、bodyに直書きだとiOSで背景が固定されないので、疑似要素をfixedで画面全体に背景として配置してグラデーションを記述しています。
 なお、linear-gradientの数値を変更するにはジェネレーターを使用するのが手っ取り早いのでオススメ。
 動作サンプル codepen上で確認してみます。
-See the Pen webpage sample by idontwannawork (@idontwannawork) on CodePen. 
+See the Pen webpage sample by ysko909 (@ysko909) on CodePen. 
 おわりに 背景に限らずグラデーションは重宝するので、使い方を覚えておきたいものです。</description>
     </item>
     
     <item>
       <title>Vue cliとBuefyでシンプルに始めるVue.js - UIのコンポーネントを作成する</title>
-      <link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-ui/</link>
+      <link>https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-ui/</link>
       <pubDate>Tue, 27 Aug 2019 13:50:30 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-ui/</guid>
+      <guid>https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-ui/</guid>
       <description>はじめに 前回は、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーションを開発するかを確認しました。
 今回はやっとこさ、コーディングします。もう内容は見切った！もう完璧だ！（死亡フラグ）
 取っ掛かりにUI部分のコーディングをします。何はともあれ、まずは見た目です。
@@ -286,20 +286,20 @@ See the Pen webpage sample by idontwannawork (@idontwannawork) on CodePen.
     
     <item>
       <title>vue-cli-service: command not foundと言われたらnode_modulesを削除</title>
-      <link>https://idontwannawork.github.io/posts/fix-vue-cli-service-command-not-found-error/</link>
+      <link>https://ysko909.github.io/posts/fix-vue-cli-service-command-not-found-error/</link>
       <pubDate>Fri, 23 Aug 2019 20:59:07 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/fix-vue-cli-service-command-not-found-error/</guid>
+      <guid>https://ysko909.github.io/posts/fix-vue-cli-service-command-not-found-error/</guid>
       <description>はじめに Vue.jsのツール「Vue CLI」にて作成したプロジェクトをクローンしてnpm run serveをしたところ、下記のようなエラーメッセージが出てきてしまいました。
 ❯ npm run serve &amp;gt; dtg@0.1.0 serve /Users/hoge/dummytextgen &amp;gt; vue-cli-service serve sh: vue-cli-service: command not found npm ERR! file sh npm ERR! code ELIFECYCLE npm ERR! errno ENOENT npm ERR! syscall spawn npm ERR! dtg@0.1.0 serve: `vue-cli-service serve` npm ERR! spawn ENOENT npm ERR! npm ERR! Failed at the dtg@0.1.0 serve script. npm ERR! This is probably not a problem with npm. There is likely additional logging output above.</description>
     </item>
     
     <item>
       <title>Vue cliとBuefyでシンプルに始めるVue.js - コンポーネントの中身を見てみる</title>
-      <link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-component/</link>
+      <link>https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-component/</link>
       <pubDate>Wed, 21 Aug 2019 13:05:14 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-component/</guid>
+      <guid>https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-component/</guid>
       <description>はじめに 前回は環境構築で終わってしまいましたが、今回から本格的に開発を始めていきます。取っ掛かりとして、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーションを開発するかを確認します。
 まずはプロジェクトを俯瞰する 何はともあれ、Vue CLIでcreateした直後の環境を俯瞰してみます。
 なにはともあれindex とりあえずファイルの名前で判断して、index.htmlあたりを見てみます。
@@ -311,10 +311,10 @@ DONE Build complete. The dist directory is ready to be deployed.</description>
     
     <item>
       <title>Vue cliとBuefyでシンプルに始めるVue.js - まずは環境の用意</title>
-      <link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs/</link>
+      <link>https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs/</link>
       <pubDate>Mon, 19 Aug 2019 15:23:26 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs/</guid>
+      <guid>https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs/</guid>
       <description>はじめに フロントの勉強としてVue.jsをいじってますが、Vue.jsのCLIを使ってシンプルなサイトを構築する際の手順についてまとめます。
 まずは構築するにあたって、開発環境の用意を行います。なお今回はNuxt.jsを利用しない（あるいは利用するまでもない）、ライトな用途を想定しています。SSRする必要がある、とかならNuxt.jsの導入を検討してみるべきかと思います。
 なお、基本的にはVue.jsのオフィシャルドキュメントをベースに、通称「猫本」と呼ばれる「基礎から学ぶVue.js」の記述に沿っています。まだ全部読み切ってないのですが、サンプルコードが参照できるサイトもあってとても親切です。
@@ -337,10 +337,10 @@ Vue CLI v3.10.0 ? Please pick a preset: (Use arrow keys) &amp;gt; default (babel
     
     <item>
       <title>Korgのvolca drumを買ったので軽くレビューしてみる</title>
-      <link>https://idontwannawork.github.io/posts/korg-volca-drum-review/</link>
+      <link>https://ysko909.github.io/posts/korg-volca-drum-review/</link>
       <pubDate>Fri, 09 Aug 2019 16:03:40 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/korg-volca-drum-review/</guid>
+      <guid>https://ysko909.github.io/posts/korg-volca-drum-review/</guid>
       <description>まーた買っちゃった modularに引き続き、volca drumも買っちゃったい_(:3」∠)_
 volcaとは volcaとは、KORGの生み出したシンセサイザーのシリーズでして、個人的にも大好きなシリーズです。コンパクトな筐体にハイエンドモデル顔負けの要素をこれでもかと積み込んで、美味しいところをコンパクトな筐体に詰め込んだセミモジュラーシンセだったり、かと思えばキック音に特化しまくった超絶ニッチだけどスゴく使えるキックジェネレーターだったり、王道のポリフォニックなアナログシンセサイザーなどなどを生み出してきたシリーズです。
 個人的にも今までにkeys、bass、kick、sampleなどなど購入してきましたが、今回新たにリズムマシン・パーカッションシンセサイザーであるvolca drumを購入しました！
@@ -373,10 +373,10 @@ CHOKE 複数パートのうち、発音を優先させたいパートを設定�
     
     <item>
       <title>Jupyter NotebookをVisual Studio Codeで実行する</title>
-      <link>https://idontwannawork.github.io/posts/run-jupyter-notebook-with-vscode/</link>
+      <link>https://ysko909.github.io/posts/run-jupyter-notebook-with-vscode/</link>
       <pubDate>Fri, 02 Aug 2019 14:00:38 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/run-jupyter-notebook-with-vscode/</guid>
+      <guid>https://ysko909.github.io/posts/run-jupyter-notebook-with-vscode/</guid>
       <description>はじめに Visual Studio Code（以下、vscode）ではDockerでPythonやVue.jsの開発環境を構築したり、あるいはMarkdownで書いたドキュメントを配布用にPDF変換したりと、今までいろいろやってきました。今度はJupyter Notebookを動かします。いやー、vscodeってホントに多彩ですね。
 なお、今回においてはDockerを利用せず、単純にローカル環境でJupyterを使用します。
 Jupyter Notebookとは Jupyter Notebook (なお、読み方は「ジュパイター・ノートブック」、または「ジュピター・ノートブック」。自分は「ジュピター」って言ってますが、どっちが一般的なんですかね？) とは、ブラウザ上で実行するデータ分析作業のためのツールです。特徴的なのは、実行結果を記録しながらプログラミングができる点です。ここでブラウザから実行できます。
@@ -396,10 +396,10 @@ vscodeでノートブックを書いてみる まず任意のフォルダを作�
     
     <item>
       <title>Unity Hubを使ってUnityをインストールする</title>
-      <link>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</link>
+      <link>https://ysko909.github.io/posts/install-unity-with-unity-hub/</link>
       <pubDate>Thu, 11 Jul 2019 16:41:00 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/install-unity-with-unity-hub/</guid>
+      <guid>https://ysko909.github.io/posts/install-unity-with-unity-hub/</guid>
       <description>Unityって何さ Unity
  世界で最も広くつかわれているゲーム開発エンジン。 様々な機能を備えたエディターと、業界で最も幅広いプラットフォームへのサポートを利用して、ゲームやインタラクティブなコンテンツを制作する方法を学びましょう。
  「ゲーム開発エンジン」とは、画面描写、効果音やBGMなどの音楽管理、ステータスなどの各種データ管理などを総合して開発できる環境のこと。ただ、昨今ではゲームだけでなく映像制作にも用いられてますし、3Dに強いという特徴を生かして建築設計にも活用されているようです。すげぇ。
@@ -423,10 +423,10 @@ Unity Hubのダウンロード Unityオフィシャルから「はじめる」�
     
     <item>
       <title>Visual Studio CodeでGitが見つからないと言われたら</title>
-      <link>https://idontwannawork.github.io/posts/fix-git-path-with-vscode/</link>
+      <link>https://ysko909.github.io/posts/fix-git-path-with-vscode/</link>
       <pubDate>Sun, 07 Jul 2019 17:14:15 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/fix-git-path-with-vscode/</guid>
+      <guid>https://ysko909.github.io/posts/fix-git-path-with-vscode/</guid>
       <description>VS Codeをアップデートしたらこんなメッセージが Visual Studio Code(以下、VS Code)をアップデートしたらこんな通知が出るようになりました。
 「Gitが見つからないよ！」って・・・いや、君今までしこたまGit使ってたじゃないか。
 理由はともかく、このままではGitの各種コマンドが利用できないので、設定します。
@@ -441,10 +441,10 @@ $ git --version Agreeing to the Xcode/iOS license requires admin privileges, ple
     
     <item>
       <title>DockerでVue.jsの開発環境を構築する</title>
-      <link>https://idontwannawork.github.io/posts/build-environment-of-vuejs-with-docker/</link>
+      <link>https://ysko909.github.io/posts/build-environment-of-vuejs-with-docker/</link>
       <pubDate>Thu, 04 Jul 2019 13:58:10 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/build-environment-of-vuejs-with-docker/</guid>
+      <guid>https://ysko909.github.io/posts/build-environment-of-vuejs-with-docker/</guid>
       <description>概要 フロントの勉強としてVue.jsの開発環境を整備するときに、せっかくなのでDockerを使って環境を構築してみました。
 環境  macOS Mojave 10.14.5 Docker version 18.09.2 Visual Studio Code version 1.35  手順 今回は勉強がてらdocker-composeを利用します。とは言っても「書くよ！」ってだけで複雑なことは全然やってないです。
 Dockerfileの作成 FROMnode:lts-alpineWORKDIR/appRUN apk update &amp;amp;&amp;amp; \  npm install -g npm @vue/cli ただし、現時点（2019年7月3日）でVisual Studio CodeのRemoteはAlpine Linuxに対応していないので、Remoteを利用したい場合は別のイメージを使った方がいいと思われます（1敗）。以前記事にしていたので「Vue.jsの環境もリモートで開発だぁ！」とか思ってたんですけど出鼻をくじかれました。
@@ -455,10 +455,10 @@ docker-compose.ymlの作成 version: &amp;#39;3&amp;#39;services: vue_app: build
     
     <item>
       <title>なんでJavaの記事って少ないの？</title>
-      <link>https://idontwannawork.github.io/posts/why-are-there-few-articles-of-java/</link>
+      <link>https://ysko909.github.io/posts/why-are-there-few-articles-of-java/</link>
       <pubDate>Sun, 30 Jun 2019 16:40:00 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/why-are-there-few-articles-of-java/</guid>
+      <guid>https://ysko909.github.io/posts/why-are-there-few-articles-of-java/</guid>
       <description>はじめに とある事情でJavaとJavaEE（今はJakartaEEか）を使用しないといけなくなってしまって、それはそれはさんざんな目にあった（あっている）。
 そんな中で気づいたのだが、Javaって記事少なくない？ということ。
 どういうこと？ JavaはブログのエントリーでもQiitaの記事でも、とにかく知名度の割りに数が少ない。検索してもエラい昔のエントリーがしれっと上位に表示される始末で、ホントに苦労した（している）。とくにJavaEEに関して言うと、例のEclipseへ移管されるニュースの方が検索上位に来てしまい、知りたい情報が埋没する。JSFについて調べたいなーと思ったら2013年の記事が検索上位にしれっと紛れ込んできた。
@@ -475,10 +475,10 @@ stackoverflow stackoverflowでも各言語でタグ検索してみた。
     
     <item>
       <title>iPhone XRを購入して半年経った感想</title>
-      <link>https://idontwannawork.github.io/posts/apple-iphone-xr-review/</link>
+      <link>https://ysko909.github.io/posts/apple-iphone-xr-review/</link>
       <pubDate>Fri, 28 Jun 2019 10:18:44 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/apple-iphone-xr-review/</guid>
+      <guid>https://ysko909.github.io/posts/apple-iphone-xr-review/</guid>
       <description>もともとiPhone 6Sだった iPhone XR（以下、XR）を購入する前はiPhone 6Sを使用していました。au版を中古で買ったのですがそのままauショップへ持ち込みSIMロックを解除してもらって、SIMフリーとして使っていました。当時刺していたSIMはIIJのデータ通信用SIMだった・・・ような気がします（この頃はSIMカードをコロコロ変えていたものでちゃんと覚えてない・・・）。
 ところが、iPhone 6Sの発売は2015年です。さすがに発売から数年も経過してくると、バッテリーのヘタりが目立つようになります。Googleマップのナビで長距離ドライブ、とハードに使用したわけでもないのに、1日を乗り切れないくらい持ちが悪くなってきました。遠出する場合は、もちろんモバイルバッテリー持参が必須。自転車に乗る際のナビ代わりに使用したら、それはもうアメ車のガソリンメーターのように、バッテリーがモリモリ減っていきます。ある意味、見ていておもしろいですが、使う分には恐ろしくてたまりません。
 「あ、こりゃダメだ」
@@ -525,10 +525,10 @@ iPhone6Sと比べるので、どうしても感じざるを得ません。「デ
     
     <item>
       <title>Korgのvolca modular買ったので軽くレビューしてみる</title>
-      <link>https://idontwannawork.github.io/posts/korg-volca-modular-review/</link>
+      <link>https://ysko909.github.io/posts/korg-volca-modular-review/</link>
       <pubDate>Sun, 16 Jun 2019 00:30:23 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/korg-volca-modular-review/</guid>
+      <guid>https://ysko909.github.io/posts/korg-volca-modular-review/</guid>
       <description>買っちゃった volca modular、買っちゃったい。いやっほー_(:3」∠)_
 volca modular？ volcaとは、KORGの生み出したシンセサイザーのシリーズでして、個人的にも大好きなシリーズです。コンパクトな筐体にハイエンドモデル顔負けの要素をこれでもかと積み込んで、FM音源を完全再現した上でUIをユーザーフレンドリーにして扱いやすくしたデジタルシンセサイザーだったり、かと思えばキック音に特化しまくった超絶ニッチだけどスゴく使えるキックジェネレーターだったり、王道のポリフォニックなアナログシンセサイザーなどなどを生み出してきたシリーズです。
 個人的にも今までにkeys、bass、kick、sampleを購入してきましたが、今回新たにセミモジュラーシンセであるvolca modularを購入しました！
@@ -556,10 +556,10 @@ Korgのvolca modular、買ってしまったのですが、パッチなしで既
     
     <item>
       <title>SequenzのVolca Rackが来たのでレビューしてみる</title>
-      <link>https://idontwannawork.github.io/posts/sequenz-volca-rack-review/</link>
+      <link>https://ysko909.github.io/posts/sequenz-volca-rack-review/</link>
       <pubDate>Sat, 15 Jun 2019 21:02:37 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/sequenz-volca-rack-review/</guid>
+      <guid>https://ysko909.github.io/posts/sequenz-volca-rack-review/</guid>
       <description>はじめに （個人的に）待望の、待望のvolca rackが来ました！
 volca rack? volcaといえば、KORGの生み出した大ヒット商品でして、個人的にも大好きなシリーズです。コンパクトな筐体にハイエンドモデル顔負けの要素をこれでもかと積み込んで、王道のポリフォニックなアナログシンセサイザーだったり、かと思えばキック音に特化しまくった超絶ニッチだけどスゴく使えるキックジェネレーターだったり、価格とサイズで攻めに攻めたセミモジュラーシンセサイザーなどなどを生み出してきたシリーズです。
 そんなvolcaなんですが、どの機種でも筐体のサイズは全部一緒です。なので「ラックに格納したら良さげだよねー」というのがvolcaユーザーの思いでした。実際、DIYでvolca用のラックを作ってしまった人もいるようで、YouTubeなんかを見てるとたまに自作っぽいラックでvolcaをプレイしている動画なんかがあったりします。
@@ -597,10 +597,10 @@ volcaも（2019年6月16日現在で）また新しい機材がリリースさ�
     
     <item>
       <title>VS CodeでDockerコンテナーのPython開発環境にリモート接続する</title>
-      <link>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</link>
+      <link>https://ysko909.github.io/posts/connect-to-docker-with-vscode-extension/</link>
       <pubDate>Mon, 10 Jun 2019 00:52:30 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</guid>
+      <guid>https://ysko909.github.io/posts/connect-to-docker-with-vscode-extension/</guid>
       <description>はじめに Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、ptvsdではなく、vscodeの拡張機能であるRemoteを用いて接続します。
 環境構築 環境  macOS Mojave 10.14.5 Docker version 18.09.2 Visual Studio Code version 1.35  拡張機能 まずは何はなくとも下記の拡張機能をインストールします。
  Remote - Containers  RemoteはまだvscodeのInsider版でしか動作しなかった・・・のですが、6月6日にStable版でも対応しました。
@@ -614,10 +614,10 @@ Dockerのメニュー中にPreferencesがあるはずなので、これをクリ
     
     <item>
       <title>macOSアップデート後のxcrunエラーはxcodeをインストールする</title>
-      <link>https://idontwannawork.github.io/posts/xcrun-error-after-macos-update/</link>
+      <link>https://ysko909.github.io/posts/xcrun-error-after-macos-update/</link>
       <pubDate>Sun, 09 Jun 2019 19:29:47 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/xcrun-error-after-macos-update/</guid>
+      <guid>https://ysko909.github.io/posts/xcrun-error-after-macos-update/</guid>
       <description>macOSあるある？ macOSのアップデート（High SierraからMojave）後にgitを実行するとxcrunが見つからないよ！というエラー内容が出現しました。
 経験上このエラーメッセージが出現するのってmacOSのアップデート直後なんですよね・・・。そんなわけで毎度調べるのもアレなのでメモしておきます。
 エラー内容 macOSをアップデートした際に、gitを実行しようとすると下記のようなエラーになることがあります。
@@ -628,10 +628,10 @@ xcode-select --install  「インストールしますか？」という旨の�
     
     <item>
       <title>TASCAMのiXZを使ってiPhoneでレコーディングする</title>
-      <link>https://idontwannawork.github.io/posts/recocrd-with-tascam-ixz/</link>
+      <link>https://ysko909.github.io/posts/recocrd-with-tascam-ixz/</link>
       <pubDate>Tue, 04 Jun 2019 17:11:23 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/recocrd-with-tascam-ixz/</guid>
+      <guid>https://ysko909.github.io/posts/recocrd-with-tascam-ixz/</guid>
       <description>そもそもiXZって何ぞや TASCAMが販売しているスマートフォン・タブレット端末用オーディオインターフェイスです。発売は2011年とめちゃくちゃ昔なのですが現役で販売されていることからもわかる通り、スマートフォン・タブレット端末で利用できる手軽なインターフェイスの王道です。
 特徴としては、スマートフォンなどに「アナログで接続する」という点。そして、ギター専用のiRigのような「スマートフォンに直接接続する」仕様であるにもかかわらず、ギターだけじゃなくコンデンサーマイクの利用も可能な点でしょうか。
 仕様 サイズは106（W）× 40（H）× 45（D）mmと、最近大型化しているスマートフォンと比べると厚さ以外は割とコンパクト。単3電池2本がセット可能ですが、電池を含めないと100gを切るくらいの軽量さ。
@@ -671,10 +671,10 @@ xcode-select --install  「インストールしますか？」という旨の�
     
     <item>
       <title>PythonでMarkdownファイルをHTMLへ変換する</title>
-      <link>https://idontwannawork.github.io/posts/convert-markdown-to-html-with-python/</link>
+      <link>https://ysko909.github.io/posts/convert-markdown-to-html-with-python/</link>
       <pubDate>Fri, 24 May 2019 14:50:30 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/convert-markdown-to-html-with-python/</guid>
+      <guid>https://ysko909.github.io/posts/convert-markdown-to-html-with-python/</guid>
       <description>はじめに 以前、VS CodeでMarkdownをPDFに自動で変換する方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので勉強がてら、Pythonで書くことにしました。と言っても難しい処理では全然ないんだけど・・・_(┐「ε:)_
 ちなみに、前の記事で紹介した拡張機能Markdown PDFを使えばHTMLにも変換できます。ただ、今回はVS Codeがないというシチュエーションでファイル変換したいのと、自分が作成したスタイルシートでHTMLファイルを生成したかったため、VS Codeの拡張機能を頼らない方法を取りました。
 というわけで、Pythonを使ったMarkdownファイルをHTMLへ変換する手順について書きます。
@@ -693,10 +693,10 @@ $ python mdtohtml.py iamacat.md の変換を開始します --------------------
     
     <item>
       <title>VS CodeでMarkdownをPDFに自動で変換する</title>
-      <link>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</link>
+      <link>https://ysko909.github.io/posts/convert-markdown-to-pdf-with-vscode/</link>
       <pubDate>Wed, 15 May 2019 13:44:12 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</guid>
+      <guid>https://ysko909.github.io/posts/convert-markdown-to-pdf-with-vscode/</guid>
       <description>はじめに Markdownで記述したmdファイルは、エンジニア間ではそのまま利用することが多いように思います（GitHubなどにREADME.mdとしてアップするとか）。ところが、メールに添付したり印刷する等、外部へ持ち出す際はPDFに変換しておいた方がいろいろ安心。とくに「mdファイルって何？」みたいなお客さんにドキュメントを渡さないといけない場合とか・・・。
 MarkdownをPDF化するのは、Pandocを利用する方法もあるのですが、ここではVisual Studio Code（以下、VS Code）の拡張機能である「Markdown PDF」を利用します。
 環境  Windows 10 vscode  インストール VS Codeにて、Ctrl＋Shift＋Xで拡張機能の検索窓に「Markdown PDF」と入力するか、上記のリンクをクリックします。検索結果から「Markdown PDF」を選択し、インストールします。Markdown PDFをインストールしてから、VS Codeで適当なMarkdownファイルを最初に開いた際、Chromiumのダウンロードが自動で始まります。ちなみに、なんでChromiumが必要かというと、Markdown PDFがPDF変換するのに利用しているから。
@@ -711,10 +711,10 @@ MarkdownをPDF化するのは、Pandocを利用する方法もあるのですが
     
     <item>
       <title>イテレータを複数回ループしたい</title>
-      <link>https://idontwannawork.github.io/posts/iterator-will-return-blank-with-loop-twice/</link>
+      <link>https://ysko909.github.io/posts/iterator-will-return-blank-with-loop-twice/</link>
       <pubDate>Wed, 15 May 2019 11:57:24 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/iterator-will-return-blank-with-loop-twice/</guid>
+      <guid>https://ysko909.github.io/posts/iterator-will-return-blank-with-loop-twice/</guid>
       <description>なんのこっちゃ？ 実行しようとしていたのはこんなコードでした。
 &amp;gt;&amp;gt;&amp;gt; import re &amp;gt;&amp;gt;&amp;gt; s = &amp;#34;hogefugapiyofoobarbaz1234567890abc987efg654hij321&amp;#34; &amp;gt;&amp;gt;&amp;gt; iter = re.finditer(&amp;#34;b..&amp;#34;, s) ← finditer()は結果をイテレータで返す &amp;gt;&amp;gt;&amp;gt; for i in iter: ... print(i.start()) ... 15 18 32 &amp;gt;&amp;gt;&amp;gt; for i in iter: ... print(i.start()) ... &amp;gt;&amp;gt;&amp;gt; ← 同じループを実行しても最初のループと異なり結果が返ってこない このように、同一のイテレータに対しループ処理を複数回行うと、2回目以降のループは結果が空になってしまいます。
 ちなみにジェネレータでも上記のような複数回のループ処理を行おうとすると、2回目以降のループで結果が空になるらしいですが、ジェネレータについては別途まとめて記事にしようと思います（まだ勉強中）。
@@ -726,24 +726,24 @@ MarkdownをPDF化するのは、Pandocを利用する方法もあるのですが
     
     <item>
       <title>Vue.jsでデータの内容を開発ツールを使わないで確認する</title>
-      <link>https://idontwannawork.github.io/posts/show-data-without-tools/</link>
+      <link>https://ysko909.github.io/posts/show-data-without-tools/</link>
       <pubDate>Sun, 05 May 2019 17:38:31 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/show-data-without-tools/</guid>
+      <guid>https://ysko909.github.io/posts/show-data-without-tools/</guid>
       <description>小ネタです Vue.jsは、ブラウザの開発ツールやVue.js用の拡張機能を利用しなくても、HTMLファイルにとあるタグを記述することで、データの内容をJSON形式で確認できます。
 記述方法 HTMLファイル内に「{{ $data }}」を任意の場所に記述します。
 &amp;lt;html&amp;gt; &amp;lt;head&amp;gt; &amp;lt;/head&amp;gt; &amp;lt;body&amp;gt; &amp;lt;div id=&amp;#34;app&amp;#34;&amp;gt; &amp;lt;p&amp;gt;{{ message.v }}&amp;lt;/p&amp;gt; &amp;lt;p&amp;gt;{{ message.v.length }}&amp;lt;/p&amp;gt; &amp;lt;p&amp;gt;{{ l[2] }}&amp;lt;/p&amp;gt; &amp;lt;p&amp;gt;{{ l[n] }}&amp;lt;/p&amp;gt; &amp;lt;pre&amp;gt;{{ $data }}&amp;lt;/pre&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;script src=&amp;#34;https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;main.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt; 仮にJavaScript側が下記の内容だった場合、
 var app = new Vue({ el: &amp;#39;#app&amp;#39;, data: { message: { v: &amp;#39;Hello Vue World!&amp;#39; }, l: [&amp;#39;hoge&amp;#39;, &amp;#39;ふが&amp;#39;, &amp;#39;ぴyo&amp;#39;], n: 1 } }) 表示内容は下記の通り。
 CodePenでやってみました。
-See the Pen vuejs_type by idontwannawork (@idontwannawork) on CodePen.</description>
+See the Pen vuejs_type by ysko909 (@ysko909) on CodePen.</description>
     </item>
     
     <item>
       <title>Pythonのopen関数はencoding引数を指定しよう</title>
-      <link>https://idontwannawork.github.io/posts/encode-error-with-open-function/</link>
+      <link>https://ysko909.github.io/posts/encode-error-with-open-function/</link>
       <pubDate>Thu, 25 Apr 2019 10:57:12 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/encode-error-with-open-function/</guid>
+      <guid>https://ysko909.github.io/posts/encode-error-with-open-function/</guid>
       <description>結論 WindowsでPythonのopen関数を使うなら、encoding引数を指定しよう（血涙
 何があったのさ WindowsにてPythonを用いて、テキストファイルの書き出しと読み込みをしようとしたんです。
 そうしたら憎きアイツが出てきたわけです。
@@ -763,10 +763,10 @@ with open(&amp;#39;C:/app/hoge.json&amp;#39;, mode=&amp;#39;r&amp;#39;, encoding
     
     <item>
       <title>json.dumpsでの文字化けを解消する</title>
-      <link>https://idontwannawork.github.io/posts/garbled-text-with-json-dumps/</link>
+      <link>https://ysko909.github.io/posts/garbled-text-with-json-dumps/</link>
       <pubDate>Wed, 24 Apr 2019 10:38:54 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/garbled-text-with-json-dumps/</guid>
+      <guid>https://ysko909.github.io/posts/garbled-text-with-json-dumps/</guid>
       <description>概要 Pythonでjson.dumps()した際に、日本語が文字化けするのを防ぐメモ。
 環境  Windows 10 Python 3.6  実際のコード &amp;gt;&amp;gt;&amp;gt; import json &amp;gt;&amp;gt;&amp;gt; dic = {&amp;#34;hoge&amp;#34;:&amp;#34;foo&amp;#34;, &amp;#34;fuga&amp;#34;:&amp;#34;bar&amp;#34;, &amp;#34;piyo&amp;#34;:&amp;#34;baz&amp;#34;} &amp;gt;&amp;gt;&amp;gt; json.dumps(dic) &amp;#39;{&amp;#34;hoge&amp;#34;: &amp;#34;foo&amp;#34;, &amp;#34;fuga&amp;#34;: &amp;#34;bar&amp;#34;, &amp;#34;piyo&amp;#34;: &amp;#34;baz&amp;#34;}&amp;#39; &amp;gt;&amp;gt;&amp;gt; dicj = {&amp;#34;日本語&amp;#34;:&amp;#34;項目名&amp;#34;, &amp;#34;にほんご&amp;#34;:&amp;#34;こうもくめい&amp;#34;} &amp;gt;&amp;gt;&amp;gt; json.dumps(dicj) &amp;#39;{&amp;#34;\\u65e5\\u672c\\u8a9e&amp;#34;: &amp;#34;\\u9805\\u76ee\\u540d&amp;#34;, &amp;#34;\\u306b\\u307b\\u3093\\u3054&amp;#34;: &amp;#34;\\u3053\\u3046\\u3082\\u304f\\u3081\\u3044&amp;#34;}&amp;#39; こんな感じで、単純にjson.dumps()すると文字化けしてしまいます。この場合、ensure_asciiオプションでFalseを指定します。
 &amp;gt;&amp;gt;&amp;gt; json.dumps(dicj, ensure_ascii=False) &amp;#39;{&amp;#34;日本語&amp;#34;: &amp;#34;項目名&amp;#34;, &amp;#34;にほんご&amp;#34;: &amp;#34;こうもくめい&amp;#34;}&amp;#39; すると、上記のように文字化けが解消されました。</description>
@@ -774,10 +774,10 @@ with open(&amp;#39;C:/app/hoge.json&amp;#39;, mode=&amp;#39;r&amp;#39;, encoding
     
     <item>
       <title>Windowsでドット付ファイルを作成する</title>
-      <link>https://idontwannawork.github.io/posts/make-file-with-dot-on-windows/</link>
+      <link>https://ysko909.github.io/posts/make-file-with-dot-on-windows/</link>
       <pubDate>Mon, 22 Apr 2019 13:06:22 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-file-with-dot-on-windows/</guid>
+      <guid>https://ysko909.github.io/posts/make-file-with-dot-on-windows/</guid>
       <description>結論 ファイル名の冒頭および語尾の両方にドットを付与！
 小ネタです .gitignoreとか.bashrcのように、何かの設定ファイルは冒頭に「.（ドット）」が付いて拡張子なしであるような名前だったりします。
 ところが、Windowsのexplorer上でドット付のファイルを作成しようとしたらエラーになりました。
@@ -791,10 +791,10 @@ with open(&amp;#39;C:/app/hoge.json&amp;#39;, mode=&amp;#39;r&amp;#39;, encoding
     
     <item>
       <title>WindowsでLinuxのコマンドが使える「BusyBox」</title>
-      <link>https://idontwannawork.github.io/posts/busybox-on-windows/</link>
+      <link>https://ysko909.github.io/posts/busybox-on-windows/</link>
       <pubDate>Tue, 16 Apr 2019 09:38:26 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/busybox-on-windows/</guid>
+      <guid>https://ysko909.github.io/posts/busybox-on-windows/</guid>
       <description>結論 普段LinuxやMacのシェルで使用している各種コマンドを、Windows環境でも使いたい！となった時には、BusyBoxを使えばいいよ！
 はじめに 仕事ではWindows、プライベートではMacまたはLinuxなんて人もいるかもしれません。そこな貴方、こんなシチュエーションがありませんでしょうか？
  ふと仕事中に「grep使いたいなー」とか「awk使いたいなー」とかなっても、Windowsのコマンドプロンプトじゃ足りないし、PowerShellはあの文法がいまいち性に合わない。ガッツリ使うわけじゃないから、わざわざ端末や仮想環境を用意するというわけにもいかない。
@@ -815,10 +815,10 @@ C:\hoge&amp;gt;BusyBox64.exe BusyBox v1.31.0-FRP-2910-ge92596d0b (2019-01-10 14:
     
     <item>
       <title>Pythonの命名規約</title>
-      <link>https://idontwannawork.github.io/posts/python-naming-conventions/</link>
+      <link>https://ysko909.github.io/posts/python-naming-conventions/</link>
       <pubDate>Fri, 12 Apr 2019 15:27:02 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/python-naming-conventions/</guid>
+      <guid>https://ysko909.github.io/posts/python-naming-conventions/</guid>
       <description>命名規約のメモ PEP8に準拠。何番煎じかわからないけども自学用に。
 推奨される命名規約    命名対象 ルール 例 備考     パッケージ、モジュール すべて小文字で短く flask, os アンダースコアの利用は非推奨   クラス （アッパー）キャメルケース MyClass    型変数 （アッパー）キャメルケース MyClass    例外 （アッパー）キャメルケース、最後に「Error」 MyExcepError 例外はクラスであるべき、とのこと   グローバル変数 すべて小文字でアンダースコア区切り、2つアンダースコアを付与 __all__ グローバル変数をエクスポートするのを防ぐ   関数、変数 すべて小文字でアンダースコア区切り my_function    メソッド、インスタンス変数 すべて小文字でアンダースコア区切り my_method    定数 すべて大文字でアンダースコア区切り MY_CONST     ポピュラーな命名 上記の基本的なルールに準拠して、実際にはどんな感じで命名をされているか、について。
 1文字のみ b 小文字1文字。</description>
@@ -826,31 +826,31 @@ C:\hoge&amp;gt;BusyBox64.exe BusyBox v1.31.0-FRP-2910-ge92596d0b (2019-01-10 14:
     
     <item>
       <title>A-Frameでいろいろ降らせる</title>
-      <link>https://idontwannawork.github.io/posts/aframe-particle/</link>
+      <link>https://ysko909.github.io/posts/aframe-particle/</link>
       <pubDate>Thu, 11 Apr 2019 09:47:58 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/aframe-particle/</guid>
+      <guid>https://ysko909.github.io/posts/aframe-particle/</guid>
       <description>降らせるって何を？ こんな感じ。
-See the Pen aframe_particle_star by idontwannawork (@idontwannawork) on CodePen. 
+See the Pen aframe_particle_star by ysko909 (@ysko909) on CodePen. 
 結論 これを使います。
 概要 webVR用のフレームワークA-Frameにはさまざまなサードパーティーのコンポーネントが存在します。その中で、「いろいろ降らせる」コンポーネントを実装します。これを実装することで「雪の降る町」や「チリの舞う荒野」なんかの表現ができます。
 設定値 preset presetの値で粒子の形を変えて降らせることができます。
  stars（デフォルト） 星が降ってきます。デフォルトではrainとsnowの中間くらいの落下速度で、粒度がrainより粗いです。そして、粒子が星形。他と異なり、後方で噴水のように噴き出しています。
-See the Pen aframe_particle_star by idontwannawork (@idontwannawork) on CodePen. 
+See the Pen aframe_particle_star by ysko909 (@ysko909) on CodePen. 
  dust チリっぽい何か。この設定値が一番ゆっくり降ってきます。というか、舞ってます。粒度は以下の2つと同様で、細かいです。チリっていうよりも「ホコリ」っていった方が正確かもしれない。
-See the Pen aframe_particle_dust by idontwannawork (@idontwannawork) on CodePen. 
+See the Pen aframe_particle_dust by ysko909 (@ysko909) on CodePen. 
  snow その名の通り、雪。rainよりゆっくり降ってきます。粒度と粒子はデフォルトではdustと同じっぽく見えます。これはしっかり上から「降って」きます。
-See the Pen aframe_particle_snow by idontwannawork (@idontwannawork) on CodePen. 
+See the Pen aframe_particle_snow by ysko909 (@ysko909) on CodePen. 
  rain その名の通り、雨。snowより早く降ってきます。粒子はいわゆるティアドロップっぽい形。これもしっかり上から「降って」きます。
-See the Pen aframe_particle_rain by idontwannawork (@idontwannawork) on CodePen.</description>
+See the Pen aframe_particle_rain by ysko909 (@ysko909) on CodePen.</description>
     </item>
     
     <item>
       <title>Hugoで静的サイトを生成してみる</title>
-      <link>https://idontwannawork.github.io/posts/make-site-with-hugo/</link>
+      <link>https://ysko909.github.io/posts/make-site-with-hugo/</link>
       <pubDate>Fri, 05 Apr 2019 10:15:49 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-site-with-hugo/</guid>
+      <guid>https://ysko909.github.io/posts/make-site-with-hugo/</guid>
       <description>Hugoとは Golangで作られている、静的サイトジェネレーター。なんでも、生成が速いらしいです。
 今回はコイツを使って、サイトを生成し公開してみようと思います。
 この記事が役立つであろう人 サイトを立ち上げたくて、ターミナルでの作業が苦でない人。また、自分でCSSなどをいじったりしてデザインするなら、記事を書くほうに労力を割きたい人。
@@ -875,10 +875,10 @@ echo &amp;#39;theme = &amp;#34;ananke&amp;#34;&amp;#39; &amp;gt;&amp;gt; config.
     
     <item>
       <title>このページについて</title>
-      <link>https://idontwannawork.github.io/about/</link>
+      <link>https://ysko909.github.io/about/</link>
       <pubDate>Thu, 04 Apr 2019 19:32:06 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/about/</guid>
+      <guid>https://ysko909.github.io/about/</guid>
       <description> はじめに このページは日々の学習内容を書いたりトラブルをメモったり、たまに全然関係ない記事を書いたりする予定。
 どうぞ、よしなに。
 誰が書いてるの こんな人。
@@ -890,10 +890,10 @@ SNSとか  Twitter GitHub Kaggle Codepen  免責事項  当ブログで掲載し
     
     <item>
       <title>プライバシーポリシー</title>
-      <link>https://idontwannawork.github.io/ppolicy/</link>
+      <link>https://ysko909.github.io/ppolicy/</link>
       <pubDate>Thu, 04 Apr 2019 19:32:06 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/ppolicy/</guid>
+      <guid>https://ysko909.github.io/ppolicy/</guid>
       <description> プライバシーポリシー 当サイトに掲載されている広告について 当サイトでは、第三者配信の広告サービス（Googleアドセンスなど）を利用しています。 このような広告配信事業者は、ユーザーの興味に応じた商品やサービスの広告を表示するため、当サイトや他サイトへのアクセスに関する情報であるCookie（氏名、住所、メールアドレス、電話番号は含まれません）を使用することがあります。 またGoogleアドセンスに関して、このプロセスの詳細やこのような情報が広告配信事業者に使用されないための方法については、こちらをクリックしてください。
 当サイトが使用しているアクセス解析ツールについて 当サイトでは、Googleによるアクセス解析ツール「Googleアナリティクス」を利用しています。 このGoogleアナリティクスはトラフィックデータの収集のためにCookieを使用しています。 このトラフィックデータは匿名で収集されており、個人を特定するものではありません。 この機能はCookieを無効にすることで収集を拒否できますので、お使いのブラウザの設定をご確認ください。 この規約に関して、詳しくはこちら、またはこちらをクリックしてください。
 当サイトへのコメントについて 当サイトでは、スパム・荒らしへの対応として、コメントの際に使用されたIPアドレスを記録しています。 これはブログの標準機能としてサポートされている機能で、スパム・荒らしへの対応以外にこのIPアドレスを使用することはありません。 すべてのコメントは管理人が事前にその内容を確認し、承認した上での掲載となりますことをあらかじめご了承ください。 加えて、次の各号に掲げる内容を含むコメントは管理人の裁量によって承認せず、削除する事があります。
@@ -902,10 +902,10 @@ SNSとか  Twitter GitHub Kaggle Codepen  免責事項  当ブログで掲載し
     
     <item>
       <title>チュートリアルを卒業したくらいが一番ツラい</title>
-      <link>https://idontwannawork.github.io/posts/after-tutorial/</link>
+      <link>https://ysko909.github.io/posts/after-tutorial/</link>
       <pubDate>Thu, 04 Apr 2019 18:38:04 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/after-tutorial/</guid>
+      <guid>https://ysko909.github.io/posts/after-tutorial/</guid>
       <description>チュートリアルってあるよね どんなプログラミング言語やライブラリやフレームワークでもあるもの、チュートリアル。「Getting Started」とか書かれたりもする。そして大抵の人がチュートリアルに触れて、場合によってはちょっと値を自分流に編集したりして、対象の雰囲気をざっくり掴むのに使う。そして、そこから「自分が作りたいもの」を目指していく。
 文章として記述するとこれだけなんだけど、自分はチュートリアルをやった直後にモチベーションがガクッと下がる。折れるまでは行かなくとも、再起するのに苦労する。
 なぜなんだぜ 結論から言ってしまえば、チュートリアル卒業レベルでは作りたいものは作れないから。

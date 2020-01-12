@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Vuex on 頑張らないために頑張る</title>
-    <link>https://idontwannawork.github.io/tags/vuex/</link>
+    <link>https://ysko909.github.io/tags/vuex/</link>
     <description>Recent content in Vuex on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Mon, 07 Oct 2019 09:41:57 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/vuex/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/vuex/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>VuexとVue Routerを使ってSPAを作るチュートリアルをやってみた</title>
-      <link>https://idontwannawork.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</link>
+      <link>https://ysko909.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</link>
       <pubDate>Mon, 07 Oct 2019 09:41:57 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</guid>
+      <guid>https://ysko909.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</guid>
       <description>はじめに 以前の記事ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したのですが、デフォルトだと「Vuex」や「Vue Router」はOFFです。Vue.jsでなくともReactなどのJavaScriptのライブラリやフレームワークを用いた環境でSPAを作成する場合、状態管理とルーティングは避けて通れない機能です。いや、別に利用しなくてもいいんですが、たぶん避けて通ったほうが後々面倒なこと（コンポーネント間でデータバケツリレーしたり、ページ遷移する必要が出てきたり・・・）になります。
 なので今回は「VuexとVue Routerを使用したSPAをざっくり作って、状態管理とルーティングに慣れておこうぜ」というのが趣旨です。基本的にはVuexのチュートリアルを参考にしています。
 また、基本的にはVue.jsのオフィシャルドキュメントを見つつ、通称「猫本」と呼ばれる「基礎から学ぶVue.js」の記述に沿っています。相変わらず完全に読み切ってないのですが、サンプルコードが参照できるサイトもあってとても親切です。

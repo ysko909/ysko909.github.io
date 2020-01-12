@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Powerpoint on 頑張らないために頑張る</title>
-    <link>https://idontwannawork.github.io/tags/powerpoint/</link>
+    <link>https://ysko909.github.io/tags/powerpoint/</link>
     <description>Recent content in Powerpoint on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Sat, 07 Sep 2019 10:31:55 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/powerpoint/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/powerpoint/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>ダミーデータをお手軽に調達する</title>
-      <link>https://idontwannawork.github.io/posts/make-random-data-easily/</link>
+      <link>https://ysko909.github.io/posts/make-random-data-easily/</link>
       <pubDate>Sat, 07 Sep 2019 10:31:55 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-random-data-easily/</guid>
+      <guid>https://ysko909.github.io/posts/make-random-data-easily/</guid>
       <description>テストデータは欲しいけど「hoge」とかじゃ困るときに 文書作成やレイアウト検討など、さまざまなシチュエーションでダミーデータは必要です。ただ、あんまり「テストテストテスト・・・」のような単語の羅列だったり、同じ日付が繰り返し並んでいても、実際の動作がイメージしにくいです。かと言って、「hoge」「fuga」「piyo」「foo」「bar」「baz」ばっかりだと「そもそもどんなデータを想定してるんだかさっぱりだよ！」なんてこともあるかもしれません。
 そこで各種ダミーデータの作成方法をメモしておきます。なお、ここで言及する「ダミーデータ」とは以下のようなものを想定しています。
  テキストであればLorem ipsumなど意味はないが読める（読めそうな）テキスト 小数あるいは整数であれば適当な値 時刻や日付であれば（任意の範囲で）適当な値  よって、Linuxなどでランダムなデータを生成するのに利用するurandomのような機能は対象外です。また、VBAによるランダムなデータの生成もここでは対象外とします。プログラムを組むなら何でもアリになっちゃうしね_(:3」∠)_

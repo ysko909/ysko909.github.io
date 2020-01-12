@@ -12,7 +12,7 @@
 なお、直接関係はありませんが、map()やfilter()はイテレータを返す（Python3での話）ので、返されたオブジェクトについてlist()などを複数回実行すると、上記のように2回目以降は空っぽになってしまうようです。
 &gt;&gt;&gt; list = [1, 2, 3] &gt;&gt;&gt; f = filter(None, list) &gt;&gt;&gt; list(list) [1, 2, 3] &gt;&gt;&gt; list(list) [1, 2, 3] ← リストlistに複数回listしても結果が返ってくる &gt;&gt;&gt; list(f) [1, 2, 3] &gt;&gt;&gt; list(f) [] ← イテレータに複数回listすると2回目以降ブランクになる &gt;&gt;&gt; そもそもイテレータって？ iteratorとはオブジェクトの一種で、データの走査方法について表現するものです。なんのこっちゃ、という感じですが「要素を1つずつ繰り返し取得できる構造を持っていて（iterable）、実際に順次取得ができる」オブジェクトっていう感じかと。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://idontwannawork.github.io/posts/iterator-will-return-blank-with-loop-twice/" /><meta property="article:published_time" content="2019-05-15T11:57:24&#43;09:00"/>
+<meta property="og:url" content="https://ysko909.github.io/posts/iterator-will-return-blank-with-loop-twice/" /><meta property="article:published_time" content="2019-05-15T11:57:24&#43;09:00"/>
 <meta property="article:modified_time" content="2019-05-15T11:57:24&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="イテレータを複数回ループしたい"/>
 <meta name="twitter:description" content="なんのこっちゃ？ 実行しようとしていたのはこんなコードでした。
@@ -25,11 +25,11 @@
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
 
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/normalize.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="https://idontwannawork.github.io/css/dark.css"
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
 		 />
-	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://idontwannawork.github.io/js/main.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
 	<script data-ad-client="ca-pub-2615583270378842" async
 		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
@@ -41,7 +41,7 @@
 		<div class="header">
 	<h1 class="site-title">頑張らないために頑張る</h1>
 	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
-			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/idontwannawork" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
 		</nav>
 	</div>
 

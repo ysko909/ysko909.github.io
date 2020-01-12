@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Java on 頑張らないために頑張る</title>
-    <link>https://idontwannawork.github.io/tags/java/</link>
+    <link>https://ysko909.github.io/tags/java/</link>
     <description>Recent content in Java on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Sun, 30 Jun 2019 16:40:00 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/java/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/java/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>なんでJavaの記事って少ないの？</title>
-      <link>https://idontwannawork.github.io/posts/why-are-there-few-articles-of-java/</link>
+      <link>https://ysko909.github.io/posts/why-are-there-few-articles-of-java/</link>
       <pubDate>Sun, 30 Jun 2019 16:40:00 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/why-are-there-few-articles-of-java/</guid>
+      <guid>https://ysko909.github.io/posts/why-are-there-few-articles-of-java/</guid>
       <description>はじめに とある事情でJavaとJavaEE（今はJakartaEEか）を使用しないといけなくなってしまって、それはそれはさんざんな目にあった（あっている）。
 そんな中で気づいたのだが、Javaって記事少なくない？ということ。
 どういうこと？ JavaはブログのエントリーでもQiitaの記事でも、とにかく知名度の割りに数が少ない。検索してもエラい昔のエントリーがしれっと上位に表示される始末で、ホントに苦労した（している）。とくにJavaEEに関して言うと、例のEclipseへ移管されるニュースの方が検索上位に来てしまい、知りたい情報が埋没する。JSFについて調べたいなーと思ったら2013年の記事が検索上位にしれっと紛れ込んできた。

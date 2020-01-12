@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Xlwings on 頑張らないために頑張る</title>
-    <link>https://idontwannawork.github.io/tags/xlwings/</link>
+    <link>https://ysko909.github.io/tags/xlwings/</link>
     <description>Recent content in Xlwings on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Fri, 06 Sep 2019 15:14:51 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/xlwings/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/xlwings/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>PythonとxlwingsでExcelファイルをいじる</title>
-      <link>https://idontwannawork.github.io/posts/edit-excel-with-python-and-xlwings/</link>
+      <link>https://ysko909.github.io/posts/edit-excel-with-python-and-xlwings/</link>
       <pubDate>Fri, 06 Sep 2019 15:14:51 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/edit-excel-with-python-and-xlwings/</guid>
+      <guid>https://ysko909.github.io/posts/edit-excel-with-python-and-xlwings/</guid>
       <description>概要 xlwingsを利用して、PythonからExcelファイルをいじってみます。下記の例はインタプリタですが、*.py形式のファイルでも同様に利用できます。
 環境  Python 3.6 xlwings 0.15.3 Windows 10  新規でワークブックを作成する 空のワークブックを作成します。
 &amp;gt;&amp;gt;&amp;gt; import xlwings as xw &amp;gt;&amp;gt;&amp;gt; xb = xw.Book() &amp;gt;&amp;gt;&amp;gt; xb.name &amp;#39;Book1&amp;#39; 次の方法でも作成できます。上記の方法は明示的に「ワークブックを作成」しますが、こっちの方法はアプリケーション（Excel）を起動しつつ新規ワークブックをアプリケーションに作成させます。スタートメニューなどから単純にExcelを起動した場合、空っぽのファイルを開いた状態でExcelが起動しますが、あれの状態をプログラムで再現している感じ。

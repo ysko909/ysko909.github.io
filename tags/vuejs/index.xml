@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Vuejs on 頑張らないために頑張る</title>
-    <link>https://idontwannawork.github.io/tags/vuejs/</link>
+    <link>https://ysko909.github.io/tags/vuejs/</link>
     <description>Recent content in Vuejs on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Mon, 07 Oct 2019 09:41:57 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/vuejs/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/vuejs/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>VuexとVue Routerを使ってSPAを作るチュートリアルをやってみた</title>
-      <link>https://idontwannawork.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</link>
+      <link>https://ysko909.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</link>
       <pubDate>Mon, 07 Oct 2019 09:41:57 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</guid>
+      <guid>https://ysko909.github.io/posts/make-spa-site-with-vuex-and-vue-router-first/</guid>
       <description>はじめに 以前の記事ではVue CLIを使って簡単なWebアプリケーションを作ってみました。このとき、Vue CLIの設定はデフォルトを採用したのですが、デフォルトだと「Vuex」や「Vue Router」はOFFです。Vue.jsでなくともReactなどのJavaScriptのライブラリやフレームワークを用いた環境でSPAを作成する場合、状態管理とルーティングは避けて通れない機能です。いや、別に利用しなくてもいいんですが、たぶん避けて通ったほうが後々面倒なこと（コンポーネント間でデータバケツリレーしたり、ページ遷移する必要が出てきたり・・・）になります。
 なので今回は「VuexとVue Routerを使用したSPAをざっくり作って、状態管理とルーティングに慣れておこうぜ」というのが趣旨です。基本的にはVuexのチュートリアルを参考にしています。
 また、基本的にはVue.jsのオフィシャルドキュメントを見つつ、通称「猫本」と呼ばれる「基礎から学ぶVue.js」の記述に沿っています。相変わらず完全に読み切ってないのですが、サンプルコードが参照できるサイトもあってとても親切です。
@@ -29,10 +29,10 @@ vue create hogehoge ・・・いい名前が思いつかなかった_(:3」∠)_
     
     <item>
       <title>Vue cliとBuefyでシンプルに始めるVue.js - テキスト生成の機能を実装してデプロイまで</title>
-      <link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-function/</link>
+      <link>https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-function/</link>
       <pubDate>Mon, 02 Sep 2019 16:08:20 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-function/</guid>
+      <guid>https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-function/</guid>
       <description>はじめに 前回は、とりあえず見た目のコンポーネントを実装しました。今回はテキストを生成する機能を実装してデプロイまでしてしまいます。後述しますがデプロイ先はGitHub Pagesです。便利ですよね。
 今回の成果物 こちらです。
 Vue.jsのオフィシャルを参考に 機能を実装するにあたっては何はともあれ、まずはVue.jsのガイドを読みます。とくにコンポーネントの部分はよく参照することになると思います。自分はここを見つつソースの編集をしてました。
@@ -43,10 +43,10 @@ Vue.jsのオフィシャルを参考に 機能を実装するにあたっては�
     
     <item>
       <title>Vue cliとBuefyでシンプルに始めるVue.js - UIのコンポーネントを作成する</title>
-      <link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-ui/</link>
+      <link>https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-ui/</link>
       <pubDate>Tue, 27 Aug 2019 13:50:30 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-ui/</guid>
+      <guid>https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-ui/</guid>
       <description>はじめに 前回は、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーションを開発するかを確認しました。
 今回はやっとこさ、コーディングします。もう内容は見切った！もう完璧だ！（死亡フラグ）
 取っ掛かりにUI部分のコーディングをします。何はともあれ、まずは見た目です。
@@ -78,20 +78,20 @@ Vue.jsのオフィシャルを参考に 機能を実装するにあたっては�
     
     <item>
       <title>vue-cli-service: command not foundと言われたらnode_modulesを削除</title>
-      <link>https://idontwannawork.github.io/posts/fix-vue-cli-service-command-not-found-error/</link>
+      <link>https://ysko909.github.io/posts/fix-vue-cli-service-command-not-found-error/</link>
       <pubDate>Fri, 23 Aug 2019 20:59:07 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/fix-vue-cli-service-command-not-found-error/</guid>
+      <guid>https://ysko909.github.io/posts/fix-vue-cli-service-command-not-found-error/</guid>
       <description>はじめに Vue.jsのツール「Vue CLI」にて作成したプロジェクトをクローンしてnpm run serveをしたところ、下記のようなエラーメッセージが出てきてしまいました。
 ❯ npm run serve &amp;gt; dtg@0.1.0 serve /Users/hoge/dummytextgen &amp;gt; vue-cli-service serve sh: vue-cli-service: command not found npm ERR! file sh npm ERR! code ELIFECYCLE npm ERR! errno ENOENT npm ERR! syscall spawn npm ERR! dtg@0.1.0 serve: `vue-cli-service serve` npm ERR! spawn ENOENT npm ERR! npm ERR! Failed at the dtg@0.1.0 serve script. npm ERR! This is probably not a problem with npm. There is likely additional logging output above.</description>
     </item>
     
     <item>
       <title>Vue cliとBuefyでシンプルに始めるVue.js - コンポーネントの中身を見てみる</title>
-      <link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-component/</link>
+      <link>https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-component/</link>
       <pubDate>Wed, 21 Aug 2019 13:05:14 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-component/</guid>
+      <guid>https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-component/</guid>
       <description>はじめに 前回は環境構築で終わってしまいましたが、今回から本格的に開発を始めていきます。取っ掛かりとして、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーションを開発するかを確認します。
 まずはプロジェクトを俯瞰する 何はともあれ、Vue CLIでcreateした直後の環境を俯瞰してみます。
 なにはともあれindex とりあえずファイルの名前で判断して、index.htmlあたりを見てみます。
@@ -103,10 +103,10 @@ DONE Build complete. The dist directory is ready to be deployed.</description>
     
     <item>
       <title>Vue cliとBuefyでシンプルに始めるVue.js - まずは環境の用意</title>
-      <link>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs/</link>
+      <link>https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs/</link>
       <pubDate>Mon, 19 Aug 2019 15:23:26 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs/</guid>
+      <guid>https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs/</guid>
       <description>はじめに フロントの勉強としてVue.jsをいじってますが、Vue.jsのCLIを使ってシンプルなサイトを構築する際の手順についてまとめます。
 まずは構築するにあたって、開発環境の用意を行います。なお今回はNuxt.jsを利用しない（あるいは利用するまでもない）、ライトな用途を想定しています。SSRする必要がある、とかならNuxt.jsの導入を検討してみるべきかと思います。
 なお、基本的にはVue.jsのオフィシャルドキュメントをベースに、通称「猫本」と呼ばれる「基礎から学ぶVue.js」の記述に沿っています。まだ全部読み切ってないのですが、サンプルコードが参照できるサイトもあってとても親切です。

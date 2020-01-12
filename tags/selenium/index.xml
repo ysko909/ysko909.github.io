@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Selenium on 頑張らないために頑張る</title>
-    <link>https://idontwannawork.github.io/tags/selenium/</link>
+    <link>https://ysko909.github.io/tags/selenium/</link>
     <description>Recent content in Selenium on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Wed, 13 Nov 2019 15:14:28 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/selenium/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/selenium/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Headless ChromeをPythonで使おうとしたら空っぽのページが返ってきた</title>
-      <link>https://idontwannawork.github.io/posts/chrome-headless-returns-emply-page-with-python/</link>
+      <link>https://ysko909.github.io/posts/chrome-headless-returns-emply-page-with-python/</link>
       <pubDate>Wed, 13 Nov 2019 15:14:28 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/chrome-headless-returns-emply-page-with-python/</guid>
+      <guid>https://ysko909.github.io/posts/chrome-headless-returns-emply-page-with-python/</guid>
       <description>はじめに Python、SeleniumにChromeの組み合わせは、PhantomJSが息絶えてしまった今では自動化の王道だと思います。そんな王道の組み合わせをWindowsで試してたら、Headlessモードの時だけページの取得が上手くできない事象を目撃しましたので、メモしておきます。Headlessモードじゃないなら正常なのに、Headlessモードへ変更した途端におかしくなってしまいました。
 環境  Windows 10 Python 3.6.8 ChromeDriver 2.38.552522 Google Chrome 80.0.3965.0（Official Build）canary （64 ビット）  現象 どんなURLを指定しても、HeadlessモードではSeleniumで取得した結果が空っぽのHTMLになってしまいます。Headlessモードを外すだけで、ちゃんと取得します。謎。
 Chrome用ソース Chromedriverは、インストール先のパスが通っている前提です。

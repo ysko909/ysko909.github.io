@@ -2,35 +2,35 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Aframe on 頑張らないために頑張る</title>
-    <link>https://idontwannawork.github.io/tags/aframe/</link>
+    <link>https://ysko909.github.io/tags/aframe/</link>
     <description>Recent content in Aframe on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Thu, 11 Apr 2019 09:47:58 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/aframe/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/aframe/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>A-Frameでいろいろ降らせる</title>
-      <link>https://idontwannawork.github.io/posts/aframe-particle/</link>
+      <link>https://ysko909.github.io/posts/aframe-particle/</link>
       <pubDate>Thu, 11 Apr 2019 09:47:58 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/aframe-particle/</guid>
+      <guid>https://ysko909.github.io/posts/aframe-particle/</guid>
       <description>降らせるって何を？ こんな感じ。
-See the Pen aframe_particle_star by idontwannawork (@idontwannawork) on CodePen. 
+See the Pen aframe_particle_star by ysko909 (@ysko909) on CodePen. 
 結論 これを使います。
 概要 webVR用のフレームワークA-Frameにはさまざまなサードパーティーのコンポーネントが存在します。その中で、「いろいろ降らせる」コンポーネントを実装します。これを実装することで「雪の降る町」や「チリの舞う荒野」なんかの表現ができます。
 設定値 preset presetの値で粒子の形を変えて降らせることができます。
  stars（デフォルト） 星が降ってきます。デフォルトではrainとsnowの中間くらいの落下速度で、粒度がrainより粗いです。そして、粒子が星形。他と異なり、後方で噴水のように噴き出しています。
-See the Pen aframe_particle_star by idontwannawork (@idontwannawork) on CodePen. 
+See the Pen aframe_particle_star by ysko909 (@ysko909) on CodePen. 
  dust チリっぽい何か。この設定値が一番ゆっくり降ってきます。というか、舞ってます。粒度は以下の2つと同様で、細かいです。チリっていうよりも「ホコリ」っていった方が正確かもしれない。
-See the Pen aframe_particle_dust by idontwannawork (@idontwannawork) on CodePen. 
+See the Pen aframe_particle_dust by ysko909 (@ysko909) on CodePen. 
  snow その名の通り、雪。rainよりゆっくり降ってきます。粒度と粒子はデフォルトではdustと同じっぽく見えます。これはしっかり上から「降って」きます。
-See the Pen aframe_particle_snow by idontwannawork (@idontwannawork) on CodePen. 
+See the Pen aframe_particle_snow by ysko909 (@ysko909) on CodePen. 
  rain その名の通り、雨。snowより早く降ってきます。粒子はいわゆるティアドロップっぽい形。これもしっかり上から「降って」きます。
-See the Pen aframe_particle_rain by idontwannawork (@idontwannawork) on CodePen.</description>
+See the Pen aframe_particle_rain by ysko909 (@ysko909) on CodePen.</description>
     </item>
     
   </channel>

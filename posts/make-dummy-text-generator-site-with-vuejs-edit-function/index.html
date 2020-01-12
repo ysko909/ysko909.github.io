@@ -11,7 +11,7 @@ Vue.jsのオフィシャルを参考に 機能を実装するにあたっては�
  JavaScriptのソース
 &lt;template&gt; &lt;div&gt; &lt;b-button size=&#34;is-medium&#34; v-bind:icon-left=&#34;buttonIcon&#34; @click=&#34;generateText(quoteTextname, outputNumber, genOptions)&#34; &gt;{{ buttonMsg }}&lt;/b-button&gt; &lt;/div&gt; &lt;/template&gt; &lt;script&gt; export default { name: &#34;GenerateText&#34;, props: { buttonMsg: { type: String, required: true }, buttonIcon: { type: String, required: true }, quoteTextname: { type: String, required: true }, outputNumber: { type: Number, required: true }, genOptions: { type: Array, required: false } }, methods: { generateText: function(quoteTextname, outputNumber, genOptions) { // コピーのコマンドに対応しているか確認する if (document." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-function/" /><meta property="article:published_time" content="2019-09-02T16:08:20&#43;09:00"/>
+<meta property="og:url" content="https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs-edit-function/" /><meta property="article:published_time" content="2019-09-02T16:08:20&#43;09:00"/>
 <meta property="article:modified_time" content="2019-09-02T16:08:20&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Vue cliとBuefyでシンプルに始めるVue.js - テキスト生成の機能を実装してデプロイまで"/>
 <meta name="twitter:description" content="はじめに 前回は、とりあえず見た目のコンポーネントを実装しました。今回はテキストを生成する機能を実装してデプロイまでしてしまいます。後述しますがデプロイ先はGitHub Pagesです。便利ですよね。
@@ -23,11 +23,11 @@ Vue.jsのオフィシャルを参考に 機能を実装するにあたっては�
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
 
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/normalize.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="https://idontwannawork.github.io/css/dark.css"
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
 		 />
-	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://idontwannawork.github.io/js/main.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
 	<script data-ad-client="ca-pub-2615583270378842" async
 		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
@@ -39,7 +39,7 @@ Vue.jsのオフィシャルを参考に 機能を実装するにあたっては�
 		<div class="header">
 	<h1 class="site-title">頑張らないために頑張る</h1>
 	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
-			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/idontwannawork" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
 		</nav>
 	</div>
 
@@ -85,7 +85,7 @@ Vue.jsのオフィシャルを参考に 機能を実装するにあたっては�
 
 <h2 id="今回の成果物">今回の成果物</h2>
 
-<p><a href="https://idontwannawork.github.io/dummytextgenerator/">こちら</a>です。</p>
+<p><a href="https://ysko909.github.io/dummytextgenerator/">こちら</a>です。</p>
 
 <h2 id="vue-jsのオフィシャルを参考に">Vue.jsのオフィシャルを参考に</h2>
 

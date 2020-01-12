@@ -32,7 +32,7 @@
  HTMLソース
 &lt;template&gt; &lt;div id=&#34;generator&#34;&gt; &lt;div class=&#34;tile is-ancestor&#34;&gt; &lt;div class=&#34;tile is-parent is-6&#34;&gt; &lt;div class=&#34;tile is-child box container&#34;&gt; &lt;div class=&#34;has-text-centered&#34;&gt; &lt;b-tooltip class=&#34;title is-4&#34; label=&#34;生成するテキストの引用元を選択してください。&#34; position=&#34;is-bottom&#34; dashed multilined&gt;引用元&lt;/b-tooltip&gt; &lt;/div&gt; &lt;p class=&#34;blank1em&#34;&gt;&lt;/p&gt; &lt;div class=&#34;field&#34;&gt; &lt;b-radio v-model=&#34;textName&#34; name=&#34;name&#34; native-value=&#34;Lorem Ipsum&#34;&gt; Lorem Ipsum &lt;/b-radio&gt; &lt;/div&gt; &lt;div class=&#34;field&#34;&gt; &lt;b-radio v-model=&#34;textName&#34; name=&#34;name&#34; native-value=&#34;Silver&#34;&gt; Silver &lt;/b-radio&gt; &lt;/div&gt; &lt;div class=&#34;field&#34;&gt; &lt;b-radio v-model=&#34;textName&#34; name=&#34;name&#34; native-value=&#34;Jack&#34;&gt; Jack &lt;/b-radio&gt; &lt;/div&gt; &lt;div class=&#34;field&#34;&gt; &lt;b-radio v-model=&#34;textName&#34; name=&#34;name&#34; native-value=&#34;Vane&#34;&gt; Vane &lt;/b-radio&gt; &lt;/div&gt; &lt;p class=&#34;radioValue&#34;&gt; &lt;b&gt;選択した元ネタ:&lt;/b&gt; {{ textName }} &lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;div class=&#34;tile is-parent is-6&#34;&gt; &lt;div class=&#34;tile is-child box&#34;&gt; &lt;div class=&#34;has-text-centered&#34;&gt; &lt;b-tooltip class=&#34;title is-4&#34; label=&#34;生成したい文字数を入力、またはスライドバーで選択してください。&#34; position=&#34;is-bottom&#34; dashed multilined&gt;出力する文字数&lt;/b-tooltip&gt; &lt;/div&gt; &lt;p class=&#34;blank2em&#34;&gt;&lt;/p&gt; &lt;b-field&gt; &lt;b-numberinput v-model=&#34;textNumber&#34; rounded controls-rounded&gt; &lt;/b-numberinput&gt; &lt;/b-field&gt; &lt;b-field&gt; &lt;b-slider v-model=&#34;textNumber&#34; max=&#34;300&#34;&gt;&lt;/b-slider&gt; &lt;/b-field&gt; &lt;p class=&#34;numberValue&#34;&gt; &lt;b&gt;文字数:&lt;/b&gt; {{ textNumber }} &lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;div class=&#34;tile is-ancestor&#34;&gt; &lt;div class=&#34;tile is-parent is-6&#34;&gt; &lt;div class=&#34;tile is-child box&#34;&gt; &lt;div class=&#34;has-text-centered&#34;&gt; &lt;b-tooltip class=&#34;title is-4&#34; label=&#34;出力する際の条件を設定してください。&#34; position=&#34;is-bottom&#34; dashed multilined&gt;出力オプション&lt;/b-tooltip&gt; &lt;/div&gt; &lt;p class=&#34;blank1em&#34;&gt;&lt;/p&gt; &lt;div class=&#34;field&#34;&gt; &lt;b-checkbox v-model=&#34;selecedOptions&#34; native-value=&#34;Silverhoge&#34;&gt; Silverhoge &lt;/b-checkbox&gt; &lt;/div&gt; &lt;div class=&#34;field&#34;&gt; &lt;b-checkbox v-model=&#34;selecedOptions&#34; native-value=&#34;Flinthoge&#34;&gt; Flinthoge &lt;/b-checkbox&gt; &lt;/div&gt; &lt;div class=&#34;field&#34;&gt; &lt;b-checkbox v-model=&#34;selecedOptions&#34; native-value=&#34;Vanehoge&#34;&gt; Vanehoge &lt;/b-checkbox&gt; &lt;/div&gt; &lt;div class=&#34;field&#34;&gt; &lt;b-checkbox v-model=&#34;selecedOptions&#34; native-value=&#34;Billyhoge&#34;&gt; Billyhoge &lt;/b-checkbox&gt; &lt;/div&gt; &lt;p class=&#34;content&#34;&gt; &lt;b&gt;Selection:&lt;/b&gt; {{ selecedOptions }} &lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;div class=&#34;tile is-parent is-6&#34;&gt; &lt;div class=&#34;tile is-child box&#34;&gt; &lt;div class=&#34;has-text-centered&#34;&gt; &lt;b-tooltip class=&#34;title is-4&#34; label=&#34;テキストを生成してクリップボードへコピーします。&#34; position=&#34;is-bottom&#34; dashed multilined&gt;テキスト生成&lt;/b-tooltip&gt; &lt;/div&gt; &lt;p class=&#34;blank5em&#34;&gt;&lt;/p&gt; &lt;div class=&#34;has-text-centered&#34;&gt; &lt;b-button size=&#34;is-medium&#34; icon-left=&#34;clipboard-text&#34; @click=&#34;alert&#34;&gt;テキスト生成する&lt;/b-button&gt; &lt;/div&gt; &lt;h1&gt;{{ msg }}&lt;/h1&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;p class=&#34;blank1em&#34;&gt;&lt;/p&gt; &lt;/div&gt; &lt;/template&gt;" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://idontwannawork.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-ui/" /><meta property="article:published_time" content="2019-08-27T13:50:30&#43;09:00"/>
+<meta property="og:url" content="https://ysko909.github.io/posts/make-dummy-text-generator-site-with-vuejs-add-ui/" /><meta property="article:published_time" content="2019-08-27T13:50:30&#43;09:00"/>
 <meta property="article:modified_time" content="2019-08-27T13:50:30&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Vue cliとBuefyでシンプルに始めるVue.js - UIのコンポーネントを作成する"/>
 <meta name="twitter:description" content="はじめに 前回は、Vue CLIで作った環境の内容を確認しつつ、どのファイルがどのように参照されているか、どのファイルをどう変更してアプリケーションを開発するかを確認しました。
@@ -65,11 +65,11 @@
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
 
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/normalize.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="https://idontwannawork.github.io/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="https://idontwannawork.github.io/css/dark.css"
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
 		 />
-	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://idontwannawork.github.io/js/main.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
 	<script data-ad-client="ca-pub-2615583270378842" async
 		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
@@ -81,7 +81,7 @@
 		<div class="header">
 	<h1 class="site-title">頑張らないために頑張る</h1>
 	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
-			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/idontwannawork" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
 		</nav>
 	</div>
 
@@ -353,9 +353,9 @@
 
 <p>実際にコードのコードは下記を参照してみてください。</p>
 
-<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="idontwannawork" data-slug-hash="MWgmBye" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="Buefy-Tiles">
-  <span>See the Pen <a href="https://codepen.io/idontwannawork/pen/MWgmBye/">
-  Buefy-Tiles</a> by idontwannawork (<a href="https://codepen.io/idontwannawork">@idontwannawork</a>)
+<p><p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="ysko909" data-slug-hash="MWgmBye" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="Buefy-Tiles">
+  <span>See the Pen <a href="https://codepen.io/ysko909/pen/MWgmBye/">
+  Buefy-Tiles</a> by ysko909 (<a href="https://codepen.io/ysko909">@ysko909</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script></p>

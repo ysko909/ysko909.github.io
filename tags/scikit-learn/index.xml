@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Scikit Learn on 頑張らないために頑張る</title>
-    <link>https://idontwannawork.github.io/tags/scikit-learn/</link>
+    <link>https://ysko909.github.io/tags/scikit-learn/</link>
     <description>Recent content in Scikit Learn on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Sun, 15 Dec 2019 14:43:33 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/scikit-learn/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/scikit-learn/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>LogisticRegressionのsolverパラメータはデフォルト値が変わってた</title>
-      <link>https://idontwannawork.github.io/posts/default-solver-param-of-logisticregression-is-changed/</link>
+      <link>https://ysko909.github.io/posts/default-solver-param-of-logisticregression-is-changed/</link>
       <pubDate>Sun, 15 Dec 2019 14:43:33 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/default-solver-param-of-logisticregression-is-changed/</guid>
+      <guid>https://ysko909.github.io/posts/default-solver-param-of-logisticregression-is-changed/</guid>
       <description>はじめに scikit-learnライブラリのロジスティック回帰（LogisticRegression）を使っていたときに気づいた事象です。
 まあまあこの界隈ではありがちですが、「過去に動作していたコードがライブラリ（やパッケージ）のアップデートで動作しなくなる」パターンのお話です。
 具体的な現象 下記のようなコードでエラーが発生します。具体的にはLogisticRegression()実行時にL1正規化を行うと「L1正規化はサポートしてないぜ！」っていうエラーになります。

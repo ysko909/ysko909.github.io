@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Google on 頑張らないために頑張る</title>
-    <link>https://idontwannawork.github.io/tags/google/</link>
+    <link>https://ysko909.github.io/tags/google/</link>
     <description>Recent content in Google on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Fri, 22 Nov 2019 09:50:35 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/google/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/google/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>PythonでExcelファイルのキーワードを参照して自動的にGoogle検索し結果を保存する</title>
-      <link>https://idontwannawork.github.io/posts/search-keyword-in-excel-book-with-python/</link>
+      <link>https://ysko909.github.io/posts/search-keyword-in-excel-book-with-python/</link>
       <pubDate>Fri, 22 Nov 2019 09:50:35 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/search-keyword-in-excel-book-with-python/</guid>
+      <guid>https://ysko909.github.io/posts/search-keyword-in-excel-book-with-python/</guid>
       <description>職場からExcelが駆逐される日は来るのだろうか Excel。
 いいアプリケーションだと思います。実力に裏打ちされた歴史もあるしね。とはいえ、こと日本においては単なる表計算ソフトに留まらず、エゲツない「1セルにつき1文字」という縛りでDTPの真似事までやらされる姿を見るに、個人的には落涙を禁じえません。「ネ申Excel」なんていう話もあるわけで、日本のExcelがいわれのない誹りを受けずに本来の表計算作業を全うする日は来るのか、という思いを抱かずにはいられません。
 また、前述のようなリッチな使い方とはまったく逆のベクトルで利用されることがあります。何はなくとも「とりあえずExcelファイルでやります」とExcelを立ち上げるケースです。今日も、テキストファイルでいいのにわざわざExcelファイルに箇条書きする、サラリーマンの姿がどこかで見られるかもしれません。そしてそのExcelファイルを送り付けられて、しかもいろんな情報までてんこ盛りだったりすると、「何この・・・何・・・？」などと口走りながらエンジニアが頭を抱えることになるでしょう。「テキストでいいじゃん」って言いたいところなのですが、相手側にはその発想がそもそもないわけです。

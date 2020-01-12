@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Markdown on 頑張らないために頑張る</title>
-    <link>https://idontwannawork.github.io/tags/markdown/</link>
+    <link>https://ysko909.github.io/tags/markdown/</link>
     <description>Recent content in Markdown on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Wed, 04 Sep 2019 09:22:56 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/markdown/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/markdown/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>detailsタグを使うと正常なコードブロックでmarkdownlintがエラーを吐く</title>
-      <link>https://idontwannawork.github.io/posts/can-not-live-together-markdownlint-and-details-tag/</link>
+      <link>https://ysko909.github.io/posts/can-not-live-together-markdownlint-and-details-tag/</link>
       <pubDate>Wed, 04 Sep 2019 09:22:56 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/can-not-live-together-markdownlint-and-details-tag/</guid>
+      <guid>https://ysko909.github.io/posts/can-not-live-together-markdownlint-and-details-tag/</guid>
       <description>はじめに とある記事で、そこそこ長いソースを記述するのに&amp;lt;details&amp;gt;タグを利用しました。すると、なぜか正常なコードブロックでエラーMD046/code-block-styleを吐くようになってしまいました。なんでー_(:3」∠)_
 環境  Windows 10 Visual Studio Code 1.37.1 markdownlint 0.30.2  実際のエラー 上の2つのMD033/no-inline-htmlは、&amp;lt;details&amp;gt;タグをmarkdown中に直接記述しているために表示されるエラーです。問題は下の3つのMD046/code-block-style。「コードはインデントじゃなくてコードブロック使えよ！」ってエラーなんですけど・・・。いや、コードブロック使ってるんですけどね？
 それぞれを見てみます。
@@ -35,10 +35,10 @@ markdownlintのエラーは表示されたところで、最終的にmarkdownが
     
     <item>
       <title>PythonでMarkdownファイルをHTMLへ変換する</title>
-      <link>https://idontwannawork.github.io/posts/convert-markdown-to-html-with-python/</link>
+      <link>https://ysko909.github.io/posts/convert-markdown-to-html-with-python/</link>
       <pubDate>Fri, 24 May 2019 14:50:30 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/convert-markdown-to-html-with-python/</guid>
+      <guid>https://ysko909.github.io/posts/convert-markdown-to-html-with-python/</guid>
       <description>はじめに 以前、VS CodeでMarkdownをPDFに自動で変換する方法を書いたのだけど、今度はHTMLファイルに変換する必要が出てきたので勉強がてら、Pythonで書くことにしました。と言っても難しい処理では全然ないんだけど・・・_(┐「ε:)_
 ちなみに、前の記事で紹介した拡張機能Markdown PDFを使えばHTMLにも変換できます。ただ、今回はVS Codeがないというシチュエーションでファイル変換したいのと、自分が作成したスタイルシートでHTMLファイルを生成したかったため、VS Codeの拡張機能を頼らない方法を取りました。
 というわけで、Pythonを使ったMarkdownファイルをHTMLへ変換する手順について書きます。
@@ -57,10 +57,10 @@ $ python mdtohtml.py iamacat.md の変換を開始します --------------------
     
     <item>
       <title>VS CodeでMarkdownをPDFに自動で変換する</title>
-      <link>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</link>
+      <link>https://ysko909.github.io/posts/convert-markdown-to-pdf-with-vscode/</link>
       <pubDate>Wed, 15 May 2019 13:44:12 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</guid>
+      <guid>https://ysko909.github.io/posts/convert-markdown-to-pdf-with-vscode/</guid>
       <description>はじめに Markdownで記述したmdファイルは、エンジニア間ではそのまま利用することが多いように思います（GitHubなどにREADME.mdとしてアップするとか）。ところが、メールに添付したり印刷する等、外部へ持ち出す際はPDFに変換しておいた方がいろいろ安心。とくに「mdファイルって何？」みたいなお客さんにドキュメントを渡さないといけない場合とか・・・。
 MarkdownをPDF化するのは、Pandocを利用する方法もあるのですが、ここではVisual Studio Code（以下、VS Code）の拡張機能である「Markdown PDF」を利用します。
 環境  Windows 10 vscode  インストール VS Codeにて、Ctrl＋Shift＋Xで拡張機能の検索窓に「Markdown PDF」と入力するか、上記のリンクをクリックします。検索結果から「Markdown PDF」を選択し、インストールします。Markdown PDFをインストールしてから、VS Codeで適当なMarkdownファイルを最初に開いた際、Chromiumのダウンロードが自動で始まります。ちなみに、なんでChromiumが必要かというと、Markdown PDFがPDF変換するのに利用しているから。
