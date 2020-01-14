@@ -7,10 +7,31 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sat, 07 Sep 2019 10:31:55 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 14 Jan 2020 15:34:28 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/word/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>PythonでWordファイルをPDFに変換する（PDFの結合もしてみる）</title>
+      <link>https://ysko909.github.io/posts/docx-convert-to-pdf-with-python/</link>
+      <pubDate>Tue, 14 Jan 2020 15:34:28 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/docx-convert-to-pdf-with-python/</guid>
+      <description>はじめに 小ネタです。
+Wordで作ったドキュメントをPDFに保存して、メールで送信する。ビジネス上、そんなシチュエーションがたまにあるかと思います。私もそうでした。
+ 上司：「ここのフォルダのwordファイルをPDFで保存して、お客さんにメールしといてくれ。」
+自分：「はーい。えーとどれどれ・・・」
+ なんでファイルを分けた？
+え、このファイル全部いちいちWordで開いてPDF形式で保存して、しかも1つのPDFファイルに連結するの？しかも、ファイルそれぞれでページ設定とか書式が微妙に違っているから、Wordでファイルを結合するのも面倒だし・・・。
+ちなみに、上記のスクリーンショットは実際のファイルではなく、イメージですのでご了承ください。
+やってられるか というわけで、Pythonを使ってWordファイルをPDFに保存しつつ、PDFファイルの結合も一緒に処理しちゃいましょう。
+実現したいこと  任意のフォルダ内にあるdocxを全部PDFに変換する 変換したPDFたちは1つのPDFに結合する PDFのページ順は別途編集するので考慮不要とする  ざっくりこんなところでしょうか。
+ちなみに、PDFのページ順を編集するのにはCubePDF Utilityを使っていますが、他のアプリケーションでももちろんOKです。Wordファイルの数にもよりますが、ファイル名でソートした結果がPDFで最終的に出力したいページ順と一致するよう、ファイル名をリネームする方法もあります。
+環境  Windows 10 Word 2016 Python 3.6  PythonはAnacondaでも問題ありません。なお、実行には下記のライブラリやパッケージが必要です。pipやcondaを利用してインストールしてください。
+ PyPDF2 comtypes  ソース いきなりですが、結論です。
+import sys import comtypes.client import glob import pathlib import PyPDF2 import time start = time.time() wdFormatPDF = 17 def convert(in_file, out_file): word = comtypes.client.CreateObject(&amp;#39;Word.Application&amp;#39;) doc = word.Documents.Open(in_file) doc.SaveAs(out_file, FileFormat=wdFormatPDF) doc.Close() word.Quit() def pdf_merger(out_pdf, pdfs): merger = PyPDF2.</description>
+    </item>
     
     <item>
       <title>ダミーデータをお手軽に調達する</title>
