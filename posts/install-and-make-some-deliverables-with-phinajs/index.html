@@ -2,11 +2,12 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>phina.jsを使ってゲーム用のテンプレートを作る - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta property="og:title" content="phina.jsを使ってゲーム用のテンプレートを作る" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>phina.jsを使ってゲーム用のテンプレートを作る（追記したよ） - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="phina.jsを使ってゲーム用のテンプレートを作る（追記したよ）" />
 <meta property="og:description" content="phina.jsとはなんぞや phina.jsとは「ゲームやツールを簡単に作る事ができるJavaScript製のゲームライブラリ」（オフィシャルより）です。詳細はオフィシャルページを見てもらうとわかりやすいと思いますが、JavaScriptでできているため、PCやスマートフォンなどを問わずブラウザ上で実行できる、便利なライブラリです。たとえばこれとかおもしろいですよね。とくに2Dのブラウザ上で動くゲームを作りたいってなったら、結構イケると思います。
 ちなみに ゲームライブラリでJavaScriptって言ったらPhaserあたりが有名だと思うのですが、今回は「国産」ってところでphina.jsを贔屓しています。もちろんPhaserもいいライブラリなので、また別の機会に触ってみたいと思います。
 何作るのよ いきなり出鼻をくじくようでアレなんですが、今回は触りってことでテンプレートとして使える簡単なデモ用のスクリプトです。クリックでランダムに「何か」が変わるようなもの、っていう簡単なテンプレートです。
+（2020年1月追記）ちょっとした落ちものゲームを作ってみました。
 完成形 いきなりですが完成形です。
 See the Pen phina.js sample by ysko909 (@ysko909) on CodePen. 
 画面のテキトーな場所をクリックすると、文字色が変わります。なんかそれっぽいボタンがありますが、画面のどこでも反応するので関係ないです。
@@ -14,10 +15,11 @@ See the Pen phina.js sample by ysko909 (@ysko909) on CodePen.
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ysko909.github.io/posts/install-and-make-some-deliverables-with-phinajs/" /><meta property="article:published_time" content="2019-12-06T09:15:20&#43;09:00"/>
 <meta property="article:modified_time" content="2019-12-06T09:15:20&#43;09:00"/><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="phina.jsを使ってゲーム用のテンプレートを作る"/>
+<meta name="twitter:title" content="phina.jsを使ってゲーム用のテンプレートを作る（追記したよ）"/>
 <meta name="twitter:description" content="phina.jsとはなんぞや phina.jsとは「ゲームやツールを簡単に作る事ができるJavaScript製のゲームライブラリ」（オフィシャルより）です。詳細はオフィシャルページを見てもらうとわかりやすいと思いますが、JavaScriptでできているため、PCやスマートフォンなどを問わずブラウザ上で実行できる、便利なライブラリです。たとえばこれとかおもしろいですよね。とくに2Dのブラウザ上で動くゲームを作りたいってなったら、結構イケると思います。
 ちなみに ゲームライブラリでJavaScriptって言ったらPhaserあたりが有名だと思うのですが、今回は「国産」ってところでphina.jsを贔屓しています。もちろんPhaserもいいライブラリなので、また別の機会に触ってみたいと思います。
 何作るのよ いきなり出鼻をくじくようでアレなんですが、今回は触りってことでテンプレートとして使える簡単なデモ用のスクリプトです。クリックでランダムに「何か」が変わるようなもの、っていう簡単なテンプレートです。
+（2020年1月追記）ちょっとした落ちものゲームを作ってみました。
 完成形 いきなりですが完成形です。
 See the Pen phina.js sample by ysko909 (@ysko909) on CodePen. 
 画面のテキトーな場所をクリックすると、文字色が変わります。なんかそれっぽいボタンがありますが、画面のどこでも反応するので関係ないです。
@@ -74,7 +76,7 @@ See the Pen phina.js sample by ysko909 (@ysko909) on CodePen.
 
 
 		<div class="post-header">
-			<h1 class="title">phina.jsを使ってゲーム用のテンプレートを作る</h1>
+			<h1 class="title">phina.jsを使ってゲーム用のテンプレートを作る（追記したよ）</h1>
 			<div class="meta">Posted at &mdash; Dec 6, 2019</div>
 		</div>
 
@@ -92,6 +94,8 @@ See the Pen phina.js sample by ysko909 (@ysko909) on CodePen.
 <h2 id="何作るのよ">何作るのよ</h2>
 
 <p>いきなり出鼻をくじくようでアレなんですが、今回は触りってことで<strong>テンプレートとして使える簡単なデモ用のスクリプト</strong>です。クリックでランダムに「何か」が変わるようなもの、っていう簡単なテンプレートです。</p>
+
+<p>（2020年1月追記）ちょっとした<a href="https://github.com/ysko909/dropGameDemo">落ちものゲームを作ってみました</a>。</p>
 
 <h2 id="完成形">完成形</h2>
 
@@ -216,6 +220,10 @@ phina.main(<span style="color:#00f">function</span> () {
 <p>自分が今後phina.jsを利用するか？と言われれば、ちょっとわからないです、と答えるしかないのがちと辛いところ。いや、使いやすいしソースも読みやすいんです。だけど、対抗馬のPhaserと比較すると、どうしても「困ったときにググったりして解決できそうか否か」っていう問題が頭をよぎるんですよね。まして自分みたいなJS初心者には。</p>
 
 <p>とりあえずPhaserも使ってみて、自分に合う方を利用しようと思います。</p>
+
+<h2 id="2020年1月追記">2020年1月追記</h2>
+
+<p>ちょっとした<a href="https://github.com/ysko909/dropGameDemo">落ちものゲームを作ってみました</a>。任意の場所にソースをクローンして、<code>main.html</code>をブラウザで開くと動作するはずです。ゲーム自体はオフライン環境でも実行できますが、<a href="https://fontawesome.com/">fontawesome</a>を利用しているため、結局ネット環境は必要です。</p>
 
 		</div><div id="disqus_thread"></div>
 <script type="text/javascript">
