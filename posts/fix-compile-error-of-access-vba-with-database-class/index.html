@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Accessで「プロジェクトではなく、ユーザ定義型を指定してください。」とエラーが出たらプロジェクト名を変更する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Accessで「プロジェクトではなく、ユーザ定義型を指定してください。」とエラーが出たらプロジェクト名を変更する" />
+<meta property="og:description" content="Access関係の小ネタです 久しぶりにAccessのVBAを弄っているのですが、ちょっとエラーでハマったのでメモ。
+こんなコンパイルエラーが表示されるんですけど 「プロジェクトではなく、ユーザ定義型を指定してください。」か・・・。相変わらず、VBAのエラーメッセージはなんだかよくわからない文言を出力してくれるなー、とか思いつつ調べます。エラーが出現するソースは下記の部分です。
+Option Compare Database Sub func() Dim db As Database &#39; ここでエラーになる Dim rec As Recordset End Sub えぇー、領域確保だけで何もしてないよー。っていうか、Databaseって思いっきりプロパティの一覧に存在してるじゃん。
+ここで書いているDatabaseはDAOのDatabaseですが、なぜかここでコンパイルエラーが発生します。F2キーを押して表示できるオブジェクトエクスプローラーにも、DatabaseはDAOのメンバーとして記載されているので、参照設定を追加しなくてもDAOはAccessのVBAから利用できるはずなんですけどねぇ・・・。
+なお、ADO利用時は参照設定の変更が必要です。
+原因 原因はコイツです。
+Accessファイルを生成した時点で、プロジェクトを指すオブジェクト名が「Database」に設定されます。コイツが「Database」というオブジェクト名になっているせいで、Accessはコード中に記述されたDatabaseをDAOのメンバーであるDatabaseとして解釈してくれません。「Database？ああ、プロジェクトのオブジェクト名ね、はいはい」と解釈してしまうわけです。なんでこんな初期値にした？言え！
+対策 対策は2つあります。
+プロジェクトのオブジェクト名を「Database」以外にする 手っ取り早く確実なのはこの方法です。オブジェクト名が重複するからいけないのであって、それならリネームしちゃえばいいわけです。なので、Accessファイルのファイル名と同じにしてみます。
+こうすることで、エラーを解消できます。
+変数宣言時に「DAO.Database」と記述する 何らかの理由でプロジェクトのオブジェクト名を変更したくない（変更できない）場合は、変数宣言時に「DAOのメンバーであるDatabaseである」と明記すれば、コンパイルエラーは発生しません。
+Option Compare Database Sub func() Dim db As DAO.Database &#39; ここを変更 Dim rec As Recordset End Sub ただし、Databaseの変数を複数宣言する必要があるとか、複数のモジュールでDatabaseを宣言しなきゃいけない、なんてケースだととても面倒くさいです。なので、基本的には「1か所だけ書き換えればいい」という場合を除き、推奨できない方法と言えます。
+まとめ VBAクンさぁ、ホントにクセがすごいよね。
+web版のExcelだとTypeScriptベースの「Office Script」が提供されたりして、OfficeのスクリプトもそのうちVisual Basicベースではなくなっていくでしょう。が、VBAを搭載した（負の）資産がそうそうOffice Scriptに取って代わるとは思えません。というか無理だろう、きっと。だからこれからも、数年はVBAで悩まされたり苦しみ悶える人たちがまだまだ後を絶たないと予想しています。絶望・・・。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fix-compile-error-of-access-vba-with-database-class/" /><meta property="article:published_time" content="2020-02-12T09:43:01&#43;09:00"/>
+<meta property="article:modified_time" content="2020-02-12T09:43:01&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Accessで「プロジェクトではなく、ユーザ定義型を指定してください。」とエラーが出たらプロジェクト名を変更する"/>
+<meta name="twitter:description" content="Access関係の小ネタです 久しぶりにAccessのVBAを弄っているのですが、ちょっとエラーでハマったのでメモ。
+こんなコンパイルエラーが表示されるんですけど 「プロジェクトではなく、ユーザ定義型を指定してください。」か・・・。相変わらず、VBAのエラーメッセージはなんだかよくわからない文言を出力してくれるなー、とか思いつつ調べます。エラーが出現するソースは下記の部分です。
+Option Compare Database Sub func() Dim db As Database &#39; ここでエラーになる Dim rec As Recordset End Sub えぇー、領域確保だけで何もしてないよー。っていうか、Databaseって思いっきりプロパティの一覧に存在してるじゃん。
+ここで書いているDatabaseはDAOのDatabaseですが、なぜかここでコンパイルエラーが発生します。F2キーを押して表示できるオブジェクトエクスプローラーにも、DatabaseはDAOのメンバーとして記載されているので、参照設定を追加しなくてもDAOはAccessのVBAから利用できるはずなんですけどねぇ・・・。
+なお、ADO利用時は参照設定の変更が必要です。
+原因 原因はコイツです。
+Accessファイルを生成した時点で、プロジェクトを指すオブジェクト名が「Database」に設定されます。コイツが「Database」というオブジェクト名になっているせいで、Accessはコード中に記述されたDatabaseをDAOのメンバーであるDatabaseとして解釈してくれません。「Database？ああ、プロジェクトのオブジェクト名ね、はいはい」と解釈してしまうわけです。なんでこんな初期値にした？言え！
+対策 対策は2つあります。
+プロジェクトのオブジェクト名を「Database」以外にする 手っ取り早く確実なのはこの方法です。オブジェクト名が重複するからいけないのであって、それならリネームしちゃえばいいわけです。なので、Accessファイルのファイル名と同じにしてみます。
+こうすることで、エラーを解消できます。
+変数宣言時に「DAO.Database」と記述する 何らかの理由でプロジェクトのオブジェクト名を変更したくない（変更できない）場合は、変数宣言時に「DAOのメンバーであるDatabaseである」と明記すれば、コンパイルエラーは発生しません。
+Option Compare Database Sub func() Dim db As DAO.Database &#39; ここを変更 Dim rec As Recordset End Sub ただし、Databaseの変数を複数宣言する必要があるとか、複数のモジュールでDatabaseを宣言しなきゃいけない、なんてケースだととても面倒くさいです。なので、基本的には「1か所だけ書き換えればいい」という場合を除き、推奨できない方法と言えます。
+まとめ VBAクンさぁ、ホントにクセがすごいよね。
+web版のExcelだとTypeScriptベースの「Office Script」が提供されたりして、OfficeのスクリプトもそのうちVisual Basicベースではなくなっていくでしょう。が、VBAを搭載した（負の）資産がそうそうOffice Scriptに取って代わるとは思えません。というか無理だろう、きっと。だからこれからも、数年はVBAで悩まされたり苦しみ悶える人たちがまだまだ後を絶たないと予想しています。絶望・・・。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Accessで「プロジェクトではなく、ユーザ定義型を指定してください。」とエラーが出たらプロジェクト名を変更する</h1>
+			<div class="meta">Posted at &mdash; Feb 12, 2020</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="access関係の小ネタです">Access関係の小ネタです</h2>
+
+<p>久しぶりにAccessのVBAを弄っているのですが、ちょっとエラーでハマったのでメモ。</p>
+
+<h2 id="こんなコンパイルエラーが表示されるんですけど">こんなコンパイルエラーが表示されるんですけど</h2>
+
+<p><img src="2020-02-12-09-46-37.png" alt="pic" /></p>
+
+<p>「プロジェクトではなく、ユーザ定義型を指定してください。」か・・・。相変わらず、VBAのエラーメッセージはなんだかよくわからない文言を出力してくれるなー、とか思いつつ調べます。エラーが出現するソースは下記の部分です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vba" data-lang="vba">Option Compare Database
+
+Sub func()
+
+    Dim db As Database  &#39; ここでエラーになる
+    Dim rec As Recordset
+
+End Sub</code></pre></div>
+<p>えぇー、<strong>領域確保だけで何もしてないよー</strong>。っていうか、<code>Database</code>って思いっきりプロパティの一覧に存在してるじゃん。</p>
+
+<p>ここで書いている<code>Database</code>はDAOの<code>Database</code>ですが、なぜかここでコンパイルエラーが発生します。F2キーを押して表示できるオブジェクトエクスプローラーにも、<code>Database</code>はDAOのメンバーとして記載されているので、参照設定を追加しなくてもDAOはAccessのVBAから利用できるはずなんですけどねぇ・・・。</p>
+
+<p><img src="2020-02-12-09-52-28.png" alt="pic" /></p>
+
+<p>なお、ADO利用時は参照設定の変更が必要です。</p>
+
+<h2 id="原因">原因</h2>
+
+<p>原因はコイツです。</p>
+
+<p><img src="2020-02-12-09-59-30.png" alt="pic" /></p>
+
+<p>Accessファイルを生成した時点で、プロジェクトを指す<strong>オブジェクト名が「Database」に設定</strong>されます。コイツが「Database」というオブジェクト名になっているせいで、Accessはコード中に記述された<code>Database</code>をDAOのメンバーである<code>Database</code>として解釈してくれません。「Database？ああ、プロジェクトの<strong>オブジェクト名</strong>ね、はいはい」と解釈してしまうわけです。<strong>なんでこんな初期値にした？言え！</strong></p>
+
+<h2 id="対策">対策</h2>
+
+<p>対策は2つあります。</p>
+
+<h3 id="プロジェクトのオブジェクト名を-database-以外にする">プロジェクトのオブジェクト名を「Database」以外にする</h3>
+
+<p>手っ取り早く確実なのはこの方法です。オブジェクト名が重複するからいけないのであって、それならリネームしちゃえばいいわけです。なので、Accessファイルのファイル名と同じにしてみます。</p>
+
+<p><img src="2020-02-12-10-09-02.png" alt="pic" /></p>
+
+<p>こうすることで、エラーを解消できます。</p>
+
+<h3 id="変数宣言時に-dao-database-と記述する">変数宣言時に「DAO.Database」と記述する</h3>
+
+<p>何らかの理由でプロジェクトのオブジェクト名を変更したくない（変更できない）場合は、変数宣言時に「DAOのメンバーである<code>Database</code>である」と明記すれば、コンパイルエラーは発生しません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vba" data-lang="vba">Option Compare Database
+
+Sub func()
+
+    Dim db As DAO.Database  &#39; ここを変更
+    Dim rec As Recordset
+
+End Sub</code></pre></div>
+<p>ただし、<code>Database</code>の変数を複数宣言する必要があるとか、複数のモジュールで<code>Database</code>を宣言しなきゃいけない、なんてケースだととても面倒くさいです。なので、基本的には「1か所だけ書き換えればいい」という場合を除き、推奨できない方法と言えます。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p><strong>VBAクンさぁ、ホントにクセがすごいよね。</strong></p>
+
+<p><a href="https://techcommunity.microsoft.com/t5/excel-blog/announcing-office-scripts-preview/ba-p/1093559">web版のExcelだとTypeScriptベースの「Office Script」が提供</a>されたりして、OfficeのスクリプトもそのうちVisual Basicベースではなくなっていくでしょう。が、VBAを搭載した（負の）資産がそうそうOffice Scriptに取って代わるとは思えません。というか無理だろう、きっと。だからこれからも、数年はVBAで悩まされたり苦しみ悶える人たちがまだまだ後を絶たないと予想しています。<strong>絶望・・・</strong>。</p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
