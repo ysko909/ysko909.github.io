@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>ファイル名をPythonとpathlibで操作する小ネタ - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="ファイル名をPythonとpathlibで操作する小ネタ" />
+<meta property="og:description" content="小ネタです。ファイル名の操作を、Pythonとモジュールpathlibを使ってやってみようと思います。
+まず目的 ここに、500ファイルほど格納されたフォルダがあります。あります（圧）。すべてJpegファイルで、ファイル名は1.jpegみたいな名前です。適当な連番のファイル名です。
+これについて、下記の通りファイル名の操作をします。なお、対象はフォルダ中の全ファイルとします。
+ ファイル名に連番を付与する。 ファイル名に任意の文字列を付与する。 拡張子を変更する。  最後の拡張子に関しては、厳密には「ファイル名」と表現できるものではありませんが、便宜上他の操作と同様に扱います。
+環境  Windows 10 Python 3.6  ファイル名に連番を付与する もともとのファイル名に連番を付与します。連番はゼロ埋めで整形するものとします。たとえば3なら[003」のような形で整形します。
+ ここでは{:03}とすることでゼロ埋め3桁としています。ここを編集すれば別の桁で出力できます。
+ファイル名に任意の文字列を付与する もともとのファイル名に、別な文字列を付与します。
+ 拡張子を変更する もともとの拡張子を、別な拡張子に変更します。
+ pathlibとな pathlibとはPythonのモジュールの1つで、ファイルシステムのパスを表すクラスを提供しています。簡単に言うとosとglobを足したようなモジュールで、これらの良いとこどりができます。少なくともPython3系であるなら、ファイル操作にわざわざos.pathを使う理由はあまりないかもしれません。
+まとめ ちょっとした作業用スクリプトですが、こういうのがあるのとないのでは大違いだったりするので、柔軟に作れるようなくらいモジュールに慣れておきたいものです。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/change_file_name_with_python_and_pathlib/" /><meta property="article:published_time" content="2020-03-09T14:04:54&#43;09:00"/>
+<meta property="article:modified_time" content="2020-03-09T14:04:54&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ファイル名をPythonとpathlibで操作する小ネタ"/>
+<meta name="twitter:description" content="小ネタです。ファイル名の操作を、Pythonとモジュールpathlibを使ってやってみようと思います。
+まず目的 ここに、500ファイルほど格納されたフォルダがあります。あります（圧）。すべてJpegファイルで、ファイル名は1.jpegみたいな名前です。適当な連番のファイル名です。
+これについて、下記の通りファイル名の操作をします。なお、対象はフォルダ中の全ファイルとします。
+ ファイル名に連番を付与する。 ファイル名に任意の文字列を付与する。 拡張子を変更する。  最後の拡張子に関しては、厳密には「ファイル名」と表現できるものではありませんが、便宜上他の操作と同様に扱います。
+環境  Windows 10 Python 3.6  ファイル名に連番を付与する もともとのファイル名に連番を付与します。連番はゼロ埋めで整形するものとします。たとえば3なら[003」のような形で整形します。
+ ここでは{:03}とすることでゼロ埋め3桁としています。ここを編集すれば別の桁で出力できます。
+ファイル名に任意の文字列を付与する もともとのファイル名に、別な文字列を付与します。
+ 拡張子を変更する もともとの拡張子を、別な拡張子に変更します。
+ pathlibとな pathlibとはPythonのモジュールの1つで、ファイルシステムのパスを表すクラスを提供しています。簡単に言うとosとglobを足したようなモジュールで、これらの良いとこどりができます。少なくともPython3系であるなら、ファイル操作にわざわざos.pathを使う理由はあまりないかもしれません。
+まとめ ちょっとした作業用スクリプトですが、こういうのがあるのとないのでは大違いだったりするので、柔軟に作れるようなくらいモジュールに慣れておきたいものです。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">ファイル名をPythonとpathlibで操作する小ネタ</h1>
+			<div class="meta">Posted at &mdash; Mar 9, 2020</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<p>小ネタです。ファイル名の操作を、Pythonとモジュール<code>pathlib</code>を使ってやってみようと思います。</p>
+
+<h2 id="まず目的">まず目的</h2>
+
+<p>ここに、500ファイルほど格納されたフォルダがあります。<strong>あります（圧）</strong>。すべてJpegファイルで、ファイル名は<code>1.jpeg</code>みたいな名前です。適当な連番のファイル名です。</p>
+
+<p>これについて、下記の通りファイル名の操作をします。なお、対象はフォルダ中の全ファイルとします。</p>
+
+<ul>
+<li>ファイル名に連番を付与する。</li>
+<li>ファイル名に任意の文字列を付与する。</li>
+<li>拡張子を変更する。</li>
+</ul>
+
+<p>最後の拡張子に関しては、厳密には「ファイル名」と表現できるものではありませんが、便宜上他の操作と同様に扱います。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Windows 10</li>
+<li>Python 3.6</li>
+</ul>
+
+<h2 id="ファイル名に連番を付与する">ファイル名に連番を付与する</h2>
+
+<p>もともとのファイル名に連番を付与します。連番はゼロ埋めで整形するものとします。たとえば3なら[003」のような形で整形します。</p>
+
+<script src="https://gist.github.com/ysko909/d3e101e632abfd3ef6e264cdcdc2bab0.js"></script>
+
+<p>ここでは<code>{:03}</code>とすることでゼロ埋め3桁としています。ここを編集すれば別の桁で出力できます。</p>
+
+<h2 id="ファイル名に任意の文字列を付与する">ファイル名に任意の文字列を付与する</h2>
+
+<p>もともとのファイル名に、別な文字列を付与します。</p>
+
+<script src="https://gist.github.com/ysko909/a984846d7011199d41c17dcef99484de.js"></script>
+
+<h2 id="拡張子を変更する">拡張子を変更する</h2>
+
+<p>もともとの拡張子を、別な拡張子に変更します。</p>
+
+<script src="https://gist.github.com/ysko909/652ead7c8fefd9706f8fe02777e2aefd.js"></script>
+
+<h2 id="pathlibとな">pathlibとな</h2>
+
+<p><a href="https://docs.python.org/ja/3/library/pathlib.html">pathlib</a>とはPythonのモジュールの1つで、ファイルシステムのパスを表すクラスを提供しています。簡単に言うと<code>os</code>と<code>glob</code>を足したようなモジュールで、これらの良いとこどりができます。少なくともPython3系であるなら、ファイル操作にわざわざ<code>os.path</code>を使う理由はあまりないかもしれません。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>ちょっとした作業用スクリプトですが、こういうのがあるのとないのでは大違いだったりするので、柔軟に作れるようなくらいモジュールに慣れておきたいものです。</p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

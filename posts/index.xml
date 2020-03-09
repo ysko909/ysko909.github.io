@@ -7,10 +7,28 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Wed, 12 Feb 2020 09:43:01 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 09 Mar 2020 14:04:54 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>ファイル名をPythonとpathlibで操作する小ネタ</title>
+      <link>https://ysko909.github.io/posts/change_file_name_with_python_and_pathlib/</link>
+      <pubDate>Mon, 09 Mar 2020 14:04:54 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/change_file_name_with_python_and_pathlib/</guid>
+      <description>小ネタです。ファイル名の操作を、Pythonとモジュールpathlibを使ってやってみようと思います。
+まず目的 ここに、500ファイルほど格納されたフォルダがあります。あります（圧）。すべてJpegファイルで、ファイル名は1.jpegみたいな名前です。適当な連番のファイル名です。
+これについて、下記の通りファイル名の操作をします。なお、対象はフォルダ中の全ファイルとします。
+ ファイル名に連番を付与する。 ファイル名に任意の文字列を付与する。 拡張子を変更する。  最後の拡張子に関しては、厳密には「ファイル名」と表現できるものではありませんが、便宜上他の操作と同様に扱います。
+環境  Windows 10 Python 3.6  ファイル名に連番を付与する もともとのファイル名に連番を付与します。連番はゼロ埋めで整形するものとします。たとえば3なら[003」のような形で整形します。
+ ここでは{:03}とすることでゼロ埋め3桁としています。ここを編集すれば別の桁で出力できます。
+ファイル名に任意の文字列を付与する もともとのファイル名に、別な文字列を付与します。
+ 拡張子を変更する もともとの拡張子を、別な拡張子に変更します。
+ pathlibとな pathlibとはPythonのモジュールの1つで、ファイルシステムのパスを表すクラスを提供しています。簡単に言うとosとglobを足したようなモジュールで、これらの良いとこどりができます。少なくともPython3系であるなら、ファイル操作にわざわざos.pathを使う理由はあまりないかもしれません。
+まとめ ちょっとした作業用スクリプトですが、こういうのがあるのとないのでは大違いだったりするので、柔軟に作れるようなくらいモジュールに慣れておきたいものです。</description>
+    </item>
     
     <item>
       <title>Accessで「プロジェクトではなく、ユーザ定義型を指定してください。」とエラーが出たらプロジェクト名を変更する</title>
