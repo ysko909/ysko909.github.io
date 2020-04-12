@@ -195,14 +195,16 @@ services:
 volumes:
     postgres:
     pgadmin:</code></pre></div>
-<p>次にSQLのソース。</p>
+<p>次にSQLのソース。まずはテーブルを<code>create</code>するSQL文。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#00f">create</span> <span style="color:#00f">table</span> users
 (
     id serial <span style="color:#00f">primary</span> <span style="color:#00f">key</span>,
     username varchar(50) <span style="color:#00f">unique</span> <span style="color:#00f">not</span> <span style="color:#00f">null</span>,
     password varchar(50) <span style="color:#00f">not</span> <span style="color:#00f">null</span>,
     email varchar(255) <span style="color:#00f">unique</span> <span style="color:#00f">not</span> <span style="color:#00f">null</span>
-);</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#00f">insert</span> <span style="color:#00f">into</span> users (username, password, email) <span style="color:#00f">values</span> (<span style="color:#a31515">&#39;keid&#39;</span>, <span style="color:#a31515">&#39;keidpass&#39;</span>, <span style="color:#a31515">&#39;keid@developer.com&#39;</span>);
+);</code></pre></div>
+<p>次にデータを<code>insert</code>するSQL文</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#00f">insert</span> <span style="color:#00f">into</span> users (username, password, email) <span style="color:#00f">values</span> (<span style="color:#a31515">&#39;keid&#39;</span>, <span style="color:#a31515">&#39;keidpass&#39;</span>, <span style="color:#a31515">&#39;keid@developer.com&#39;</span>);
 <span style="color:#00f">insert</span> <span style="color:#00f">into</span> users (username, password, email) <span style="color:#00f">values</span> (<span style="color:#a31515">&#39;jobs&#39;</span>, <span style="color:#a31515">&#39;jobspass&#39;</span>, <span style="color:#a31515">&#39;jobs@developer.com&#39;</span>);
 <span style="color:#00f">insert</span> <span style="color:#00f">into</span> users (username, password, email) <span style="color:#00f">values</span> (<span style="color:#a31515">&#39;mask&#39;</span>, <span style="color:#a31515">&#39;maskpass&#39;</span>, <span style="color:#a31515">&#39;mask@developer.com&#39;</span>);</code></pre></div>
 <p>ぶっちゃけ、この2つのSQLはテスト用のデータでしかないので、別にデータを準備できるのであれば必要ありません。</p>
@@ -214,11 +216,11 @@ volumes:
 docker-compose up -d</code></pre></div>
 <p><code>docker-compose ps</code>で確認してみます。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker-compose ps
-        Name                   Command           State            Ports         
+        Name                   Command           State            Ports
 --------------------------------------------------------------------------------
-sample_db_pgadmin_1    /entrypoint.sh            Up      443/tcp,               
-                                                         0.0.0.0:8080-&gt;80/tcp   
-sample_db_postgres_1   docker-entrypoint.sh      Up      0.0.0.0:5432-&gt;5432/tcp 
+sample_db_pgadmin_1    /entrypoint.sh            Up      443/tcp,
+                                                         0.0.0.0:8080-&gt;80/tcp
+sample_db_postgres_1   docker-entrypoint.sh      Up      0.0.0.0:5432-&gt;5432/tcp
                        postgres</code></pre></div>
 <p>確認できたら、ブラウザで<code>localhost:8080</code>にアクセスしてみます。</p>
 
