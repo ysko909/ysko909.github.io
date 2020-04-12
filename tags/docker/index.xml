@@ -19,6 +19,7 @@
       
       <guid>https://ysko909.github.io/posts/access-to-postgresql-in-docker-container-with-python/</guid>
       <description>はじめに Pythonを使ってDB操作をする場合、pyodbcを利用すると思います。そこで、Dockerコンテナで立ち上がっているPostgreSQLに対して、pyodbcで接続する手順をメモします。なお、確認用としてPostgreSQLにはテスト用のデータを少しだけ格納しておきます。
+ちなみに、今回のソースはこちらにあります。
 環境  macOS : 10.15.4 Python : 3.7.5 pyodbc : 4.0.30 Docker : 19.0.3.8 psql : 12.2  ざっくりした手順  psqlとpyodbcをインストールする。 DockerでPostgreSQLのコンテナを起動する。 Pythonから接続してみる。  詳しい手順 各種インストール psqlをインストールする まずは、何はなくともpsqlが必要です。インストールします。
  psqlとはPostgreSQLのターミナル型フロントエンドです。 対話的に問い合わせを入力し、それをPostgreSQLに対して発行して、結果を確認することができます。
  macOSなのでHomebrewを使うのが1番早いです。

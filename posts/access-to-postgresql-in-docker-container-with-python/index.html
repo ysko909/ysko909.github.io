@@ -5,6 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>pyodbcでDockerコンテナのPostgreSQLに接続する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta property="og:title" content="pyodbcでDockerコンテナのPostgreSQLに接続する" />
 <meta property="og:description" content="はじめに Pythonを使ってDB操作をする場合、pyodbcを利用すると思います。そこで、Dockerコンテナで立ち上がっているPostgreSQLに対して、pyodbcで接続する手順をメモします。なお、確認用としてPostgreSQLにはテスト用のデータを少しだけ格納しておきます。
+ちなみに、今回のソースはこちらにあります。
 環境  macOS : 10.15.4 Python : 3.7.5 pyodbc : 4.0.30 Docker : 19.0.3.8 psql : 12.2  ざっくりした手順  psqlとpyodbcをインストールする。 DockerでPostgreSQLのコンテナを起動する。 Pythonから接続してみる。  詳しい手順 各種インストール psqlをインストールする まずは、何はなくともpsqlが必要です。インストールします。
  psqlとはPostgreSQLのターミナル型フロントエンドです。 対話的に問い合わせを入力し、それをPostgreSQLに対して発行して、結果を確認することができます。
  macOSなのでHomebrewを使うのが1番早いです。
@@ -17,6 +18,7 @@ $ psql --version psql (PostgreSQL) 12.2 これでpsqlの準備が整いました
 <meta property="article:modified_time" content="2020-04-11T09:18:31&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="pyodbcでDockerコンテナのPostgreSQLに接続する"/>
 <meta name="twitter:description" content="はじめに Pythonを使ってDB操作をする場合、pyodbcを利用すると思います。そこで、Dockerコンテナで立ち上がっているPostgreSQLに対して、pyodbcで接続する手順をメモします。なお、確認用としてPostgreSQLにはテスト用のデータを少しだけ格納しておきます。
+ちなみに、今回のソースはこちらにあります。
 環境  macOS : 10.15.4 Python : 3.7.5 pyodbc : 4.0.30 Docker : 19.0.3.8 psql : 12.2  ざっくりした手順  psqlとpyodbcをインストールする。 DockerでPostgreSQLのコンテナを起動する。 Pythonから接続してみる。  詳しい手順 各種インストール psqlをインストールする まずは、何はなくともpsqlが必要です。インストールします。
  psqlとはPostgreSQLのターミナル型フロントエンドです。 対話的に問い合わせを入力し、それをPostgreSQLに対して発行して、結果を確認することができます。
  macOSなのでHomebrewを使うのが1番早いです。
@@ -86,6 +88,8 @@ $ psql --version psql (PostgreSQL) 12.2 これでpsqlの準備が整いました
 <h2 id="はじめに">はじめに</h2>
 
 <p>Pythonを使ってDB操作をする場合、<a href="https://github.com/mkleehammer/pyodbc">pyodbc</a>を利用すると思います。そこで、Dockerコンテナで立ち上がっているPostgreSQLに対して、pyodbcで接続する手順をメモします。なお、確認用としてPostgreSQLにはテスト用のデータを少しだけ格納しておきます。</p>
+
+<p>ちなみに、今回のソースは<a href="https://github.com/ysko909/sample_pyodbc_and_postgre">こちら</a>にあります。</p>
 
 <h2 id="環境">環境</h2>
 
