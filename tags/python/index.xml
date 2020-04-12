@@ -7,10 +7,26 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Mon, 09 Mar 2020 14:04:54 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 11 Apr 2020 09:18:31 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>pyodbcでDockerコンテナのPostgreSQLに接続する</title>
+      <link>https://ysko909.github.io/posts/access-to-postgresql-in-docker-container-with-python/</link>
+      <pubDate>Sat, 11 Apr 2020 09:18:31 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/access-to-postgresql-in-docker-container-with-python/</guid>
+      <description>はじめに Pythonを使ってDB操作をする場合、pyodbcを利用すると思います。そこで、Dockerコンテナで立ち上がっているPostgreSQLに対して、pyodbcで接続する手順をメモします。なお、確認用としてPostgreSQLにはテスト用のデータを少しだけ格納しておきます。
+環境  macOS : 10.15.4 Python : 3.7.5 pyodbc : 4.0.30 Docker : 19.0.3.8 psql : 12.2  ざっくりした手順  psqlとpyodbcをインストールする。 DockerでPostgreSQLのコンテナを起動する。 Pythonから接続してみる。  詳しい手順 各種インストール psqlをインストールする まずは、何はなくともpsqlが必要です。インストールします。
+ psqlとはPostgreSQLのターミナル型フロントエンドです。 対話的に問い合わせを入力し、それをPostgreSQLに対して発行して、結果を確認することができます。
+ macOSなのでHomebrewを使うのが1番早いです。
+brew update brew install postgresql 次にODBCの設定ファイルを変更します。もともと（多分）何も記述されていないファイル「odbcinst.ini」に、PostgreSQL用の部分を追記します。
+$ cat /usr/local/etc/odbcinst.ini [PostgreSQL] Driver=/usr/local/lib/psqlodbcw.so  追記の仕方は、下記のようにヒアドキュメントを使うのが多分早いです。
+cat &amp;lt;&amp;lt;EOF &amp;gt;&amp;gt; /usr/local/etc/odbcinst.ini heredoc else&amp;gt; [PostgreSQL] heredoc else&amp;gt; Driver=/usr/local/lib/psqlodbcw.so heredoc else&amp;gt; EOF とりあえずバージョンでも見ておきます。
+$ psql --version psql (PostgreSQL) 12.2 これでpsqlの準備が整いました。</description>
+    </item>
     
     <item>
       <title>ファイル名をPythonとpathlibで操作する小ネタ</title>
