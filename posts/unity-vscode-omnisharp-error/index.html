@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>UnityでVscode使おうとしたらOmnisharpがエラー吐いたけどアップデートしたら直った - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="UnityでVscode使おうとしたらOmnisharpがエラー吐いたけどアップデートしたら直った" />
+<meta property="og:description" content="UnityのエディタをVS Codeに変えた UnityではC#を編集する際、もともとVisual Studio Communityを使うのですが、使い慣れたVisual Studio Code（以下、VS Code）でコーディングしたかったので、Unity側の設定を変えたんです。
+そうしたら 問題発生。
+おい、なんかエラー（Warning？）吐いてるぞ。
+とりあえず「Show Output」で内容を確認してみます。
+[fail]: OmniSharp.MSBuild.ProjectLoader The reference assemblies for .NETFramework,Version=v4.7.1 were not found. To resolve this, install the Developer Pack (SDK/Targeting Pack) for this framework version or retarget your application. You can download .NET Framework Developer Packs at https://aka.ms/msbuild/developerpacks [fail]: OmniSharp.MSBuild.ProjectManager Attempted to update project that is not loaded:/hoge/hoge/... 「.NETFramework v4.7.1が見つからないぞ！」って言われてるな・・・。これ単体でインストールが必要とかって聞いたことないぞ。っていうか、Macなんだからいらないよな、これ。
+解決策は王道のアップデート 王道はアップデートだよね、ってことでVisual Studio Community側の更新を行いました。しばらくUnity触ってなかったから、随分バージョンも古くなってしまっていたようで・・・。
+合計するとそこそこファイルサイズが大きいので、なかなかダウンロードするのにも時間がかかりました。
+そうしたら。
+[info]: OmniSharp.MSBuild.ProjectManager Update project: Assembly-CSharp 直ってる？" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/unity-vscode-omnisharp-error/" /><meta property="article:published_time" content="2020-05-11T00:42:40&#43;09:00"/>
+<meta property="article:modified_time" content="2020-05-11T00:42:40&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="UnityでVscode使おうとしたらOmnisharpがエラー吐いたけどアップデートしたら直った"/>
+<meta name="twitter:description" content="UnityのエディタをVS Codeに変えた UnityではC#を編集する際、もともとVisual Studio Communityを使うのですが、使い慣れたVisual Studio Code（以下、VS Code）でコーディングしたかったので、Unity側の設定を変えたんです。
+そうしたら 問題発生。
+おい、なんかエラー（Warning？）吐いてるぞ。
+とりあえず「Show Output」で内容を確認してみます。
+[fail]: OmniSharp.MSBuild.ProjectLoader The reference assemblies for .NETFramework,Version=v4.7.1 were not found. To resolve this, install the Developer Pack (SDK/Targeting Pack) for this framework version or retarget your application. You can download .NET Framework Developer Packs at https://aka.ms/msbuild/developerpacks [fail]: OmniSharp.MSBuild.ProjectManager Attempted to update project that is not loaded:/hoge/hoge/... 「.NETFramework v4.7.1が見つからないぞ！」って言われてるな・・・。これ単体でインストールが必要とかって聞いたことないぞ。っていうか、Macなんだからいらないよな、これ。
+解決策は王道のアップデート 王道はアップデートだよね、ってことでVisual Studio Community側の更新を行いました。しばらくUnity触ってなかったから、随分バージョンも古くなってしまっていたようで・・・。
+合計するとそこそこファイルサイズが大きいので、なかなかダウンロードするのにも時間がかかりました。
+そうしたら。
+[info]: OmniSharp.MSBuild.ProjectManager Update project: Assembly-CSharp 直ってる？"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">UnityでVscode使おうとしたらOmnisharpがエラー吐いたけどアップデートしたら直った</h1>
+			<div class="meta">Posted at &mdash; May 11, 2020</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="unityのエディタをvs-codeに変えた">UnityのエディタをVS Codeに変えた</h2>
+
+<p>UnityではC#を編集する際、もともとVisual Studio Communityを使うのですが、使い慣れたVisual Studio Code（以下、VS Code）でコーディングしたかったので、Unity側の設定を変えたんです。</p>
+
+<h2 id="そうしたら">そうしたら</h2>
+
+<p><strong>問題発生</strong>。</p>
+
+<p><img src="2020-05-11-00-42-48.png" alt="pic" /></p>
+
+<p>おい、なんかエラー（Warning？）吐いてるぞ。</p>
+
+<p>とりあえず「Show Output」で内容を確認してみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">[fail]: OmniSharp.MSBuild.ProjectLoader
+        The reference assemblies for .NETFramework,Version=v4.7.1 were not found. To resolve this, install the Developer Pack (SDK/Targeting Pack) for this framework version or retarget your application. You can download .NET Framework Developer Packs at https://aka.ms/msbuild/developerpacks
+
+[fail]: OmniSharp.MSBuild.ProjectManager
+        Attempted to update project that is not loaded:/hoge/hoge/...</code></pre></div>
+<p>「.NETFramework v4.7.1が見つからないぞ！」って言われてるな・・・。これ単体でインストールが必要とかって聞いたことないぞ。っていうか、Macなんだからいらないよな、これ。</p>
+
+<h2 id="解決策は王道のアップデート">解決策は王道のアップデート</h2>
+
+<p><img src="2020-05-11-01-06-15.png" alt="pic" /></p>
+
+<p>王道はアップデートだよね、ってことでVisual Studio Community側の更新を行いました。しばらくUnity触ってなかったから、随分バージョンも古くなってしまっていたようで・・・。</p>
+
+<p>合計するとそこそこファイルサイズが大きいので、なかなかダウンロードするのにも時間がかかりました。</p>
+
+<p>そうしたら。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">[info]: OmniSharp.MSBuild.ProjectManager
+        Update project: Assembly-CSharp</code></pre></div>
+<p><strong>直ってる？</strong></p>
+
+<p>本当はもっとたくさんメッセージが表示されるんですが、単純に起動時の実行ログっぽいしエラーっぽいのが表示されなくなったので、良しとします。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p><strong>アップデートはこまめにね</strong>、っていうベタなオチでした、はい。</p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

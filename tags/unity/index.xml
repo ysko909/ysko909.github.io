@@ -7,10 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Thu, 11 Jul 2019 16:41:00 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 11 May 2020 00:42:40 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/unity/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>UnityでVscode使おうとしたらOmnisharpがエラー吐いたけどアップデートしたら直った</title>
+      <link>https://ysko909.github.io/posts/unity-vscode-omnisharp-error/</link>
+      <pubDate>Mon, 11 May 2020 00:42:40 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/unity-vscode-omnisharp-error/</guid>
+      <description>UnityのエディタをVS Codeに変えた UnityではC#を編集する際、もともとVisual Studio Communityを使うのですが、使い慣れたVisual Studio Code（以下、VS Code）でコーディングしたかったので、Unity側の設定を変えたんです。
+そうしたら 問題発生。
+おい、なんかエラー（Warning？）吐いてるぞ。
+とりあえず「Show Output」で内容を確認してみます。
+[fail]: OmniSharp.MSBuild.ProjectLoader The reference assemblies for .NETFramework,Version=v4.7.1 were not found. To resolve this, install the Developer Pack (SDK/Targeting Pack) for this framework version or retarget your application. You can download .NET Framework Developer Packs at https://aka.ms/msbuild/developerpacks [fail]: OmniSharp.MSBuild.ProjectManager Attempted to update project that is not loaded:/hoge/hoge/... 「.NETFramework v4.7.1が見つからないぞ！」って言われてるな・・・。これ単体でインストールが必要とかって聞いたことないぞ。っていうか、Macなんだからいらないよな、これ。
+解決策は王道のアップデート 王道はアップデートだよね、ってことでVisual Studio Community側の更新を行いました。しばらくUnity触ってなかったから、随分バージョンも古くなってしまっていたようで・・・。
+合計するとそこそこファイルサイズが大きいので、なかなかダウンロードするのにも時間がかかりました。
+そうしたら。
+[info]: OmniSharp.MSBuild.ProjectManager Update project: Assembly-CSharp 直ってる？</description>
+    </item>
     
     <item>
       <title>Unity Hubを使ってUnityをインストールする</title>
