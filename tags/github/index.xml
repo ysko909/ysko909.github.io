@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Git on 頑張らないために頑張る</title>
-    <link>https://ysko909.github.io/tags/git/</link>
-    <description>Recent content in Git on 頑張らないために頑張る</description>
+    <title>Github on 頑張らないために頑張る</title>
+    <link>https://ysko909.github.io/tags/github/</link>
+    <description>Recent content in Github on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Mon, 11 May 2020 22:02:34 +0900</lastBuildDate>
     
-	<atom:link href="https://ysko909.github.io/tags/git/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/github/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -32,24 +32,6 @@ Macのキーチェーンアクセスを見てみる GitHubに限りませんが�
 さあどうだ おもむろにgit pullしてみます。
 $ git pull Username for &amp;#39;https://github.com&amp;#39;:  というわけで、認証情報の入力を求められました。再度正しい情報を入力すれば、また普段どおりpullやpushが実行できるようになります。
 まとめ とくに何か特別な作業をやった記憶はないのですが、たまにこういうことも起こり得るようです。というわけで、なにかのお役に立てば幸いです。</description>
-    </item>
-    
-    <item>
-      <title>Visual Studio CodeでGitが見つからないと言われたら</title>
-      <link>https://ysko909.github.io/posts/fix-git-path-with-vscode/</link>
-      <pubDate>Sun, 07 Jul 2019 17:14:15 +0900</pubDate>
-      
-      <guid>https://ysko909.github.io/posts/fix-git-path-with-vscode/</guid>
-      <description>VS Codeをアップデートしたらこんなメッセージが Visual Studio Code(以下、VS Code)をアップデートしたらこんな通知が出るようになりました。
-「Gitが見つからないよ！」って・・・いや、君今までしこたまGit使ってたじゃないか。
-理由はともかく、このままではGitの各種コマンドが利用できないので、設定します。
-環境  macOS Mojave 10.14.5 Visual Studio Code version 1.36  設定手順  左下の歯車マークから、あるいはCommand + ,で「Settings」画面を表示します。
- 出てきた画面に「git.path」と入力します。すると、「Settings.jsonで設定してね」と言われるのでSettings.jsonを開きます。
-ごちゃごちゃしてますが、下のところに&amp;quot;git.path&amp;quot;: &amp;quot;/usr/bin&amp;quot;を追記しました。なお、gitのパスはコンソール画面にてwhich gitすればわかります。
- 編集が終わったら保存します。これで完了です。なお、いつのバージョン以降からかは失念しましたが、設定の変更を行ってもVS Codeを再起動する必要はなく即時反映されます。
-  （番外編）XcodeをインストールしたらなぜかGitが使えないぞ XcodeをインストールしたらGitが使えなくなりました。なんかライセンス契約に同意する必要があるみたいです。
-指示に従いコマンド発行および同意を行ったら、Gitが再び利用できるようになりました。
-$ git --version Agreeing to the Xcode/iOS license requires admin privileges, please run “sudo xcodebuild -license” and then retry this command. $ sudo xcodebuild -license You have not agreed to the Xcode license agreements.</description>
     </item>
     
   </channel>

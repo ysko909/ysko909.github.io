@@ -7,10 +7,32 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Mon, 11 May 2020 00:42:40 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 11 May 2020 22:02:34 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>GitHubからRepository not found.と言われたらキーチェーンを見てみよう</title>
+      <link>https://ysko909.github.io/posts/can-not-access-to-github-with-git/</link>
+      <pubDate>Mon, 11 May 2020 22:02:34 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/can-not-access-to-github-with-git/</guid>
+      <description>Macの話なんですけどね Missing or invalid credentials. Skip silent fetch commands remote: Repository not found. ある日、いつもの通りブログをチョロっと書いてGitHubのリポジトリにpushしようとしたら、「Repository not found.」とか言われたわけです。リポジトリがないよ、って言っているわけですね。
+ないわけないだろ。
+ないわけないじゃないですかやだー つい最近作ったばっかりだったら「リポジトリ名間違えたかなー」とか思うわけですけど、もう何ヶ月も同じリポジトリ使ってるわけで、稼働実績があるリポジトリなわけです。だから、「リポジトリが見つからないよ」って言われたところで、そんなわけないだろってなるわけです。
+エラーのメッセージをよくよく見てみると「リポジトリないよ」って言っている前にMissing or invalid credentials.って言ってるんですよね。認証情報のエラーなんだけど、認証情報を入力できない。
+リポジトリを作ってはじめてpullとかする場合、認証画面が表示されたりコンソールなら入力を求められるはずです。それすら表情されない。あれ、これって結構重症？
+Macのキーチェーンアクセスを見てみる GitHubに限りませんが、Macの場合認証情報をキーチェーンアクセスというアプリケーションで管理しています。ここに格納されているGitHub用の認証情報がコケてるんじゃね？
+というわけでおもむろに確認してみます。
+アプリケーションからユーティリティのフォルダを開いて、その中の「キーチェーンアクセス」をクリックします。すると保持している認証情報の一覧が表示されます。
+ウィンドウの右上にある検索窓へ「GitHub」と入力します。するとGitHub用の認証情報が表示されるはずです。
+表示されたら、そいつは削除します。右クリックメニューから削除を選択します。
+きれいサッパリ削除が完了したのを確認したら、キーチェーンアクセスは閉じて構いません。
+さあどうだ おもむろにgit pullしてみます。
+$ git pull Username for &amp;#39;https://github.com&amp;#39;:  というわけで、認証情報の入力を求められました。再度正しい情報を入力すれば、また普段どおりpullやpushが実行できるようになります。
+まとめ とくに何か特別な作業をやった記憶はないのですが、たまにこういうことも起こり得るようです。というわけで、なにかのお役に立てば幸いです。</description>
+    </item>
     
     <item>
       <title>UnityでVscode使おうとしたらOmnisharpがエラー吐いたけどアップデートしたら直った</title>

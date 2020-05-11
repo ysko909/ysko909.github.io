@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>GitHubからRepository not found.と言われたらキーチェーンを見てみよう - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="GitHubからRepository not found.と言われたらキーチェーンを見てみよう" />
+<meta property="og:description" content="Macの話なんですけどね Missing or invalid credentials. Skip silent fetch commands remote: Repository not found. ある日、いつもの通りブログをチョロっと書いてGitHubのリポジトリにpushしようとしたら、「Repository not found.」とか言われたわけです。リポジトリがないよ、って言っているわけですね。
+ないわけないだろ。
+ないわけないじゃないですかやだー つい最近作ったばっかりだったら「リポジトリ名間違えたかなー」とか思うわけですけど、もう何ヶ月も同じリポジトリ使ってるわけで、稼働実績があるリポジトリなわけです。だから、「リポジトリが見つからないよ」って言われたところで、そんなわけないだろってなるわけです。
+エラーのメッセージをよくよく見てみると「リポジトリないよ」って言っている前にMissing or invalid credentials.って言ってるんですよね。認証情報のエラーなんだけど、認証情報を入力できない。
+リポジトリを作ってはじめてpullとかする場合、認証画面が表示されたりコンソールなら入力を求められるはずです。それすら表情されない。あれ、これって結構重症？
+Macのキーチェーンアクセスを見てみる GitHubに限りませんが、Macの場合認証情報をキーチェーンアクセスというアプリケーションで管理しています。ここに格納されているGitHub用の認証情報がコケてるんじゃね？
+というわけでおもむろに確認してみます。
+アプリケーションからユーティリティのフォルダを開いて、その中の「キーチェーンアクセス」をクリックします。すると保持している認証情報の一覧が表示されます。
+ウィンドウの右上にある検索窓へ「GitHub」と入力します。するとGitHub用の認証情報が表示されるはずです。
+表示されたら、そいつは削除します。右クリックメニューから削除を選択します。
+きれいサッパリ削除が完了したのを確認したら、キーチェーンアクセスは閉じて構いません。
+さあどうだ おもむろにgit pullしてみます。
+$ git pull Username for &#39;https://github.com&#39;:  というわけで、認証情報の入力を求められました。再度正しい情報を入力すれば、また普段どおりpullやpushが実行できるようになります。
+まとめ とくに何か特別な作業をやった記憶はないのですが、たまにこういうことも起こり得るようです。というわけで、なにかのお役に立てば幸いです。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/can-not-access-to-github-with-git/" /><meta property="article:published_time" content="2020-05-11T22:02:34&#43;09:00"/>
+<meta property="article:modified_time" content="2020-05-11T22:02:34&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GitHubからRepository not found.と言われたらキーチェーンを見てみよう"/>
+<meta name="twitter:description" content="Macの話なんですけどね Missing or invalid credentials. Skip silent fetch commands remote: Repository not found. ある日、いつもの通りブログをチョロっと書いてGitHubのリポジトリにpushしようとしたら、「Repository not found.」とか言われたわけです。リポジトリがないよ、って言っているわけですね。
+ないわけないだろ。
+ないわけないじゃないですかやだー つい最近作ったばっかりだったら「リポジトリ名間違えたかなー」とか思うわけですけど、もう何ヶ月も同じリポジトリ使ってるわけで、稼働実績があるリポジトリなわけです。だから、「リポジトリが見つからないよ」って言われたところで、そんなわけないだろってなるわけです。
+エラーのメッセージをよくよく見てみると「リポジトリないよ」って言っている前にMissing or invalid credentials.って言ってるんですよね。認証情報のエラーなんだけど、認証情報を入力できない。
+リポジトリを作ってはじめてpullとかする場合、認証画面が表示されたりコンソールなら入力を求められるはずです。それすら表情されない。あれ、これって結構重症？
+Macのキーチェーンアクセスを見てみる GitHubに限りませんが、Macの場合認証情報をキーチェーンアクセスというアプリケーションで管理しています。ここに格納されているGitHub用の認証情報がコケてるんじゃね？
+というわけでおもむろに確認してみます。
+アプリケーションからユーティリティのフォルダを開いて、その中の「キーチェーンアクセス」をクリックします。すると保持している認証情報の一覧が表示されます。
+ウィンドウの右上にある検索窓へ「GitHub」と入力します。するとGitHub用の認証情報が表示されるはずです。
+表示されたら、そいつは削除します。右クリックメニューから削除を選択します。
+きれいサッパリ削除が完了したのを確認したら、キーチェーンアクセスは閉じて構いません。
+さあどうだ おもむろにgit pullしてみます。
+$ git pull Username for &#39;https://github.com&#39;:  というわけで、認証情報の入力を求められました。再度正しい情報を入力すれば、また普段どおりpullやpushが実行できるようになります。
+まとめ とくに何か特別な作業をやった記憶はないのですが、たまにこういうことも起こり得るようです。というわけで、なにかのお役に立てば幸いです。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">GitHubからRepository not found.と言われたらキーチェーンを見てみよう</h1>
+			<div class="meta">Posted at &mdash; May 11, 2020</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="macの話なんですけどね">Macの話なんですけどね</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">Missing or invalid credentials.
+Skip silent fetch commands
+remote: Repository not found.</code></pre></div>
+<p>ある日、いつもの通りブログをチョロっと書いてGitHubのリポジトリに<code>push</code>しようとしたら、「Repository not found.」とか言われたわけです。リポジトリがないよ、って言っているわけですね。</p>
+
+<p><strong>ないわけないだろ</strong>。</p>
+
+<h2 id="ないわけないじゃないですかやだー">ないわけないじゃないですかやだー</h2>
+
+<p>つい最近作ったばっかりだったら「リポジトリ名間違えたかなー」とか思うわけですけど、もう何ヶ月も同じリポジトリ使ってるわけで、稼働実績があるリポジトリなわけです。だから、「リポジトリが見つからないよ」って言われたところで、そんなわけないだろってなるわけです。</p>
+
+<p>エラーのメッセージをよくよく見てみると「リポジトリないよ」って言っている前に<code>Missing or invalid credentials.</code>って言ってるんですよね。認証情報のエラーなんだけど、認証情報を入力できない。</p>
+
+<p>リポジトリを作ってはじめて<code>pull</code>とかする場合、認証画面が表示されたりコンソールなら入力を求められるはずです。<strong>それすら表情されない</strong>。あれ、これって結構重症？</p>
+
+<h2 id="macのキーチェーンアクセスを見てみる">Macのキーチェーンアクセスを見てみる</h2>
+
+<p>GitHubに限りませんが、Macの場合認証情報をキーチェーンアクセスというアプリケーションで管理しています。<strong>ここに格納されているGitHub用の認証情報がコケてるんじゃね？</strong></p>
+
+<p>というわけでおもむろに確認してみます。</p>
+
+<p><img src="2020-05-11-22-14-14.png" alt="pic" /></p>
+
+<p>アプリケーションからユーティリティのフォルダを開いて、その中の「キーチェーンアクセス」をクリックします。すると保持している認証情報の一覧が表示されます。</p>
+
+<p><img src="2020-05-11-22-15-47.png" alt="pic" /></p>
+
+<p>ウィンドウの右上にある検索窓へ「GitHub」と入力します。するとGitHub用の認証情報が表示されるはずです。</p>
+
+<p>表示されたら、<strong>そいつは削除します</strong>。右クリックメニューから削除を選択します。</p>
+
+<p>きれいサッパリ削除が完了したのを確認したら、キーチェーンアクセスは閉じて構いません。</p>
+
+<h2 id="さあどうだ">さあどうだ</h2>
+
+<p>おもむろに<code>git pull</code>してみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ git pull
+Username for &#39;https://github.com&#39;: </code></pre></div>
+<p>というわけで、認証情報の入力を求められました。再度正しい情報を入力すれば、また普段どおり<code>pull</code>や<code>push</code>が実行できるようになります。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>とくに何か特別な作業をやった記憶はないのですが、たまにこういうことも起こり得るようです。というわけで、なにかのお役に立てば幸いです。</p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
