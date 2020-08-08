@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>DockerのDebian環境に日本語フォントをインストールする - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="DockerのDebian環境に日本語フォントをインストールする" />
+<meta property="og:description" content="概要 Dockerコンテナで構築したDebianの環境に、日本語フォントをインストールする方法についてメモします。基本的にはコンテナ上で日本語を使うことってあまりないような気もしますが、matplotlibで日本語項目や日本語のデータを表示する際には日本語フォントが必要になるので。
+インストール FROMpython:3.8-busterENVACCEPT_EULA=YRUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -RUN curl https://packages.microsoft.com/config/debian/10/prod.list &gt; /etc/apt/sources.list.d/mssql-release.listRUN apt-get update \  &amp;&amp; apt-get install -y g&#43;&#43; \  apt-utils \  apt-transport-https \  gcc \  build-essential \  unixodbc \  unixodbc-dev \  msodbcsql17 \  mssql-tools \  locales \  fonts-takao-gothic \  &amp;&amp; apt-get upgrade -y \  &amp;&amp; apt-get clean \  &amp;&amp; sed -i -E &#39;s/(CipherString\s*=\s*DEFAULT@SECLEVEL=)2/\11/&#39; /etc/ssl/openssl." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/install-japanese-font-to-docker-cotainer/" /><meta property="article:published_time" content="2020-08-07T15:12:54&#43;09:00"/>
+<meta property="article:modified_time" content="2020-08-07T15:12:54&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="DockerのDebian環境に日本語フォントをインストールする"/>
+<meta name="twitter:description" content="概要 Dockerコンテナで構築したDebianの環境に、日本語フォントをインストールする方法についてメモします。基本的にはコンテナ上で日本語を使うことってあまりないような気もしますが、matplotlibで日本語項目や日本語のデータを表示する際には日本語フォントが必要になるので。
+インストール FROMpython:3.8-busterENVACCEPT_EULA=YRUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -RUN curl https://packages.microsoft.com/config/debian/10/prod.list &gt; /etc/apt/sources.list.d/mssql-release.listRUN apt-get update \  &amp;&amp; apt-get install -y g&#43;&#43; \  apt-utils \  apt-transport-https \  gcc \  build-essential \  unixodbc \  unixodbc-dev \  msodbcsql17 \  mssql-tools \  locales \  fonts-takao-gothic \  &amp;&amp; apt-get upgrade -y \  &amp;&amp; apt-get clean \  &amp;&amp; sed -i -E &#39;s/(CipherString\s*=\s*DEFAULT@SECLEVEL=)2/\11/&#39; /etc/ssl/openssl."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">DockerのDebian環境に日本語フォントをインストールする</h1>
+			<div class="meta">Posted at &mdash; Aug 7, 2020</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>Dockerコンテナで構築したDebianの環境に、日本語フォントをインストールする方法についてメモします。基本的にはコンテナ上で日本語を使うことってあまりないような気もしますが、matplotlibで日本語項目や日本語のデータを表示する際には日本語フォントが必要になるので。</p>
+
+<h2 id="インストール">インストール</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#00f">FROM</span><span style="color:#a31515"> python:3.8-buster</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">ENV</span><span style="color:#a31515"> ACCEPT_EULA=Y</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -<span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> curl https://packages.microsoft.com/config/debian/10/prod.list &gt; /etc/apt/sources.list.d/mssql-release.list<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> apt-get update <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; apt-get install -y g++ <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    apt-utils <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    apt-transport-https <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    gcc <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    build-essential <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    unixodbc <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    unixodbc-dev <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    msodbcsql17 <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    mssql-tools <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    locales <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    fonts-takao-gothic <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; apt-get upgrade -y <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; apt-get clean <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; sed -i -E <span style="color:#a31515">&#39;s/(CipherString\s*=\s*DEFAULT@SECLEVEL=)2/\11/&#39;</span> /etc/ssl/openssl.cnf <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; pip install --upgrade pip <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; pip install --no-cache-dir <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    autopep8 <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    flake8 <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; rm -rf /var/lib/apt/lists/*<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> echo <span style="color:#a31515">&#39;export PATH=&#34;$PATH:/opt/mssql-tools/bin&#34;&#39;</span> &gt;&gt; ~/.bashrc<span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> /bin/bash -c <span style="color:#a31515">&#34;source ~/.bashrc&#34;</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> locale-gen ja_JP.UTF-8<span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> localedef -f UTF-8 -i ja_JP ja_JP<span style="">
+</span><span style=""></span><span style="color:#00f">ENV</span><span style="color:#a31515"> LANG ja_JP.UTF-8</span><span style="">
+</span><span style=""></span><span style="color:#00f">ENV</span><span style="color:#a31515"> LANGUAGE ja_JP:jp</span><span style="">
+</span><span style=""></span><span style="color:#00f">ENV</span><span style="color:#a31515"> LC_ALL ja_JP.UTF-8</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">ADD</span><span style="color:#a31515"> . /home/workdir</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">WORKDIR</span><span style="color:#a31515"> /home/workdir</span><span style="">
+</span><span style="">
+</span><span style=""></span>COPY ./requirements.txt <span style="color:#a31515">${</span>PWD<span style="color:#a31515">}</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> pip install -r requirements.txt<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">WORKDIR</span><span style="color:#a31515"> /home/workdir/src</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">EXPOSE</span><span style="color:#a31515"> 8888</span></code></pre></div>
+<p>上記のDockerfileはpyodbc用の設定などがごちゃごちゃ書いてありますが、日本語フォントについて重要なのは「fonts-takao-gothic」の部分です。Takaoフォントというのは<a href="https://launchpad.net/takao-fonts">IPAフォントの派生版</a>です。ゴシックだけでなく明朝体（fonts-takao-mincho）も存在します。上記Dockerfileではゴシックだけインストールしていましたが、ゴシックと一緒に明朝体をインストールしてももちろん問題ありません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#00f">RUN</span> locale-gen ja_JP.UTF-8<span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> localedef -f UTF-8 -i ja_JP ja_JP<span style="">
+</span><span style=""></span><span style="color:#00f">ENV</span><span style="color:#a31515"> LANG ja_JP.UTF-8</span><span style="">
+</span><span style=""></span><span style="color:#00f">ENV</span><span style="color:#a31515"> LANGUAGE ja_JP:jp</span><span style="">
+</span><span style=""></span><span style="color:#00f">ENV</span><span style="color:#a31515"> LC_ALL ja_JP.UTF-8</span></code></pre></div>
+<p>部分のロケール設定は正直いらないかもしれません。どっちかっていうと、普段のコマンドラインで日本語が使えるようになる、くらいなので。matplotlibには直接関係しない・・・はず。</p>
+
+<h2 id="matplotlibでの日本語フォント指定">matplotlibでの日本語フォント指定</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> matplotlib
+
+font = {<span style="color:#a31515">&#39;family&#39;</span>:<span style="color:#a31515">&#39;TakaoPGothic&#39;</span>}
+
+matplotlib.rc(<span style="color:#a31515">&#39;font&#39;</span>, **font)</code></pre></div>
+<p>ちなみに、日本語を含むようなグラフの出力には、上記の設定で日本語フォントを設定する必要があります。</p>
+
+<h2 id="参考">参考</h2>
+
+<p><a href="https://blog.osakana.net/archives/9786">armbianで起動したchromiumが文字化けする</a></p>
+
+<p><a href="https://7me.oji.0j0.jp/2016/dockerfile-debian-locale-japanese.html">DockerfileでDebianコンテナの日本語環境を整える</a></p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

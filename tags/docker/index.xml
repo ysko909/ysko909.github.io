@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sat, 11 Apr 2020 09:18:31 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 07 Aug 2020 15:12:54 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>DockerのDebian環境に日本語フォントをインストールする</title>
+      <link>https://ysko909.github.io/posts/install-japanese-font-to-docker-cotainer/</link>
+      <pubDate>Fri, 07 Aug 2020 15:12:54 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/install-japanese-font-to-docker-cotainer/</guid>
+      <description>概要 Dockerコンテナで構築したDebianの環境に、日本語フォントをインストールする方法についてメモします。基本的にはコンテナ上で日本語を使うことってあまりないような気もしますが、matplotlibで日本語項目や日本語のデータを表示する際には日本語フォントが必要になるので。
+インストール FROMpython:3.8-busterENVACCEPT_EULA=YRUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -RUN curl https://packages.microsoft.com/config/debian/10/prod.list &amp;gt; /etc/apt/sources.list.d/mssql-release.listRUN apt-get update \  &amp;amp;&amp;amp; apt-get install -y g++ \  apt-utils \  apt-transport-https \  gcc \  build-essential \  unixodbc \  unixodbc-dev \  msodbcsql17 \  mssql-tools \  locales \  fonts-takao-gothic \  &amp;amp;&amp;amp; apt-get upgrade -y \  &amp;amp;&amp;amp; apt-get clean \  &amp;amp;&amp;amp; sed -i -E &amp;#39;s/(CipherString\s*=\s*DEFAULT@SECLEVEL=)2/\11/&amp;#39; /etc/ssl/openssl.</description>
+    </item>
     
     <item>
       <title>pyodbcでDockerコンテナのPostgreSQLに接続する</title>
