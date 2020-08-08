@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>JavaScriptの即時関数についてメモ - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="JavaScriptの即時関数についてメモ" />
+<meta property="og:description" content="概要 プログラミング言語における関数は、一度どこかで宣言をしてから別の所でその関数を呼び出すことにより実行できます。ただ、JSに関しては宣言と同時に実行が可能な即時関数という機能があります。
+一度しか利用しないような処理を即時関数としてまとめておく、とにかく冒頭で実行させたい処理がある・・・というケースに使うかな。あとは、サンプル的に実行するのでわざわざ呼び出しすら記述したくない、とか。
+なお、function()やアロー関数でも両方即時関数として記述できます。
+記述方法 記述方法は関数を丸カッコで囲います。この囲い方に特徴があって、「関数を宣言しつつ、実行するようなコード」を記述しています。
+((hoge)=&gt;{console.log(hoge)})(&#39;hoge&#39;);  なにやらカッコがいっぱいあってややこしいですが、分解して考えれば問題ありません。
+(hoge)=&gt;{console.log(hoge)}  まず、この部分はアロー関数の宣言部分。これは「関数の宣言」部分として解釈できます。名前のない関数、つまり匿名関数を宣言しています。とりあえず、これ以降はこの部分を「F」として表記を簡略化してみましょう。すると残った部分はどうなるか、という話ですが。
+(F)(&#39;hoge&#39;);  こうなります。
+「F」で置き換えた部分と&#39;hoge&#39;という文字列が、それぞれ丸カッコで囲われています。このうち、&#39;hoge&#39;を囲っている部分は関数に渡す引数を記述しています。関数Fは引数を指定する必要がある関数なのでこのような記述になりますが、引数を必要としない関数に対しても丸カッコは省略できません。
+ところで、関数は引数の有無こそあれ、実行のためのトリガーがなにかしら必要になります。宣言と実行を別に記述するような、普段の実装の場合はどう記述しているかを考えてみると、宣言した関数がXXXという名前である場合はXXX()というように記述して実行します。これが引数を必要とする関数である場合は、XXX(foo, bar, baz)というように記述し実行します。つまり、この()の部分が関数の実行の直接のトリガーになる、と考えられるわけです。ということは、このトリガーを匿名関数でも使えばいいわけです。
+そんなわけで、さきほど記述した匿名関数のFに対しても同様に記述してみます。
+F(&#39;hoge&#39;);  ただし、上記のような書き方では残念ながらエラーになる。これはJSの言語仕様で、冒頭にいきなりfunction()が来る関数や丸カッコの左側になにもないアロー関数、つまり匿名関数をそれ単体では書けないからです。ただ、逆に言えば冒頭に書かなければいいのであって、なにかしらの文字を冒頭に書いてやればいい、ということになります。
+&#43;function(){console.log(&#39;test&#39;)}()  というわけで書いたのがこれ。
+冒頭に演算子の&#43;を書くという、ある意味非常識極まりない記述方法ですがこれはJSだと実行可能です。これは、-とかでもいいし!でもいいです。ただし、この書き方はアロー関数では使えませんので念のため。ただ、function()の即時関数でも上記のような書き方をすることはほとんどありません。理由は、&#43;のような演算子を記述することがバグの遠因となるかもしれないから。よって、大抵は算術の優先度を決める丸カッコを利用します。
+(function(){console.log(&#39;test&#39;)})(); (function(){console.log(&#39;test&#39;)}()); // この書き方でも大丈夫  つまりこうなります。この記述方法を匿名のアロー関数に適用したのが、最初の例です。
+まとめ  匿名関数単体では記述できないから冒頭になにかしら書いておきたい。 演算子とかだとなんか怖いから丸カッコで囲うことにしよう。 関数実行の「トリガー」となる丸カッコをつけよう。  これらの結果が即時関数の書き方なわけです。考え方がわかれば、ぱっと見よくわからない文法もなんとか納得できます。
+それにしても、JSはホントに複雑怪奇だわ・・・。
+参考 IIFE（即時実行関数式）
+即時関数の使い方と構造について" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/note-for-immediately-invoked-function-expression/" /><meta property="article:published_time" content="2020-08-08T13:47:08&#43;09:00"/>
+<meta property="article:modified_time" content="2020-08-08T13:47:08&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JavaScriptの即時関数についてメモ"/>
+<meta name="twitter:description" content="概要 プログラミング言語における関数は、一度どこかで宣言をしてから別の所でその関数を呼び出すことにより実行できます。ただ、JSに関しては宣言と同時に実行が可能な即時関数という機能があります。
+一度しか利用しないような処理を即時関数としてまとめておく、とにかく冒頭で実行させたい処理がある・・・というケースに使うかな。あとは、サンプル的に実行するのでわざわざ呼び出しすら記述したくない、とか。
+なお、function()やアロー関数でも両方即時関数として記述できます。
+記述方法 記述方法は関数を丸カッコで囲います。この囲い方に特徴があって、「関数を宣言しつつ、実行するようなコード」を記述しています。
+((hoge)=&gt;{console.log(hoge)})(&#39;hoge&#39;);  なにやらカッコがいっぱいあってややこしいですが、分解して考えれば問題ありません。
+(hoge)=&gt;{console.log(hoge)}  まず、この部分はアロー関数の宣言部分。これは「関数の宣言」部分として解釈できます。名前のない関数、つまり匿名関数を宣言しています。とりあえず、これ以降はこの部分を「F」として表記を簡略化してみましょう。すると残った部分はどうなるか、という話ですが。
+(F)(&#39;hoge&#39;);  こうなります。
+「F」で置き換えた部分と&#39;hoge&#39;という文字列が、それぞれ丸カッコで囲われています。このうち、&#39;hoge&#39;を囲っている部分は関数に渡す引数を記述しています。関数Fは引数を指定する必要がある関数なのでこのような記述になりますが、引数を必要としない関数に対しても丸カッコは省略できません。
+ところで、関数は引数の有無こそあれ、実行のためのトリガーがなにかしら必要になります。宣言と実行を別に記述するような、普段の実装の場合はどう記述しているかを考えてみると、宣言した関数がXXXという名前である場合はXXX()というように記述して実行します。これが引数を必要とする関数である場合は、XXX(foo, bar, baz)というように記述し実行します。つまり、この()の部分が関数の実行の直接のトリガーになる、と考えられるわけです。ということは、このトリガーを匿名関数でも使えばいいわけです。
+そんなわけで、さきほど記述した匿名関数のFに対しても同様に記述してみます。
+F(&#39;hoge&#39;);  ただし、上記のような書き方では残念ながらエラーになる。これはJSの言語仕様で、冒頭にいきなりfunction()が来る関数や丸カッコの左側になにもないアロー関数、つまり匿名関数をそれ単体では書けないからです。ただ、逆に言えば冒頭に書かなければいいのであって、なにかしらの文字を冒頭に書いてやればいい、ということになります。
+&#43;function(){console.log(&#39;test&#39;)}()  というわけで書いたのがこれ。
+冒頭に演算子の&#43;を書くという、ある意味非常識極まりない記述方法ですがこれはJSだと実行可能です。これは、-とかでもいいし!でもいいです。ただし、この書き方はアロー関数では使えませんので念のため。ただ、function()の即時関数でも上記のような書き方をすることはほとんどありません。理由は、&#43;のような演算子を記述することがバグの遠因となるかもしれないから。よって、大抵は算術の優先度を決める丸カッコを利用します。
+(function(){console.log(&#39;test&#39;)})(); (function(){console.log(&#39;test&#39;)}()); // この書き方でも大丈夫  つまりこうなります。この記述方法を匿名のアロー関数に適用したのが、最初の例です。
+まとめ  匿名関数単体では記述できないから冒頭になにかしら書いておきたい。 演算子とかだとなんか怖いから丸カッコで囲うことにしよう。 関数実行の「トリガー」となる丸カッコをつけよう。  これらの結果が即時関数の書き方なわけです。考え方がわかれば、ぱっと見よくわからない文法もなんとか納得できます。
+それにしても、JSはホントに複雑怪奇だわ・・・。
+参考 IIFE（即時実行関数式）
+即時関数の使い方と構造について"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">JavaScriptの即時関数についてメモ</h1>
+			<div class="meta">Posted at &mdash; Aug 8, 2020</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>プログラミング言語における関数は、一度どこかで宣言をしてから別の所でその関数を呼び出すことにより実行できます。ただ、JSに関しては宣言と同時に実行が可能な<strong>即時関数</strong>という機能があります。</p>
+
+<p>一度しか利用しないような処理を即時関数としてまとめておく、とにかく冒頭で実行させたい処理がある・・・というケースに使うかな。あとは、サンプル的に実行するのでわざわざ呼び出しすら記述したくない、とか。</p>
+
+<p>なお、<code>function()</code>やアロー関数でも両方即時関数として記述できます。</p>
+
+<h2 id="記述方法">記述方法</h2>
+
+<p>記述方法は関数を丸カッコで囲います。この囲い方に特徴があって、「関数を宣言しつつ、実行するようなコード」を記述しています。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">((hoge)=&gt;{console.log(hoge)})(<span style="color:#a31515">&#39;hoge&#39;</span>);
+</code></pre></div>
+<p>なにやらカッコがいっぱいあってややこしいですが、分解して考えれば問題ありません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">(hoge)=&gt;{console.log(hoge)}
+</code></pre></div>
+<p>まず、この部分はアロー関数の宣言部分。これは「関数の宣言」部分として解釈できます。名前のない関数、つまり匿名関数を宣言しています。とりあえず、これ以降はこの部分を「F」として表記を簡略化してみましょう。すると残った部分はどうなるか、という話ですが。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">(F)(<span style="color:#a31515">&#39;hoge&#39;</span>);
+</code></pre></div>
+<p>こうなります。</p>
+
+<p>「F」で置き換えた部分と<code>'hoge'</code>という文字列が、それぞれ丸カッコで囲われています。このうち、<code>'hoge'</code>を囲っている部分は関数に渡す引数を記述しています。関数Fは引数を指定する必要がある関数なのでこのような記述になりますが、引数を必要としない関数に対しても丸カッコは省略できません。</p>
+
+<p>ところで、関数は引数の有無こそあれ、実行のためのトリガーがなにかしら必要になります。宣言と実行を別に記述するような、普段の実装の場合はどう記述しているかを考えてみると、宣言した関数が<code>XXX</code>という名前である場合は<code>XXX()</code>というように記述して実行します。これが引数を必要とする関数である場合は、<code>XXX(foo, bar, baz)</code>というように記述し実行します。つまり、この<code>()</code>の部分が関数の実行の直接のトリガーになる、と考えられるわけです。ということは、このトリガーを匿名関数でも使えばいいわけです。</p>
+
+<p>そんなわけで、さきほど記述した匿名関数の<code>F</code>に対しても同様に記述してみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">F(<span style="color:#a31515">&#39;hoge&#39;</span>);
+</code></pre></div>
+<p>ただし、上記のような書き方では残念ながらエラーになる。これはJSの言語仕様で、冒頭にいきなり<code>function()</code>が来る関数や丸カッコの左側になにもないアロー関数、つまり匿名関数をそれ単体では書けないからです。ただ、逆に言えば<strong>冒頭に書かなければいい</strong>のであって、なにかしらの文字を冒頭に書いてやればいい、ということになります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">+<span style="color:#00f">function</span>(){console.log(<span style="color:#a31515">&#39;test&#39;</span>)}()
+</code></pre></div>
+<p>というわけで書いたのがこれ。</p>
+
+<p>冒頭に演算子の<code>+</code>を書くという、ある意味非常識極まりない記述方法ですがこれはJSだと<strong>実行可能</strong>です。これは、<code>-</code>とかでもいいし<code>!</code>でもいいです。ただし、この書き方はアロー関数では使えませんので念のため。ただ、<code>function()</code>の即時関数でも上記のような書き方をすることはほとんどありません。理由は、<code>+</code>のような演算子を記述することがバグの遠因となるかもしれないから。よって、大抵は<strong>算術の優先度を決める丸カッコを利用します</strong>。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">(<span style="color:#00f">function</span>(){console.log(<span style="color:#a31515">&#39;test&#39;</span>)})();
+(<span style="color:#00f">function</span>(){console.log(<span style="color:#a31515">&#39;test&#39;</span>)}()); <span style="color:#008000">// この書き方でも大丈夫
+</span><span style="color:#008000"></span></code></pre></div>
+<p>つまりこうなります。この記述方法を匿名のアロー関数に適用したのが、最初の例です。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<ul>
+<li>匿名関数単体では記述できないから冒頭になにかしら書いておきたい。</li>
+<li>演算子とかだとなんか怖いから丸カッコで囲うことにしよう。</li>
+<li>関数実行の「トリガー」となる丸カッコをつけよう。</li>
+</ul>
+
+<p>これらの結果が即時関数の書き方なわけです。考え方がわかれば、ぱっと見よくわからない文法もなんとか納得できます。</p>
+
+<p>それにしても、JSはホントに複雑怪奇だわ・・・。</p>
+
+<h2 id="参考">参考</h2>
+
+<p><a href="https://developer.mozilla.org/ja/docs/Glossary/IIFE">IIFE（即時実行関数式）</a></p>
+
+<p><a href="https://wp-p.info/tpl_rep.php?cat=js-intermediate&amp;fl=r11">即時関数の使い方と構造について</a></p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
