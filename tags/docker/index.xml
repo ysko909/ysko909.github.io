@@ -7,10 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Fri, 07 Aug 2020 15:12:54 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 19 Aug 2020 20:40:06 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Debian busterベースのPython用コンテナでvscodeとpyodbcを使ってSQL Serverにアクセスにする</title>
+      <link>https://ysko909.github.io/posts/access-to-sql-server-with-pyodbc-and-docker/</link>
+      <pubDate>Wed, 19 Aug 2020 20:40:06 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/access-to-sql-server-with-pyodbc-and-docker/</guid>
+      <description>はじめに 今回はDockerコンテナ上で、pyodbcを使ってSQL Serverにアクセス可能な環境を構築します。また、Pythonコードを記述するのにVisual Studio Code（以下、vscode）の拡張機能であるRemoteを利用して、Dockerコンテナに対しリモートでのソース編集と実行を行います。この環境を構築するには、下記のように各種ドライバーなどが必要になります。
+ pyodbcを使うためにodbcドライバーが必要 相手（アクセス先）がSQL Serverなので、SQL Server用のドライバーが必要 pyodbcがsql.hに依存しているため、unixodbc-devのインストールが必要 vscodeで編集するためPythonなどの拡張機能が必要  これらの要求をすべて満たすような、Dockerfileやvscodeの設定ファイルなどを用意します。
+フォルダ構成 │ Dockerfile │ requirements.txt │ ├─.devcontainer │ devcontainer.json │ ├─.vscode │ extensions.json │ settings.json │ └─src main.py 冒頭にピリオドのついたフォルダは、vscode用の設定フォルダですのでフォルダ名は固定です。「src」は、実行するPythonのソースコードを格納するだけなので、名前は何でもいいです。もちろん、中身のPythonファイルも名前は任意です。
+Dockerfile なにはともあれ、Dockerコンテナを生成しないことには始まりません。
+ファイルの内容 ここでは「python:3.8-buster」を利用しています。PythonとDebianのバージョンは、動作させたいアプリケーションの要求する環境に合わせて変更します。ここでは特段のこだわりがないので適当です。
+FROMpython:3.8-busterENVACCEPT_EULA=YRUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -RUN curl https://packages.microsoft.com/config/debian/10/prod.list &amp;gt; /etc/apt/sources.list.d/mssql-release.listRUN apt-get update \  &amp;amp;&amp;amp; apt-get install -y g++ \  apt-utils \  apt-transport-https \  gcc \  build-essential \  unixodbc \  unixodbc-dev \  msodbcsql17 \  mssql-tools \  &amp;amp;&amp;amp; apt-get upgrade -y \  &amp;amp;&amp;amp; apt-get clean \  &amp;amp;&amp;amp; sed -i -E &amp;#39;s/(CipherString\s*=\s*DEFAULT@SECLEVEL=)2/\11/&amp;#39; /etc/ssl/openssl.</description>
+    </item>
     
     <item>
       <title>DockerのDebian環境に日本語フォントをインストールする</title>

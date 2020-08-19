@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Debian busterベースのPython用コンテナでvscodeとpyodbcを使ってSQL Serverにアクセスにする - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Debian busterベースのPython用コンテナでvscodeとpyodbcを使ってSQL Serverにアクセスにする" />
+<meta property="og:description" content="はじめに 今回はDockerコンテナ上で、pyodbcを使ってSQL Serverにアクセス可能な環境を構築します。また、Pythonコードを記述するのにVisual Studio Code（以下、vscode）の拡張機能であるRemoteを利用して、Dockerコンテナに対しリモートでのソース編集と実行を行います。この環境を構築するには、下記のように各種ドライバーなどが必要になります。
+ pyodbcを使うためにodbcドライバーが必要 相手（アクセス先）がSQL Serverなので、SQL Server用のドライバーが必要 pyodbcがsql.hに依存しているため、unixodbc-devのインストールが必要 vscodeで編集するためPythonなどの拡張機能が必要  これらの要求をすべて満たすような、Dockerfileやvscodeの設定ファイルなどを用意します。
+フォルダ構成 │ Dockerfile │ requirements.txt │ ├─.devcontainer │ devcontainer.json │ ├─.vscode │ extensions.json │ settings.json │ └─src main.py 冒頭にピリオドのついたフォルダは、vscode用の設定フォルダですのでフォルダ名は固定です。「src」は、実行するPythonのソースコードを格納するだけなので、名前は何でもいいです。もちろん、中身のPythonファイルも名前は任意です。
+Dockerfile なにはともあれ、Dockerコンテナを生成しないことには始まりません。
+ファイルの内容 ここでは「python:3.8-buster」を利用しています。PythonとDebianのバージョンは、動作させたいアプリケーションの要求する環境に合わせて変更します。ここでは特段のこだわりがないので適当です。
+FROMpython:3.8-busterENVACCEPT_EULA=YRUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -RUN curl https://packages.microsoft.com/config/debian/10/prod.list &gt; /etc/apt/sources.list.d/mssql-release.listRUN apt-get update \  &amp;&amp; apt-get install -y g&#43;&#43; \  apt-utils \  apt-transport-https \  gcc \  build-essential \  unixodbc \  unixodbc-dev \  msodbcsql17 \  mssql-tools \  &amp;&amp; apt-get upgrade -y \  &amp;&amp; apt-get clean \  &amp;&amp; sed -i -E &#39;s/(CipherString\s*=\s*DEFAULT@SECLEVEL=)2/\11/&#39; /etc/ssl/openssl." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/access-to-sql-server-with-pyodbc-and-docker/" /><meta property="article:published_time" content="2020-08-19T20:40:06&#43;09:00"/>
+<meta property="article:modified_time" content="2020-08-19T20:40:06&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Debian busterベースのPython用コンテナでvscodeとpyodbcを使ってSQL Serverにアクセスにする"/>
+<meta name="twitter:description" content="はじめに 今回はDockerコンテナ上で、pyodbcを使ってSQL Serverにアクセス可能な環境を構築します。また、Pythonコードを記述するのにVisual Studio Code（以下、vscode）の拡張機能であるRemoteを利用して、Dockerコンテナに対しリモートでのソース編集と実行を行います。この環境を構築するには、下記のように各種ドライバーなどが必要になります。
+ pyodbcを使うためにodbcドライバーが必要 相手（アクセス先）がSQL Serverなので、SQL Server用のドライバーが必要 pyodbcがsql.hに依存しているため、unixodbc-devのインストールが必要 vscodeで編集するためPythonなどの拡張機能が必要  これらの要求をすべて満たすような、Dockerfileやvscodeの設定ファイルなどを用意します。
+フォルダ構成 │ Dockerfile │ requirements.txt │ ├─.devcontainer │ devcontainer.json │ ├─.vscode │ extensions.json │ settings.json │ └─src main.py 冒頭にピリオドのついたフォルダは、vscode用の設定フォルダですのでフォルダ名は固定です。「src」は、実行するPythonのソースコードを格納するだけなので、名前は何でもいいです。もちろん、中身のPythonファイルも名前は任意です。
+Dockerfile なにはともあれ、Dockerコンテナを生成しないことには始まりません。
+ファイルの内容 ここでは「python:3.8-buster」を利用しています。PythonとDebianのバージョンは、動作させたいアプリケーションの要求する環境に合わせて変更します。ここでは特段のこだわりがないので適当です。
+FROMpython:3.8-busterENVACCEPT_EULA=YRUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -RUN curl https://packages.microsoft.com/config/debian/10/prod.list &gt; /etc/apt/sources.list.d/mssql-release.listRUN apt-get update \  &amp;&amp; apt-get install -y g&#43;&#43; \  apt-utils \  apt-transport-https \  gcc \  build-essential \  unixodbc \  unixodbc-dev \  msodbcsql17 \  mssql-tools \  &amp;&amp; apt-get upgrade -y \  &amp;&amp; apt-get clean \  &amp;&amp; sed -i -E &#39;s/(CipherString\s*=\s*DEFAULT@SECLEVEL=)2/\11/&#39; /etc/ssl/openssl."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Debian busterベースのPython用コンテナでvscodeとpyodbcを使ってSQL Serverにアクセスにする</h1>
+			<div class="meta">Posted at &mdash; Aug 19, 2020</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>今回はDockerコンテナ上で、pyodbcを使ってSQL Serverにアクセス可能な環境を構築します。また、Pythonコードを記述するのにVisual Studio Code（以下、vscode）の拡張機能であるRemoteを利用して、Dockerコンテナに対しリモートでのソース編集と実行を行います。この環境を構築するには、下記のように各種ドライバーなどが必要になります。</p>
+
+<ul>
+<li>pyodbcを使うためにodbcドライバーが必要</li>
+<li>相手（アクセス先）がSQL Serverなので、SQL Server用のドライバーが必要</li>
+<li>pyodbcが<code>sql.h</code>に依存しているため、unixodbc-devのインストールが必要</li>
+<li>vscodeで編集するためPythonなどの拡張機能が必要</li>
+</ul>
+
+<p>これらの要求をすべて満たすような、Dockerfileやvscodeの設定ファイルなどを用意します。</p>
+
+<h2 id="フォルダ構成">フォルダ構成</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">│  Dockerfile
+│  requirements.txt
+│
+├─.devcontainer
+│      devcontainer.json
+│
+├─.vscode
+│      extensions.json
+│      settings.json
+│
+└─src
+        main.py</code></pre></div>
+<p>冒頭にピリオドのついたフォルダは、vscode用の設定フォルダですのでフォルダ名は固定です。「src」は、実行するPythonのソースコードを格納するだけなので、名前は何でもいいです。もちろん、中身のPythonファイルも名前は任意です。</p>
+
+<h2 id="dockerfile">Dockerfile</h2>
+
+<p>なにはともあれ、Dockerコンテナを生成しないことには始まりません。</p>
+
+<h3 id="ファイルの内容">ファイルの内容</h3>
+
+<p>ここでは「python:3.8-buster」を利用しています。PythonとDebianのバージョンは、動作させたいアプリケーションの要求する環境に合わせて変更します。ここでは特段のこだわりがないので適当です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#00f">FROM</span><span style="color:#a31515"> python:3.8-buster</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">ENV</span><span style="color:#a31515"> ACCEPT_EULA=Y</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -<span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> curl https://packages.microsoft.com/config/debian/10/prod.list &gt; /etc/apt/sources.list.d/mssql-release.list<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> apt-get update <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; apt-get install -y g++ <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    apt-utils <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    apt-transport-https <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    gcc <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    build-essential <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    unixodbc <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    unixodbc-dev <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    msodbcsql17 <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    mssql-tools <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; apt-get upgrade -y <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; apt-get clean <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; sed -i -E <span style="color:#a31515">&#39;s/(CipherString\s*=\s*DEFAULT@SECLEVEL=)2/\11/&#39;</span> /etc/ssl/openssl.cnf <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; pip install --upgrade pip <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; pip install --no-cache-dir <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    autopep8 <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    flake8 <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; rm -rf /var/lib/apt/lists/*<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> echo <span style="color:#a31515">&#39;export PATH=&#34;$PATH:/opt/mssql-tools/bin&#34;&#39;</span> &gt;&gt; ~/.bashrc<span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> /bin/bash -c <span style="color:#a31515">&#34;source ~/.bashrc&#34;</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">ADD</span><span style="color:#a31515"> . /home/workdir</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">WORKDIR</span><span style="color:#a31515"> /home/workdir</span><span style="">
+</span><span style="">
+</span><span style=""></span>COPY ./requirements.txt <span style="color:#a31515">${</span>PWD<span style="color:#a31515">}</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> pip install -r requirements.txt<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">WORKDIR</span><span style="color:#a31515"> /home/workdir/src</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">EXPOSE</span><span style="color:#a31515"> 8888</span></code></pre></div>
+<p>コンテナのビルドは、vscodeのRemoteを利用します。Remoteを利用したコンテナのビルドとアクセス方法は<a href="/posts/connect-to-docker-with-vscode-extension/">こちら</a>です。</p>
+
+<h3 id="必要なパッケージなど">必要なパッケージなど</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+RUN curl https://packages.microsoft.com/config/debian/10/prod.list &gt; /etc/apt/sources.list.d/mssql-release.list</code></pre></div>
+<p>この2行はSQL Serverへのアクセスに必要なパッケージを準備します。2行目の<code>debian/10/</code>の数字部分は、採用したDebianのバージョンで変わります。今回はBusterを選択しているので10ですが、stretchなどを選択した場合は9になります。</p>
+
+<ul>
+<li>unixodbc</li>
+<li>unixodbc-dev</li>
+</ul>
+
+<p>これはpyodbcを実行するのに必要です。これがないと「<code>sql.h</code>が見つからないよ！」とエラーになります。</p>
+
+<ul>
+<li>msodbcsql17</li>
+<li>mssql-tools</li>
+</ul>
+
+<p>こっちはSQL Serverへアクセスするために必要。先ほどのMicrosoftへアクセスする<code>curl</code>は、これらのパッケージを利用するのに必要な場合なデータを、マイクロソフトのサーバーから取得しているわけです。</p>
+
+<h3 id="プロキシ情報について">プロキシ情報について</h3>
+
+<p>会社や学校内などからアクセスする場合、プロキシ情報をDockerコンテナのビルド時に付与する必要があります。あるいはDockerfile内に<code>ENV</code>として直接記述します。</p>
+
+<h3 id="opensslの設定ファイル書き換えについて">OpenSSLの設定ファイル書き換えについて</h3>
+
+<p><code>apt-get</code>と同時に<code>sed</code>で<code>openssl.cnf</code>を書き換えています。これは、デフォルトで設定されたセキュリティレベルを2から1に変更しているからです。</p>
+
+<p>Debianはbusterからセキュリティの要件が変更になり、OpenSSLのセキュリティレベルがデフォルトでは「2」に設定されています。ところが、デフォルトの設定だと<code>sqlcmd</code>などでSQL Serverへアクセスした際に下記のエラーを出力します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">Sqlcmd: Error: Microsoft ODBC Driver 17 for SQL Server : TCP Provider: Error code 0x2746.
+Sqlcmd: Error: Microsoft ODBC Driver 17 for SQL Server : Client unable to establish connection.</code></pre></div>
+<p>このエラーを回避するために、セキュリティレベルを従来の「1」に書き換えています。なお、この操作が必要になるのはデフォルトの値が変わったbuster以降の話なので、stretch以前ではこの書き換えは必要ないはず。</p>
+
+<p>このように、Dockerfile内に書き換えを行うコマンドを記述しておくことで、ビルド後にbash経由などで書き換える必要がなくなります。また、このDockerfileだけを持ってコンテナをビルドすればいいので、別のプラットフォームで環境構築する際に余計な手間がかかりません。</p>
+
+<h2 id="vscodeの設定ファイル">vscodeの設定ファイル</h2>
+
+<p>以下の2ファイルは、「.vscode」というフォルダを作成して格納する。内容は利用する拡張機能と、vscodeの設定です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt:extensions.json" data-lang="txt:extensions.json">{
+    &#34;recommendations&#34;: [
+        <span style="color:#a31515">&#34;ms-vscode-remote.remote-containers&#34;</span>
+    ]
+}</code></pre></div>
+<p>拡張機能ではリモートでコンテナ内のPythonソースを編集するので、Remoteが必須です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt:setting.json" data-lang="txt:setting.json">{
+    &#34;python.pythonPath&#34;: <span style="color:#a31515">&#34;/usr/local/bin/python&#34;</span>,
+    &#34;python.languageServer&#34;: <span style="color:#a31515">&#34;Jedi&#34;</span>
+}</code></pre></div>
+<p>本来、Language ServerはデフォルトがJediなので変更する必要はないと思うのですが、どうもPythonの拡張機能をインストールするとLanguage ServerがMicrosoftに変更されるっぽいです。ちょっと確証がないのですけど。なので、明示的に設定をデフォルトのJediに戻しています。Language ServerをMicrosoftで利用する場合は、この設定は削除してしまって問題ありません。</p>
+
+<h2 id="vscodeの拡張機能設定用ファイル">vscodeの拡張機能設定用ファイル</h2>
+
+<p>以下のファイルは、「.devcontainer」という名前のフォルダを作成して格納します。内容は拡張機能のPythonにおける設定や、flake8のLint設定などです。各設定の詳細は割愛します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt:devcontainer.json" data-lang="txt:devcontainer.json">{
+    &#34;name&#34;: <span style="color:#a31515">&#34;work python project&#34;</span>,
+    &#34;dockerFile&#34;: <span style="color:#a31515">&#34;../Dockerfile&#34;</span>,
+    &#34;settings&#34;: {
+        &#34;terminal.integrated.shell.linux&#34;: <span style="color:#a31515">&#34;/bin/bash&#34;</span>,
+        &#34;python.pythonPath&#34;: <span style="color:#a31515">&#34;/usr/local/bin/python&#34;</span>,
+        &#34;python.linting.pylintEnabled&#34;: <span style="color:#00f">false</span>,
+        &#34;python.linting.flake8Enabled&#34;: <span style="color:#00f">true</span>,
+        &#34;python.linting.flake8Args&#34;: [
+            <span style="color:#a31515">&#34;--ignore=E402,E501&#34;</span>
+        ],
+        &#34;python.formatting.provider&#34;: <span style="color:#a31515">&#34;autopep8&#34;</span>,
+        &#34;python.formatting.autopep8Args&#34;: [
+            <span style="color:#a31515">&#34;--ignore&#34;</span>,
+            <span style="color:#a31515">&#34;E402,E501&#34;</span>
+        ],
+        &#34;[python]&#34;: {
+            &#34;editor.formatOnSave&#34;: <span style="color:#00f">true</span>
+        }
+    },
+    &#34;extensions&#34;: [
+        <span style="color:#a31515">&#34;ms-python.python&#34;</span>
+    ],
+}</code></pre></div>
+<h2 id="導入するpythonライブラリについて">導入するPythonライブラリについて</h2>
+
+<p>今回は<code>pip</code>を用いてインストールするPythonのライブラリについて、Dockerfile上では記述しないで、requirements.txtに記述しています。内容は下記の通り。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">numpy
+pandas
+matplotlib
+seaborn
+tqdm
+scikit-learn
+pyodbc
+requests
+jupyter</code></pre></div>
+<p>現状では指定していないものの、各ライブラリについてインストールする対象のバージョンを指定できるので、依存関係上必要な場合はバージョンを都度指定します。</p>
+
+<p>また基準となる環境がすでにある場合は、その環境で<code>pip freeze &gt; requirements.txt</code>と実行すれば簡単にバージョン指定まで含んだrequirements.txtが用意できます。</p>
+
+<h2 id="コンテナのビルド">コンテナのビルド</h2>
+
+<p>コンテナのビルドは<code>docker</code>コマンドで実行してもいいですが、ここではvscodeのRemoteを用いてビルドします。vscodeのRemoteを利用したコンテナのビルドとアクセス方法は<a href="/posts/connect-to-docker-with-vscode-extension/">こちら</a>です。</p>
+
+<h2 id="実行">実行</h2>
+
+<p>コンテナのビルドが終わったら、vscodeで<code>main.py</code>を編集します。事前にコードを書いてもいいですが、せっかくなのでvscodeでコンテナビルドをやってリモートで書いてみました。</p>
+
+<p>Pythonコードの実行はF5キーでの実行でもいいですし、コンテナのbashなどで<code>python main.py</code>と入力して実行しても問題ありません。どちらでも動作するはずです。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>実を言うと、このDockerfileの作成が結構難産でした。というのもあまりドキュメントがないことと、必要なライブラリやパッケージなどが多数存在したためです。「XXXを実行するにはYYYが必要で、YYYをインストールするにはZZZが必要」みたいな感じで、実行してみてコケてはググって・・・という、トライアンドエラーの繰り返しでした。果てはコンテナのビルドが成功したので、喜び勇んでpyodbcを実行してみたらエラーを吐いて異常終了・・・なんて状態だったので、我ながらよく心折れなかったなぁと思います。とりあえず二度とやりたくないｗ</p>
+
+<p>なにはともあれ、これでSQL Serverにアクセスできつつ、リモートでコーディング可能な環境が揃いました。上記では言及していませんが、Jupyter notebookの実行も可能です。vscodeでnotebookを書いてもいいし、ブラウザからコンテナにアクセスすれば普段どおりブラウザで編集できます。</p>
+
+<p>新しく環境を用意する場合は、このファイル一式をまるっとコピペしてコンテナをビルドするだけで再現します。</p>
+
+<p>本当に、Dockerとvscodeの組み合わせって便利ですよね。まぁ、<strong>その環境構築が割りと大変なんだけどね！</strong></p>
+
+<h2 id="参考">参考</h2>
+
+<p><a href="https://docs.microsoft.com/ja-jp/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver15">Microsoft ODBC Driver for SQL Server をインストールする</a></p>
+
+<p><a href="https://qiita.com/miraijin/items/0c7bfbd70234967e87bd">Docker内からホストのSQL Serverへアクセスする</a></p>
+
+<p><a href="https://stackoverflow.com/questions/57265913/error-tcp-provider-error-code-0x2746-during-the-sql-setup-in-linux-through-te">Error: TCP Provider: Error code 0x2746. During the Sql setup in linux through terminal</a></p>
+
+<p><a href="https://github.com/microsoft/msphpsql/issues/1021">Can&rsquo;t connect to Sqlserver with Openssl 1.1.1c (Error code 0x2746)</a></p>
+
+<p><a href="https://qiita.com/0MeO/items/1fc3995e568d2c95569e">【venv不要】Remote Containersで作る最強のPython開発環境【VSCode/Docker】</a></p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
