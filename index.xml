@@ -7,10 +7,30 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Wed, 19 Aug 2020 20:40:06 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 12 Sep 2020 05:41:57 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>処理中にDockerコンテナへの接続が切断される場合はリソース設定を疑う</title>
+      <link>https://ysko909.github.io/posts/check-docker-config-when-disconnect-from-container/</link>
+      <pubDate>Sat, 12 Sep 2020 05:41:57 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/check-docker-config-when-disconnect-from-container/</guid>
+      <description>概要 Kerasを使ったモデルのSHAPによる寄与度の評価を実行しようとしたところ、コンテナとの接続が無言で切れる現象が頻発しました。Visual Studio Code(以下、vscode）のRemoteからも、コマンドプロンプトからもコンテナにアクセスできなくなり、Dockerのリスタートorシステムリブートを余儀なくされるほど無反応。
+今回はこの事象の回避策について。
+環境  Windows 10 1909 Docker 2.3.0.3  現象 vscodeでPythonスクリプトの処理だったりJupyter notebookの実行だったりと、必ず何かの処理中に突然切断されるのが特徴。また、しばらく再接続ができないなど、コンテナに対するアクションも実行不能になりました。
+じゃあ、vscodeを使わなければいいのか、という話なのですがそんなこともなく、ターミナルから直接ファイルを指定して実行してもレスポンスが途切れた後、コンテナから切断されてしまいました。
+「特定の処理時に必ず切断される」というわけではなく、比較的軽めな処理は問題なく実行できます。逆に言えば、いつ切断されるのかが読めないということでもあります。
+その他の特徴としては、切断直後はディスクの使用率がガンッと跳ね上がって、しばらく100%近くに張り付きます。放置していると、徐々に使用率が下がっていきます。ディスクの使用率が下がったころ、再度コンテナにアクセスしてみると接続が可能になりました。
+・・・リソース不足じゃない？
+ログ # python bar.py 2020-09-08 04:19:54.095345: I tensorflow/core/platform/profile_utils/cpu_utils.cc:104] CPU Frequency: 1992000000 Hz （いろいろ中略） 2020-09-08 04:19:57.169352: W tensorflow/core/framework/cpu_allocator_impl.cc:81] Allocation of 642252800 exceeds 10% of free system memory. 2020-09-08 04:20:00.732041: W tensorflow/core/framework/cpu_allocator_impl.cc:81] Allocation of 160563200 exceeds 10% of free system memory. Killed #  Pythonの実行ログを見てみると、プロセスがkillされてる・・・なんか、「それ」っぽいな・・・。
+原因と対処法 原因はDockerのデフォルト設定が、リソースを遠慮がちに設定してる（CPUは1コア、メモリは2GB・・・など）せいで、ちょっと重い処理（shapの寄与度計算とかな！）をすると、スワップ領域まで喰いつくしてしまい、プロセスがコンテナ内部のカーネルによりkillされてしまうようです。
+リソース設定を贅沢に使うよう設定変更してやると、killされなくなりコンテナとの切断も起こらなくなりました。
+備考 ただし、当たり前だけどリソースをDockerに割り振る分は、他のアプリケーションが割を食うので注意。余力がある分を、Dockerに割り振るといいかと思います。
+ちなみに、あんまりこういうケースをネットで見かけなかったのですが、みんなDockerには最初から贅沢なリソースを設定してるの・・・？</description>
+    </item>
     
     <item>
       <title>Debian busterベースのPython用コンテナでvscodeとpyodbcを使ってSQL Serverにアクセスにする</title>
