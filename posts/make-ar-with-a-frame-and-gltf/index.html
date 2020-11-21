@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>ペルソナ玲音を召喚するARをA-Frameで作る - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="ペルソナ玲音を召喚するARをA-Frameで作る" />
+<meta property="og:description" content="作ったもの ペルソナ玲音を召喚するARを、A-Frameを使って実装しました。今回はマーカーに依存しないマーカーレスなARで、任意の座標にペルソナ玲音の3Dモデルが「浮いている」ARを実装してみることにします。
+実装結果はこちら。Netlifyにデプロイしました。いやー、ファイルさえアップロードすればあとは勝手にやってくれるので楽ですね。
+マーカーベースなARじゃないです 前述しましたが、今回はマーカーレスなARです。
+マーカーベースなARは「3Dモデルを召喚する」手法としては王道ですが、ユーザーにURLを渡しただけでは動作しません。何らかの方法で、ユーザーにマーカーを準備させなければならないのが難点です。名刺とかにマーカーを印刷してURLと一緒に渡すなど、フィジカルなものを利用すれば手段がないわけではありません。とはいえ、ネット上でのみやり取りする際にはこの方法が使えないため、やっぱりマーカーの分どうしても手間は増えます。
+その点、マーカーレスなARはユーザーにURLさえ渡せばすぐ動作するのが最大のメリット。SNSなどにURLだけ掲載しておけば、あとはユーザーにブラウザ経由でアクセスさせるだけです。場合によっては、SNSアプリの内部ブラウザでは動作しないケースがありますが、そこはChromeやFirefoxでアクセスするよう誘導すれば問題ありません。JSによるwebARの実装である以上、現状では3DoFでしか実現できない（XYZ軸の回転のみ検出する）のが難点ですが、そこはアイデアで乗り切るしかありません。あとは、ブラウザとライブラリの進化に期待するしか・・・（他力本願
+ペルソナ玲音の3Dモデルについて ペルソナ玲音の3Dモデルは、MagicaVoxelとBlenderを利用し自作しました。モデルの形式ですが、今回はglTFを利用します。glTFだとモーションまで含んだ3Dモデルとして扱えるため、ただ3Dモデルが「そこにある」だけでなく「動く」ので、UXの観点から非常に有利です。
+3Dモデルの作り方は割愛しますが、簡単に紹介すると下記のような手順で動く3Dモデルを作成可能です。
+ MagicaVoxelでボクセルモデルを作成する。 objファイルとしてエクスポートする。 エクスポートしたファイル一式をZIPで圧縮する。 MixAmoにアクセスし好きなモーションを付与する。 MixAmoのメニューからFBX形式でダウンロードする。 Blenderで新規プロジェクトを作成し、ダウンロードしたFBXをインポートする。 3Dモデルのサイズや位置、角度などを必要に応じて調整する。 glTF形式でエクスポートする。  ちなみに、MixAmoからダウンロードする際は、FBX形式じゃなくてもBlenderにはインポートできると思いますが、とりあえずFBXを選択しておけば問題ないと思います。
+実際のコード 実際に記述したコードは下記のHTMLソースだけです。HTMLと3Dモデルだけ準備すればARが実装できるのは、本当にA-Frame様様ですね。
+&lt;html&gt; &lt;head&gt; &lt;script src=&#34;https://aframe.io/releases/1.0.4/aframe.min.js&#34;&gt;&lt;/script&gt; &lt;script src=&#34;https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js&#34;&gt;&lt;/script&gt; &lt;script src=&#34;https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js&#34;&gt;&lt;/script&gt; &lt;/head&gt; &lt;body&gt; &lt;a-scene embedded arjs=&#34;debugUIEnabled:false;&#34; renderer=&#34;gammaOutput: true;&#34; vr-mode-ui=&#34;enabled: false&#34;&gt; &lt;a-assets&gt; &lt;a-asset-item id=&#34;model&#34; src=&#34;persona_lain_blender.glb&#34;&gt;&lt;/a-asset-item&gt; &lt;/a-assets&gt; &lt;a-entity scale=&#34;100 100 100&#34; position=&#34;0 0.4 -3&#34; animation-mixer=&#34;clip:*&#34; gltf-model=&#34;#model&#34; visible=&#34;true&#34;&gt; &lt;/a-entity&gt; &lt;a-light type=&#34;ambient&#34; color=&#34;#ffffff&#34;&gt;&lt;/a-light&gt; &lt;a-light type=&#34;point&#34; intensity=&#34;2&#34; position=&#34;0 4 0&#34;&gt;&lt;/a-light&gt; &lt;/a-scene&gt; &lt;/body&gt; &lt;/html&gt; 本来、glTFやFBXをそのまま3DモデルとしてAR空間上に出現させる場合、A-Frame単体では実現できません。じゃあどうしているかというと、A-Frame extrasという、A-Frameの拡張機能を利用します。このアドオンを導入することで、glTFの実装が可能になります。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/make-ar-with-a-frame-and-gltf/" /><meta property="article:published_time" content="2020-11-21T10:31:39&#43;09:00"/>
+<meta property="article:modified_time" content="2020-11-21T10:31:39&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ペルソナ玲音を召喚するARをA-Frameで作る"/>
+<meta name="twitter:description" content="作ったもの ペルソナ玲音を召喚するARを、A-Frameを使って実装しました。今回はマーカーに依存しないマーカーレスなARで、任意の座標にペルソナ玲音の3Dモデルが「浮いている」ARを実装してみることにします。
+実装結果はこちら。Netlifyにデプロイしました。いやー、ファイルさえアップロードすればあとは勝手にやってくれるので楽ですね。
+マーカーベースなARじゃないです 前述しましたが、今回はマーカーレスなARです。
+マーカーベースなARは「3Dモデルを召喚する」手法としては王道ですが、ユーザーにURLを渡しただけでは動作しません。何らかの方法で、ユーザーにマーカーを準備させなければならないのが難点です。名刺とかにマーカーを印刷してURLと一緒に渡すなど、フィジカルなものを利用すれば手段がないわけではありません。とはいえ、ネット上でのみやり取りする際にはこの方法が使えないため、やっぱりマーカーの分どうしても手間は増えます。
+その点、マーカーレスなARはユーザーにURLさえ渡せばすぐ動作するのが最大のメリット。SNSなどにURLだけ掲載しておけば、あとはユーザーにブラウザ経由でアクセスさせるだけです。場合によっては、SNSアプリの内部ブラウザでは動作しないケースがありますが、そこはChromeやFirefoxでアクセスするよう誘導すれば問題ありません。JSによるwebARの実装である以上、現状では3DoFでしか実現できない（XYZ軸の回転のみ検出する）のが難点ですが、そこはアイデアで乗り切るしかありません。あとは、ブラウザとライブラリの進化に期待するしか・・・（他力本願
+ペルソナ玲音の3Dモデルについて ペルソナ玲音の3Dモデルは、MagicaVoxelとBlenderを利用し自作しました。モデルの形式ですが、今回はglTFを利用します。glTFだとモーションまで含んだ3Dモデルとして扱えるため、ただ3Dモデルが「そこにある」だけでなく「動く」ので、UXの観点から非常に有利です。
+3Dモデルの作り方は割愛しますが、簡単に紹介すると下記のような手順で動く3Dモデルを作成可能です。
+ MagicaVoxelでボクセルモデルを作成する。 objファイルとしてエクスポートする。 エクスポートしたファイル一式をZIPで圧縮する。 MixAmoにアクセスし好きなモーションを付与する。 MixAmoのメニューからFBX形式でダウンロードする。 Blenderで新規プロジェクトを作成し、ダウンロードしたFBXをインポートする。 3Dモデルのサイズや位置、角度などを必要に応じて調整する。 glTF形式でエクスポートする。  ちなみに、MixAmoからダウンロードする際は、FBX形式じゃなくてもBlenderにはインポートできると思いますが、とりあえずFBXを選択しておけば問題ないと思います。
+実際のコード 実際に記述したコードは下記のHTMLソースだけです。HTMLと3Dモデルだけ準備すればARが実装できるのは、本当にA-Frame様様ですね。
+&lt;html&gt; &lt;head&gt; &lt;script src=&#34;https://aframe.io/releases/1.0.4/aframe.min.js&#34;&gt;&lt;/script&gt; &lt;script src=&#34;https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js&#34;&gt;&lt;/script&gt; &lt;script src=&#34;https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js&#34;&gt;&lt;/script&gt; &lt;/head&gt; &lt;body&gt; &lt;a-scene embedded arjs=&#34;debugUIEnabled:false;&#34; renderer=&#34;gammaOutput: true;&#34; vr-mode-ui=&#34;enabled: false&#34;&gt; &lt;a-assets&gt; &lt;a-asset-item id=&#34;model&#34; src=&#34;persona_lain_blender.glb&#34;&gt;&lt;/a-asset-item&gt; &lt;/a-assets&gt; &lt;a-entity scale=&#34;100 100 100&#34; position=&#34;0 0.4 -3&#34; animation-mixer=&#34;clip:*&#34; gltf-model=&#34;#model&#34; visible=&#34;true&#34;&gt; &lt;/a-entity&gt; &lt;a-light type=&#34;ambient&#34; color=&#34;#ffffff&#34;&gt;&lt;/a-light&gt; &lt;a-light type=&#34;point&#34; intensity=&#34;2&#34; position=&#34;0 4 0&#34;&gt;&lt;/a-light&gt; &lt;/a-scene&gt; &lt;/body&gt; &lt;/html&gt; 本来、glTFやFBXをそのまま3DモデルとしてAR空間上に出現させる場合、A-Frame単体では実現できません。じゃあどうしているかというと、A-Frame extrasという、A-Frameの拡張機能を利用します。このアドオンを導入することで、glTFの実装が可能になります。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">ペルソナ玲音を召喚するARをA-Frameで作る</h1>
+			<div class="meta">Posted at &mdash; Nov 21, 2020</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="作ったもの">作ったもの</h2>
+
+<p>ペルソナ玲音を召喚するARを、<a href="https://aframe.io/">A-Frame</a>を使って実装しました。今回はマーカーに依存しないマーカーレスなARで、任意の座標にペルソナ玲音の3Dモデルが「浮いている」ARを実装してみることにします。</p>
+
+<p><a href="https://sad-swanson-b3fbc1.netlify.app">実装結果はこちら</a>。Netlifyにデプロイしました。いやー、ファイルさえアップロードすればあとは勝手にやってくれるので楽ですね。</p>
+
+<h2 id="マーカーベースなarじゃないです">マーカーベースなARじゃないです</h2>
+
+<p>前述しましたが、今回は<strong>マーカーレスなAR</strong>です。</p>
+
+<p>マーカーベースなARは「3Dモデルを召喚する」手法としては王道ですが、ユーザーにURLを渡しただけでは動作しません。何らかの方法で、ユーザーにマーカーを準備させなければならないのが難点です。名刺とかにマーカーを印刷してURLと一緒に渡すなど、フィジカルなものを利用すれば手段がないわけではありません。とはいえ、ネット上でのみやり取りする際にはこの方法が使えないため、やっぱりマーカーの分どうしても手間は増えます。</p>
+
+<p>その点、マーカーレスなARは<strong>ユーザーにURLさえ渡せばすぐ動作する</strong>のが最大のメリット。SNSなどにURLだけ掲載しておけば、あとはユーザーにブラウザ経由でアクセスさせるだけです。場合によっては、SNSアプリの内部ブラウザでは動作しないケースがありますが、そこはChromeやFirefoxでアクセスするよう誘導すれば問題ありません。JSによるwebARの実装である以上、現状では<strong>3DoFでしか実現できない</strong>（XYZ軸の回転のみ検出する）のが難点ですが、そこはアイデアで乗り切るしかありません。あとは、ブラウザとライブラリの進化に期待するしか・・・（他力本願</p>
+
+<h2 id="ペルソナ玲音の3dモデルについて">ペルソナ玲音の3Dモデルについて</h2>
+
+<p>ペルソナ玲音の3Dモデルは、<a href="https://ephtracy.github.io/">MagicaVoxel</a>と<a href="https://www.blender.org/">Blender</a>を利用し自作しました。モデルの形式ですが、今回は<a href="https://www.khronos.org/gltf/">glTF</a>を利用します。glTFだとモーションまで含んだ3Dモデルとして扱えるため、ただ3Dモデルが「そこにある」だけでなく「動く」ので、UXの観点から非常に有利です。</p>
+
+<p>3Dモデルの作り方は割愛しますが、簡単に紹介すると下記のような手順で動く3Dモデルを作成可能です。</p>
+
+<ol>
+<li>MagicaVoxelでボクセルモデルを作成する。</li>
+<li>objファイルとしてエクスポートする。</li>
+<li>エクスポートしたファイル一式をZIPで圧縮する。</li>
+<li><a href="https://www.mixamo.com/">MixAmo</a>にアクセスし好きなモーションを付与する。</li>
+<li>MixAmoのメニューからFBX形式でダウンロードする。</li>
+<li>Blenderで新規プロジェクトを作成し、ダウンロードしたFBXをインポートする。</li>
+<li>3Dモデルのサイズや位置、角度などを必要に応じて調整する。</li>
+<li>glTF形式でエクスポートする。</li>
+</ol>
+
+<p>ちなみに、MixAmoからダウンロードする際は、FBX形式じゃなくてもBlenderにはインポートできると思いますが、とりあえずFBXを選択しておけば問題ないと思います。</p>
+
+<h2 id="実際のコード">実際のコード</h2>
+
+<p>実際に記述したコードは下記のHTMLソースだけです。HTMLと3Dモデルだけ準備すればARが実装できるのは、本当にA-Frame様様ですね。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;html&gt;
+
+&lt;head&gt;
+    &lt;script src=<span style="color:#a31515">&#34;https://aframe.io/releases/1.0.4/aframe.min.js&#34;</span>&gt;&lt;/script&gt;
+    &lt;script src=<span style="color:#a31515">&#34;https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js&#34;</span>&gt;&lt;/script&gt;
+    &lt;script src=<span style="color:#a31515">&#34;https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js&#34;</span>&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;a-scene embedded arjs=<span style="color:#a31515">&#34;debugUIEnabled:false;&#34;</span> renderer=<span style="color:#a31515">&#34;gammaOutput: true;&#34;</span> vr-mode-ui=<span style="color:#a31515">&#34;enabled: false&#34;</span>&gt;
+        &lt;a-assets&gt;
+            &lt;a-asset-item id=<span style="color:#a31515">&#34;model&#34;</span> src=<span style="color:#a31515">&#34;persona_lain_blender.glb&#34;</span>&gt;&lt;/a-asset-item&gt;
+        &lt;/a-assets&gt;
+
+        &lt;a-entity scale=<span style="color:#a31515">&#34;100 100 100&#34;</span> position=<span style="color:#a31515">&#34;0 0.4 -3&#34;</span> animation-mixer=<span style="color:#a31515">&#34;clip:*&#34;</span> gltf-model=<span style="color:#a31515">&#34;#model&#34;</span> visible=<span style="color:#a31515">&#34;true&#34;</span>&gt;
+        &lt;/a-entity&gt;
+
+        &lt;a-light type=<span style="color:#a31515">&#34;ambient&#34;</span> color=<span style="color:#a31515">&#34;#ffffff&#34;</span>&gt;&lt;/a-light&gt;
+        &lt;a-light type=<span style="color:#a31515">&#34;point&#34;</span> intensity=<span style="color:#a31515">&#34;2&#34;</span> position=<span style="color:#a31515">&#34;0 4 0&#34;</span>&gt;&lt;/a-light&gt;
+    &lt;/a-scene&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</code></pre></div>
+<p>本来、glTFやFBXをそのまま3DモデルとしてAR空間上に出現させる場合、A-Frame単体では実現できません。じゃあどうしているかというと、<a href="https://github.com/n5ro/aframe-extras">A-Frame extras</a>という、A-Frameの拡張機能を利用します。このアドオンを導入することで、glTFの実装が可能になります。</p>
+
+<p>ちなみに、当初FBX形式を利用しAR実装を目指していた際、「<code>inflate.min.js</code>がないよー」とブラウザのコンソールでエラーが表示されました。エラーメッセージは<code>Error: FBXLoader: Import inflate.min.js from https://github.com/imaya/zlib.js</code>というもの。この<code>inflate.min.js</code>がNPMやCDN上に見当たらなかったため、<a href="https://github.com/imaya/zlib.js">https://github.com/imaya/zlib.js</a>から該当のファイルを単体でダウンロードして任意のフォルダに保存し、参照しました。ところがglTFファイルの利用時には、上記の<code>inflate.min.js</code>が必要ないらしくコメントアウトしても動作に影響がありませんでした。なので、FBXを利用しないのであれば、このファイルは不要っぽいです。</p>
+
+<p>各設定値の内容は下記の通りです。</p>
+
+<ul>
+<li><code>vr-mode-ui=&quot;enabled: false&quot;</code>は、ブラウザの画面下に現れるVR用画面のためのボタンを非表示にする。</li>
+<li><code>renderer=&quot;gammaOutput: true;&quot;</code>は下側の<code>a-light</code>と同様に、3Dモデルに対する光の調節を行っている。これがないと、3Dモデルがすこぶる暗く表示されてしまうため。理由はちゃんと調べていないが、とりあえずこの設定をするとまともに見られるようになった。</li>
+<li><code>a-entity</code>で<code>scale</code>の設定をX軸Y軸Z軸の全方向で<strong>100倍</strong>しているが、これはもとのglTFの3Dモデルが<strong>なぜかめちゃくちゃ小さい</strong>ため。Blenderでインポートしたときも「なんか小さいなー」とは思っていたのだが、glTFにエクスポートしたら米粒みたいに小さかった。そのまま表示させたら、どこにいるのかわからないくらい小さい。今回はとりあえずスケールアップすることでなんとかした。多分Blenderにインポートした際、モデルの値をちゃんと設定しておくべきだったのだろうが・・・3Dモデルの設定は謎が多い。</li>
+<li><code>position</code>の値は適当。とりあえずカメラ位置よりも3Dモデルを奥側に配置させるため、Z軸に負の数を設定している。</li>
+<li><code>rotation</code>は設定なし。</li>
+<li><code>animation-mixer</code>はモーション設定のあるglTFでは必須。ただし、MixAmoで出力したFBXはモーション名がいまいち不明なので、<code>clip:*</code>にしてどんなモーションでも実行するような設定にしてある。多分これはBlenderでの設定が必要な部分だと思う。</li>
+<li><code>visible</code>の設定って必要なのか、というところだが（デフォルト値でTrueになってると普通は思う）とりあえず設定済み。</li>
+</ul>
+
+<p>これだけ書けば動作します。すげぇ。</p>
+
+<h2 id="動作風景">動作風景</h2>
+
+<p><img src="./screenshot_lain_1.gif" alt="pic" /></p>
+
+<h2 id="改良版">改良版</h2>
+
+<p>これまでの実装では、ただ3Dモデルを表示するだけでした。ですが、A-Frameはエンティティに対してアニメーションを設定できます。というわけで、アニメーションを追加してみました。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;html&gt;
+
+&lt;head&gt;
+    &lt;script src=<span style="color:#a31515">&#34;https://aframe.io/releases/1.0.4/aframe.min.js&#34;</span>&gt;&lt;/script&gt;
+    &lt;script src=<span style="color:#a31515">&#34;https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js&#34;</span>&gt;&lt;/script&gt;
+    &lt;script src=<span style="color:#a31515">&#34;https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js&#34;</span>&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;a-scene embedded arjs=<span style="color:#a31515">&#34;debugUIEnabled:false;&#34;</span> renderer=<span style="color:#a31515">&#34;gammaOutput: true;&#34;</span> vr-mode-ui=<span style="color:#a31515">&#34;enabled: false&#34;</span>&gt;
+        &lt;a-assets&gt;
+            &lt;a-asset-item id=<span style="color:#a31515">&#34;persona_lain_waving&#34;</span> src=<span style="color:#a31515">&#34;persona_lain_waving.glb&#34;</span>&gt;&lt;/a-asset-item&gt;
+
+            &lt;a-asset-item id=<span style="color:#a31515">&#34;chibi_navi&#34;</span> src=<span style="color:#a31515">&#34;lain_chibi_navi.glb&#34;</span>&gt;&lt;/a-asset-item&gt;
+
+        &lt;/a-assets&gt;
+
+        &lt;a-entity scale=<span style="color:#a31515">&#34;1 1 1&#34;</span> rotaion=<span style="color:#a31515">&#34;0 0 0&#34;</span> position=<span style="color:#a31515">&#34;0 0.4 -3&#34;</span> animation-mixer=<span style="color:#a31515">&#34;clip:*&#34;</span>
+            gltf-model=<span style="color:#a31515">&#34;#persona_lain_waving&#34;</span> visible=<span style="color:#a31515">&#34;true&#34;</span>
+            animation=<span style="color:#a31515">&#34;property: position; from: 0 0.5 -3; to: 0 0.8 -3; dir: alternate; dur: 1800; easing: easeInOutQuad; loop: true&#34;</span>&gt;
+        &lt;/a-entity&gt;
+
+        &lt;a-entity scale=<span style="color:#a31515">&#34;0.2 0.2 0.2&#34;</span> rotation=<span style="color:#a31515">&#34;-45 -45 0&#34;</span> animation-mixer=<span style="color:#a31515">&#34;clip:*&#34;</span> gltf-model=<span style="color:#a31515">&#34;#chibi_navi&#34;</span>
+            visible=<span style="color:#a31515">&#34;true&#34;</span>
+            animation=<span style="color:#a31515">&#34;property: position; from: 0.1 0.2 -3.5; to: 0.1 0.5 -3.5; dir: alternate; dur: 2300; easing: easeInOutQuad; loop: true&#34;</span>&gt;
+        &lt;/a-entity&gt;
+
+        &lt;/a-obj-model&gt;
+
+        &lt;a-light type=<span style="color:#a31515">&#34;ambient&#34;</span> color=<span style="color:#a31515">&#34;#ffffff&#34;</span>&gt;&lt;/a-light&gt;
+        &lt;a-light type=<span style="color:#a31515">&#34;point&#34;</span> intensity=<span style="color:#a31515">&#34;2&#34;</span> position=<span style="color:#a31515">&#34;0 4 0&#34;</span>&gt;&lt;/a-light&gt;
+    &lt;/a-scene&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</code></pre></div>
+<p>相変わらずHTMLしか書いてません。JSなんてこれっぽっちも書いてないのに動作するA-Frameマジ神。なお、さっきのコードと比べてわかるとおり、エンティティのスケールが100倍とかじゃないです。これは、モデル設定をBlender側で修正してから実装しているためです。</p>
+
+<p>改良前を比較すると、表示する3Dモデルを増やしつつアニメーションを設定しています。アニメーションにおける各設定値の内容は下記の通りです。</p>
+
+<ul>
+<li>property：アニメーションする対象。今回は<code>position</code>なので、3Dモデルの位置が変化する。</li>
+<li>from：アニメーション開始の<code>position</code>。エンティティの初期位置よりY時を下に設定するとモデルの下部分が欠けるため、Y軸の位置は0.4より上に設定している。</li>
+<li>to：アニメーション終了の<code>position</code>。</li>
+<li>dir：fromからtoの間をどのように移動するかを設定する。
+
+<ul>
+<li><code>normal</code>だとfromからtoへの一方通行。</li>
+<li><code>alternate</code>だと、fromとtoを交互に往復する。</li>
+<li><code>reverse</code>はtoからfromへ一方通行。</li>
+</ul></li>
+<li>dur：1回のアニメーションに要する時間。単位はミリ秒。</li>
+<li>easing：アニメーションのイージング。<a href="https://easings.net/ja">ここ</a>がすごい参考になる。</li>
+<li>loop：アニメーションをループさせるか否か。</li>
+</ul>
+
+<h2 id="改良版の動作風景">改良版の動作風景</h2>
+
+<p><img src="screenshot_lain_2.gif" alt="pic" /></p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>そんなわけでペルソナ玲音を召喚するARを、A-Frameで実装してみました。</p>
+
+<p>モダンなブラウザのないスマートフォンなんて存在しないので、URLさえ渡せば動作可能なのはやっぱり最大のメリットですねぇ。</p>
+
+<p>それと、glTF単体でモーション設定するのもいいけど、<strong>A-Frameのアニメーションもね</strong>！</p>
+
+<p>・・・いやまぁ、アニメーション設定でどうにかできる動きには限界があるんで、UX向上のためにはやっぱりMixAmoなんかでモーション設定するのは必須、って感じがするのは致し方ないところ。とはいえ、単純な上下運動とかのアニメーションはA-Frameで書いた方が早いし、JavaScriptで書き換えられたりするので使い勝手がいいので、使い所なんですね。</p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

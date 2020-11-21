@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/make-ar-with-a-frame-and-gltf/</loc>
+    <lastmod>2020-11-21T10:31:39+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/check-docker-config-when-disconnect-from-container/</loc>
     <lastmod>2020-09-12T05:41:57+09:00</lastmod>
   </url>
@@ -268,6 +273,12 @@
   </url>
   
   <url>
+    <loc>https://ysko909.github.io/tags/a-frame/</loc>
+    <lastmod>2020-11-21T10:31:39+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/tags/access/</loc>
     <lastmod>2020-02-12T09:43:01+09:00</lastmod>
     <priority>0</priority>
@@ -288,6 +299,18 @@
   <url>
     <loc>https://ysko909.github.io/tags/apple/</loc>
     <lastmod>2019-06-28T10:18:44+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ysko909.github.io/tags/ar/</loc>
+    <lastmod>2020-11-21T10:31:39+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ysko909.github.io/tags/ar.js/</loc>
+    <lastmod>2020-11-21T10:31:39+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -485,7 +508,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2020-09-12T05:41:57+09:00</lastmod>
+    <lastmod>2020-11-21T10:31:39+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -533,7 +556,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/</loc>
-    <lastmod>2020-02-12T09:43:01+09:00</lastmod>
+    <lastmod>2020-11-21T10:31:39+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -617,7 +640,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2020-09-12T05:41:57+09:00</lastmod>
+    <lastmod>2020-11-21T10:31:39+09:00</lastmod>
     <priority>0</priority>
   </url>
   
