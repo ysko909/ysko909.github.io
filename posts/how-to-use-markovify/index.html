@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Pythonを使いマルコフ連鎖で文章を自動生成する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Pythonを使いマルコフ連鎖で文章を自動生成する" />
+<meta property="og:description" content="感想文とか自動生成されたら楽だなって そういう不純な動機で調べてたわけじゃないんですが、今回はPythonでマルコフ連鎖を使いそれっぽい文章を自動生成してみよう、という話です。ここではマルコフ連鎖を実装するためのライブラリとしてmarkovifyを、日本語の形態素解析器としてSudachiPyを利用します。
+今回のコードと元ネタのテキストは、ここのGistで公開しています。
+マルコフ連鎖 マルコフ連鎖の詳しい内容はwikipediaとかマルコフ連鎖とかを参照してみてください。自分もよくわかってないです。
+すっごい乱暴にざっくり言うなら、将来の状態が過去の状態に左右されず、現在の状態のみに依存するという性質（正確にはこれをマルコフ性と言い、マルコフ性のある確率過程のことをマルコフ連鎖と言う・・・らしい）のことです。この性質から、入力されたテキストから「ある名詞の後はこの助詞が来る確率が高い」「ある助詞の後はこの動詞、あるいはこの形容詞が来る確率が高い」といった、単語の出現におけるつながりをモデルとして作成します。作成したモデルから、各ノード（形態素）をランダムに選択すれば文章が生成できる、というわけです。
+今回は、マルコフ連鎖の実装を自力では行わないでmarkovifyを利用します。あるなら使わなきゃソンでしょー。巨人の肩には遠慮なく乗ります。
+なお、モデルの生成にはその元となるテキストが必要です。そのテキストをどこから調達するかによって、生成される文章のテイストが変わってきます。新聞記事のようなテキストを元に作成したモデルから、口語主体のブログのようなテキストは生成できません。よって、「どのような文章を生成したいか」によって、調達するテキストが違ってきます。
+形態素解析 形態素解析とは、普段生活の中で使用する自然言語を意味を持つ最小単位である形態素にまで分解すること。このとき、文章は名詞や動詞、副詞などの各品詞に分解されます。
+形態素解析を行う機能を持ったツールを、形態素解析器とか形態素解析エンジンと言ったりします。代表的なところだとMecabやJanomeあたりが有名でしょうか。今回はSudachiのPython用ライブラリであるSudachiPyを利用します。なんでこれかって言うとpipだけで完結できることと、比較的マイナーどころなのでどんな感じか触ってみたかったってところです。
+環境 $ python --version Python 3.8.5 $ pip freeze | grep markov markovify==0.9.0 $ pip freeze | grep -i sudachi SudachiDict-full==20201223.post1 SudachiPy==0.5.1 Dockerコンテナ上にPython3.8を構築しています。利用したmarkovifyのバージョンは0.9.0でした。Sudachiは0.5.1でした。SudachiDict-fullって何よ？ってところだと思いますが、これは後述します。
+環境構築 Python3.8のDockerコンテナ作って、markovifyとSudachiをpipするだけの簡単なお仕事。
+pip install markovify pip install sudachipy pip install sudachidict_core 3行目のコマンドが何をインストールしているのか、なんとなく想像がつくと思います。これはSudachi用の辞書なんですが、全部で3パターンあります。上記のcoreはスタンダードなエディションです。他には最小構成のsudachidict_small、フル構成のsudachidict_fullがあります。
+sudachipy link -t small あるいは sudachipy link -t full core以外の辞書を利用する場合、上記のコマンドを実行して辞書のリンク先をcoreから変更しておく必要があります。なお、一度リンクをsmallかfullに切り替えたあとでcoreへ戻したい場合は、sudachipy link -uを実行すれば戻ります。
+pipでインストールが終わると、コマンドライン上で実行可能になります。
+sudachipy -m A -a Pythonはインタープリタ型の高水準汎用プログラミング言語である。 Python 名詞,固有名詞,一般,*,*,* Python Python パイソン 0 [19295] は 助詞,係助詞,*,*,*,* は は ハ 0 [] インタープリタ 名詞,普通名詞,一般,*,*,* インタープリター インタープリタ インタープリタ 0 [14262] 型 接尾辞,名詞的,一般,*,*,* 型 型 ガタ 0 [] の 助詞,格助詞,*,*,*,* の の ノ 0 [] 高 接頭辞,*,*,*,*,* 高 高 コウ 0 [] 水準 名詞,普通名詞,一般,*,*,* 水準 水準 スイジュン 0 [244] 汎用 名詞,普通名詞,一般,*,*,* 汎用 汎用 ハンヨウ 0 [] プログラミング 名詞,普通名詞,サ変可能,*,*,* プログラミング プログラミング プログラミング 0 [19447] 言語 名詞,普通名詞,一般,*,*,* 言語 言語 ゲンゴ 0 [19562] で 助動詞,*,*,*,助動詞-ダ,連用形-一般 だ だ デ 0 [] ある 動詞,非自立可能,*,*,五段-ラ行,終止形-一般 有る ある アル 0 [] 。 補助記号,句点,*,*,*,* 。 。 。 0 [] EOS 上記のコマンドを実行すると文字列の入力待ちになるので、適当な文章を入力します。すると入力した文章を、解析して返してきます。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/how-to-use-markovify/" /><meta property="article:published_time" content="2021-02-15T20:50:59&#43;09:00"/>
+<meta property="article:modified_time" content="2021-02-15T20:50:59&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Pythonを使いマルコフ連鎖で文章を自動生成する"/>
+<meta name="twitter:description" content="感想文とか自動生成されたら楽だなって そういう不純な動機で調べてたわけじゃないんですが、今回はPythonでマルコフ連鎖を使いそれっぽい文章を自動生成してみよう、という話です。ここではマルコフ連鎖を実装するためのライブラリとしてmarkovifyを、日本語の形態素解析器としてSudachiPyを利用します。
+今回のコードと元ネタのテキストは、ここのGistで公開しています。
+マルコフ連鎖 マルコフ連鎖の詳しい内容はwikipediaとかマルコフ連鎖とかを参照してみてください。自分もよくわかってないです。
+すっごい乱暴にざっくり言うなら、将来の状態が過去の状態に左右されず、現在の状態のみに依存するという性質（正確にはこれをマルコフ性と言い、マルコフ性のある確率過程のことをマルコフ連鎖と言う・・・らしい）のことです。この性質から、入力されたテキストから「ある名詞の後はこの助詞が来る確率が高い」「ある助詞の後はこの動詞、あるいはこの形容詞が来る確率が高い」といった、単語の出現におけるつながりをモデルとして作成します。作成したモデルから、各ノード（形態素）をランダムに選択すれば文章が生成できる、というわけです。
+今回は、マルコフ連鎖の実装を自力では行わないでmarkovifyを利用します。あるなら使わなきゃソンでしょー。巨人の肩には遠慮なく乗ります。
+なお、モデルの生成にはその元となるテキストが必要です。そのテキストをどこから調達するかによって、生成される文章のテイストが変わってきます。新聞記事のようなテキストを元に作成したモデルから、口語主体のブログのようなテキストは生成できません。よって、「どのような文章を生成したいか」によって、調達するテキストが違ってきます。
+形態素解析 形態素解析とは、普段生活の中で使用する自然言語を意味を持つ最小単位である形態素にまで分解すること。このとき、文章は名詞や動詞、副詞などの各品詞に分解されます。
+形態素解析を行う機能を持ったツールを、形態素解析器とか形態素解析エンジンと言ったりします。代表的なところだとMecabやJanomeあたりが有名でしょうか。今回はSudachiのPython用ライブラリであるSudachiPyを利用します。なんでこれかって言うとpipだけで完結できることと、比較的マイナーどころなのでどんな感じか触ってみたかったってところです。
+環境 $ python --version Python 3.8.5 $ pip freeze | grep markov markovify==0.9.0 $ pip freeze | grep -i sudachi SudachiDict-full==20201223.post1 SudachiPy==0.5.1 Dockerコンテナ上にPython3.8を構築しています。利用したmarkovifyのバージョンは0.9.0でした。Sudachiは0.5.1でした。SudachiDict-fullって何よ？ってところだと思いますが、これは後述します。
+環境構築 Python3.8のDockerコンテナ作って、markovifyとSudachiをpipするだけの簡単なお仕事。
+pip install markovify pip install sudachipy pip install sudachidict_core 3行目のコマンドが何をインストールしているのか、なんとなく想像がつくと思います。これはSudachi用の辞書なんですが、全部で3パターンあります。上記のcoreはスタンダードなエディションです。他には最小構成のsudachidict_small、フル構成のsudachidict_fullがあります。
+sudachipy link -t small あるいは sudachipy link -t full core以外の辞書を利用する場合、上記のコマンドを実行して辞書のリンク先をcoreから変更しておく必要があります。なお、一度リンクをsmallかfullに切り替えたあとでcoreへ戻したい場合は、sudachipy link -uを実行すれば戻ります。
+pipでインストールが終わると、コマンドライン上で実行可能になります。
+sudachipy -m A -a Pythonはインタープリタ型の高水準汎用プログラミング言語である。 Python 名詞,固有名詞,一般,*,*,* Python Python パイソン 0 [19295] は 助詞,係助詞,*,*,*,* は は ハ 0 [] インタープリタ 名詞,普通名詞,一般,*,*,* インタープリター インタープリタ インタープリタ 0 [14262] 型 接尾辞,名詞的,一般,*,*,* 型 型 ガタ 0 [] の 助詞,格助詞,*,*,*,* の の ノ 0 [] 高 接頭辞,*,*,*,*,* 高 高 コウ 0 [] 水準 名詞,普通名詞,一般,*,*,* 水準 水準 スイジュン 0 [244] 汎用 名詞,普通名詞,一般,*,*,* 汎用 汎用 ハンヨウ 0 [] プログラミング 名詞,普通名詞,サ変可能,*,*,* プログラミング プログラミング プログラミング 0 [19447] 言語 名詞,普通名詞,一般,*,*,* 言語 言語 ゲンゴ 0 [19562] で 助動詞,*,*,*,助動詞-ダ,連用形-一般 だ だ デ 0 [] ある 動詞,非自立可能,*,*,五段-ラ行,終止形-一般 有る ある アル 0 [] 。 補助記号,句点,*,*,*,* 。 。 。 0 [] EOS 上記のコマンドを実行すると文字列の入力待ちになるので、適当な文章を入力します。すると入力した文章を、解析して返してきます。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Pythonを使いマルコフ連鎖で文章を自動生成する</h1>
+			<div class="meta">Posted at &mdash; Feb 15, 2021</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="感想文とか自動生成されたら楽だなって">感想文とか自動生成されたら楽だなって</h2>
+
+<p>そういう不純な動機で調べてたわけじゃないんですが、今回はPythonでマルコフ連鎖を使いそれっぽい文章を自動生成してみよう、という話です。ここではマルコフ連鎖を実装するためのライブラリとして<a href="https://github.com/jsvine/markovify">markovify</a>を、日本語の形態素解析器として<a href="https://github.com/WorksApplications/SudachiPy">SudachiPy</a>を利用します。</p>
+
+<p>今回のコードと元ネタのテキストは、<a href="https://gist.github.com/ysko909/d99041530fc0c01939bac29754dbd8b5">ここ</a>のGistで公開しています。</p>
+
+<h2 id="マルコフ連鎖">マルコフ連鎖</h2>
+
+<p>マルコフ連鎖の詳しい内容は<a href="https://ja.wikipedia.org/wiki/%E3%83%9E%E3%83%AB%E3%82%B3%E3%83%95%E9%80%A3%E9%8E%96">wikipedia</a>とか<a href="https://omedstu.jimdofree.com/2018/05/04/%E3%83%9E%E3%83%AB%E3%82%B3%E3%83%95%E9%80%A3%E9%8E%96-markov-chain/">マルコフ連鎖</a>とかを参照してみてください。自分もよくわかってないです。</p>
+
+<p>すっごい乱暴にざっくり言うなら、将来の状態が過去の状態に左右されず、現在の状態のみに依存するという性質（正確にはこれをマルコフ性と言い、マルコフ性のある確率過程のことをマルコフ連鎖と言う・・・らしい）のことです。この性質から、入力されたテキストから「ある名詞の後はこの助詞が来る確率が高い」「ある助詞の後はこの動詞、あるいはこの形容詞が来る確率が高い」といった、単語の出現におけるつながりをモデルとして作成します。作成したモデルから、各ノード（形態素）をランダムに選択すれば文章が生成できる、というわけです。</p>
+
+<p>今回は、マルコフ連鎖の実装を自力では行わないで<a href="https://github.com/jsvine/markovify">markovify</a>を利用します。<strong>あるなら使わなきゃソンでしょー</strong>。巨人の肩には遠慮なく乗ります。</p>
+
+<p>なお、モデルの生成にはその元となる<strong>テキストが必要です</strong>。そのテキストをどこから調達するかによって、生成される文章のテイストが変わってきます。新聞記事のようなテキストを元に作成したモデルから、口語主体のブログのようなテキストは生成できません。よって、「どのような文章を生成したいか」によって、調達するテキストが違ってきます。</p>
+
+<h2 id="形態素解析">形態素解析</h2>
+
+<p>形態素解析とは、普段生活の中で使用する自然言語を意味を持つ最小単位である形態素にまで分解すること。このとき、文章は名詞や動詞、副詞などの各品詞に分解されます。</p>
+
+<p>形態素解析を行う機能を持ったツールを、形態素解析器とか形態素解析エンジンと言ったりします。代表的なところだと<a href="https://taku910.github.io/mecab/">Mecab</a>や<a href="https://github.com/mocobeta/janome">Janome</a>あたりが有名でしょうか。今回は<a href="https://github.com/WorksApplications/Sudachi">Sudachi</a>のPython用ライブラリである<a href="https://github.com/WorksApplications/SudachiPy">SudachiPy</a>を利用します。なんでこれかって言うと<code>pip</code>だけで完結できることと、比較的マイナーどころなのでどんな感じか触ってみたかったってところです。</p>
+
+<h2 id="環境">環境</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ python --version
+Python 3.8.5
+$ pip freeze | grep markov
+markovify==0.9.0
+$ pip freeze | grep -i sudachi
+SudachiDict-full==20201223.post1
+SudachiPy==0.5.1</code></pre></div>
+<p>Dockerコンテナ上にPython3.8を構築しています。利用したmarkovifyのバージョンは0.9.0でした。Sudachiは0.5.1でした。<code>SudachiDict-full</code>って何よ？ってところだと思いますが、これは後述します。</p>
+
+<h2 id="環境構築">環境構築</h2>
+
+<p>Python3.8のDockerコンテナ作って、markovifyとSudachiを<code>pip</code>するだけの簡単なお仕事。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">pip install markovify
+pip install sudachipy
+pip install sudachidict_core</code></pre></div>
+<p>3行目のコマンドが何をインストールしているのか、なんとなく想像がつくと思います。これはSudachi用の辞書なんですが、全部で3パターンあります。上記の<code>core</code>はスタンダードなエディションです。他には最小構成の<code>sudachidict_small</code>、フル構成の<code>sudachidict_full</code>があります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">sudachipy link -t small
+あるいは
+sudachipy link -t full</code></pre></div>
+<p><code>core</code>以外の辞書を利用する場合、上記のコマンドを実行して辞書のリンク先を<code>core</code>から変更しておく必要があります。なお、一度リンクを<code>small</code>か<code>full</code>に切り替えたあとで<code>core</code>へ戻したい場合は、<code>sudachipy link -u</code>を実行すれば戻ります。</p>
+
+<p><code>pip</code>でインストールが終わると、コマンドライン上で実行可能になります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">sudachipy -m A -a
+Pythonはインタープリタ型の高水準汎用プログラミング言語である。
+Python  名詞,固有名詞,一般,*,*,*        Python  Python  パイソン        0       [19295]
+は      助詞,係助詞,*,*,*,*     は      は      ハ      0       []
+インタープリタ  名詞,普通名詞,一般,*,*,*        インタープリター        インタープリタ  インタープリタ  0       [14262]
+型      接尾辞,名詞的,一般,*,*,*        型      型      ガタ    0       []
+の      助詞,格助詞,*,*,*,*     の      の      ノ      0       []
+高      接頭辞,*,*,*,*,*        高      高      コウ    0       []
+水準    名詞,普通名詞,一般,*,*,*        水準    水準    スイジュン      0       [244]
+汎用    名詞,普通名詞,一般,*,*,*        汎用    汎用    ハンヨウ        0       []
+プログラミング  名詞,普通名詞,サ変可能,*,*,*    プログラミング  プログラミング  プログラミング  0       [19447]
+言語    名詞,普通名詞,一般,*,*,*        言語    言語    ゲンゴ  0       [19562]
+で      助動詞,*,*,*,助動詞-ダ,連用形-一般      だ      だ      デ      0       []
+ある    動詞,非自立可能,*,*,五段-ラ行,終止形-一般       有る    ある    アル    0       []
+。      補助記号,句点,*,*,*,*   。      。      。      0       []
+EOS</code></pre></div>
+<p>上記のコマンドを実行すると文字列の入力待ちになるので、適当な文章を入力します。すると入力した文章を、解析して返してきます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">from</span> sudachipy <span style="color:#00f">import</span> tokenizer
+<span style="color:#00f">from</span> sudachipy <span style="color:#00f">import</span> dictionary</code></pre></div>
+<p>Pythonスクリプト上で使用する際は、上記のように<code>import</code>することで利用可能になります。</p>
+
+<h2 id="実装">実装</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">from</span> sudachipy <span style="color:#00f">import</span> tokenizer
+<span style="color:#00f">from</span> sudachipy <span style="color:#00f">import</span> dictionary
+<span style="color:#00f">import</span> markovify
+<span style="color:#00f">import</span> re
+<span style="color:#00f">from</span> glob <span style="color:#00f">import</span> iglob
+
+
+<span style="color:#00f">def</span> load_file(file):
+
+    _text = <span style="color:#a31515">&#39;&#39;</span>
+
+    <span style="color:#00f">for</span> path <span style="color:#00f">in</span> iglob(file):
+        <span style="color:#00f">with</span> open(path, <span style="color:#a31515">&#39;r&#39;</span>, encoding=<span style="color:#a31515">&#39;utf-8&#39;</span>) <span style="color:#00f">as</span> f:
+            _text += f.read().strip()
+
+    <span style="color:#00f">return</span> _text
+
+
+<span style="color:#00f">def</span> split_input_files(text):
+
+    _tokenizer_obj = dictionary.Dictionary().create()
+    _mode = tokenizer.Tokenizer.SplitMode.C
+
+    _splitted_text = <span style="color:#a31515">&#39;&#39;</span>
+
+    _words = [m.surface() <span style="color:#00f">for</span> m <span style="color:#00f">in</span> _tokenizer_obj.tokenize(text, _mode)]
+
+    <span style="color:#00f">for</span> _word <span style="color:#00f">in</span> _words:
+
+        _word = re.sub(<span style="color:#a31515">r</span><span style="color:#a31515">&#39;[（）「」『』｛｝【】＠”’！？｜～・]&#39;</span>, <span style="color:#a31515">&#39;&#39;</span>, _word)  <span style="color:#008000"># 全角のカッコ、各種記号は削除</span>
+        _word = re.sub(<span style="color:#a31515">r</span><span style="color:#a31515">&#39;[()\[\]{}@</span><span style="color:#a31515">\&#39;</span><span style="color:#a31515">\&#34;!?|~-]&#39;</span>, <span style="color:#a31515">&#39;&#39;</span>, _word)  <span style="color:#008000"># 半角のカッコ、各種記号は削除</span>
+        _word = re.sub(<span style="color:#a31515">r</span><span style="color:#a31515">&#39;\u3000&#39;</span>, <span style="color:#a31515">&#39;&#39;</span>, _word)  <span style="color:#008000"># 全角カッコは削除</span>
+        _word = re.sub(<span style="color:#a31515">r</span><span style="color:#a31515">&#39; &#39;</span>, <span style="color:#a31515">&#39;&#39;</span>, _word)  <span style="color:#008000"># 半角スペースは削除</span>
+        _word = re.sub(<span style="color:#a31515">r</span><span style="color:#a31515">&#39;\n&#39;</span>, <span style="color:#a31515">&#39;&#39;</span>, _word)  <span style="color:#008000"># もともと存在する改行コードは削除</span>
+
+        _word = re.sub(<span style="color:#a31515">r</span><span style="color:#a31515">&#39;。&#39;</span>, <span style="color:#a31515">&#39;。</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#39;</span>, _word)  <span style="color:#008000"># 句点は改行コードを追加</span>
+        _word += <span style="color:#a31515">&#39; &#39;</span>
+
+        _splitted_text += _word
+
+    <span style="color:#00f">return</span> _splitted_text
+
+
+<span style="color:#00f">def</span> main(exec_times, *files):
+    input_text = <span style="color:#a31515">&#39;&#39;</span>
+
+    <span style="color:#00f">for</span> file <span style="color:#00f">in</span> files:
+        input_text += load_file(file)
+
+    splitted_text = split_input_files(input_text)
+
+    text_model = markovify.NewlineText(splitted_text, state_size=3)  <span style="color:#008000"># markovify.Text()ではない</span>
+
+    <span style="color:#00f">for</span> i <span style="color:#00f">in</span> range(exec_times):
+        <span style="color:#008000"># print(&#39;patarn &#39;, i, &#39;: &#39;, text_model.make_sentence())</span>
+        <span style="color:#00f">print</span>(<span style="color:#a31515">&#39;patarn &#39;</span>, i, <span style="color:#a31515">&#39;: &#39;</span>, text_model.make_short_sentence(140, tries=100))
+
+
+<span style="color:#00f">if</span> __name__ == <span style="color:#a31515">&#39;__main__&#39;</span>:
+
+    main(5, <span style="color:#a31515">&#39;./src/hoge.txt&#39;</span>)
+    <span style="color:#008000"># main(5, &#39;./src/hoge.txt&#39;, &#39;./src/fuga.txt&#39;)</span></code></pre></div>
+<p>実装は上記のような形にしました。</p>
+
+<ol>
+<li>マルコフ連鎖モデルの生成元となるファイルを読み込む。複数ファイルが指定された場合、すべて読み込む。現状はハードコーディングしてますが、<code>args</code>とかにして引数でファイル指定したほうが断然いいでしょうね。</li>
+<li>入力ファイルの形態素解析を行います。Sudachiを使って入力ファイル内のテキストを分析し、不要な文字は削除や置き換えなどの処理を行います。</li>
+<li>マルコフ連鎖モデルを作成します。モデル作成時、チュートリアルなどでは<code>markovify.Text()</code>を利用しますが、ここでは使いません。これは<code>markovify.Text()</code>が日本語の入力を解釈するのに不向きで、ファイル丸ごと渡すより句点で改行した1行1行をステップで渡したほうがいいだろうと判断して<code>NewlineText()</code>でモデル作成を行っています。</li>
+<li>作成したモデルで文章を生成する。<code>make_short_sentence()</code>で文章生成を行う場合、オプションで試行回数や生成する文章の文字数を指定できます。文章の生成結果がNoneである場合が存在する（特にモデル作成元文章が短いとか、モデル作成のオプションで<code>state_size</code>を３より大きく指定するとなりがち）のですが、上記のオプションを指定することでNoneを無視して何らかの形で文章生成するまで処理を実行することができます。</li>
+</ol>
+
+<h2 id="実行">実行</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">patarn  0 :  これ で Sync の クロック ソース が Int に なっ て いる よう で 、 単純 に 接続 する だけ で は 同期 の クロック ソース を TRIG に 変更 でき ます 。
+patarn  1 :  コントローラー の 配置 も ほぼ TB 303 と は 異なる 部分 です 。
+patarn  2 :  これ 、 どう も デフォルト 設定 で は 同期 でき ませ ん でし た 。
+patarn  3 :  USB コネクタ は PC を 接続 する わけ です が 、 キーボード の 黒鍵 部分 が 黒 に なっ て い た Behringer の TD 3 の 黄色 版 です 。
+patarn  4 :  いかに も Acid な 感じ が いい の で は と 思わ せる くらい の デザイン に なっ て いる よう で 、 単純 に 接続 する だけ で は 同期 の クロック ソース が Int に なっ て いる の は TB 303 と は 異なる 部分 です 。</code></pre></div>
+<p>何と申しますか、文脈の意味合いとしてはいかにも自動生成然とした文章なのが如何ともしがたいですが、少なくとも日本語の文章構造として崩壊しているわけではないのが特徴ですかね。あと、もともと用意したテキスト量が少ないため、どうしてもモデル作成元のテキスト臭が漂ってしまうのはどうにかしたいところです。これに関しては、単純にテキスト量を増やすという方法がありますが、第三者のwebページなどをスクレイピングする場合については注意が必要です。一応文章にも著作権はありますので、もし同じような文章生成モデルを作成して一般公開などする場合は、パブリックドメインと明示されているものや青空文庫などを利用することなると思います。この辺の権利周りは疎いので、詳しい人に確認するのが吉。</p>
+
+<p>ちなみに、出力が半角カナでぶつ切りされているのは、形態素解析結果から作成したモデルの出力をそのまま表示しているせいです。気になるようであれば、表示の際に半角スペースを除外してしまえば、とりあえず見た目はちゃんとした文章っぽくなります。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>Pythonでマルコフ連鎖による文章生成をやってみました。実装自体はライブラリを多用して、なるべく「安い、早い、うまい」を目指しましたがどうでしょうか。まぁ、「うまい」かどうかは議論の余地が多分にありますが、これに関しては入力のテキスト量を増やしたりだとかで対策が可能がと思います。日本語として構造的にも文脈の意味合い的にも齟齬のない文章が自動生成できると、<strong>ちょっといろいろと楽になるんじゃないかなー</strong>とか思ってないですから、ホント。</p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
