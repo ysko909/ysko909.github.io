@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>PythonからMongoDB Atlasにアクセスする - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="PythonからMongoDB Atlasにアクセスする" />
+<meta property="og:description" content="はじめに PythonからMongoDBのクラウドサービスであるMongoDB Atlasにアクセスして、データを取得する方法についてメモしておきます。ここでは、将来的にはAPIサーバーとして運用することを想定して、Flaskをついでに導入しています。
+MongoDB Atlasについては日本語の記事があまり見受けられなかったので、同じような方法で接続しようとしています方の一助になれば幸いです。
+前提 ここでは下記の処理が済んでいることを前提としています。
+ MongoDB側にクラスターとデータベース、コレクションが既存である（もちろんなにかしらのデータが格納済み）。 Read権限あるいはReadとWrite権限を持ったユーザーを作成しています。  プロジェクトのトップページから左メニュー内の「Database Access」を選択すると、ユーザーの一覧が表示されます。ここで「Add new database user」ボタンをクリックすると、新しいユーザーを追加できます。ここの権限設定で「Only read any database」を選択しておけば、プロジェクト内におけるどのデータベースでもRead権限でアクセスできるようになります。
+単純に接続確認をするだけなら初期ユーザーで行えばいいわけですが、初期ユーザーはAdmin権限なのでただ接続確認するだけなら権限としては不要でしょう。それに、今後恒常的に利用することを鑑みると、専用のユーザーを作成しておくほうが望ましいと思いました。
+手順  Pythonの環境を準備する。 pipで必要なライブラリをインストールする。 MongoDB Atlasで接続用のドライバーを発行する。 Pythonスクリプトを用意する。 接続確認を行う。  大雑把な手順は上記のとおりです。順に説明します。
+Pythonの環境を準備する Python自体の環境は、Dockerやローカルなど好きな方法で準備します。後述する接続用ドライバーはPythonのバージョンで内容が異なりますが、あまりに古いバージョンをあえて利用しなければならない場合を除けば、安定版を準備するべきと思います。どっちかって言うと注意が必要なのは、後述するMongoDBへの接続用のライブラリです。
+FROMpython:3.8-buster 今回、自分は上記のイメージでDockerコンテナを作成しています。まぁほかのプロジェクトのDockerfileを流用しただけなんですけど。
+pipで必要なライブラリをインストールする MongoDBへ接続するのに必要なライブラリはpymongoというもの。ところがこれをインストールする際には、ちょっとした記述が必要になります。
+python -m pip install pymongo[snappy,gssapi,srv,tls] あるいは pip3 install pymongo[srv] pip install pymongo[srv] 角カッコの中身なに？というところなのですが、この中で最低でもsrvは記述が必要です。pip install pymongoとだけ書くと、あとで実行したときに「dnspython must be installed error」というわかりにくいエラーになってしまうので注意が必要。なお、pipでこのように角カッコを記述するのは、インストール対象のライブラリについて環境を指定したい場合。つまり単純にpymongoとするだけではダメで、srv用環境としてのpymongoが必要なわけです。
+とりあえず、最低限接続に必要なライブラリはこれだけなのですが、後々APIサーバーとして扱いたいので自分はFlaskもインストールしておきました。
+MongoDB Atlasで接続用のドライバーを発行する MongoDBには、いわゆるAPI Keyとは異なる接続用のドライバーが存在します。ドライバーは簡単に取得できます。
+まずはとりあえず、いつもどおりMongoDB Atlasにログインします。次に接続したいクラスタの「CONNECT」ボタンを押します。
+表示されたメニューのうち、真ん中の「Connect your application」を押します。
+次に表示されたメニューから、接続元の環境を選択します。ここではPythonの3.6以降を選択しました。すると、mongodb&#43;srv://で始まる文字列が表示されると思うので、この文字列を丸々コピーして控えておきます。後述するPythonスクリプトに記述するのですが、ここで編集が必要になるのは下記の項目。
+ ユーザー名。これは&lt;username&gt;となっている部分を書き換える。もちろん&lt;&gt;の部分もだぞ！ パスワード。これは&lt;password&gt;となっている部分を書き換える。もちろん&lt;&gt;の部分もだぞ！ 接続先データベース名。これはmyFirstDatabaseとなっている部分を書き換える。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/access-to-mongodb-with-python/" /><meta property="article:published_time" content="2021-02-28T23:10:52&#43;09:00"/>
+<meta property="article:modified_time" content="2021-02-28T23:10:52&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="PythonからMongoDB Atlasにアクセスする"/>
+<meta name="twitter:description" content="はじめに PythonからMongoDBのクラウドサービスであるMongoDB Atlasにアクセスして、データを取得する方法についてメモしておきます。ここでは、将来的にはAPIサーバーとして運用することを想定して、Flaskをついでに導入しています。
+MongoDB Atlasについては日本語の記事があまり見受けられなかったので、同じような方法で接続しようとしています方の一助になれば幸いです。
+前提 ここでは下記の処理が済んでいることを前提としています。
+ MongoDB側にクラスターとデータベース、コレクションが既存である（もちろんなにかしらのデータが格納済み）。 Read権限あるいはReadとWrite権限を持ったユーザーを作成しています。  プロジェクトのトップページから左メニュー内の「Database Access」を選択すると、ユーザーの一覧が表示されます。ここで「Add new database user」ボタンをクリックすると、新しいユーザーを追加できます。ここの権限設定で「Only read any database」を選択しておけば、プロジェクト内におけるどのデータベースでもRead権限でアクセスできるようになります。
+単純に接続確認をするだけなら初期ユーザーで行えばいいわけですが、初期ユーザーはAdmin権限なのでただ接続確認するだけなら権限としては不要でしょう。それに、今後恒常的に利用することを鑑みると、専用のユーザーを作成しておくほうが望ましいと思いました。
+手順  Pythonの環境を準備する。 pipで必要なライブラリをインストールする。 MongoDB Atlasで接続用のドライバーを発行する。 Pythonスクリプトを用意する。 接続確認を行う。  大雑把な手順は上記のとおりです。順に説明します。
+Pythonの環境を準備する Python自体の環境は、Dockerやローカルなど好きな方法で準備します。後述する接続用ドライバーはPythonのバージョンで内容が異なりますが、あまりに古いバージョンをあえて利用しなければならない場合を除けば、安定版を準備するべきと思います。どっちかって言うと注意が必要なのは、後述するMongoDBへの接続用のライブラリです。
+FROMpython:3.8-buster 今回、自分は上記のイメージでDockerコンテナを作成しています。まぁほかのプロジェクトのDockerfileを流用しただけなんですけど。
+pipで必要なライブラリをインストールする MongoDBへ接続するのに必要なライブラリはpymongoというもの。ところがこれをインストールする際には、ちょっとした記述が必要になります。
+python -m pip install pymongo[snappy,gssapi,srv,tls] あるいは pip3 install pymongo[srv] pip install pymongo[srv] 角カッコの中身なに？というところなのですが、この中で最低でもsrvは記述が必要です。pip install pymongoとだけ書くと、あとで実行したときに「dnspython must be installed error」というわかりにくいエラーになってしまうので注意が必要。なお、pipでこのように角カッコを記述するのは、インストール対象のライブラリについて環境を指定したい場合。つまり単純にpymongoとするだけではダメで、srv用環境としてのpymongoが必要なわけです。
+とりあえず、最低限接続に必要なライブラリはこれだけなのですが、後々APIサーバーとして扱いたいので自分はFlaskもインストールしておきました。
+MongoDB Atlasで接続用のドライバーを発行する MongoDBには、いわゆるAPI Keyとは異なる接続用のドライバーが存在します。ドライバーは簡単に取得できます。
+まずはとりあえず、いつもどおりMongoDB Atlasにログインします。次に接続したいクラスタの「CONNECT」ボタンを押します。
+表示されたメニューのうち、真ん中の「Connect your application」を押します。
+次に表示されたメニューから、接続元の環境を選択します。ここではPythonの3.6以降を選択しました。すると、mongodb&#43;srv://で始まる文字列が表示されると思うので、この文字列を丸々コピーして控えておきます。後述するPythonスクリプトに記述するのですが、ここで編集が必要になるのは下記の項目。
+ ユーザー名。これは&lt;username&gt;となっている部分を書き換える。もちろん&lt;&gt;の部分もだぞ！ パスワード。これは&lt;password&gt;となっている部分を書き換える。もちろん&lt;&gt;の部分もだぞ！ 接続先データベース名。これはmyFirstDatabaseとなっている部分を書き換える。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">PythonからMongoDB Atlasにアクセスする</h1>
+			<div class="meta">Posted at &mdash; Feb 28, 2021</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>PythonからMongoDBのクラウドサービスである<a href="https://www.mongodb.com/cloud/atlas">MongoDB Atlas</a>にアクセスして、データを取得する方法についてメモしておきます。ここでは、将来的にはAPIサーバーとして運用することを想定して、Flaskをついでに導入しています。</p>
+
+<p>MongoDB Atlasについては日本語の記事があまり見受けられなかったので、同じような方法で接続しようとしています方の一助になれば幸いです。</p>
+
+<h2 id="前提">前提</h2>
+
+<p>ここでは下記の処理が済んでいることを前提としています。</p>
+
+<ul>
+<li>MongoDB側にクラスターとデータベース、コレクションが既存である（もちろんなにかしらのデータが格納済み）。</li>
+<li>Read権限あるいはReadとWrite権限を持ったユーザーを作成しています。</li>
+</ul>
+
+<p>プロジェクトのトップページから左メニュー内の「Database Access」を選択すると、ユーザーの一覧が表示されます。ここで「Add new database user」ボタンをクリックすると、新しいユーザーを追加できます。ここの権限設定で「Only read any database」を選択しておけば、プロジェクト内におけるどのデータベースでもRead権限でアクセスできるようになります。</p>
+
+<p>単純に接続確認をするだけなら初期ユーザーで行えばいいわけですが、初期ユーザーはAdmin権限なのでただ接続確認するだけなら権限としては不要でしょう。それに、今後恒常的に利用することを鑑みると、専用のユーザーを作成しておくほうが望ましいと思いました。</p>
+
+<h2 id="手順">手順</h2>
+
+<ol>
+<li>Pythonの環境を準備する。</li>
+<li><code>pip</code>で必要なライブラリをインストールする。</li>
+<li>MongoDB Atlasで接続用のドライバーを発行する。</li>
+<li>Pythonスクリプトを用意する。</li>
+<li>接続確認を行う。</li>
+</ol>
+
+<p>大雑把な手順は上記のとおりです。順に説明します。</p>
+
+<h2 id="pythonの環境を準備する">Pythonの環境を準備する</h2>
+
+<p>Python自体の環境は、Dockerやローカルなど好きな方法で準備します。後述する接続用ドライバーはPythonのバージョンで内容が異なりますが、あまりに古いバージョンをあえて利用しなければならない場合を除けば、安定版を準備するべきと思います。どっちかって言うと注意が必要なのは、後述するMongoDBへの接続用のライブラリです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#00f">FROM</span><span style="color:#a31515"> python:3.8-buster</span></code></pre></div>
+<p>今回、自分は上記のイメージでDockerコンテナを作成しています。<del>まぁほかのプロジェクトのDockerfileを流用しただけなんですけど。</del></p>
+
+<h2 id="pip-で必要なライブラリをインストールする"><code>pip</code>で必要なライブラリをインストールする</h2>
+
+<p>MongoDBへ接続するのに必要なライブラリは<code>pymongo</code>というもの。ところがこれをインストールする際には、ちょっとした記述が必要になります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">python -m pip install pymongo[snappy,gssapi,srv,tls]
+あるいは
+pip3 install pymongo[srv]
+pip install pymongo[srv]</code></pre></div>
+<p>角カッコの中身なに？というところなのですが、この中で最低でも<code>srv</code>は記述が必要です。<code>pip install pymongo</code>とだけ書くと、あとで実行したときに「dnspython must be installed error」という<a href="https://stackoverflow.com/questions/52930341/pymongo-mongodbsrv-dnspython-must-be-installed-error">わかりにくいエラーになってしまう</a>ので注意が必要。なお、<code>pip</code>でこのように角カッコを記述するのは、<strong>インストール対象のライブラリについて環境を指定したい</strong>場合。つまり単純に<code>pymongo</code>とするだけではダメで、<code>srv</code>用環境としての<code>pymongo</code>が必要なわけです。</p>
+
+<p>とりあえず、最低限接続に必要なライブラリはこれだけなのですが、後々APIサーバーとして扱いたいので自分はFlaskもインストールしておきました。</p>
+
+<h2 id="mongodb-atlasで接続用のドライバーを発行する">MongoDB Atlasで接続用のドライバーを発行する</h2>
+
+<p>MongoDBには、いわゆるAPI Keyとは異なる接続用のドライバーが存在します。ドライバーは簡単に取得できます。</p>
+
+<p><img src="2021-02-28-22-08-26.png" alt="pic" /></p>
+
+<p>まずはとりあえず、いつもどおりMongoDB Atlasにログインします。次に接続したいクラスタの「CONNECT」ボタンを押します。</p>
+
+<p><img src="2021-02-28-22-09-42.png" alt="pic" /></p>
+
+<p>表示されたメニューのうち、真ん中の「Connect your application」を押します。</p>
+
+<p><img src="2021-02-28-22-11-06.png" alt="pic" /></p>
+
+<p>次に表示されたメニューから、接続元の環境を選択します。ここではPythonの3.6以降を選択しました。すると、<code>mongodb+srv://</code>で始まる文字列が表示されると思うので、この文字列を丸々コピーして控えておきます。後述するPythonスクリプトに記述するのですが、ここで編集が必要になるのは下記の項目。</p>
+
+<ul>
+<li>ユーザー名。これは<code>&lt;username&gt;</code>となっている部分を書き換える。もちろん<code>&lt;&gt;</code>の部分もだぞ！</li>
+<li>パスワード。これは<code>&lt;password&gt;</code>となっている部分を書き換える。もちろん<code>&lt;&gt;</code>の部分もだぞ！</li>
+
+<li><p>接続先データベース名。これは<code>myFirstDatabase</code>となっている部分を書き換える。</p>
+
+<p>Replace <code>&lt;password&gt;</code> with the password for the <code>&lt;username&gt;</code> user. Replace myFirstDatabase with the name of the database that connections will use by default.</p></li>
+</ul>
+
+<p>まぁこのページ内で上記のように注意書きされているので、書き換え忘れることはないと思いますが。</p>
+
+<h2 id="pythonスクリプトを用意する">Pythonスクリプトを用意する</h2>
+
+<p>Pythonスクリプトは下記の内容であれば、とりあえず接続して値を取得できるはずです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">from</span> flask <span style="color:#00f">import</span> Flask
+<span style="color:#00f">from</span> flask_cors <span style="color:#00f">import</span> CORS
+<span style="color:#00f">import</span> pymongo
+
+connection_url = <span style="color:#a31515">&#39;mongodb+srv://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@hoge.fuga.mongodb.net/DATABASE_NAME?retryWrites=true&amp;w=majority&#39;</span>
+
+app = Flask(__name__)
+client = pymongo.MongoClient(connection_url)
+
+db = client.DATABASE_NAME
+collection = db.COLLECTION_NAME
+
+result = collection.find_one()
+<span style="color:#00f">print</span>(result)
+
+<span style="color:#00f">if</span> __name__ == <span style="color:#a31515">&#39;__main__&#39;</span>:
+    app.run(debug=True)</code></pre></div>
+<p>まずは前述の通り、MongoDBに接続するドライバーの部分で書き換える必要があるのは3箇所。</p>
+
+<ul>
+<li>ユーザー名</li>
+<li>パスワード</li>
+<li>接続先データベース名</li>
+</ul>
+
+<p>さらに接続が確立したあとは、データを取得したいコレクションを指定して実際に値を取得する必要があります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">db = client.DATABASE_NAME
+collection = db.COLLECTION_NAME
+
+result = collection.find_one()
+<span style="color:#00f">print</span>(result)</code></pre></div>
+<p>それをしているのが上記の部分。ここで<code>DATABASE_NAME</code>となっている部分には<strong>実際のデータベース名を記述します</strong>。データベース名が<code>hoge</code>という名前なら、上記のスクリプトなら<code>db.hoge</code>と記述すれば参照先データベースを指定できます。</p>
+
+<p>なお、接続用ドライバーである<code>connection_url</code>の中で接続先データベース名を指定していますが、これは<strong>デフォルトで使用するデータベース名</strong>を記述しています。クラスタ内にデータベースが複数あって、デフォルトでアクセスする先と実際に値を取得したい先が異なる場合などは上記のように接続先を逐一指定します。じゃあ、デフォルトの接続先と値の取得先が同じなら<code>client.DATABASE_NAME</code>の部分は不要なんじゃ？と思って<code>client.COLLECTION_NAME</code>と記述して実行してみましたが、<code>find_one()</code>のところで「&rsquo;Collection&rsquo; object is not callable.」エラーになってしまいました。そんなわけで、現状では上記の冗長な書き方をしています。</p>
+
+<p><code>COLLECTION_NAME</code>には、値の取得を実行したいコレクション名を記述します。コレクション名が<code>fuga</code>という場合、上記のスクリプトなら<code>db.fuga</code>と記述すれば参照先コレクションを指定できます。</p>
+
+<p><code>find_one()</code>は、「とりあえずなんか1つデータくれ」という意味なので、検索する値を設定する場合は<code>find_one({'KEY': 'VALUE'})</code>と記述します。<code>find_one()</code>とだけ記述して実行する場合、最初のデータが参照されます。</p>
+
+<h2 id="接続確認を行う">接続確認を行う</h2>
+
+<p>ここまでスクリプトを書いたら実行してみましょう。多分、取得結果がコンソールに出力されるはず。ここまでできれば、とりあえずアクセスの確率とデータの取得はできました。</p>
+
+<h2 id="参照">参照</h2>
+
+<ol>
+<li><a href="https://docs.atlas.mongodb.com/tutorial/connect-to-your-cluster/">Connect to Your Cluster</a></li>
+<li><a href="https://docs.atlas.mongodb.com/tutorial/insert-data-into-your-cluster/">Insert and View Data in Your Cluster</a></li>
+<li><a href="https://www.geeksforgeeks.org/make-python-api-to-access-mongo-atlas-database/">Make Python API to access Mongo Atlas Database</a></li>
+<li><a href="https://stackoverflow.com/questions/52930341/pymongo-mongodbsrv-dnspython-must-be-installed-error">pymongo - mongodb+srv “dnspython must be installed” error</a></li>
+<li><a href="https://blog.amedama.jp/entry/2016/06/17/224532">Python: 環境ごとの依存ライブラリをセットアップスクリプトの extras_require で管理する</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
