@@ -33,7 +33,7 @@ MongoDB Atlasで接続用のドライバーを発行する MongoDBには、い�
 まずはとりあえず、いつもどおりMongoDB Atlasにログインします。次に接続したいクラスタの「CONNECT」ボタンを押します。
 表示されたメニューのうち、真ん中の「Connect your application」を押します。
 次に表示されたメニューから、接続元の環境を選択します。ここではPythonの3.6以降を選択しました。すると、mongodb+srv://で始まる文字列が表示されると思うので、この文字列を丸々コピーして控えておきます。後述するPythonスクリプトに記述するのですが、ここで編集が必要になるのは下記の項目。
- ユーザー名。これは&amp;lt;username&amp;gt;となっている部分を書き換える。もちろん&amp;lt;&amp;gt;の部分もだぞ！ パスワード。これは&amp;lt;password&amp;gt;となっている部分を書き換える。もちろん&amp;lt;&amp;gt;の部分もだぞ！ 接続先データベース名。これはmyFirstDatabaseとなっている部分を書き換える。</description>
+ ユーザー名。これは&amp;lt;username&amp;gt;となっている部分を書き換える。もちろん&amp;lt;&amp;gt;の部分もだぞ！ パスワード。これは&amp;lt;password&amp;gt;となっている部分を書き換える。もちろん&amp;lt;&amp;gt;の部分もだぞ！ 接続先データベース名。これはmyFirstDatabaseとなっている部分を書き換える。   Replace &amp;lt;password&amp;gt; with the password for the &amp;lt;username&amp;gt; user.</description>
     </item>
     
     <item>
