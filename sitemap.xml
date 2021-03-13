@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/use-pickle-for-ml-model/</loc>
+    <lastmod>2021-03-13T10:51:59+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/access-to-mongodb-with-python/</loc>
     <lastmod>2021-02-28T23:10:52+09:00</lastmod>
   </url>
@@ -517,6 +522,12 @@
   </url>
   
   <url>
+    <loc>https://ysko909.github.io/tags/pickle/</loc>
+    <lastmod>2021-03-13T10:51:59+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/tags/postgresql/</loc>
     <lastmod>2020-04-11T09:18:31+09:00</lastmod>
     <priority>0</priority>
@@ -524,7 +535,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2021-02-28T23:10:52+09:00</lastmod>
+    <lastmod>2021-03-13T10:51:59+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -536,7 +547,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/python/</loc>
-    <lastmod>2021-02-28T23:10:52+09:00</lastmod>
+    <lastmod>2021-03-13T10:51:59+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -656,7 +667,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2021-02-28T23:10:52+09:00</lastmod>
+    <lastmod>2021-03-13T10:51:59+09:00</lastmod>
     <priority>0</priority>
   </url>
   

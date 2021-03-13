@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>学習済みのモデルをpickleで保存する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="学習済みのモデルをpickleで保存する" />
+<meta property="og:description" content="概要 今回は、作成した学習済みモデルをpickleを使って保存・ロードしてみます。
+作成した機械学習モデルは、何もしなければそのプログラムが実行終了するとともにメモリから揮発してしまいます。そのため再度モデルを利用したい場合は、もう一度最初からプログラムを実行して学習モデルを作成する必要があるわけです。
+とは言え、学習モデルの作成は場合によっては何時間もかけて行うため、モデルを利用するごとに毎回モデル作成を実行していたのでは割に合いません。よって、一度作成したモデルはどこかに保存するなりして永続化しておき、利用するときに読み込むという運用ならモデルの再作成という余計な処理をしなくて済みます。また、モデル間の予測結果を比較したい場合などは、バージョンごとにモデルを保存しておきたい、というニーズもあるかもしれません。
+こういうケースにおいて、モデルの保存に利用するのがpickleです。Pythonの標準ライブラリなので追加インストールする必要はありません。
+ちなみにもう少し正確に言うと、pickleは学習モデルを保存するためだけのモジュールではありません。もともとの目的は、Pythonのオブジェクトをバイト列などの直列化・非直列化するためのモジュールです。よって、学習モデルに限らずPythonにおけるオブジェクトなら扱えます。学習モデルの永続化以外の用途だと、巨大なデータを読み込んだ結果をpickleで保存しておき、再度利用する際のデータ読み込み負荷を軽減するためなどに利用するケースがあります。
+なお、「pickle」の複数形は「pickles」。つまりピクルスのことで、直列化されたデータについて「長期保存できる漬物」という見方をしているのですね。
+環境 # python --version Python 3.8.5 上記の環境で実行しました。Pythonのバージョンは、事前に確認しておいてください。
+なぜそんな必要があるかというと、Pythonのバージョンに依ってpickleが生成するデータ形式の内容は微妙に異なるからです。正確に言えば、プロトコルのバージョンが異なります。
+Python3.8以降の環境において、直列化の際にプロトコルを指定しないのなら、作成されたデータのプロトコルバージョンは4になります。こいつは、たとえばPython2系ではロードできません。Python2系がロードできるのは、プロトコルのバージョンが2であるデータだけです。よって、Pythonのバージョンが異なる環境をまたいでpickleを利用したい場合は、出力時のプロトコルを実行環境に対応したバージョンで指定しておく必要があるわけです。詳細はこちらを参照してください。
+なお、今回は直列化・非直列化で同じバージョンのPythonを利用するため、プロトコルの指定は行っていません。
+コード 試しにちょっとした学習モデルを作成してみましょう。ここではおなじみのirisデータを用いて、学習モデルを作成し永続化してみます。
+import pickle from sklearn import datasets from sklearn.ensemble import RandomForestClassifier from sklearn.model_selection import train_test_split iris = datasets.load_iris() X_train, X_test, y_train, y_test = train_test_split(iris[&#39;data&#39;], iris[&#39;target&#39;], random_state=0) model = RandomForestClassifier(n_estimators=5, criterion=&#39;entropy&#39;, max_depth=3, random_state=3) print(model) model.fit(X_train, y_train) pred = model.predict(X_test) accuracy = model.score(X_test, y_test) print(&#39;accuracy {0:.2%}&#39;.format(accuracy)) with open(&#39;model.pickle&#39;, &#39;wb&#39;) as f: pickle.dump(model, f) モデリングのアルゴリズムはRandom Forestを利用しました。とくに意味はありません。手癖です。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/use-pickle-for-ml-model/" /><meta property="article:published_time" content="2021-03-13T10:51:59&#43;09:00"/>
+<meta property="article:modified_time" content="2021-03-13T10:51:59&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="学習済みのモデルをpickleで保存する"/>
+<meta name="twitter:description" content="概要 今回は、作成した学習済みモデルをpickleを使って保存・ロードしてみます。
+作成した機械学習モデルは、何もしなければそのプログラムが実行終了するとともにメモリから揮発してしまいます。そのため再度モデルを利用したい場合は、もう一度最初からプログラムを実行して学習モデルを作成する必要があるわけです。
+とは言え、学習モデルの作成は場合によっては何時間もかけて行うため、モデルを利用するごとに毎回モデル作成を実行していたのでは割に合いません。よって、一度作成したモデルはどこかに保存するなりして永続化しておき、利用するときに読み込むという運用ならモデルの再作成という余計な処理をしなくて済みます。また、モデル間の予測結果を比較したい場合などは、バージョンごとにモデルを保存しておきたい、というニーズもあるかもしれません。
+こういうケースにおいて、モデルの保存に利用するのがpickleです。Pythonの標準ライブラリなので追加インストールする必要はありません。
+ちなみにもう少し正確に言うと、pickleは学習モデルを保存するためだけのモジュールではありません。もともとの目的は、Pythonのオブジェクトをバイト列などの直列化・非直列化するためのモジュールです。よって、学習モデルに限らずPythonにおけるオブジェクトなら扱えます。学習モデルの永続化以外の用途だと、巨大なデータを読み込んだ結果をpickleで保存しておき、再度利用する際のデータ読み込み負荷を軽減するためなどに利用するケースがあります。
+なお、「pickle」の複数形は「pickles」。つまりピクルスのことで、直列化されたデータについて「長期保存できる漬物」という見方をしているのですね。
+環境 # python --version Python 3.8.5 上記の環境で実行しました。Pythonのバージョンは、事前に確認しておいてください。
+なぜそんな必要があるかというと、Pythonのバージョンに依ってpickleが生成するデータ形式の内容は微妙に異なるからです。正確に言えば、プロトコルのバージョンが異なります。
+Python3.8以降の環境において、直列化の際にプロトコルを指定しないのなら、作成されたデータのプロトコルバージョンは4になります。こいつは、たとえばPython2系ではロードできません。Python2系がロードできるのは、プロトコルのバージョンが2であるデータだけです。よって、Pythonのバージョンが異なる環境をまたいでpickleを利用したい場合は、出力時のプロトコルを実行環境に対応したバージョンで指定しておく必要があるわけです。詳細はこちらを参照してください。
+なお、今回は直列化・非直列化で同じバージョンのPythonを利用するため、プロトコルの指定は行っていません。
+コード 試しにちょっとした学習モデルを作成してみましょう。ここではおなじみのirisデータを用いて、学習モデルを作成し永続化してみます。
+import pickle from sklearn import datasets from sklearn.ensemble import RandomForestClassifier from sklearn.model_selection import train_test_split iris = datasets.load_iris() X_train, X_test, y_train, y_test = train_test_split(iris[&#39;data&#39;], iris[&#39;target&#39;], random_state=0) model = RandomForestClassifier(n_estimators=5, criterion=&#39;entropy&#39;, max_depth=3, random_state=3) print(model) model.fit(X_train, y_train) pred = model.predict(X_test) accuracy = model.score(X_test, y_test) print(&#39;accuracy {0:.2%}&#39;.format(accuracy)) with open(&#39;model.pickle&#39;, &#39;wb&#39;) as f: pickle.dump(model, f) モデリングのアルゴリズムはRandom Forestを利用しました。とくに意味はありません。手癖です。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">学習済みのモデルをpickleで保存する</h1>
+			<div class="meta">Posted at &mdash; Mar 13, 2021</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>今回は、作成した学習済みモデルを<code>pickle</code>を使って保存・ロードしてみます。</p>
+
+<p>作成した機械学習モデルは、何もしなければそのプログラムが実行終了するとともにメモリから揮発してしまいます。そのため再度モデルを利用したい場合は、もう一度最初からプログラムを実行して学習モデルを作成する必要があるわけです。</p>
+
+<p>とは言え、学習モデルの作成は場合によっては何時間もかけて行うため、モデルを利用するごとに毎回モデル作成を実行していたのでは割に合いません。よって、一度作成したモデルはどこかに保存するなりして永続化しておき、利用するときに読み込むという運用ならモデルの再作成という余計な処理をしなくて済みます。また、モデル間の予測結果を比較したい場合などは、バージョンごとにモデルを保存しておきたい、というニーズもあるかもしれません。</p>
+
+<p>こういうケースにおいて、モデルの保存に利用するのが<a href="https://docs.python.org/ja/3/library/pickle.html">pickle</a>です。Pythonの標準ライブラリなので追加インストールする必要はありません。</p>
+
+<p>ちなみにもう少し正確に言うと、<code>pickle</code>は学習モデルを保存するためだけのモジュールではありません。もともとの目的は、Pythonのオブジェクトをバイト列などの直列化・非直列化するためのモジュールです。よって、学習モデルに限らずPythonにおけるオブジェクトなら扱えます。学習モデルの永続化以外の用途だと、巨大なデータを読み込んだ結果を<code>pickle</code>で保存しておき、再度利用する際のデータ読み込み負荷を軽減するためなどに利用するケースがあります。</p>
+
+<p>なお、「pickle」の複数形は「pickles」。つまりピクルスのことで、直列化されたデータについて「長期保存できる漬物」という見方をしているのですね。</p>
+
+<h2 id="環境">環境</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console"># python --version
+Python 3.8.5</code></pre></div>
+<p>上記の環境で実行しました。Pythonのバージョンは、事前に確認しておいてください。</p>
+
+<p>なぜそんな必要があるかというと、Pythonのバージョンに依って<code>pickle</code>が生成するデータ形式の内容は<strong>微妙に異なるから</strong>です。正確に言えば、<strong>プロトコルのバージョン</strong>が異なります。</p>
+
+<p>Python3.8以降の環境において、直列化の際にプロトコルを指定しないのなら、作成されたデータのプロトコルバージョンは4になります。こいつは、たとえばPython2系ではロードできません。Python2系がロードできるのは、プロトコルのバージョンが2であるデータだけです。よって、Pythonのバージョンが異なる環境をまたいで<code>pickle</code>を利用したい場合は、出力時のプロトコルを実行環境に対応したバージョンで指定しておく必要があるわけです。詳細は<a href="https://docs.python.org/ja/3/library/pickle.html#data-stream-format">こちら</a>を参照してください。</p>
+
+<p>なお、今回は直列化・非直列化で同じバージョンのPythonを利用するため、プロトコルの指定は行っていません。</p>
+
+<h2 id="コード">コード</h2>
+
+<p>試しにちょっとした学習モデルを作成してみましょう。ここではおなじみの<code>iris</code>データを用いて、学習モデルを作成し永続化してみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> pickle
+<span style="color:#00f">from</span> sklearn <span style="color:#00f">import</span> datasets
+<span style="color:#00f">from</span> sklearn.ensemble <span style="color:#00f">import</span> RandomForestClassifier
+<span style="color:#00f">from</span> sklearn.model_selection <span style="color:#00f">import</span> train_test_split
+
+iris = datasets.load_iris()
+
+X_train, X_test, y_train, y_test = train_test_split(iris[<span style="color:#a31515">&#39;data&#39;</span>], iris[<span style="color:#a31515">&#39;target&#39;</span>], random_state=0)
+
+model = RandomForestClassifier(n_estimators=5, criterion=<span style="color:#a31515">&#39;entropy&#39;</span>, max_depth=3, random_state=3)
+
+<span style="color:#00f">print</span>(model)
+
+model.fit(X_train, y_train)
+
+pred = model.predict(X_test)
+
+accuracy = model.score(X_test, y_test)
+
+<span style="color:#00f">print</span>(<span style="color:#a31515">&#39;accuracy {0:.2%}&#39;</span>.format(accuracy))
+
+<span style="color:#00f">with</span> open(<span style="color:#a31515">&#39;model.pickle&#39;</span>, <span style="color:#a31515">&#39;wb&#39;</span>) <span style="color:#00f">as</span> f:
+    pickle.dump(model, f)</code></pre></div>
+<p>モデリングのアルゴリズムはRandom Forestを利用しました。とくに意味はありません。手癖です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">RandomForestClassifier(criterion=&#39;entropy&#39;, max_depth=3, n_estimators=5,
+                       random_state=3)
+accuracy 92.11%</code></pre></div>
+<p>実行結果は上記のようになります。この学習モデルは、<code>model.pickle</code>という名前で保存されました。</p>
+
+<p>今度は、保存したモデルを読み込んで再度実行してみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> pickle
+<span style="color:#00f">from</span> sklearn <span style="color:#00f">import</span> datasets
+<span style="color:#00f">from</span> sklearn.model_selection <span style="color:#00f">import</span> train_test_split
+
+<span style="color:#00f">with</span> open(<span style="color:#a31515">&#39;model.pickle&#39;</span>, <span style="color:#a31515">&#39;rb&#39;</span>) <span style="color:#00f">as</span> f:
+    model = pickle.load(f)
+
+<span style="color:#00f">print</span>(model)
+
+iris = datasets.load_iris()
+
+_, X_test, _, y_test = train_test_split(iris[<span style="color:#a31515">&#39;data&#39;</span>], iris[<span style="color:#a31515">&#39;target&#39;</span>], random_state=0)
+
+pickle_accuracy = model.score(X_test, y_test)
+
+<span style="color:#00f">print</span>(<span style="color:#a31515">&#39;accuracy : {0:.2%}&#39;</span>.format(pickle_accuracy))</code></pre></div>
+<p>今度は、保存されたモデルである<code>mode.pickle</code>を読み込んで実行してみます。モデルはロードしただけで手を加えていないので、同じ実行結果になるはずです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">RandomForestClassifier(criterion=&#39;entropy&#39;, max_depth=3, n_estimators=5,
+                       random_state=3)
+accuracy : 92.11%</code></pre></div>
+<p>モデルを読み込んで同じデータを利用し予測を行ったところ、モデル保存時と同様の結果が出力されました。これで、モデルの外部保存とロードができるようになりました。</p>
+
+<h2 id="備考">備考</h2>
+
+<p><code>pickle.load()</code>は読み込むデータについて、特段のチェック機構などを持っていません。つまり、完全に信用しきって読み込みます。よって、仮にシステムに対し害を与えるような内容が保存されていたとしても、それを確認したり防ぐような機能はありません。つまり、脆弱性となってしまうわけです。よって、<strong>信用できるデータ以外は絶対にロードしてはいけません</strong>。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>モデルの作成はマシンスペックに物言わせれば多かれ少なかれ短縮できますが、だからって実行のたびに作成していては大変なリソースのムダです。<code>pickle</code>を使ってムダを省きつつ快適なモデルの取り回しを実現してみましょう。</p>
+
+<h2 id="参考">参考</h2>
+
+<p><a href="https://docs.python.org/ja/3/library/pickle.html">pickle &mdash; Python オブジェクトの直列化</a></p>
+
+<p><a href="https://blog.amedama.jp/entry/2015/12/05/132520">Python: オブジェクトを漬物 (Pickle) にする</a></p>
+
+<p><a href="https://www.sairablog.com/article/pickle-trained-model-save-read.html">pickle を使った、学習済みモデルの保存・読み出し方法</a></p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

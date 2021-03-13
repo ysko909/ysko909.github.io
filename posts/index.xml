@@ -7,10 +7,30 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sun, 28 Feb 2021 23:10:52 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 13 Mar 2021 10:51:59 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>学習済みのモデルをpickleで保存する</title>
+      <link>https://ysko909.github.io/posts/use-pickle-for-ml-model/</link>
+      <pubDate>Sat, 13 Mar 2021 10:51:59 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/use-pickle-for-ml-model/</guid>
+      <description>概要 今回は、作成した学習済みモデルをpickleを使って保存・ロードしてみます。
+作成した機械学習モデルは、何もしなければそのプログラムが実行終了するとともにメモリから揮発してしまいます。そのため再度モデルを利用したい場合は、もう一度最初からプログラムを実行して学習モデルを作成する必要があるわけです。
+とは言え、学習モデルの作成は場合によっては何時間もかけて行うため、モデルを利用するごとに毎回モデル作成を実行していたのでは割に合いません。よって、一度作成したモデルはどこかに保存するなりして永続化しておき、利用するときに読み込むという運用ならモデルの再作成という余計な処理をしなくて済みます。また、モデル間の予測結果を比較したい場合などは、バージョンごとにモデルを保存しておきたい、というニーズもあるかもしれません。
+こういうケースにおいて、モデルの保存に利用するのがpickleです。Pythonの標準ライブラリなので追加インストールする必要はありません。
+ちなみにもう少し正確に言うと、pickleは学習モデルを保存するためだけのモジュールではありません。もともとの目的は、Pythonのオブジェクトをバイト列などの直列化・非直列化するためのモジュールです。よって、学習モデルに限らずPythonにおけるオブジェクトなら扱えます。学習モデルの永続化以外の用途だと、巨大なデータを読み込んだ結果をpickleで保存しておき、再度利用する際のデータ読み込み負荷を軽減するためなどに利用するケースがあります。
+なお、「pickle」の複数形は「pickles」。つまりピクルスのことで、直列化されたデータについて「長期保存できる漬物」という見方をしているのですね。
+環境 # python --version Python 3.8.5 上記の環境で実行しました。Pythonのバージョンは、事前に確認しておいてください。
+なぜそんな必要があるかというと、Pythonのバージョンに依ってpickleが生成するデータ形式の内容は微妙に異なるからです。正確に言えば、プロトコルのバージョンが異なります。
+Python3.8以降の環境において、直列化の際にプロトコルを指定しないのなら、作成されたデータのプロトコルバージョンは4になります。こいつは、たとえばPython2系ではロードできません。Python2系がロードできるのは、プロトコルのバージョンが2であるデータだけです。よって、Pythonのバージョンが異なる環境をまたいでpickleを利用したい場合は、出力時のプロトコルを実行環境に対応したバージョンで指定しておく必要があるわけです。詳細はこちらを参照してください。
+なお、今回は直列化・非直列化で同じバージョンのPythonを利用するため、プロトコルの指定は行っていません。
+コード 試しにちょっとした学習モデルを作成してみましょう。ここではおなじみのirisデータを用いて、学習モデルを作成し永続化してみます。
+import pickle from sklearn import datasets from sklearn.ensemble import RandomForestClassifier from sklearn.model_selection import train_test_split iris = datasets.load_iris() X_train, X_test, y_train, y_test = train_test_split(iris[&amp;#39;data&amp;#39;], iris[&amp;#39;target&amp;#39;], random_state=0) model = RandomForestClassifier(n_estimators=5, criterion=&amp;#39;entropy&amp;#39;, max_depth=3, random_state=3) print(model) model.fit(X_train, y_train) pred = model.predict(X_test) accuracy = model.score(X_test, y_test) print(&amp;#39;accuracy {0:.2%}&amp;#39;.format(accuracy)) with open(&amp;#39;model.pickle&amp;#39;, &amp;#39;wb&amp;#39;) as f: pickle.dump(model, f) モデリングのアルゴリズムはRandom Forestを利用しました。とくに意味はありません。手癖です。</description>
+    </item>
     
     <item>
       <title>PythonからMongoDB Atlasにアクセスする</title>
