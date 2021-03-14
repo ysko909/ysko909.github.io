@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Kaggleに登録してTitanicチュートリアルのデータを見てみる - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Kaggleに登録してTitanicチュートリアルのデータを見てみる" />
+<meta property="og:description" content="概要 今回はKaggleに登録して、チュートリアルのデータ参照をしてみます。実際にモデルを作成したりするのはまた別の機会に。
+Kaggleってなにさ Kaggleは企業や研究者がデータを（場合によっては懸賞金も）提供し、世界中のエンジニアが最適な機械学習のモデルを競い合うプラットフォームのこと。これだけ聞くと恐れ多い感じもしますが、初心者にとってはデータ分析がタダで練習できるステキなサイトです。しかも参考になる他人のソースや解説資料なども見放題と来たもんで、非常に学べるサイトです。
+Titanicチュートリアル Kaggleに掲載されているコンペティションは、基本的に企業や個人がデータを提供し期限を設けて開催するものです。それとは別に、常時開催され提出期限のないチュートリアルがあります。Titanicチュートリアルはその中でも割と有名なチュートリアルです。Titanicとは「あの」タイタニック号のことであり、提供されるデータは乗船していた顧客名簿です。このデータを用いて、生存予測を行うというチュートリアルです。
+なにはともあれアカウント登録 Kaggleにアカウントを開設します。登録の方法は、とくに躓くようなところはないと思いますので割愛します。登録するとアイコンはアヒルになります。なぜに？
+Titanicチュートリアルに参加 Kaggleのアカウント作成が終わったら、コンペ参加のためTitanicチュートリアルにアクセスします。「Join Competition」をクリックするとポップアップウィンドウが出現しますので、おもむろにに「I Understand and Accept.」をクリックします。要は「同意する、ってボタン押したら、コンペのルールに準拠してもらうからね」ということです。これに同意しないと先に進まないので同意します。
+するとこんな感じの画面になるはずです。「You have accepted the rules for this competition. Good luck!」
+なお、ルールなどを確認したい場合は「Rules」にいろいろ記述してあります。コンペティションによっては、そのコンペに限定した特別なルールがあったりするので確認が必要です。
+Notebookの作成 チュートリアルに参加したところで、今度はNotebookを新規で作成します。コンペティションのトップにある「Notebooks」をクリックすると、右側に「New Notebook」と表示されますので、そのボタンをクリックします。
+すると画面が切り替わって、新規でNotebookを作成する画面が表示されます。基本的にはあまり変更する必要はないとは思います。「SHOW ADVANCED SETTINGS」をクリックすると詳細な設定項目が表示されますが、GPUの使用だとかGCPとアカウントをリンクするかといった設定（デフォルトではどちらもOFFに設定されている）なので、やっぱりあまり変更する必要はとりあえずないと思います。
+ちなみに、NotebookとScriptの違いですが、NotebookはJupyter Notebookです。なのでMarkdownを記述しつつPythonコードを書くスタイルです。Scriptはその名の通りスクリプトで、コード単体です。どちらがいいかはお好みで。ここではNotebookを選択しました。
+下の「Create」ボタンを押すと処理が進んでNotebookが作成されます。すると下記のような画面に遷移します。
+これでNotebookが作成できました。Jupyter NotebookなのでMarkdownで任意の記述を行いつつ、Pythonソースを記述かつ実行できます。Notebookの任意の場所にカーソルを置くとMarkdown用、あるいはPython用のセルを追加するボタンが出現します。これでセルを追加していろいろ記述するわけです。
+実行は、セル単位であれば実行したいセルにカーソルを置くと、三角形の再生ボタンが左側に表示されます。コイツをクリックすることで、そのセルを実行できるわけです。
+実行するとそのセルの直下に実行結果が表示されます。
+Notebookを作成したら右上の「Commit」ボタンを押します。下の画像だとすでに何回かボタンを押した後なのでVersionが3まで行っちゃってますが・・・。
+「Logs」の部分に処理内容が表示されます。ただし、ここではNotebookに処理内容を記述していないのであまり意味のないCommit結果になっていますが・・・。
+なにはともあれ、「Notebookを作成し処理を記述、できあがったらCommitして必要に応じてチューニングを施す」のが、Kaggleのコンペにおける基本的な行動です。
+データセットを準備する Notebookを作成したので、コンペ用のデータを読み込んで内容を確認してみます。Notebookの内容は下記のとおりとします。データはコンペのメインページに戻り「Data」タブを参照します。
+「Overview」にはどんな名前のデータがあるか、データにはどんな情報が含まれているかなどの情報が記載されています。そのまま読み進めていくと、ページの中頃に「Data Sources」という項目があり、データがダウンロードできるようになっています。
+タイタニックのチュートリアルで利用するファイルは「train.csv」と「test.csv」の2ファイルです。とりあえずトレーニング用の「train.csv」について、その内容を確認してみます。そんなわけで下記のようなソースを書きました。
+import pandas as pd train = pd.read_csv(&#39;train.csv&#39;) train.head(3) これを実行すると・・・そんなファイルねぇよ！って怒られます。
+えー。まぁなんの考慮もなくべた書きしたところで、そんなテキトーなコードがちゃんと動作するはずもないですな。じゃあどうすれば参照できるのか調べます。
+Kaggleではコンペそのものにはデータがキチンと準備されています（じゃないとコンペできないから当たり前ですね）。が、参加者が各々で作成したNotebookから参照するためには、データがどのフォルダに格納されているかを確認する必要があります。
+作成したNotebookの右側に「Data」を押すと、下記のようなフォルダが表示されます。
+展開してみるとこんな感じ。
+じゃあこのファイルをどうやって参照するかですが、まずはinputフォルダはいいとして、その下のフォルダはなんかずいぶんと長い名前です。これ全部指定しなきゃだめなの・・・？とりあえずその辺を確認したいので、ざっくりこんなコードを書いて実行してみます。
+import os print(os.listdir(&#39;../input&#39;)) print(os.listdir(&#39;../input/titanic&#39;)) listdir()は指定したフォルダの中身を返します。実行結果を見てみます。
+[&#39;titanic&#39;] [&#39;train.csv&#39;, &#39;gender_submission.csv&#39;, &#39;test.csv&#39;] どうやらinput/titanic/と指定すれば、配下のファイルが参照できそうです。というわけで冒頭のファイルを修正してみました。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/resist-kaggle-and-make-notebook-of-tutorial/" /><meta property="article:published_time" content="2019-11-19T15:25:40&#43;09:00"/>
+<meta property="article:modified_time" content="2019-11-19T15:25:40&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Kaggleに登録してTitanicチュートリアルのデータを見てみる"/>
+<meta name="twitter:description" content="概要 今回はKaggleに登録して、チュートリアルのデータ参照をしてみます。実際にモデルを作成したりするのはまた別の機会に。
+Kaggleってなにさ Kaggleは企業や研究者がデータを（場合によっては懸賞金も）提供し、世界中のエンジニアが最適な機械学習のモデルを競い合うプラットフォームのこと。これだけ聞くと恐れ多い感じもしますが、初心者にとってはデータ分析がタダで練習できるステキなサイトです。しかも参考になる他人のソースや解説資料なども見放題と来たもんで、非常に学べるサイトです。
+Titanicチュートリアル Kaggleに掲載されているコンペティションは、基本的に企業や個人がデータを提供し期限を設けて開催するものです。それとは別に、常時開催され提出期限のないチュートリアルがあります。Titanicチュートリアルはその中でも割と有名なチュートリアルです。Titanicとは「あの」タイタニック号のことであり、提供されるデータは乗船していた顧客名簿です。このデータを用いて、生存予測を行うというチュートリアルです。
+なにはともあれアカウント登録 Kaggleにアカウントを開設します。登録の方法は、とくに躓くようなところはないと思いますので割愛します。登録するとアイコンはアヒルになります。なぜに？
+Titanicチュートリアルに参加 Kaggleのアカウント作成が終わったら、コンペ参加のためTitanicチュートリアルにアクセスします。「Join Competition」をクリックするとポップアップウィンドウが出現しますので、おもむろにに「I Understand and Accept.」をクリックします。要は「同意する、ってボタン押したら、コンペのルールに準拠してもらうからね」ということです。これに同意しないと先に進まないので同意します。
+するとこんな感じの画面になるはずです。「You have accepted the rules for this competition. Good luck!」
+なお、ルールなどを確認したい場合は「Rules」にいろいろ記述してあります。コンペティションによっては、そのコンペに限定した特別なルールがあったりするので確認が必要です。
+Notebookの作成 チュートリアルに参加したところで、今度はNotebookを新規で作成します。コンペティションのトップにある「Notebooks」をクリックすると、右側に「New Notebook」と表示されますので、そのボタンをクリックします。
+すると画面が切り替わって、新規でNotebookを作成する画面が表示されます。基本的にはあまり変更する必要はないとは思います。「SHOW ADVANCED SETTINGS」をクリックすると詳細な設定項目が表示されますが、GPUの使用だとかGCPとアカウントをリンクするかといった設定（デフォルトではどちらもOFFに設定されている）なので、やっぱりあまり変更する必要はとりあえずないと思います。
+ちなみに、NotebookとScriptの違いですが、NotebookはJupyter Notebookです。なのでMarkdownを記述しつつPythonコードを書くスタイルです。Scriptはその名の通りスクリプトで、コード単体です。どちらがいいかはお好みで。ここではNotebookを選択しました。
+下の「Create」ボタンを押すと処理が進んでNotebookが作成されます。すると下記のような画面に遷移します。
+これでNotebookが作成できました。Jupyter NotebookなのでMarkdownで任意の記述を行いつつ、Pythonソースを記述かつ実行できます。Notebookの任意の場所にカーソルを置くとMarkdown用、あるいはPython用のセルを追加するボタンが出現します。これでセルを追加していろいろ記述するわけです。
+実行は、セル単位であれば実行したいセルにカーソルを置くと、三角形の再生ボタンが左側に表示されます。コイツをクリックすることで、そのセルを実行できるわけです。
+実行するとそのセルの直下に実行結果が表示されます。
+Notebookを作成したら右上の「Commit」ボタンを押します。下の画像だとすでに何回かボタンを押した後なのでVersionが3まで行っちゃってますが・・・。
+「Logs」の部分に処理内容が表示されます。ただし、ここではNotebookに処理内容を記述していないのであまり意味のないCommit結果になっていますが・・・。
+なにはともあれ、「Notebookを作成し処理を記述、できあがったらCommitして必要に応じてチューニングを施す」のが、Kaggleのコンペにおける基本的な行動です。
+データセットを準備する Notebookを作成したので、コンペ用のデータを読み込んで内容を確認してみます。Notebookの内容は下記のとおりとします。データはコンペのメインページに戻り「Data」タブを参照します。
+「Overview」にはどんな名前のデータがあるか、データにはどんな情報が含まれているかなどの情報が記載されています。そのまま読み進めていくと、ページの中頃に「Data Sources」という項目があり、データがダウンロードできるようになっています。
+タイタニックのチュートリアルで利用するファイルは「train.csv」と「test.csv」の2ファイルです。とりあえずトレーニング用の「train.csv」について、その内容を確認してみます。そんなわけで下記のようなソースを書きました。
+import pandas as pd train = pd.read_csv(&#39;train.csv&#39;) train.head(3) これを実行すると・・・そんなファイルねぇよ！って怒られます。
+えー。まぁなんの考慮もなくべた書きしたところで、そんなテキトーなコードがちゃんと動作するはずもないですな。じゃあどうすれば参照できるのか調べます。
+Kaggleではコンペそのものにはデータがキチンと準備されています（じゃないとコンペできないから当たり前ですね）。が、参加者が各々で作成したNotebookから参照するためには、データがどのフォルダに格納されているかを確認する必要があります。
+作成したNotebookの右側に「Data」を押すと、下記のようなフォルダが表示されます。
+展開してみるとこんな感じ。
+じゃあこのファイルをどうやって参照するかですが、まずはinputフォルダはいいとして、その下のフォルダはなんかずいぶんと長い名前です。これ全部指定しなきゃだめなの・・・？とりあえずその辺を確認したいので、ざっくりこんなコードを書いて実行してみます。
+import os print(os.listdir(&#39;../input&#39;)) print(os.listdir(&#39;../input/titanic&#39;)) listdir()は指定したフォルダの中身を返します。実行結果を見てみます。
+[&#39;titanic&#39;] [&#39;train.csv&#39;, &#39;gender_submission.csv&#39;, &#39;test.csv&#39;] どうやらinput/titanic/と指定すれば、配下のファイルが参照できそうです。というわけで冒頭のファイルを修正してみました。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Kaggleに登録してTitanicチュートリアルのデータを見てみる</h1>
+			<div class="meta">Posted at &mdash; Nov 19, 2019</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>今回はKaggleに登録して、チュートリアルのデータ参照をしてみます。実際にモデルを作成したりするのはまた別の機会に。</p>
+
+<h2 id="kaggleってなにさ">Kaggleってなにさ</h2>
+
+<p><a href="https://www.kaggle.com/">Kaggle</a>は企業や研究者がデータを（場合によっては懸賞金も）提供し、世界中のエンジニアが最適な機械学習のモデルを競い合うプラットフォームのこと。これだけ聞くと恐れ多い感じもしますが、初心者にとってはデータ分析が<strong>タダ</strong>で練習できるステキなサイトです。しかも参考になる他人のソースや解説資料なども見放題と来たもんで、非常に学べるサイトです。</p>
+
+<h2 id="titanicチュートリアル">Titanicチュートリアル</h2>
+
+<p>Kaggleに掲載されているコンペティションは、基本的に企業や個人がデータを提供し<strong>期限を設けて</strong>開催するものです。それとは別に、常時開催され提出期限のないチュートリアルがあります。<a href="https://www.kaggle.com/c/titanic">Titanicチュートリアル</a>はその中でも割と有名なチュートリアルです。Titanicとは「あの」タイタニック号のことであり、提供されるデータは乗船していた顧客名簿です。このデータを用いて、生存予測を行うというチュートリアルです。</p>
+
+<h2 id="なにはともあれアカウント登録">なにはともあれアカウント登録</h2>
+
+<p>Kaggleにアカウントを開設します。登録の方法は、とくに躓くようなところはないと思いますので割愛します。登録するとアイコンはアヒルになります。なぜに？</p>
+
+<p><img src="2019-12-03-13-55-26.png" alt="pic" /></p>
+
+<h2 id="titanicチュートリアルに参加">Titanicチュートリアルに参加</h2>
+
+<p>Kaggleのアカウント作成が終わったら、コンペ参加のためTitanicチュートリアルにアクセスします。「Join Competition」をクリックするとポップアップウィンドウが出現しますので、おもむろにに「I Understand and Accept.」をクリックします。要は「同意する、ってボタン押したら、コンペのルールに準拠してもらうからね」ということです。これに同意しないと先に進まないので同意します。</p>
+
+<p><img src="2019-12-03-13-57-07.png" alt="pic" /></p>
+
+<p>するとこんな感じの画面になるはずです。「You have accepted the rules for this competition. Good luck!」</p>
+
+<p><img src="2019-12-03-14-00-42.png" alt="pic" /></p>
+
+<p>なお、ルールなどを確認したい場合は「Rules」にいろいろ記述してあります。コンペティションによっては、そのコンペに限定した特別なルールがあったりするので確認が必要です。</p>
+
+<h2 id="notebookの作成">Notebookの作成</h2>
+
+<p>チュートリアルに参加したところで、今度はNotebookを新規で作成します。コンペティションのトップにある「Notebooks」をクリックすると、右側に「New Notebook」と表示されますので、そのボタンをクリックします。</p>
+
+<p><img src="2019-12-03-14-55-16.png" alt="pic" /></p>
+
+<p>すると画面が切り替わって、新規でNotebookを作成する画面が表示されます。基本的にはあまり変更する必要はないとは思います。「SHOW ADVANCED SETTINGS」をクリックすると詳細な設定項目が表示されますが、GPUの使用だとかGCPとアカウントをリンクするかといった設定（デフォルトではどちらもOFFに設定されている）なので、やっぱりあまり変更する必要はとりあえずないと思います。</p>
+
+<p>ちなみに、NotebookとScriptの違いですが、NotebookはJupyter Notebookです。なのでMarkdownを記述しつつPythonコードを書くスタイルです。Scriptはその名の通りスクリプトで、コード単体です。どちらがいいかはお好みで。ここではNotebookを選択しました。</p>
+
+<p><img src="2019-12-03-14-57-32.png" alt="pic" /></p>
+
+<p>下の「Create」ボタンを押すと処理が進んでNotebookが作成されます。すると下記のような画面に遷移します。</p>
+
+<p><img src="2019-12-03-15-25-03.png" alt="pic" /></p>
+
+<p>これでNotebookが作成できました。Jupyter NotebookなのでMarkdownで任意の記述を行いつつ、Pythonソースを記述かつ実行できます。Notebookの任意の場所にカーソルを置くとMarkdown用、あるいはPython用のセルを追加するボタンが出現します。これでセルを追加していろいろ記述するわけです。</p>
+
+<p><img src="2019-12-03-17-54-45.png" alt="pic" /></p>
+
+<p>実行は、セル単位であれば実行したいセルにカーソルを置くと、三角形の再生ボタンが左側に表示されます。コイツをクリックすることで、そのセルを実行できるわけです。</p>
+
+<p><img src="2019-12-03-17-56-53.png" alt="pic" /></p>
+
+<p>実行するとそのセルの直下に実行結果が表示されます。</p>
+
+<p><img src="2019-12-03-16-16-36.png" alt="pic" /></p>
+
+<p>Notebookを作成したら右上の「Commit」ボタンを押します。下の画像だとすでに何回かボタンを押した後なのでVersionが3まで行っちゃってますが・・・。</p>
+
+<p><img src="2019-12-03-18-01-43.png" alt="pic" /></p>
+
+<p>「Logs」の部分に処理内容が表示されます。ただし、ここではNotebookに処理内容を記述していないのであまり意味のないCommit結果になっていますが・・・。</p>
+
+<p>なにはともあれ、「Notebookを作成し処理を記述、できあがったらCommitして必要に応じてチューニングを施す」のが、Kaggleのコンペにおける基本的な行動です。</p>
+
+<h2 id="データセットを準備する">データセットを準備する</h2>
+
+<p>Notebookを作成したので、コンペ用のデータを読み込んで内容を確認してみます。Notebookの内容は下記のとおりとします。データはコンペのメインページに戻り「Data」タブを参照します。</p>
+
+<p><img src="2019-12-03-18-09-25.png" alt="pic" /></p>
+
+<p>「Overview」にはどんな名前のデータがあるか、データにはどんな情報が含まれているかなどの情報が記載されています。そのまま読み進めていくと、ページの中頃に「Data Sources」という項目があり、データがダウンロードできるようになっています。</p>
+
+<p>タイタニックのチュートリアルで利用するファイルは「train.csv」と「test.csv」の2ファイルです。とりあえずトレーニング用の「train.csv」について、その内容を確認してみます。そんなわけで下記のようなソースを書きました。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> pandas <span style="color:#00f">as</span> pd
+train = pd.read_csv(<span style="color:#a31515">&#39;train.csv&#39;</span>)
+train.head(3)</code></pre></div>
+<p>これを実行すると・・・<strong>そんなファイルねぇよ！</strong>って怒られます。</p>
+
+<p><img src="2019-12-03-18-43-07.png" alt="pic" /></p>
+
+<p>えー。まぁなんの考慮もなくべた書きしたところで、そんなテキトーなコードがちゃんと動作するはずもないですな。じゃあどうすれば参照できるのか調べます。</p>
+
+<p>Kaggleではコンペそのものにはデータがキチンと準備されています（じゃないとコンペできないから当たり前ですね）。が、参加者が各々で作成したNotebookから参照するためには、データがどのフォルダに格納されているかを確認する必要があります。</p>
+
+<p>作成したNotebookの右側に「Data」を押すと、下記のようなフォルダが表示されます。</p>
+
+<p><img src="2019-12-03-18-46-36.png" alt="pic" /></p>
+
+<p>展開してみるとこんな感じ。</p>
+
+<p><img src="2019-12-03-18-53-10.png" alt="pic" /></p>
+
+<p>じゃあこのファイルをどうやって参照するかですが、まずは<code>input</code>フォルダはいいとして、その下のフォルダはなんかずいぶんと長い名前です。これ全部指定しなきゃだめなの・・・？とりあえずその辺を確認したいので、ざっくりこんなコードを書いて実行してみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> os
+<span style="color:#00f">print</span>(os.listdir(<span style="color:#a31515">&#39;../input&#39;</span>))
+<span style="color:#00f">print</span>(os.listdir(<span style="color:#a31515">&#39;../input/titanic&#39;</span>))</code></pre></div>
+<p><code>listdir()</code>は指定したフォルダの中身を返します。実行結果を見てみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">[&#39;titanic&#39;]
+[&#39;train.csv&#39;, &#39;gender_submission.csv&#39;, &#39;test.csv&#39;]</code></pre></div>
+<p>どうやら<code>input/titanic/</code>と指定すれば、配下のファイルが参照できそうです。というわけで冒頭のファイルを修正してみました。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> pandas <span style="color:#00f">as</span> pd
+train = pd.read_csv(<span style="color:#a31515">&#39;../input/titanic/train.csv&#39;</span>)
+train.head(3)</code></pre></div>
+<p>これを実行してみると、下記のようにファイルの内容が表示されました。これでファイルの参照ができるようになりました。</p>
+
+<p><img src="2019-12-03-18-59-11.png" alt="pic" /></p>
+
+<h2 id="余談-モデル作成とかしないでとりあえず提出してみる">（余談）モデル作成とかしないでとりあえず提出してみる</h2>
+
+<p>Kaggleのコンペでは、最終的に指定された形式でファイルを提出します。Kaggleは提出されたファイルを評価して順位をつけるわけですが、提出するデータはその体裁があらかじめ決められています。その体裁のサンプルとなるデータがどこにあるかというと、タイタニックのコンペ画面に戻って「Data」タブの中にあります。</p>
+
+<p>なお、解析のためのデータも同じ「Data」タブの中にあります。</p>
+
+<p><img src="2019-12-03-18-09-25.png" alt="pic" /></p>
+
+<p>「Overview」にはどんな名前のデータがあるか、データにはどんな情報が含まれているかなどの情報が記載されています。そのまま読み進めていくと、ページの中頃に「Data Sources」という項目があり、データがダウンロードできるようになっています。</p>
+
+<p>ここでダウンロードするのは「gender_submission.csv」です。これは提出用のサンプルファイルです。このファイルの内容を確認することで、どんな形式のファイルをKaggleに提出すればいいかがわかります。</p>
+
+<p>ファイル名にマウスカーソルを合わせるとダウンロードボタンが出現しますので、ローカルの任意の場所にダウンロードしておきます。ここでダウンロードしたデータは後で利用します。</p>
+
+<p><img src="2019-12-03-18-11-43.png" alt="pic" /></p>
+
+<p>今度はページの上位に戻って「Submit Predictions」ボタンを押します。</p>
+
+<p><img src="2019-12-03-18-14-34.png" alt="pic" /></p>
+
+<p>表示されたページの中央、右側あたりにデータをアップロードする場所があります。そこに、さっきダウンロードした「gender_submission.csv」をドラッグアンドドロップします。</p>
+
+<p><img src="2019-12-03-18-15-10.png" alt="pic" /></p>
+
+<p>データのアップロードが完了したら一番下にある「Make Submission」を押します。するとサンプルのデータで順位が算出されます。</p>
+
+<p>アップロードしたのはサンプルなので提出したところでどうにかなるものではないですが、提出の練習にはなるかもしれません。なお、サンプルを提出することのペナルティとかはとくにない・・・と思います。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>「データ分析するのにゃ、そもそもデータが採取されていないとできないんだよぉ！」っていうのは、データ分析に携わる人なら一度は思ったりすると思います。データ取得はされてても、ただデータがあるだけで項目の意味や単位が全部バラバラ・・・なんてケースもあったり。その点Kaggleならデータはちゃんと必要十分にそろってますし、なにより実データに近いものがアップされるので「あー、こういう形でデータ取ってくりゃいいのね」っていう参考にもなります。そして、世界中のデータサイエンティストがアップしたモデルやNotebookの内容を見ることで、「こう前処理すりゃよかったのか」「あー、このアルゴリズムを使うと有効なわけね」なんて知見も蓄積できること請け合いです。</p>
+
+<p>そんなわけで、貴方もぜひKagglerになりませんか。</p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
