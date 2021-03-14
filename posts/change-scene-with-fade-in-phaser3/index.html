@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Phaser3でフェードアウトしながらシーンを変える方法 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Phaser3でフェードアウトしながらシーンを変える方法" />
+<meta property="og:description" content="概要 Phaser3でゲームを作るときに、フェードアウトとフェードインを活用してシーンを変える方法があります。しかも割と簡単。今回はその話です。
+Phaser3においてシーン遷移する場合、なんの設定もしないといきなりシーンがバシッと変わってしまって、余韻もへったくれもありません。とはいえ、マスクを使ってシーンを変えるほどでもないしなーそういうのは他でやりたいなー、という場合に便利なのがフェードアウトとフェードインです。じわーっと画面がだんだん消えていって、消えきったなーと思ったら別の画面がじわーと現れる、この一連の動きを実装してみます。具体的には、遷移前のシーンをフェードアウトさせて、遷移後のシーンをフェードインさせるわけですね。
+コード Phaser3でシーンを遷移させる場合はscene.start(&#39;nextScene&#39;)を使うわけですが、これが実行されるとシーンが遷移します。ということは、これが実行される前にフェードアウトさせて、次のシーン側でフェードインさせるわけです。
+今回はFirstSceneからSecondSceneに遷移するケースを考えてみます。
+export class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstScene&#39;); } create() { const { width, height } = this.game.canvas; this.add.text(width / 2, height / 2, &#39;First Scene&#39;).setOrigin(0.5); const zone = this.add.zone(width / 2, height / 2, width, height); zone.setInteractive({ useHandCursor: true }); zone.on(&#39;pointerdown&#39;, () =&gt; { this.cameras.main.fadeOut(1200, 0, 0, 0); // このシーンが完全にフェードアウトしてから次のシーンをstartする  this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () =&gt; { this.scene.start(&#39;secondScene&#39;); }); }); } } export class SecondScene extends Phaser." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/change-scene-with-fade-in-phaser3/" /><meta property="article:published_time" content="2021-03-14T23:30:13&#43;09:00"/>
+<meta property="article:modified_time" content="2021-03-14T23:30:13&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Phaser3でフェードアウトしながらシーンを変える方法"/>
+<meta name="twitter:description" content="概要 Phaser3でゲームを作るときに、フェードアウトとフェードインを活用してシーンを変える方法があります。しかも割と簡単。今回はその話です。
+Phaser3においてシーン遷移する場合、なんの設定もしないといきなりシーンがバシッと変わってしまって、余韻もへったくれもありません。とはいえ、マスクを使ってシーンを変えるほどでもないしなーそういうのは他でやりたいなー、という場合に便利なのがフェードアウトとフェードインです。じわーっと画面がだんだん消えていって、消えきったなーと思ったら別の画面がじわーと現れる、この一連の動きを実装してみます。具体的には、遷移前のシーンをフェードアウトさせて、遷移後のシーンをフェードインさせるわけですね。
+コード Phaser3でシーンを遷移させる場合はscene.start(&#39;nextScene&#39;)を使うわけですが、これが実行されるとシーンが遷移します。ということは、これが実行される前にフェードアウトさせて、次のシーン側でフェードインさせるわけです。
+今回はFirstSceneからSecondSceneに遷移するケースを考えてみます。
+export class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstScene&#39;); } create() { const { width, height } = this.game.canvas; this.add.text(width / 2, height / 2, &#39;First Scene&#39;).setOrigin(0.5); const zone = this.add.zone(width / 2, height / 2, width, height); zone.setInteractive({ useHandCursor: true }); zone.on(&#39;pointerdown&#39;, () =&gt; { this.cameras.main.fadeOut(1200, 0, 0, 0); // このシーンが完全にフェードアウトしてから次のシーンをstartする  this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () =&gt; { this.scene.start(&#39;secondScene&#39;); }); }); } } export class SecondScene extends Phaser."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Phaser3でフェードアウトしながらシーンを変える方法</h1>
+			<div class="meta">Posted at &mdash; Mar 14, 2021</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>Phaser3でゲームを作るときに、フェードアウトとフェードインを活用してシーンを変える方法があります。しかも割と簡単。今回はその話です。</p>
+
+<p>Phaser3においてシーン遷移する場合、なんの設定もしないといきなりシーンが<strong>バシッと</strong>変わってしまって、余韻もへったくれもありません。とはいえ、マスクを使ってシーンを変えるほどでもないしなーそういうのは他でやりたいなー、という場合に便利なのがフェードアウトとフェードインです。じわーっと画面がだんだん消えていって、消えきったなーと思ったら別の画面がじわーと現れる、この一連の動きを実装してみます。具体的には、遷移前のシーンをフェードアウトさせて、遷移後のシーンをフェードインさせるわけですね。</p>
+
+<h2 id="コード">コード</h2>
+
+<p>Phaser3でシーンを遷移させる場合は<code>scene.start('nextScene')</code>を使うわけですが、これが実行されるとシーンが遷移します。ということは、これが実行される前にフェードアウトさせて、次のシーン側でフェードインさせるわけです。</p>
+
+<p>今回は<code>FirstScene</code>から<code>SecondScene</code>に遷移するケースを考えてみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">export</span> <span style="color:#00f">class</span> FirstScene <span style="color:#00f">extends</span> Phaser.Scene {
+  constructor() {
+    <span style="color:#00f">super</span>(<span style="color:#a31515">&#39;firstScene&#39;</span>);
+  }
+
+  create() {
+
+    <span style="color:#00f">const</span> { width, height } = <span style="color:#00f">this</span>.game.canvas;
+
+    <span style="color:#00f">this</span>.add.text(width <span style="color:#a31515">/ 2, height /</span> 2, <span style="color:#a31515">&#39;First Scene&#39;</span>).setOrigin(0.5);
+
+    <span style="color:#00f">const</span> zone = <span style="color:#00f">this</span>.add.zone(width <span style="color:#a31515">/ 2, height /</span> 2, width, height);
+
+    zone.setInteractive({
+      useHandCursor: <span style="color:#00f">true</span>
+    });
+
+    zone.on(<span style="color:#a31515">&#39;pointerdown&#39;</span>, () =&gt; {
+      <span style="color:#00f">this</span>.cameras.main.fadeOut(1200, 0, 0, 0);
+      <span style="color:#008000">// このシーンが完全にフェードアウトしてから次のシーンをstartする
+</span><span style="color:#008000"></span>      <span style="color:#00f">this</span>.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () =&gt; {
+        <span style="color:#00f">this</span>.scene.start(<span style="color:#a31515">&#39;secondScene&#39;</span>);
+      });
+    });
+
+  }
+}
+
+<span style="color:#00f">export</span> <span style="color:#00f">class</span> SecondScene <span style="color:#00f">extends</span> Phaser.Scene {
+  constructor() {
+    <span style="color:#00f">super</span>(<span style="color:#a31515">&#39;secondScene&#39;</span>);
+  }
+
+  create() {
+
+    <span style="color:#00f">this</span>.cameras.main.fadeIn(1000, 0, 0, 0);
+
+    <span style="color:#00f">const</span> { width, height } = <span style="color:#00f">this</span>.game.canvas;
+
+    <span style="color:#00f">this</span>.add.text(width <span style="color:#a31515">/ 2, height /</span> 2, <span style="color:#a31515">&#39;Second Scene&#39;</span>).setOrigin(0.5);
+
+  }
+}
+
+<span style="color:#00f">const</span> config = {
+  type: Phaser.AUTO,
+  width: 800,
+  height: 600,
+  scene: [FirstScene, SecondScene]
+};
+
+<span style="color:#00f">new</span> Phaser.Game(config);
+</code></pre></div>
+<h2 id="サンプル">サンプル</h2>
+
+<p><p class="codepen" data-height="265" data-theme-id="light" data-default-tab="js,result" data-user="ysko909" data-slug-hash="VwmRPMp" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="Change scene with fade in Phaser3">
+  <span>See the Pen <a href="https://codepen.io/ysko909/pen/VwmRPMp">
+  Change scene with fade in Phaser3</a> by ysko909 (<a href="https://codepen.io/ysko909">@ysko909</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script></p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>今回はPhaser3のシーン遷移について、フェードアウトとフェードインを導入して実装してみました。</p>
+
+<p>フェードアウトもさることながら、フェードインに関しても「こんなに簡単に実装できるの？」というくらい全然記述してないですね。ホントにPhaser3様様です。</p>
+
+<h2 id="参考">参考</h2>
+
+<p><a href="https://blog.ourcade.co/posts/2020/phaser-3-fade-out-scene-transition/">Scene Transition with Fade Out in Phaser 3</a></p>
+
+<p><a href="https://dev.to/jorbascrumps/creating-spelunky-style-level-transitions-in-phaser-2ajd">Creating Spelunky-style level transitions in Phaser</a></p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Phaser on 頑張らないために頑張る</title>
+    <link>https://ysko909.github.io/tags/phaser/</link>
+    <description>Recent content in Phaser on 頑張らないために頑張る</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© Copyright ysko</copyright>
+    <lastBuildDate>Sun, 14 Mar 2021 23:30:13 +0900</lastBuildDate>
+    
+	<atom:link href="https://ysko909.github.io/tags/phaser/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Phaser3でフェードアウトしながらシーンを変える方法</title>
+      <link>https://ysko909.github.io/posts/change-scene-with-fade-in-phaser3/</link>
+      <pubDate>Sun, 14 Mar 2021 23:30:13 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/change-scene-with-fade-in-phaser3/</guid>
+      <description>概要 Phaser3でゲームを作るときに、フェードアウトとフェードインを活用してシーンを変える方法があります。しかも割と簡単。今回はその話です。
+Phaser3においてシーン遷移する場合、なんの設定もしないといきなりシーンがバシッと変わってしまって、余韻もへったくれもありません。とはいえ、マスクを使ってシーンを変えるほどでもないしなーそういうのは他でやりたいなー、という場合に便利なのがフェードアウトとフェードインです。じわーっと画面がだんだん消えていって、消えきったなーと思ったら別の画面がじわーと現れる、この一連の動きを実装してみます。具体的には、遷移前のシーンをフェードアウトさせて、遷移後のシーンをフェードインさせるわけですね。
+コード Phaser3でシーンを遷移させる場合はscene.start(&#39;nextScene&#39;)を使うわけですが、これが実行されるとシーンが遷移します。ということは、これが実行される前にフェードアウトさせて、次のシーン側でフェードインさせるわけです。
+今回はFirstSceneからSecondSceneに遷移するケースを考えてみます。
+export class FirstScene extends Phaser.Scene { constructor() { super(&amp;#39;firstScene&amp;#39;); } create() { const { width, height } = this.game.canvas; this.add.text(width / 2, height / 2, &amp;#39;First Scene&amp;#39;).setOrigin(0.5); const zone = this.add.zone(width / 2, height / 2, width, height); zone.setInteractive({ useHandCursor: true }); zone.on(&amp;#39;pointerdown&amp;#39;, () =&amp;gt; { this.cameras.main.fadeOut(1200, 0, 0, 0); // このシーンが完全にフェードアウトしてから次のシーンをstartする  this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () =&amp;gt; { this.scene.start(&amp;#39;secondScene&amp;#39;); }); }); } } export class SecondScene extends Phaser.</description>
+    </item>
+    
+  </channel>
+</rss>
