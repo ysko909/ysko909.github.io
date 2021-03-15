@@ -6,7 +6,7 @@
 	<meta property="og:title" content="Phaser3でフェードアウトしながらシーンを変える方法" />
 <meta property="og:description" content="概要 Phaser3でゲームを作るときに、フェードアウトとフェードインを活用してシーンを変える方法があります。しかも割と簡単。今回はその話です。
 Phaser3においてシーン遷移する場合、なんの設定もしないといきなりシーンがバシッと変わってしまって、余韻もへったくれもありません。とはいえ、マスクを使ってシーンを変えるほどでもないしなーそういうのは他でやりたいなー、という場合に便利なのがフェードアウトとフェードインです。じわーっと画面がだんだん消えていって、消えきったなーと思ったら別の画面がじわーと現れる、この一連の動きを実装してみます。具体的には、遷移前のシーンをフェードアウトさせて、遷移後のシーンをフェードインさせるわけですね。
-コード Phaser3でシーンを遷移させる場合はscene.start(&#39;nextScene&#39;)を使うわけですが、これが実行されるとシーンが遷移します。ということは、これが実行される前にフェードアウトさせて、次のシーン側でフェードインさせるわけです。
+コード 全体像 Phaser3でシーンを遷移させる場合はscene.start(&#39;nextScene&#39;)を使うわけですが、これが実行されるとシーンが遷移します。ということは、これが実行される前にフェードアウトさせて、次のシーン側でフェードインさせるわけです。
 今回はFirstSceneからSecondSceneに遷移するケースを考えてみます。
 export class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstScene&#39;); } create() { const { width, height } = this.game.canvas; this.add.text(width / 2, height / 2, &#39;First Scene&#39;).setOrigin(0.5); const zone = this.add.zone(width / 2, height / 2, width, height); zone.setInteractive({ useHandCursor: true }); zone.on(&#39;pointerdown&#39;, () =&gt; { this.cameras.main.fadeOut(1200, 0, 0, 0); // このシーンが完全にフェードアウトしてから次のシーンをstartする  this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () =&gt; { this.scene.start(&#39;secondScene&#39;); }); }); } } export class SecondScene extends Phaser." />
 <meta property="og:type" content="article" />
@@ -15,7 +15,7 @@ export class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstS
 <meta name="twitter:title" content="Phaser3でフェードアウトしながらシーンを変える方法"/>
 <meta name="twitter:description" content="概要 Phaser3でゲームを作るときに、フェードアウトとフェードインを活用してシーンを変える方法があります。しかも割と簡単。今回はその話です。
 Phaser3においてシーン遷移する場合、なんの設定もしないといきなりシーンがバシッと変わってしまって、余韻もへったくれもありません。とはいえ、マスクを使ってシーンを変えるほどでもないしなーそういうのは他でやりたいなー、という場合に便利なのがフェードアウトとフェードインです。じわーっと画面がだんだん消えていって、消えきったなーと思ったら別の画面がじわーと現れる、この一連の動きを実装してみます。具体的には、遷移前のシーンをフェードアウトさせて、遷移後のシーンをフェードインさせるわけですね。
-コード Phaser3でシーンを遷移させる場合はscene.start(&#39;nextScene&#39;)を使うわけですが、これが実行されるとシーンが遷移します。ということは、これが実行される前にフェードアウトさせて、次のシーン側でフェードインさせるわけです。
+コード 全体像 Phaser3でシーンを遷移させる場合はscene.start(&#39;nextScene&#39;)を使うわけですが、これが実行されるとシーンが遷移します。ということは、これが実行される前にフェードアウトさせて、次のシーン側でフェードインさせるわけです。
 今回はFirstSceneからSecondSceneに遷移するケースを考えてみます。
 export class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstScene&#39;); } create() { const { width, height } = this.game.canvas; this.add.text(width / 2, height / 2, &#39;First Scene&#39;).setOrigin(0.5); const zone = this.add.zone(width / 2, height / 2, width, height); zone.setInteractive({ useHandCursor: true }); zone.on(&#39;pointerdown&#39;, () =&gt; { this.cameras.main.fadeOut(1200, 0, 0, 0); // このシーンが完全にフェードアウトしてから次のシーンをstartする  this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () =&gt; { this.scene.start(&#39;secondScene&#39;); }); }); } } export class SecondScene extends Phaser."/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
@@ -85,6 +85,8 @@ export class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstS
 
 <h2 id="コード">コード</h2>
 
+<h3 id="全体像">全体像</h3>
+
 <p>Phaser3でシーンを遷移させる場合は<code>scene.start('nextScene')</code>を使うわけですが、これが実行されるとシーンが遷移します。ということは、これが実行される前にフェードアウトさせて、次のシーン側でフェードインさせるわけです。</p>
 
 <p>今回は<code>FirstScene</code>から<code>SecondScene</code>に遷移するケースを考えてみます。</p>
@@ -141,6 +143,36 @@ export class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstS
 
 <span style="color:#00f">new</span> Phaser.Game(config);
 </code></pre></div>
+<p>シーンは前述のとおり<code>FirstScene</code>と<code>SecondScene</code>の2つで、これらをクラスで準備します。それぞれ、<code>FirstScene</code>にはフェードアウトするコードを、<code>SecondScene</code>にはフェードインするコードを実装しています。</p>
+
+<h3 id="フェードアウト">フェードアウト</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">this</span>.cameras.main.fadeOut(1200, 0, 0, 0);
+<span style="color:#008000">// このシーンが完全にフェードアウトしてから次のシーンをstartする
+</span><span style="color:#008000"></span><span style="color:#00f">this</span>.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () =&gt; {
+  <span style="color:#00f">this</span>.scene.start(<span style="color:#a31515">&#39;secondScene&#39;</span>);
+});
+</code></pre></div>
+<p>上記の部分が、<code>FirstScene</code>をフェードアウトさせているコードです。<code>scene.cameras.main.fadeOut()</code>の第1引数にフェードアウトする時間、第2引数から第4引数まではそれぞれRGBの値をセットします。RGBの値はフェードアウトする色を指定できます。上記では真っ黒にフェードアウトしますが、「青色にフェードアウトしてほしい」という場合は<code>fadeOut(1000, 0, 0, 255)</code>のように記述すればいいわけです。もちろん、<code>100, 40, 180</code>のような値も設定可能なので、シーンの雰囲気によってフェードアウトする色を指定できます。</p>
+
+<p>ちなみに、第5引数にはコールバック関数を指定できます。コールバック関数は、フェードアウトしている間ずっと<strong>フレームごと</strong>に呼び出されます。フェードアウトしてから呼び出されるものではないので注意。</p>
+
+<p>フェードアウトし終わってから処理を行いたい場合は、<code>scene.cameras.main.once()</code>の第1引数に「フェードアウトが終わったぜー」という意味の<code>Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE</code>を渡してやります。すると、フェードアウトが完了したかどうかを勝手に判断してくれて、完了したら第2引数に指定されたコールバック関数を実行します。ここでは<code>SecondScene</code>に遷移しろよーと書いてあります。お察しのとおり、フェードアウトの完了以外にもイベントは存在していて、<code>FADE_OUT_START</code>という「フェードアウトが始まったとき」というようにイベント開始をトリガーにできたりします。また、フェードアウト以外にも<code>SHAKE_START</code>というシェイクに関するイベントも実装されています。</p>
+
+<ol>
+<li><code>FADE_OUT_START</code>でフェードアウトの開始を検知して、BGMを変更する。</li>
+<li>フェードアウト中はコールバック関数を使って、ランダムなタイミングで効果音を鳴らす。</li>
+<li><code>FADE_OUT_COMPLETE</code>でフェードアウトの完了を検知して、シーンを変更する。</li>
+</ol>
+
+<p>上記のような一連の処理が、これらのイベントを組み合わせることで実装可能になるわけです。</p>
+
+<h3 id="フェードイン">フェードイン</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">this</span>.cameras.main.fadeIn(1000, 0, 0, 0);
+</code></pre></div>
+<p>上記の部分が、<code>SecondScene</code>をフェードインさせているコードです。<code>scene.cameras.main.fadeIn()</code>の引数構成は<code>scene.cameras.main.fadeOut()</code>と同一です。こちらもRGBでフェードインする色を指定できるので、フェードアウトする色と同じ色を指定することでシームレスなシーン遷移が実装できます。</p>
+
+<p>第5引数のコールバック関数に関しても、やはり同様です。フェードインしている間ずっと<strong>フレームごと</strong>に呼び出されます。フェードインしてから呼び出されるものではないので注意。そして、フェードインが完了したときに処理を行いたければ、<code>FADE_IN_COMPLETE</code>イベントを検知すればいいわけです。こちらもやはり同様ですね。</p>
+
 <h2 id="サンプル">サンプル</h2>
 
 <p><p class="codepen" data-height="265" data-theme-id="light" data-default-tab="js,result" data-user="ysko909" data-slug-hash="VwmRPMp" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="Change scene with fade in Phaser3">
@@ -150,6 +182,8 @@ export class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstS
 </p>
 <script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script></p>
 
+<p>実際にCodepen上に実装してみました。クリックするとフェードアウトが発動して、フェードアウト完了時にシーンの遷移が行われます。遷移先のシーンではフェードインが発動して、遷移先のシーンがじわじわと表示される挙動を確認できると思います。</p>
+
 <h2 id="まとめ">まとめ</h2>
 
 <p>今回はPhaser3のシーン遷移について、フェードアウトとフェードインを導入して実装してみました。</p>
@@ -157,6 +191,10 @@ export class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstS
 <p>フェードアウトもさることながら、フェードインに関しても「こんなに簡単に実装できるの？」というくらい全然記述してないですね。ホントにPhaser3様様です。</p>
 
 <h2 id="参考">参考</h2>
+
+<p><a href="https://photonstorm.github.io/phaser3-docs/Phaser.Cameras.Scene2D.Camera.html">Phaser.Cameras.Scene2D. Camera</a></p>
+
+<p><a href="https://photonstorm.github.io/phaser3-docs/Phaser.Cameras.Scene2D.Events.html">Phaser.Cameras.Scene2D. Events</a></p>
 
 <p><a href="https://blog.ourcade.co/posts/2020/phaser-3-fade-out-scene-transition/">Scene Transition with Fade Out in Phaser 3</a></p>
 
