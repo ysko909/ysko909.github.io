@@ -7,10 +7,31 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sun, 14 Mar 2021 23:30:13 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 16 Mar 2021 23:31:22 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Phaser3でlocalForageを導入する</title>
+      <link>https://ysko909.github.io/posts/use-localforage-with-phaser/</link>
+      <pubDate>Tue, 16 Mar 2021 23:31:22 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/use-localforage-with-phaser/</guid>
+      <description>概要 今回はローカルにデータを保存するJSライブラリのlocalForageをPhaserに導入してみよう、というお話です。
+ここで保存対象とするデータは、個人情報やカード情報、セッション情報などの重要なデータ以外とします。たとえばユーザーが指定した背景の色のカラーコードや、webアプリケーション側が生成した重要情報を含まないデータなどです。
+背景 Phaserに限らず、クライアント側に何かしらのデータを保存しておきたいというニーズはたまにあったりします。サイトの背景色や文字サイズなどの表示設定を個人に合わせるケースや、前サイトでの重要でない行動情報などのデータを保存しておきたいケースなどです。
+こういう場合にパッと思いつくのはweb storageを使う方法です。とくに「local storage」は、クッキーと比べてそこそこのサイズのデータを有効期限なしに保存できます。
+ただ、代償として非同期処理できないことやセキュリティ的な保護機構は一切存在しないデメリットがあります。つまり、local storageは同期処理であるため、パフォーマンス的にイマイチです。さらに、個人情報やセッション情報などをlocal storageに保存したら、攻撃者から窃取されたい放題になってしまいます。明示的に削除しないかぎり、データが残存し続けるというのも考え物なのですね。さらに、保存できるデータ型はstringのみ、という縛りもあります。
+こういうデメリットのせいで、さして重要じゃないデータについてもlocal storageで運用するには二の足を踏む状況なわけです。
+じゃあ代替手段はないの？という話ですが、手段は、ありまぁす。たとえばindexedDBなどは、その代表格でしょう。ただ、コイツはその実装方法が若干複雑です。シンプルにちょっとしたデータを格納したいんだよね、という場合には少し重いです。そこでよりフレンドリーに扱えるlocalForageの出番です。
+localForageとは localForageは、シンプルにストレージを扱えるJSライブラリです。前述のIndexedDBやWebSQLといった機能を、シンプルな記述で利用できるラッパーのような感じでしょうか。こういう機能だと他にはStore.jsもあります。
+コイツの個人的に一番いいところは、メジャーなブラウザでもサポートに差のあるストレージ機能の複数に対応していることです。さらに、ブラウザが対応しているドライバーに勝手に合わせて保存してくれる、という親切機能付き！素晴らしいー。
+ IndexedDB WebSQL localStorage  優先度で言えば、上記の順になります。たとえばプログラマーがIndexedDBを使え！と指定していたとしても、ブラウザがIndexedDBを利用できなければ勝手にWebSQLで処理を進めてくれる、というわけです。
+他にもAPIの実装が簡単、というのも大きいメリットです。localForage API Docsを見ると実装方法が記載されていますが、とても見通しのいいコードです。Promiseを利用している、ということもありますがコールバック関数での記述でもそこまで可動性は落ちません（でもPromiseが推奨なのでPromiseで書くのが正解かな）。コードの体裁が整っているのももちろんですが、このページ自体とても可読性が高いので見習いたいものです。
+コード では実際に、PhaserへlocalForageを導入してみましょう。ここでは、以前作成したシーンの切り替えでフェードアウト・フェードインするコードを流用しています。
+export class FirstScene extends Phaser.Scene { constructor() { super(&amp;#39;firstScene&amp;#39;); this.hoge = &amp;#39;hoge&amp;#39;; } create() { // ローカルからデータを取得  localforage.getItem(&amp;#39;hogekey&amp;#39;) .then(value=&amp;gt;{ if (value){ console.log(&amp;#39;get item: &amp;#39; + value); this.hoge = value; this.add.text(width / 2, height / 2 + 100, this.hoge).setOrigin(0.5); localforage.removeItem(&amp;#39;hogekey&amp;#39;); } else { console.</description>
+    </item>
     
     <item>
       <title>Phaser3でフェードアウトしながらシーンを変える方法</title>

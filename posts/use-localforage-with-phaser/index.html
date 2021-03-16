@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Phaser3でlocalForageを導入する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Phaser3でlocalForageを導入する" />
+<meta property="og:description" content="概要 今回はローカルにデータを保存するJSライブラリのlocalForageをPhaserに導入してみよう、というお話です。
+ここで保存対象とするデータは、個人情報やカード情報、セッション情報などの重要なデータ以外とします。たとえばユーザーが指定した背景の色のカラーコードや、webアプリケーション側が生成した重要情報を含まないデータなどです。
+背景 Phaserに限らず、クライアント側に何かしらのデータを保存しておきたいというニーズはたまにあったりします。サイトの背景色や文字サイズなどの表示設定を個人に合わせるケースや、前サイトでの重要でない行動情報などのデータを保存しておきたいケースなどです。
+こういう場合にパッと思いつくのはweb storageを使う方法です。とくに「local storage」は、クッキーと比べてそこそこのサイズのデータを有効期限なしに保存できます。
+ただ、代償として非同期処理できないことやセキュリティ的な保護機構は一切存在しないデメリットがあります。つまり、local storageは同期処理であるため、パフォーマンス的にイマイチです。さらに、個人情報やセッション情報などをlocal storageに保存したら、攻撃者から窃取されたい放題になってしまいます。明示的に削除しないかぎり、データが残存し続けるというのも考え物なのですね。さらに、保存できるデータ型はstringのみ、という縛りもあります。
+こういうデメリットのせいで、さして重要じゃないデータについてもlocal storageで運用するには二の足を踏む状況なわけです。
+じゃあ代替手段はないの？という話ですが、手段は、ありまぁす。たとえばindexedDBなどは、その代表格でしょう。ただ、コイツはその実装方法が若干複雑です。シンプルにちょっとしたデータを格納したいんだよね、という場合には少し重いです。そこでよりフレンドリーに扱えるlocalForageの出番です。
+localForageとは localForageは、シンプルにストレージを扱えるJSライブラリです。前述のIndexedDBやWebSQLといった機能を、シンプルな記述で利用できるラッパーのような感じでしょうか。こういう機能だと他にはStore.jsもあります。
+コイツの個人的に一番いいところは、メジャーなブラウザでもサポートに差のあるストレージ機能の複数に対応していることです。さらに、ブラウザが対応しているドライバーに勝手に合わせて保存してくれる、という親切機能付き！素晴らしいー。
+ IndexedDB WebSQL localStorage  優先度で言えば、上記の順になります。たとえばプログラマーがIndexedDBを使え！と指定していたとしても、ブラウザがIndexedDBを利用できなければ勝手にWebSQLで処理を進めてくれる、というわけです。
+他にもAPIの実装が簡単、というのも大きいメリットです。localForage API Docsを見ると実装方法が記載されていますが、とても見通しのいいコードです。Promiseを利用している、ということもありますがコールバック関数での記述でもそこまで可動性は落ちません（でもPromiseが推奨なのでPromiseで書くのが正解かな）。コードの体裁が整っているのももちろんですが、このページ自体とても可読性が高いので見習いたいものです。
+コード では実際に、PhaserへlocalForageを導入してみましょう。ここでは、以前作成したシーンの切り替えでフェードアウト・フェードインするコードを流用しています。
+export class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstScene&#39;); this.hoge = &#39;hoge&#39;; } create() { // ローカルからデータを取得  localforage.getItem(&#39;hogekey&#39;) .then(value=&gt;{ if (value){ console.log(&#39;get item: &#39; &#43; value); this.hoge = value; this.add.text(width / 2, height / 2 &#43; 100, this.hoge).setOrigin(0.5); localforage.removeItem(&#39;hogekey&#39;); } else { console." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/use-localforage-with-phaser/" /><meta property="article:published_time" content="2021-03-16T23:31:22&#43;09:00"/>
+<meta property="article:modified_time" content="2021-03-16T23:31:22&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Phaser3でlocalForageを導入する"/>
+<meta name="twitter:description" content="概要 今回はローカルにデータを保存するJSライブラリのlocalForageをPhaserに導入してみよう、というお話です。
+ここで保存対象とするデータは、個人情報やカード情報、セッション情報などの重要なデータ以外とします。たとえばユーザーが指定した背景の色のカラーコードや、webアプリケーション側が生成した重要情報を含まないデータなどです。
+背景 Phaserに限らず、クライアント側に何かしらのデータを保存しておきたいというニーズはたまにあったりします。サイトの背景色や文字サイズなどの表示設定を個人に合わせるケースや、前サイトでの重要でない行動情報などのデータを保存しておきたいケースなどです。
+こういう場合にパッと思いつくのはweb storageを使う方法です。とくに「local storage」は、クッキーと比べてそこそこのサイズのデータを有効期限なしに保存できます。
+ただ、代償として非同期処理できないことやセキュリティ的な保護機構は一切存在しないデメリットがあります。つまり、local storageは同期処理であるため、パフォーマンス的にイマイチです。さらに、個人情報やセッション情報などをlocal storageに保存したら、攻撃者から窃取されたい放題になってしまいます。明示的に削除しないかぎり、データが残存し続けるというのも考え物なのですね。さらに、保存できるデータ型はstringのみ、という縛りもあります。
+こういうデメリットのせいで、さして重要じゃないデータについてもlocal storageで運用するには二の足を踏む状況なわけです。
+じゃあ代替手段はないの？という話ですが、手段は、ありまぁす。たとえばindexedDBなどは、その代表格でしょう。ただ、コイツはその実装方法が若干複雑です。シンプルにちょっとしたデータを格納したいんだよね、という場合には少し重いです。そこでよりフレンドリーに扱えるlocalForageの出番です。
+localForageとは localForageは、シンプルにストレージを扱えるJSライブラリです。前述のIndexedDBやWebSQLといった機能を、シンプルな記述で利用できるラッパーのような感じでしょうか。こういう機能だと他にはStore.jsもあります。
+コイツの個人的に一番いいところは、メジャーなブラウザでもサポートに差のあるストレージ機能の複数に対応していることです。さらに、ブラウザが対応しているドライバーに勝手に合わせて保存してくれる、という親切機能付き！素晴らしいー。
+ IndexedDB WebSQL localStorage  優先度で言えば、上記の順になります。たとえばプログラマーがIndexedDBを使え！と指定していたとしても、ブラウザがIndexedDBを利用できなければ勝手にWebSQLで処理を進めてくれる、というわけです。
+他にもAPIの実装が簡単、というのも大きいメリットです。localForage API Docsを見ると実装方法が記載されていますが、とても見通しのいいコードです。Promiseを利用している、ということもありますがコールバック関数での記述でもそこまで可動性は落ちません（でもPromiseが推奨なのでPromiseで書くのが正解かな）。コードの体裁が整っているのももちろんですが、このページ自体とても可読性が高いので見習いたいものです。
+コード では実際に、PhaserへlocalForageを導入してみましょう。ここでは、以前作成したシーンの切り替えでフェードアウト・フェードインするコードを流用しています。
+export class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstScene&#39;); this.hoge = &#39;hoge&#39;; } create() { // ローカルからデータを取得  localforage.getItem(&#39;hogekey&#39;) .then(value=&gt;{ if (value){ console.log(&#39;get item: &#39; &#43; value); this.hoge = value; this.add.text(width / 2, height / 2 &#43; 100, this.hoge).setOrigin(0.5); localforage.removeItem(&#39;hogekey&#39;); } else { console."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Phaser3でlocalForageを導入する</h1>
+			<div class="meta">Posted at &mdash; Mar 16, 2021</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>今回はローカルにデータを保存するJSライブラリの<a href="https://github.com/localForage/localForage">localForage</a>をPhaserに導入してみよう、というお話です。</p>
+
+<p>ここで保存対象とするデータは、個人情報やカード情報、セッション情報などの<strong>重要なデータ以外</strong>とします。たとえばユーザーが指定した背景の色のカラーコードや、webアプリケーション側が生成した重要情報を含まないデータなどです。</p>
+
+<h2 id="背景">背景</h2>
+
+<p>Phaserに限らず、<a href="https://developer.mozilla.org/ja/docs/Learn/JavaScript/Client-side_web_APIs/Client-side_storage">クライアント側に何かしらのデータを保存しておきたい</a>というニーズはたまにあったりします。サイトの背景色や文字サイズなどの表示設定を個人に合わせるケースや、前サイトでの重要でない行動情報などのデータを保存しておきたいケースなどです。</p>
+
+<p>こういう場合にパッと思いつくのは<a href="https://developer.mozilla.org/ja/docs/Web/API/Web_Storage_API">web storage</a>を使う方法です。とくに「local storage」は、クッキーと比べてそこそこのサイズのデータを有効期限なしに保存できます。</p>
+
+<p>ただ、代償として非同期処理できないことやセキュリティ的な保護機構は一切存在しないデメリットがあります。つまり、local storageは同期処理であるため、パフォーマンス的にイマイチです。さらに、個人情報やセッション情報などをlocal storageに保存したら、攻撃者から窃取されたい放題になってしまいます。明示的に削除しないかぎり、データが残存し続けるというのも考え物なのですね。さらに、保存できるデータ型はstringのみ、という縛りもあります。</p>
+
+<p>こういうデメリットのせいで、さして重要じゃないデータについてもlocal storageで運用するには二の足を踏む状況なわけです。</p>
+
+<p>じゃあ代替手段はないの？という話ですが、手段は、ありまぁす。たとえば<a href="https://developer.mozilla.org/ja/docs/Web/API/IndexedDB_API">indexedDB</a>などは、その代表格でしょう。ただ、コイツはその実装方法が若干複雑です。シンプルにちょっとしたデータを格納したいんだよね、という場合には少し重いです。そこでよりフレンドリーに扱えるlocalForageの出番です。</p>
+
+<h2 id="localforageとは">localForageとは</h2>
+
+<p>localForageは、シンプルにストレージを扱えるJSライブラリです。前述のIndexedDBやWebSQLといった機能を、シンプルな記述で利用できるラッパーのような感じでしょうか。こういう機能だと他には<a href="https://github.com/marcuswestin/store.js/">Store.js</a>もあります。</p>
+
+<p>コイツの個人的に一番いいところは、メジャーなブラウザでもサポートに差のあるストレージ機能の<strong>複数に対応している</strong>ことです。さらに、ブラウザが対応しているドライバーに勝手に合わせて保存してくれる、という親切機能付き！素晴らしいー。</p>
+
+<ol>
+<li>IndexedDB</li>
+<li>WebSQL</li>
+<li>localStorage</li>
+</ol>
+
+<p>優先度で言えば、上記の順になります。たとえばプログラマーがIndexedDBを使え！と指定していたとしても、ブラウザがIndexedDBを利用できなければ勝手にWebSQLで処理を進めてくれる、というわけです。</p>
+
+<p>他にもAPIの実装が簡単、というのも大きいメリットです。<a href="https://localforage.github.io/localForage/">localForage API Docs</a>を見ると実装方法が記載されていますが、とても見通しのいいコードです。Promiseを利用している、ということもありますがコールバック関数での記述でもそこまで可動性は落ちません（でもPromiseが推奨なのでPromiseで書くのが正解かな）。コードの体裁が整っているのももちろんですが、このページ自体とても可読性が高いので見習いたいものです。</p>
+
+<h2 id="コード">コード</h2>
+
+<p>では実際に、PhaserへlocalForageを導入してみましょう。ここでは、以前作成したシーンの切り替えでフェードアウト・フェードインするコードを流用しています。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">export</span> <span style="color:#00f">class</span> FirstScene <span style="color:#00f">extends</span> Phaser.Scene {
+  
+  constructor() {
+    <span style="color:#00f">super</span>(<span style="color:#a31515">&#39;firstScene&#39;</span>);
+    <span style="color:#00f">this</span>.hoge = <span style="color:#a31515">&#39;hoge&#39;</span>;
+  }
+
+  create() {
+    
+    <span style="color:#008000">// ローカルからデータを取得
+</span><span style="color:#008000"></span>    localforage.getItem(<span style="color:#a31515">&#39;hogekey&#39;</span>)
+      .then(value=&gt;{
+        <span style="color:#00f">if</span> (value){
+          console.log(<span style="color:#a31515">&#39;get item: &#39;</span> + value);
+          <span style="color:#00f">this</span>.hoge = value;
+          <span style="color:#00f">this</span>.add.text(width <span style="color:#a31515">/ 2, height /</span> 2 + 100, <span style="color:#00f">this</span>.hoge).setOrigin(0.5);
+          localforage.removeItem(<span style="color:#a31515">&#39;hogekey&#39;</span>);        
+        } <span style="color:#00f">else</span> {
+          console.log(<span style="color:#a31515">&#39;hoge is null.&#39;</span>);
+        }
+
+      })
+      .<span style="color:#00f">catch</span>(err=&gt;console.log(<span style="color:#a31515">&#39;get err: &#39;</span> + err));
+
+    <span style="color:#00f">const</span> { width, height } = <span style="color:#00f">this</span>.game.canvas;
+
+    <span style="color:#00f">this</span>.add.text(width <span style="color:#a31515">/ 2, height /</span> 2, <span style="color:#a31515">&#39;First Scene&#39;</span>).setOrigin(0.5);
+
+    <span style="color:#00f">const</span> zone = <span style="color:#00f">this</span>.add.zone(width <span style="color:#a31515">/ 2, height /</span> 2, width, height);
+
+    zone.setInteractive({
+      useHandCursor: <span style="color:#00f">true</span>
+    });
+
+    zone.on(<span style="color:#a31515">&#39;pointerdown&#39;</span>, () =&gt; {
+      <span style="color:#00f">this</span>.cameras.main.fadeOut(1200, 0, 0, 0);
+      <span style="color:#00f">this</span>.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () =&gt; {
+        <span style="color:#00f">this</span>.scene.start(<span style="color:#a31515">&#39;secondScene&#39;</span>);
+      });
+    });
+
+  }
+}
+
+<span style="color:#00f">export</span> <span style="color:#00f">class</span> SecondScene <span style="color:#00f">extends</span> Phaser.Scene {
+  constructor() {
+    <span style="color:#00f">super</span>(<span style="color:#a31515">&#39;secondScene&#39;</span>);
+  }
+
+  create() {
+    
+    <span style="color:#008000">// ローカルにデータを保存
+</span><span style="color:#008000"></span>    localforage.setItem(<span style="color:#a31515">&#39;hogekey&#39;</span>, <span style="color:#a31515">&#34;hoge fuga piyo&#34;</span>)
+      .then(value=&gt;console.log(<span style="color:#a31515">&#39;value: &#39;</span> + value))
+      .<span style="color:#00f">catch</span>(err=&gt;console.log(<span style="color:#a31515">&#39;err: &#39;</span> + err));
+
+    <span style="color:#00f">this</span>.cameras.main.fadeIn(1000, 0, 0, 0);
+
+    <span style="color:#00f">const</span> { width, height } = <span style="color:#00f">this</span>.game.canvas;
+
+    <span style="color:#00f">this</span>.add.text(width <span style="color:#a31515">/ 2, height /</span> 2, <span style="color:#a31515">&#39;Second Scene&#39;</span>).setOrigin(0.5);
+
+  }
+}
+
+<span style="color:#00f">const</span> config = {
+  type: Phaser.AUTO,
+  width: 400,
+  height: 300,
+  scene: [FirstScene, SecondScene]
+};
+
+<span style="color:#00f">new</span> Phaser.Game(config);
+</code></pre></div>
+<p>これだけのコードで、簡単にデータを保存・読み込みが実装できました。</p>
+
+<p>保存されたデータは、タブを閉じたとしても保持されます。一度タブを閉じて別タブで開いてみると、一度保存した情報を保持していることがわかります。</p>
+
+<h2 id="実装の注意点">実装の注意点</h2>
+
+<p>注意点は、存在しないキーのデータを取得しようとした場合は、エラーにならず<code>null</code>が返ってくるという点です。<a href="https://github.com/localForage/localForage/issues/353">Issues</a>でも話題に上ったことがありますが、これは<strong>仕様</strong>です。よって、データの取得処理が正常に終わったとしても、取得結果が<code>null</code>のケースを想定しないといけないわけです。データが取得できなかったら、それはそれとして何かしらの処理をコードに落とし込んでおく必要がある、ってことですね。こういうのって、気付かないとスルーしそうだったので、事前にわかってよかったですホント。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>今回は、localForageを使ってローカルにデータを保存する実装について考えてみました。</p>
+
+<p>実装するのにさほど苦労せずそれでいて効果抜群なので、セキュリティ的なところがクリアできるデータならどんどん利用していきたいものです。</p>
+
+<h2 id="参考">参考</h2>
+
+<p><a href="https://github.com/localForage/localForage">localForage</a></p>
+
+<p><a href="https://localforage.github.io/localForage/">localForage API Docs</a></p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
