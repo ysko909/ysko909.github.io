@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>DockerコンテナがRestarting状態から変化しなくなってしまった場合ログを見てみる - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="DockerコンテナがRestarting状態から変化しなくなってしまった場合ログを見てみる" />
+<meta property="og:description" content="Restartingループから抜け出せない 今回は、自分が経験したDockerまわりのトラブルシューティングについてです。
+docker-compose.ymlを編集してdocker-compose up -dしたところ、一度は起動したコンテナがRestartingの状態に変化し、その後ずっとRestartingから変化しなくなる、という症状に見舞われました。つまり、一度は正常に起動しても何らかの原因でコンテナが落ちて、再起動してまた落ちて再起動して・・・を繰り返していることになります。
+docker-compose ps psコマンドでコンテナの状態（status）を見てみると、起動直後は「Up」なのですが少ししてから再度psで見てみると「Restarting」に変化していて、以降はずっと「Restarting」から変化しません。
+結論から言うと、コンテナ自体が悪いわけではなくコンテナ起動に関してエラーが起こっている可能性が高いと考えられます。よって、その原因が解消できればコンテナは正常に起動すると思われます。
+トラブったdocker-compose.yml version: &#39;3&#39; services: postgres: image: postgres container_name: postgres_hoge restart: always environment: TZ: &#34;Asia/Tokyo&#34; POSTGRES_USER: pg_hoge_admin POSTGRES_PASSWORD: pg_hoge_admin POSTGRES_DB: pg_hoge ports: - 30000:5432 volumes: - postgres:/var/lib/postgresql/data - ./postgres/initdb:/docker-entrypoint-initdb.d pgadmin: image: dpage/pgadmin4 container_name: pgadmin_hoge restart: always ports: - 30001:80 environment: PGADMIN_DEFAULT_EMAIL: admin@example.com PGADMIN_DEFAULT_PASSWORD: admin volumes: - pgadmin:/var/lib/pgadmin depends_on: - postgres volumes: postgres: pgadmin: 上記のようなdocker-compose.ymlを作成してdocker-compose up -dしたところ、PostgreSQL側のコンテナだけRestartingから抜け出せなくなってしまいました。コンテナのリビルドやイメージの再取得をしてもダメ。
+エラーの回避策 こういう場合は、正常起動しないコンテナのログを参照してエラーが起きていないかチェックした方がいいです。
+というのは、「少なくとも1度は正常起動するコンテナ」なので、イメージやコンテナのビルドそのものには問題がないと思われます。そうなると、コンテナが正常起動した直後になんらかのエラーがコンテナ内部で発生していると考えられ、そのエラーを解消する手がかりがログに残っていると考えられます。
+docker logs --tail 50 --follow --timestamps postgres_hoge 上記のコマンドを実行すると、指定したコンテナ（上記だとpostgres_hogeコンテナを指します）のログの最新50件分を表示します。大抵の場合、このログを見てみることで何かしらのエラーログを見つけられるはず。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/docker-container-gets-into-restarting-loop/" /><meta property="article:published_time" content="2021-04-03T09:05:43&#43;09:00"/>
+<meta property="article:modified_time" content="2021-04-03T09:05:43&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="DockerコンテナがRestarting状態から変化しなくなってしまった場合ログを見てみる"/>
+<meta name="twitter:description" content="Restartingループから抜け出せない 今回は、自分が経験したDockerまわりのトラブルシューティングについてです。
+docker-compose.ymlを編集してdocker-compose up -dしたところ、一度は起動したコンテナがRestartingの状態に変化し、その後ずっとRestartingから変化しなくなる、という症状に見舞われました。つまり、一度は正常に起動しても何らかの原因でコンテナが落ちて、再起動してまた落ちて再起動して・・・を繰り返していることになります。
+docker-compose ps psコマンドでコンテナの状態（status）を見てみると、起動直後は「Up」なのですが少ししてから再度psで見てみると「Restarting」に変化していて、以降はずっと「Restarting」から変化しません。
+結論から言うと、コンテナ自体が悪いわけではなくコンテナ起動に関してエラーが起こっている可能性が高いと考えられます。よって、その原因が解消できればコンテナは正常に起動すると思われます。
+トラブったdocker-compose.yml version: &#39;3&#39; services: postgres: image: postgres container_name: postgres_hoge restart: always environment: TZ: &#34;Asia/Tokyo&#34; POSTGRES_USER: pg_hoge_admin POSTGRES_PASSWORD: pg_hoge_admin POSTGRES_DB: pg_hoge ports: - 30000:5432 volumes: - postgres:/var/lib/postgresql/data - ./postgres/initdb:/docker-entrypoint-initdb.d pgadmin: image: dpage/pgadmin4 container_name: pgadmin_hoge restart: always ports: - 30001:80 environment: PGADMIN_DEFAULT_EMAIL: admin@example.com PGADMIN_DEFAULT_PASSWORD: admin volumes: - pgadmin:/var/lib/pgadmin depends_on: - postgres volumes: postgres: pgadmin: 上記のようなdocker-compose.ymlを作成してdocker-compose up -dしたところ、PostgreSQL側のコンテナだけRestartingから抜け出せなくなってしまいました。コンテナのリビルドやイメージの再取得をしてもダメ。
+エラーの回避策 こういう場合は、正常起動しないコンテナのログを参照してエラーが起きていないかチェックした方がいいです。
+というのは、「少なくとも1度は正常起動するコンテナ」なので、イメージやコンテナのビルドそのものには問題がないと思われます。そうなると、コンテナが正常起動した直後になんらかのエラーがコンテナ内部で発生していると考えられ、そのエラーを解消する手がかりがログに残っていると考えられます。
+docker logs --tail 50 --follow --timestamps postgres_hoge 上記のコマンドを実行すると、指定したコンテナ（上記だとpostgres_hogeコンテナを指します）のログの最新50件分を表示します。大抵の場合、このログを見てみることで何かしらのエラーログを見つけられるはず。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">DockerコンテナがRestarting状態から変化しなくなってしまった場合ログを見てみる</h1>
+			<div class="meta">Posted at &mdash; Apr 3, 2021</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="restartingループから抜け出せない">Restartingループから抜け出せない</h2>
+
+<p>今回は、自分が経験したDockerまわりのトラブルシューティングについてです。</p>
+
+<p>docker-compose.ymlを編集して<code>docker-compose up -d</code>したところ、一度は起動したコンテナがRestartingの状態に変化し、その後ずっとRestartingから変化しなくなる、という症状に見舞われました。つまり、一度は正常に起動しても何らかの原因でコンテナが落ちて、再起動してまた落ちて再起動して・・・を繰り返していることになります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker-compose ps</code></pre></div>
+<p><code>ps</code>コマンドでコンテナの状態（status）を見てみると、起動直後は「Up」なのですが少ししてから再度<code>ps</code>で見てみると「Restarting」に変化していて、以降はずっと「Restarting」から変化しません。</p>
+
+<p>結論から言うと、コンテナ自体が悪いわけではなく<strong>コンテナ起動に関してエラーが起こっている</strong>可能性が高いと考えられます。よって、その原因が解消できればコンテナは正常に起動すると思われます。</p>
+
+<h2 id="トラブったdocker-compose-yml">トラブったdocker-compose.yml</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml">version: <span style="color:#a31515">&#39;3&#39;</span>
+
+services:
+    postgres:
+        image: postgres
+        container_name:  postgres_hoge
+        restart: always
+        environment:
+            TZ: <span style="color:#a31515">&#34;Asia/Tokyo&#34;</span>
+            POSTGRES_USER: pg_hoge_admin
+            POSTGRES_PASSWORD: pg_hoge_admin
+            POSTGRES_DB: pg_hoge
+        ports:
+            - 30000:5432
+        volumes:
+            - postgres:/var/lib/postgresql/data
+            - ./postgres/initdb:/docker-entrypoint-initdb.d
+
+    pgadmin:
+        image: dpage/pgadmin4
+        container_name:  pgadmin_hoge
+        restart: always
+        ports:
+            - 30001:80
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin@example.com
+            PGADMIN_DEFAULT_PASSWORD: admin
+        volumes:
+            - pgadmin:/var/lib/pgadmin
+        depends_on:
+            - postgres
+
+volumes:
+    postgres:
+    pgadmin:</code></pre></div>
+<p>上記のようなdocker-compose.ymlを作成して<code>docker-compose up -d</code>したところ、PostgreSQL側のコンテナだけRestartingから抜け出せなくなってしまいました。コンテナのリビルドやイメージの再取得をしてもダメ。</p>
+
+<h2 id="エラーの回避策">エラーの回避策</h2>
+
+<p>こういう場合は、正常起動しないコンテナのログを参照してエラーが起きていないかチェックした方がいいです。</p>
+
+<p>というのは、「少なくとも1度は正常起動するコンテナ」なので、イメージやコンテナのビルドそのものには問題がないと思われます。そうなると、コンテナが正常起動した直後になんらかのエラーが<strong>コンテナ内部で発生している</strong>と考えられ、そのエラーを解消する手がかりがログに残っていると考えられます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker logs --tail 50 --follow --timestamps postgres_hoge</code></pre></div>
+<p>上記のコマンドを実行すると、指定したコンテナ（上記だと<code>postgres_hoge</code>コンテナを指します）のログの最新50件分を表示します。大抵の場合、このログを見てみることで何かしらのエラーログを見つけられるはず。</p>
+
+<p>今回の場合、PostgreSQLを構築する際に「pg_hoge_admin」というユーザーを追加しようとしていますが、頭に「pg_」が付くスキーマは<strong>システムが利用するため予約されて</strong>おり新規ユーザーに対して割り当てることはできません。「その名前のユーザーは作れないぜ！」とエラーになっていたわけです。</p>
+
+<p>これがエラーの根本原因ですが、このエラーはdocker-compose.ymlを編集しない限り解消しません。Dockerはコンテナ起動に失敗してもとりあえずそのままの状態でリスタートするので、コンテナの起動ごとに毎回このエラーが発生し続けます。よって、コンテナの起動に失敗し続け「Restarting」から抜け出せなくなっていた、というわけです。今回の場合はユーザー名を変更し、「pg_」のないユーザー名でユーザー追加を行うことで事なきを得ました。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>コンテナが起動しない場合はリビルドやイメージの再取得をしがちですが、上記のようにコンテナそのものではなく中身が問題であるケースもあります。思い込みはキケン、というのが今回身に染みました。疲れた・・・。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://stackoverflow.com/questions/37471929/docker-container-keeps-on-restarting-again-on-again">Docker: Container keeps on restarting again on again</a></li>
+<li><a href="https://docs.docker.com/compose/reference/ps/">docker-compose ps</a></li>
+<li><a href="https://www.postgresql.jp/document/9.1/html/ddl-schemas.html">スキーマ</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

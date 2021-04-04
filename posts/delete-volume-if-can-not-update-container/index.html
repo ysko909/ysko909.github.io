@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>コンテナやイメージを削除してもDockerfileやdocker-compose.ymlの内容が反映されない場合はvolumeを削除する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="コンテナやイメージを削除してもDockerfileやdocker-compose.ymlの内容が反映されない場合はvolumeを削除する" />
+<meta property="og:description" content="コンテナをリビルドしても反映されないんだけど 前回に引き続き、今回もDockerまわりのトラブルシューティングです。
+Dockerfileやdocker-compose.ymlの内容を更新した場合、基本的にはリビルドして内容をコンテナに反映させます。
+docker-compose build --no-cache docker-compose up -d --build --force-recreate docker-composeの場合、上記のようなコマンドを発行するとキャッシュを無視（--no-cache）してリビルドしたり、ymlの内容に変更がなくてもイメージの強制再作成（--force-recreate）から実行してくれます。
+ところが、場合によってはこれだけでは反映されないことがあります。
+遭遇した現象 version: &#39;3&#39; services: postgres: image: postgres container_name: postgres_hoge restart: always environment: TZ: &#34;Asia/Tokyo&#34; POSTGRES_USER: admin POSTGRES_PASSWORD: admin POSTGRES_DB: hoge ports: - 30000:5432 volumes: - postgres:/var/lib/postgresql/data - ./postgres/initdb:/docker-entrypoint-initdb.d pgadmin: image: dpage/pgadmin4 container_name: pgadmin_hoge restart: always ports: - 30001:80 environment: PGADMIN_DEFAULT_EMAIL: admin@example.com PGADMIN_DEFAULT_PASSWORD: admin volumes: - pgadmin:/var/lib/pgadmin depends_on: - postgres volumes: postgres: pgadmin: 上記は、PostgreSQLとpgAdminのコンテナを立ち上げるdocker-compose.ymlファイルです。このファイルのうち、environmentの部分を変更して、コンテナをリビルドしたのですが変更が反映されませんでした。
+environment: PGADMIN_DEFAULT_EMAIL: hogehoge@example.com PGADMIN_DEFAULT_PASSWORD: hogehoge PGADMIN_DEFAULT_EMAILは、pgAdminにログインするメールアドレスを記述する箇所。PGADMIN_DEFAULT_PASSWORDは、その名の通りパスワードを記述する箇所。これらについて、admin@example." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/delete-volume-if-can-not-update-container/" /><meta property="article:published_time" content="2021-04-04T09:27:22&#43;09:00"/>
+<meta property="article:modified_time" content="2021-04-04T09:27:22&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="コンテナやイメージを削除してもDockerfileやdocker-compose.ymlの内容が反映されない場合はvolumeを削除する"/>
+<meta name="twitter:description" content="コンテナをリビルドしても反映されないんだけど 前回に引き続き、今回もDockerまわりのトラブルシューティングです。
+Dockerfileやdocker-compose.ymlの内容を更新した場合、基本的にはリビルドして内容をコンテナに反映させます。
+docker-compose build --no-cache docker-compose up -d --build --force-recreate docker-composeの場合、上記のようなコマンドを発行するとキャッシュを無視（--no-cache）してリビルドしたり、ymlの内容に変更がなくてもイメージの強制再作成（--force-recreate）から実行してくれます。
+ところが、場合によってはこれだけでは反映されないことがあります。
+遭遇した現象 version: &#39;3&#39; services: postgres: image: postgres container_name: postgres_hoge restart: always environment: TZ: &#34;Asia/Tokyo&#34; POSTGRES_USER: admin POSTGRES_PASSWORD: admin POSTGRES_DB: hoge ports: - 30000:5432 volumes: - postgres:/var/lib/postgresql/data - ./postgres/initdb:/docker-entrypoint-initdb.d pgadmin: image: dpage/pgadmin4 container_name: pgadmin_hoge restart: always ports: - 30001:80 environment: PGADMIN_DEFAULT_EMAIL: admin@example.com PGADMIN_DEFAULT_PASSWORD: admin volumes: - pgadmin:/var/lib/pgadmin depends_on: - postgres volumes: postgres: pgadmin: 上記は、PostgreSQLとpgAdminのコンテナを立ち上げるdocker-compose.ymlファイルです。このファイルのうち、environmentの部分を変更して、コンテナをリビルドしたのですが変更が反映されませんでした。
+environment: PGADMIN_DEFAULT_EMAIL: hogehoge@example.com PGADMIN_DEFAULT_PASSWORD: hogehoge PGADMIN_DEFAULT_EMAILは、pgAdminにログインするメールアドレスを記述する箇所。PGADMIN_DEFAULT_PASSWORDは、その名の通りパスワードを記述する箇所。これらについて、admin@example."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">コンテナやイメージを削除してもDockerfileやdocker-compose.ymlの内容が反映されない場合はvolumeを削除する</h1>
+			<div class="meta">Posted at &mdash; Apr 4, 2021</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="コンテナをリビルドしても反映されないんだけど">コンテナをリビルドしても反映されないんだけど</h2>
+
+<p>前回に引き続き、今回もDockerまわりのトラブルシューティングです。</p>
+
+<p>Dockerfileやdocker-compose.ymlの内容を更新した場合、基本的にはリビルドして内容をコンテナに反映させます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker-compose build --no-cache
+docker-compose up -d --build --force-recreate</code></pre></div>
+<p><code>docker-compose</code>の場合、上記のようなコマンドを発行するとキャッシュを無視（<code>--no-cache</code>）してリビルドしたり、ymlの内容に変更がなくてもイメージの強制再作成（<code>--force-recreate</code>）から実行してくれます。</p>
+
+<p>ところが、場合によっては<strong>これだけでは反映されないことがあります</strong>。</p>
+
+<h2 id="遭遇した現象">遭遇した現象</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml">version: <span style="color:#a31515">&#39;3&#39;</span>
+
+services:
+    postgres:
+        image: postgres
+        container_name:  postgres_hoge
+        restart: always
+        environment:
+            TZ: <span style="color:#a31515">&#34;Asia/Tokyo&#34;</span>
+            POSTGRES_USER: admin
+            POSTGRES_PASSWORD: admin
+            POSTGRES_DB: hoge
+        ports:
+            - 30000:5432
+        volumes:
+            - postgres:/var/lib/postgresql/data
+            - ./postgres/initdb:/docker-entrypoint-initdb.d
+
+    pgadmin:
+        image: dpage/pgadmin4
+        container_name:  pgadmin_hoge
+        restart: always
+        ports:
+            - 30001:80
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin@example.com
+            PGADMIN_DEFAULT_PASSWORD: admin
+        volumes:
+            - pgadmin:/var/lib/pgadmin
+        depends_on:
+            - postgres
+
+volumes:
+    postgres:
+    pgadmin:</code></pre></div>
+<p>上記は、PostgreSQLとpgAdminのコンテナを立ち上げるdocker-compose.ymlファイルです。このファイルのうち、<code>environment</code>の部分を変更して、コンテナをリビルドしたのですが<strong>変更が反映されませんでした</strong>。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml">        environment:
+            PGADMIN_DEFAULT_EMAIL: hogehoge@example.com
+            PGADMIN_DEFAULT_PASSWORD: hogehoge</code></pre></div>
+<p><code>PGADMIN_DEFAULT_EMAIL</code>は、pgAdminにログインするメールアドレスを記述する箇所。<code>PGADMIN_DEFAULT_PASSWORD</code>は、その名の通りパスワードを記述する箇所。これらについて、<code>admin@example.com</code>を<code>hogehoge@example.com</code>に変更するなどして、docker-compopse.ymlを更新しましました。</p>
+
+<p>本来であれば、単純にコンテナをリビルドして新しいメールアドレスとパスワードでログインすればいいと思うのですが、なぜか反映されませんでした。つまりdocker-compose.ymlの<strong>変更前</strong>のメールアドレスやパスワードでないとpgAdminにログインできないわけです。ワケわからん。</p>
+
+<p><code>environment</code>は、コンテナ内で利用する単なる環境変数です。ということは、ここではpgAdminのコンテナを立ち上げる際の初期設定にしか利用していないはず。そのわりに、<code>docker-compose down --rmi all</code>などでイメージの削除を行ってから、再度<code>pull</code>しても駄目。そもそも、本来はイメージの再取得は必要なくて、<code>docker-compose up --build -d</code>とかでいいと思うのですが、どちらにせよなぜか反映されません。許さん。</p>
+
+<h2 id="原因">原因</h2>
+
+<p>原因は<strong>データボリュームにゴミが残っていた</strong>こと。</p>
+
+<p>volumeの内容は、コンテナをリビルドしたりイメージを削除するだけでは消えません。「volumeの内容を削除する」コマンドを発行しないかぎり残り続けます。今回は、ログインに必要なアカウント情報がvolume側に残存していたため、いくらコンテナをリビルドして新しい環境変数にしてもイメージを再取得しても、それらは残存し続けるvolumeには関係ないため反映されなかったわけです。マジか。</p>
+
+<h2 id="解決法">解決法</h2>
+
+<p>ゴミが残ってるなら、捨てればいいわけです。やったるぞー。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker volume ls
+docker volume rm hogehoge</code></pre></div>
+<p><code>docker volume ls</code>で、volumeの一覧が参照できます。このうち削除したいvolumeを<code>docker volume rm hogehoge</code>で指定します。これでvolumeが削除可能です。</p>
+
+<p>残存していたデータボリュームを削除しコンテナをリビルドしたところ、無事に新しいアカウント情報でログインできました。</p>
+
+<p>やった。</p>
+
+<h2 id="注意点">注意点</h2>
+
+<p>「<code>docker volume rm hogehoge</code>」を実行するということは、そのコンテナで利用していたデータボリュームをまるっと削除することになるので、重要なデータは事前に別コンテナなどに退避させる必要があります。</p>
+
+<p>コンテナを作ったばっかりならいいかもしれませんが、ある程度運用しているようなコンテナについてvolumeをいじる場合は、データボリュームに重要なデータが格納されていないか一応確認した方がいいかもしれません。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://docs.docker.com/storage/volumes/">Use volumes</a></li>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes-ja">Dockerのイメージ、コンテナおよびボリュームを削除する方法</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

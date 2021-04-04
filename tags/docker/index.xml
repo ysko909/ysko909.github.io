@@ -7,10 +7,40 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sat, 12 Sep 2020 05:41:57 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 04 Apr 2021 09:27:22 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>コンテナやイメージを削除してもDockerfileやdocker-compose.ymlの内容が反映されない場合はvolumeを削除する</title>
+      <link>https://ysko909.github.io/posts/delete-volume-if-can-not-update-container/</link>
+      <pubDate>Sun, 04 Apr 2021 09:27:22 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/delete-volume-if-can-not-update-container/</guid>
+      <description>コンテナをリビルドしても反映されないんだけど 前回に引き続き、今回もDockerまわりのトラブルシューティングです。
+Dockerfileやdocker-compose.ymlの内容を更新した場合、基本的にはリビルドして内容をコンテナに反映させます。
+docker-compose build --no-cache docker-compose up -d --build --force-recreate docker-composeの場合、上記のようなコマンドを発行するとキャッシュを無視（--no-cache）してリビルドしたり、ymlの内容に変更がなくてもイメージの強制再作成（--force-recreate）から実行してくれます。
+ところが、場合によってはこれだけでは反映されないことがあります。
+遭遇した現象 version: &amp;#39;3&amp;#39; services: postgres: image: postgres container_name: postgres_hoge restart: always environment: TZ: &amp;#34;Asia/Tokyo&amp;#34; POSTGRES_USER: admin POSTGRES_PASSWORD: admin POSTGRES_DB: hoge ports: - 30000:5432 volumes: - postgres:/var/lib/postgresql/data - ./postgres/initdb:/docker-entrypoint-initdb.d pgadmin: image: dpage/pgadmin4 container_name: pgadmin_hoge restart: always ports: - 30001:80 environment: PGADMIN_DEFAULT_EMAIL: admin@example.com PGADMIN_DEFAULT_PASSWORD: admin volumes: - pgadmin:/var/lib/pgadmin depends_on: - postgres volumes: postgres: pgadmin: 上記は、PostgreSQLとpgAdminのコンテナを立ち上げるdocker-compose.ymlファイルです。このファイルのうち、environmentの部分を変更して、コンテナをリビルドしたのですが変更が反映されませんでした。
+environment: PGADMIN_DEFAULT_EMAIL: hogehoge@example.com PGADMIN_DEFAULT_PASSWORD: hogehoge PGADMIN_DEFAULT_EMAILは、pgAdminにログインするメールアドレスを記述する箇所。PGADMIN_DEFAULT_PASSWORDは、その名の通りパスワードを記述する箇所。これらについて、admin@example.</description>
+    </item>
+    
+    <item>
+      <title>DockerコンテナがRestarting状態から変化しなくなってしまった場合ログを見てみる</title>
+      <link>https://ysko909.github.io/posts/docker-container-gets-into-restarting-loop/</link>
+      <pubDate>Sat, 03 Apr 2021 09:05:43 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/docker-container-gets-into-restarting-loop/</guid>
+      <description>Restartingループから抜け出せない 今回は、自分が経験したDockerまわりのトラブルシューティングについてです。
+docker-compose.ymlを編集してdocker-compose up -dしたところ、一度は起動したコンテナがRestartingの状態に変化し、その後ずっとRestartingから変化しなくなる、という症状に見舞われました。つまり、一度は正常に起動しても何らかの原因でコンテナが落ちて、再起動してまた落ちて再起動して・・・を繰り返していることになります。
+docker-compose ps psコマンドでコンテナの状態（status）を見てみると、起動直後は「Up」なのですが少ししてから再度psで見てみると「Restarting」に変化していて、以降はずっと「Restarting」から変化しません。
+結論から言うと、コンテナ自体が悪いわけではなくコンテナ起動に関してエラーが起こっている可能性が高いと考えられます。よって、その原因が解消できればコンテナは正常に起動すると思われます。
+トラブったdocker-compose.yml version: &amp;#39;3&amp;#39; services: postgres: image: postgres container_name: postgres_hoge restart: always environment: TZ: &amp;#34;Asia/Tokyo&amp;#34; POSTGRES_USER: pg_hoge_admin POSTGRES_PASSWORD: pg_hoge_admin POSTGRES_DB: pg_hoge ports: - 30000:5432 volumes: - postgres:/var/lib/postgresql/data - ./postgres/initdb:/docker-entrypoint-initdb.d pgadmin: image: dpage/pgadmin4 container_name: pgadmin_hoge restart: always ports: - 30001:80 environment: PGADMIN_DEFAULT_EMAIL: admin@example.com PGADMIN_DEFAULT_PASSWORD: admin volumes: - pgadmin:/var/lib/pgadmin depends_on: - postgres volumes: postgres: pgadmin: 上記のようなdocker-compose.ymlを作成してdocker-compose up -dしたところ、PostgreSQL側のコンテナだけRestartingから抜け出せなくなってしまいました。コンテナのリビルドやイメージの再取得をしてもダメ。
+エラーの回避策 こういう場合は、正常起動しないコンテナのログを参照してエラーが起きていないかチェックした方がいいです。
+というのは、「少なくとも1度は正常起動するコンテナ」なので、イメージやコンテナのビルドそのものには問題がないと思われます。そうなると、コンテナが正常起動した直後になんらかのエラーがコンテナ内部で発生していると考えられ、そのエラーを解消する手がかりがログに残っていると考えられます。
+docker logs --tail 50 --follow --timestamps postgres_hoge 上記のコマンドを実行すると、指定したコンテナ（上記だとpostgres_hogeコンテナを指します）のログの最新50件分を表示します。大抵の場合、このログを見てみることで何かしらのエラーログを見つけられるはず。</description>
+    </item>
     
     <item>
       <title>処理中にDockerコンテナへの接続が切断される場合はリソース設定を疑う</title>
