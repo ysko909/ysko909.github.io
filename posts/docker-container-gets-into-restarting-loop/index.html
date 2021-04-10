@@ -139,7 +139,7 @@ volumes:
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker logs --tail 50 --follow --timestamps postgres_hoge</code></pre></div>
 <p>上記のコマンドを実行すると、指定したコンテナ（上記だと<code>postgres_hoge</code>コンテナを指します）のログの最新50件分を表示します。大抵の場合、このログを見てみることで何かしらのエラーログを見つけられるはず。</p>
 
-<p>今回の場合、PostgreSQLを構築する際に「pg_hoge_admin」というユーザーを追加しようとしていますが、頭に「pg_」が付くスキーマは<strong>システムが利用するため予約されて</strong>おり新規ユーザーに対して割り当てることはできません。「その名前のユーザーは作れないぜ！」とエラーになっていたわけです。</p>
+<p>今回の場合、PostgreSQLを構築する際に「pg_hoge_admin」というユーザーを追加しようとしていますが、頭に「pg_」が付くスキーマは<strong>システムが利用するため予約されて</strong>おり新規に割り当てることはできません。「その名前は使えないぜ！」とエラーになっていたわけです。</p>
 
 <p>これがエラーの根本原因ですが、このエラーはdocker-compose.ymlを編集しない限り解消しません。Dockerはコンテナ起動に失敗してもとりあえずそのままの状態でリスタートするので、コンテナの起動ごとに毎回このエラーが発生し続けます。よって、コンテナの起動に失敗し続け「Restarting」から抜け出せなくなっていた、というわけです。今回の場合はユーザー名を変更し、「pg_」のないユーザー名でユーザー追加を行うことで事なきを得ました。</p>
 
