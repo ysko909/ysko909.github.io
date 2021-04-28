@@ -16,7 +16,7 @@ localForageとは localForageは、シンプルにストレージを扱えるJS�
  IndexedDB WebSQL localStorage  優先度で言えば、上記の順になります。たとえばプログラマーがIndexedDBを使え！と指定していたとしても、ブラウザがIndexedDBを利用できなければ勝手にWebSQLで処理を進めてくれる、というわけです。
 他にもAPIの実装が簡単、というのも大きいメリットです。localForage API Docsを見ると実装方法が記載されていますが、とても見通しのいいコードです。Promiseを利用している、ということもありますがコールバック関数での記述でもそこまで可動性は落ちません（でもPromiseが推奨なのでPromiseで書くのが正解かな）。コードの体裁が整っているのももちろんですが、このページ自体とても可読性が高いので見習いたいものです。
 コード では実際に、PhaserへlocalForageを導入してみましょう。ここでは、以前作成したシーンの切り替えでフェードアウト・フェードインするコードを流用しています。
-export class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstScene&#39;); this.hoge = &#39;hoge&#39;; } create() { // ローカルからデータを取得  localforage.getItem(&#39;hogekey&#39;) .then(value=&gt;{ if (value){ console.log(&#39;get item: &#39; &#43; value); this.hoge = value; this.add.text(width / 2, height / 2 &#43; 100, this.hoge).setOrigin(0.5); localforage.removeItem(&#39;hogekey&#39;); } else { console." />
+class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstScene&#39;); this.hoge = &#39;hoge&#39;; } create() { // ローカルからデータを取得  localforage.getItem(&#39;hogekey&#39;) .then(value=&gt;{ if (value){ console.log(&#39;get item: &#39; &#43; value); this.hoge = value; this.add.text(width / 2, height / 2 &#43; 100, this.hoge).setOrigin(0.5); localforage.removeItem(&#39;hogekey&#39;); } else { console." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ysko909.github.io/posts/use-localforage-with-phaser/" /><meta property="article:published_time" content="2021-03-16T23:31:22&#43;09:00"/>
 <meta property="article:modified_time" content="2021-03-16T23:31:22&#43;09:00"/><meta name="twitter:card" content="summary"/>
@@ -33,7 +33,7 @@ localForageとは localForageは、シンプルにストレージを扱えるJS�
  IndexedDB WebSQL localStorage  優先度で言えば、上記の順になります。たとえばプログラマーがIndexedDBを使え！と指定していたとしても、ブラウザがIndexedDBを利用できなければ勝手にWebSQLで処理を進めてくれる、というわけです。
 他にもAPIの実装が簡単、というのも大きいメリットです。localForage API Docsを見ると実装方法が記載されていますが、とても見通しのいいコードです。Promiseを利用している、ということもありますがコールバック関数での記述でもそこまで可動性は落ちません（でもPromiseが推奨なのでPromiseで書くのが正解かな）。コードの体裁が整っているのももちろんですが、このページ自体とても可読性が高いので見習いたいものです。
 コード では実際に、PhaserへlocalForageを導入してみましょう。ここでは、以前作成したシーンの切り替えでフェードアウト・フェードインするコードを流用しています。
-export class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstScene&#39;); this.hoge = &#39;hoge&#39;; } create() { // ローカルからデータを取得  localforage.getItem(&#39;hogekey&#39;) .then(value=&gt;{ if (value){ console.log(&#39;get item: &#39; &#43; value); this.hoge = value; this.add.text(width / 2, height / 2 &#43; 100, this.hoge).setOrigin(0.5); localforage.removeItem(&#39;hogekey&#39;); } else { console."/>
+class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstScene&#39;); this.hoge = &#39;hoge&#39;; } create() { // ローカルからデータを取得  localforage.getItem(&#39;hogekey&#39;) .then(value=&gt;{ if (value){ console.log(&#39;get item: &#39; &#43; value); this.hoge = value; this.add.text(width / 2, height / 2 &#43; 100, this.hoge).setOrigin(0.5); localforage.removeItem(&#39;hogekey&#39;); } else { console."/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
 
@@ -130,7 +130,7 @@ export class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstS
 <h2 id="コード">コード</h2>
 
 <p>では実際に、PhaserへlocalForageを導入してみましょう。ここでは、以前作成したシーンの切り替えでフェードアウト・フェードインするコードを流用しています。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">export</span> <span style="color:#00f">class</span> FirstScene <span style="color:#00f">extends</span> Phaser.Scene {
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">class</span> FirstScene <span style="color:#00f">extends</span> Phaser.Scene {
   
   constructor() {
     <span style="color:#00f">super</span>(<span style="color:#a31515">&#39;firstScene&#39;</span>);
@@ -174,7 +174,7 @@ export class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstS
   }
 }
 
-<span style="color:#00f">export</span> <span style="color:#00f">class</span> SecondScene <span style="color:#00f">extends</span> Phaser.Scene {
+<span style="color:#00f">class</span> SecondScene <span style="color:#00f">extends</span> Phaser.Scene {
   constructor() {
     <span style="color:#00f">super</span>(<span style="color:#a31515">&#39;secondScene&#39;</span>);
   }
@@ -204,6 +204,8 @@ export class FirstScene extends Phaser.Scene { constructor() { super(&#39;firstS
 
 <span style="color:#00f">new</span> Phaser.Game(config);
 </code></pre></div>
+<p>最初のシーンでは、ローカルにデータが存在するか確認します。データが存在する場合は値を取得して表示しデータを削除します。が、存在しなければ何もしません。2つ目のシーンでは、ローカルにデータを保存します。つまり、2つ目のシーンまで最低1度でも見ているなら、最初のシーンではローカルに保存されたデータが表示されるわけです。逆に最初のシーンを見て1度ブラウザの更新ボタンを押すと、ローカルデータを作成する2つ目のシーンを見ていないためローカルにデータが保存されません。よってこの場合、データが存在しないのでローカルデータなしとなって何も表示されません。</p>
+
 <p>これだけのコードで、簡単にデータを保存・読み込みが実装できました。</p>
 
 <p>保存されたデータは、タブを閉じたとしても保持されます。一度タブを閉じて別タブで開いてみると、一度保存した情報を保持していることがわかります。</p>

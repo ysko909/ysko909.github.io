@@ -30,7 +30,7 @@ localForageとは localForageは、シンプルにストレージを扱えるJS�
  IndexedDB WebSQL localStorage  優先度で言えば、上記の順になります。たとえばプログラマーがIndexedDBを使え！と指定していたとしても、ブラウザがIndexedDBを利用できなければ勝手にWebSQLで処理を進めてくれる、というわけです。
 他にもAPIの実装が簡単、というのも大きいメリットです。localForage API Docsを見ると実装方法が記載されていますが、とても見通しのいいコードです。Promiseを利用している、ということもありますがコールバック関数での記述でもそこまで可動性は落ちません（でもPromiseが推奨なのでPromiseで書くのが正解かな）。コードの体裁が整っているのももちろんですが、このページ自体とても可読性が高いので見習いたいものです。
 コード では実際に、PhaserへlocalForageを導入してみましょう。ここでは、以前作成したシーンの切り替えでフェードアウト・フェードインするコードを流用しています。
-export class FirstScene extends Phaser.Scene { constructor() { super(&amp;#39;firstScene&amp;#39;); this.hoge = &amp;#39;hoge&amp;#39;; } create() { // ローカルからデータを取得  localforage.getItem(&amp;#39;hogekey&amp;#39;) .then(value=&amp;gt;{ if (value){ console.log(&amp;#39;get item: &amp;#39; + value); this.hoge = value; this.add.text(width / 2, height / 2 + 100, this.hoge).setOrigin(0.5); localforage.removeItem(&amp;#39;hogekey&amp;#39;); } else { console.</description>
+class FirstScene extends Phaser.Scene { constructor() { super(&amp;#39;firstScene&amp;#39;); this.hoge = &amp;#39;hoge&amp;#39;; } create() { // ローカルからデータを取得  localforage.getItem(&amp;#39;hogekey&amp;#39;) .then(value=&amp;gt;{ if (value){ console.log(&amp;#39;get item: &amp;#39; + value); this.hoge = value; this.add.text(width / 2, height / 2 + 100, this.hoge).setOrigin(0.5); localforage.removeItem(&amp;#39;hogekey&amp;#39;); } else { console.</description>
     </item>
     
     <item>
