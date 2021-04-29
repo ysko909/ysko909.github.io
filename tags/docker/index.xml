@@ -7,10 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sun, 04 Apr 2021 09:27:22 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 29 Apr 2021 09:00:07 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>コンテナ内で作成したファイルをホストで操作するとPermission deniedが発生する</title>
+      <link>https://ysko909.github.io/posts/permission-denied-when-use-data-volume-of-docker/</link>
+      <pubDate>Thu, 29 Apr 2021 09:00:07 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/permission-denied-when-use-data-volume-of-docker/</guid>
+      <description>概要 DockerfileでVOLUMEを使ったりdocker runの際に-vオプションを利用することで、ホストのフォルダをコンテナにマウントできます。それにより、コンテナにおいてホストに存在するファイルを参照したり、逆にコンテナ内で作成したファイルをホストで操作できるようになります。
+ただし、後者の場合はファイルのowner権限を考慮しておかないと、Permission deniedエラーを食らうこともあるので注意が必要です。
+再現してみる Busyboxコンテナ内で作成したファイルを、ホスト側で削除してみます。
+sampleusr@foohost:~/foo$ id uid=1000(sampleusr) gid=9999(testgr) groups=9999(testgr),999(docker) sampleusr@foohost:~/foo$ mkdir hoge &amp;amp;&amp;amp; touch hoge/hoge.txt sampleusr@foohost:~/foo$ ls -al hoge total 8 drwxr-xr-x 2 sampleusr testgr 4096 4月 20 16:41 . drwxr-xr-x 4 sampleusr testgr 4096 4月 20 16:41 .. -rw-r--r-- 1 sampleusr testgr 0 4月 20 16:41 hoge.txt sampleusr@foohost:~/foo$ docker run -it -v $(pwd)/hoge:/hoge busybox / # ls -al /hoge total 8 drwxr-xr-x 2 1000 9999 4096 Apr 20 07:41 .</description>
+    </item>
     
     <item>
       <title>コンテナやイメージを削除してもDockerfileやdocker-compose.ymlの内容が反映されない場合はvolumeを削除する</title>

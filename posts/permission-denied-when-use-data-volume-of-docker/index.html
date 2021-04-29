@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>コンテナ内で作成したファイルをホストで操作するとPermission deniedが発生する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="コンテナ内で作成したファイルをホストで操作するとPermission deniedが発生する" />
+<meta property="og:description" content="概要 DockerfileでVOLUMEを使ったりdocker runの際に-vオプションを利用することで、ホストのフォルダをコンテナにマウントできます。それにより、コンテナにおいてホストに存在するファイルを参照したり、逆にコンテナ内で作成したファイルをホストで操作できるようになります。
+ただし、後者の場合はファイルのowner権限を考慮しておかないと、Permission deniedエラーを食らうこともあるので注意が必要です。
+再現してみる Busyboxコンテナ内で作成したファイルを、ホスト側で削除してみます。
+sampleusr@foohost:~/foo$ id uid=1000(sampleusr) gid=9999(testgr) groups=9999(testgr),999(docker) sampleusr@foohost:~/foo$ mkdir hoge &amp;&amp; touch hoge/hoge.txt sampleusr@foohost:~/foo$ ls -al hoge total 8 drwxr-xr-x 2 sampleusr testgr 4096 4月 20 16:41 . drwxr-xr-x 4 sampleusr testgr 4096 4月 20 16:41 .. -rw-r--r-- 1 sampleusr testgr 0 4月 20 16:41 hoge.txt sampleusr@foohost:~/foo$ docker run -it -v $(pwd)/hoge:/hoge busybox / # ls -al /hoge total 8 drwxr-xr-x 2 1000 9999 4096 Apr 20 07:41 ." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/permission-denied-when-use-data-volume-of-docker/" /><meta property="article:published_time" content="2021-04-29T09:00:07&#43;09:00"/>
+<meta property="article:modified_time" content="2021-04-29T09:00:07&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="コンテナ内で作成したファイルをホストで操作するとPermission deniedが発生する"/>
+<meta name="twitter:description" content="概要 DockerfileでVOLUMEを使ったりdocker runの際に-vオプションを利用することで、ホストのフォルダをコンテナにマウントできます。それにより、コンテナにおいてホストに存在するファイルを参照したり、逆にコンテナ内で作成したファイルをホストで操作できるようになります。
+ただし、後者の場合はファイルのowner権限を考慮しておかないと、Permission deniedエラーを食らうこともあるので注意が必要です。
+再現してみる Busyboxコンテナ内で作成したファイルを、ホスト側で削除してみます。
+sampleusr@foohost:~/foo$ id uid=1000(sampleusr) gid=9999(testgr) groups=9999(testgr),999(docker) sampleusr@foohost:~/foo$ mkdir hoge &amp;&amp; touch hoge/hoge.txt sampleusr@foohost:~/foo$ ls -al hoge total 8 drwxr-xr-x 2 sampleusr testgr 4096 4月 20 16:41 . drwxr-xr-x 4 sampleusr testgr 4096 4月 20 16:41 .. -rw-r--r-- 1 sampleusr testgr 0 4月 20 16:41 hoge.txt sampleusr@foohost:~/foo$ docker run -it -v $(pwd)/hoge:/hoge busybox / # ls -al /hoge total 8 drwxr-xr-x 2 1000 9999 4096 Apr 20 07:41 ."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">コンテナ内で作成したファイルをホストで操作するとPermission deniedが発生する</h1>
+			<div class="meta">Posted at &mdash; Apr 29, 2021</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>Dockerfileで<code>VOLUME</code>を使ったり<code>docker run</code>の際に<code>-v</code>オプションを利用することで、ホストのフォルダをコンテナにマウントできます。それにより、コンテナにおいてホストに存在するファイルを参照したり、逆にコンテナ内で作成したファイルをホストで操作できるようになります。</p>
+
+<p>ただし、後者の場合はファイルのowner権限を考慮しておかないと、<strong>Permission denied</strong>エラーを食らうこともあるので注意が必要です。</p>
+
+<h2 id="再現してみる">再現してみる</h2>
+
+<p>Busyboxコンテナ内で作成したファイルを、ホスト側で削除してみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">sampleusr@foohost:~/foo$ id
+uid=1000(sampleusr) gid=9999(testgr) groups=9999(testgr),999(docker)
+sampleusr@foohost:~/foo$ mkdir hoge &amp;&amp; touch hoge/hoge.txt
+sampleusr@foohost:~/foo$ ls -al hoge
+total 8
+drwxr-xr-x 2 sampleusr testgr 4096  4月 20 16:41 .
+drwxr-xr-x 4 sampleusr testgr 4096  4月 20 16:41 ..
+-rw-r--r-- 1 sampleusr testgr    0  4月 20 16:41 hoge.txt
+sampleusr@foohost:~/foo$ docker run -it -v $(pwd)/hoge:/hoge busybox
+/ # ls -al /hoge
+total 8
+drwxr-xr-x    2 1000     9999          4096 Apr 20 07:41 .
+drwxr-xr-x    1 root     root          4096 Apr 20 07:42 ..
+-rw-r--r--    1 1000     9999             0 Apr 20 07:41 hoge.txt
+/ # touch /hoge/foo.txt
+/ # ls -al /hoge
+total 8
+drwxr-xr-x    2 1000     9999          4096 Apr 20 07:43 .
+drwxr-xr-x    1 root     root          4096 Apr 20 07:42 ..
+-rw-r--r--    1 root     root             0 Apr 20 07:43 foo.txt
+-rw-r--r--    1 1000     9999             0 Apr 20 07:41 hoge.txt
+/ # exit
+sampleusr@foohost:~/foo$ ls -al hoge
+total 8
+drwxr-xr-x 2 sampleusr testgr 4096  4月 20 16:43 .
+drwxr-xr-x 4 sampleusr testgr 4096  4月 20 16:41 ..
+-rw-r--r-- 1 root      root      0  4月 20 16:43 foo.txt
+-rw-r--r-- 1 sampleusr testgr    0  4月 20 16:41 hoge.txt
+sampleusr@foohost:~/foo$ rm hoge/foo.txt
+rm: remove write-protected regular empty file &#39;hoge/foo.txt&#39;? y
+rm: cannot remove &#39;hoge/foo.txt&#39;: Permission denied</code></pre></div>
+<p>コンテナ内で作成したファイル<code>foo.txt</code>はownerがrootになっているため、そのファイルをホストで削除しようとしても（ホストでは一般ユーザーとしてログインしているので）Permission denidとメッセージが出力されます。</p>
+
+<p>コンテナにおいてrootとしてログインして作業していた場合、その権限設定は<strong>そのままホストでも参照される</strong>ので「（一般ユーザーのお前じゃ）ファイルにアクセスする権限ないぞ」と怒られるわけですね。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">sampleusr@foohost:~/foo$ mkdir hoge
+sampleusr@foohost:~/foo$ docker run -it -v $(pwd)/hoge:/hoge busybox
+/ # mkdir -p /hoge/fuga/piyo
+/ # exit
+sampleusr@foohost:~/foo$ ls -al hoge
+total 12
+drwxr-xr-x 3 sampleusr testgr 4096  4月 21 13:19 .
+drwxr-xr-x 4 sampleusr testgr 4096  4月 21 13:18 ..
+drwxr-xr-x 3 root      root   4096  4月 21 13:19 fuga
+sampleusr@foohost:~/foo$ touch hoge/fuga/piyo/foo.txt
+touch: cannot touch &#39;hoge/fuga/piyo/foo.txt&#39;: Permission denied</code></pre></div>
+<p>他のケースとしては、コンテナ内で作成されたフォルダに対しファイルを作成しようした場合に、同様の権限エラーが起きます。このケースでもさっきと同様に、フォルダのownerがrootになっているため、ホスト側でログインしている一般ユーザーの権限では参照できないからです。もちろんフォルダの削除も不可。</p>
+
+<h3 id="どうもlinux環境だけっぽい">どうもLinux環境だけっぽい</h3>
+
+<p>この現象は、どうも<strong>LinuxのホストでLinuxのコンテナを利用するときに発生する</strong>ようで、ホストがWindowsかmacOSの場合は発現しませんでした。はっきりとした理由は不明ですが、Dockerがうまいことハンドリングしてくれているのかもしれません。</p>
+
+<h3 id="どうすりゃいいのよ">どうすりゃいいのよ</h3>
+
+<p>根本的な原因は、コンテナで作業する際のユーザーが<strong>rootであること</strong>です。ホスト側の権限と同じであれば、このようなエラーは発生し得ません。となれば、コンテナ内の作業ユーザーをホスト側の権限と同じにしてやればいいわけです。</p>
+
+<p>対処法はいくつか考えられますが、簡単なのはコンテナ内で<code>useradd</code>して一般ユーザーを作成し、作成した一般ユーザーで処理を実行するというもの。<code>useradd</code>する際に、ホスト側のユーザーに関するUIDやGIDをそのまま渡してやれば一番簡単です。</p>
+
+<p><code>docker run</code>などでコンテナ起動する場合は、<code>-u</code>オプションで起動時のUIDやGIDをコンテナに引き継ぐ方法もあります。ただし、この方法は<code>/etc/passwd</code>と<code>/etc/group</code>をコンテナにボリュームマウントする必要があるので忘れないよう指定しましょう。</p>
+
+<h3 id="まとめ">まとめ</h3>
+
+<p>「Linux環境でLinuxのコンテナを使うときだけ発現する」ケースのエラーでしたので、場合によっては一度も遭遇したことのない人がもしかしたらいらっしゃるかもしれません。往々にして、特定環境でのみ発生するエラーケースは対処法を探すのが結構骨だったりします。この記事が一助になれば幸いです。</p>
+
+<h3 id="参照">参照</h3>
+
+<ol>
+<li><a href="https://docs.docker.com/storage/volumes/">Use volumes</a></li>
+<li><a href="https://qiita.com/yohm/items/047b2e68d008ebb0f001">dockerでvolumeをマウントしたときのファイルのowner問題</a></li>
+<li><a href="https://blog.amedama.jp/entry/docker-container-host-same-user">Docker コンテナ内で Docker ホストと同じユーザを使う</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
