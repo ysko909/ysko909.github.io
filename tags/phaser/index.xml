@@ -7,10 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Tue, 16 Mar 2021 23:31:22 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 02 May 2021 09:20:03 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/phaser/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>PhaserJSでタイマーイベントを使う</title>
+      <link>https://ysko909.github.io/posts/use-timer-event-with-phaserjs/</link>
+      <pubDate>Sun, 02 May 2021 09:20:03 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/use-timer-event-with-phaserjs/</guid>
+      <description>タイマーイベントってなんだっけ 一定の時間経過を条件として発動するイベントのことを、タイマーイベントといいます。タイマーイベントには繰り返し発生するタイプと、1回だけ発動するタイプの2つが存在します。繰り返し発生するタイプは永久に発生し続けるものと、決められた回数のみ発生する2パターンが存在します。
+ loop:シーンが遷移するなどの処理が実行されない限り、永久に発生し続ける。 repeat:決められた回数分発動し、以降は実行されない。 one shot:1回だけ発生するタイプ。  後述しますが、実装時のメソッドが異なるのでそれだけは注意。
+これらのタイマーイベントは、Phaser.Time.Clockクラスを利用することで実装が可能です。
+サンプルコード class GameScene extends Phaser.Scene { timerRepeat: Phaser.Time.Clock; timerLoop: Phaser.Time.Clock; timerOneShot: Phaser.Time.Clock; constructor() { super(&amp;#39;gameScene&amp;#39;); } preload() { } create() { this.timerRepeat = this.time.addEvent({ delay: 1000, callback: ()=&amp;gt;console.log(&amp;#39;hoge&amp;#39;), callbackScope: this, repeat: 2, }); this.timerLoop = this.time.addEvent({ delay: 2000, callback: ()=&amp;gt;console.log(&amp;#39;loop&amp;#39;), callbackScope: this, loop: true, }); this.timerOneShot = this.time.delayedCall(3000, ()=&amp;gt;console.log(&amp;#39;one shot&amp;#39;), this ); } } let gameScene = new GameScene(); let config = { type: Phaser.</description>
+    </item>
     
     <item>
       <title>Phaser3でlocalForageを導入する</title>

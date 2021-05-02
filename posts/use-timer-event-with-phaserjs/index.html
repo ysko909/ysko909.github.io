@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>PhaserJSでタイマーイベントを使う - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="PhaserJSでタイマーイベントを使う" />
+<meta property="og:description" content="タイマーイベントってなんだっけ 一定の時間経過を条件として発動するイベントのことを、タイマーイベントといいます。タイマーイベントには繰り返し発生するタイプと、1回だけ発動するタイプの2つが存在します。繰り返し発生するタイプは永久に発生し続けるものと、決められた回数のみ発生する2パターンが存在します。
+ loop:シーンが遷移するなどの処理が実行されない限り、永久に発生し続ける。 repeat:決められた回数分発動し、以降は実行されない。 one shot:1回だけ発生するタイプ。  後述しますが、実装時のメソッドが異なるのでそれだけは注意。
+これらのタイマーイベントは、Phaser.Time.Clockクラスを利用することで実装が可能です。
+サンプルコード class GameScene extends Phaser.Scene { timerRepeat: Phaser.Time.Clock; timerLoop: Phaser.Time.Clock; timerOneShot: Phaser.Time.Clock; constructor() { super(&#39;gameScene&#39;); } preload() { } create() { this.timerRepeat = this.time.addEvent({ delay: 1000, callback: ()=&gt;console.log(&#39;hoge&#39;), callbackScope: this, repeat: 2, }); this.timerLoop = this.time.addEvent({ delay: 2000, callback: ()=&gt;console.log(&#39;loop&#39;), callbackScope: this, loop: true, }); this.timerOneShot = this.time.delayedCall(3000, ()=&gt;console.log(&#39;one shot&#39;), this ); } } let gameScene = new GameScene(); let config = { type: Phaser." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/use-timer-event-with-phaserjs/" /><meta property="article:published_time" content="2021-05-02T09:20:03&#43;09:00"/>
+<meta property="article:modified_time" content="2021-05-02T09:20:03&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="PhaserJSでタイマーイベントを使う"/>
+<meta name="twitter:description" content="タイマーイベントってなんだっけ 一定の時間経過を条件として発動するイベントのことを、タイマーイベントといいます。タイマーイベントには繰り返し発生するタイプと、1回だけ発動するタイプの2つが存在します。繰り返し発生するタイプは永久に発生し続けるものと、決められた回数のみ発生する2パターンが存在します。
+ loop:シーンが遷移するなどの処理が実行されない限り、永久に発生し続ける。 repeat:決められた回数分発動し、以降は実行されない。 one shot:1回だけ発生するタイプ。  後述しますが、実装時のメソッドが異なるのでそれだけは注意。
+これらのタイマーイベントは、Phaser.Time.Clockクラスを利用することで実装が可能です。
+サンプルコード class GameScene extends Phaser.Scene { timerRepeat: Phaser.Time.Clock; timerLoop: Phaser.Time.Clock; timerOneShot: Phaser.Time.Clock; constructor() { super(&#39;gameScene&#39;); } preload() { } create() { this.timerRepeat = this.time.addEvent({ delay: 1000, callback: ()=&gt;console.log(&#39;hoge&#39;), callbackScope: this, repeat: 2, }); this.timerLoop = this.time.addEvent({ delay: 2000, callback: ()=&gt;console.log(&#39;loop&#39;), callbackScope: this, loop: true, }); this.timerOneShot = this.time.delayedCall(3000, ()=&gt;console.log(&#39;one shot&#39;), this ); } } let gameScene = new GameScene(); let config = { type: Phaser."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">PhaserJSでタイマーイベントを使う</h1>
+			<div class="meta">Posted at &mdash; May 2, 2021</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="タイマーイベントってなんだっけ">タイマーイベントってなんだっけ</h2>
+
+<p>一定の時間経過を条件として発動するイベントのことを、タイマーイベントといいます。タイマーイベントには繰り返し発生するタイプと、1回だけ発動するタイプの2つが存在します。繰り返し発生するタイプは永久に発生し続けるものと、決められた回数のみ発生する2パターンが存在します。</p>
+
+<ul>
+<li>loop:シーンが遷移するなどの処理が実行されない限り、永久に発生し続ける。</li>
+<li>repeat:決められた回数分発動し、以降は実行されない。</li>
+<li>one shot:<strong>1回だけ</strong>発生するタイプ。</li>
+</ul>
+
+<p>後述しますが、実装時のメソッドが異なるのでそれだけは注意。</p>
+
+<p>これらのタイマーイベントは、<code>Phaser.Time.Clock</code>クラスを利用することで実装が可能です。</p>
+
+<h2 id="サンプルコード">サンプルコード</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">class</span> GameScene <span style="color:#00f">extends</span> Phaser.Scene {
+    timerRepeat: <span style="color:#2b91af">Phaser.Time.Clock</span>;
+    timerLoop: <span style="color:#2b91af">Phaser.Time.Clock</span>;
+    timerOneShot: <span style="color:#2b91af">Phaser.Time.Clock</span>;
+  
+    <span style="color:#00f">constructor</span>() {
+        <span style="color:#00f">super</span>(<span style="color:#a31515">&#39;gameScene&#39;</span>);
+    }
+
+    preload() {
+
+    }
+
+    create() {
+      <span style="color:#00f">this</span>.timerRepeat = <span style="color:#00f">this</span>.time.addEvent({
+        delay: <span style="color:#2b91af">1000</span>,
+        callback: ()=&gt;console.log(<span style="color:#a31515">&#39;hoge&#39;</span>),
+        callbackScope: <span style="color:#2b91af">this</span>,
+        repeat: <span style="color:#2b91af">2</span>,
+      });
+
+      <span style="color:#00f">this</span>.timerLoop = <span style="color:#00f">this</span>.time.addEvent({
+        delay: <span style="color:#2b91af">2000</span>,
+        callback: ()=&gt;console.log(<span style="color:#a31515">&#39;loop&#39;</span>),
+        callbackScope: <span style="color:#2b91af">this</span>,
+        loop: <span style="color:#2b91af">true</span>,
+      });
+
+      <span style="color:#00f">this</span>.timerOneShot = <span style="color:#00f">this</span>.time.delayedCall(3000, ()=&gt;console.log(<span style="color:#a31515">&#39;one shot&#39;</span>), <span style="color:#00f">this</span>
+      );
+
+    }
+}
+
+<span style="color:#00f">let</span> gameScene = <span style="color:#00f">new</span> GameScene();
+
+<span style="color:#00f">let</span> config = {
+    type: <span style="color:#2b91af">Phaser.AUTO</span>,
+    width: <span style="color:#2b91af">800</span>,
+    height: <span style="color:#2b91af">600</span>,
+    backgroundColor: <span style="color:#a31515">&#39;#e0e0e0&#39;</span>
+};
+
+<span style="color:#00f">let</span> game = <span style="color:#00f">new</span> Phaser.Game(config);
+
+game.scene.add(<span style="color:#a31515">&#39;gameScene&#39;</span>, gameScene);
+
+game.scene.start(<span style="color:#a31515">&#39;gameScene&#39;</span>);</code></pre></div>
+<p><code>addEvent()</code>では、引数にタイマーの設定を記述したオブジェクトを渡します。このときプロパティの設定値によって挙動が変わり、<code>loop:true</code>にすれば延々とループするし、<code>repeat:n</code>とすればn+1回リピートします。</p>
+
+<p>ちなみに、リピート数は前述のとおり<code>repeat:n</code>で指定しますが、このとき実行される実際の回数n+1回です。なぜ1回足されるかというと、どうも<strong>0回目からスタートする</strong>ようで、<code>repeat:2</code>と指定した場合は合計で3回コールバック関数が実行されました。<code>repeat:0</code>とした場合は1回のみの実行で終了、つまり単発の実行と同じになります。</p>
+
+<p>単発で処理を実行するイベントを仕込む場合は、<code>delayedCall()</code>で実装することが可能です。ただ、単発イベントの実装だけメソッド名が異なるので注意してください。こちらは、引数にオブジェクトではなく経過時間、コールバック関数、コールバックのスコープなどをそれぞれ指定します。設定した時間が経過すると1度だけコールバック関数が実行され、以降の処理はありません。</p>
+
+<h2 id="サンプルコードその2">サンプルコードその2</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> generateEllipse = (scene) =&gt; {
+  <span style="color:#00f">let</span> {width, height} = scene.game.canvas;  
+  
+  <span style="color:#00f">let</span> ellipse = scene.add.ellipse(Phaser.Math.Between(0, width), Phaser.Math.Between(0, height), 100, 100, 0x12a797);
+      ellipse.setOrigin(0, 0);
+      ellipse.setInteractive();
+      ellipse.on(<span style="color:#a31515">&#39;pointerdown&#39;</span>, ()=&gt;{
+        ellipse.input.enabled = <span style="color:#00f">false</span>;
+        ellipse.destroy();
+      });
+  
+  <span style="color:#00f">return</span> ellipse;
+};
+
+<span style="color:#00f">const</span> generateMoveText = (scene, text,) =&gt; {
+  <span style="color:#00f">let</span> {width, height} = scene.game.canvas;
+  
+  <span style="color:#00f">let</span> textObj = scene.add.text(Phaser.Math.Between(0, width <span style="">/ 2), Phaser.Math.Between(0, height), text, {</span>
+    fontSize: <span style="color:#2b91af">Phaser.Math.Between</span>(15, 40),
+    color: <span style="color:#a31515">&#39;#a83839&#39;</span>,
+  });
+  
+  <span style="color:#00f">let</span> tween = scene.tweens.add({
+        targets: <span style="color:#2b91af">textObj</span>,
+        props: {
+            x: { value: <span style="color:#2b91af">width</span>, duration: <span style="color:#2b91af">4000</span>, ease: <span style="color:#a31515">&#39;Linear&#39;</span> },
+            y: { value: <span style="color:#2b91af">height</span> <span style="">/ 2, duration: 1000, ease: &#39;Bounce.easeInOut&#39;, yoyo: true, delay: 1000 },</span>
+          alpha: { value: <span style="color:#2b91af">0</span>, duration: <span style="color:#2b91af">2000</span>, ease: <span style="color:#a31515">&#39;Linear&#39;</span>, delay: <span style="color:#2b91af">2000</span>}
+        }
+    });
+  
+  <span style="color:#00f">let</span> onetimeTimer = scene.time.delayedCall(4000, ()=&gt;{
+    textObj.destroy();
+  }, scene);
+  
+  <span style="color:#00f">return</span> textObj;
+};
+
+<span style="color:#00f">class</span> GameScene <span style="color:#00f">extends</span> Phaser.Scene {
+    timerRepeat: <span style="color:#2b91af">Phaser.Time.Clock</span>;
+    timerLoop: <span style="color:#2b91af">Phaser.Time.Clock</span>;
+    timerOneShot: <span style="color:#2b91af">Phaser.Time.Clock</span>;
+  
+    <span style="color:#00f">constructor</span>() {
+        <span style="color:#00f">super</span>(<span style="color:#a31515">&#39;gameScene&#39;</span>);
+    }
+
+    preload() {
+
+    }
+
+    create() {
+      <span style="color:#00f">this</span>.timerRepeat = <span style="color:#00f">this</span>.time.addEvent({
+        delay: <span style="color:#2b91af">1000</span>,
+        callback: ()=&gt;console.log(<span style="color:#a31515">&#39;hoge&#39;</span>),
+        callbackScope: <span style="color:#2b91af">this</span>,
+        repeat: <span style="color:#2b91af">3</span>,
+      });
+
+      <span style="color:#00f">this</span>.timerLoop = <span style="color:#00f">this</span>.time.addEvent({
+        delay: <span style="color:#2b91af">2000</span>,
+        callback: ()=&gt;{
+          generateEllipse(<span style="color:#00f">this</span>);
+          generateMoveText(<span style="color:#00f">this</span>, <span style="color:#a31515">&#39;hoge&#39;</span>);
+          console.log(<span style="color:#a31515">&#39;loop&#39;</span>)
+        },
+        callbackScope: <span style="color:#2b91af">this</span>,
+        loop: <span style="color:#2b91af">true</span>,
+      });
+
+      <span style="color:#00f">this</span>.timerOneShot = <span style="color:#00f">this</span>.time.delayedCall(3000, ()=&gt;console.log(<span style="color:#a31515">&#39;one shot&#39;</span>), <span style="color:#00f">this</span>
+      );
+
+    }
+}
+
+<span style="color:#00f">let</span> gameScene = <span style="color:#00f">new</span> GameScene();
+
+<span style="color:#00f">let</span> config = {
+    type: <span style="color:#2b91af">Phaser.AUTO</span>,
+    width: <span style="color:#2b91af">800</span>,
+    height: <span style="color:#2b91af">600</span>,
+    backgroundColor: <span style="color:#a31515">&#39;#e0e0e0&#39;</span>
+};
+
+<span style="color:#00f">let</span> game = <span style="color:#00f">new</span> Phaser.Game(config);
+
+game.scene.add(<span style="color:#a31515">&#39;gameScene&#39;</span>, gameScene);
+
+game.scene.start(<span style="color:#a31515">&#39;gameScene&#39;</span>);</code></pre></div>
+<p>上記のサンプルに、円と文字を表示する関数をそれぞれタイマー実行するコードを追加しました。文字自体にも、一定時間経過後自分自身を<code>destroy()</code>するタイマーイベントを仕込んであります。<code>tween</code>で実装できないような処理を仕込みたい場合に使えそうですね。</p>
+
+<p><p class="codepen" data-height="265" data-theme-id="light" data-default-tab="js,result" data-user="ysko909" data-slug-hash="abpvLgg" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="Timer with PhaserJS">
+  <span>See the Pen <a href="https://codepen.io/ysko909/pen/abpvLgg">
+  Timer with PhaserJS</a> by ysko909 (<a href="https://codepen.io/ysko909">@ysko909</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script></p>
+
+<p>Codepenでも実装してみました。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>アクションゲームだったり、RPGでも時限式イベントなどでは必須のタイマーイベント。たったこれだけの記述量で処理を仕込めるのは、PhaserJSのいいところですね。有効に使いたいものです。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://photonstorm.github.io/phaser3-docs/Phaser.Time.Clock.html">Phaser.Time. Clock</a></li>
+<li><a href="https://rexrainbow.github.io/phaser3-rex-notes/docs/site/timer/">Timer</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
