@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>TypeScriptの関数で引数をいろいろする方法 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="TypeScriptの関数で引数をいろいろする方法" />
+<meta property="og:description" content="いろいろするって雑すぎるだろ いい表現方法が思い浮かばなかったんだよぅ。
+たとえば 基本的な関数における引数の指定方法は、引数名:引数のデータ型という感じで宣言します。
+const func = (str: string):string =&gt; &#39;input: &#39; &#43; str; console.log(func(&#39;hoge&#39;)); これが基本形。ここでは、これをもう少し便利に使える記述方法だったり、拡張機能を見ていこうと思います。
+関数の引数にオブジェクトを指定する 当たり前ですが、関数の引数は文字列や数値などのプリミティブな型以外に、オブジェクトを指定できます。
+const func = (arg:{x: string, y: string, z: string}): string =&gt; arg.x &#43; arg.y &#43; arg.z; const func2 = (arg:{x: number, y: number, z: string}, arg2: string) =&gt; { return arg.x.toString() &#43; arg.y.toString() &#43; arg.z &#43; arg2; } console.log(func({x:&#39;foo&#39;, y: &#39;bar&#39;, z: &#39;baz&#39;})); console.log(func2({x: 1, y: 2, z: &#39;funcfunc&#39;}, &#39;fugafuga&#39;)); 記述方法は上記のとおりで、引数のオブジェクト自体に名前をつけて、各プロパティにそれぞれ型情報を付与してやります。関数内で引数を参照する場合は、オブジェクトの名前.プロパティ名で参照できます。基本的には、普段のTypeScriptの書き方で問題ありません。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/define-args-of-function-with-typescript/" /><meta property="article:published_time" content="2021-05-04T12:36:38&#43;09:00"/>
+<meta property="article:modified_time" content="2021-05-04T12:36:38&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="TypeScriptの関数で引数をいろいろする方法"/>
+<meta name="twitter:description" content="いろいろするって雑すぎるだろ いい表現方法が思い浮かばなかったんだよぅ。
+たとえば 基本的な関数における引数の指定方法は、引数名:引数のデータ型という感じで宣言します。
+const func = (str: string):string =&gt; &#39;input: &#39; &#43; str; console.log(func(&#39;hoge&#39;)); これが基本形。ここでは、これをもう少し便利に使える記述方法だったり、拡張機能を見ていこうと思います。
+関数の引数にオブジェクトを指定する 当たり前ですが、関数の引数は文字列や数値などのプリミティブな型以外に、オブジェクトを指定できます。
+const func = (arg:{x: string, y: string, z: string}): string =&gt; arg.x &#43; arg.y &#43; arg.z; const func2 = (arg:{x: number, y: number, z: string}, arg2: string) =&gt; { return arg.x.toString() &#43; arg.y.toString() &#43; arg.z &#43; arg2; } console.log(func({x:&#39;foo&#39;, y: &#39;bar&#39;, z: &#39;baz&#39;})); console.log(func2({x: 1, y: 2, z: &#39;funcfunc&#39;}, &#39;fugafuga&#39;)); 記述方法は上記のとおりで、引数のオブジェクト自体に名前をつけて、各プロパティにそれぞれ型情報を付与してやります。関数内で引数を参照する場合は、オブジェクトの名前.プロパティ名で参照できます。基本的には、普段のTypeScriptの書き方で問題ありません。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">TypeScriptの関数で引数をいろいろする方法</h1>
+			<div class="meta">Posted at &mdash; May 4, 2021</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="いろいろするって雑すぎるだろ">いろいろするって雑すぎるだろ</h2>
+
+<p>いい表現方法が思い浮かばなかったんだよぅ。</p>
+
+<h2 id="たとえば">たとえば</h2>
+
+<p>基本的な関数における引数の指定方法は、<code>引数名:引数のデータ型</code>という感じで宣言します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> func = (str: <span style="color:#2b91af">string</span>):<span style="color:#2b91af">string</span> =&gt; <span style="color:#a31515">&#39;input: &#39;</span> + str;
+
+console.log(func(<span style="color:#a31515">&#39;hoge&#39;</span>));</code></pre></div>
+<p>これが基本形。ここでは、これをもう少し便利に使える記述方法だったり、拡張機能を見ていこうと思います。</p>
+
+<h2 id="関数の引数にオブジェクトを指定する">関数の引数にオブジェクトを指定する</h2>
+
+<p>当たり前ですが、関数の引数は文字列や数値などのプリミティブな型以外に、オブジェクトを指定できます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> func = (arg:{x: <span style="color:#2b91af">string</span>, y: <span style="color:#2b91af">string</span>, z: <span style="color:#2b91af">string</span>}): <span style="color:#2b91af">string</span> =&gt; arg.x + arg.y + arg.z;
+
+<span style="color:#00f">const</span> func2 = (arg:{x: <span style="color:#2b91af">number</span>, y: <span style="color:#2b91af">number</span>, z: <span style="color:#2b91af">string</span>}, arg2: <span style="color:#2b91af">string</span>) =&gt; {
+    <span style="color:#00f">return</span> arg.x.toString() + arg.y.toString() + arg.z + arg2;
+}
+
+console.log(func({x:<span style="color:#a31515">&#39;foo&#39;</span>, y: <span style="color:#a31515">&#39;bar&#39;</span>, z: <span style="color:#a31515">&#39;baz&#39;</span>}));
+
+console.log(func2({x: <span style="color:#2b91af">1</span>, y: <span style="color:#2b91af">2</span>, z: <span style="color:#a31515">&#39;funcfunc&#39;</span>}, <span style="color:#a31515">&#39;fugafuga&#39;</span>));</code></pre></div>
+<p>記述方法は上記のとおりで、引数のオブジェクト自体に名前をつけて、各プロパティにそれぞれ型情報を付与してやります。関数内で引数を参照する場合は、<code>オブジェクトの名前.プロパティ名</code>で参照できます。基本的には、普段のTypeScriptの書き方で問題ありません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript">type Hoge = {
+    foo: <span style="color:#2b91af">number</span>[];
+    bar: <span style="color:#2b91af">string</span>;
+    baz: <span style="color:#2b91af">Function</span>;
+};
+
+<span style="color:#00f">const</span> sum = (numbers: <span style="color:#2b91af">number</span>[]) =&gt; numbers.reduce((total, value) =&gt; total + value);
+
+<span style="color:#00f">const</span> func = (hoge: <span style="color:#2b91af">Hoge</span>) =&gt; {
+    console.log(sum(hoge.foo));
+    console.log(hoge.bar.substr(3, 5));
+    console.log(hoge.baz(<span style="color:#a31515">&#39;hogehoge&#39;</span>));
+}
+
+<span style="color:#00f">let</span> hoge:<span style="color:#2b91af">Hoge</span> = {
+    foo: [1, 2, 3, 4, 5],
+    bar: <span style="color:#a31515">&#39;hogefugapiyo&#39;</span>,
+    baz: (arg: <span style="color:#2b91af">string</span>) =&gt; arg + <span style="color:#a31515">&#39; in func&#39;</span>
+}
+
+func(hoge);</code></pre></div>
+<p>上記のように、<code>type</code>で定義したオブジェクトを引数に指定することも可能です。また、<code>interface</code>を使った記述方法も同様に可能です。</p>
+
+<p>ちなみに上記の<code>sum()</code>関数は、数値の配列の要素を合算します。意外と、要素を合算するような配列のメソッドとかはないっぽい。</p>
+
+<h2 id="関数の引数をオプションにする">関数の引数をオプションにする</h2>
+
+<p>関数宣言時に引数を単純に指定すると、その引数は指定が必須になります。引数の指定を任意にしたい場合は、その引数名に<code>?</code>を付与することが必要です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> f = (arg: <span style="color:#2b91af">string</span>) =&gt; {
+    <span style="color:#00f">return</span> arg;
+}
+
+<span style="color:#00f">const</span> f2 = (arg? : <span style="color:#2b91af">string</span>) =&gt; {
+    <span style="color:#00f">return</span> arg;
+}
+
+<span style="color:#00f">const</span> f3 = (arg1: <span style="color:#2b91af">string</span>, arg2?: <span style="color:#2b91af">string</span>, arg3?: <span style="color:#2b91af">string</span>) =&gt; {
+    <span style="color:#00f">return</span> arg1 + arg2 + arg3;
+}
+
+console.log(f(<span style="color:#a31515">&#39;foo&#39;</span>));
+console.log(f2(<span style="color:#a31515">&#39;bar&#39;</span>));
+console.log(f3(<span style="color:#a31515">&#39;ham&#39;</span>, <span style="color:#a31515">&#39;eggs&#39;</span>, <span style="color:#a31515">&#39;spam&#39;</span>));
+
+console.log(f3(<span style="color:#a31515">&#39;ham&#39;</span>));
+console.log(f3(<span style="color:#a31515">&#39;ham&#39;</span>, <span style="color:#a31515">&#39;eggs&#39;</span>));
+
+console.log(f()); <span style="color:#008000">// error Expected 1 arguments, but got 0.
+</span><span style="color:#008000"></span>console.log(f2());
+console.log(f3()); <span style="">// error &#34;Expected 1-3 arguments, but got 0.&#34;</span></code></pre></div>
+<p>関数<code>f</code>のように引数名に<code>?</code>がない場合、引数を省略し実行しようとしてもエラーになります。しかし、<code>引数名?</code>とすることでその引数をオプション扱いにできるので、引数を省略して関数を実行することが可能です。</p>
+
+<p>オプションの引数と必須の引数を、1つの関数に同居させることもできます。この場合、必須の引数が存在するため引数を完全に省略して関数を実行するのは不可能だが、オプションの引数は省略が可能です。</p>
+
+<h2 id="関数の引数にデフォルト値を設定する">関数の引数にデフォルト値を設定する</h2>
+
+<p>関数の引数にはデフォルト値を指定できます。関数実行時に引数が指定されなかった場合は、デフォルト値が採用され関数を実行できます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> f = (arg: <span style="color:#2b91af">string</span> = <span style="color:#a31515">&#39;hoge&#39;</span>) =&gt; {
+    <span style="color:#00f">return</span> arg;
+};
+
+console.log(f(<span style="color:#a31515">&#39;foo&#39;</span>));
+console.log(f());
+
+console.log(f(<span style="color:#a31515">&#39;&#39;</span>));</code></pre></div>
+<p>引数が指定されなかった場合、デフォルト値である「hoge」という文字列が採用されます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">&#34;foo&#34; 
+&#34;hoge&#34; 
+&#34;&#34; </code></pre></div>
+<p>実行結果は上記のとおりです。</p>
+
+<p>ちなみに、引数にstring形式を指定した場合で空文字を渡すのは、引数に設定なしとは見なされず<strong>空文字が正規の指定になる</strong>ので一応注意が必要です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> f2 = (arg1: <span style="color:#2b91af">number</span> = 1, arg2?: <span style="color:#2b91af">number</span> = 2) =&gt; { <span style="color:#008000">// error &#34;Parameter cannot have question mark and initializer.&#34;
+</span><span style="color:#008000"></span>    <span style="color:#00f">return</span> arg1 + arg2;
+}</code></pre></div>
+<p>ちなみに、前述の引数をオプションにする<code>?</code>とデフォルト値の設定は同時指定できません。「デフォルト値を設定するくらいなんだから、その引数は必須なんでしょ？オプション扱いしたらデフォルトに指定した値どうするのよ」ということらしい。まぁそうだわな。</p>
+
+<h2 id="rest引数を使う">Rest引数を使う</h2>
+
+<p>TypeScriptには<strong>Rest引数</strong>というものがあります。これは<strong>引数を可変長にできる機能</strong>で、ある引数名の<strong>前</strong>に<code>...</code>を指定し配列として宣言することで実装可能です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> f = (arg1: <span style="color:#2b91af">string</span>, ...arg2: <span style="color:#2b91af">number</span>[]) =&gt; {
+    <span style="color:#00f">let</span> sum: <span style="color:#2b91af">number</span> = arg2.reduce((total, value) =&gt; total += value);
+
+    <span style="color:#00f">return</span> arg1 + <span style="color:#a31515">&#39;: &#39;</span> + sum.toString();
+};
+
+console.log(f(<span style="color:#a31515">&#39;hoge&#39;</span>, 1));
+console.log(f(<span style="color:#a31515">&#39;hoge&#39;</span>, 1, 2, 3));
+console.log(f(<span style="color:#a31515">&#39;hoge&#39;</span>, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+
+<span style="color:#00f">const</span> f2 = (...arg: <span style="color:#2b91af">string</span>[]) =&gt; {
+    arg.forEach(item =&gt; {
+        console.log(item);
+    });
+};
+
+f2(<span style="color:#a31515">&#39;ham&#39;</span>, <span style="color:#a31515">&#39;eggs&#39;</span>, <span style="color:#a31515">&#39;spam&#39;</span>);</code></pre></div>
+<p><code>...arg2</code>が可変長である宣言に該当し、<code>...arg2: number[]</code>と記述することでnumber型の<strong>配列</strong>として宣言します。これにより、引数を可変に指定できます。関数内では、可変長の引数は配列として扱うので<code>forEach</code>などで逐次処理が可能です。</p>
+
+<p>なお、上記の例ではarg1は必須の引数扱いなので、こっちは指定が必要です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">&#34;hoge: 1&#34; 
+&#34;hoge: 6&#34; 
+&#34;hoge: 55&#34; 
+&#34;ham&#34; 
+&#34;eggs&#34; 
+&#34;spam&#34; </code></pre></div>
+<p>関数実行時、引数を指定したいだけ指定すればよいので、「配列化してから引数として渡す」などの前処理が必要ないのは嬉しいところ。データ型はわかっているけど、データ数が確定しない場合などに威力を発揮します。</p>
+
+<p>ただ、引数として渡したい配列に含まれるデータ型が<code>string</code>と<code>number</code>のごちゃまぜ、という場合などはこれまでの方法だとうまくいきません。そこで別の方法を使います。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> f = (...arg: <span style="color:#2b91af">Array</span>&lt;<span style="color:#2b91af">number</span> | <span style="color:#2b91af">string</span> | <span style="color:#00f">boolean</span>&gt;) =&gt; {
+    arg.forEach(item =&gt; console.log(item));
+}
+
+f(1, <span style="color:#a31515">&#39;hoge&#39;</span>, 2, <span style="color:#00f">true</span>, 3, <span style="color:#a31515">&#39;fuga&#39;</span>, <span style="color:#a31515">&#39;piyo&#39;</span>, <span style="color:#00f">false</span>);</code></pre></div>
+<p>可変長の引数に複数のデータ型を指定したい場合、<code>Array&lt;T&gt;</code>の形式で指定します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> f = (...arg: <span style="color:#2b91af">Array</span>&lt;<span style="color:#2b91af">number</span> | <span style="color:#2b91af">string</span>&gt;) =&gt; {
+    arg.forEach(item =&gt; console.log(item));
+}
+
+f(<span style="color:#a31515">&#39;foo&#39;</span>, <span style="color:#a31515">&#39;bar&#39;</span>, 1, <span style="color:#a31515">&#39;baz&#39;</span>, 2, 3);
+
+<span style="color:#00f">let</span> foo = [1, 2, <span style="color:#a31515">&#39;ham&#39;</span>, 3, <span style="color:#a31515">&#39;eggs&#39;</span>, <span style="color:#a31515">&#39;spam&#39;</span>];
+
+f(...foo);
+
+<span style="color:#00f">const</span> hoge = [1];
+<span style="color:#00f">const</span> fuga = [4, 5];
+
+<span style="color:#00f">const</span> f2 = (...arg: <span style="color:#2b91af">Array</span>&lt;<span style="color:#2b91af">number</span>&gt;) =&gt; {
+    <span style="color:#00f">let</span> sum = arg.reduce((total, value) =&gt; total += value);
+    <span style="color:#00f">return</span> sum;
+}
+
+console.log(f2(...hoge));
+console.log(f2(...fuga));</code></pre></div>
+<p>上記のように、引数が文字列と数値のごちゃまぜであったとしても、ちゃんとデータ型を指定してやることで1つの配列として処理できます。</p>
+
+<p>なお、「もともと存在する配列を可変長の引数扱いしたい」という場合は、関数実行時に配列を<a href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Operators/Spread_syntax">スプレッド構文</a>とともに指定してやることで、配列を展開しつつ引数としての指定が可能です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> f2 = (...arg?: <span style="color:#2b91af">string</span>[]) =&gt; { <span style="color:#008000">// error &#34;A rest parameter cannot be optional.&#34;
+</span><span style="color:#008000"></span>    <span style="color:#00f">return</span> arg;
+}</code></pre></div>
+<p>ちなみに、Rest引数もオプション扱いできないので注意。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>TypeScriptで引数を便利に使える方法をいくつか見てみました。オプション指定なんかは普段遣いすることも多いと思いますが、Rest引数なんかも上手に使えるととても有用なので適材適所で使っていきたいものです。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://www.typescriptlang.org/docs/handbook/2/functions.html">More on functions</a></li>
+<li><a href="https://docs.solab.jp/typescript/function/parameter/">TypeScript プログラミング -関数 -引数</a></li>
+<li><a href="https://www.typescriptlang.org/docs/handbook/utility-types.html">Utility Types</a></li>
+<li><a href="https://www.typescriptlang.org/docs/handbook/2/objects.html">Object Types</a></li>
+<li><a href="https://qiita.com/pochopocho13/items/c92cba15be3f6a1b29a6">TypeScriptの関数を振り返る</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
