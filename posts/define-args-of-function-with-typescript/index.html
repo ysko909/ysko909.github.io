@@ -177,7 +177,7 @@ console.log(f(<span style="color:#a31515">&#39;&#39;</span>));</code></pre></div
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> f2 = (arg1: <span style="color:#2b91af">number</span> = 1, arg2?: <span style="color:#2b91af">number</span> = 2) =&gt; { <span style="color:#008000">// error &#34;Parameter cannot have question mark and initializer.&#34;
 </span><span style="color:#008000"></span>    <span style="color:#00f">return</span> arg1 + arg2;
 }</code></pre></div>
-<p>ちなみに、前述の引数をオプションにする<code>?</code>とデフォルト値の設定は同時指定できません。「デフォルト値を設定するくらいなんだから、その引数は必須なんでしょ？オプション扱いしたらデフォルトに指定した値どうするのよ」ということらしい。まぁそうだわな。</p>
+<p>なお、前述の引数をオプションにする<code>?</code>とデフォルト値の設定は同時指定できません。「デフォルト値を設定するくらいなんだから、その引数は必須なんでしょ？オプション扱いしたらデフォルトに指定した値どうするのよ」ということらしいです。まぁそうだわな。</p>
 
 <h2 id="rest引数を使う">Rest引数を使う</h2>
 
