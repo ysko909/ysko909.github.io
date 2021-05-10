@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Tue, 04 May 2021 12:36:38 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 10 May 2021 23:45:04 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/typescript/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Phaserを使ってボタン用のクラスを作る</title>
+      <link>https://ysko909.github.io/posts/make-button-class-with-phaserjs/</link>
+      <pubDate>Mon, 10 May 2021 23:45:04 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/make-button-class-with-phaserjs/</guid>
+      <description>Phaserを使ってボタンを作ろう 任意の文字列と押されたときの挙動を記述したコールバック関数などを引数として受け取って、画面にボタンを配置するクラスを作ってみました。
+メニュー画面やRPGの戦闘シーンなどで、コマンドなどを一覧描画したりする際に利用できます。
+ソース // 設定用オブジェクト type Props = { width: number; height: number; onClick: Function; align: string; fontSize: number; color: string; } class OriginalButtonClass extends Phaser.GameObjects.Container{ text: Phaser.GameObjects.Text; container: Phaser.GameObjects.Rectangle; constructor (scene: Phaser.Scene, x:number, y:number, text:string, props: Props){ super(scene, x, y); // 入力されたオブジェクトから各要素を取り出す  const{ width = 90, height = 40, onClick, align = &amp;#39;center&amp;#39;, fontSize = 30, color = &amp;#39;black&amp;#39; } = props; // シーンにボタンを追加  this.scene = scene; this.</description>
+    </item>
     
     <item>
       <title>TypeScriptの関数で引数をいろいろする方法</title>

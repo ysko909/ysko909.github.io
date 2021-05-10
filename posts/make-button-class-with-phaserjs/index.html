@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Phaserを使ってボタン用のクラスを作る - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Phaserを使ってボタン用のクラスを作る" />
+<meta property="og:description" content="Phaserを使ってボタンを作ろう 任意の文字列と押されたときの挙動を記述したコールバック関数などを引数として受け取って、画面にボタンを配置するクラスを作ってみました。
+メニュー画面やRPGの戦闘シーンなどで、コマンドなどを一覧描画したりする際に利用できます。
+ソース // 設定用オブジェクト type Props = { width: number; height: number; onClick: Function; align: string; fontSize: number; color: string; } class OriginalButtonClass extends Phaser.GameObjects.Container{ text: Phaser.GameObjects.Text; container: Phaser.GameObjects.Rectangle; constructor (scene: Phaser.Scene, x:number, y:number, text:string, props: Props){ super(scene, x, y); // 入力されたオブジェクトから各要素を取り出す  const{ width = 90, height = 40, onClick, align = &#39;center&#39;, fontSize = 30, color = &#39;black&#39; } = props; // シーンにボタンを追加  this.scene = scene; this." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/make-button-class-with-phaserjs/" /><meta property="article:published_time" content="2021-05-10T23:45:04&#43;09:00"/>
+<meta property="article:modified_time" content="2021-05-10T23:45:04&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Phaserを使ってボタン用のクラスを作る"/>
+<meta name="twitter:description" content="Phaserを使ってボタンを作ろう 任意の文字列と押されたときの挙動を記述したコールバック関数などを引数として受け取って、画面にボタンを配置するクラスを作ってみました。
+メニュー画面やRPGの戦闘シーンなどで、コマンドなどを一覧描画したりする際に利用できます。
+ソース // 設定用オブジェクト type Props = { width: number; height: number; onClick: Function; align: string; fontSize: number; color: string; } class OriginalButtonClass extends Phaser.GameObjects.Container{ text: Phaser.GameObjects.Text; container: Phaser.GameObjects.Rectangle; constructor (scene: Phaser.Scene, x:number, y:number, text:string, props: Props){ super(scene, x, y); // 入力されたオブジェクトから各要素を取り出す  const{ width = 90, height = 40, onClick, align = &#39;center&#39;, fontSize = 30, color = &#39;black&#39; } = props; // シーンにボタンを追加  this.scene = scene; this."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Phaserを使ってボタン用のクラスを作る</h1>
+			<div class="meta">Posted at &mdash; May 10, 2021</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="phaserを使ってボタンを作ろう">Phaserを使ってボタンを作ろう</h2>
+
+<p>任意の文字列と押されたときの挙動を記述したコールバック関数などを引数として受け取って、画面にボタンを配置するクラスを作ってみました。</p>
+
+<p>メニュー画面やRPGの戦闘シーンなどで、コマンドなどを一覧描画したりする際に利用できます。</p>
+
+<h2 id="ソース">ソース</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#008000">// 設定用オブジェクト
+</span><span style="color:#008000"></span>type Props = {
+  width: <span style="color:#2b91af">number</span>;
+  height: <span style="color:#2b91af">number</span>;
+  onClick: <span style="color:#2b91af">Function</span>;
+  align: <span style="color:#2b91af">string</span>;
+  fontSize: <span style="color:#2b91af">number</span>;
+  color: <span style="color:#2b91af">string</span>;
+}
+
+<span style="color:#00f">class</span> OriginalButtonClass <span style="color:#00f">extends</span> Phaser.GameObjects.Container{
+  
+  text: <span style="color:#2b91af">Phaser.GameObjects.Text</span>;
+  container: <span style="color:#2b91af">Phaser.GameObjects.Rectangle</span>;
+  
+  <span style="color:#00f">constructor</span> (scene: <span style="color:#2b91af">Phaser.Scene</span>, x:<span style="color:#2b91af">number</span>, y:<span style="color:#2b91af">number</span>, text:<span style="color:#2b91af">string</span>, props: <span style="color:#2b91af">Props</span>){
+    <span style="color:#00f">super</span>(scene, x, y);
+    
+    <span style="color:#008000">// 入力されたオブジェクトから各要素を取り出す
+</span><span style="color:#008000"></span>    <span style="color:#00f">const</span>{
+      width = 90,
+      height = 40, 
+      onClick,
+      align = <span style="color:#a31515">&#39;center&#39;</span>, 
+      fontSize = 30, 
+      color = <span style="color:#a31515">&#39;black&#39;</span>
+    } = props;
+    
+    <span style="color:#008000">// シーンにボタンを追加
+</span><span style="color:#008000"></span>    <span style="color:#00f">this</span>.scene = scene;
+    <span style="color:#00f">this</span>.scene.add.existing(<span style="color:#00f">this</span>);
+    
+    <span style="color:#00f">this</span>.setSize(width, height);
+    <span style="color:#00f">this</span>.setInteractive({useHandCursor: <span style="color:#2b91af">true</span>});
+    
+    <span style="color:#00f">const</span> alignLeft = align === <span style="color:#a31515">&#39;left&#39;</span>;
+    
+    <span style="color:#008000">// 左寄せの場合は位置を調整
+</span><span style="color:#008000"></span>    <span style="color:#00f">this</span>.text = scene.add.text(alignLeft ? -width <span style="">/ 2 + 0 : 0, -1, text, {align, fontSize, color}).setOrigin(alignLeft ? 0:0.5, 0.5).setPadding(0, 2, 0, 0);</span>
+    <span style="color:#00f">this</span>.text.setColor(color);
+    
+    <span style="color:#008000">// ボタンの枠を作成
+</span><span style="color:#008000"></span>    <span style="color:#00f">this</span>.container = scene.add.rectangle(0, 0, width, height);
+    <span style="color:#00f">this</span>.container.setStrokeStyle(1, 0xffffff).setOrigin(alignLeft ? 0 : <span style="color:#2b91af">0.5</span>, 0.5);
+    
+    <span style="color:#00f">this</span>.add([<span style="color:#00f">this</span>.container, <span style="color:#00f">this</span>.text])
+    <span style="color:#00f">this</span>.on(<span style="color:#a31515">&#39;pointerover&#39;</span>, () =&gt; {
+      <span style="color:#00f">this</span>.updateButton(<span style="color:#a31515">&#39;pointer over&#39;</span>, <span style="color:#a31515">&#39;red&#39;</span>);
+    });
+    
+    <span style="color:#00f">this</span>.on(<span style="color:#a31515">&#39;pointerout&#39;</span>, () =&gt; {
+      <span style="color:#00f">this</span>.updateButton(<span style="color:#a31515">&#39;pointer out&#39;</span>, color);
+    });
+    
+    <span style="color:#00f">this</span>.on(<span style="color:#a31515">&#39;pointerdown&#39;</span>, ()=&gt;{
+      <span style="color:#00f">this</span>.updateButton(<span style="color:#a31515">&#39;pointer down&#39;</span>, <span style="color:#a31515">&#39;blue&#39;</span>);
+      <span style="color:#00f">this</span>.scene.tweens.add({
+        targets: <span style="color:#2b91af">this</span>,
+        scaleX: <span style="color:#2b91af">1.1</span>,
+        scaleY: <span style="color:#2b91af">1.1</span>,
+        duration: <span style="color:#2b91af">100</span>,
+        yoyo: <span style="color:#2b91af">true</span>,
+        repeat: <span style="color:#2b91af">2</span>,
+        ease: <span style="color:#a31515">&#39;Sine.easeInOut&#39;</span>,
+      });
+    });
+    
+    <span style="color:#00f">this</span>.on(<span style="color:#a31515">&#39;pointerup&#39;</span>, () =&gt; {
+      <span style="color:#00f">this</span>.updateButton(<span style="color:#a31515">&#39;pointer up&#39;</span>,<span style="color:#a31515">&#39;yellow&#39;</span>);
+      onClick();
+    });
+    
+  }
+  
+  updateButton =(message: <span style="color:#2b91af">string</span>, color: <span style="color:#2b91af">string</span>)=&gt;{
+    console.log(message);
+    <span style="color:#00f">this</span>.text.setColor(color);
+  }
+
+}
+
+<span style="color:#00f">class</span> GameScene <span style="color:#00f">extends</span> Phaser.Scene {
+    <span style="color:#00f">constructor</span>() {
+        <span style="color:#00f">super</span>(<span style="color:#a31515">&#39;gameScene&#39;</span>);
+    }
+
+    preload() {
+
+    }
+
+    create() {
+      <span style="color:#00f">this</span>.button = <span style="color:#00f">new</span> OriginalButtonClass(<span style="color:#00f">this</span>, 200, 200, <span style="color:#a31515">&#39;hoge&#39;</span>, {
+        onClick: ()=&gt;{
+          console.log(<span style="color:#a31515">&#39;clicked.&#39;</span>);
+        }
+      });
+
+    }
+}
+
+<span style="color:#00f">let</span> gameScene = <span style="color:#00f">new</span> GameScene();
+
+<span style="color:#00f">let</span> config = {
+    type: <span style="color:#2b91af">Phaser.AUTO</span>,
+    width: <span style="color:#2b91af">800</span>,
+    height: <span style="color:#2b91af">600</span>,
+    backgroundColor: <span style="color:#a31515">&#39;#e0e0e0&#39;</span>
+};
+
+<span style="color:#00f">let</span> game = <span style="color:#00f">new</span> Phaser.Game(config);
+
+game.scene.add(<span style="color:#a31515">&#39;gameScene&#39;</span>, gameScene);
+
+game.scene.start(<span style="color:#a31515">&#39;gameScene&#39;</span>);</code></pre></div>
+<p>クリックしたときのTweenも設定してみました。</p>
+
+<p>ボタンを押したときの機能はコールバック関数として引数で渡すので、ボタンのクラス内には特段の機能は記述していません。必要があれば追記するか、このクラスを継承して新しいクラスとして作成すれば問題ありません。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://snowbillr.github.io/blog/2018-07-03-buttons-in-phaser-3/">Buttons In Phaser 3</a></li>
+<li><a href="https://qiita.com/S-Kaito/items/85a1c90c86e61156c87d">Phaser3でボタンクラスを作る</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
