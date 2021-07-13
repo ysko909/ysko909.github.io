@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/get-statistical-test-level-2/</loc>
+    <lastmod>2021-07-12T20:22:01+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/make-button-class-with-phaserjs/</loc>
     <lastmod>2021-05-10T23:45:04+09:00</lastmod>
   </url>
@@ -604,7 +609,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2021-05-10T23:45:04+09:00</lastmod>
+    <lastmod>2021-07-12T20:22:01+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -647,6 +652,12 @@
   <url>
     <loc>https://ysko909.github.io/tags/sequenz/</loc>
     <lastmod>2019-06-15T21:02:37+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ysko909.github.io/tags/statistical/</loc>
+    <lastmod>2021-07-12T20:22:01+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -748,7 +759,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2021-05-10T23:45:04+09:00</lastmod>
+    <lastmod>2021-07-12T20:22:01+09:00</lastmod>
     <priority>0</priority>
   </url>
   
