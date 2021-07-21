@@ -6,6 +6,7 @@
 	<meta property="og:title" content="Jupyter NotebookをVisual Studio Codeで実行する" />
 <meta property="og:description" content="はじめに Visual Studio Code（以下、vscode）ではDockerでPythonやVue.jsの開発環境を構築したり、あるいはMarkdownで書いたドキュメントを配布用にPDF変換したりと、今までいろいろやってきました。今度はJupyter Notebookを動かします。いやー、vscodeってホントに多彩ですね。
 なお、今回においてはDockerを利用せず、単純にローカル環境でJupyterを使用します。
+追記 2019年時点ではこの記事の仕様でしたが、現在(2020年後半）では完全にネイティブでnotebookに対応しています。なので、#%%という記述は現在では完全に不要です。よって、この記事の存在意義は現時点で皆無なのですが、過去の遺産ということでそのまま残しておきます。
 Jupyter Notebookとは Jupyter Notebook (なお、読み方は「ジュパイター・ノートブック」、または「ジュピター・ノートブック」。自分は「ジュピター」って言ってますが、どっちが一般的なんですかね？) とは、ブラウザ上で実行するデータ分析作業のためのツールです。特徴的なのは、実行結果を記録しながらプログラミングができる点です。ここでブラウザから実行できます。
 プログラムそのものを記述しつつ、Markdownを利用して各種テキストや図表も同時に書き込んでいくことが可能です。つまり、プログラムのソースとその実行結果が、メモを含めて明確に紐づいた状態で確認できます。そのため、作業内容の振り返りに非常に便利ですし、複数人で作業を行う場合の共有にも有用です。また、Jupyterは*.ipynb形式のファイルで保存しますが、ソースコード部分を*.pyのPythonコードとして出力することも可能ですし、実行結果をPDFやHTML形式で出力できるため、Jupyterの実行環境がなくても内容を共有できます。
 そんなJupyterをvscodeで使っちゃえ、というのが今回の趣旨です。
@@ -25,6 +26,7 @@ vscodeでノートブックを書いてみる まず任意のフォルダを作�
 <meta name="twitter:title" content="Jupyter NotebookをVisual Studio Codeで実行する"/>
 <meta name="twitter:description" content="はじめに Visual Studio Code（以下、vscode）ではDockerでPythonやVue.jsの開発環境を構築したり、あるいはMarkdownで書いたドキュメントを配布用にPDF変換したりと、今までいろいろやってきました。今度はJupyter Notebookを動かします。いやー、vscodeってホントに多彩ですね。
 なお、今回においてはDockerを利用せず、単純にローカル環境でJupyterを使用します。
+追記 2019年時点ではこの記事の仕様でしたが、現在(2020年後半）では完全にネイティブでnotebookに対応しています。なので、#%%という記述は現在では完全に不要です。よって、この記事の存在意義は現時点で皆無なのですが、過去の遺産ということでそのまま残しておきます。
 Jupyter Notebookとは Jupyter Notebook (なお、読み方は「ジュパイター・ノートブック」、または「ジュピター・ノートブック」。自分は「ジュピター」って言ってますが、どっちが一般的なんですかね？) とは、ブラウザ上で実行するデータ分析作業のためのツールです。特徴的なのは、実行結果を記録しながらプログラミングができる点です。ここでブラウザから実行できます。
 プログラムそのものを記述しつつ、Markdownを利用して各種テキストや図表も同時に書き込んでいくことが可能です。つまり、プログラムのソースとその実行結果が、メモを含めて明確に紐づいた状態で確認できます。そのため、作業内容の振り返りに非常に便利ですし、複数人で作業を行う場合の共有にも有用です。また、Jupyterは*.ipynb形式のファイルで保存しますが、ソースコード部分を*.pyのPythonコードとして出力することも可能ですし、実行結果をPDFやHTML形式で出力できるため、Jupyterの実行環境がなくても内容を共有できます。
 そんなJupyterをvscodeで使っちゃえ、というのが今回の趣旨です。
@@ -102,6 +104,10 @@ vscodeでノートブックを書いてみる まず任意のフォルダを作�
 <p>Visual Studio Code（以下、vscode）ではDockerで<a href="/posts/connect-to-docker-with-vscode-extension/">Python</a>や<a href="/posts/build-environment-of-vuejs-with-docker/">Vue.js</a>の開発環境を構築したり、あるいは<a href="/posts/convert-markdown-to-pdf-with-vscode/">Markdownで書いたドキュメントを配布用にPDF変換</a>したりと、今までいろいろやってきました。今度は<a href="https://jupyter.org/">Jupyter Notebook</a>を動かします。いやー、vscodeってホントに多彩ですね。</p>
 
 <p>なお、今回においてはDockerを利用せず、単純にローカル環境でJupyterを使用します。</p>
+
+<h2 id="追記">追記</h2>
+
+<p>2019年時点ではこの記事の仕様でしたが、現在(2020年後半）では<strong>完全にネイティブで</strong>notebookに対応しています。なので、<code>#%%</code>という記述は<strong>現在では完全に不要</strong>です。よって、この記事の存在意義は現時点で皆無なのですが、過去の遺産ということでそのまま残しておきます。</p>
 
 <h2 id="jupyter-notebookとは">Jupyter Notebookとは</h2>
 
