@@ -7,10 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Mon, 12 Jul 2021 20:22:01 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 23 Jul 2021 18:58:27 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>関数の引数に再代入することの可否について考える</title>
+      <link>https://ysko909.github.io/posts/think-about-reassign-param/</link>
+      <pubDate>Fri, 23 Jul 2021 18:58:27 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/think-about-reassign-param/</guid>
+      <description>再代入ってなにそれ まぁ次のコードを見てくださいな。
+const hoge = arg =&amp;gt; { let temp = arg + 1; return temp; }; console.log(hoge(1));  関数hogeは入力された値に1を加算して返すだけです。機能としてはそれだけ。ここで注目するのは、加算された結果をどこに格納しているかです。ここでは変数tempを新しく宣言して格納しています。return arg + 1;にすればいいじゃん、というのはとりあえず置いておいて。
+このコードを少し書き直してみます。
+const hoge = arg =&amp;gt; { arg = arg + 1; // arg += 1;でも同様  return arg; }; console.log(hoge(1));  変数を新しく宣言するのではなく、引数に直接再代入しちゃえばいいじゃんというのが上記のコード。つまり、これが関数の引数に再代入しているわけです。
+もちろん、少なくとも狙ったように入力値が1加算されて出力されます。さきほどのコードと同様に動作するわけです。つまり、関数のなかで引数に本来格納されている値とは別の値を再代入しちゃうようなケースです。なので、少なくとも言語仕様としては問題ないということです。
+ただ、言語仕様で問題ないからって多用してもいいようなものなの？コレ。
+規約で禁止してたりする Airbnbのコーディング規約では、関数の引数へ値を再代入することは禁止されています。ESLintにも、再代入を禁止するルールが存在します。
+ 7.13 パラメータを再割り当てしない。eslint: no-param-reassign
+ const hoge = foo =&amp;gt; { foo += 1; return foo; } hoge(1);  つまり上記のような、fooに再代入するのはダメということですね。</description>
+    </item>
     
     <item>
       <title>統計検定2級のCBT試験を受験してみた</title>

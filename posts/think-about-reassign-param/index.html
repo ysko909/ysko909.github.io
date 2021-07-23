@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>関数の引数に再代入することの可否について考える - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="関数の引数に再代入することの可否について考える" />
+<meta property="og:description" content="再代入ってなにそれ まぁ次のコードを見てくださいな。
+const hoge = arg =&gt; { let temp = arg &#43; 1; return temp; }; console.log(hoge(1));  関数hogeは入力された値に1を加算して返すだけです。機能としてはそれだけ。ここで注目するのは、加算された結果をどこに格納しているかです。ここでは変数tempを新しく宣言して格納しています。return arg &#43; 1;にすればいいじゃん、というのはとりあえず置いておいて。
+このコードを少し書き直してみます。
+const hoge = arg =&gt; { arg = arg &#43; 1; // arg &#43;= 1;でも同様  return arg; }; console.log(hoge(1));  変数を新しく宣言するのではなく、引数に直接再代入しちゃえばいいじゃんというのが上記のコード。つまり、これが関数の引数に再代入しているわけです。
+もちろん、少なくとも狙ったように入力値が1加算されて出力されます。さきほどのコードと同様に動作するわけです。つまり、関数のなかで引数に本来格納されている値とは別の値を再代入しちゃうようなケースです。なので、少なくとも言語仕様としては問題ないということです。
+ただ、言語仕様で問題ないからって多用してもいいようなものなの？コレ。
+規約で禁止してたりする Airbnbのコーディング規約では、関数の引数へ値を再代入することは禁止されています。ESLintにも、再代入を禁止するルールが存在します。
+ 7.13 パラメータを再割り当てしない。eslint: no-param-reassign
+ const hoge = foo =&gt; { foo &#43;= 1; return foo; } hoge(1);  つまり上記のような、fooに再代入するのはダメということですね。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/think-about-reassign-param/" /><meta property="article:published_time" content="2021-07-23T18:58:27&#43;09:00"/>
+<meta property="article:modified_time" content="2021-07-23T18:58:27&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="関数の引数に再代入することの可否について考える"/>
+<meta name="twitter:description" content="再代入ってなにそれ まぁ次のコードを見てくださいな。
+const hoge = arg =&gt; { let temp = arg &#43; 1; return temp; }; console.log(hoge(1));  関数hogeは入力された値に1を加算して返すだけです。機能としてはそれだけ。ここで注目するのは、加算された結果をどこに格納しているかです。ここでは変数tempを新しく宣言して格納しています。return arg &#43; 1;にすればいいじゃん、というのはとりあえず置いておいて。
+このコードを少し書き直してみます。
+const hoge = arg =&gt; { arg = arg &#43; 1; // arg &#43;= 1;でも同様  return arg; }; console.log(hoge(1));  変数を新しく宣言するのではなく、引数に直接再代入しちゃえばいいじゃんというのが上記のコード。つまり、これが関数の引数に再代入しているわけです。
+もちろん、少なくとも狙ったように入力値が1加算されて出力されます。さきほどのコードと同様に動作するわけです。つまり、関数のなかで引数に本来格納されている値とは別の値を再代入しちゃうようなケースです。なので、少なくとも言語仕様としては問題ないということです。
+ただ、言語仕様で問題ないからって多用してもいいようなものなの？コレ。
+規約で禁止してたりする Airbnbのコーディング規約では、関数の引数へ値を再代入することは禁止されています。ESLintにも、再代入を禁止するルールが存在します。
+ 7.13 パラメータを再割り当てしない。eslint: no-param-reassign
+ const hoge = foo =&gt; { foo &#43;= 1; return foo; } hoge(1);  つまり上記のような、fooに再代入するのはダメということですね。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">関数の引数に再代入することの可否について考える</h1>
+			<div class="meta">Posted at &mdash; Jul 23, 2021</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="再代入ってなにそれ">再代入ってなにそれ</h2>
+
+<p>まぁ次のコードを見てくださいな。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">const</span> hoge = arg =&gt; {
+  <span style="color:#00f">let</span> temp = arg + 1;
+  <span style="color:#00f">return</span> temp;
+};
+
+console.log(hoge(1));
+</code></pre></div>
+<p>関数<code>hoge</code>は入力された値に1を加算して返すだけです。機能としてはそれだけ。ここで注目するのは、<strong>加算された結果をどこに格納しているか</strong>です。ここでは変数<code>temp</code>を新しく宣言して格納しています。<code>return arg + 1;</code>にすればいいじゃん、というのはとりあえず置いておいて。</p>
+
+<p>このコードを少し書き直してみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">const</span> hoge = arg =&gt; {
+  arg = arg + 1; <span style="color:#008000">// arg += 1;でも同様
+</span><span style="color:#008000"></span>  <span style="color:#00f">return</span> arg;
+};
+
+console.log(hoge(1));
+</code></pre></div>
+<p>変数を新しく宣言するのではなく、引数に直接再代入しちゃえばいいじゃんというのが上記のコード。つまり、これが<strong>関数の引数に再代入している</strong>わけです。</p>
+
+<p>もちろん、少なくとも狙ったように入力値が1加算されて出力されます。さきほどのコードと同様に動作するわけです。つまり、関数のなかで引数に本来格納されている値とは別の値を再代入しちゃうようなケースです。なので、少なくとも<strong>言語仕様としては問題ない</strong>ということです。</p>
+
+<p>ただ、言語仕様で問題ないからって多用してもいいようなものなの？コレ。</p>
+
+<h2 id="規約で禁止してたりする">規約で禁止してたりする</h2>
+
+<p>Airbnbのコーディング規約では、関数の引数へ値を再代入することは禁止されています。ESLintにも、再代入を禁止するルールが存在します。</p>
+
+<blockquote>
+<p>7.13 パラメータを再割り当てしない。eslint: no-param-reassign</p>
+</blockquote>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">const</span> hoge = foo =&gt; {
+  foo += 1;
+  <span style="color:#00f">return</span> foo;
+}
+
+hoge(1);
+</code></pre></div>
+<p>つまり上記のような、<code>foo</code>に再代入するのはダメということですね。</p>
+
+<p>ESLintなどでは、「no-param-reassign」という名前で<a href="https://eslint.org/docs/rules/no-param-reassign">ルール</a>が存在します。実際、ESLintが体験できる<a href="https://eslint.org/demo">デモサイト</a>でこのルールを有効にした状態で上記のコードを記述すると、再代入している部分でエラーメッセージが表示されます。ただ、このルールはデフォルト設定だとOFFになっています。そこまで優先度は高くないんだろうか。このあたりのさじ加減は、プロジェクトそのものやメンバーの思想に多少左右されるかもしれません。</p>
+
+<h2 id="そもそも再代入って危ないんか">そもそも再代入って危ないんか</h2>
+
+<p>まぁそれを言っちゃうとケースバイケースとしか言えないんだけど、ちょっと思考実験をしてみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">const</span> hoge = (foo, bar) =&gt; {
+  foo = 9;
+  bar.push(4);
+  console.log(<span style="color:#a31515">`inside function: </span><span style="color:#a31515">${</span>foo<span style="color:#a31515">}</span><span style="color:#a31515">, </span><span style="color:#a31515">${</span>bar<span style="color:#a31515">}</span><span style="color:#a31515">`</span>);
+}
+
+<span style="color:#00f">let</span> n = 1;
+<span style="color:#00f">let</span> a = [0, 1, 2, 3];
+
+console.log(<span style="color:#a31515">`outside function 1: </span><span style="color:#a31515">${</span>n<span style="color:#a31515">}</span><span style="color:#a31515">, </span><span style="color:#a31515">${</span>a<span style="color:#a31515">}</span><span style="color:#a31515">`</span>);
+hoge(n, a);
+console.log(<span style="color:#a31515">`outside function 2: </span><span style="color:#a31515">${</span>n<span style="color:#a31515">}</span><span style="color:#a31515">, </span><span style="color:#a31515">${</span>a<span style="color:#a31515">}</span><span style="color:#a31515">`</span>);
+</code></pre></div>
+<p>個人的には、上記のような再代入を行うコードが危ないと思っています。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">outside function 1: 1, 0,1,2,3
+inside function: 9, 0,1,2,3,4
+outside function 2: 1, 0,1,2,3,4</code></pre></div>
+<p>実行してみると、変数<code>n</code>と<code>a</code>に着目したとき関数<code>hoge</code>を実行する前後で<code>n</code>は変化しないものの、配列である<code>a</code>は内容が変化してしまっています。関数内で引数に対し操作を行ってしまったため、もともと変数に格納されていた値が揮発してしまっています。</p>
+
+<p>ただ、自分で書いておいてなんですけど、これは再代入処理が悪いというよりミュータブルとイミュータブルを適切に処理していないために起きている症状なので、再代入の是非を問うケースと考えると少々例えが悪い気もしなくもないな・・・。</p>
+
+<p>とはいえ、このようなコードを書いてオブジェクトを書き換えてしまい、バグの発生原因を作ることが危惧されるくらいのコードを書く可能性があるなら、もういっそルールで禁止してしまえということも1つの解決策かもしれません。少なくとも自分はESLintの設定をONにしておこうと思います。</p>
+
+<h2 id="reference">reference</h2>
+
+<ol>
+<li><a href="https://mitsuruog.github.io/javascript-style-guide/#functions--reassign-params">7.13 Never reassign parameters. eslint: no-param-reassign</a></li>
+<li><a href="https://teratail.com/questions/173485">JavaScriptの仮引数に再代入することの是非</a></li>
+<li><a href="https://teratail.com/questions/173503">「Airbnb JavaScript Style Guide」の引数への再代入禁止ルール</a></li>
+<li><a href="https://stackoverflow.com/questions/575196/why-can-a-function-modify-some-arguments-as-perceived-by-the-caller-but-not-oth">Why can a function modify some arguments as perceived by the caller, but not others?</a></li>
+<li><a href="https://sbfl.net/blog/2018/09/25/javascript-immutable-programming/">JavaScriptでイミュータブルなプログラミングをする</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
