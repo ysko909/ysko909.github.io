@@ -129,9 +129,43 @@ hoge(1);
 
 <p>ESLintなどでは、「no-param-reassign」という名前で<a href="https://eslint.org/docs/rules/no-param-reassign">ルール</a>が存在します。実際、ESLintが体験できる<a href="https://eslint.org/demo">デモサイト</a>でこのルールを有効にした状態で上記のコードを記述すると、再代入している部分でエラーメッセージが表示されます。ただ、このルールはデフォルト設定だとOFFになっています。そこまで優先度は高くないんだろうか。このあたりのさじ加減は、プロジェクトそのものやメンバーの思想に多少左右されるかもしれません。</p>
 
+<p>なお、ESLintでもオブジェクトに対する再代入は「no-param-reassign」のルールをONにしただけでは<a href="https://eslint.org/docs/rules/no-param-reassign#options">エラーに対象ではありません</a>。オプションで<code>{ &quot;props&quot;: true }</code>とした場合のみ、「プロパティの変更まで監視するよー」とオブジェクトへの変更がエラー扱いになります。</p>
+
 <h2 id="そもそも再代入って危ないんか">そもそも再代入って危ないんか</h2>
 
 <p>まぁそれを言っちゃうとケースバイケースとしか言えないんだけど、ちょっと思考実験をしてみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">const</span> hoge = (foo) =&gt; {
+  foo = <span style="color:#a31515">&#39;string&#39;</span>;
+  
+  <span style="color:#00f">return</span> foo;
+}
+
+<span style="color:#00f">const</span> fuga = (bar) =&gt; {
+  bar.prop = <span style="color:#a31515">&#39;baz&#39;</span>;
+  
+  <span style="color:#00f">return</span> bar;
+}
+
+<span style="color:#00f">let</span> ham = <span style="color:#a31515">&#39;&#39;</span>;
+<span style="color:#00f">let</span> eggs = {};
+
+console.log(ham);
+console.log(eggs);
+
+hoge(ham);
+fuga(eggs);
+
+console.log(ham);
+console.log(eggs);
+</code></pre></div>
+<p>こっちはオブジェクトにプロパティを追加しちゃうケース。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">&#34;&#34; 
+{} 
+&#34;&#34; 
+{
+  &#34;prop&#34;: &#34;baz&#34;
+} </code></pre></div>
+<p>上記のように、オブジェクトの内容が変更されています。対して、文字列が格納されている変数には影響なし。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">const</span> hoge = (foo, bar) =&gt; {
   foo = 9;
   bar.push(4);
@@ -145,20 +179,36 @@ console.log(<span style="color:#a31515">`outside function 1: </span><span style=
 hoge(n, a);
 console.log(<span style="color:#a31515">`outside function 2: </span><span style="color:#a31515">${</span>n<span style="color:#a31515">}</span><span style="color:#a31515">, </span><span style="color:#a31515">${</span>a<span style="color:#a31515">}</span><span style="color:#a31515">`</span>);
 </code></pre></div>
-<p>個人的には、上記のような再代入を行うコードが危ないと思っています。</p>
+<p>こっちは配列に値を追加しちゃうケース。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">outside function 1: 1, 0,1,2,3
 inside function: 9, 0,1,2,3,4
 outside function 2: 1, 0,1,2,3,4</code></pre></div>
 <p>実行してみると、変数<code>n</code>と<code>a</code>に着目したとき関数<code>hoge</code>を実行する前後で<code>n</code>は変化しないものの、配列である<code>a</code>は内容が変化してしまっています。関数内で引数に対し操作を行ってしまったため、もともと変数に格納されていた値が揮発してしまっています。</p>
 
-<p>ただ、自分で書いておいてなんですけど、これは再代入処理が悪いというよりミュータブルとイミュータブルを適切に処理していないために起きている症状なので、再代入の是非を問うケースと考えると少々例えが悪い気もしなくもないな・・・。</p>
+<p>個人的には、これらのような再代入を行うコードが危ないと思っています。</p>
 
-<p>とはいえ、このようなコードを書いてオブジェクトを書き換えてしまい、バグの発生原因を作ることが危惧されるくらいのコードを書く可能性があるなら、もういっそルールで禁止してしまえということも1つの解決策かもしれません。少なくとも自分はESLintの設定をONにしておこうと思います。</p>
+<h2 id="これって再代入が悪いって言うよりさ">これって再代入が悪いって言うよりさ</h2>
+
+<p>自分で書いておいてなんですけど、これは再代入処理が悪いというより<strong>ミュータブルとイミュータブルを適切に処理していない</strong>ために起きている症状なので、再代入の是非を問うケースと考えると少々例えが悪い気もしなくもないな・・・。</p>
+
+<p>一応、単純に数値を再代入した場合は値が書き換わるようなことはなく、とりあえずもともとの値を保持しています。対してオブジェクトなどは内容が書き換わってしまっており、場合によってはこのことがバグの原因になる可能性が否めません。なので、オブジェクトに<strong>意図せず</strong>プロパティを追加しちゃったりするような、本来の想定とは異なる記述をするケースを発見するためにも<a href="https://eslint.org/docs/rules/no-param-reassign#options">オプション</a>は有用だと考えます。ただ、単純に引数に再代入するのはダメってのはチェックする必要があるか？という気がしなくもないんだよなー。</p>
+
+<ul>
+<li>デフォルト設定で「no-param-reassign」はOFFなので、引数に対する再代入を妨げない。</li>
+<li>「no-param-reassign」をONにしても、オブジェクトに対する操作については対象外。むしろそっちをチェックして欲しい。</li>
+<li>オプション設定をONにすることでやっとミュータブルなオブジェクトまで対象に含む。</li>
+</ul>
+
+<p>プロパティの誤った追加など、<strong>意図しない操作</strong>をしてしまう可能性があるのは「オプション」として付属品扱いされている方なので、こちらの方がリスキーだと思うのですがね。</p>
+
+<p>なにはともあれ、このようなコードを書いてオブジェクトを書き換えてしまい、バグの発生原因を作ることが危惧されるくらいのコードを書く可能性があるなら、もういっそルールで禁止してしまえということも1つの解決策かもしれません。少なくとも自分はESLintの設定をONにしておこうと思います。もちろん、オプション設定でオブジェクトへの誤った操作を防ぐために、です。<code>props</code>のチェックを優先してもらいたいのは山々ですが、現状の仕様では仕方ありません。</p>
 
 <h2 id="reference">reference</h2>
 
 <ol>
+<li><a href="https://eslint.org/docs/rules/no-param-reassign">no-param-reassign</a></li>
 <li><a href="https://mitsuruog.github.io/javascript-style-guide/#functions--reassign-params">7.13 Never reassign parameters. eslint: no-param-reassign</a></li>
+<li><a href="http://hhsprings.pinoko.jp/site-hhs/2018/02/eslint-no-param-reassign/">eslint-no-param-reassign</a></li>
 <li><a href="https://teratail.com/questions/173485">JavaScriptの仮引数に再代入することの是非</a></li>
 <li><a href="https://teratail.com/questions/173503">「Airbnb JavaScript Style Guide」の引数への再代入禁止ルール</a></li>
 <li><a href="https://stackoverflow.com/questions/575196/why-can-a-function-modify-some-arguments-as-perceived-by-the-caller-but-not-oth">Why can a function modify some arguments as perceived by the caller, but not others?</a></li>
