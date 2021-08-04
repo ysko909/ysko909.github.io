@@ -2,8 +2,8 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>PhaserJSでタイマーイベントを使う - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta property="og:title" content="PhaserJSでタイマーイベントを使う" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Phaser3でタイマーイベントを使う - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Phaser3でタイマーイベントを使う" />
 <meta property="og:description" content="タイマーイベントってなんだっけ 一定の時間経過を条件として発動するイベントのことを、タイマーイベントといいます。タイマーイベントには繰り返し発生するタイプと、1回だけ発動するタイプの2つが存在します。繰り返し発生するタイプは永久に発生し続けるものと、決められた回数のみ発生する2パターンが存在します。
  loop:シーンが遷移するなどの処理が実行されない限り、永久に発生し続ける。 repeat:決められた回数分発動し、以降は実行されない。 one shot:1回だけ発生するタイプ。  後述しますが、実装時のメソッドが異なるのでそれだけは注意。
 これらのタイマーイベントは、Phaser.Time.Clockクラスを利用することで実装が可能です。
@@ -11,7 +11,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ysko909.github.io/posts/use-timer-event-with-phaserjs/" /><meta property="article:published_time" content="2021-05-02T09:20:03&#43;09:00"/>
 <meta property="article:modified_time" content="2021-05-02T09:20:03&#43;09:00"/><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="PhaserJSでタイマーイベントを使う"/>
+<meta name="twitter:title" content="Phaser3でタイマーイベントを使う"/>
 <meta name="twitter:description" content="タイマーイベントってなんだっけ 一定の時間経過を条件として発動するイベントのことを、タイマーイベントといいます。タイマーイベントには繰り返し発生するタイプと、1回だけ発動するタイプの2つが存在します。繰り返し発生するタイプは永久に発生し続けるものと、決められた回数のみ発生する2パターンが存在します。
  loop:シーンが遷移するなどの処理が実行されない限り、永久に発生し続ける。 repeat:決められた回数分発動し、以降は実行されない。 one shot:1回だけ発生するタイプ。  後述しますが、実装時のメソッドが異なるのでそれだけは注意。
 これらのタイマーイベントは、Phaser.Time.Clockクラスを利用することで実装が可能です。
@@ -68,7 +68,7 @@
 
 
 		<div class="post-header">
-			<h1 class="title">PhaserJSでタイマーイベントを使う</h1>
+			<h1 class="title">Phaser3でタイマーイベントを使う</h1>
 			<div class="meta">Posted at &mdash; May 2, 2021</div>
 		</div>
 
@@ -237,9 +237,9 @@ game.scene.add(<span style="color:#a31515">&#39;gameScene&#39;</span>, gameScene
 game.scene.start(<span style="color:#a31515">&#39;gameScene&#39;</span>);</code></pre></div>
 <p>上記のサンプルに、円と文字を表示する関数をそれぞれタイマー実行するコードを追加しました。文字自体にも、一定時間経過後自分自身を<code>destroy()</code>するタイマーイベントを仕込んであります。<code>tween</code>で実装できないような処理を仕込みたい場合に使えそうですね。</p>
 
-<p><p class="codepen" data-height="265" data-theme-id="light" data-default-tab="js,result" data-user="ysko909" data-slug-hash="abpvLgg" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="Timer with PhaserJS">
+<p><p class="codepen" data-height="265" data-theme-id="light" data-default-tab="js,result" data-user="ysko909" data-slug-hash="abpvLgg" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="Timer with Phaser3">
   <span>See the Pen <a href="https://codepen.io/ysko909/pen/abpvLgg">
-  Timer with PhaserJS</a> by ysko909 (<a href="https://codepen.io/ysko909">@ysko909</a>)
+  Timer with Phaser3</a> by ysko909 (<a href="https://codepen.io/ysko909">@ysko909</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 <script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script></p>
@@ -248,7 +248,7 @@ game.scene.start(<span style="color:#a31515">&#39;gameScene&#39;</span>);</code>
 
 <h2 id="まとめ">まとめ</h2>
 
-<p>アクションゲームだったり、RPGでも時限式イベントなどでは必須のタイマーイベント。たったこれだけの記述量で処理を仕込めるのは、PhaserJSのいいところですね。有効に使いたいものです。</p>
+<p>アクションゲームだったり、RPGでも時限式イベントなどでは必須のタイマーイベント。たったこれだけの記述量で処理を仕込めるのは、Phaser3のいいところですね。有効に使いたいものです。</p>
 
 <h2 id="参考">参考</h2>
 

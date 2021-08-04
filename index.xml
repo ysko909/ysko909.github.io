@@ -107,7 +107,7 @@ const func = (arg:{x: string, y: string, z: string}): string =&amp;gt; arg.x + a
     </item>
     
     <item>
-      <title>PhaserJSでタイマーイベントを使う</title>
+      <title>Phaser3でタイマーイベントを使う</title>
       <link>https://ysko909.github.io/posts/use-timer-event-with-phaserjs/</link>
       <pubDate>Sun, 02 May 2021 09:20:03 +0900</pubDate>
       
