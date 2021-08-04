@@ -2,16 +2,16 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>PhaserJSを使ってボタン用のクラスを作る - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta property="og:title" content="PhaserJSを使ってボタン用のクラスを作る" />
-<meta property="og:description" content="PhaserJSを使ってボタンを作ろう 任意の文字列と押されたときの挙動を記述したコールバック関数などを引数として受け取って、画面にボタンを配置するクラスを作ってみました。
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Phaser3を使ってボタン用のクラスを作る - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Phaser3を使ってボタン用のクラスを作る" />
+<meta property="og:description" content="Phaser3を使ってボタンを作ろう 任意の文字列と押されたときの挙動を記述したコールバック関数などを引数として受け取って、画面にボタンを配置するクラスを作ってみました。
 メニュー画面やRPGの戦闘シーンなどで、コマンドなどを一覧描画したりする際に利用できます。また、ボタンとしての機能を持たせるため、カーソルオーバーなどのイベントに何かしらの反応を示す要素が記述されています。
 ソース // 設定用オブジェクト type Props = { width: number; height: number; onClick: Function; align: string; fontSize: number; color: string; } class OriginalButtonClass extends Phaser.GameObjects.Container{ text: Phaser.GameObjects.Text; container: Phaser.GameObjects.Rectangle; constructor (scene: Phaser.Scene, x:number, y:number, text:string, props: Props){ super(scene, x, y); // 入力されたオブジェクトから各要素を取り出す  const{ width = 90, height = 40, onClick, align = &#39;center&#39;, fontSize = 30, color = &#39;black&#39; } = props; // シーンにボタンを追加  this.scene = scene; this." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ysko909.github.io/posts/make-button-class-with-phaserjs/" /><meta property="article:published_time" content="2021-05-10T23:45:04&#43;09:00"/>
 <meta property="article:modified_time" content="2021-05-10T23:45:04&#43;09:00"/><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="PhaserJSを使ってボタン用のクラスを作る"/>
-<meta name="twitter:description" content="PhaserJSを使ってボタンを作ろう 任意の文字列と押されたときの挙動を記述したコールバック関数などを引数として受け取って、画面にボタンを配置するクラスを作ってみました。
+<meta name="twitter:title" content="Phaser3を使ってボタン用のクラスを作る"/>
+<meta name="twitter:description" content="Phaser3を使ってボタンを作ろう 任意の文字列と押されたときの挙動を記述したコールバック関数などを引数として受け取って、画面にボタンを配置するクラスを作ってみました。
 メニュー画面やRPGの戦闘シーンなどで、コマンドなどを一覧描画したりする際に利用できます。また、ボタンとしての機能を持たせるため、カーソルオーバーなどのイベントに何かしらの反応を示す要素が記述されています。
 ソース // 設定用オブジェクト type Props = { width: number; height: number; onClick: Function; align: string; fontSize: number; color: string; } class OriginalButtonClass extends Phaser.GameObjects.Container{ text: Phaser.GameObjects.Text; container: Phaser.GameObjects.Rectangle; constructor (scene: Phaser.Scene, x:number, y:number, text:string, props: Props){ super(scene, x, y); // 入力されたオブジェクトから各要素を取り出す  const{ width = 90, height = 40, onClick, align = &#39;center&#39;, fontSize = 30, color = &#39;black&#39; } = props; // シーンにボタンを追加  this.scene = scene; this."/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
@@ -66,14 +66,14 @@
 
 
 		<div class="post-header">
-			<h1 class="title">PhaserJSを使ってボタン用のクラスを作る</h1>
+			<h1 class="title">Phaser3を使ってボタン用のクラスを作る</h1>
 			<div class="meta">Posted at &mdash; May 10, 2021</div>
 		</div>
 
 		<div class="markdown">
 			
 
-<h2 id="phaserjsを使ってボタンを作ろう">PhaserJSを使ってボタンを作ろう</h2>
+<h2 id="phaser3を使ってボタンを作ろう">Phaser3を使ってボタンを作ろう</h2>
 
 <p>任意の文字列と押されたときの挙動を記述したコールバック関数などを引数として受け取って、画面にボタンを配置するクラスを作ってみました。</p>
 
