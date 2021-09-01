@@ -7,10 +7,36 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sat, 13 Mar 2021 10:51:59 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 01 Sep 2021 23:51:17 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>PyCaretでSHAPを使った`interpret_model()`を実行するとエラーになる</title>
+      <link>https://ysko909.github.io/posts/get-error-when-use-interpret-model-with-pycaret-and-shap/</link>
+      <pubDate>Wed, 01 Sep 2021 23:51:17 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/get-error-when-use-interpret-model-with-pycaret-and-shap/</guid>
+      <description> 前提 Pythonで機械学習をする際に有用なライブラリPyCaretの1機能であるinterpret_mode()を使うと、SHAPを利用したモデルの解釈をPyCaretから実行できるようになります。
+pip install pycaret pip install shap この2行（正確にはinterpretも必要なプロットがあったりするけど）だけで、基本的にはPyCaretからSHAPが使えるようになるので非常に便利です。とくにNotebook上でPyCaretだけimportすればよく、import shapすら必要ありません。あとはinterpret_mode()と記述して、create_model()しておいたモデルについてプロットするだけです。
+本来はそれだけのはずなのですが。
+ええ、エラーになってしまったのですよ。
+エラー内容 ImportError: numpy.core.multiarray failed to importRuntimeError: module compiled against API version 0xe but this version of numpy is 0xd interpret_mode()を実行したところ、上記のようなエラーが発生しました。importの実行でエラーになってしまい、これから先に進みません。
+場合によっては、importは実行できるもののinterpret_model()を実行した箇所で似たようなエラーになるケースにも遭遇しました（ただし、こちらについては後述）。
+さらに解せないのは、同じコードでつい数日前までは実行できていたことです。数日前にinterpret_model()を正常に使っていたコンテナからDockerfileを持ってきて、それを元に新しくコンテナをビルドした環境で同じコードを実行したらエラーになる、という謎なシチュエーション。エラーメッセージを見るとNumPyが犯人っぽいけど・・・？
+原因 Numbaのバージョンアップのせい。
+実はNumbaの更新履歴を見てみると、2021年8月21日にバージョン0.54がリリースされていることがわかります。これが直接の原因です。
+PyCaretは、NumPyなら後述のようにバージョン指定していますが、Numbaについてはとくにバージョン指定がありません。そのため、PyCaretをインストールするとNumbaは最新版がインストールされます。現時点（2021年9月1日）では0.54がインストールされます。ところが、このバージョンでinterpret_model()を実行すると、さっきのようなエラーが表示されてしまい、処理が異常終了してしまいます。
+「数日前までは動いてた」のもコレが原因。たまたま8月21日以前にPyCaretの環境をDockerコンテナにて構築した際は、Numbaがバージョン0.53.1でインストールされたため問題なく動作していました。ところが、8月21日以降にPyCaretの環境を構築するとNumbaは最新バージョンとなってしまいます。そのため、interpret_model()が正常に動作していた環境とは厳密には異なる環境になっていたわけです。
+なお、エラーメッセージからしてNumPyが悪いように見えますが、これは完全に濡れ衣。PyCaretはNumPyのバージョン1.19.5を指定している（以上でも以下でもなく==で指定）ため、少なくともフツーにpipするならこれ以外のバージョンがインストールされることはありません。
+回避策 インストールするNumbaのバージョンを指定すればいいわけです。単純ですね。
+numba==0.53.1 自分は、上記のように0.53.1をインストール対象のバージョンとして指定しています。コンテナであれば、上記のようにバージョン指定したうえでコンテナをリビルドすれば問題なくinterpret_model()が実行できるようになるはずです。
+（参考）別解 基本的には上記のようにインストールするNumbaのバージョンを指定すれば問題ないはずですが、そんなことをしなくてもエラーになったセルを再度実行することで、何事もなかったかのように処理が通るケースも確認しました。なんでやねん。とくにimport部分ではなくinterpret_model()のセルでエラーを吐いているケースでは、単純に再実行するだけで処置が通りました。なんでやねん。理由は謎です。
+なお、import部分でエラーになってしまうケースでは、この単純に再実行する方法は使えない（同じエラーが出続ける）ので、Numbaのバージョン指定を行うべきです。
+いずれにせよ、なぜimport部分でコケるケースとコケないケースが存在するのかは謎です。とはいえ、エラーになる条件がいまいちはっきりせず、仮に再実行で処理の継続は可能とは言っても毎回エラーの度に再実行するのは手間なので、基本的には前述の通りNumbaのバージョン指定することがベターだと思います。
+参考  Numba Numba history  </description>
+    </item>
     
     <item>
       <title>学習済みのモデルをpickleで保存する</title>
