@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>プログレスバー付きのローディングシーンを追加する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="プログレスバー付きのローディングシーンを追加する" />
+<meta property="og:description" content="ああ、よくあるよね ゲームのオブジェクトを読み込むときによくあるのがローディング画面。ゲームにもよりますが、だいたい「Loading&hellip;」みたいな文字列を表示しつつ、プログレスバーがだんだん進行していって、ロードが100%終了するとゲームが始まるような画面のことをここではローディング画面と表現しています。今回はこのローディング画面をPhaser3で実装しようという話。
+実際どうやるの 基本的に、Phaser3はゲームで使うオブジェクト（アセットと言います）をpreload()関数内でロードします。このアセットのロードがすべて終了するところを100%として、「今xx%までロードできましたー」という情報をPhaserからもらいつつ、その進行具合で画面に表示したプログレスバーの長さを更新します。Phaserはその進行具合を情報として返してくれるので、こういう実装ができるのですね。
+ここではわかりやすく0%でプログレスバーの表示がなし、100%でプログレスバーが画面右まで到達している状態とします。また、ロードが100%になった時点で自動的にローディング画面からゲーム本編に遷移するものとします。ロードの進捗率が100%になったら画面をクリック、とか毎度したくないしね。
+なお、「ゲーム内のSDキャラクターがちょこちょこと走り回る」ような、コンテンツ的にリッチなローディング画面もゲームによってはあったりますが、今回は考えないことにします。というのは、「ゲームで使うアセットをロードするためのローディング画面で、ローディング画面に使うアセットをロードする必要がある」という入れ子構造になってしまい、そのアセットを事前にどこかでロードしておく必要があるためです。逆にいえば、事前にどこかでロードさえしておけば、Phaser3ではアセットのキャッシュはどのシーンからでもアクセスが可能です。なので、序盤にロードしておいてそれ以降のローディング画面ではアセットを表示する、というのも十分検討できる手段だと思います。
+ただし、前述のとおりここではプログレスバーの長方形について、進捗率にしたがって幅を変えるだけにします。
+サンプル codepenで実装してみました。
+See the Pen loading scene with phaser3 by ysko909 (@ysko909) on CodePen. 
+wikimediaにあるファイルを読み込んでいるのですが、うまく動作しないことがあります。
+コード class BaseScene extends Phaser.Scene { nextSceneName: string; canMoveToNextSceneWithClick: boolean; progressBar!: Phaser.GameObjects.Rectangle; game!: Phaser.Game; wholeCanvas!: Phaser.GameObjects.Zone; constructor(sceneName: string, nextSceneName: string, canMoveToNextSceneWithClick = false) { super(sceneName); this.nextSceneName = nextSceneName; this.canMoveToNextSceneWithClick = canMoveToNextSceneWithClick; } preload() { this.game = this.sys.game; this.progressBar = this.add.rectangle(0, this.game.canvas.height / 2, 0, 8, 0xffffff); this." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/add-loading-scene-including-progress-bar/" /><meta property="article:published_time" content="2021-09-11T21:51:52&#43;09:00"/>
+<meta property="article:modified_time" content="2021-09-11T21:51:52&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="プログレスバー付きのローディングシーンを追加する"/>
+<meta name="twitter:description" content="ああ、よくあるよね ゲームのオブジェクトを読み込むときによくあるのがローディング画面。ゲームにもよりますが、だいたい「Loading&hellip;」みたいな文字列を表示しつつ、プログレスバーがだんだん進行していって、ロードが100%終了するとゲームが始まるような画面のことをここではローディング画面と表現しています。今回はこのローディング画面をPhaser3で実装しようという話。
+実際どうやるの 基本的に、Phaser3はゲームで使うオブジェクト（アセットと言います）をpreload()関数内でロードします。このアセットのロードがすべて終了するところを100%として、「今xx%までロードできましたー」という情報をPhaserからもらいつつ、その進行具合で画面に表示したプログレスバーの長さを更新します。Phaserはその進行具合を情報として返してくれるので、こういう実装ができるのですね。
+ここではわかりやすく0%でプログレスバーの表示がなし、100%でプログレスバーが画面右まで到達している状態とします。また、ロードが100%になった時点で自動的にローディング画面からゲーム本編に遷移するものとします。ロードの進捗率が100%になったら画面をクリック、とか毎度したくないしね。
+なお、「ゲーム内のSDキャラクターがちょこちょこと走り回る」ような、コンテンツ的にリッチなローディング画面もゲームによってはあったりますが、今回は考えないことにします。というのは、「ゲームで使うアセットをロードするためのローディング画面で、ローディング画面に使うアセットをロードする必要がある」という入れ子構造になってしまい、そのアセットを事前にどこかでロードしておく必要があるためです。逆にいえば、事前にどこかでロードさえしておけば、Phaser3ではアセットのキャッシュはどのシーンからでもアクセスが可能です。なので、序盤にロードしておいてそれ以降のローディング画面ではアセットを表示する、というのも十分検討できる手段だと思います。
+ただし、前述のとおりここではプログレスバーの長方形について、進捗率にしたがって幅を変えるだけにします。
+サンプル codepenで実装してみました。
+See the Pen loading scene with phaser3 by ysko909 (@ysko909) on CodePen. 
+wikimediaにあるファイルを読み込んでいるのですが、うまく動作しないことがあります。
+コード class BaseScene extends Phaser.Scene { nextSceneName: string; canMoveToNextSceneWithClick: boolean; progressBar!: Phaser.GameObjects.Rectangle; game!: Phaser.Game; wholeCanvas!: Phaser.GameObjects.Zone; constructor(sceneName: string, nextSceneName: string, canMoveToNextSceneWithClick = false) { super(sceneName); this.nextSceneName = nextSceneName; this.canMoveToNextSceneWithClick = canMoveToNextSceneWithClick; } preload() { this.game = this.sys.game; this.progressBar = this.add.rectangle(0, this.game.canvas.height / 2, 0, 8, 0xffffff); this."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">プログレスバー付きのローディングシーンを追加する</h1>
+			<div class="meta">Posted at &mdash; Sep 11, 2021</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="ああ-よくあるよね">ああ、よくあるよね</h2>
+
+<p>ゲームのオブジェクトを読み込むときによくあるのがローディング画面。ゲームにもよりますが、だいたい「Loading&hellip;」みたいな文字列を表示しつつ、プログレスバーがだんだん進行していって、ロードが100%終了するとゲームが始まるような画面のことをここではローディング画面と表現しています。今回はこのローディング画面をPhaser3で実装しようという話。</p>
+
+<h2 id="実際どうやるの">実際どうやるの</h2>
+
+<p>基本的に、Phaser3はゲームで使うオブジェクト（アセットと言います）を<code>preload()</code>関数内でロードします。このアセットのロードがすべて終了するところを100%として、「今xx%までロードできましたー」という情報をPhaserからもらいつつ、その進行具合で画面に表示したプログレスバーの長さを更新します。Phaserはその進行具合を情報として返してくれるので、こういう実装ができるのですね。</p>
+
+<p>ここではわかりやすく0%でプログレスバーの表示がなし、100%でプログレスバーが画面右まで到達している状態とします。また、ロードが100%になった時点で<strong>自動的に</strong>ローディング画面からゲーム本編に遷移するものとします。ロードの進捗率が100%になったら画面をクリック、とか毎度したくないしね。</p>
+
+<p>なお、「ゲーム内のSDキャラクターがちょこちょこと走り回る」ような、コンテンツ的にリッチなローディング画面もゲームによってはあったりますが、今回は考えないことにします。というのは、「ゲームで使うアセットをロードするためのローディング画面で、ローディング画面に使うアセットをロードする必要がある」という入れ子構造になってしまい、そのアセットを事前にどこかでロードしておく必要があるためです。逆にいえば、事前にどこかでロードさえしておけば、Phaser3ではアセットのキャッシュはどのシーンからでもアクセスが可能です。なので、序盤にロードしておいてそれ以降のローディング画面ではアセットを表示する、というのも十分検討できる手段だと思います。</p>
+
+<p>ただし、前述のとおりここではプログレスバーの長方形について、進捗率にしたがって幅を変えるだけにします。</p>
+
+<h2 id="サンプル">サンプル</h2>
+
+<p>codepenで実装してみました。</p>
+
+<p><p class="codepen" data-height="300" data-default-tab="html,result" data-slug-hash="ExXvBdV" data-user="ysko909" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
+  <span>See the Pen <a href="https://codepen.io/ysko909/pen/ExXvBdV">
+  loading scene with phaser3</a> by ysko909 (<a href="https://codepen.io/ysko909">@ysko909</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script></p>
+
+<p>wikimediaにあるファイルを読み込んでいるのですが、うまく動作しないことがあります。</p>
+
+<h2 id="コード">コード</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">class</span> BaseScene <span style="color:#00f">extends</span> Phaser.Scene {
+    
+    nextSceneName: <span style="color:#2b91af">string</span>;
+    canMoveToNextSceneWithClick: <span style="color:#2b91af">boolean</span>;    
+    progressBar!: Phaser.GameObjects.Rectangle;
+    game!: Phaser.Game;
+    wholeCanvas!: Phaser.GameObjects.Zone;
+
+    <span style="color:#00f">constructor</span>(sceneName: <span style="color:#2b91af">string</span>, nextSceneName: <span style="color:#2b91af">string</span>, canMoveToNextSceneWithClick = <span style="color:#00f">false</span>) {
+        <span style="color:#00f">super</span>(sceneName);
+        <span style="color:#00f">this</span>.nextSceneName = nextSceneName;
+        <span style="color:#00f">this</span>.canMoveToNextSceneWithClick = canMoveToNextSceneWithClick;
+
+
+    }
+
+    preload() {
+        <span style="color:#00f">this</span>.game = <span style="color:#00f">this</span>.sys.game;
+
+        <span style="color:#00f">this</span>.progressBar = <span style="color:#00f">this</span>.add.rectangle(0, <span style="color:#00f">this</span>.game.canvas.height <span style="">/ 2, 0, 8, 0xffffff);</span>
+        <span style="color:#00f">this</span>.loadingText = <span style="color:#00f">this</span>.add.text(<span style="color:#00f">this</span>.game.canvas.width <span style="color:#a31515">/ 2, this.game.canvas.height /</span> 2 - 30, <span style="color:#a31515">&#39;loading...&#39;</span>, {});
+        <span style="color:#00f">this</span>.loadingText.setOrigin(0.5);
+
+        <span style="color:#008000">// ロード進行中はプログレスバーの伸縮を進捗率に応じて変化させる。
+</span><span style="color:#008000"></span>        <span style="color:#00f">this</span>.scene.scene.load.on(<span style="color:#a31515">&#39;progress&#39;</span>, <span style="color:#00f">this</span>._updateBar.bind(<span style="color:#00f">this</span>));
+        <span style="color:#008000">// 個別のファイルのロードが完了したとき、ロードできたファイルの情報をコンソールに表示する。
+</span><span style="color:#008000"></span>        <span style="color:#00f">this</span>.scene.scene.load.on(<span style="color:#a31515">&#39;load&#39;</span>, <span style="color:#00f">this</span>._displayLoadedFileInfo.bind(<span style="color:#00f">this</span>));
+        <span style="color:#008000">// すべてのファイルのロードが完了したらローディング画面はフェードアウトしてメインのシーンに遷移する。
+</span><span style="color:#008000"></span>        <span style="color:#00f">this</span>.scene.scene.load.on(<span style="color:#a31515">&#39;complete&#39;</span>, <span style="color:#00f">this</span>._fadeoutMainCamera.bind(<span style="color:#00f">this</span>));
+
+    }
+
+    <span style="color:#008000">/** 
+</span><span style="color:#008000">     * ローディングプログレスバーの幅を進捗率に応じて伸縮する。
+</span><span style="color:#008000">     * @param percentage ローディングの進捗率。 
+</span><span style="color:#008000">     */</span>
+    <span style="color:#00f">private</span> _updateBar(percentage: <span style="color:#2b91af">number</span>) {
+
+        <span style="color:#00f">this</span>.progressBar.width = <span style="color:#00f">this</span>.game.canvas.width * percentage;
+    }
+
+    <span style="color:#008000">/**
+</span><span style="color:#008000">     * ロードが成功したファイルの情報をコンソールに表示するデバッグ用メソッド。
+</span><span style="color:#008000">     * @param file ロードしたファイルオブジェクト。
+</span><span style="color:#008000">     */</span>
+    <span style="color:#00f">private</span> _displayLoadedFileInfo(file: <span style="color:#2b91af">any</span>) {
+        <span style="color:#00f">const</span> src = file.src ? file.src : <span style="color:#a31515">&#39;unknown/path&#39;</span>;
+        <span style="color:#00f">const</span> key = file.src ? file.key : <span style="color:#a31515">&#39;unknown/key&#39;</span>;
+
+        console.log(<span style="color:#a31515">`load asset: key=</span><span style="color:#a31515">${</span>key<span style="color:#a31515">}</span><span style="color:#a31515">, src=</span><span style="color:#a31515">${</span>src<span style="color:#a31515">}</span><span style="color:#a31515">`</span>);
+    }
+
+    <span style="color:#008000">/**
+</span><span style="color:#008000">     * メインカメラを1秒かけてフェードアウトさせる。
+</span><span style="color:#008000">     */</span>
+    <span style="color:#00f">private</span> _fadeoutMainCamera() {
+
+        <span style="color:#00f">this</span>.cameras.main.fadeOut(1000, 0, 0, 0);
+
+    }
+
+    create() {
+
+        <span style="color:#008000">// フェードアウトが完了したとき
+</span><span style="color:#008000"></span>        <span style="color:#00f">this</span>.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () =&gt; {
+
+            <span style="color:#00f">if</span> (<span style="color:#00f">this</span>.progressBar) {
+                <span style="color:#00f">this</span>.progressBar.destroy();
+                <span style="color:#00f">this</span>.loadingText.destroy();
+            }
+
+            <span style="color:#00f">this</span>.cameras.main.fadeIn(1000, 0, 0, 0);
+          
+            <span style="color:#00f">this</span>.displayBackground();
+            <span style="color:#00f">this</span>.displayText(<span style="color:#00f">this</span>.nextSceneName);
+
+        });
+
+        <span style="color:#00f">const</span> { width, height } = <span style="color:#00f">this</span>.game.canvas;
+      
+        <span style="color:#008000">// クリックによる画面遷移を条件により実装
+</span><span style="color:#008000"></span>        <span style="color:#00f">if</span> (<span style="color:#00f">this</span>.canMoveToNextSceneWithClick) {
+
+            <span style="color:#008000">/** キャンバス全体を領域とするゲームオブジェクト。クリック要素を持たせるために使う */</span>
+            <span style="color:#00f">this</span>.wholeCanvas = <span style="color:#00f">this</span>.add.zone(width <span style="color:#a31515">/ 2, height /</span> 2, width, height);
+
+            <span style="color:#00f">this</span>.wholeCanvas.setInteractive({
+                useHandCursor: <span style="color:#2b91af">true</span>
+            });
+
+            <span style="color:#00f">this</span>.wholeCanvas.on(<span style="color:#a31515">&#39;pointerdown&#39;</span>, () =&gt; {
+                <span style="color:#00f">this</span>.wholeCanvas.removeInteractive();
+                <span style="color:#00f">this</span>.changeScene(<span style="color:#00f">this</span>.nextSceneName);
+            });
+        };
+
+    }
+
+    <span style="color:#00f">public</span> changeScene(destinationSceneName: <span style="color:#2b91af">string</span>) {
+
+        <span style="color:#00f">this</span>.cameras.main.fadeOut(800, 0, 0, 0);
+        <span style="color:#00f">this</span>.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () =&gt; {
+            <span style="color:#00f">this</span>.scene.start(destinationSceneName);
+            
+        });
+    }
+
+    <span style="color:#00f">public</span> displayText(text: <span style="color:#2b91af">string</span>){
+      <span style="color:#00f">if</span> (text){
+        <span style="color:#00f">this</span>.add.text(<span style="color:#00f">this</span>.game.canvas.width <span style="">/ 2, 200, &#39;Go to &#39; + text).setOrigin(0.5);</span>
+      }
+        
+    }
+
+    <span style="color:#00f">public</span> displayBackground(){
+      
+    }
+
+}
+
+<span style="color:#00f">class</span> Scene1 <span style="color:#00f">extends</span> BaseScene {
+  <span style="color:#00f">constructor</span>(){
+    <span style="color:#00f">super</span>(<span style="color:#a31515">&#39;scene1&#39;</span>, <span style="color:#a31515">&#39;scene2&#39;</span>, <span style="color:#00f">true</span>);
+    
+  }
+  
+  preload(){
+    <span style="color:#00f">super</span>.preload();
+    
+    <span style="color:#00f">this</span>.load.image(<span style="color:#a31515">&#39;space&#39;</span>, <span style="color:#a31515">&#39;https://upload.wikimedia.org/wikipedia/commons/e/ee/Artemis_Base_Camp.png&#39;</span>);
+  }
+  
+  create(){
+    <span style="color:#00f">super</span>.create();
+    
+  }
+    
+  <span style="color:#00f">public</span> displayBackground(){
+    <span style="color:#00f">this</span>.add.image(0, 0, <span style="color:#a31515">&#39;space&#39;</span>);
+  }
+  
+}
+
+<span style="color:#00f">class</span> Scene2 <span style="color:#00f">extends</span> BaseScene {
+  <span style="color:#00f">constructor</span>(){
+    <span style="color:#00f">super</span>(<span style="color:#a31515">&#39;scene2&#39;</span>, <span style="color:#a31515">&#39;&#39;</span>, <span style="color:#00f">false</span>);
+  }
+  preload(){
+    <span style="color:#00f">super</span>.preload();
+    
+    <span style="color:#00f">this</span>.load.image(<span style="color:#a31515">&#39;galaxy&#39;</span>, <span style="color:#a31515">&#39;https://upload.wikimedia.org/wikipedia/commons/5/5e/Galaxy2.png&#39;</span>);
+  }
+  
+  create(){
+    <span style="color:#00f">super</span>.create();
+  }
+  <span style="color:#00f">public</span> displayBackground(){
+    <span style="color:#00f">this</span>.add.image(0, 0, <span style="color:#a31515">&#39;galaxy&#39;</span>);
+  }
+}
+
+<span style="color:#00f">const</span> config: <span style="color:#2b91af">Phaser.Types.Core.GameConfig</span> = {
+  type: <span style="color:#2b91af">Phaser.AUTO</span>,
+  width: <span style="color:#2b91af">800</span>,
+  height: <span style="color:#2b91af">600</span>,
+  resolution: <span style="color:#2b91af">window.devicePixelRatio</span>,
+  parent: <span style="color:#a31515">&#39;game-app&#39;</span>,
+  scene: [Scene1, Scene2]
+};
+
+<span style="color:#00f">new</span> Phaser.Game(config);</code></pre></div>
+<p>サンプルを実行してみるとわかりますが、一瞬ローディング画面が表示されてロードが終了したら自動的にフェードアウトし、背景が表示されます。クリックすると次のシーンに遷移しますが、同じクラスを用いたシーンなので同じ挙動をします。ただし、画面へのクリックが可能なのは最初のシーンだけにしたかったので、「画面クリックを可能にするか否か」をコンストラクタにて指定することにしました。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>ここでは独自クラスを作って、その中にローディング画面の表示機能を実装しました。アセットを事前にロードしておけばこのクラスから参照するようにコードを改変することで、「単純な長方形が伸びるだけ」の味気ないローディング画面を、より表現豊かな画面に作り変えることもできます。これだけのコードで実装できるので、やっぱりPhaser3はすごい。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://gamedevacademy.org/creating-a-preloading-screen-in-phaser-3/">Creating a Preloading Screen in Phaser 3</a></li>
+<li><a href="https://gpnotes.hatenablog.jp/entry/2019/01/22/170000">phaser3:プログレスバーを作る</a></li>
+<li><a href="https://mijinc0.github.io/blog/post/20200821_phaser3_loading_scene/">Phaser3 Loadingシーン</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

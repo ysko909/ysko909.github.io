@@ -7,10 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Wed, 01 Sep 2021 23:51:17 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 11 Sep 2021 21:51:52 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>プログレスバー付きのローディングシーンを追加する</title>
+      <link>https://ysko909.github.io/posts/add-loading-scene-including-progress-bar/</link>
+      <pubDate>Sat, 11 Sep 2021 21:51:52 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/add-loading-scene-including-progress-bar/</guid>
+      <description>ああ、よくあるよね ゲームのオブジェクトを読み込むときによくあるのがローディング画面。ゲームにもよりますが、だいたい「Loading&amp;hellip;」みたいな文字列を表示しつつ、プログレスバーがだんだん進行していって、ロードが100%終了するとゲームが始まるような画面のことをここではローディング画面と表現しています。今回はこのローディング画面をPhaser3で実装しようという話。
+実際どうやるの 基本的に、Phaser3はゲームで使うオブジェクト（アセットと言います）をpreload()関数内でロードします。このアセットのロードがすべて終了するところを100%として、「今xx%までロードできましたー」という情報をPhaserからもらいつつ、その進行具合で画面に表示したプログレスバーの長さを更新します。Phaserはその進行具合を情報として返してくれるので、こういう実装ができるのですね。
+ここではわかりやすく0%でプログレスバーの表示がなし、100%でプログレスバーが画面右まで到達している状態とします。また、ロードが100%になった時点で自動的にローディング画面からゲーム本編に遷移するものとします。ロードの進捗率が100%になったら画面をクリック、とか毎度したくないしね。
+なお、「ゲーム内のSDキャラクターがちょこちょこと走り回る」ような、コンテンツ的にリッチなローディング画面もゲームによってはあったりますが、今回は考えないことにします。というのは、「ゲームで使うアセットをロードするためのローディング画面で、ローディング画面に使うアセットをロードする必要がある」という入れ子構造になってしまい、そのアセットを事前にどこかでロードしておく必要があるためです。逆にいえば、事前にどこかでロードさえしておけば、Phaser3ではアセットのキャッシュはどのシーンからでもアクセスが可能です。なので、序盤にロードしておいてそれ以降のローディング画面ではアセットを表示する、というのも十分検討できる手段だと思います。
+ただし、前述のとおりここではプログレスバーの長方形について、進捗率にしたがって幅を変えるだけにします。
+サンプル codepenで実装してみました。
+See the Pen loading scene with phaser3 by ysko909 (@ysko909) on CodePen. 
+wikimediaにあるファイルを読み込んでいるのですが、うまく動作しないことがあります。
+コード class BaseScene extends Phaser.Scene { nextSceneName: string; canMoveToNextSceneWithClick: boolean; progressBar!: Phaser.GameObjects.Rectangle; game!: Phaser.Game; wholeCanvas!: Phaser.GameObjects.Zone; constructor(sceneName: string, nextSceneName: string, canMoveToNextSceneWithClick = false) { super(sceneName); this.nextSceneName = nextSceneName; this.canMoveToNextSceneWithClick = canMoveToNextSceneWithClick; } preload() { this.game = this.sys.game; this.progressBar = this.add.rectangle(0, this.game.canvas.height / 2, 0, 8, 0xffffff); this.</description>
+    </item>
     
     <item>
       <title>PyCaretでSHAPを使った`interpret_model()`を実行するとエラーになる</title>
@@ -28,8 +45,8 @@ pip install pycaret pip install shap この2行（正確にはinterpretも必要
 原因 Numbaのバージョンアップのせい。
 実はNumbaの更新履歴を見てみると、2021年8月21日にバージョン0.54がリリースされていることがわかります。これが直接の原因です。
 PyCaretは、NumPyなら後述のようにバージョン指定していますが、Numbaについてはとくにバージョン指定がありません。そのため、PyCaretをインストールするとNumbaは最新版がインストールされます。現時点（2021年9月1日）では0.54がインストールされます。ところが、このバージョンでinterpret_model()を実行すると、さっきのようなエラーが表示されてしまい、処理が異常終了してしまいます。
-「数日前までは動いてた」のもコレが原因。たまたま8月21日以前にPyCaretの環境をDockerコンテナにて構築した際は、Numbaがバージョン0.53.1でインストールされたため問題なく動作していました。ところが、8月21日以降にPyCaretの環境を構築するとNumbaは最新バージョンとなってしまいます。そのため、interpret_model()が正常に動作していた環境とは厳密には異なる環境になっていたわけです。
-なお、エラーメッセージからしてNumPyが悪いように見えますが、これは完全に濡れ衣。PyCaretはNumPyのバージョン1.19.5を指定している（以上でも以下でもなく==で指定）ため、少なくともフツーにpipするならこれ以外のバージョンがインストールされることはありません。
+「数日前までは動いてた」ってのもコレが原因。たまたま8月21日以前にPyCaretの環境をDockerコンテナにて構築した際は、Numbaがバージョン0.53.1でインストールされたため問題なく動作していました。ところが、8月21日以降にPyCaretの環境を構築するとNumbaは最新バージョンをインストールしてしまいます。そのため、interpret_model()が正常に動作していた環境とは厳密には異なる環境になっていたわけです。
+なお、エラーメッセージからしてNumPyが悪いように見えますが、これは完全に濡れ衣です。PyCaretはNumPyのバージョン1.19.5を指定している（以上でも以下でもなく==で指定）ため、少なくともフツーにpipするならこれ以外のバージョンがインストールされることはありません。
 回避策 インストールするNumbaのバージョンを指定すればいいわけです。単純ですね。
 numba==0.53.1 自分は、上記のように0.53.1をインストール対象のバージョンとして指定しています。コンテナであれば、上記のようにバージョン指定したうえでコンテナをリビルドすれば問題なくinterpret_model()が実行できるようになるはずです。
 （参考）別解 基本的には上記のようにインストールするNumbaのバージョンを指定すれば問題ないはずですが、そんなことをしなくてもエラーになったセルを再度実行することで、何事もなかったかのように処理が通るケースも確認しました。なんでやねん。とくにimport部分ではなくinterpret_model()のセルでエラーを吐いているケースでは、単純に再実行するだけで処置が通りました。なんでやねん。理由は謎です。
