@@ -2,29 +2,29 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>プログレスバー付きのローディングシーンを追加する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta property="og:title" content="プログレスバー付きのローディングシーンを追加する" />
-<meta property="og:description" content="ああ、よくあるよね ゲームのオブジェクトを読み込むときによくあるのがローディング画面。ゲームにもよりますが、だいたい「Loading&hellip;」みたいな文字列を表示しつつ、プログレスバーがだんだん進行していって、ロードが100%終了するとゲームが始まるような画面のことをここではローディング画面と表現しています。今回はこのローディング画面をPhaser3で実装しようという話。
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Phaser3でプログレスバー付きのローディングシーンを追加する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Phaser3でプログレスバー付きのローディングシーンを追加する" />
+<meta property="og:description" content="ああ、よくあるよね ゲームのオブジェクトを読み込むときによくあるのがローディング画面。ゲームにもよりますが、だいたい「Loading&hellip;」みたいな文字列を表示しつつ、プログレスバーがだんだん進行していって、ロードが100%終了するとゲームが始まるような画面のことをここではローディング画面と表現しています。今回は、このローディング画面をPhaser3で実装しようという話。
 実際どうやるの 基本的に、Phaser3はゲームで使うオブジェクト（アセットと言います）をpreload()関数内でロードします。このアセットのロードがすべて終了するところを100%として、「今xx%までロードできましたー」という情報をPhaserからもらいつつ、その進行具合で画面に表示したプログレスバーの長さを更新します。Phaserはその進行具合を情報として返してくれるので、こういう実装ができるのですね。
 ここではわかりやすく0%でプログレスバーの表示がなし、100%でプログレスバーが画面右まで到達している状態とします。また、ロードが100%になった時点で自動的にローディング画面からゲーム本編に遷移するものとします。ロードの進捗率が100%になったら画面をクリック、とか毎度したくないしね。
-なお、「ゲーム内のSDキャラクターがちょこちょこと走り回る」ような、コンテンツ的にリッチなローディング画面もゲームによってはあったりますが、今回は考えないことにします。というのは、「ゲームで使うアセットをロードするためのローディング画面で、ローディング画面に使うアセットをロードする必要がある」という入れ子構造になってしまい、そのアセットを事前にどこかでロードしておく必要があるためです。逆にいえば、事前にどこかでロードさえしておけば、Phaser3ではアセットのキャッシュはどのシーンからでもアクセスが可能です。なので、序盤にロードしておいてそれ以降のローディング画面ではアセットを表示する、というのも十分検討できる手段だと思います。
+なお、「ゲーム内のSDキャラクターがちょこちょこと走り回る」ような、コンテンツ的にリッチなローディング画面もゲームによってはあったりますが、今回は考えないことにします。というのは、「ゲームで使うアセットをロードするためのローディング画面で、ローディング画面に使うアセットをロードする必要がある」という入れ子構造になってしまい、そのアセットを事前にどこかでロードしておく必要があるためです。ただ、事前にどこかでロードさえしておけば、Phaser3ではアセットのキャッシュはどのシーンからでもアクセスが可能です。なので、序盤のどこかでロードしておいてそれ以降のローディング画面ではアセットを表示する、というのも十分検討できる手段だと思います。
 ただし、前述のとおりここではプログレスバーの長方形について、進捗率にしたがって幅を変えるだけにします。
 サンプル codepenで実装してみました。
 See the Pen loading scene with phaser3 by ysko909 (@ysko909) on CodePen. 
-wikimediaにあるファイルを読み込んでいるのですが、うまく動作しないことがあります。
+wikimediaにあるファイルを読み込んでいるのですが、うまく動作しないことがあります。そういう場合は更新してみてください。なお、ネットワーク環境が良好だとすぐダウンロードできるので、ローディング画面が一瞬で終わってしまうことがあるようです。そのときは心の目で見てください（ェ
 コード class BaseScene extends Phaser.Scene { nextSceneName: string; canMoveToNextSceneWithClick: boolean; progressBar!: Phaser.GameObjects.Rectangle; game!: Phaser.Game; wholeCanvas!: Phaser.GameObjects.Zone; constructor(sceneName: string, nextSceneName: string, canMoveToNextSceneWithClick = false) { super(sceneName); this.nextSceneName = nextSceneName; this.canMoveToNextSceneWithClick = canMoveToNextSceneWithClick; } preload() { this.game = this.sys.game; this.progressBar = this.add.rectangle(0, this.game.canvas.height / 2, 0, 8, 0xffffff); this." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ysko909.github.io/posts/add-loading-scene-including-progress-bar/" /><meta property="article:published_time" content="2021-09-11T21:51:52&#43;09:00"/>
 <meta property="article:modified_time" content="2021-09-11T21:51:52&#43;09:00"/><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="プログレスバー付きのローディングシーンを追加する"/>
-<meta name="twitter:description" content="ああ、よくあるよね ゲームのオブジェクトを読み込むときによくあるのがローディング画面。ゲームにもよりますが、だいたい「Loading&hellip;」みたいな文字列を表示しつつ、プログレスバーがだんだん進行していって、ロードが100%終了するとゲームが始まるような画面のことをここではローディング画面と表現しています。今回はこのローディング画面をPhaser3で実装しようという話。
+<meta name="twitter:title" content="Phaser3でプログレスバー付きのローディングシーンを追加する"/>
+<meta name="twitter:description" content="ああ、よくあるよね ゲームのオブジェクトを読み込むときによくあるのがローディング画面。ゲームにもよりますが、だいたい「Loading&hellip;」みたいな文字列を表示しつつ、プログレスバーがだんだん進行していって、ロードが100%終了するとゲームが始まるような画面のことをここではローディング画面と表現しています。今回は、このローディング画面をPhaser3で実装しようという話。
 実際どうやるの 基本的に、Phaser3はゲームで使うオブジェクト（アセットと言います）をpreload()関数内でロードします。このアセットのロードがすべて終了するところを100%として、「今xx%までロードできましたー」という情報をPhaserからもらいつつ、その進行具合で画面に表示したプログレスバーの長さを更新します。Phaserはその進行具合を情報として返してくれるので、こういう実装ができるのですね。
 ここではわかりやすく0%でプログレスバーの表示がなし、100%でプログレスバーが画面右まで到達している状態とします。また、ロードが100%になった時点で自動的にローディング画面からゲーム本編に遷移するものとします。ロードの進捗率が100%になったら画面をクリック、とか毎度したくないしね。
-なお、「ゲーム内のSDキャラクターがちょこちょこと走り回る」ような、コンテンツ的にリッチなローディング画面もゲームによってはあったりますが、今回は考えないことにします。というのは、「ゲームで使うアセットをロードするためのローディング画面で、ローディング画面に使うアセットをロードする必要がある」という入れ子構造になってしまい、そのアセットを事前にどこかでロードしておく必要があるためです。逆にいえば、事前にどこかでロードさえしておけば、Phaser3ではアセットのキャッシュはどのシーンからでもアクセスが可能です。なので、序盤にロードしておいてそれ以降のローディング画面ではアセットを表示する、というのも十分検討できる手段だと思います。
+なお、「ゲーム内のSDキャラクターがちょこちょこと走り回る」ような、コンテンツ的にリッチなローディング画面もゲームによってはあったりますが、今回は考えないことにします。というのは、「ゲームで使うアセットをロードするためのローディング画面で、ローディング画面に使うアセットをロードする必要がある」という入れ子構造になってしまい、そのアセットを事前にどこかでロードしておく必要があるためです。ただ、事前にどこかでロードさえしておけば、Phaser3ではアセットのキャッシュはどのシーンからでもアクセスが可能です。なので、序盤のどこかでロードしておいてそれ以降のローディング画面ではアセットを表示する、というのも十分検討できる手段だと思います。
 ただし、前述のとおりここではプログレスバーの長方形について、進捗率にしたがって幅を変えるだけにします。
 サンプル codepenで実装してみました。
 See the Pen loading scene with phaser3 by ysko909 (@ysko909) on CodePen. 
-wikimediaにあるファイルを読み込んでいるのですが、うまく動作しないことがあります。
+wikimediaにあるファイルを読み込んでいるのですが、うまく動作しないことがあります。そういう場合は更新してみてください。なお、ネットワーク環境が良好だとすぐダウンロードできるので、ローディング画面が一瞬で終わってしまうことがあるようです。そのときは心の目で見てください（ェ
 コード class BaseScene extends Phaser.Scene { nextSceneName: string; canMoveToNextSceneWithClick: boolean; progressBar!: Phaser.GameObjects.Rectangle; game!: Phaser.Game; wholeCanvas!: Phaser.GameObjects.Zone; constructor(sceneName: string, nextSceneName: string, canMoveToNextSceneWithClick = false) { super(sceneName); this.nextSceneName = nextSceneName; this.canMoveToNextSceneWithClick = canMoveToNextSceneWithClick; } preload() { this.game = this.sys.game; this.progressBar = this.add.rectangle(0, this.game.canvas.height / 2, 0, 8, 0xffffff); this."/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
@@ -78,7 +78,7 @@ wikimediaにあるファイルを読み込んでいるのですが、うまく�
 
 
 		<div class="post-header">
-			<h1 class="title">プログレスバー付きのローディングシーンを追加する</h1>
+			<h1 class="title">Phaser3でプログレスバー付きのローディングシーンを追加する</h1>
 			<div class="meta">Posted at &mdash; Sep 11, 2021</div>
 		</div>
 
@@ -87,7 +87,7 @@ wikimediaにあるファイルを読み込んでいるのですが、うまく�
 
 <h2 id="ああ-よくあるよね">ああ、よくあるよね</h2>
 
-<p>ゲームのオブジェクトを読み込むときによくあるのがローディング画面。ゲームにもよりますが、だいたい「Loading&hellip;」みたいな文字列を表示しつつ、プログレスバーがだんだん進行していって、ロードが100%終了するとゲームが始まるような画面のことをここではローディング画面と表現しています。今回はこのローディング画面をPhaser3で実装しようという話。</p>
+<p>ゲームのオブジェクトを読み込むときによくあるのがローディング画面。ゲームにもよりますが、だいたい「Loading&hellip;」みたいな文字列を表示しつつ、プログレスバーがだんだん進行していって、ロードが100%終了するとゲームが始まるような画面のことをここではローディング画面と表現しています。今回は、このローディング画面をPhaser3で実装しようという話。</p>
 
 <h2 id="実際どうやるの">実際どうやるの</h2>
 
@@ -95,7 +95,7 @@ wikimediaにあるファイルを読み込んでいるのですが、うまく�
 
 <p>ここではわかりやすく0%でプログレスバーの表示がなし、100%でプログレスバーが画面右まで到達している状態とします。また、ロードが100%になった時点で<strong>自動的に</strong>ローディング画面からゲーム本編に遷移するものとします。ロードの進捗率が100%になったら画面をクリック、とか毎度したくないしね。</p>
 
-<p>なお、「ゲーム内のSDキャラクターがちょこちょこと走り回る」ような、コンテンツ的にリッチなローディング画面もゲームによってはあったりますが、今回は考えないことにします。というのは、「ゲームで使うアセットをロードするためのローディング画面で、ローディング画面に使うアセットをロードする必要がある」という入れ子構造になってしまい、そのアセットを事前にどこかでロードしておく必要があるためです。逆にいえば、事前にどこかでロードさえしておけば、Phaser3ではアセットのキャッシュはどのシーンからでもアクセスが可能です。なので、序盤にロードしておいてそれ以降のローディング画面ではアセットを表示する、というのも十分検討できる手段だと思います。</p>
+<p>なお、「ゲーム内のSDキャラクターがちょこちょこと走り回る」ような、コンテンツ的にリッチなローディング画面もゲームによってはあったりますが、今回は考えないことにします。というのは、「ゲームで使うアセットをロードするためのローディング画面で、ローディング画面に使うアセットをロードする必要がある」という入れ子構造になってしまい、そのアセットを事前にどこかでロードしておく必要があるためです。ただ、事前にどこかでロードさえしておけば、Phaser3ではアセットのキャッシュはどのシーンからでもアクセスが可能です。なので、序盤のどこかでロードしておいてそれ以降のローディング画面ではアセットを表示する、というのも十分検討できる手段だと思います。</p>
 
 <p>ただし、前述のとおりここではプログレスバーの長方形について、進捗率にしたがって幅を変えるだけにします。</p>
 
@@ -110,7 +110,7 @@ wikimediaにあるファイルを読み込んでいるのですが、うまく�
 </p>
 <script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script></p>
 
-<p>wikimediaにあるファイルを読み込んでいるのですが、うまく動作しないことがあります。</p>
+<p>wikimediaにあるファイルを読み込んでいるのですが、うまく動作しないことがあります。そういう場合は更新してみてください。なお、ネットワーク環境が良好だとすぐダウンロードできるので、ローディング画面が一瞬で終わってしまうことがあるようです。そのときは心の目で見てください（ェ</p>
 
 <h2 id="コード">コード</h2>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">class</span> BaseScene <span style="color:#00f">extends</span> Phaser.Scene {
@@ -284,7 +284,22 @@ wikimediaにあるファイルを読み込んでいるのですが、うまく�
 };
 
 <span style="color:#00f">new</span> Phaser.Game(config);</code></pre></div>
+<p><code>Scene</code>クラスを継承して、<code>BaseScene</code>という新しいクラスを作成します。新クラスの中でローディングに関する実装を行うことで、ローディング画面を実装したシーンを作成したい場合は、<code>BaseScene</code>クラスを継承して新しいクラスを作成すればいいので楽です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">this</span>.progressBar = <span style="color:#00f">this</span>.add.rectangle(0, <span style="color:#00f">this</span>.game.canvas.height <span style="">/ 2, 0, 8, 0xffffff);</span>
+<span style="color:#00f">this</span>.loadingText = <span style="color:#00f">this</span>.add.text(<span style="color:#00f">this</span>.game.canvas.width <span style="color:#a31515">/ 2, this.game.canvas.height /</span> 2 - 30, <span style="color:#a31515">&#39;loading...&#39;</span>, {});
+<span style="color:#00f">this</span>.loadingText.setOrigin(0.5);
+
+<span style="color:#008000">// ロード進行中はプログレスバーの伸縮を進捗率に応じて変化させる。
+</span><span style="color:#008000"></span><span style="color:#00f">this</span>.scene.scene.load.on(<span style="color:#a31515">&#39;progress&#39;</span>, <span style="color:#00f">this</span>._updateBar.bind(<span style="color:#00f">this</span>));
+<span style="color:#008000">// 個別のファイルのロードが完了したとき、ロードできたファイルの情報をコンソールに表示する。
+</span><span style="color:#008000"></span><span style="color:#00f">this</span>.scene.scene.load.on(<span style="color:#a31515">&#39;load&#39;</span>, <span style="color:#00f">this</span>._displayLoadedFileInfo.bind(<span style="color:#00f">this</span>));
+<span style="color:#008000">// すべてのファイルのロードが完了したらローディング画面はフェードアウトしてメインのシーンに遷移する。
+</span><span style="color:#008000"></span><span style="color:#00f">this</span>.scene.scene.load.on(<span style="color:#a31515">&#39;complete&#39;</span>, <span style="color:#00f">this</span>._fadeoutMainCamera.bind(<span style="color:#00f">this</span>));</code></pre></div>
+<p>実際に、ローディング画面に関するコードを記述しているのは上記の部分です。ロード中はその進捗具合に応じて長方形の幅を更新し、すべてのアセットがロードできたら、ローディング画面に表示した長方形やテキストなどのオブジェクトは破棄してからメインの画面を表示します。ローディング画面からメイン画面へ切り替えるときは、フェードイン・フェードアウトさせます。シーンの切り替えの際も同様です。</p>
+
 <p>サンプルを実行してみるとわかりますが、一瞬ローディング画面が表示されてロードが終了したら自動的にフェードアウトし、背景が表示されます。クリックすると次のシーンに遷移しますが、同じクラスを用いたシーンなので同じ挙動をします。ただし、画面へのクリックが可能なのは最初のシーンだけにしたかったので、「画面クリックを可能にするか否か」をコンストラクタにて指定することにしました。</p>
+
+<p>シーンの切り替えにフェードイン・フェードアウトを実装しているのは、単純に趣味です。ロードが終わった瞬間に余韻なくスパッと画面が切り替わるような実装がお好みである場合、フェードイン・フェードアウトに関係する部分のコードを削除するだけでOKです。</p>
 
 <h2 id="まとめ">まとめ</h2>
 
