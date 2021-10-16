@@ -7,10 +7,32 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sat, 11 Sep 2021 21:51:52 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 16 Oct 2021 14:45:04 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>PyCaretをIrisやBostonで動かしてみる</title>
+      <link>https://ysko909.github.io/posts/fundamentals-of-pycaret/</link>
+      <pubDate>Sat, 16 Oct 2021 14:45:04 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/fundamentals-of-pycaret/</guid>
+      <description>概要 PyCaretとは、AutoMLをサポートしたPythonの機械学習ライブラリです。AutoMLはというと、ある程度定型化されているような機械学習モデルの作成作業を自動化する仕組みのことです。
+PyCaret自体は、scikit-learnやOptuna、Hyperoptなどの機械学習ライブラリのラッパー的な位置づけ。もちろん、LightGBMやCatboostにようなアルゴリズムもばっちりサポート。
+scikit-learnで実装すると何行も書かなければならないようなモデルの学習ロジックを数行で実装できたり、本来matplotlibやseabornなどを使って描画するようなグラフもPyCaretでは1行で描画できたりと、とにかく機械学習における作業サイクルを簡素化して生産性向上に全振りしてる印象。しかも、PyCaret自体を実行するときも煩雑なコードを書く必要はまったくないのがすごい。
+ここでは機械学習の代表的なデータを使って、PyCaretの使い方を見てみます。
+PyCaretをIrisデータで使ってみる クラス分類では、毎度おなじみIris（アヤメ）のデータを使って、ざっくりPyCaretを実行してみます。
+インストールは、こちらも毎度おなじみpipを使います。
+pip install pycaret PyCaretのインストールは上記を実行しておきましょう。
+なお、上記のコマンドでインストールされるPyCaretはSlim Versionであるため、一部の依存関係にあるライブラリをスキップしているようです。顕著に影響が出てくるケースがinterpert_model()あたりを実行する場合で、「XXXのライブラリがインストールされてないぞー」みたいなエラーが出てきたりますが、まぁ今回は気にしないでいきます。
+pip install pycaret[full] 上記のコマンドを実行することで、PyCaretのFull Versionがインストールされます。
+import pandas as pd import numpy as np from sklearn.datasets import load_iris from sklearn.model_selection import train_test_split from pycaret.classification import * まずはライブラリ読み込み。
+ここではscikit-learnのload_iris()を使うのでimportしておきます。今回はクラス分類モデルの作成なのでpycaret.classificationを参照します。回帰モデルを作成する場合は別なクラスが用意されているのでそちらを参照します。
+ちなみに後で気付いたのですが、PyCaretは代表的なデータを自分自身で提供している（ここでPyCaretが提供しているデータを確認できる）ので、わざわざscikit-learnをインポートする必要はなかったんだよなぁ・・・。
+iris = load_iris() x = pd.DataFrame(data=iris.data, columns=iris.feature_names) y = pd.Series(data=iris.target, name=&amp;#39;Species&amp;#39;) 次にirisのデータをロードします。
+train_X, test_X, train_y, test_y = train_test_split(x, y) train = pd.concat([train_X, train_y], axis=1) test = pd.concat([test_X, test_y], axis=1) 学習に使うトレーニングデータと、モデルを作ったあとの検証に使うテストデータを分けておきます。なお、ここでは説明変数と目的変数を1つのデータセットとして結合していますが、これは後で実行するPyCaretのセットアップで利用するため。</description>
+    </item>
     
     <item>
       <title>Phaser3でプログレスバー付きのローディングシーンを追加する</title>

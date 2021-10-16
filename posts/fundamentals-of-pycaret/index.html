@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>PyCaretをIrisやBostonで動かしてみる - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="PyCaretをIrisやBostonで動かしてみる" />
+<meta property="og:description" content="概要 PyCaretとは、AutoMLをサポートしたPythonの機械学習ライブラリです。AutoMLはというと、ある程度定型化されているような機械学習モデルの作成作業を自動化する仕組みのことです。
+PyCaret自体は、scikit-learnやOptuna、Hyperoptなどの機械学習ライブラリのラッパー的な位置づけ。もちろん、LightGBMやCatboostにようなアルゴリズムもばっちりサポート。
+scikit-learnで実装すると何行も書かなければならないようなモデルの学習ロジックを数行で実装できたり、本来matplotlibやseabornなどを使って描画するようなグラフもPyCaretでは1行で描画できたりと、とにかく機械学習における作業サイクルを簡素化して生産性向上に全振りしてる印象。しかも、PyCaret自体を実行するときも煩雑なコードを書く必要はまったくないのがすごい。
+ここでは機械学習の代表的なデータを使って、PyCaretの使い方を見てみます。
+PyCaretをIrisデータで使ってみる クラス分類では、毎度おなじみIris（アヤメ）のデータを使って、ざっくりPyCaretを実行してみます。
+インストールは、こちらも毎度おなじみpipを使います。
+pip install pycaret PyCaretのインストールは上記を実行しておきましょう。
+なお、上記のコマンドでインストールされるPyCaretはSlim Versionであるため、一部の依存関係にあるライブラリをスキップしているようです。顕著に影響が出てくるケースがinterpert_model()あたりを実行する場合で、「XXXのライブラリがインストールされてないぞー」みたいなエラーが出てきたりますが、まぁ今回は気にしないでいきます。
+pip install pycaret[full] 上記のコマンドを実行することで、PyCaretのFull Versionがインストールされます。
+import pandas as pd import numpy as np from sklearn.datasets import load_iris from sklearn.model_selection import train_test_split from pycaret.classification import * まずはライブラリ読み込み。
+ここではscikit-learnのload_iris()を使うのでimportしておきます。今回はクラス分類モデルの作成なのでpycaret.classificationを参照します。回帰モデルを作成する場合は別なクラスが用意されているのでそちらを参照します。
+ちなみに後で気付いたのですが、PyCaretは代表的なデータを自分自身で提供している（ここでPyCaretが提供しているデータを確認できる）ので、わざわざscikit-learnをインポートする必要はなかったんだよなぁ・・・。
+iris = load_iris() x = pd.DataFrame(data=iris.data, columns=iris.feature_names) y = pd.Series(data=iris.target, name=&#39;Species&#39;) 次にirisのデータをロードします。
+train_X, test_X, train_y, test_y = train_test_split(x, y) train = pd.concat([train_X, train_y], axis=1) test = pd.concat([test_X, test_y], axis=1) 学習に使うトレーニングデータと、モデルを作ったあとの検証に使うテストデータを分けておきます。なお、ここでは説明変数と目的変数を1つのデータセットとして結合していますが、これは後で実行するPyCaretのセットアップで利用するため。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-pycaret/" /><meta property="article:published_time" content="2021-10-16T14:45:04&#43;09:00"/>
+<meta property="article:modified_time" content="2021-10-16T14:45:04&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="PyCaretをIrisやBostonで動かしてみる"/>
+<meta name="twitter:description" content="概要 PyCaretとは、AutoMLをサポートしたPythonの機械学習ライブラリです。AutoMLはというと、ある程度定型化されているような機械学習モデルの作成作業を自動化する仕組みのことです。
+PyCaret自体は、scikit-learnやOptuna、Hyperoptなどの機械学習ライブラリのラッパー的な位置づけ。もちろん、LightGBMやCatboostにようなアルゴリズムもばっちりサポート。
+scikit-learnで実装すると何行も書かなければならないようなモデルの学習ロジックを数行で実装できたり、本来matplotlibやseabornなどを使って描画するようなグラフもPyCaretでは1行で描画できたりと、とにかく機械学習における作業サイクルを簡素化して生産性向上に全振りしてる印象。しかも、PyCaret自体を実行するときも煩雑なコードを書く必要はまったくないのがすごい。
+ここでは機械学習の代表的なデータを使って、PyCaretの使い方を見てみます。
+PyCaretをIrisデータで使ってみる クラス分類では、毎度おなじみIris（アヤメ）のデータを使って、ざっくりPyCaretを実行してみます。
+インストールは、こちらも毎度おなじみpipを使います。
+pip install pycaret PyCaretのインストールは上記を実行しておきましょう。
+なお、上記のコマンドでインストールされるPyCaretはSlim Versionであるため、一部の依存関係にあるライブラリをスキップしているようです。顕著に影響が出てくるケースがinterpert_model()あたりを実行する場合で、「XXXのライブラリがインストールされてないぞー」みたいなエラーが出てきたりますが、まぁ今回は気にしないでいきます。
+pip install pycaret[full] 上記のコマンドを実行することで、PyCaretのFull Versionがインストールされます。
+import pandas as pd import numpy as np from sklearn.datasets import load_iris from sklearn.model_selection import train_test_split from pycaret.classification import * まずはライブラリ読み込み。
+ここではscikit-learnのload_iris()を使うのでimportしておきます。今回はクラス分類モデルの作成なのでpycaret.classificationを参照します。回帰モデルを作成する場合は別なクラスが用意されているのでそちらを参照します。
+ちなみに後で気付いたのですが、PyCaretは代表的なデータを自分自身で提供している（ここでPyCaretが提供しているデータを確認できる）ので、わざわざscikit-learnをインポートする必要はなかったんだよなぁ・・・。
+iris = load_iris() x = pd.DataFrame(data=iris.data, columns=iris.feature_names) y = pd.Series(data=iris.target, name=&#39;Species&#39;) 次にirisのデータをロードします。
+train_X, test_X, train_y, test_y = train_test_split(x, y) train = pd.concat([train_X, train_y], axis=1) test = pd.concat([test_X, test_y], axis=1) 学習に使うトレーニングデータと、モデルを作ったあとの検証に使うテストデータを分けておきます。なお、ここでは説明変数と目的変数を1つのデータセットとして結合していますが、これは後で実行するPyCaretのセットアップで利用するため。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">PyCaretをIrisやBostonで動かしてみる</h1>
+			<div class="meta">Posted at &mdash; Oct 16, 2021</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p><a href="https://pycaret.org/">PyCaret</a>とは、<a href="https://docs.microsoft.com/ja-jp/azure/machine-learning/concept-automated-ml">AutoML</a>をサポートしたPythonの機械学習ライブラリです。AutoMLはというと、ある程度定型化されているような機械学習モデルの作成作業を自動化する仕組みのことです。</p>
+
+<p>PyCaret自体は、<a href="https://scikit-learn.org/">scikit-learn</a>や<a href="https://optuna.org/">Optuna</a>、<a href="https://hyperopt.github.io/hyperopt/">Hyperopt</a>などの機械学習ライブラリのラッパー的な位置づけ。もちろん、<a href="https://lightgbm.readthedocs.io/en/latest/">LightGBM</a>や<a href="https://catboost.ai/">Catboost</a>にようなアルゴリズムもばっちりサポート。</p>
+
+<p><a href="https://scikit-learn.org/">scikit-learn</a>で実装すると何行も書かなければならないようなモデルの学習ロジックを数行で実装できたり、本来<a href="https://matplotlib.org/">matplotlib</a>や<a href="https://seaborn.pydata.org/">seaborn</a>などを使って描画するようなグラフもPyCaretでは1行で描画できたりと、とにかく機械学習における作業サイクルを簡素化して生産性向上に全振りしてる印象。しかも、PyCaret自体を実行するときも煩雑なコードを書く必要はまったくないのがすごい。</p>
+
+<p>ここでは機械学習の代表的なデータを使って、PyCaretの使い方を見てみます。</p>
+
+<h2 id="pycaretをirisデータで使ってみる">PyCaretをIrisデータで使ってみる</h2>
+
+<p>クラス分類では、毎度おなじみ<a href="https://medium.com/@jebaseelanravi96/machine-learning-iris-classification-33aa18a4a983">Iris</a>（アヤメ）のデータを使って、ざっくりPyCaretを実行してみます。</p>
+
+<p>インストールは、こちらも毎度おなじみ<code>pip</code>を使います。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">pip install pycaret</code></pre></div>
+<p>PyCaretのインストールは上記を実行しておきましょう。</p>
+
+<p>なお、上記のコマンドでインストールされるPyCaretは<strong>Slim Version</strong>であるため、一部の依存関係にあるライブラリをスキップしているようです。顕著に影響が出てくるケースが<code>interpert_model()</code>あたりを実行する場合で、「XXXのライブラリがインストールされてないぞー」みたいなエラーが出てきたりますが、まぁ今回は気にしないでいきます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">pip install pycaret[full]</code></pre></div>
+<p>上記のコマンドを実行することで、PyCaretのFull Versionがインストールされます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> pandas <span style="color:#00f">as</span> pd
+<span style="color:#00f">import</span> numpy <span style="color:#00f">as</span> np
+
+<span style="color:#00f">from</span> sklearn.datasets <span style="color:#00f">import</span> load_iris
+<span style="color:#00f">from</span> sklearn.model_selection <span style="color:#00f">import</span> train_test_split
+
+
+<span style="color:#00f">from</span> pycaret.classification <span style="color:#00f">import</span> *</code></pre></div>
+<p>まずはライブラリ読み込み。</p>
+
+<p>ここではscikit-learnの<code>load_iris()</code>を使うので<code>import</code>しておきます。今回はクラス分類モデルの作成なので<code>pycaret.classification</code>を参照します。回帰モデルを作成する場合は<a href="https://pycaret.readthedocs.io/en/latest/api/regression.html">別なクラス</a>が用意されているのでそちらを参照します。</p>
+
+<p>ちなみに後で気付いたのですが、PyCaretは代表的なデータを<strong>自分自身で提供している</strong>（<a href="https://pycaret.org/get-data/#datasets">ここ</a>でPyCaretが提供しているデータを確認できる）ので、わざわざ<strong>scikit-learnをインポートする必要はなかった</strong>んだよなぁ・・・。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">iris = load_iris()
+x = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+y = pd.Series(data=iris.target, name=<span style="color:#a31515">&#39;Species&#39;</span>)</code></pre></div>
+<p>次にirisのデータをロードします。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">train_X, test_X, train_y, test_y = train_test_split(x, y)
+train = pd.concat([train_X, train_y], axis=1)
+test = pd.concat([test_X, test_y], axis=1)</code></pre></div>
+<p>学習に使うトレーニングデータと、モデルを作ったあとの検証に使うテストデータを分けておきます。なお、ここでは説明変数と目的変数を1つのデータセットとして結合していますが、これは後で実行するPyCaretのセットアップで利用するため。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">clf1 = setup(
+    data=train,
+    target=<span style="color:#a31515">&#39;Species&#39;</span>,
+    session_id=123,
+    log_experiment=True,
+    experiment_name=<span style="color:#a31515">&#39;work_iris&#39;</span>
+)</code></pre></div>
+<p>PyCaretのセットアップを実行します。目的変数と説明変数を含んだトレーニングデータを渡し、<code>target</code>で目的変数を指定します。<code>session_id</code>以降は任意。ログは正直なくてもいいけど、今回はどんなことをしているかを見たかったので<a href="https://pycaret.org/get-logs/">出力する</a>ような設定にしています。実際のところ、めちゃくちゃ長いログが出てくるので、必要じゃない場合はわざわざ出力することないと思うけど・・・。</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Description</th>
+<th>Value</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>session_id</td>
+<td>123</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>Target</td>
+<td>Species</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Target Type</td>
+<td>Multiclass</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>Label Encoded</td>
+<td>0: 0, 1: 1, 2: 2</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>Original Data</td>
+<td>(112, 5)</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>Missing Values</td>
+<td>FALSE</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>Numeric Features</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>Categorical Features</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>8</td>
+<td>Ordinal Features</td>
+<td>FALSE</td>
+</tr>
+
+<tr>
+<td>9</td>
+<td>High Cardinality Features</td>
+<td>FALSE</td>
+</tr>
+
+<tr>
+<td>10</td>
+<td>High Cardinality Method</td>
+<td>None</td>
+</tr>
+
+<tr>
+<td>11</td>
+<td>Transformed Train Set</td>
+<td>(78, 4)</td>
+</tr>
+
+<tr>
+<td>12</td>
+<td>Transformed Test Set</td>
+<td>(34, 4)</td>
+</tr>
+
+<tr>
+<td>13</td>
+<td>Shuffle Train-Test</td>
+<td>TRUE</td>
+</tr>
+
+<tr>
+<td>14</td>
+<td>Stratify Train-Test</td>
+<td>FALSE</td>
+</tr>
+</tbody>
+</table>
+
+<p>セットアップを実行すると、こんな感じでパラメータが表示されます。ちなみに、長すぎるので上記では15行目以降を省略しています。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">best_model = compare_models()</code></pre></div>
+<p>次は各アルゴリズム別に学習モデルの比較を行います。上記のようにたった1行書くだけで、いろいろなアルゴリズムを1度に試せるのはすごい。</p>
+
+<p><img src="2021-10-16-15-21-30.png" alt="alt" /></p>
+
+<p>実行するとこんな感じに出力されます。精度によりソートされて、今回はknnなど複数のモデルの精度が一番良かったことになります。ただし、この結果は<strong>あくまでこのときの結果</strong>でしかないので、もう1回実行すると別なアルゴリズムの良い結果が出たりします（とくに<code>session_id</code>を指定していないとき）。ただ、後述するハイパーパラメータのチューニングをここでは考慮していない（はず）なので、参考程度に考えておきましょう。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">lda = create_model(<span style="color:#a31515">&#39;lda&#39;</span>)</code></pre></div>
+<p>さっきのはモデル別の比較だったので、今度は実際に学習モデルを作成してグラフをプロットしてみます。上記の1文を実行することでモデル作成が可能。スゲー。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plot_model(lda, plot=<span style="color:#a31515">&#39;confusion_matrix&#39;</span>)</code></pre></div>
+<p><img src="2021-10-16-15-21-54.png" alt="alt" /></p>
+
+<p>モデル作成に限らず、グラフの描画も1行で可能。至れり尽くせりですねぇ。それから、<code>plot</code>に渡す文字列を変えて<a href="https://pycaret.org/plot-model/">描画するグラフを変更</a>できます。</p>
+
+<ul>
+<li>Area Under the Curve：‘auc’</li>
+<li>Discrimination Threshold：‘threshold’</li>
+<li>Precision Recall Curve：‘pr’</li>
+<li>Confusion Matrix：‘confusion_matrix’</li>
+<li>Class Prediction Error：‘error’</li>
+</ul>
+
+<p>これはクラス分類時に出力できるグラフの一例。回帰モデルやクラスタリングの場合は、また別のグラフが別途用意されています。とりあえずこれ以上必要？というくらい用意されているので、PyCaretを<code>import</code>しておけば大体事足りるんじゃなかろうか。別途matplotlibが必要になるケースは、グラフに何かしら線などを直接描画したい、表示形式を細かく指定したいとかのシチュエーションしか思いつかない。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">models()</code></pre></div>
+<p>この関数を実行すると、比較可能なアルゴリズムの一覧が出力されます。</p>
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Reference</th>
+<th>Turbo</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>lr</td>
+<td>Logistic Regression</td>
+<td>sklearn.linear_model._logistic.LogisticRegression</td>
+<td>TRUE</td>
+</tr>
+
+<tr>
+<td>knn</td>
+<td>K Neighbors Classifier</td>
+<td>sklearn.neighbors._classification.KNeighborsCl&hellip;</td>
+<td>TRUE</td>
+</tr>
+
+<tr>
+<td>nb</td>
+<td>Naive Bayes</td>
+<td>sklearn.naive_bayes.GaussianNB</td>
+<td>TRUE</td>
+</tr>
+
+<tr>
+<td>dt</td>
+<td>Decision Tree Classifier</td>
+<td>sklearn.tree._classes.DecisionTreeClassifier</td>
+<td>TRUE</td>
+</tr>
+
+<tr>
+<td>svm</td>
+<td>SVM - Linear Kernel</td>
+<td>sklearn.linear_model._stochastic_gradient.SGDC&hellip;</td>
+<td>TRUE</td>
+</tr>
+
+<tr>
+<td>rbfsvm</td>
+<td>SVM - Radial Kernel</td>
+<td>sklearn.svm._classes.SVC</td>
+<td>FALSE</td>
+</tr>
+
+<tr>
+<td>gpc</td>
+<td>Gaussian Process Classifier</td>
+<td>sklearn.gaussian_process._gpc.GaussianProcessC&hellip;</td>
+<td>FALSE</td>
+</tr>
+
+<tr>
+<td>mlp</td>
+<td>MLP Classifier</td>
+<td>sklearn.neural_network._multilayer_perceptron&hellip;.</td>
+<td>FALSE</td>
+</tr>
+
+<tr>
+<td>ridge</td>
+<td>Ridge Classifier</td>
+<td>sklearn.linear_model._ridge.RidgeClassifier</td>
+<td>TRUE</td>
+</tr>
+
+<tr>
+<td>rf</td>
+<td>Random Forest Classifier</td>
+<td>sklearn.ensemble._forest.RandomForestClassifier</td>
+<td>TRUE</td>
+</tr>
+
+<tr>
+<td>qda</td>
+<td>Quadratic Discriminant Analysis</td>
+<td>sklearn.discriminant_analysis.QuadraticDiscrim&hellip;</td>
+<td>TRUE</td>
+</tr>
+
+<tr>
+<td>ada</td>
+<td>Ada Boost Classifier</td>
+<td>sklearn.ensemble._weight_boosting.AdaBoostClas&hellip;</td>
+<td>TRUE</td>
+</tr>
+
+<tr>
+<td>gbc</td>
+<td>Gradient Boosting Classifier</td>
+<td>sklearn.ensemble._gb.GradientBoostingClassifier</td>
+<td>TRUE</td>
+</tr>
+
+<tr>
+<td>lda</td>
+<td>Linear Discriminant Analysis</td>
+<td>sklearn.discriminant_analysis.LinearDiscrimina&hellip;</td>
+<td>TRUE</td>
+</tr>
+
+<tr>
+<td>et</td>
+<td>Extra Trees Classifier</td>
+<td>sklearn.ensemble._forest.ExtraTreesClassifier</td>
+<td>TRUE</td>
+</tr>
+
+<tr>
+<td>lightgbm</td>
+<td>Light Gradient Boosting Machine</td>
+<td>lightgbm.sklearn.LGBMClassifier</td>
+<td>TRUE</td>
+</tr>
+</tbody>
+</table>
+
+<p>ここではクラス分類を行っているので、クラス分類用のアルゴリズムの一覧が出てきます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pred_holdouts = predict_model(lda)
+pred_holdouts.head()</code></pre></div>
+<p>作成したモデルについて、実データと予測値の比較がこのコードで可能。ここでは、先ほど作ったldaモデルについて実行しています。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">best = automl(optimize=<span style="color:#a31515">&#39;Recall&#39;</span>)
+best</code></pre></div>
+<p>AutoMLで最適なモデルを作成します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">LinearDiscriminantAnalysis(n_components=None, priors=None, shrinkage=None,
+                           solver=<span style="color:#a31515">&#39;svd&#39;</span>, store_covariance=False, tol=0.0001)</code></pre></div>
+<p>ldaが選択されて、最適と思われるパラメータが出力されています。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">predict_test = predict_model(best, data=test)
+predict_test.head()</code></pre></div>
+<p>先ほど選択した最良モデル<code>best</code>を使って検証を行うには、上記のコードでテスト用データを渡せばオーケー。しかしホントに書く量が少ないなー。</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>sepal length (cm)</th>
+<th>sepal width (cm)</th>
+<th>petal length (cm)</th>
+<th>petal width (cm)</th>
+<th>Species</th>
+<th>Label</th>
+<th>Score</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>131</td>
+<td>7.9</td>
+<td>3.8</td>
+<td>6.4</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>0.9946</td>
+</tr>
+
+<tr>
+<td>85</td>
+<td>6</td>
+<td>3.4</td>
+<td>4.5</td>
+<td>1.6</td>
+<td>1</td>
+<td>1</td>
+<td>0.9989</td>
+</tr>
+
+<tr>
+<td>26</td>
+<td>5</td>
+<td>3.4</td>
+<td>1.6</td>
+<td>0.4</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>70</td>
+<td>5.9</td>
+<td>3.2</td>
+<td>4.8</td>
+<td>1.8</td>
+<td>1</td>
+<td>2</td>
+<td>0.8861</td>
+</tr>
+
+<tr>
+<td>69</td>
+<td>5.6</td>
+<td>2.5</td>
+<td>3.9</td>
+<td>1.1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+<p>実行するとこんな感じでテストデータに対する予測結果が出力されます。<code>Species</code>までの列がテストデータに含まれる内容で、Label以降が予測結果です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">save_model(best, model_name=<span style="color:#a31515">&#39;work_best_model&#39;</span>)</code></pre></div>
+<p>作成したモデルはpkl形式で保存が可能です。<code>save_model()</code>の第1引数に保存対象のモデルを、第2引数に保存する出力先ファイル名（拡張子は不要）を記述します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">loaded_best = load_model(<span style="color:#a31515">&#39;work_best_model&#39;</span>)
+<span style="color:#00f">print</span>(loaded_best)</code></pre></div>
+<p>保存ができればロードももちろん可能。<code>load_model()</code>を使えば保存したモデルをロードできます。</p>
+
+<p>ここまでで、IrisのデータでPyCaretをざっくり動かしてみました。機械学習のモデル作成を行う際にだいたい手癖でやっているような、定型的な作業をすこぶる少ないコードを実行してくれるし、本来scikit-learnを<code>import</code>するなどして書いていたコードより見通しのいいコードになりますね。結果の比較も簡単でベストなモデルの生成も可能と、おおよそ必要な機能がしっかり揃っています。</p>
+
+<h2 id="pycaretをbostonデータで使ってみる">PyCaretをBostonデータで使ってみる</h2>
+
+<p>今度は、Bostonデータでも同様にPyCaretを使ってみます。基本的には、irisデータでやっていたこととほぼ同じ。多少読み込むライブラリが異なる程度なので、その辺りだけ気にすればオーケーです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">from</span> sklearn.model_selection <span style="color:#00f">import</span> train_test_split
+
+<span style="color:#00f">from</span> pycaret.regression <span style="color:#00f">import</span> *
+<span style="color:#00f">from</span> pycaret.datasets <span style="color:#00f">import</span> get_data
+data = get_data(<span style="color:#a31515">&#39;boston&#39;</span>)</code></pre></div>
+<p><code>pycaret.regression</code>を読み込んでいるが、これがirisのときと異なる点。irisのクラス分類と異なり、bostonデータは回帰であるためそれ用のライブラリを読み込む必要があります。</p>
+
+<p>また、ここではbostonデータをPyCaret本体から取得するため、<code>pycaret.datasets.get_data()</code>をインポートしています。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">train = data.sample(frac=0.8, random_state=0).reset_index(drop=True)
+test = data.drop(train.index)
+reg = setup(data=train, target=<span style="color:#a31515">&#39;medv&#39;</span>, session_id=123)</code></pre></div>
+<table>
+<thead>
+<tr>
+<th align="right"></th>
+<th align="right">Description</th>
+<th align="right">Value</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="right">0</td>
+<td align="right">session_id</td>
+<td align="right">123</td>
+</tr>
+
+<tr>
+<td align="right">1</td>
+<td align="right">Target</td>
+<td align="right">medv</td>
+</tr>
+
+<tr>
+<td align="right">2</td>
+<td align="right">Original Data</td>
+<td align="right">(405, 14)</td>
+</tr>
+
+<tr>
+<td align="right">3</td>
+<td align="right">Missing Values</td>
+<td align="right">False</td>
+</tr>
+
+<tr>
+<td align="right">4</td>
+<td align="right">Numeric Features</td>
+<td align="right">11</td>
+</tr>
+
+<tr>
+<td align="right">5</td>
+<td align="right">Categorical Features</td>
+<td align="right">2</td>
+</tr>
+
+<tr>
+<td align="right">6</td>
+<td align="right">Ordinal Features</td>
+<td align="right">False</td>
+</tr>
+
+<tr>
+<td align="right">7</td>
+<td align="right">High Cardinality Features</td>
+<td align="right">False</td>
+</tr>
+
+<tr>
+<td align="right">8</td>
+<td align="right">High Cardinality Method</td>
+<td align="right">None</td>
+</tr>
+
+<tr>
+<td align="right">9</td>
+<td align="right">Transformed Train Set</td>
+<td align="right">(283, 21)</td>
+</tr>
+
+<tr>
+<td align="right">10</td>
+<td align="right">Transformed Test Set</td>
+<td align="right">(122, 21)</td>
+</tr>
+
+<tr>
+<td align="right">11</td>
+<td align="right">Shuffle Train-Test</td>
+<td align="right">True</td>
+</tr>
+
+<tr>
+<td align="right">12</td>
+<td align="right">Stratify Train-Test</td>
+<td align="right">False</td>
+</tr>
+
+<tr>
+<td align="right">13</td>
+<td align="right">Fold Generator</td>
+<td align="right">KFold</td>
+</tr>
+
+<tr>
+<td align="right">14</td>
+<td align="right">Fold Number</td>
+<td align="right">10</td>
+</tr>
+</tbody>
+</table>
+
+<p>クラス分類のときと同様に、<code>setup()</code>を実行することでPyCaretの環境をセットアップできます。なお、上記の実行結果は15行目以降を省略しています。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">best_model = compare_models()</code></pre></div>
+<p>相変わらず1行でモデルの比較が可能。</p>
+
+<p><img src="2021-10-16-15-22-35.png" alt="alt" /></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">models()</code></pre></div>
+<p>上記を実行すると、今回は回帰のアルゴリズムが一覧出力されます。</p>
+
+<table>
+<thead>
+<tr>
+<th align="right">ID</th>
+<th align="right">Name</th>
+<th align="right">Reference</th>
+<th align="right">Turbo</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="right">lr</td>
+<td align="right">Linear Regression</td>
+<td align="right">sklearn.linear_model._base.LinearRegression</td>
+<td align="right">TRUE</td>
+</tr>
+
+<tr>
+<td align="right">lasso</td>
+<td align="right">Lasso Regression</td>
+<td align="right">sklearn.linear_model._coordinate_descent.Lasso</td>
+<td align="right">TRUE</td>
+</tr>
+
+<tr>
+<td align="right">ridge</td>
+<td align="right">Ridge Regression</td>
+<td align="right">sklearn.linear_model._ridge.Ridge</td>
+<td align="right">TRUE</td>
+</tr>
+
+<tr>
+<td align="right">en</td>
+<td align="right">Elastic Net</td>
+<td align="right">sklearn.linear_model._coordinate_descent.Elast&hellip;</td>
+<td align="right">TRUE</td>
+</tr>
+
+<tr>
+<td align="right">lar</td>
+<td align="right">Least Angle Regression</td>
+<td align="right">sklearn.linear_model._least_angle.Lars</td>
+<td align="right">TRUE</td>
+</tr>
+
+<tr>
+<td align="right">llar</td>
+<td align="right">Lasso Least Angle Regression</td>
+<td align="right">sklearn.linear_model._least_angle.LassoLars</td>
+<td align="right">TRUE</td>
+</tr>
+
+<tr>
+<td align="right">omp</td>
+<td align="right">Orthogonal Matching Pursuit</td>
+<td align="right">sklearn.linear_model._omp.OrthogonalMatchingPu&hellip;</td>
+<td align="right">TRUE</td>
+</tr>
+
+<tr>
+<td align="right">br</td>
+<td align="right">Bayesian Ridge</td>
+<td align="right">sklearn.linear_model._bayes.BayesianRidge</td>
+<td align="right">TRUE</td>
+</tr>
+
+<tr>
+<td align="right">ard</td>
+<td align="right">Automatic Relevance Determination</td>
+<td align="right">sklearn.linear_model._bayes.ARDRegression</td>
+<td align="right">FALSE</td>
+</tr>
+
+<tr>
+<td align="right">par</td>
+<td align="right">Passive Aggressive Regressor</td>
+<td align="right">sklearn.linear_model._passive_aggressive.Passi&hellip;</td>
+<td align="right">TRUE</td>
+</tr>
+
+<tr>
+<td align="right">ransac</td>
+<td align="right">Random Sample Consensus</td>
+<td align="right">sklearn.linear_model._ransac.RANSACRegressor</td>
+<td align="right">FALSE</td>
+</tr>
+
+<tr>
+<td align="right">tr</td>
+<td align="right">TheilSen Regressor</td>
+<td align="right">sklearn.linear_model._theil_sen.TheilSenRegressor</td>
+<td align="right">FALSE</td>
+</tr>
+
+<tr>
+<td align="right">huber</td>
+<td align="right">Huber Regressor</td>
+<td align="right">sklearn.linear_model._huber.HuberRegressor</td>
+<td align="right">TRUE</td>
+</tr>
+
+<tr>
+<td align="right">kr</td>
+<td align="right">Kernel Ridge</td>
+<td align="right">sklearn.kernel_ridge.KernelRidge</td>
+<td align="right">FALSE</td>
+</tr>
+
+<tr>
+<td align="right">svm</td>
+<td align="right">Support Vector Regression</td>
+<td align="right">sklearn.svm._classes.SVR</td>
+<td align="right">FALSE</td>
+</tr>
+
+<tr>
+<td align="right">knn</td>
+<td align="right">K Neighbors Regressor</td>
+<td align="right">sklearn.neighbors._regression.KNeighborsRegressor</td>
+<td align="right">TRUE</td>
+</tr>
+
+<tr>
+<td align="right">dt</td>
+<td align="right">Decision Tree Regressor</td>
+<td align="right">sklearn.tree._classes.DecisionTreeRegressor</td>
+<td align="right">TRUE</td>
+</tr>
+
+<tr>
+<td align="right">rf</td>
+<td align="right">Random Forest Regressor</td>
+<td align="right">sklearn.ensemble._forest.RandomForestRegressor</td>
+<td align="right">TRUE</td>
+</tr>
+
+<tr>
+<td align="right">et</td>
+<td align="right">Extra Trees Regressor</td>
+<td align="right">sklearn.ensemble._forest.ExtraTreesRegressor</td>
+<td align="right">TRUE</td>
+</tr>
+
+<tr>
+<td align="right">ada</td>
+<td align="right">AdaBoost Regressor</td>
+<td align="right">sklearn.ensemble._weight_boosting.AdaBoostRegr&hellip;</td>
+<td align="right">TRUE</td>
+</tr>
+
+<tr>
+<td align="right">gbr</td>
+<td align="right">Gradient Boosting Regressor</td>
+<td align="right">sklearn.ensemble._gb.GradientBoostingRegressor</td>
+<td align="right">TRUE</td>
+</tr>
+
+<tr>
+<td align="right">mlp</td>
+<td align="right">MLP Regressor</td>
+<td align="right">sklearn.neural_network._multilayer_perceptron&hellip;.</td>
+<td align="right">FALSE</td>
+</tr>
+
+<tr>
+<td align="right">lightgbm</td>
+<td align="right">Light Gradient Boosting Machine</td>
+<td align="right">lightgbm.sklearn.LGBMRegressor</td>
+<td align="right">TRUE</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">rf = create_model(<span style="color:#a31515">&#39;rf&#39;</span>)
+tuned_rf = tune_model(rf, optimize=<span style="color:#a31515">&#39;RMSE&#39;</span>)</code></pre></div>
+<p>こちらも相変わらず1行でモデルの作成が可能。<code>tune_model()</code>は一度作成したモデルを、ハイパーパラメータをいじることで文字通りチューンします。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">rf</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">RandomForestRegressor(bootstrap=True, ccp_alpha=0.0, criterion=&#39;mse&#39;,
+                      max_depth=None, max_features=&#39;auto&#39;, max_leaf_nodes=None,
+                      max_samples=None, min_impurity_decrease=0.0,
+                      min_impurity_split=None, min_samples_leaf=1,
+                      min_samples_split=2, min_weight_fraction_leaf=0.0,
+                      n_estimators=100, n_jobs=-1, oob_score=False,
+                      random_state=123, verbose=0, warm_start=False)</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">tuned_rf</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">RandomForestRegressor(bootstrap=False, ccp_alpha=0.0, criterion=&#39;mse&#39;,
+                      max_depth=8, max_features=&#39;sqrt&#39;, max_leaf_nodes=None,
+                      max_samples=None, min_impurity_decrease=0.0001,
+                      min_impurity_split=None, min_samples_leaf=2,
+                      min_samples_split=5, min_weight_fraction_leaf=0.0,
+                      n_estimators=240, n_jobs=-1, oob_score=False,
+                      random_state=123, verbose=0, warm_start=False)</code></pre></div>
+<p>チューニング後のモデルは、パラメータの設定値が微妙に変化している。これがチューニングの成果。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plot_model(tuned_rf)</code></pre></div>
+<p><img src="2021-10-16-15-23-15.png" alt="alt" /></p>
+
+<p>可視化もirisのときと一緒。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plot_model(tuned_rf, plot=<span style="color:#a31515">&#39;error&#39;</span>)</code></pre></div>
+<p><img src="2021-10-16-15-23-38.png" alt="alt" /></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plot_model(tuned_rf, plot=<span style="color:#a31515">&#39;feature&#39;</span>)</code></pre></div>
+<p><img src="2021-10-16-15-24-04.png" alt="alt" /></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">lgbm = create_model(<span style="color:#a31515">&#39;lightgbm&#39;</span>)
+tuned_lgbm = tune_model(lgbm, optimize=<span style="color:#a31515">&#39;MAE&#39;</span>)</code></pre></div>
+<p>ここで今度はLightGBMを使ってモデルを作ってみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">interpret_model(tuned_lgbm)</code></pre></div>
+<p><img src="2021-10-16-15-24-24.png" alt="alt" /></p>
+
+<p>事前に<code>SHAP</code>のライブラリを<code>pip</code>を使ってインストールしておくと、モデル解釈のための<code>interpret_model()</code>などのSHAPに関する機能が利用できるようになります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">interpret_model(tuned_lgbm, plot=<span style="color:#a31515">&#39;correlation&#39;</span>, feature=<span style="color:#a31515">&#39;nox&#39;</span>)</code></pre></div>
+<p><img src="2021-10-16-15-24-43.png" alt="alt" /></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">interpret_model(tuned_lgbm, plot=<span style="color:#a31515">&#39;reason&#39;</span>)</code></pre></div>
+<p><img src="2021-10-16-15-25-08.png" alt="alt" /></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">best = automl(optimize=<span style="color:#a31515">&#39;RMSE&#39;</span>)
+best</code></pre></div>
+<p>AutoMLもirisのときと同様に実行可能。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">RandomForestRegressor(bootstrap=True, ccp_alpha=0.0, criterion=&#39;mse&#39;,
+                      max_depth=None, max_features=&#39;auto&#39;, max_leaf_nodes=None,
+                      max_samples=None, min_impurity_decrease=0.0,
+                      min_impurity_split=None, min_samples_leaf=1,
+                      min_samples_split=2, min_weight_fraction_leaf=0.0,
+                      n_estimators=100, n_jobs=-1, oob_score=False,
+                      random_state=123, verbose=0, warm_start=False)</code></pre></div>
+<p>ランダムフォレストが選択され、最適だと思われるパラメータがセットされています。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pred_new = predict_model(best, data=test)
+pred_new.head()</code></pre></div>
+<p>先ほど選択した最良モデル<code>best</code>を使って検証を行うには、上記のコードでテスト用データを渡します。</p>
+
+<table>
+<thead>
+<tr>
+<th align="right">crim</th>
+<th align="right">zn</th>
+<th align="right">indus</th>
+<th align="right">chas</th>
+<th align="right">nox</th>
+<th align="right">rm</th>
+<th align="right">age</th>
+<th align="right">dis</th>
+<th align="right">rad</th>
+<th align="right">tax</th>
+<th align="right">ptratio</th>
+<th align="right">black</th>
+<th align="right">lstat</th>
+<th align="right">medv</th>
+<th align="right">Label</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="right">405</td>
+<td align="right">67.92080</td>
+<td align="right">0.0</td>
+<td align="right">18.1</td>
+<td align="right">0</td>
+<td align="right">0.693</td>
+<td align="right">5.683</td>
+<td align="right">100.0</td>
+<td align="right">1.4254</td>
+<td align="right">24</td>
+<td align="right">666</td>
+<td align="right">20.2</td>
+<td align="right">384.97</td>
+<td align="right">22.98</td>
+<td align="right">5.0</td>
+<td>6.369</td>
+</tr>
+
+<tr>
+<td align="right">406</td>
+<td align="right">20.71620</td>
+<td align="right">0.0</td>
+<td align="right">18.1</td>
+<td align="right">0</td>
+<td align="right">0.659</td>
+<td align="right">4.138</td>
+<td align="right">100.0</td>
+<td align="right">1.1781</td>
+<td align="right">24</td>
+<td align="right">666</td>
+<td align="right">20.2</td>
+<td align="right">370.22</td>
+<td align="right">23.34</td>
+<td align="right">11.9</td>
+<td>12.977</td>
+</tr>
+
+<tr>
+<td align="right">407</td>
+<td align="right">11.95110</td>
+<td align="right">0.0</td>
+<td align="right">18.1</td>
+<td align="right">0</td>
+<td align="right">0.659</td>
+<td align="right">5.608</td>
+<td align="right">100.0</td>
+<td align="right">1.2852</td>
+<td align="right">24</td>
+<td align="right">666</td>
+<td align="right">20.2</td>
+<td align="right">332.09</td>
+<td align="right">12.13</td>
+<td align="right">27.9</td>
+<td>28.149</td>
+</tr>
+
+<tr>
+<td align="right">408</td>
+<td align="right">7.40389</td>
+<td align="right">0.0</td>
+<td align="right">18.1</td>
+<td align="right">0</td>
+<td align="right">0.597</td>
+<td align="right">5.617</td>
+<td align="right">97.9</td>
+<td align="right">1.4547</td>
+<td align="right">24</td>
+<td align="right">666</td>
+<td align="right">20.2</td>
+<td align="right">314.64</td>
+<td align="right">26.40</td>
+<td align="right">17.2</td>
+<td>15.711</td>
+</tr>
+
+<tr>
+<td align="right">409</td>
+<td align="right">14.43830</td>
+<td align="right">0.0</td>
+<td align="right">18.1</td>
+<td align="right">0</td>
+<td align="right">0.597</td>
+<td align="right">6.852</td>
+<td align="right">100.0</td>
+<td align="right">1.4655</td>
+<td align="right">24</td>
+<td align="right">666</td>
+<td align="right">20.2</td>
+<td align="right">179.36</td>
+<td align="right">19.78</td>
+<td align="right">27.5</td>
+<td>24.216</td>
+</tr>
+</tbody>
+</table>
+
+<p>最終列が予測結果です。</p>
+
+<h2 id="gpuをpycaretで利用する">GPUをPyCaretで利用する</h2>
+
+<p>PyCaretは、モデルの学習やハイパーパラメータのチューニングについて<a href="https://pycaret.readthedocs.io/en/latest/installation.html?highlight=gpu#pycaret-on-gpu">GPUを利用可能</a>。ただし、デフォルト設定では無効になっているので、コードにてGPUの利用を明記する必要があります。また、アルゴリズムとPyCaretを利用するプラットフォームによっては追加のライブラリが必要になるケースがあるので注意。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">clf1 = setup(
+    data=train,
+    target=<span style="color:#a31515">&#39;Species&#39;</span>,
+    use_gpu=True
+)</code></pre></div>
+<p>上記のように<code>setup()</code>実行時に、引数として<code>use_gpu=True</code>を指定することでGPUを使ったモデル学習が可能です。これはクラス分類や回帰でもAPIの利用方法は同一であるため、同様の指定で問題ありません。</p>
+
+<p>追加のインストールが必要になるケースは下記の通り。</p>
+
+<ul>
+<li>LightGBM
+
+<ul>
+<li><a href="https://lightgbm.readthedocs.io/en/latest/GPU-Tutorial.html">追加のインストール</a>が必要。</li>
+</ul></li>
+<li>Logistic Regression</li>
+<li>Ridge Classifier</li>
+<li>Random Forest</li>
+<li>K Neighbors Classifier</li>
+<li>K Neighbors Regressor</li>
+<li>SVM</li>
+<li>Linear Regression</li>
+<li>Ridge Regression</li>
+<li>Lasso Regression
+
+<ul>
+<li><a href="https://github.com/rapidsai/cuml">cuML &gt;= 0.15</a>が必要。</li>
+</ul></li>
+</ul>
+
+<p>上記とは別に、データ数の条件などでGPUの利用の可否が分かれるケースもあります。</p>
+
+<ul>
+<li>CatBoost：データセットが50,000行以上の場合にのみGPUでの処理が有効になる。</li>
+</ul>
+
+<p>なお、一応ドキュメントには以下のアルゴリズムついては追加インストールの<strong>必要なし</strong>と明記されているのでメモ。</p>
+
+<ul>
+<li>Extreme Gradient Boosting</li>
+<li>CatBoost：前述のとおり、データ数が50,000行以上という条件がある。</li>
+</ul>
+
+<h2 id="dockerコンテナでpycaretを利用する">DockerコンテナでPyCaretを利用する</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#00f">FROM</span><span style="color:#a31515"> python:3.7-slim</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">WORKDIR</span><span style="color:#a31515"> /app</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">ADD</span><span style="color:#a31515"> . /app</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> apt-get update &amp;&amp; apt-get install -y libgomp1<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> pip install --trusted-host pypi.python.org -r requirements.txt<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">CMD</span><span style="color:#a31515"> pytest #replace it with your entry point.</span></code></pre></div>
+<p><a href="https://pycaret.readthedocs.io/en/latest/installation.html?highlight=gpu#run-pycaret-on-a-docker-container">オフィシャルのドキュメント</a>では、上記のようなDockerfileをサンプルとして例示しています。必要なライブラリはrequirements.txtに記述します。基本的にはPythonのSlimを使えば問題なく動作すると思いますが、フルバージョンが必要な場合は<code>FROM python:3.7</code>とします。</p>
+
+<h2 id="reference">reference</h2>
+
+<ol>
+<li><a href="https://pycaret.org/">PyCaret</a></li>
+<li><a href="https://pycaret.readthedocs.io/en/latest/api/classification.html">classification</a></li>
+<li><a href="https://pycaret.readthedocs.io/en/latest/installation.html?highlight=gpu#pycaret-on-gpu">PyCaret on GPU</a></li>
+<li><a href="https://pycaret.readthedocs.io/en/latest/installation.html#installing-the-full-version">Installing the full version</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

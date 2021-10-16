@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/fundamentals-of-pycaret/</loc>
+    <lastmod>2021-10-16T14:45:04+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/add-loading-scene-including-progress-bar/</loc>
     <lastmod>2021-09-11T21:51:52+09:00</lastmod>
   </url>
@@ -630,7 +635,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2021-09-11T21:51:52+09:00</lastmod>
+    <lastmod>2021-10-16T14:45:04+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -642,13 +647,13 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/pycaret/</loc>
-    <lastmod>2021-09-01T23:51:17+09:00</lastmod>
+    <lastmod>2021-10-16T14:45:04+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://ysko909.github.io/tags/python/</loc>
-    <lastmod>2021-09-01T23:51:17+09:00</lastmod>
+    <lastmod>2021-10-16T14:45:04+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -792,7 +797,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2021-09-11T21:51:52+09:00</lastmod>
+    <lastmod>2021-10-16T14:45:04+09:00</lastmod>
     <priority>0</priority>
   </url>
   
