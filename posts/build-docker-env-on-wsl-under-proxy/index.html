@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Proxy環境下のWSLにDockerを構築してVS Codeからアクセスする - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Proxy環境下のWSLにDockerを構築してVS Codeからアクセスする" />
+<meta property="og:description" content="概要 Proxy環境下のWSLで、Dockerをインストールしコンテナを構築する手順についてメモします。さらに、構築したコンテナにVS Codeからリモートでアクセスして編集してみるところまでやってみました。
+なお、めちゃめちゃ長いです。コーヒー片手にでもお読みください。
+そもそもなんでそんなことすんの Docker Desktop便利すぎてダメ人間になりそうだから。っていうのは半分嘘ですが、普段使っているWindows環境でLinuxが利用できるWSLという機能がせっかくあるので、どうせなら勉強ついでにDockerでも入れてWSL環境で運用してみようかな、というのが理由。
+Docker Desktopが従業員250名を超えるなどの条件を満たす企業での利用は有料となったため、WSLへの移行を検討していた人もいらっしゃるかと思いますが・・・そういう人たちはさすがにもう移行してるよね？まぁDocker Desktopが優秀なので、むしろ今まで無料で使えていたことのほうが異常という気もしなくはないのですが。
+手順 前提条件  Windows 10以降 現状でDocker Desktopを利用中 ディストリビューションはUbuntuを利用 エディタはVisual Studio Code  上記の環境を想定しています。
+WSL2の有効化 フルオートでインストールする まず基盤となるWSL2環境を準備します。WSLのインストール手順については、マイクロソフトの「WSLのインストール」を参照するのが早いです。
+とは言ってもWSLの環境構築はすこぶる簡単で、コマンドを1つ実行すればあとは待っているだけでいいのが素晴らしい。
+wsl --install 上記のコマンドをPowerShell上で実行すればよく、Linuxカーネルのダウンロードやインストール、WSL2の既定設定がオートで実行されます。
+マニュアルでインストールする Proxy環境下では上記のコマンドが動作しない（ただ、どうも例外があるようで動作するケースもあるようです。一応上記の方法を試してみて、ダメならマニュアルインストールを行ってみるといいかもしれません）。そのため、別の方法を検討する必要があります。つまり、マニュアル作業でUbuntuをWSL2環境にインストールします。手順はここにあります。
+ PowerShellでEnable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linuxを実行しWSLをインストールします。この際、インストール終了時にリブートを求められるはず。 ディストリビューションのパッケージをダウンロードします。ここから好きなディストリビューションを選択してダウンロードします。curlを使う方法もあるのですが、上記のwebページから直接ダウンロードした方が早いです。 PowerShellで先ほどダウンロードしたAdd-AppxPackage C:\Users\XXX\Downloads\Ubuntu2004.appxを実行して、パッケージをインストールします。 インストールが完了すると、スタートメニューからUbuntuが選択できるようになっているはす。  結果確認 前提条件の通りここではUbuntuをインストールすることを想定しています。バージョンは、特別な理由がない限り指定する必要はありません。デフォルトではUbuntuの最新版がインストールされるはず。
+一度インストールが完了すれば、以降はUbuntuをスタートメニューから起動できるようになるはず。初期起動時、Ubuntu環境でのユーザーIDとパスワードを入力する必要があるので、適当に決めておきましょう。
+Ubuntuのコンソールにログイン後、バージョンを確認します。
+cat /etc/os-release 上記のコマンドを実行すると、Ubuntuのバージョン情報が表示されます。
+仮想化の確認は事前にしておこう インストールの時点でCPU側が仮想化をサポートしていない場合エラーが発生します。仮想化に対応しているか（利用可能か）は、タスクマネージャーを参照すると確認できます。事前にやっておくと吉。
+Ubuntuのデフォルトユーザーを変更する この時点ではUbuntuのデフォルトユーザーが、インストール後に設定した任意のユーザーとなっているはずです。通常の利用ではそれでも問題ないのですが、後述する「VS CodeからDockerを起動する処理」を行う際に、処理が権限の不一致でエラーになります。そのため、これを回避するためにデフォルトユーザーをrootに変更します。最初から最高権限のユーザーを利用すれば、前述の権限問題は気にしないで済むからです。ただし、最高権限であるがゆえに誤操作などのアクシデントには弱くなるので、そこだけは注意。
+$ sudo su - # passwd Ubuntuにログイン後、まずrootになります。その後rootのパスワードを設定しておきましょう。その後Ubuntuのコンソールはいったん終了します。
+wsl -l --verbose PowerShellで上記のコマンドを実行して、WSLで動作しているディストリビューションの一覧を表示します。
+NAME STATE VERSION * Ubuntu Stopped 2 Ubuntu-20." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/build-docker-env-on-wsl-under-proxy/" /><meta property="article:published_time" content="2022-01-29T22:28:19&#43;09:00"/>
+<meta property="article:modified_time" content="2022-01-29T22:28:19&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Proxy環境下のWSLにDockerを構築してVS Codeからアクセスする"/>
+<meta name="twitter:description" content="概要 Proxy環境下のWSLで、Dockerをインストールしコンテナを構築する手順についてメモします。さらに、構築したコンテナにVS Codeからリモートでアクセスして編集してみるところまでやってみました。
+なお、めちゃめちゃ長いです。コーヒー片手にでもお読みください。
+そもそもなんでそんなことすんの Docker Desktop便利すぎてダメ人間になりそうだから。っていうのは半分嘘ですが、普段使っているWindows環境でLinuxが利用できるWSLという機能がせっかくあるので、どうせなら勉強ついでにDockerでも入れてWSL環境で運用してみようかな、というのが理由。
+Docker Desktopが従業員250名を超えるなどの条件を満たす企業での利用は有料となったため、WSLへの移行を検討していた人もいらっしゃるかと思いますが・・・そういう人たちはさすがにもう移行してるよね？まぁDocker Desktopが優秀なので、むしろ今まで無料で使えていたことのほうが異常という気もしなくはないのですが。
+手順 前提条件  Windows 10以降 現状でDocker Desktopを利用中 ディストリビューションはUbuntuを利用 エディタはVisual Studio Code  上記の環境を想定しています。
+WSL2の有効化 フルオートでインストールする まず基盤となるWSL2環境を準備します。WSLのインストール手順については、マイクロソフトの「WSLのインストール」を参照するのが早いです。
+とは言ってもWSLの環境構築はすこぶる簡単で、コマンドを1つ実行すればあとは待っているだけでいいのが素晴らしい。
+wsl --install 上記のコマンドをPowerShell上で実行すればよく、Linuxカーネルのダウンロードやインストール、WSL2の既定設定がオートで実行されます。
+マニュアルでインストールする Proxy環境下では上記のコマンドが動作しない（ただ、どうも例外があるようで動作するケースもあるようです。一応上記の方法を試してみて、ダメならマニュアルインストールを行ってみるといいかもしれません）。そのため、別の方法を検討する必要があります。つまり、マニュアル作業でUbuntuをWSL2環境にインストールします。手順はここにあります。
+ PowerShellでEnable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linuxを実行しWSLをインストールします。この際、インストール終了時にリブートを求められるはず。 ディストリビューションのパッケージをダウンロードします。ここから好きなディストリビューションを選択してダウンロードします。curlを使う方法もあるのですが、上記のwebページから直接ダウンロードした方が早いです。 PowerShellで先ほどダウンロードしたAdd-AppxPackage C:\Users\XXX\Downloads\Ubuntu2004.appxを実行して、パッケージをインストールします。 インストールが完了すると、スタートメニューからUbuntuが選択できるようになっているはす。  結果確認 前提条件の通りここではUbuntuをインストールすることを想定しています。バージョンは、特別な理由がない限り指定する必要はありません。デフォルトではUbuntuの最新版がインストールされるはず。
+一度インストールが完了すれば、以降はUbuntuをスタートメニューから起動できるようになるはず。初期起動時、Ubuntu環境でのユーザーIDとパスワードを入力する必要があるので、適当に決めておきましょう。
+Ubuntuのコンソールにログイン後、バージョンを確認します。
+cat /etc/os-release 上記のコマンドを実行すると、Ubuntuのバージョン情報が表示されます。
+仮想化の確認は事前にしておこう インストールの時点でCPU側が仮想化をサポートしていない場合エラーが発生します。仮想化に対応しているか（利用可能か）は、タスクマネージャーを参照すると確認できます。事前にやっておくと吉。
+Ubuntuのデフォルトユーザーを変更する この時点ではUbuntuのデフォルトユーザーが、インストール後に設定した任意のユーザーとなっているはずです。通常の利用ではそれでも問題ないのですが、後述する「VS CodeからDockerを起動する処理」を行う際に、処理が権限の不一致でエラーになります。そのため、これを回避するためにデフォルトユーザーをrootに変更します。最初から最高権限のユーザーを利用すれば、前述の権限問題は気にしないで済むからです。ただし、最高権限であるがゆえに誤操作などのアクシデントには弱くなるので、そこだけは注意。
+$ sudo su - # passwd Ubuntuにログイン後、まずrootになります。その後rootのパスワードを設定しておきましょう。その後Ubuntuのコンソールはいったん終了します。
+wsl -l --verbose PowerShellで上記のコマンドを実行して、WSLで動作しているディストリビューションの一覧を表示します。
+NAME STATE VERSION * Ubuntu Stopped 2 Ubuntu-20."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Proxy環境下のWSLにDockerを構築してVS Codeからアクセスする</h1>
+			<div class="meta">Posted at &mdash; Jan 29, 2022</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>Proxy環境下の<a href="https://docs.microsoft.com/en-us/windows/wsl/about">WSL</a>で、Dockerをインストールしコンテナを構築する手順についてメモします。さらに、構築したコンテナにVS Codeからリモートでアクセスして編集してみるところまでやってみました。</p>
+
+<p>なお、めちゃめちゃ長いです。コーヒー片手にでもお読みください。</p>
+
+<h2 id="そもそもなんでそんなことすんの">そもそもなんでそんなことすんの</h2>
+
+<p><strong>Docker Desktop便利すぎてダメ人間になりそうだから</strong>。っていうのは半分嘘ですが、普段使っているWindows環境でLinuxが利用できるWSLという機能がせっかくあるので、どうせなら勉強ついでにDockerでも入れてWSL環境で運用してみようかな、というのが理由。</p>
+
+<p>Docker Desktopが<a href="https://www.docker.com/pricing/faq">従業員250名を超えるなどの条件を満たす企業での利用は有料</a>となったため、WSLへの移行を検討していた人もいらっしゃるかと思いますが・・・そういう人たちはさすがにもう移行してるよね？まぁDocker Desktopが優秀なので、むしろ今まで無料で使えていたことのほうが異常という気もしなくはないのですが。</p>
+
+<h2 id="手順">手順</h2>
+
+<h3 id="前提条件">前提条件</h3>
+
+<ul>
+<li>Windows 10以降</li>
+<li>現状でDocker Desktopを利用中</li>
+<li>ディストリビューションはUbuntuを利用</li>
+<li>エディタはVisual Studio Code</li>
+</ul>
+
+<p>上記の環境を想定しています。</p>
+
+<h3 id="wsl2の有効化">WSL2の有効化</h3>
+
+<h4 id="フルオートでインストールする">フルオートでインストールする</h4>
+
+<p>まず基盤となるWSL2環境を準備します。WSLのインストール手順については、マイクロソフトの「<a href="https://docs.microsoft.com/ja-jp/windows/wsl/install">WSLのインストール</a>」を参照するのが早いです。</p>
+
+<p>とは言ってもWSLの環境構築はすこぶる簡単で、コマンドを1つ実行すればあとは待っているだけでいいのが素晴らしい。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">wsl --install</code></pre></div>
+<p>上記のコマンドをPowerShell上で実行すればよく、Linuxカーネルのダウンロードやインストール、WSL2の既定設定がオートで実行されます。</p>
+
+<h4 id="マニュアルでインストールする">マニュアルでインストールする</h4>
+
+<p>Proxy環境下では上記のコマンドが動作しない（ただ、どうも例外があるようで動作するケースもあるようです。一応上記の方法を試してみて、ダメならマニュアルインストールを行ってみるといいかもしれません）。そのため、別の方法を検討する必要があります。つまり、マニュアル作業でUbuntuをWSL2環境にインストールします。手順は<a href="https://docs.microsoft.com/en-us/windows/wsl/install-manual">ここ</a>にあります。</p>
+
+<ol>
+<li>PowerShellで<code>Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux</code>を実行しWSLをインストールします。この際、インストール終了時にリブートを求められるはず。</li>
+<li>ディストリビューションのパッケージをダウンロードします。<a href="https://docs.microsoft.com/en-us/windows/wsl/install-manual#downloading-distributions">ここ</a>から好きなディストリビューションを選択してダウンロードします。<code>curl</code>を使う方法もあるのですが、上記のwebページから直接ダウンロードした方が早いです。</li>
+<li>PowerShellで先ほどダウンロードした<code>Add-AppxPackage C:\Users\XXX\Downloads\Ubuntu2004.appx</code>を実行して、パッケージをインストールします。</li>
+<li>インストールが完了すると、スタートメニューからUbuntuが選択できるようになっているはす。</li>
+</ol>
+
+<h4 id="結果確認">結果確認</h4>
+
+<p>前提条件の通りここではUbuntuをインストールすることを想定しています。バージョンは、特別な理由がない限り指定する必要はありません。デフォルトではUbuntuの最新版がインストールされるはず。</p>
+
+<p>一度インストールが完了すれば、以降はUbuntuをスタートメニューから起動できるようになるはず。初期起動時、Ubuntu環境でのユーザーIDとパスワードを入力する必要があるので、適当に決めておきましょう。</p>
+
+<p>Ubuntuのコンソールにログイン後、バージョンを確認します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">cat /etc/os-release</code></pre></div>
+<p>上記のコマンドを実行すると、Ubuntuのバージョン情報が表示されます。</p>
+
+<h4 id="仮想化の確認は事前にしておこう">仮想化の確認は事前にしておこう</h4>
+
+<p>インストールの時点でCPU側が仮想化をサポートしていない場合エラーが発生します。仮想化に対応しているか（利用可能か）は、タスクマネージャーを参照すると確認できます。事前にやっておくと吉。</p>
+
+<p><img src="2022-01-29-22-30-28.png" alt="pic" /></p>
+
+<h3 id="ubuntuのデフォルトユーザーを変更する">Ubuntuのデフォルトユーザーを変更する</h3>
+
+<p>この時点ではUbuntuのデフォルトユーザーが、インストール後に設定した任意のユーザーとなっているはずです。通常の利用ではそれでも問題ないのですが、後述する「VS CodeからDockerを起動する処理」を行う際に、処理が権限の不一致で<strong>エラーになります</strong>。そのため、これを回避するために<a href="https://docs.microsoft.com/ja-jp/windows/wsl/basic-commands#change-the-default-user-for-a-distribution">デフォルトユーザーをrootに変更</a>します。最初から最高権限のユーザーを利用すれば、前述の権限問題は気にしないで済むからです。ただし、最高権限であるがゆえに誤操作などのアクシデントには弱くなるので、そこだけは注意。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ sudo su -
+# passwd</code></pre></div>
+<p>Ubuntuにログイン後、まずrootになります。その後rootのパスワードを設定しておきましょう。その後Ubuntuのコンソールはいったん終了します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">wsl -l --verbose</code></pre></div>
+<p>PowerShellで上記のコマンドを実行して、WSLで動作しているディストリビューションの一覧を表示します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">  NAME                   STATE           VERSION
+* Ubuntu                 Stopped         2
+  Ubuntu-20.04           Running         2</code></pre></div>
+<p>環境にも依りますが、だいたい上記のような結果が返ってくるはず。上記の例では、2つのディストリビューションが存在していることになります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">&lt;DISTRIBUTION_NAME&gt; config --default-user root</code></pre></div>
+<p>次に、上記のコマンドを実行することで、指定したディストリビューションのデフォルトユーザーがrootになります。</p>
+
+<p>たとえばデフォルトユーザーを変更したいディストリビューションがUbuntuである場合、<code>ubuntu config --default-user root</code>とします。ここで注意が必要なのは、複数のディストリビューションが動作している場合。前述の<code>wsl -l</code>を実行した結果の<code>Ubuntu-20.04</code>についてデフォルトユーザーを変更したい場合、実行するコマンドは<code>ubuntu2004 config --default-user root</code>である。ピリオドなどの記号がディストリビューション名に含まれているため、ディストリビューション名をそのままコマンドとしては利用できない。そのため、ここでは「Ubuntu-20.04」から記号などを除き小文字化した結果の「ubuntu2004」が<code>&lt;DISTRIBUTION_NAME&gt;</code>となる。</p>
+
+<p>ここまで実行できたら再度Ubuntu環境にログインします。この時点で、デフォルトユーザーがrootになっているはず。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console"># whoami
+root</code></pre></div>
+<p>大抵の環境ではrootになった際、ユーザー名などがコンソールに表示されたりしてプロンプトが変わっているはずなので、確認するまでもないとは思う。念のため確認するなら、<code>whoami</code>を実行すると自分の名前（ユーザー名）を表示するので、これを使ってrootでログインできているかを見ることができる。</p>
+
+<h3 id="ubuntuにproxyを設定する">UbuntuにProxyを設定する</h3>
+
+<p>インストールしたての状態ではProxy設定が施されていないはず。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">printenv HTTP_PROXY HTTPS_PROXY</code></pre></div>
+<p>上記のコマンドを実行して、結果が何も返ってこない場合は設定が未済であると判断できる。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">export HTTP_PROXY=&#34;http://&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/&#34;
+export HTTPS_PROXY=$HTTP_PROXY</code></pre></div>
+<p>上記のコマンドを実行すると、環境変数にProxy情報が設定できる。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">export HTTP_PROXY=&#34;http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/&#34;
+export HTTPS_PROXY=$HTTP_PROXY</code></pre></div>
+<p>認証が必要なProxyの場合は、上記のようにアカウント情報を付与します。</p>
+
+<p>なお、これらの情報は<code>.bashrc</code>内に設定した方が良い。コンソール上で<code>export</code>を実行すると、コンソールごとに上記のコマンドを実行しなければならない。この「コンソールごと」というのが曲者で、VS Codeのコンソールでも<code>export</code>コマンドを発行しなければならずすこぶる手間である。よって、ユーザーログイン時に参照される<code>.bashrc</code>へ記述しておく。</p>
+
+<h3 id="アプリケーション固有のproxyを設定する">アプリケーション固有のProxyを設定する</h3>
+
+<p>環境変数にProxyを設定しただけではダメなアプリケーションがあり、たとえば<code>apt-get</code>は環境変数を設定したところでやっぱりコケる。ヒドい。なぜなら、<code>apt-get</code>には<strong>それ用の設定が必要</strong>であるためで、上記の設定とは別の方法でProxy設定を施す必要があります。</p>
+
+<p>いくつか方法があるが、ここでは<code>apt.conf</code>ファイルを作成します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">cd /etc/apt
+sudo tee apt.conf &lt;&lt;EOF &gt; /dev/null
+Acquire::http::proxy &#34;http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/&#34;;
+Acquire::https::proxy &#34;http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/&#34;;
+EOF</code></pre></div>
+<p>これにより、<code>apt-get</code>が通るようになったはず。</p>
+
+<p>次に<code>wget</code>用の設定を行う。なんで<code>wget</code>の設定が必要かと言うと、あとでVS Codeを利用する際、VS CodeはVS Code用のサーバーをダウンロードしようとするのですが、どうもこれが<code>wget</code>を用いて行われているようです。そのため、事前に<code>wget</code>に対してProxy設定を施さないと、このダウンロード処理がコケてしまい詰んでしまいます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">cd
+cat &lt;&lt;EOF &gt; .wgetrc
+http_proxy=http://&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/
+https_proxy=http://&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/
+proxy_user=&lt;USERNAME&gt;
+proxy_password=&lt;PASSWORD&gt;
+EOF</code></pre></div>
+<p>上記の方法で<code>.wgetrc</code>ファイルを作成することで、<code>wget</code>のProxy設定が完了します。なお、上記はユーザーごとに指定する必要があるため、全ユーザーを対象にしたい場合は<code>/etc/wgetrc</code>に対し、上記と同じ変更内容を記述します。</p>
+
+<h3 id="ubuntuにdocker-engineをインストールする">UbuntuにDocker Engineをインストールする</h3>
+
+<p>Windows側で動作しているDocker Desktopが存在している場合は、コイツを止めておきましょう。</p>
+
+<ol>
+<li>タスクバー上に存在するDockerのクジラマークを右クリックします。</li>
+<li>表示されたメニューから「Quit docker desktop」をクリックし、Docker Desktopをシャットダウンします。</li>
+</ol>
+
+<p>Docker Desktopが終了したら、Ubuntu側にDocker Engineをインストールします。インストール手順は<a href="https://docs.docker.com/engine/install/ubuntu/">オフィシャルのドキュメント</a>を参照します。</p>
+
+<h3 id="dockerにproxy設定を施す">DockerにProxy設定を施す</h3>
+
+<p>Ubuntuの環境変数に追加しただけでは足りず、DockerのデフォルトとしてProxy情報を設定する必要があります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">vi /etc/default/docker</code></pre></div>
+<p>エディタで上記のファイルを開く。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">export HTTP_PROXY=&#34;http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/&#34;
+export HTTPS_PROXY=&#34;http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/&#34;</code></pre></div>
+<p><code>export</code>を忘れないように。</p>
+
+<h3 id="vs-codeにremote-wslをインストールする">VS CodeにRemote-WSLをインストールする</h3>
+
+<p>すでにVS Codeはインストール済みである想定だが、まだインストールされていない場合は、<a href="https://code.visualstudio.com/">ここ</a>からインストールしておく。</p>
+
+<p>次に、VS Codeの拡張機能である「Remote-WSL」をインストールします。</p>
+
+<p><img src="2022-01-29-22-30-53.png" alt="pic" /></p>
+
+<p>拡張機能のインストールが終了したら、いったんVS Codeは終了します。</p>
+
+<h3 id="ubuntuでvs-codeを起動する">UbuntuでVS Codeを起動する</h3>
+
+<p>Ubuntuのターミナルを起動し、任意のフォルダを作成します。ここではホーム直下に<code>hoge</code>というフォルダを作成した。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">mkdir hoge
+cd hoge
+code .</code></pre></div>
+<p>作成したフォルダにカレントディレクトリを変更したあとで、<code>code .</code>と実行することでVS Codeを起動できる。場合によっては（初回起動だと？）「この環境って信頼していいん？」という確認メッセージが表示されるので、「Trust」を選択しておく。</p>
+
+<p>VS Codeが起動したら適当なファイルを作成してみる。</p>
+
+<p><img src="2022-01-29-22-31-15.png" alt="pic" /></p>
+
+<p>VS Codeのエクスプローラーで新規ファイル作成を実行し、「hoge.txt」という名前で作成します。</p>
+
+<p><img src="2022-01-29-22-31-29.png" alt="pic" /></p>
+
+<p>内容を適当に編集し保存します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ cat hoge.md
+hoge
+fuga
+piyo</code></pre></div>
+<p>Ubuntuのコンソールで保存したファイルを確認してみると、VS Code上で入力・保存した内容が参照できる。</p>
+
+<h3 id="wslでdockerを動かす">WSLでDockerを動かす</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">service docker status</code></pre></div>
+<p>上記コマンドを実行して、Dockerのサービスが動作中であることを確認します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">service docker start</code></pre></div>
+<p>起動していない場合は上記のコマンドを実行して、サービスを開始します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker run hello-world</code></pre></div>
+<p>サービスを開始できたら動作確認のため、上記のコマンドを実行します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the &#34;hello-world&#34; image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/</code></pre></div>
+<p>正常に完了したら上記のようなメッセージが表示されるはず。これで、設定と動作確認は完了。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">mkdir work_python
+cd work_python
+touch Dockerfile
+vi Dockerfile</code></pre></div>
+<p>次に、<code>Dockerfile</code>からコンテナを作成するため、任意のフォルダ内に<code>Dockerfile</code>を作成します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">FROM python:3.9-slim
+
+ENV http_proxy http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/
+ENV https_proxy http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/
+
+ENV ACCEPT_EULA=Y
+
+RUN apt-get update
+
+ADD . /home/workdir
+
+WORKDIR /home/workdir</code></pre></div>
+<p>Dockerfileの内容は基本的に任意だが、コンテナへProxy情報を渡すため<code>ENV</code>を設定しています。上記の内容で保存します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">code .</code></pre></div>
+<p>その後、<code>code .</code>を実行してVS Codeを起動し、いつもの通り「Reopen in container」を選択してコンテナをビルドします。</p>
+
+<p>この時点で権限回りの問題がクリアできてないと、<strong>エラーを吐く</strong>。</p>
+
+<p><img src="2022-01-29-22-31-54.png" alt="pic" /></p>
+
+<p>これは、VS CodeのRemote経由でDockerのプロセスを起動させようとすると、root権限で<strong>ない</strong>ためDockerの実行が行えないというエラー。WSLのデフォルトユーザーが、（大抵の場合）rootではないユーザーになっていることが原因。</p>
+
+<p>なお、仮になんとかDockerのコンテナをビルドできたとしても、それはそれでまた別の権限問題が出てくる。それは、コンテナ内ではrootなのにWSLのログインユーザーがrootでないため、コンテナ内から作成したファイルの権限がWSLと異なってしまうためファイルへのアクセスができなくなってしまう。そのため、WSLでのDocker環境はとくに権限回りに頭を悩ませがち。</p>
+
+<p>このような権限問題を回避するため、前述の「デフォルトユーザーをrootに変更する」処理が必要になります。</p>
+
+<p>各種の設定が正常に完了していれば、VS CodeがWSL内のコンテナにアクセスできるはず。</p>
+
+<p><img src="2022-01-29-22-32-13.png" alt="pic" /></p>
+
+<p>適当な<code>*.py</code>ファイルを作って実行してみます。正常に実行が終われば問題なし。VS CodeのPython用拡張機能がインストールされていれば、ここでF5キーを押すことで実行が可能になります。ただ、上記スクリーンショットの段階だとインストールしていなかったため、コンソールで<code>*.py</code>ファイルを指定して実行しています。</p>
+
+<h3 id="dockerを常時起動させる">Dockerを常時起動させる</h3>
+
+<p>Dockerを常時起動させる設定を施します。rootでログインしてから<code>.bashrc</code>を編集します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">echo $(service docker status | awk &#39;{print $4}&#39;)
+if test $(service docker status | awk &#39;{print $4}&#39;) = &#39;not&#39;; then
+        /usr/sbin/service docker start
+fi</code></pre></div>
+<p>上記を<code>.bashrc</code>に追加することで、起動時にDockerが起動していなければ自動的に<code>service docker start</code>を実行してくれます。上記のコマンドはroot権限で実行する前提であるため、<code>sudo</code>は付いていませんが、一般ユーザーの<code>.bashrc</code>に追加する場合は<code>sudo /usr/sbin/service docker start</code>のように<code>sudo</code>を追加します。</p>
+
+<h3 id="windowsとwslを連携させる">WindowsとWSLを連携させる</h3>
+
+<p>ファイルをWindowsとWSLの間で連携させたい場合、WindowsからWSLのファイルを参照するパターンと、WSLからWindowsのファイルを参照する2パターンが存在します。</p>
+
+<ol>
+<li>WindowsからWSLのファイルを参照する</li>
+</ol>
+
+<p>この場合、エクスプローラーに<code>\\wsl$</code>を入力します。するとWSL上に存在するディストリビューションが表示されます。複数のディストリビューションが存在する場合は、複数表示されます。この中から参照したいディストリビューションを選択します。あとは普段と同じ感覚で、WSL内のファイルをエクスプローラーで参照できるはずです。
+2. WSLからWindowsのファイルを参照する</p>
+
+<p><code>/mnt</code>にアクセスすると<code>C</code>というフォルダが存在します。これがWindowsのCドライブと接続されている。ここから、Windowsのフォルダを参照します。フォルダが深い階層にあると少々参照するのが面倒なので、任意の場所からシンボリックリンクでも張ると多少参照するのが楽になります。</p>
+
+<h3 id="wsl環境のdockerで過去の資産を利用したいとき">WSL環境のDockerで過去の資産を利用したいとき</h3>
+
+<p>この記事を読んでいる層の中には、「Docker Desktopのライセンス内容が変更されたためにWSL環境でのDocker運用に移行しようとしている（あるいはした）」人がいるかもしれません。これまで書いてきた方法で、WSLでDockerを利用できる環境は構築できると思います。</p>
+
+<p>ただ「WindowsのDocker Desktopで運用していたファイルなどの資産を、WSL環境のDockerから直接参照する」ケースは、少なくとも自分の環境では<strong>エラーとなってしまいました</strong>。エラー内容などは後述しますが、エラーの回避策は<code>/mnt/c</code>配下にあるWindows環境の資産を直接参照するのではなく、一度<code>/home</code>などのWSL環境へ<strong>コピーしてから参照する</strong>ことです。一度コピーする手順を踏むことで、エラーを回避できました。</p>
+
+<h2 id="備考">備考</h2>
+
+<h3 id="service-を使う理由と-systemctl-が使えない理由"><code>service</code>を使う理由と<code>systemctl</code>が使えない理由</h3>
+
+<p>Dockerの起動やステータス確認の際、上記では<code>service</code>コマンドを実行しています。が、WSL環境でないフツーのLinuxでは、そのような場合に<code>systemctl</code>を用いているようです。つまり、<code>service</code>から<code>systemctl</code>に移行しています。</p>
+
+<p>そこで、WSL環境で<code>systemctl</code>を実行してます。使えるのかいな。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console"># systemctl
+System has not been booted with systemd as init system (PID 1). Can&#39;t operate.
+Failed to connect to bus: Host is down</code></pre></div>
+<p>WSLでは<code>systemctl</code>が<strong>実行できませんでした</strong>。コマンドを発行しても上記のようなエラーを吐いて異常終了します。そのため、WSL環境下ではサービスの制御に<code>service</code>を使うことになります。<code>systemctl</code>の実行がエラーになる直接的な原因は、<code>systemd</code>がPID1で実行されていないためです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console"># ps -aux
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.0    908   528 ?        Sl   08:33   0:00 /init
+root       740  0.0  0.0  10836  3408 pts/1    R+   16:36   0:00 ps -aux
+root      1147  0.0  0.0    900    88 ?        Ss   12:51   0:00 /init</code></pre></div>
+<p>WSL環境で<code>ps</code>コマンドを実行するとわかりますが、PID1のプロセスは<code>/init</code>となっています。<code>systemd</code>をPID1で実行すれば<code>systemctl</code>を利用できるようになるのですが、別なパッケージのインストールが必要です。<code>systemctl</code>を頻繫に利用する環境なら導入を検討しても良いと思いますが、今回はDockerのインストール時のみ必要となるため<code>systemctl</code>による設定を見送りました。</p>
+
+<h3 id="windows環境のファイルはwsl環境へコピーすること">Windows環境のファイルはWSL環境へコピーすること</h3>
+
+<p>WSL環境は、<code>/mnt/c</code>配下にあるアドレスを辿ることでWindows環境にあるファイルを参照できます。このとき、WSL環境のVS CodeでWindows環境にあるファイルを使って、Dockerコンテナの作成を行うと<strong>エラーが発生</strong>します。</p>
+
+<p>正確なところは謎ですが、どうもDockerfileが存在する環境においてDockerコンテナを作成する？ような挙動をします。WindowsにはDocker DesktopなどのDockerが動作するような環境はなく、もっぱらWSL上でDockerを動作させているため、WSL環境で実行する分には問題ないのですが、WSL環境からWindows環境にあるファイルを参照してDockerコンテナの作成を実行するとエラーが起きてしまいます。</p>
+
+<ol>
+<li>Windowsにおいて、任意のフォルダ（ここでは<code>c:\temp\</code>とする）にDockerfileを作成し保存します。</li>
+<li>WSLのコンソールで<code>cd /mnt/c/temp</code>と実行し、カレントディレクトリを変更します。</li>
+<li><code>code .</code>と入力してVS Codeを起動します。</li>
+<li>VS Codeが起動すると、カレントディレクトリにはDockerfileが存在するため「Dockerコンテナで開くかい？」というポップアップが表示されます。ここで、「Reopen in container」をクリックします。ポップアップが表示されない場合は、VS Code画面左下のRemoteのメニューから「Reopen in container」を選択します。</li>
+<li>上記の<strong>エラー発生</strong>。おいってばよ。</li>
+</ol>
+
+<p><img src="2022-01-29-22-32-33.png" alt="pic" /></p>
+
+<p>エラーウィンドウが表示されるが、これだけだとイマイチ要領を得ないんですよねぇ。そこでエラーログ側を見てみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">Stop (842 ms): Check Docker is running
+Docker returned an error code 1, message: Command failed: docker version --format {{.Server.APIVersion}}</code></pre></div>
+<p>エラーログを見てみると、Dockerが起動しているかチェックするステップでエラーが起こっていることがわかります。そこで、なぁんだDockerが起動していないのかと思って<code>service docker status</code>を実行してみると・・・WSL環境の<strong>Dockerはすでに起動しています</strong>。なんじゃこりゃ。</p>
+
+<p>「Reopen in container」をクリックしない（コンテナ作成処理を実行しない）でVS Codeのターミナルから<code>docker build</code>を手入力して実行すると、この場合はなぜ正常にコンテナ作成が完了します。ただ、この場合VS Codeでリモート接続できていないので、コンテナにログインしての編集ができません。</p>
+
+<p>ここで、試しにWSLにて<code>/home</code>配下の任意のフォルダにて適当なDockerfileを作成して、<code>code .</code>を実行してVS Codeを立ち上げて同様に「Reopen in container」をクリックしてみます。すると、この場合は<strong>正常にコンテナが起動</strong>しちゃうんですよねぇ。なんだコレ。</p>
+
+<p>このため、上記のエラーを回避するには「Windows環境にあるファイルを直接参照するのではなく、<strong>WSL環境にコピーしてからVS Codeでコンテナ作成を行う</strong>」という作業が必要になります。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://docs.microsoft.com/ja-jp/windows/wsl/install">WSLのインストール</a></li>
+<li><a href="https://docs.microsoft.com/en-us/windows/wsl/install-manual">Manual installation steps for older versions of WSL</a></li>
+<li><a href="https://qiita.com/moriai/items/850ee91d60edc91e7b7e">WSL / WSL 2 をコマンドラインでインストールする</a></li>
+<li><a href="https://qiita.com/Gushi_maru/items/5ba23d997e32abc98620">【WSL(Windows Subsystem for Linux)】Proxy環境でのインストール</a></li>
+<li><a href="https://qiita.com/m-tmatma/items/e3d9de76be50763ac01c">apt のプロキシ対応</a></li>
+<li><a href="https://zenn.dev/taiga533/articles/11f1b21ef4a5ff">DockerDesktopからWSL2上のみで動くDockerに移行する</a></li>
+<li><a href="https://qiita.com/nutti/items/4ed09d3d61ccad49069b">[Linux] wgetをプロキシ経由で実行する方法</a></li>
+<li><a href="https://aquasoftware.net/blog/?p=1172">Proxy 下で VS Code の WSL 拡張へ接続できない</a></li>
+<li><a href="https://futureys.tokyo/how-permission-should-be-set-for-developing-inside-a-container-using-wsl-2/">WSL 2 を利用したコンテナー内開発で権限をどう設定するべきか</a></li>
+<li><a href="https://tech-blog.s-yoshiki.com/entry/108">Proxy環境下で快適に作業する設定メモ</a></li>
+<li><a href="https://www.usagi1975.com/202006082022/">WSL2+docker そして外部通信がブロックされてしまう問題対策</a></li>
+<li><a href="https://qiita.com/ko-zi/items/949d358163bbbad5a91e">wsl2でDocker自動起動設定</a></li>
+<li><a href="https://qiita.com/quzq/items/1096c638c0d86795be13">WSLとwindows間のファイル連携</a>;</li>
+<li><a href="https://atmarkit.itmedia.co.jp/ait/articles/1605/30/news022.html">【 ln 】コマンド――ファイルのハードリンクとシンボリックリンクを作る</a></li>
+<li><a href="https://qiita.com/tamorieeeen/items/94c9eac62093f039dab6">シンボリックリンクの貼り方</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

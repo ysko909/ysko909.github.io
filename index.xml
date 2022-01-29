@@ -7,10 +7,36 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sat, 16 Oct 2021 14:45:04 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 29 Jan 2022 22:28:19 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Proxy環境下のWSLにDockerを構築してVS Codeからアクセスする</title>
+      <link>https://ysko909.github.io/posts/build-docker-env-on-wsl-under-proxy/</link>
+      <pubDate>Sat, 29 Jan 2022 22:28:19 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/build-docker-env-on-wsl-under-proxy/</guid>
+      <description>概要 Proxy環境下のWSLで、Dockerをインストールしコンテナを構築する手順についてメモします。さらに、構築したコンテナにVS Codeからリモートでアクセスして編集してみるところまでやってみました。
+なお、めちゃめちゃ長いです。コーヒー片手にでもお読みください。
+そもそもなんでそんなことすんの Docker Desktop便利すぎてダメ人間になりそうだから。っていうのは半分嘘ですが、普段使っているWindows環境でLinuxが利用できるWSLという機能がせっかくあるので、どうせなら勉強ついでにDockerでも入れてWSL環境で運用してみようかな、というのが理由。
+Docker Desktopが従業員250名を超えるなどの条件を満たす企業での利用は有料となったため、WSLへの移行を検討していた人もいらっしゃるかと思いますが・・・そういう人たちはさすがにもう移行してるよね？まぁDocker Desktopが優秀なので、むしろ今まで無料で使えていたことのほうが異常という気もしなくはないのですが。
+手順 前提条件  Windows 10以降 現状でDocker Desktopを利用中 ディストリビューションはUbuntuを利用 エディタはVisual Studio Code  上記の環境を想定しています。
+WSL2の有効化 フルオートでインストールする まず基盤となるWSL2環境を準備します。WSLのインストール手順については、マイクロソフトの「WSLのインストール」を参照するのが早いです。
+とは言ってもWSLの環境構築はすこぶる簡単で、コマンドを1つ実行すればあとは待っているだけでいいのが素晴らしい。
+wsl --install 上記のコマンドをPowerShell上で実行すればよく、Linuxカーネルのダウンロードやインストール、WSL2の既定設定がオートで実行されます。
+マニュアルでインストールする Proxy環境下では上記のコマンドが動作しない（ただ、どうも例外があるようで動作するケースもあるようです。一応上記の方法を試してみて、ダメならマニュアルインストールを行ってみるといいかもしれません）。そのため、別の方法を検討する必要があります。つまり、マニュアル作業でUbuntuをWSL2環境にインストールします。手順はここにあります。
+ PowerShellでEnable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linuxを実行しWSLをインストールします。この際、インストール終了時にリブートを求められるはず。 ディストリビューションのパッケージをダウンロードします。ここから好きなディストリビューションを選択してダウンロードします。curlを使う方法もあるのですが、上記のwebページから直接ダウンロードした方が早いです。 PowerShellで先ほどダウンロードしたAdd-AppxPackage C:\Users\XXX\Downloads\Ubuntu2004.appxを実行して、パッケージをインストールします。 インストールが完了すると、スタートメニューからUbuntuが選択できるようになっているはす。  結果確認 前提条件の通りここではUbuntuをインストールすることを想定しています。バージョンは、特別な理由がない限り指定する必要はありません。デフォルトではUbuntuの最新版がインストールされるはず。
+一度インストールが完了すれば、以降はUbuntuをスタートメニューから起動できるようになるはず。初期起動時、Ubuntu環境でのユーザーIDとパスワードを入力する必要があるので、適当に決めておきましょう。
+Ubuntuのコンソールにログイン後、バージョンを確認します。
+cat /etc/os-release 上記のコマンドを実行すると、Ubuntuのバージョン情報が表示されます。
+仮想化の確認は事前にしておこう インストールの時点でCPU側が仮想化をサポートしていない場合エラーが発生します。仮想化に対応しているか（利用可能か）は、タスクマネージャーを参照すると確認できます。事前にやっておくと吉。
+Ubuntuのデフォルトユーザーを変更する この時点ではUbuntuのデフォルトユーザーが、インストール後に設定した任意のユーザーとなっているはずです。通常の利用ではそれでも問題ないのですが、後述する「VS CodeからDockerを起動する処理」を行う際に、処理が権限の不一致でエラーになります。そのため、これを回避するためにデフォルトユーザーをrootに変更します。最初から最高権限のユーザーを利用すれば、前述の権限問題は気にしないで済むからです。ただし、最高権限であるがゆえに誤操作などのアクシデントには弱くなるので、そこだけは注意。
+$ sudo su - # passwd Ubuntuにログイン後、まずrootになります。その後rootのパスワードを設定しておきましょう。その後Ubuntuのコンソールはいったん終了します。
+wsl -l --verbose PowerShellで上記のコマンドを実行して、WSLで動作しているディストリビューションの一覧を表示します。
+NAME STATE VERSION * Ubuntu Stopped 2 Ubuntu-20.</description>
+    </item>
     
     <item>
       <title>PyCaretをIrisやBostonで動かしてみる</title>

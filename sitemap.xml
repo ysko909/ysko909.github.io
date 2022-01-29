@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/build-docker-env-on-wsl-under-proxy/</loc>
+    <lastmod>2022-01-29T22:28:19+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/fundamentals-of-pycaret/</loc>
     <lastmod>2021-10-16T14:45:04+09:00</lastmod>
   </url>
@@ -437,7 +442,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/docker/</loc>
-    <lastmod>2021-04-29T09:00:07+09:00</lastmod>
+    <lastmod>2022-01-29T22:28:19+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -635,7 +640,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2021-10-16T14:45:04+09:00</lastmod>
+    <lastmod>2022-01-29T22:28:19+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -790,6 +795,12 @@
   </url>
   
   <url>
+    <loc>https://ysko909.github.io/tags/wsl/</loc>
+    <lastmod>2022-01-29T22:28:19+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/tags/xlwings/</loc>
     <lastmod>2019-09-06T15:14:51+09:00</lastmod>
     <priority>0</priority>
@@ -797,7 +808,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2021-10-16T14:45:04+09:00</lastmod>
+    <lastmod>2022-01-29T22:28:19+09:00</lastmod>
     <priority>0</priority>
   </url>
   
