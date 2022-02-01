@@ -199,7 +199,7 @@ export HTTPS_PROXY=$HTTP_PROXY</code></pre></div>
 export HTTPS_PROXY=$HTTP_PROXY</code></pre></div>
 <p>認証が必要なProxyの場合は、上記のようにアカウント情報を付与します。</p>
 
-<p>なお、これらの情報は<code>.bashrc</code>内に設定した方が良い。コンソール上で<code>export</code>を実行すると、コンソールごとに上記のコマンドを実行しなければいけません。この「コンソールごと」というのが曲者で、VS Codeのコンソールでも<code>export</code>コマンドを発行しなければならずすこぶる手間です。よって、ユーザーログイン時に参照される<code>.bashrc</code>へ記述しておきましょう。</p>
+<p>なお、これらの情報は<code>.bashrc</code>内に設定した方が良いでしょう。コンソール上で<code>export</code>を実行すると、コンソールごとに上記のコマンドを実行しなければいけません。この「コンソールごと」というのが曲者で、VS Codeのコンソールでも<code>export</code>コマンドを発行しなければならずすこぶる手間です。よって、ユーザーログイン時に参照される<code>.bashrc</code>へ記述しておきましょう。</p>
 
 <h3 id="アプリケーション固有のproxyを設定する">アプリケーション固有のProxyを設定する</h3>
 
@@ -321,7 +321,7 @@ RUN apt-get update
 ADD . /home/workdir
 
 WORKDIR /home/workdir</code></pre></div>
-<p>Dockerfileの内容は基本的に任意だが、コンテナへProxy情報を渡すため<code>ENV</code>を設定しています。上記の内容で保存します。</p>
+<p>Dockerfileの内容は基本的に任意ですが、コンテナへProxy情報を渡すため<code>ENV</code>を設定しています。上記の内容で保存します。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">code .</code></pre></div>
 <p>その後、<code>code .</code>を実行してVS Codeを起動し、いつもの通り「Reopen in container」を選択してコンテナをビルドします。</p>
 
@@ -358,8 +358,11 @@ fi</code></pre></div>
 <li>WindowsからWSLのファイルを参照する</li>
 </ol>
 
-<p>この場合、エクスプローラーに<code>\\wsl$</code>を入力します。するとWSL上に存在するディストリビューションが表示されます。複数のディストリビューションが存在する場合は、複数表示されます。この中から参照したいディストリビューションを選択します。あとは普段と同じ感覚で、WSL内のファイルをエクスプローラーで参照できるはずです。
-2. WSLからWindowsのファイルを参照する</p>
+<p>この場合、エクスプローラーに<code>\\wsl$</code>を入力します。するとWSL上に存在するディストリビューションが表示されます。複数のディストリビューションが存在する場合は、複数表示されます。この中から参照したいディストリビューションを選択します。あとは普段と同じ感覚で、WSL内のファイルをエクスプローラーで参照できるはずです。</p>
+
+<ol>
+<li>WSLからWindowsのファイルを参照する</li>
+</ol>
 
 <p><code>/mnt</code>にアクセスすると<code>C</code>というフォルダが存在します。これがWindowsのCドライブと接続されている。ここから、Windowsのフォルダを参照します。フォルダが深い階層にあると少々参照するのが面倒なので、任意の場所からシンボリックリンクでも張ると多少参照するのが楽になります。</p>
 
