@@ -180,30 +180,30 @@ NAME STATE VERSION * Ubuntu Stopped 2 Ubuntu-20."/>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">&lt;DISTRIBUTION_NAME&gt; config --default-user root</code></pre></div>
 <p>次に、上記のコマンドを実行することで、指定したディストリビューションのデフォルトユーザーがrootになります。</p>
 
-<p>たとえばデフォルトユーザーを変更したいディストリビューションがUbuntuである場合、<code>ubuntu config --default-user root</code>とします。ここで注意が必要なのは、複数のディストリビューションが動作している場合。前述の<code>wsl -l</code>を実行した結果の<code>Ubuntu-20.04</code>についてデフォルトユーザーを変更したい場合、実行するコマンドは<code>ubuntu2004 config --default-user root</code>である。ピリオドなどの記号がディストリビューション名に含まれているため、ディストリビューション名をそのままコマンドとしては利用できない。そのため、ここでは「Ubuntu-20.04」から記号などを除き小文字化した結果の「ubuntu2004」が<code>&lt;DISTRIBUTION_NAME&gt;</code>となる。</p>
+<p>たとえばデフォルトユーザーを変更したいディストリビューションがUbuntuである場合、<code>ubuntu config --default-user root</code>とします。ここで注意が必要なのは、複数のディストリビューションが動作している場合。前述の<code>wsl -l</code>を実行した結果の<code>Ubuntu-20.04</code>についてデフォルトユーザーを変更したい場合、実行するコマンドは<code>ubuntu2004 config --default-user root</code>です。ピリオドなどの記号がディストリビューション名に含まれているため、ディストリビューション名をそのままコマンドとしては利用できないのです。そのため、ここでは「Ubuntu-20.04」から記号などを除き小文字化した結果の「ubuntu2004」が<code>&lt;DISTRIBUTION_NAME&gt;</code>となります。</p>
 
 <p>ここまで実行できたら再度Ubuntu環境にログインします。この時点で、デフォルトユーザーがrootになっているはず。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console"># whoami
 root</code></pre></div>
-<p>大抵の環境ではrootになった際、ユーザー名などがコンソールに表示されたりしてプロンプトが変わっているはずなので、確認するまでもないとは思う。念のため確認するなら、<code>whoami</code>を実行すると自分の名前（ユーザー名）を表示するので、これを使ってrootでログインできているかを見ることができる。</p>
+<p>大抵の環境ではrootになった際、ユーザー名などがコンソールに表示されたりしてプロンプトが変わっているはずなので、確認するまでもないとは思います。念のため確認するなら、<code>whoami</code>を実行すると自分の名前（ユーザー名）を表示するので、これを使ってrootでログインできているかを見ることが可能です。</p>
 
 <h3 id="ubuntuにproxyを設定する">UbuntuにProxyを設定する</h3>
 
 <p>インストールしたての状態ではProxy設定が施されていないはず。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">printenv HTTP_PROXY HTTPS_PROXY</code></pre></div>
-<p>上記のコマンドを実行して、結果が何も返ってこない場合は設定が未済であると判断できる。</p>
+<p>上記のコマンドを実行して、結果が何も返ってこない場合は設定が未済であると判断できます。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">export HTTP_PROXY=&#34;http://&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/&#34;
 export HTTPS_PROXY=$HTTP_PROXY</code></pre></div>
-<p>上記のコマンドを実行すると、環境変数にProxy情報が設定できる。</p>
+<p>上記のコマンドを実行すると、環境変数にProxy情報が設定できます。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">export HTTP_PROXY=&#34;http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/&#34;
 export HTTPS_PROXY=$HTTP_PROXY</code></pre></div>
 <p>認証が必要なProxyの場合は、上記のようにアカウント情報を付与します。</p>
 
-<p>なお、これらの情報は<code>.bashrc</code>内に設定した方が良い。コンソール上で<code>export</code>を実行すると、コンソールごとに上記のコマンドを実行しなければならない。この「コンソールごと」というのが曲者で、VS Codeのコンソールでも<code>export</code>コマンドを発行しなければならずすこぶる手間である。よって、ユーザーログイン時に参照される<code>.bashrc</code>へ記述しておく。</p>
+<p>なお、これらの情報は<code>.bashrc</code>内に設定した方が良い。コンソール上で<code>export</code>を実行すると、コンソールごとに上記のコマンドを実行しなければいけません。この「コンソールごと」というのが曲者で、VS Codeのコンソールでも<code>export</code>コマンドを発行しなければならずすこぶる手間です。よって、ユーザーログイン時に参照される<code>.bashrc</code>へ記述しておきましょう。</p>
 
 <h3 id="アプリケーション固有のproxyを設定する">アプリケーション固有のProxyを設定する</h3>
 
-<p>環境変数にProxyを設定しただけではダメなアプリケーションがあり、たとえば<code>apt-get</code>は環境変数を設定したところでやっぱりコケる。ヒドい。なぜなら、<code>apt-get</code>には<strong>それ用の設定が必要</strong>であるためで、上記の設定とは別の方法でProxy設定を施す必要があります。</p>
+<p>環境変数にProxyを設定しただけではダメなアプリケーションがあり、たとえば<code>apt-get</code>は環境変数を設定したところでやっぱりコケます。ヒドい。なぜなら、<code>apt-get</code>には<strong>それ用の設定が必要</strong>であるためで、上記の設定とは別の方法でProxy設定を施す必要があります。</p>
 
 <p>いくつか方法があるが、ここでは<code>apt.conf</code>ファイルを作成します。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">cd /etc/apt
@@ -238,14 +238,14 @@ EOF</code></pre></div>
 
 <p>Ubuntuの環境変数に追加しただけでは足りず、DockerのデフォルトとしてProxy情報を設定する必要があります。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">vi /etc/default/docker</code></pre></div>
-<p>エディタで上記のファイルを開く。</p>
+<p>エディタで上記のファイルを開きます。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">export HTTP_PROXY=&#34;http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/&#34;
 export HTTPS_PROXY=&#34;http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/&#34;</code></pre></div>
-<p><code>export</code>を忘れないように。</p>
+<p><code>export</code>を忘れないように上記の編集を行います。</p>
 
 <h3 id="vs-codeにremote-wslをインストールする">VS CodeにRemote-WSLをインストールする</h3>
 
-<p>すでにVS Codeはインストール済みである想定だが、まだインストールされていない場合は、<a href="https://code.visualstudio.com/">ここ</a>からインストールしておく。</p>
+<p>すでにVS Codeはインストール済みである想定ですが、まだインストールされていない場合は<a href="https://code.visualstudio.com/">ここ</a>からインストールしておきます。</p>
 
 <p>次に、VS Codeの拡張機能である「Remote-WSL」をインストールします。</p>
 
@@ -255,13 +255,13 @@ export HTTPS_PROXY=&#34;http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXY_SERVE
 
 <h3 id="ubuntuでvs-codeを起動する">UbuntuでVS Codeを起動する</h3>
 
-<p>Ubuntuのターミナルを起動し、任意のフォルダを作成します。ここではホーム直下に<code>hoge</code>というフォルダを作成した。</p>
+<p>Ubuntuのターミナルを起動し、任意のフォルダを作成します。ここではホーム直下に<code>hoge</code>というフォルダを作成しました。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">mkdir hoge
 cd hoge
 code .</code></pre></div>
-<p>作成したフォルダにカレントディレクトリを変更したあとで、<code>code .</code>と実行することでVS Codeを起動できる。場合によっては（初回起動だと？）「この環境って信頼していいん？」という確認メッセージが表示されるので、「Trust」を選択しておく。</p>
+<p>作成したフォルダにカレントディレクトリを変更したあとで、<code>code .</code>と実行することでVS Codeを起動できます。場合によっては（初回起動だと？）「この環境って信頼していいん？」という確認メッセージが表示されるので、「Trust」を選択しておきましょう。</p>
 
-<p>VS Codeが起動したら適当なファイルを作成してみる。</p>
+<p>VS Codeが起動したら適当なファイルを作成してみます。</p>
 
 <p><img src="2022-01-29-22-31-15.png" alt="pic" /></p>
 
@@ -274,7 +274,7 @@ code .</code></pre></div>
 hoge
 fuga
 piyo</code></pre></div>
-<p>Ubuntuのコンソールで保存したファイルを確認してみると、VS Code上で入力・保存した内容が参照できる。</p>
+<p>Ubuntuのコンソールで保存したファイルを確認してみると、VS Code上で入力・保存した内容が参照できます。</p>
 
 <h3 id="wslでdockerを動かす">WSLでDockerを動かす</h3>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">service docker status</code></pre></div>
@@ -331,7 +331,7 @@ WORKDIR /home/workdir</code></pre></div>
 
 <p>これは、VS CodeのRemote経由でDockerのプロセスを起動させようとすると、root権限で<strong>ない</strong>ためDockerの実行が行えないというエラー。WSLのデフォルトユーザーが、（大抵の場合）rootではないユーザーになっていることが原因。</p>
 
-<p>なお、仮になんとかDockerのコンテナをビルドできたとしても、それはそれでまた別の権限問題が出てくる。それは、コンテナ内ではrootなのにWSLのログインユーザーがrootでないため、コンテナ内から作成したファイルの権限がWSLと異なってしまうためファイルへのアクセスができなくなってしまう。そのため、WSLでのDocker環境はとくに権限回りに頭を悩ませがち。</p>
+<p>なお、仮になんとかDockerのコンテナをビルドできたとしても、それはそれでまた別の権限問題が出てくる可能性が高いです。それは、コンテナ内ではrootなのにWSLのログインユーザーがrootでないため、コンテナ内から作成したファイルの権限がWSLと異なってしまうためファイルへのアクセスができなくなってしまうから。そのため、WSLでのDocker環境はとくに権限回りに頭を悩ませがち。</p>
 
 <p>このような権限問題を回避するため、前述の「デフォルトユーザーをrootに変更する」処理が必要になります。</p>
 
