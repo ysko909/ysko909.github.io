@@ -205,7 +205,7 @@ export HTTPS_PROXY=$HTTP_PROXY</code></pre></div>
 
 <p>環境変数にProxyを設定しただけではダメなアプリケーションがあり、たとえば<code>apt-get</code>は環境変数を設定したところでやっぱりコケます。ヒドい。なぜなら、<code>apt-get</code>には<strong>それ用の設定が必要</strong>であるためで、上記の設定とは別の方法でProxy設定を施す必要があります。</p>
 
-<p>いくつか方法があるが、ここでは<code>apt.conf</code>ファイルを作成します。</p>
+<p>いくつか方法がありますが、ここでは<code>apt.conf</code>ファイルを作成します。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">cd /etc/apt
 sudo tee apt.conf &lt;&lt;EOF &gt; /dev/null
 Acquire::http::proxy &#34;http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/&#34;;
@@ -325,7 +325,7 @@ WORKDIR /home/workdir</code></pre></div>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">code .</code></pre></div>
 <p>その後、<code>code .</code>を実行してVS Codeを起動し、いつもの通り「Reopen in container」を選択してコンテナをビルドします。</p>
 
-<p>この時点で権限回りの問題がクリアできてないと、<strong>エラーを吐く</strong>。</p>
+<p>この時点で権限回りの問題がクリアできてないと、<strong>エラーを吐きます</strong>。許さん。</p>
 
 <p><img src="2022-01-29-22-31-54.png" alt="pic" /></p>
 
@@ -364,11 +364,11 @@ fi</code></pre></div>
 <li>WSLからWindowsのファイルを参照する</li>
 </ol>
 
-<p><code>/mnt</code>にアクセスすると<code>C</code>というフォルダが存在します。これがWindowsのCドライブと接続されている。ここから、Windowsのフォルダを参照します。フォルダが深い階層にあると少々参照するのが面倒なので、任意の場所からシンボリックリンクでも張ると多少参照するのが楽になります。</p>
+<p><code>/mnt</code>にアクセスすると<code>C</code>というフォルダが存在します。これがWindowsのCドライブと接続されています。ここから、Windowsのフォルダを参照します。フォルダが深い階層にあると少々参照するのが面倒なので、任意の場所からシンボリックリンクでも張ると多少参照するのが楽になります。</p>
 
 <h3 id="wsl環境のdockerで過去の資産を利用したいとき">WSL環境のDockerで過去の資産を利用したいとき</h3>
 
-<p>この記事を読んでいる層の中には、「Docker Desktopのライセンス内容が変更されたためにWSL環境でのDocker運用に移行しようとしている（あるいはした）」人がいるかもしれません。これまで書いてきた方法で、WSLでDockerを利用できる環境は構築できると思います。</p>
+<p>この記事を読んでいる方の中には、「Docker Desktopのライセンス内容が変更されたためにWSL環境でのDocker運用に移行しようとしている（あるいはした）」人がいるかもしれません。これまで書いてきた方法で、WSLでDockerを利用できる環境は構築できると思います。</p>
 
 <p>ただ「WindowsのDocker Desktopで運用していたファイルなどの資産を、WSL環境のDockerから直接参照する」ケースは、少なくとも自分の環境では<strong>エラーとなってしまいました</strong>。エラー内容などは後述しますが、エラーの回避策は<code>/mnt/c</code>配下にあるWindows環境の資産を直接参照するのではなく、一度<code>/home</code>などのWSL環境へ<strong>コピーしてから参照する</strong>ことです。一度コピーする手順を踏むことで、エラーを回避できました。</p>
 
@@ -388,7 +388,7 @@ USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
 root         1  0.0  0.0    908   528 ?        Sl   08:33   0:00 /init
 root       740  0.0  0.0  10836  3408 pts/1    R+   16:36   0:00 ps -aux
 root      1147  0.0  0.0    900    88 ?        Ss   12:51   0:00 /init</code></pre></div>
-<p>WSL環境で<code>ps</code>コマンドを実行するとわかりますが、PID1のプロセスは<code>/init</code>となっています。<code>systemd</code>をPID1で実行すれば<code>systemctl</code>を利用できるようになるのですが、別なパッケージのインストールが必要です。<code>systemctl</code>を頻繫に利用する環境なら導入を検討しても良いと思いますが、今回はDockerのインストール時のみ必要となるため<code>systemctl</code>による設定を見送りました。</p>
+<p>WSL環境で<code>ps</code>コマンドを実行するとわかりますが、PID1のプロセスは<code>/init</code>となっています。<code>systemd</code>をPID1で実行すれば<code>systemctl</code>を利用できるようになるのですが、それを実現するには別なパッケージのインストールが必要です。<code>systemctl</code>を頻繫に利用する環境なら導入を検討しても良いと思いますが、今回はDockerのインストール時のみ必要となるため<code>systemctl</code>による設定を見送りました。</p>
 
 <h3 id="windows環境のファイルはwsl環境へコピーすること">Windows環境のファイルはWSL環境へコピーすること</h3>
 
@@ -406,7 +406,7 @@ root      1147  0.0  0.0    900    88 ?        Ss   12:51   0:00 /init</code></p
 
 <p><img src="2022-01-29-22-32-33.png" alt="pic" /></p>
 
-<p>エラーウィンドウが表示されるが、これだけだとイマイチ要領を得ないんですよねぇ。そこでエラーログ側を見てみます。</p>
+<p>エラーウィンドウが表示されますが、これだけだとイマイチ要領を得ないんですよねぇ。そこでエラーログ側を見てみます。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">Stop (842 ms): Check Docker is running
 Docker returned an error code 1, message: Command failed: docker version --format {{.Server.APIVersion}}</code></pre></div>
 <p>エラーログを見てみると、Dockerが起動しているかチェックするステップでエラーが起こっていることがわかります。そこで、なぁんだDockerが起動していないのかと思って<code>service docker status</code>を実行してみると・・・WSL環境の<strong>Dockerはすでに起動しています</strong>。なんじゃこりゃ。</p>
@@ -416,6 +416,12 @@ Docker returned an error code 1, message: Command failed: docker version --forma
 <p>ここで、試しにWSLにて<code>/home</code>配下の任意のフォルダにて適当なDockerfileを作成して、<code>code .</code>を実行してVS Codeを立ち上げて同様に「Reopen in container」をクリックしてみます。すると、この場合は<strong>正常にコンテナが起動</strong>しちゃうんですよねぇ。なんだコレ。</p>
 
 <p>このため、上記のエラーを回避するには「Windows環境にあるファイルを直接参照するのではなく、<strong>WSL環境にコピーしてからVS Codeでコンテナ作成を行う</strong>」という作業が必要になります。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p><strong>長いわ！</strong></p>
+
+<p>いや、お疲れ様でした。ここまでお読みいただきありがとうございます。ここまでしないと、WSL上でのDockerは現状では構築できません（将来的にはもう少し簡単になると思いたいですが）。Windows環境でDocker Desktopを利用していたことの恩恵は、こんなにも大きかったのですねぇ。感慨深い。<strong>そりゃ有償化もしたくなるわ</strong>。</p>
 
 <h2 id="参考">参考</h2>
 
