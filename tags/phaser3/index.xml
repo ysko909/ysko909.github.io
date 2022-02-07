@@ -7,10 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sat, 11 Sep 2021 21:51:52 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 07 Feb 2022 20:45:49 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/phaser3/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>メッセージダイアログをPhaser.jsで作る</title>
+      <link>https://ysko909.github.io/posts/make-message-dialog-with-phaserjs/</link>
+      <pubDate>Mon, 07 Feb 2022 20:45:49 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/make-message-dialog-with-phaserjs/</guid>
+      <description>ノベルゲームでよくあるアレ 会話が主体のノベルゲームでは、登場人物の会話を表示するためのダイアログが存在します。よく、画面の下半分くらいに表示される小窓っぽいアレですね。アレをPhaser.jsを使って実装してみようという小ネタです。
+実際どうするの ここでは、四角や円といったPhaser.jsがもともと持っているゲームオブジェクトを使って表示します。
+ダイアログをアセットとして用意するのではなく、ゲームオブジェクトで表示するメリットはゲームの挙動を軽くできることです。Phaser.jsが持つ機能を使って描画するだけなので、アセットをダウンロードするのに比べて段違いに早いです。コード量も、アセットを使ったときと大差ありません。
+ダイアログをアセットとして準備すれば、ただの四角などではなく凝ったデザインのダイアログにできるため、ゲーム画面のUIデザインに凝りたい場合は画像のアセットとして準備したほうがよいです。ゲーム画面のUI素材は、探せばCC0のものがあったりします。
+ただ、アセットを多用し凝ったUIは見た目に華やかですが、そう感じるのは最初だけでゲームを進めていくうちに慣れてしまいます。ところが、「ロードが遅い」といったマイナス面はいくぶんか慣れこそするものの、ストレスがたまらなくなるわけでもないので、なるべくUIに凝るよりUX向上を狙います。
+べ、別にデザインセンスがないのでUIには凝らない、とかそういうわけじゃないんだからね！
+サンプル codepenで実装してみました。
+See the Pen Untitled by ysko909 (@ysko909) on CodePen. 
+コード type DialogProps = { width: number; height: number; align: string; fontSize: number; color: string; strokeColor: number; } class OriginalDialogClass extends Phaser.GameObjects.Container{ constructor (scene: Phaser.Scene, x:number, y:number, text:string, dialogProps: DialogProps){ super(scene, x, y); this.scene = scene; this.scene.add.existing(this); // 入力されたオブジェクトから各要素を取り出す  const { width = 100, height = 100, align = &amp;#39;left&amp;#39;, fontSize = 15, color = &amp;#39;#222233&amp;#39;, strokeColor = 0x009285 } = dialogProps; this.</description>
+    </item>
     
     <item>
       <title>Phaser3でプログレスバー付きのローディングシーンを追加する</title>
