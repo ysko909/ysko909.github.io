@@ -218,7 +218,7 @@ insideDialogRect.setStrokeStyle(1.5, strokeColor).setOrigin(0.5, 0.5);
 rightUpCircle.setOrigin(0.5, 0.5);</code></pre></div>
 <p>上記の部分で、ゲームオブジェクトの長方形と円を使ってダイアログを生成し表示しています。ただの四角と円なので見た目としては地味ですが。</p>
 
-<p>なお、上記ではダイアログの外枠のみ表示しています。ダイアログの背景は設定していないので、人物や背景の画像などとかぶった際にテキストが見にくくなる可能性があります。その場合は、上記の部分にダイアログの背景として長方形を生成するコードを追加する必要があります。背景色やアルファ値などは実際の画面の都合で調節する必要があるかと思いますが、軽く透過させることでテキストの読みやすさと人物や背景の表示を両立させることができると思います。</p>
+<p>なお、上記ではダイアログの外枠のみ表示しています。ダイアログの背景は設定していないので、人物や背景の画像などとかぶった際にテキストが見にくくなる、という可能性があります。その場合は、上記の部分にダイアログの背景として長方形を生成するコードを追加する必要があります。背景色やアルファ値などは実際の画面の都合で調節する必要があるかと思いますが、軽く透過させることでテキストの読みやすさと人物や背景の表示を両立させることができると思います。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> dialogTextStyle = {
     align: <span style="color:#2b91af">align</span>,
     fontSize: <span style="color:#2b91af">fontSize</span>,

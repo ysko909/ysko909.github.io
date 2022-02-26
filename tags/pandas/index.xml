@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pandas on 頑張らないために頑張る</title>
+    <link>https://ysko909.github.io/tags/pandas/</link>
+    <description>Recent content in Pandas on 頑張らないために頑張る</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© Copyright ysko</copyright>
+    <lastBuildDate>Sat, 26 Feb 2022 14:49:22 +0900</lastBuildDate>
+    
+	<atom:link href="https://ysko909.github.io/tags/pandas/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>「If using all scalar values, you must pass an index」エラーが出たら、インデックスを指定する</title>
+      <link>https://ysko909.github.io/posts/get-error-if-using-all-scalar-values-you-must-pass-an-index/</link>
+      <pubDate>Sat, 26 Feb 2022 14:49:22 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/get-error-if-using-all-scalar-values-you-must-pass-an-index/</guid>
+      <description>データフレーム作ろうとしたらエラー出た Pythonで、データフレームを辞書から新規に作ろうとしたらエラーが出ました。
+&amp;gt;&amp;gt;&amp;gt; import pandas as pd &amp;gt;&amp;gt;&amp;gt; hoge = {&amp;#39;foo&amp;#39;: 1, &amp;#39;bar&amp;#39;: &amp;#39;aaa&amp;#39;, &amp;#39;baz&amp;#39;: 3} &amp;gt;&amp;gt;&amp;gt; df = pd.DataFrame.from_dict(hoge) Traceback (most recent call last): File &amp;#34;&amp;lt;stdin&amp;gt;&amp;#34;, line 1, in &amp;lt;module&amp;gt; File &amp;#34;/usr/local/lib/python3.8/site-packages/pandas/core/frame.py&amp;#34;, line 1593, in from_dict return cls(data, index=index, columns=columns, dtype=dtype) File &amp;#34;/usr/local/lib/python3.8/site-packages/pandas/core/frame.py&amp;#34;, line 614, in __init__ mgr = dict_to_mgr(data, index, columns, dtype=dtype, copy=copy, typ=manager) File &amp;#34;/usr/local/lib/python3.8/site-packages/pandas/core/internals/construction.py&amp;#34;, line 464, in dict_to_mgr return arrays_to_mgr( File &amp;#34;/usr/local/lib/python3.8/site-packages/pandas/core/internals/construction.py&amp;#34;, line 119, in arrays_to_mgr index = _extract_index(arrays) File &amp;#34;/usr/local/lib/python3.</description>
+    </item>
+    
+  </channel>
+</rss>

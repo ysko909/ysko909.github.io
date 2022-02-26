@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>「If using all scalar values, you must pass an index」エラーが出たら、インデックスを指定する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="「If using all scalar values, you must pass an index」エラーが出たら、インデックスを指定する" />
+<meta property="og:description" content="データフレーム作ろうとしたらエラー出た Pythonで、データフレームを辞書から新規に作ろうとしたらエラーが出ました。
+&gt;&gt;&gt; import pandas as pd &gt;&gt;&gt; hoge = {&#39;foo&#39;: 1, &#39;bar&#39;: &#39;aaa&#39;, &#39;baz&#39;: 3} &gt;&gt;&gt; df = pd.DataFrame.from_dict(hoge) Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; File &#34;/usr/local/lib/python3.8/site-packages/pandas/core/frame.py&#34;, line 1593, in from_dict return cls(data, index=index, columns=columns, dtype=dtype) File &#34;/usr/local/lib/python3.8/site-packages/pandas/core/frame.py&#34;, line 614, in __init__ mgr = dict_to_mgr(data, index, columns, dtype=dtype, copy=copy, typ=manager) File &#34;/usr/local/lib/python3.8/site-packages/pandas/core/internals/construction.py&#34;, line 464, in dict_to_mgr return arrays_to_mgr( File &#34;/usr/local/lib/python3.8/site-packages/pandas/core/internals/construction.py&#34;, line 119, in arrays_to_mgr index = _extract_index(arrays) File &#34;/usr/local/lib/python3." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/get-error-if-using-all-scalar-values-you-must-pass-an-index/" /><meta property="article:published_time" content="2022-02-26T14:49:22&#43;09:00"/>
+<meta property="article:modified_time" content="2022-02-26T14:49:22&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="「If using all scalar values, you must pass an index」エラーが出たら、インデックスを指定する"/>
+<meta name="twitter:description" content="データフレーム作ろうとしたらエラー出た Pythonで、データフレームを辞書から新規に作ろうとしたらエラーが出ました。
+&gt;&gt;&gt; import pandas as pd &gt;&gt;&gt; hoge = {&#39;foo&#39;: 1, &#39;bar&#39;: &#39;aaa&#39;, &#39;baz&#39;: 3} &gt;&gt;&gt; df = pd.DataFrame.from_dict(hoge) Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; File &#34;/usr/local/lib/python3.8/site-packages/pandas/core/frame.py&#34;, line 1593, in from_dict return cls(data, index=index, columns=columns, dtype=dtype) File &#34;/usr/local/lib/python3.8/site-packages/pandas/core/frame.py&#34;, line 614, in __init__ mgr = dict_to_mgr(data, index, columns, dtype=dtype, copy=copy, typ=manager) File &#34;/usr/local/lib/python3.8/site-packages/pandas/core/internals/construction.py&#34;, line 464, in dict_to_mgr return arrays_to_mgr( File &#34;/usr/local/lib/python3.8/site-packages/pandas/core/internals/construction.py&#34;, line 119, in arrays_to_mgr index = _extract_index(arrays) File &#34;/usr/local/lib/python3."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">「If using all scalar values, you must pass an index」エラーが出たら、インデックスを指定する</h1>
+			<div class="meta">Posted at &mdash; Feb 26, 2022</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="データフレーム作ろうとしたらエラー出た">データフレーム作ろうとしたらエラー出た</h2>
+
+<p>Pythonで、データフレームを辞書から新規に作ろうとしたらエラーが出ました。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; <span style="color:#00f">import</span> pandas <span style="color:#00f">as</span> pd
+&gt;&gt;&gt; hoge = {<span style="color:#a31515">&#39;foo&#39;</span>: 1, <span style="color:#a31515">&#39;bar&#39;</span>: <span style="color:#a31515">&#39;aaa&#39;</span>, <span style="color:#a31515">&#39;baz&#39;</span>: 3}
+&gt;&gt;&gt; df = pd.DataFrame.from_dict(hoge)
+Traceback (most recent call last):
+  File <span style="color:#a31515">&#34;&lt;stdin&gt;&#34;</span>, line 1, <span style="color:#00f">in</span> &lt;module&gt;
+  File <span style="color:#a31515">&#34;/usr/local/lib/python3.8/site-packages/pandas/core/frame.py&#34;</span>, line 1593, <span style="color:#00f">in</span> from_dict
+    <span style="color:#00f">return</span> cls(data, index=index, columns=columns, dtype=dtype)
+  File <span style="color:#a31515">&#34;/usr/local/lib/python3.8/site-packages/pandas/core/frame.py&#34;</span>, line 614, <span style="color:#00f">in</span> __init__
+    mgr = dict_to_mgr(data, index, columns, dtype=dtype, copy=copy, typ=manager)
+  File <span style="color:#a31515">&#34;/usr/local/lib/python3.8/site-packages/pandas/core/internals/construction.py&#34;</span>, line 464, <span style="color:#00f">in</span> dict_to_mgr
+    <span style="color:#00f">return</span> arrays_to_mgr(
+  File <span style="color:#a31515">&#34;/usr/local/lib/python3.8/site-packages/pandas/core/internals/construction.py&#34;</span>, line 119, <span style="color:#00f">in</span> arrays_to_mgr
+    index = _extract_index(arrays)
+  File <span style="color:#a31515">&#34;/usr/local/lib/python3.8/site-packages/pandas/core/internals/construction.py&#34;</span>, line 625, <span style="color:#00f">in</span> _extract_index
+    <span style="color:#00f">raise</span> ValueError(<span style="color:#a31515">&#34;If using all scalar values, you must pass an index&#34;</span>)
+ValueError: If using all scalar values, you must <span style="color:#00f">pass</span> an index</code></pre></div>
+<p>上記では<code>from_dict</code>を使っていますが、<code>pandas.DataFrame(hoge)</code>としても結果は変同じでした。</p>
+
+<h2 id="対処法">対処法</h2>
+
+<p>「スカラー値を使う場合、インデックスを渡さないとダメだよー」というエラーなので、解決策としては<strong>スカラー値を使わない</strong>か、<strong>インデックスを渡してやればいい</strong>ということになります。</p>
+
+<h3 id="スカラー値を使わない">スカラー値を使わない</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; hoge_good = {<span style="color:#a31515">&#39;foo&#39;</span>: [1], <span style="color:#a31515">&#39;bar&#39;</span>: <span style="color:#a31515">&#39;aaa&#39;</span>, <span style="color:#a31515">&#39;baz&#39;</span>: 3}
+&gt;&gt;&gt; df = pd.DataFrame.from_dict(hoge_good)
+&gt;&gt;&gt; df
+   foo  bar  baz
+0    1  aaa    3
+&gt;&gt;&gt; df = pd.DataFrame(hoge_good)
+&gt;&gt;&gt; df
+   foo  bar  baz
+0    1  aaa    3</code></pre></div>
+<p>まず、元データの辞書内でスカラー値を使わないパターンです。1つ目の値を<code>1</code>から<code>[1]</code>に変更しています。つまり、スカラー値を使わないためにリストを用いているわけです。これを行うことで、何事もなかったかのように<strong>エラーが消えます</strong>。ただ、3つ目の要素の<code>3</code>もスカラー値なはずですが、なぜかこちらは何もしなくてもいいんですよね。<strong>ｺﾚｶﾞﾜｶﾗﾅｲ</strong>。いやホントに謎。ただ、とにかくなぜかこれで動作するんですよね。</p>
+
+<h2 id="インデックスを指定する">インデックスを指定する</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; df = pd.DataFrame(hoge, index=[0])
+&gt;&gt;&gt; df
+   foo  bar  baz
+0    1  aaa    3</code></pre></div>
+<p>今度はインデックスを指定するパターンです。オプションの<code>index=</code>を使ってインデックスを指定しています。なお、<code>from_dict()</code>にはインデックスを指定できるようなオプションがないっぽいので、ここでは<code>pandas.DataFrame</code>のみ利用しています。エラーメッセージからすると、この対応方法こそ正攻法であるような気がします。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.from_dict.html">pandas.DataFrame.from_dict</a></li>
+<li><a href="https://financial-it-engineer.hatenablog.com/entry/2019/07/20/004927">pandasのDataFrame新規作成時のエラー：If using all scalar values, you must pass an index</a></li>
+<li><a href="https://stackoverflow.com/questions/17839973/constructing-pandas-dataframe-from-values-in-variables-gives-valueerror-if-usi">Constructing pandas DataFrame from values in variables gives &ldquo;ValueError: If using all scalar values, you must pass an index&rdquo;</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
