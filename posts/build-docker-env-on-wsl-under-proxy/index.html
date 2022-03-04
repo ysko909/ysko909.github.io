@@ -417,6 +417,16 @@ Docker returned an error code 1, message: Command failed: docker version --forma
 
 <p>このため、上記のエラーを回避するには「Windows環境にあるファイルを直接参照するのではなく、<strong>WSL環境にコピーしてからVS Codeでコンテナ作成を行う</strong>」という作業が必要になります。</p>
 
+<h3 id="docker-composeはどうするのさ">docker-composeはどうするのさ</h3>
+
+<p>そう、実は上記までの処理を行っただけでは、docker-composeがインストールされていないのです。そのため、現状では<code>docker-compose.yml</code>を使った環境構築が行えません。そこで、<a href="https://docs.docker.com/compose/install/">ここ</a>を参照にdocker-composeのインストールを進めることにします。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">sudo curl -L &#34;https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)&#34; -o /usr/local/bin/docker-compose</code></pre></div>
+<p>まず、WSL環境で上記のコマンドを実行し最新版のdocker-composeを入手しましょう。すぐ終わると思います。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">sudo chmod +x /usr/local/bin/docker-compose</code></pre></div>
+<p>その後アクセス権を変更します。基本的にはこれだけで大丈夫です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker-compose --version</code></pre></div>
+<p>あとは、インストール確認を行うだけです。上記のコマンドを実行して、docker-composeのバージョンが返ってきたらインストール完了です。</p>
+
 <h2 id="まとめ">まとめ</h2>
 
 <p><strong>長いわ！</strong></p>
@@ -441,6 +451,7 @@ Docker returned an error code 1, message: Command failed: docker version --forma
 <li><a href="https://qiita.com/quzq/items/1096c638c0d86795be13">WSLとwindows間のファイル連携</a>;</li>
 <li><a href="https://atmarkit.itmedia.co.jp/ait/articles/1605/30/news022.html">【 ln 】コマンド――ファイルのハードリンクとシンボリックリンクを作る</a></li>
 <li><a href="https://qiita.com/tamorieeeen/items/94c9eac62093f039dab6">シンボリックリンクの貼り方</a></li>
+<li><a href="https://docs.docker.com/compose/install/">Install Docker Compose</a></li>
 </ol>
 
 		</div><div id="disqus_thread"></div>
