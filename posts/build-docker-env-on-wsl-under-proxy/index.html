@@ -422,6 +422,8 @@ Docker returned an error code 1, message: Command failed: docker version --forma
 <p>そう、実は上記までの処理を行っただけでは、docker-composeがインストールされていないのです。そのため、現状では<code>docker-compose.yml</code>を使った環境構築が行えません。そこで、<a href="https://docs.docker.com/compose/install/">ここ</a>を参照にdocker-composeのインストールを進めることにします。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">sudo curl -L &#34;https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)&#34; -o /usr/local/bin/docker-compose</code></pre></div>
 <p>まず、WSL環境で上記のコマンドを実行し最新版のdocker-composeを入手しましょう。すぐ終わると思います。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">sudo curl -L &#34;https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)&#34; -o /usr/local/bin/docker-compose -x http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXY_SERVER&gt;:&lt;PORT&gt;</code></pre></div>
+<p>ただ、この記事で言及しているようなProxy環境からアクセスする場合は、<code>-x</code>オプションでProxy情報を付与してやる必要があります。Proxy情報を付与しないとdocker-composeのダウンロードが始まらない場合は、上記のコマンドを実行してください。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">sudo chmod +x /usr/local/bin/docker-compose</code></pre></div>
 <p>その後アクセス権を変更します。基本的にはこれだけで大丈夫です。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker-compose --version</code></pre></div>
