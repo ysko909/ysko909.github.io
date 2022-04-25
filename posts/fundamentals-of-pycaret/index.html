@@ -270,7 +270,7 @@ test = pd.concat([test_X, test_y], axis=1)</code></pre></div>
 <li>Class Prediction Error：‘error’</li>
 </ul>
 
-<p>これはクラス分類時に出力できるグラフの一例。回帰モデルやクラスタリングの場合は、また別のグラフが別途用意されています。とりあえずこれ以上必要？というくらい用意されているので、PyCaretを<code>import</code>しておけば大体事足りるんじゃなかろうか。別途matplotlibが必要になるケースは、グラフに何かしら線などを直接描画したい、表示形式を細かく指定したいとかのシチュエーションしか思いつかない。</p>
+<p>これはクラス分類時に出力できるグラフの一例。回帰モデルやクラスタリングの場合は、また別のグラフが別途用意されています。とりあえずこれ以上必要？というくらい用意されているので、PyCaretを<code>import</code>しておけば大体事足りるんじゃなかろうか。別途matplotlibが必要になるケースは、グラフに何かしら線などを直接描画したい、表示形式を細かく指定したいとかのシチュエーションしか思いつかないなぁ。まぁ、それはそれで重要なニーズなのですが。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">models()</code></pre></div>
 <p>この関数を実行すると、比較可能なアルゴリズムの一覧が出力されます。</p>
 
@@ -402,7 +402,7 @@ test = pd.concat([test_X, test_y], axis=1)</code></pre></div>
 <p>ここではクラス分類を行っているので、クラス分類用のアルゴリズムの一覧が出てきます。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pred_holdouts = predict_model(lda)
 pred_holdouts.head()</code></pre></div>
-<p>作成したモデルについて、実データと予測値の比較がこのコードで可能。ここでは、先ほど作ったldaモデルについて実行しています。</p>
+<p>作成したモデルについて、実データと予測値の比較がこのコードで可能です。ここでは、先ほど作ったldaモデルについて実行しています。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">best = automl(optimize=<span style="color:#a31515">&#39;Recall&#39;</span>)
 best</code></pre></div>
 <p>AutoMLで最適なモデルを作成します。</p>
@@ -502,9 +502,9 @@ predict_test.head()</code></pre></div>
 <span style="color:#00f">from</span> pycaret.regression <span style="color:#00f">import</span> *
 <span style="color:#00f">from</span> pycaret.datasets <span style="color:#00f">import</span> get_data
 data = get_data(<span style="color:#a31515">&#39;boston&#39;</span>)</code></pre></div>
-<p><code>pycaret.regression</code>を読み込んでいるが、これがirisのときと異なる点。irisのクラス分類と異なり、bostonデータは回帰であるためそれ用のライブラリを読み込む必要があります。</p>
+<p><code>pycaret.regression</code>を読み込んでいますが、これがirisのときと異なる点。irisのクラス分類と異なり、bostonデータは回帰であるためそれ用のライブラリを読み込む必要があります。</p>
 
-<p>また、ここではbostonデータをPyCaret本体から取得するため、<code>pycaret.datasets.get_data()</code>をインポートしています。</p>
+<p>また、ここではIrisのときとは異なりbostonデータをPyCaret本体から取得するため、<code>pycaret.datasets.get_data()</code>をインポートしています。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">train = data.sample(frac=0.8, random_state=0).reset_index(drop=True)
 test = data.drop(train.index)
 reg = setup(data=train, target=<span style="color:#a31515">&#39;medv&#39;</span>, session_id=123)</code></pre></div>
@@ -612,7 +612,7 @@ reg = setup(data=train, target=<span style="color:#a31515">&#39;medv&#39;</span>
 
 <p>クラス分類のときと同様に、<code>setup()</code>を実行することでPyCaretの環境をセットアップできます。なお、上記の実行結果は15行目以降を省略しています。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">best_model = compare_models()</code></pre></div>
-<p>相変わらず1行でモデルの比較が可能。</p>
+<p>相変わらず1行でモデルの比較が可能です。</p>
 
 <p><img src="2021-10-16-15-22-35.png" alt="alt" /></p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">models()</code></pre></div>
@@ -807,7 +807,7 @@ tuned_rf = tune_model(rf, optimize=<span style="color:#a31515">&#39;RMSE&#39;</s
                       min_samples_split=5, min_weight_fraction_leaf=0.0,
                       n_estimators=240, n_jobs=-1, oob_score=False,
                       random_state=123, verbose=0, warm_start=False)</code></pre></div>
-<p>チューニング後のモデルは、パラメータの設定値が微妙に変化している。これがチューニングの成果。</p>
+<p>チューニング後のモデルは、パラメータの設定値が微妙に変化しています。これがチューニングの成果。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plot_model(tuned_rf)</code></pre></div>
 <p><img src="2021-10-16-15-23-15.png" alt="alt" /></p>
 
@@ -966,7 +966,7 @@ pred_new.head()</code></pre></div>
 
 <h2 id="gpuをpycaretで利用する">GPUをPyCaretで利用する</h2>
 
-<p>PyCaretは、モデルの学習やハイパーパラメータのチューニングについて<a href="https://pycaret.readthedocs.io/en/latest/installation.html?highlight=gpu#pycaret-on-gpu">GPUを利用可能</a>。ただし、デフォルト設定では無効になっているので、コードにてGPUの利用を明記する必要があります。また、アルゴリズムとPyCaretを利用するプラットフォームによっては追加のライブラリが必要になるケースがあるので注意。</p>
+<p>PyCaretは、モデルの学習やハイパーパラメータのチューニングについて<a href="https://pycaret.readthedocs.io/en/latest/installation.html?highlight=gpu#pycaret-on-gpu">GPUを利用可能</a>です。ただし、デフォルト設定では無効になっているので、コードにてGPUの利用を明記する必要があります。また、アルゴリズムとPyCaretを利用するプラットフォームによっては追加のライブラリが必要になるケースがあるので注意。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">clf1 = setup(
     data=train,
     target=<span style="color:#a31515">&#39;Species&#39;</span>,
