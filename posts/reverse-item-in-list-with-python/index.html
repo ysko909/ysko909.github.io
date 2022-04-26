@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Pythonのリストを逆順に並べ替える方法 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Pythonのリストを逆順に並べ替える方法" />
+<meta property="og:description" content="小ネタ Pythonにおいて、リストの要素を逆順に並び変えるにはいろいろ方法はあります。
+結論から言ってしまうと、リスト・文字列・タプルと汎用的に使えるスライスで処理するのが一番楽です。しかも、もともとのデータを破壊しない（新しいオブジェクトを作る）ので安心。
+スライス &gt;&gt;&gt; hoge = [1, 2, 3] &gt;&gt;&gt; hoge[::-1] [3, 2, 1] &gt;&gt;&gt; hoge [1, 2, 3] 上記はスライスによる逆順処理です。スライスは[start:end:step]の形で指定しますが、startとendが指定されない場合は、全要素が対象になります。全要素を対象としつつstepを-1とすると、最後の要素を最初に参照します。あとは最後から最初に1件ずつさかのぼって参照されるため、逆順に並べ替えられるというわけです。新しいオブジェクトを返すので、もともとのリストはそのままなのもポイント高い。
+reverse() &gt;&gt;&gt; hoge = [1, 2, 3] &gt;&gt;&gt; print(hoge.reverse()) None &gt;&gt;&gt; hoge [3, 2, 1] &gt;&gt;&gt; hoge.reverse() &gt;&gt;&gt; hoge [1, 2, 3] &gt;&gt;&gt; hoge = (1, 2, 3) &gt;&gt;&gt; hoge.reverse() Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; AttributeError: &#39;tuple&#39; object has no attribute &#39;reverse&#39; &gt;&gt;&gt; hoge = &#39;foobarbaz&#39; &gt;&gt;&gt; hoge." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/reverse-item-in-list-with-python/" /><meta property="article:published_time" content="2022-04-27T01:30:34&#43;09:00"/>
+<meta property="article:modified_time" content="2022-04-27T01:30:34&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Pythonのリストを逆順に並べ替える方法"/>
+<meta name="twitter:description" content="小ネタ Pythonにおいて、リストの要素を逆順に並び変えるにはいろいろ方法はあります。
+結論から言ってしまうと、リスト・文字列・タプルと汎用的に使えるスライスで処理するのが一番楽です。しかも、もともとのデータを破壊しない（新しいオブジェクトを作る）ので安心。
+スライス &gt;&gt;&gt; hoge = [1, 2, 3] &gt;&gt;&gt; hoge[::-1] [3, 2, 1] &gt;&gt;&gt; hoge [1, 2, 3] 上記はスライスによる逆順処理です。スライスは[start:end:step]の形で指定しますが、startとendが指定されない場合は、全要素が対象になります。全要素を対象としつつstepを-1とすると、最後の要素を最初に参照します。あとは最後から最初に1件ずつさかのぼって参照されるため、逆順に並べ替えられるというわけです。新しいオブジェクトを返すので、もともとのリストはそのままなのもポイント高い。
+reverse() &gt;&gt;&gt; hoge = [1, 2, 3] &gt;&gt;&gt; print(hoge.reverse()) None &gt;&gt;&gt; hoge [3, 2, 1] &gt;&gt;&gt; hoge.reverse() &gt;&gt;&gt; hoge [1, 2, 3] &gt;&gt;&gt; hoge = (1, 2, 3) &gt;&gt;&gt; hoge.reverse() Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; AttributeError: &#39;tuple&#39; object has no attribute &#39;reverse&#39; &gt;&gt;&gt; hoge = &#39;foobarbaz&#39; &gt;&gt;&gt; hoge."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Pythonのリストを逆順に並べ替える方法</h1>
+			<div class="meta">Posted at &mdash; Apr 27, 2022</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="小ネタ">小ネタ</h2>
+
+<p>Pythonにおいて、リストの要素を逆順に並び変えるにはいろいろ方法はあります。</p>
+
+<p>結論から言ってしまうと、リスト・文字列・タプルと汎用的に使えるスライスで処理するのが一番楽です。しかも、もともとのデータを破壊しない（新しいオブジェクトを作る）ので安心。</p>
+
+<h3 id="スライス">スライス</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; hoge = [1, 2, 3]
+&gt;&gt;&gt; hoge[::-1]
+[3, 2, 1]
+&gt;&gt;&gt; hoge
+[1, 2, 3]</code></pre></div>
+<p>上記はスライスによる逆順処理です。スライスは<code>[start:end:step]</code>の形で指定しますが、<code>start</code>と<code>end</code>が指定されない場合は、全要素が対象になります。全要素を対象としつつ<code>step</code>を<code>-1</code>とすると、最後の要素を最初に参照します。あとは最後から最初に1件ずつさかのぼって参照されるため、逆順に並べ替えられるというわけです。新しいオブジェクトを返すので、もともとのリストはそのままなのもポイント高い。</p>
+
+<h3 id="reverse"><code>reverse()</code></h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; hoge = [1, 2, 3]
+&gt;&gt;&gt; <span style="color:#00f">print</span>(hoge.reverse())
+None
+&gt;&gt;&gt; hoge
+[3, 2, 1]
+&gt;&gt;&gt; hoge.reverse()
+&gt;&gt;&gt; hoge
+[1, 2, 3]
+&gt;&gt;&gt; hoge = (1, 2, 3)
+&gt;&gt;&gt; hoge.reverse()
+Traceback (most recent call last):
+  File <span style="color:#a31515">&#34;&lt;stdin&gt;&#34;</span>, line 1, <span style="color:#00f">in</span> &lt;module&gt;
+AttributeError: <span style="color:#a31515">&#39;tuple&#39;</span> object has no attribute <span style="color:#a31515">&#39;reverse&#39;</span>
+&gt;&gt;&gt; hoge = <span style="color:#a31515">&#39;foobarbaz&#39;</span>
+&gt;&gt;&gt; hoge.reverse()
+Traceback (most recent call last):
+  File <span style="color:#a31515">&#34;&lt;stdin&gt;&#34;</span>, line 1, <span style="color:#00f">in</span> &lt;module&gt;
+AttributeError: <span style="color:#a31515">&#39;str&#39;</span> object has no attribute <span style="color:#a31515">&#39;reverse&#39;</span></code></pre></div>
+<p>リストのみ有効だが、逆順処理する<code>reverse()</code>メソッドがあります。これは、もともとのリストを直接変更するので、戻り値は<code>None</code>であることに注意。実行された時点で、リストの内容が書き換わります。もともとのデータを書き換えるため、ミュータブルなリストでのみ可能で文字列やタプルなどでは利用できません。</p>
+
+<h3 id="reversed"><code>reversed()</code></h3>
+
+<p>前述の<code>reverse()</code>メソッドと似ていますが、こっちは組み込み関数の<code>reversed()</code>です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; hoge
+[1, 2, 3]
+&gt;&gt;&gt; reversed(hoge)
+&lt;list_reverseiterator object at 0x7fb748484670&gt;
+&gt;&gt;&gt; list(reversed(hoge))
+[3, 2, 1]
+&gt;&gt;&gt; hoge
+[1, 2, 3]
+&gt;&gt;&gt; hoge = (1, 2, 3)
+&gt;&gt;&gt; tuple(reversed(hoge))
+(3, 2, 1)
+&gt;&gt;&gt; hoge
+(1, 2, 3)
+&gt;&gt;&gt; hoge = <span style="color:#a31515">&#39;foobarbaz&#39;</span>
+&gt;&gt;&gt; reversed(hoge)
+&lt;reversed object at 0x7fb7485ff9d0&gt;
+&gt;&gt;&gt; list(reversed(hoge))
+[<span style="color:#a31515">&#39;z&#39;</span>, <span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;b&#39;</span>, <span style="color:#a31515">&#39;r&#39;</span>, <span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;b&#39;</span>, <span style="color:#a31515">&#39;o&#39;</span>, <span style="color:#a31515">&#39;o&#39;</span>, <span style="color:#a31515">&#39;f&#39;</span>]
+&gt;&gt;&gt; <span style="color:#a31515">&#39;&#39;</span>.join(list(reversed(hoge)))
+<span style="color:#a31515">&#39;zabraboof&#39;</span>
+&gt;&gt;&gt; hoge
+<span style="color:#a31515">&#39;foobarbaz&#39;</span></code></pre></div>
+<p>組み込み関数の<code>reversed()</code>を利用すると、戻り値はイテレータです。そのままでは利用できない（<code>for</code>文などには使えるが）ので、上記では<code>list()</code>を使ってリストに直しています。これはもともとのデータを書き換えず、新しいオブジェクトを作成してくれます。リストだけでなく、文字列やタプルにも利用できるのはメソッドと比較すると大きいメリット。</p>
+
+<p>ただ、文字列やタプルにも使えるとは言いましたが、如何せん戻り値がイテレータなのでやっぱり直接的に利用できないのが玉にキズ。よって、<code>tuple()</code>でタプルに直したり、<code>join()</code>で一度リストにしたものを結合し文字列に直す必要があります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; hoge = [1, 2, 3]
+&gt;&gt;&gt; fuga = (4, 5, 6)
+&gt;&gt;&gt; piyo = <span style="color:#a31515">&#39;foobarbaz&#39;</span>
+&gt;&gt;&gt; hoge[::-1]
+[3, 2, 1]
+&gt;&gt;&gt; fuga[::-1]
+(6, 5, 4)
+&gt;&gt;&gt; piyo[::-1]
+<span style="color:#a31515">&#39;zabraboof&#39;</span>
+&gt;&gt;&gt; hoge
+[1, 2, 3]
+&gt;&gt;&gt; fuga
+(4, 5, 6)
+&gt;&gt;&gt; piyo
+<span style="color:#a31515">&#39;foobarbaz&#39;</span></code></pre></div>
+<p>なお、スライスを利用すればリストやタプルなどの形式に関係なく処理可能。しかも、もともとのデータを変更しません。もうこれでいいのでは、って気がします。</p>
+
+<h2 id="reference">reference</h2>
+
+<ol>
+<li><a href="https://docs.python.org/ja/3/library/array.html?highlight=reverse#array.array.reverse">array.reverse</a></li>
+<li><a href="https://docs.python.org/ja/3/library/functions.html?highlight=reversed#reversed">reversed</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

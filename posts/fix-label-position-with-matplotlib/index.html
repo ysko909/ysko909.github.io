@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>matplotlibで作成したグラフのラベル重複を解消する方法 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="matplotlibで作成したグラフのラベル重複を解消する方法" />
+<meta property="og:description" content="概要 matplotlibでグラフを作成する際、ラベルが長すぎるなどの理由で他のラベルと重複して表示されてしまい見にくい場合があります。こういうときは、rotationで角度をつけると見やすくなるのでメモ。
+サンプル fig = plt.figure() ax = fig.add_subplot(1, 1, 1) ax.plot(df, label=&#39;original&#39;) ax.plot(pred, label=&#39;prediction&#39;, linestyle=&#39;--&#39;) ax.plot(pred2, label=&#39;prediction2&#39;, linestyle=&#39;--&#39;) ax.legend() plt.show() 任意のデータが含まれたdfについてプロットします。
+この結果は上記のようになります。X軸のラベルがそれぞれに被ってしまい非常に見にくいですね。
+fig = plt.figure() ax = fig.add_subplot(1, 1, 1) ax.plot(df, label=&#39;original&#39;) ax.plot(pred, label=&#39;prediction&#39;, linestyle=&#39;--&#39;) ax.plot(pred2, label=&#39;prediction2&#39;, linestyle=&#39;--&#39;) labels = ax.get_xticklabels() plt.setp(labels, rotation=45) ax.legend() plt.show() そこで、上記のようにラベル表示に角度をつけます。上の例だと、45度の角度を設定しているわけです。
+もともとの表示位置から45度反時計回りに回転した状態で、X軸のラベルが表示されました。どうも、ラベルの文字列の中心が、回転の中心になっているようです。また、そのまま回転するとグラフ本体に被ってしまいそうな場合、上下方向に調節してくれるようです。
+fig = plt.figure() ax = fig.add_subplot(1, 1, 1) ax.plot(df, label=&#39;original&#39;) ax.plot(pred, label=&#39;prediction&#39;, linestyle=&#39;--&#39;) ax.plot(pred2, label=&#39;prediction2&#39;, linestyle=&#39;--&#39;) labels = ax.get_xticklabels() plt.setp(labels, rotation=45, ha=&#39;right&#39;) ax." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fix-label-position-with-matplotlib/" /><meta property="article:published_time" content="2022-04-25T01:19:38&#43;09:00"/>
+<meta property="article:modified_time" content="2022-04-25T01:19:38&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="matplotlibで作成したグラフのラベル重複を解消する方法"/>
+<meta name="twitter:description" content="概要 matplotlibでグラフを作成する際、ラベルが長すぎるなどの理由で他のラベルと重複して表示されてしまい見にくい場合があります。こういうときは、rotationで角度をつけると見やすくなるのでメモ。
+サンプル fig = plt.figure() ax = fig.add_subplot(1, 1, 1) ax.plot(df, label=&#39;original&#39;) ax.plot(pred, label=&#39;prediction&#39;, linestyle=&#39;--&#39;) ax.plot(pred2, label=&#39;prediction2&#39;, linestyle=&#39;--&#39;) ax.legend() plt.show() 任意のデータが含まれたdfについてプロットします。
+この結果は上記のようになります。X軸のラベルがそれぞれに被ってしまい非常に見にくいですね。
+fig = plt.figure() ax = fig.add_subplot(1, 1, 1) ax.plot(df, label=&#39;original&#39;) ax.plot(pred, label=&#39;prediction&#39;, linestyle=&#39;--&#39;) ax.plot(pred2, label=&#39;prediction2&#39;, linestyle=&#39;--&#39;) labels = ax.get_xticklabels() plt.setp(labels, rotation=45) ax.legend() plt.show() そこで、上記のようにラベル表示に角度をつけます。上の例だと、45度の角度を設定しているわけです。
+もともとの表示位置から45度反時計回りに回転した状態で、X軸のラベルが表示されました。どうも、ラベルの文字列の中心が、回転の中心になっているようです。また、そのまま回転するとグラフ本体に被ってしまいそうな場合、上下方向に調節してくれるようです。
+fig = plt.figure() ax = fig.add_subplot(1, 1, 1) ax.plot(df, label=&#39;original&#39;) ax.plot(pred, label=&#39;prediction&#39;, linestyle=&#39;--&#39;) ax.plot(pred2, label=&#39;prediction2&#39;, linestyle=&#39;--&#39;) labels = ax.get_xticklabels() plt.setp(labels, rotation=45, ha=&#39;right&#39;) ax."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		 />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">matplotlibで作成したグラフのラベル重複を解消する方法</h1>
+			<div class="meta">Posted at &mdash; Apr 25, 2022</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p><a href="https://matplotlib.org/">matplotlib</a>でグラフを作成する際、ラベルが長すぎるなどの理由で他のラベルと重複して表示されてしまい見にくい場合があります。こういうときは、<code>rotation</code>で角度をつけると見やすくなるのでメモ。</p>
+
+<h2 id="サンプル">サンプル</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">fig = plt.figure()
+ax = fig.add_subplot(1, 1, 1)
+
+ax.plot(df, label=<span style="color:#a31515">&#39;original&#39;</span>)
+ax.plot(pred, label=<span style="color:#a31515">&#39;prediction&#39;</span>, linestyle=<span style="color:#a31515">&#39;--&#39;</span>)
+ax.plot(pred2, label=<span style="color:#a31515">&#39;prediction2&#39;</span>, linestyle=<span style="color:#a31515">&#39;--&#39;</span>)
+
+ax.legend()
+
+plt.show()</code></pre></div>
+<p>任意のデータが含まれた<code>df</code>についてプロットします。</p>
+
+<p><img src="2022-04-27-01-22-16.png" alt="pic" /></p>
+
+<p>この結果は上記のようになります。X軸のラベルがそれぞれに被ってしまい非常に見にくいですね。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">fig = plt.figure()
+ax = fig.add_subplot(1, 1, 1)
+
+ax.plot(df, label=<span style="color:#a31515">&#39;original&#39;</span>)
+ax.plot(pred, label=<span style="color:#a31515">&#39;prediction&#39;</span>, linestyle=<span style="color:#a31515">&#39;--&#39;</span>)
+ax.plot(pred2, label=<span style="color:#a31515">&#39;prediction2&#39;</span>, linestyle=<span style="color:#a31515">&#39;--&#39;</span>)
+
+labels = ax.get_xticklabels()
+plt.setp(labels, rotation=45)
+
+ax.legend()
+
+plt.show()</code></pre></div>
+<p>そこで、上記のようにラベル表示に角度をつけます。上の例だと、45度の角度を設定しているわけです。</p>
+
+<p><img src="2022-04-27-01-22-40.png" alt="pic" /></p>
+
+<p>もともとの表示位置から45度反時計回りに回転した状態で、X軸のラベルが表示されました。どうも、ラベルの文字列の中心が、回転の中心になっているようです。また、そのまま回転するとグラフ本体に被ってしまいそうな場合、上下方向に調節してくれるようです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">fig = plt.figure()
+ax = fig.add_subplot(1, 1, 1)
+
+ax.plot(df, label=<span style="color:#a31515">&#39;original&#39;</span>)
+ax.plot(pred, label=<span style="color:#a31515">&#39;prediction&#39;</span>, linestyle=<span style="color:#a31515">&#39;--&#39;</span>)
+ax.plot(pred2, label=<span style="color:#a31515">&#39;prediction2&#39;</span>, linestyle=<span style="color:#a31515">&#39;--&#39;</span>)
+
+labels = ax.get_xticklabels()
+plt.setp(labels, rotation=45, ha=<span style="color:#a31515">&#39;right&#39;</span>)
+
+ax.legend()
+
+plt.show()</code></pre></div>
+<p><code>ha</code>はたぶんhorizontalalignmentの略で、<code>left</code>・<code>center</code>・<code>right</code>の値を取ります。水平方向の表示位置を調整するのに利用します。</p>
+
+<p><img src="2022-04-27-01-22-58.png" alt="pic" /></p>
+
+<p><code>ha</code>に<code>right</code>を設定したところ、ラベルの右側が目盛り線の位置と合うようになりました。この設定を<code>left</code>にすれば、ラベルの左側が目盛り線と合うようになります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">fig = plt.figure()
+ax = fig.add_subplot(1, 1, 1)
+
+ax.plot(df, label=<span style="color:#a31515">&#39;original&#39;</span>)
+ax.plot(pred, label=<span style="color:#a31515">&#39;prediction&#39;</span>, linestyle=<span style="color:#a31515">&#39;--&#39;</span>)
+ax.plot(pred2, label=<span style="color:#a31515">&#39;prediction2&#39;</span>, linestyle=<span style="color:#a31515">&#39;--&#39;</span>)
+
+labels = ax.get_xticklabels()
+plt.setp(labels, rotation=45, ha=<span style="color:#a31515">&#39;right&#39;</span>, va=<span style="color:#a31515">&#39;center_baseline&#39;</span>)
+
+ax.legend()
+
+plt.show()</code></pre></div>
+<p>水平方向があるってことは垂直方向があるってことで、verticalalignmentを意味する<code>va</code>もあります。<code>top</code>・<code>bottom</code>・<code>center</code>・<code>baseline</code>・<code>center_baseline</code>が設定可能なパラメータ。デフォルトは多分だけど<code>top</code>でしょうか。</p>
+
+<p><img src="2022-04-27-01-23-14.png" alt="pic" /></p>
+
+<p>実行結果は上記の画像のようになります。</p>
+
+<p>ちなみに、<code>top</code>と<code>center_baseline</code>以外の設定値は、ラベルがグラフ本体に被るので正直使いどころが難しいです。文字列が短いならアリなんだろうかなぁ。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://matplotlib.org/3.3.1/api/_as_gen/matplotlib.pyplot.setp.html">matplotlib.pyplot.setp</a></li>
+<li><a href="https://qiita.com/nkay/items/d1eb91e33b9d6469ef51">matplotlibのめっちゃまとめ</a></li>
+<li><a href="https://stackoverflow.com/questions/34188248/proper-alignment-of-labels-in-matplotlib">Proper alignment of labels in matplotlib</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Matplotlib on 頑張らないために頑張る</title>
+    <link>https://ysko909.github.io/tags/matplotlib/</link>
+    <description>Recent content in Matplotlib on 頑張らないために頑張る</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© Copyright ysko</copyright>
+    <lastBuildDate>Mon, 25 Apr 2022 01:19:38 +0900</lastBuildDate>
+    
+	<atom:link href="https://ysko909.github.io/tags/matplotlib/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>matplotlibで作成したグラフのラベル重複を解消する方法</title>
+      <link>https://ysko909.github.io/posts/fix-label-position-with-matplotlib/</link>
+      <pubDate>Mon, 25 Apr 2022 01:19:38 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/fix-label-position-with-matplotlib/</guid>
+      <description>概要 matplotlibでグラフを作成する際、ラベルが長すぎるなどの理由で他のラベルと重複して表示されてしまい見にくい場合があります。こういうときは、rotationで角度をつけると見やすくなるのでメモ。
+サンプル fig = plt.figure() ax = fig.add_subplot(1, 1, 1) ax.plot(df, label=&amp;#39;original&amp;#39;) ax.plot(pred, label=&amp;#39;prediction&amp;#39;, linestyle=&amp;#39;--&amp;#39;) ax.plot(pred2, label=&amp;#39;prediction2&amp;#39;, linestyle=&amp;#39;--&amp;#39;) ax.legend() plt.show() 任意のデータが含まれたdfについてプロットします。
+この結果は上記のようになります。X軸のラベルがそれぞれに被ってしまい非常に見にくいですね。
+fig = plt.figure() ax = fig.add_subplot(1, 1, 1) ax.plot(df, label=&amp;#39;original&amp;#39;) ax.plot(pred, label=&amp;#39;prediction&amp;#39;, linestyle=&amp;#39;--&amp;#39;) ax.plot(pred2, label=&amp;#39;prediction2&amp;#39;, linestyle=&amp;#39;--&amp;#39;) labels = ax.get_xticklabels() plt.setp(labels, rotation=45) ax.legend() plt.show() そこで、上記のようにラベル表示に角度をつけます。上の例だと、45度の角度を設定しているわけです。
+もともとの表示位置から45度反時計回りに回転した状態で、X軸のラベルが表示されました。どうも、ラベルの文字列の中心が、回転の中心になっているようです。また、そのまま回転するとグラフ本体に被ってしまいそうな場合、上下方向に調節してくれるようです。
+fig = plt.figure() ax = fig.add_subplot(1, 1, 1) ax.plot(df, label=&amp;#39;original&amp;#39;) ax.plot(pred, label=&amp;#39;prediction&amp;#39;, linestyle=&amp;#39;--&amp;#39;) ax.plot(pred2, label=&amp;#39;prediction2&amp;#39;, linestyle=&amp;#39;--&amp;#39;) labels = ax.get_xticklabels() plt.setp(labels, rotation=45, ha=&amp;#39;right&amp;#39;) ax.</description>
+    </item>
+    
+  </channel>
+</rss>
