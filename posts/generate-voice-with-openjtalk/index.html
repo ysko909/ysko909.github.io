@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>OpenJTalkを使って音声合成する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="OpenJTalkを使って音声合成する" />
+<meta property="og:description" content="概要 OpenJTalkとは、名古屋工業大学製の音声合成エンジンです。デモはここで実行できます。使い方は単純で、文字列を渡すと指定されたパラメータにしたがって音声合成を行ってくれます。指定できるオプションとしては話す速度や抑揚、声の高低などさまざま。サンプリングレートも指定できますが、このあたりは必要な人が限られるかも。
+今回は、このOpenJTalk用の環境をDockerを使って構築しようと思います。
+前提 OpenJTalkは、使用するプラットフォームによって環境構築の難易度に差が存在します。macOSやLinuxでの環境構築は比較的楽な反面、Windowsは自分自身でビルドしないといけないのがちょっと・・・いや、かなり面倒。
+そんなわけで、ここではmacOSにてDockerコンテナを用いてOpenJTalkの環境を構築します。多分、WindowsでもWSLを用いるとか、Dockerコンテナ上で構築する方が楽だと思います。
+ちなみに、ここではPython3のコンテナをベースに環境構築してますが、これは将来的に「文字列を渡すと音声合成したWaveファイルを返す」というような、サーバーとして機能させたい想定があるためです。ええ、要はFlaskのためですｗ
+環境構築 Dockerfileは、前述のとおりPythonのコンテナをベースとします。
+FROMpython:3.10-busterENVACCEPT_EULA=YRUN apt-get update \  &amp;&amp; apt-get install -y g&#43;&#43; \  apt-utils \  apt-transport-https \  gcc \  build-essential \  open-jtalk \  open-jtalk-mecab-naist-jdic \  &amp;&amp; apt-get upgrade -y \  &amp;&amp; apt-get clean \  &amp;&amp; pip install --upgrade pip \  &amp;&amp; pip install --no-cache-dir \  autopep8 \  flake8 \  &amp;&amp; rm -rf /var/lib/apt/lists/*ADD." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/generate-voice-with-openjtalk/" /><meta property="article:published_time" content="2022-04-28T00:01:16&#43;09:00"/>
+<meta property="article:modified_time" content="2022-04-28T00:01:16&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="OpenJTalkを使って音声合成する"/>
+<meta name="twitter:description" content="概要 OpenJTalkとは、名古屋工業大学製の音声合成エンジンです。デモはここで実行できます。使い方は単純で、文字列を渡すと指定されたパラメータにしたがって音声合成を行ってくれます。指定できるオプションとしては話す速度や抑揚、声の高低などさまざま。サンプリングレートも指定できますが、このあたりは必要な人が限られるかも。
+今回は、このOpenJTalk用の環境をDockerを使って構築しようと思います。
+前提 OpenJTalkは、使用するプラットフォームによって環境構築の難易度に差が存在します。macOSやLinuxでの環境構築は比較的楽な反面、Windowsは自分自身でビルドしないといけないのがちょっと・・・いや、かなり面倒。
+そんなわけで、ここではmacOSにてDockerコンテナを用いてOpenJTalkの環境を構築します。多分、WindowsでもWSLを用いるとか、Dockerコンテナ上で構築する方が楽だと思います。
+ちなみに、ここではPython3のコンテナをベースに環境構築してますが、これは将来的に「文字列を渡すと音声合成したWaveファイルを返す」というような、サーバーとして機能させたい想定があるためです。ええ、要はFlaskのためですｗ
+環境構築 Dockerfileは、前述のとおりPythonのコンテナをベースとします。
+FROMpython:3.10-busterENVACCEPT_EULA=YRUN apt-get update \  &amp;&amp; apt-get install -y g&#43;&#43; \  apt-utils \  apt-transport-https \  gcc \  build-essential \  open-jtalk \  open-jtalk-mecab-naist-jdic \  &amp;&amp; apt-get upgrade -y \  &amp;&amp; apt-get clean \  &amp;&amp; pip install --upgrade pip \  &amp;&amp; pip install --no-cache-dir \  autopep8 \  flake8 \  &amp;&amp; rm -rf /var/lib/apt/lists/*ADD."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">OpenJTalkを使って音声合成する</h1>
+			<div class="meta">Posted at &mdash; Apr 28, 2022</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p><a href="http://open-jtalk.sourceforge.net/">OpenJTalk</a>とは、名古屋工業大学製の音声合成エンジンです。デモは<a href="https://open-jtalk.sp.nitech.ac.jp/">ここ</a>で実行できます。使い方は単純で、文字列を渡すと指定されたパラメータにしたがって音声合成を行ってくれます。指定できるオプションとしては話す速度や抑揚、声の高低などさまざま。サンプリングレートも指定できますが、このあたりは必要な人が限られるかも。</p>
+
+<p>今回は、このOpenJTalk用の環境をDockerを使って構築しようと思います。</p>
+
+<h2 id="前提">前提</h2>
+
+<p>OpenJTalkは、使用するプラットフォームによって環境構築の難易度に差が存在します。macOSやLinuxでの環境構築は比較的楽な反面、Windowsは自分自身でビルドしないといけないのがちょっと・・・いや、かなり面倒。</p>
+
+<p>そんなわけで、ここではmacOSにてDockerコンテナを用いてOpenJTalkの環境を構築します。多分、WindowsでもWSLを用いるとか、Dockerコンテナ上で構築する方が楽だと思います。</p>
+
+<p>ちなみに、ここではPython3のコンテナをベースに環境構築してますが、これは将来的に「文字列を渡すと音声合成したWaveファイルを返す」というような、サーバーとして機能させたい想定があるためです。ええ、要は<a href="https://github.com/pallets/flask">Flask</a>のためですｗ</p>
+
+<h2 id="環境構築">環境構築</h2>
+
+<p>Dockerfileは、前述のとおりPythonのコンテナをベースとします。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#00f">FROM</span><span style="color:#a31515"> python:3.10-buster</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">ENV</span><span style="color:#a31515"> ACCEPT_EULA=Y</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> apt-get update <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; apt-get install -y g++ <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    apt-utils <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    apt-transport-https <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    gcc <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    build-essential <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    open-jtalk <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    open-jtalk-mecab-naist-jdic <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; apt-get upgrade -y <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; apt-get clean <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; pip install --upgrade pip <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; pip install --no-cache-dir <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    autopep8 <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    flake8 <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>    &amp;&amp; rm -rf /var/lib/apt/lists/*<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">ADD</span><span style="color:#a31515"> . /home/workdir</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">WORKDIR</span><span style="color:#a31515"> /home/workdir</span><span style="">
+</span><span style="">
+</span><span style=""></span>COPY ./requirements.txt <span style="color:#a31515">${</span>PWD<span style="color:#a31515">}</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> pip install -r requirements.txt<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> wget https://sourceforge.net/projects/mmdagent/files/MMDAgent_Example/MMDAgent_Example-1.6/MMDAgent_Example-1.6.zip/download -O MMDAgent_Example-1.6.zip<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> unzip MMDAgent_Example-1.6.zip MMDAgent_Example-1.6/Voice/*<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> cp -r MMDAgent_Example-1.6/Voice/mei/ /usr/share/hts-voice<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">WORKDIR</span><span style="color:#a31515"> /home/workdir/src</span></code></pre></div>
+<p>Dockerfileを上記の内容で作成して、<code>docker build</code>すれば環境はできあがりです。<del><a href="https://dic.pixiv.net/a/%E3%81%AD%E3%80%81%E7%B0%A1%E5%8D%98%E3%81%A7%E3%81%97%E3%82%87%3F">ね、簡単でしょ？</a></del></p>
+
+<p>ちなみに、VS Codeを使っているなら「Reopen in container」を選択して、コンテナの環境構築を行ってもOK。こっちのほうが、環境構築後にコンテナへのログインをせずともVS Codeのコンソールで音声合成のコマンド発行できるので、少しだけ早いです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">flask</code></pre></div>
+<p>なお、requirements.txtは上記の内容で作成してます。これは、前述のとおり将来的にサーバーを立てる想定だったので導入しているわけですが、単純に音声合成だけしたいのならPython環境は不要です。DebianならBusterかBullseye、Ubuntuあたりで環境構築しておけば特段困ることはないと思います。</p>
+
+<p>コンテナのビルドが完了したら試しに音声合成を行ってみましょう。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">echo こんにちは、世界。 | open_jtalk -x /var/lib/mecab/dic/open-jtalk/naist-jdic/ -m /usr/share/hts-voice/mei_normal.htsvoice -ow hello.wav</code></pre></div>
+<p>上記を実行すると、カレントフォルダに<code>hallo.wav</code>というファイルが生成されるはずです。これを再生すれば、合成された音声で「こんにちは、世界」と言われるはず。</p>
+
+<p>これで環境構築は完了です。</p>
+
+<h2 id="解説">解説</h2>
+
+<p>OpenJTalkで音声合成を行うために必要なファイルは3種類です。</p>
+
+<ul>
+<li>OpenJTalk本体</li>
+<li>OpenJTalk用辞書ファイル</li>
+<li>音声ファイル</li>
+</ul>
+
+<p>前述のDockerfile中で上記のファイルをインストールしているのは、<code>open-jtalk</code>と<code>open-jtalk-mecab-naist-jdic</code>を<code>apt-get</code>している部分に当たります。</p>
+
+<p>「あれ、3種類のファイルが必要って言ったのに<strong>2つしかなくね？</strong>」と思ったあなたは鋭い。その通りで、この2つは「OpenJTalk本体」と「辞書ファイル」に当たるものです。つまり、<code>apt-get</code>では音声ファイルをインストールしていないのです。</p>
+
+<p>なんでかって？</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console"><span style="">#</span> apt-get install hts-voice-nitech-jp-atr503-m001
+Reading <span style="color:#00f">package</span> lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Package hts-voice-nitech-jp-atr503-m001 is not available, but is referred to by another <span style="color:#00f">package</span>.
+This may mean that the <span style="color:#00f">package</span> is missing, has been obsoleted, or
+is only available from another source
+
+E: Package <span style="">&#39;</span>hts-voice-nitech-jp-atr503-m001<span style="">&#39;</span> has no installation candidate</code></pre></div>
+<p>その理由がこのエラー。</p>
+
+<p>音声ファイルである<code>hts-voice-nitech-jp-atr503-m001</code>は、<code>apt-get</code>でインストールしようとしても現在（2022年4月末）のところなぜかエラーになります。メッセージを見ると、「なんか見つからないんだよねー。でも、他のパッケージから参照されているんだわコレ。だから、たぶん廃止されたか他のソースからじゃないと入手できないんじゃない？」と言われているようです。</p>
+
+<p>ただ、音声ファイルはこの1種類だけというわけではなく、OpenJTalkに利用できるいろんな声質の音声ファイルが存在しています。実際、今回はこのファイルを利用せず後述する別の音声ファイルを導入するので、ここで<code>hts-voice-nitech-jp-atr503-m001</code>を導入しなくても<strong>何ら問題ありません</strong>。そのため、エラーの原因について詳しくは調査してないんだなぁ、コレが。一応<a href="https://packages.debian.org/buster/hts-voice-nitech-jp-atr503-m001">パッケージの情報</a>を見てみると、存在自体はしているらしいんですけどねぇ・・・。</p>
+
+<p>じゃあ、<code>hts-voice-nitech-jp-atr503-m001</code>以外の音声ファイルはどうやって調達するのよ？という話になるわけです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#00f">RUN</span> wget https://sourceforge.net/projects/mmdagent/files/MMDAgent_Example/MMDAgent_Example-1.6/MMDAgent_Example-1.6.zip/download -O MMDAgent_Example-1.6.zip<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> unzip MMDAgent_Example-1.6.zip MMDAgent_Example-1.6/Voice/*<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> cp -r MMDAgent_Example-1.6/Voice/mei/ /usr/share/hts-voice</code></pre></div>
+<p>上記の3行が、その音声ファイルを導入している部分に当たります。<code>wget</code>で音声ファイルを入手し、<code>unzip</code>で解凍・展開します。展開した音声ファイルを<code>/usr/share/hts-voice</code>に格納すると、OpenJTalkを用いた音声合成が可能な環境の完成です。</p>
+
+<p>なお、参考にした「<a href="https://www.ekit-tech.com/?p=666">合成音声「Open JTalk」でハマったこと</a>」では<code>-y</code>オプションを<code>apt-get</code>に付与することで、音声ファイル入手時のエラーを回避しているようです。ただ、そもそもエラー内容が異なる（参考先では<code>E: Unable to locate package hts-voice-nitech-jp-atr503-m001</code>）ためか今回のケースでは回避できませんでした。うーん、謎。</p>
+
+<h2 id="オプション">オプション</h2>
+
+<p>コマンドで音声合成を実行する際、さまざまなオプションを設定できます。オプションの一覧は、<code>open_jtalk</code>に引数を指定しない状態で実行すると表示されます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console"># open_jtalk
+The Japanese TTS System &#34;Open JTalk&#34;
+Version 1.10 (http://open-jtalk.sourceforge.net/)
+Copyright (C) 2008-2016 Nagoya Institute of Technology
+All rights reserved.
+
+The HMM-Based Speech Synthesis Engine &#34;hts_engine API&#34;
+Version 1.10 (http://hts-engine.sourceforge.net/)
+Copyright (C) 2001-2015 Nagoya Institute of Technology
+              2001-2008 Tokyo Institute of Technology
+All rights reserved.
+
+Yet Another Part-of-Speech and Morphological Analyzer &#34;Mecab&#34;
+Version 0.996 (http://mecab.sourceforge.net/)
+Copyright (C) 2001-2008 Taku Kudo
+              2004-2008 Nippon Telegraph and Telephone Corporation
+All rights reserved.
+
+NAIST Japanese Dictionary
+Version 0.6.1-20090630 (http://naist-jdic.sourceforge.jp/)
+Copyright (C) 2009 Nara Institute of Science and Technology
+All rights reserved.
+
+UniDic
+Version 2.2.0 (https://unidic.ninjal.ac.jp/)
+Copyright (C) 2011-2017 The UniDic Consortium
+All rights reserved.
+
+open_jtalk - The Japanese TTS system &#34;Open JTalk&#34;
+
+  usage:
+       open_jtalk [ options ] [ infile ] 
+  options:                                                                   [  def][ min-- max]
+    -x  dir        : dictionary directory                                    [  N/A]
+    -m  htsvoice   : HTS voice files                                         [  N/A]
+    -ow s          : filename of output wav audio (generated speech)         [  N/A]
+    -ot s          : filename of output trace information                    [  N/A]
+    -s  i          : sampling frequency                                      [ auto][   1--    ]
+    -p  i          : frame period (point)                                    [ auto][   1--    ]
+    -a  f          : all-pass constant                                       [ auto][ 0.0-- 1.0]
+    -b  f          : postfiltering coefficient                               [  0.0][ 0.0-- 1.0]
+    -r  f          : speech speed rate                                       [  1.0][ 0.0--    ]
+    -fm f          : additional half-tone                                    [  0.0][    --    ]
+    -u  f          : voiced/unvoiced threshold                               [  0.5][ 0.0-- 1.0]
+    -jm f          : weight of GV for spectrum                               [  1.0][ 0.0--    ]
+    -jf f          : weight of GV for log F0                                 [  1.0][ 0.0--    ]
+    -g  f          : volume (dB)                                             [  0.0][    --    ]
+    -z  i          : audio buffer size (if i==0, turn off)                   [    0][   0--    ]
+  infile:
+    text file                                                                [stdin]</code></pre></div>
+<p>たくさんオプションがありますが、基本的には設定に関するものとファイル出力に関するものだけ指定すれば良いはずです。</p>
+
+<h3 id="設定に関するオプション">設定に関するオプション</h3>
+
+<table>
+<thead>
+<tr>
+<th align="center">オプション</th>
+<th align="center">内容</th>
+<th align="center">指定例</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center"><code>-x</code></td>
+<td align="center">辞書を指定する。<strong>辞書が存在するフォルダ</strong>を指定する。必須。</td>
+<td align="center"><code>-x /var/lib/mecab/dic/open-jtalk/naist-jdic/</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>-m</code></td>
+<td align="center">音声ファイルを指定する。ファイルそのものを指定する。必須。</td>
+<td align="center"><code>-m /usr/share/hts-voice/mei_bashful.htsvoice</code></td>
+</tr>
+</tbody>
+</table>
+
+<p>上記の2オプションは指定が必須です。</p>
+
+<h3 id="ファイル出力に関するオプション">ファイル出力に関するオプション</h3>
+
+<table>
+<thead>
+<tr>
+<th align="center">オプション</th>
+<th align="center">内容</th>
+<th align="center">指定例</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center"><code>-ow</code></td>
+<td align="center">出力先Waveファイルを指定する。指定が必須のオプション。</td>
+<td align="center"><code>-ow hoge.wav</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>-ot</code></td>
+<td align="center">ログファイルの出力先を指定する。指定は任意。</td>
+<td align="center"><code>-ot generate_log.log</code></td>
+</tr>
+</tbody>
+</table>
+
+<p><code>-ot</code>のログファイル出力は、形態素解析などの結果が出力されます。どんな解析や音声合成をしているか、気になる人は見てみるといいかも。</p>
+
+<h3 id="音声合成に関するオプション">音声合成に関するオプション</h3>
+
+<table>
+<thead>
+<tr>
+<th align="center">オプション</th>
+<th align="center">内容</th>
+<th align="center">指定例</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center"><code>-s</code></td>
+<td align="center">サンプリングレートを指定する。</td>
+<td align="center"><code>-s 44100</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>-p</code></td>
+<td align="center">フレーム周期を指定する。</td>
+<td align="center"><code>-p 220</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>-a</code></td>
+<td align="center">オールパス値を指定する。値が小さくなるほどヘリウムガスを吸ったような声になる。</td>
+<td align="center"><code>-a 0.5</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>-b</code></td>
+<td align="center">ポストフィルターの値を指定する。1に近いほどなめらかな発声。</td>
+<td align="center"><code>-b 0.9</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>-r</code></td>
+<td align="center">話す速度を指定する。数字が小さいほど遅い。</td>
+<td align="center"><code>-r 1.2</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>-fm</code></td>
+<td align="center">追加ハーフトーンを指定する。数字が小さいほど「落ち着いた」声質。</td>
+<td align="center"><code>-fm</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>-u</code></td>
+<td align="center">音声の有無に関する閾値を指定する。</td>
+<td align="center"><code>-u</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>-jm</code></td>
+<td align="center">スペクトラム変動の重みを指定する。声量に関係する。</td>
+<td align="center"><code>-jm 1.0</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>-jf</code></td>
+<td align="center">F0変動の重みを指定する。値が小さいほど抑揚のない声質になる。</td>
+<td align="center"><code>-jf 1.0</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>-g</code></td>
+<td align="center">音量をデシベルで指定する。</td>
+<td align="center"><code>-g 10</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>-z</code></td>
+<td align="center">バッファサイズを指定する。</td>
+<td align="center"><code>-z 0</code></td>
+</tr>
+</tbody>
+</table>
+
+<p>基本的にはデフォルト値で音声合成して問題ないと思います。強いていうなら、デフォルトでは音声速度が若干遅く感じるので、<code>-r</code>で調整してもいいかもしれません。</p>
+
+<h2 id="reference">reference</h2>
+
+<ol>
+<li><a href="https://open-jtalk.sp.nitech.ac.jp/">OpenJTalkデモページ</a></li>
+<li><a href="https://ja.wikipedia.org/wiki/Open_JTalk">OpenJTalkのwikipediaページ</a></li>
+<li><a href="https://dyama.org/2021/09/%E9%9F%B3%E5%A3%B0%E5%90%88%E6%88%90%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3-openjtalk-%E3%81%AE%E3%83%81%E3%83%A5%E3%83%BC%E3%83%8B%E3%83%B3%E3%82%B0/">音声合成エンジン OpenJTalk のチューニング</a></li>
+<li><a href="http://moblog.absgexp.net/openjtalk/">萌え声を探せ！Open JTalkのパラメータをいろいろ変化させてみた！</a></li>
+<li><a href="https://www.ekit-tech.com/?p=666">合成音声「Open JTalk」でハマったこと</a></li>
+<li><a href="https://qiita.com/kkoba84/items/b828229c374a249965a9">OpenJTalk + python で日本語テキストを発話</a></li>
+<li><a href="https://mekou.com/linux-magazine/open-jtalklinux-%E6%97%A5%E6%9C%AC%E8%AA%9E%E9%9F%B3%E5%A3%B0%E5%90%88%E6%88%90%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3/">Open JTalkLinux 日本語音声合成エンジン</a></li>
+<li><a href="https://deviceplus.jp/raspberrypi/control-device-with-raspberrypi-04/#02">Pythonでデバイスを制御しよう 第1回：日本語テキストを読み上げる(4)　OpenJTalkを使ってオフラインで音声合成</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

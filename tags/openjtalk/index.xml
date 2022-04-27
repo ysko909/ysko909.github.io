@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Openjtalk on 頑張らないために頑張る</title>
+    <link>https://ysko909.github.io/tags/openjtalk/</link>
+    <description>Recent content in Openjtalk on 頑張らないために頑張る</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© Copyright ysko</copyright>
+    <lastBuildDate>Thu, 28 Apr 2022 00:01:16 +0900</lastBuildDate>
+    
+	<atom:link href="https://ysko909.github.io/tags/openjtalk/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>OpenJTalkを使って音声合成する</title>
+      <link>https://ysko909.github.io/posts/generate-voice-with-openjtalk/</link>
+      <pubDate>Thu, 28 Apr 2022 00:01:16 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/generate-voice-with-openjtalk/</guid>
+      <description>概要 OpenJTalkとは、名古屋工業大学製の音声合成エンジンです。デモはここで実行できます。使い方は単純で、文字列を渡すと指定されたパラメータにしたがって音声合成を行ってくれます。指定できるオプションとしては話す速度や抑揚、声の高低などさまざま。サンプリングレートも指定できますが、このあたりは必要な人が限られるかも。
+今回は、このOpenJTalk用の環境をDockerを使って構築しようと思います。
+前提 OpenJTalkは、使用するプラットフォームによって環境構築の難易度に差が存在します。macOSやLinuxでの環境構築は比較的楽な反面、Windowsは自分自身でビルドしないといけないのがちょっと・・・いや、かなり面倒。
+そんなわけで、ここではmacOSにてDockerコンテナを用いてOpenJTalkの環境を構築します。多分、WindowsでもWSLを用いるとか、Dockerコンテナ上で構築する方が楽だと思います。
+ちなみに、ここではPython3のコンテナをベースに環境構築してますが、これは将来的に「文字列を渡すと音声合成したWaveファイルを返す」というような、サーバーとして機能させたい想定があるためです。ええ、要はFlaskのためですｗ
+環境構築 Dockerfileは、前述のとおりPythonのコンテナをベースとします。
+FROMpython:3.10-busterENVACCEPT_EULA=YRUN apt-get update \  &amp;amp;&amp;amp; apt-get install -y g++ \  apt-utils \  apt-transport-https \  gcc \  build-essential \  open-jtalk \  open-jtalk-mecab-naist-jdic \  &amp;amp;&amp;amp; apt-get upgrade -y \  &amp;amp;&amp;amp; apt-get clean \  &amp;amp;&amp;amp; pip install --upgrade pip \  &amp;amp;&amp;amp; pip install --no-cache-dir \  autopep8 \  flake8 \  &amp;amp;&amp;amp; rm -rf /var/lib/apt/lists/*ADD.</description>
+    </item>
+    
+  </channel>
+</rss>
