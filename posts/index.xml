@@ -33,7 +33,7 @@ FROMpython:3.10-busterENVACCEPT_EULA=YRUN apt-get update \  &amp;amp;&amp;amp; a
       <pubDate>Wed, 27 Apr 2022 01:30:34 +0900</pubDate>
       
       <guid>https://ysko909.github.io/posts/reverse-item-in-list-with-python/</guid>
-      <description>小ネタ Pythonにおいて、リストの要素を逆順に並び変えるにはいろいろ方法はあります。
+      <description>小ネタです Pythonにおいて、リストの要素を逆順に並び変えるにはいろいろ方法はあります。
 結論から言ってしまうと、リスト・文字列・タプルと汎用的に使えるスライスで処理するのが一番楽です。しかも、もともとのデータを破壊しない（新しいオブジェクトを作る）ので安心。
 スライス &amp;gt;&amp;gt;&amp;gt; hoge = [1, 2, 3] &amp;gt;&amp;gt;&amp;gt; hoge[::-1] [3, 2, 1] &amp;gt;&amp;gt;&amp;gt; hoge [1, 2, 3] 上記はスライスによる逆順処理です。スライスは[start:end:step]の形で指定しますが、startとendが指定されない場合は、全要素が対象になります。全要素を対象としつつstepを-1とすると、最後の要素を最初に参照します。あとは最後から最初に1件ずつさかのぼって参照されるため、逆順に並べ替えられるというわけです。新しいオブジェクトを返すので、もともとのリストはそのままなのもポイント高い。
 reverse() &amp;gt;&amp;gt;&amp;gt; hoge = [1, 2, 3] &amp;gt;&amp;gt;&amp;gt; print(hoge.reverse()) None &amp;gt;&amp;gt;&amp;gt; hoge [3, 2, 1] &amp;gt;&amp;gt;&amp;gt; hoge.reverse() &amp;gt;&amp;gt;&amp;gt; hoge [1, 2, 3] &amp;gt;&amp;gt;&amp;gt; hoge = (1, 2, 3) &amp;gt;&amp;gt;&amp;gt; hoge.reverse() Traceback (most recent call last): File &amp;#34;&amp;lt;stdin&amp;gt;&amp;#34;, line 1, in &amp;lt;module&amp;gt; AttributeError: &amp;#39;tuple&amp;#39; object has no attribute &amp;#39;reverse&amp;#39; &amp;gt;&amp;gt;&amp;gt; hoge = &amp;#39;foobarbaz&amp;#39; &amp;gt;&amp;gt;&amp;gt; hoge.</description>

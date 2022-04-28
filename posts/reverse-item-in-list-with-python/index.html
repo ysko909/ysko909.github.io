@@ -4,7 +4,7 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Pythonのリストを逆順に並べ替える方法 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta property="og:title" content="Pythonのリストを逆順に並べ替える方法" />
-<meta property="og:description" content="小ネタ Pythonにおいて、リストの要素を逆順に並び変えるにはいろいろ方法はあります。
+<meta property="og:description" content="小ネタです Pythonにおいて、リストの要素を逆順に並び変えるにはいろいろ方法はあります。
 結論から言ってしまうと、リスト・文字列・タプルと汎用的に使えるスライスで処理するのが一番楽です。しかも、もともとのデータを破壊しない（新しいオブジェクトを作る）ので安心。
 スライス &gt;&gt;&gt; hoge = [1, 2, 3] &gt;&gt;&gt; hoge[::-1] [3, 2, 1] &gt;&gt;&gt; hoge [1, 2, 3] 上記はスライスによる逆順処理です。スライスは[start:end:step]の形で指定しますが、startとendが指定されない場合は、全要素が対象になります。全要素を対象としつつstepを-1とすると、最後の要素を最初に参照します。あとは最後から最初に1件ずつさかのぼって参照されるため、逆順に並べ替えられるというわけです。新しいオブジェクトを返すので、もともとのリストはそのままなのもポイント高い。
 reverse() &gt;&gt;&gt; hoge = [1, 2, 3] &gt;&gt;&gt; print(hoge.reverse()) None &gt;&gt;&gt; hoge [3, 2, 1] &gt;&gt;&gt; hoge.reverse() &gt;&gt;&gt; hoge [1, 2, 3] &gt;&gt;&gt; hoge = (1, 2, 3) &gt;&gt;&gt; hoge.reverse() Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; AttributeError: &#39;tuple&#39; object has no attribute &#39;reverse&#39; &gt;&gt;&gt; hoge = &#39;foobarbaz&#39; &gt;&gt;&gt; hoge." />
@@ -12,7 +12,7 @@ reverse() &gt;&gt;&gt; hoge = [1, 2, 3] &gt;&gt;&gt; print(hoge.reverse()) None 
 <meta property="og:url" content="https://ysko909.github.io/posts/reverse-item-in-list-with-python/" /><meta property="article:published_time" content="2022-04-27T01:30:34&#43;09:00"/>
 <meta property="article:modified_time" content="2022-04-27T01:30:34&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Pythonのリストを逆順に並べ替える方法"/>
-<meta name="twitter:description" content="小ネタ Pythonにおいて、リストの要素を逆順に並び変えるにはいろいろ方法はあります。
+<meta name="twitter:description" content="小ネタです Pythonにおいて、リストの要素を逆順に並び変えるにはいろいろ方法はあります。
 結論から言ってしまうと、リスト・文字列・タプルと汎用的に使えるスライスで処理するのが一番楽です。しかも、もともとのデータを破壊しない（新しいオブジェクトを作る）ので安心。
 スライス &gt;&gt;&gt; hoge = [1, 2, 3] &gt;&gt;&gt; hoge[::-1] [3, 2, 1] &gt;&gt;&gt; hoge [1, 2, 3] 上記はスライスによる逆順処理です。スライスは[start:end:step]の形で指定しますが、startとendが指定されない場合は、全要素が対象になります。全要素を対象としつつstepを-1とすると、最後の要素を最初に参照します。あとは最後から最初に1件ずつさかのぼって参照されるため、逆順に並べ替えられるというわけです。新しいオブジェクトを返すので、もともとのリストはそのままなのもポイント高い。
 reverse() &gt;&gt;&gt; hoge = [1, 2, 3] &gt;&gt;&gt; print(hoge.reverse()) None &gt;&gt;&gt; hoge [3, 2, 1] &gt;&gt;&gt; hoge.reverse() &gt;&gt;&gt; hoge [1, 2, 3] &gt;&gt;&gt; hoge = (1, 2, 3) &gt;&gt;&gt; hoge.reverse() Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; AttributeError: &#39;tuple&#39; object has no attribute &#39;reverse&#39; &gt;&gt;&gt; hoge = &#39;foobarbaz&#39; &gt;&gt;&gt; hoge."/>
@@ -75,7 +75,7 @@ reverse() &gt;&gt;&gt; hoge = [1, 2, 3] &gt;&gt;&gt; print(hoge.reverse()) None 
 		<div class="markdown">
 			
 
-<h2 id="小ネタ">小ネタ</h2>
+<h2 id="小ネタです">小ネタです</h2>
 
 <p>Pythonにおいて、リストの要素を逆順に並び変えるにはいろいろ方法はあります。</p>
 
@@ -153,7 +153,7 @@ AttributeError: <span style="color:#a31515">&#39;str&#39;</span> object has no a
 (4, 5, 6)
 &gt;&gt;&gt; piyo
 <span style="color:#a31515">&#39;foobarbaz&#39;</span></code></pre></div>
-<p>なお、スライスを利用すればリストやタプルなどの形式に関係なく処理可能。しかも、もともとのデータを変更しません。もうこれでいいのでは、って気がします。</p>
+<p>なお、スライスを利用すればリストやタプルなどの形式に関係なく処理可能。しかも、もともとのデータを変更しません。もうこれでいいのでは、って気がします。ってか、これでいいよねぇ。</p>
 
 <h2 id="reference">reference</h2>
 
