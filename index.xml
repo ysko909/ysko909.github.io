@@ -338,11 +338,11 @@ environment: PGADMIN_DEFAULT_EMAIL: hogehoge@example.com PGADMIN_DEFAULT_PASSWOR
       <description>Restartingループから抜け出せない 今回は、自分が経験したDockerまわりのトラブルシューティングについてです。
 docker-compose.ymlを編集してdocker-compose up -dしたところ、一度は起動したコンテナがRestartingの状態に変化し、その後ずっとRestartingから変化しなくなる、という症状に見舞われました。つまり、一度は正常に起動しても何らかの原因でコンテナが落ちて、再起動してまた落ちて再起動して・・・を繰り返していることになります。
 docker-compose ps psコマンドでコンテナの状態（status）を見てみると、起動直後は「Up」なのですが少ししてから再度psで見てみると「Restarting」に変化していて、以降はずっと「Restarting」から変化しません。
-結論から言うと、コンテナ自体が悪いわけではなくコンテナ起動に関してエラーが起こっている可能性が高いと考えられます。よって、その原因が解消できればコンテナは正常に起動すると思われます。
-トラブったdocker-compose.yml version: &amp;#39;3&amp;#39; services: postgres: image: postgres container_name: postgres_hoge restart: always environment: TZ: &amp;#34;Asia/Tokyo&amp;#34; POSTGRES_USER: pg_hoge_admin POSTGRES_PASSWORD: pg_hoge_admin POSTGRES_DB: pg_hoge ports: - 30000:5432 volumes: - postgres:/var/lib/postgresql/data - ./postgres/initdb:/docker-entrypoint-initdb.d pgadmin: image: dpage/pgadmin4 container_name: pgadmin_hoge restart: always ports: - 30001:80 environment: PGADMIN_DEFAULT_EMAIL: admin@example.com PGADMIN_DEFAULT_PASSWORD: admin volumes: - pgadmin:/var/lib/pgadmin depends_on: - postgres volumes: postgres: pgadmin: 上記のようなdocker-compose.ymlを作成してdocker-compose up -dしたところ、PostgreSQL側のコンテナだけRestartingから抜け出せなくなってしまいました。コンテナのリビルドやイメージの再取得をしてもダメ。
-エラーの回避策 こういう場合は、正常起動しないコンテナのログを参照してエラーが起きていないかチェックした方がいいです。
-というのは、「少なくとも1度は正常起動するコンテナ」なので、イメージやコンテナのビルドそのものには問題がないと思われます。そうなると、コンテナが正常起動した直後になんらかのエラーがコンテナ内部で発生していると考えられ、そのエラーを解消する手がかりがログに残っていると考えられます。
-docker logs --tail 50 --follow --timestamps postgres_hoge 上記のコマンドを実行すると、指定したコンテナ（上記だとpostgres_hogeコンテナを指します）のログの最新50件分を表示します。大抵の場合、このログを見てみることで何かしらのエラーログを見つけられるはず。</description>
+結論から言うと、コンテナ自体が悪いわけではなく起動の際にコンテナ内でエラーが起こっている可能性が高いです。よって、その原因が解消できればコンテナは正常に起動するはずです。
+トラブったdocker-compose.yml version: &amp;#39;3&amp;#39; services: postgres: image: postgres container_name: postgres_hoge restart: always environment: TZ: &amp;#34;Asia/Tokyo&amp;#34; POSTGRES_USER: pg_hoge_admin POSTGRES_PASSWORD: pg_hoge_admin POSTGRES_DB: pg_hoge ports: - 30000:5432 volumes: - postgres:/var/lib/postgresql/data - ./postgres/initdb:/docker-entrypoint-initdb.d pgadmin: image: dpage/pgadmin4 container_name: pgadmin_hoge restart: always ports: - 30001:80 environment: PGADMIN_DEFAULT_EMAIL: admin@example.com PGADMIN_DEFAULT_PASSWORD: admin volumes: - pgadmin:/var/lib/pgadmin depends_on: - postgres volumes: postgres: pgadmin: 上記のようなdocker-compose.ymlを作成してdocker-compose up -dしたところ、PostgreSQL側のコンテナだけRestartingから抜け出せなくなってしまいました。コンテナのリビルドやイメージの再取得をしてもダメです。ダメです。ダメだってば(/ω＼)ｲﾔﾝ
+エラーの回避策 こういう場合は、正常起動しないコンテナのログを参照してみて、何らかのエラーが起きていないかチェックした方がいいです。
+というのは、「少なくとも1度は正常起動するコンテナ」なので、イメージやコンテナのビルドそのものには問題がないと考えるのが自然です。そうなると、コンテナが正常起動した直後になんらかのエラーがコンテナ内部で発生していると考えられ、そのエラーを解消する手がかりがログに残っていると考えられます。
+docker logs --tail 50 --follow --timestamps postgres_hoge 上記のコマンドを実行すると、指定したコンテナ（上記だとpostgres_hogeコンテナを指します）のログの最新50件分を表示します。大抵の場合、これくらいの件数だけ直近のログを見てみれば何かしらのエラーログを見つけられるはずです。エラーログが見当たらなければ、もうちょっと出力する件数を増やしてみます。</description>
     </item>
     
     <item>
