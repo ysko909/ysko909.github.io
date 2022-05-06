@@ -108,7 +108,7 @@ AttributeError: <span style="color:#a31515">&#39;tuple&#39;</span> object has no
 Traceback (most recent call last):
   File <span style="color:#a31515">&#34;&lt;stdin&gt;&#34;</span>, line 1, <span style="color:#00f">in</span> &lt;module&gt;
 AttributeError: <span style="color:#a31515">&#39;str&#39;</span> object has no attribute <span style="color:#a31515">&#39;reverse&#39;</span></code></pre></div>
-<p>リストのみ有効だが、逆順処理する<code>reverse()</code>メソッドがあります。これは、もともとのリストを直接変更するので、戻り値は<code>None</code>であることに注意。実行された時点で、リストの内容が書き換わります。もともとのデータを書き換えるため、ミュータブルなリストでのみ可能で文字列やタプルなどでは利用できません。</p>
+<p>リストのみ有効ですが、逆順処理する<code>reverse()</code>メソッドがあります。これは、もともとのリストを直接変更するので、戻り値は<code>None</code>であることに注意。実行された時点で、リストの内容が書き換わります。もともとのデータを書き換えるためミュータブルなリストでのみ可能で、文字列やタプルなどでは利用できません。</p>
 
 <h3 id="reversed"><code>reversed()</code></h3>
 
@@ -135,9 +135,9 @@ AttributeError: <span style="color:#a31515">&#39;str&#39;</span> object has no a
 <span style="color:#a31515">&#39;zabraboof&#39;</span>
 &gt;&gt;&gt; hoge
 <span style="color:#a31515">&#39;foobarbaz&#39;</span></code></pre></div>
-<p>組み込み関数の<code>reversed()</code>を利用すると、戻り値はイテレータです。そのままでは利用できない（<code>for</code>文などには使えるが）ので、上記では<code>list()</code>を使ってリストに直しています。これはもともとのデータを書き換えず、新しいオブジェクトを作成してくれます。リストだけでなく、文字列やタプルにも利用できるのはメソッドと比較すると大きいメリット。</p>
+<p>組み込み関数の<code>reversed()</code>を利用すると、戻り値はイテレータです。そのままでは利用できない（<code>for</code>文などでは使える）ので、上記では<code>list()</code>を使ってリストに直しています。これはもともとのデータを書き換えず、新しいオブジェクトを作成してくれます。リストだけでなく、文字列やタプルにも利用できるのはメソッドと比較すると大きいメリット。</p>
 
-<p>ただ、文字列やタプルにも使えるとは言いましたが、如何せん戻り値がイテレータなのでやっぱり直接的に利用できないのが玉にキズ。よって、<code>tuple()</code>でタプルに直したり、<code>join()</code>で一度リストにしたものを結合し文字列に直す必要があります。</p>
+<p>ただ、文字列やタプルにも使えるとは言いましたが、いかんせん戻り値がイテレータなのでやっぱり直接的に利用できないのが玉にキズ。よって、<code>tuple()</code>でタプルに直したり、<code>join()</code>で一度リストにしたものを結合し文字列に直す必要があります。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; hoge = [1, 2, 3]
 &gt;&gt;&gt; fuga = (4, 5, 6)
 &gt;&gt;&gt; piyo = <span style="color:#a31515">&#39;foobarbaz&#39;</span>
