@@ -213,7 +213,7 @@ Acquire::https::proxy &#34;http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXY_SE
 EOF</code></pre></div>
 <p>これにより、<code>apt-get</code>が通るようになったはず。</p>
 
-<p>次に<code>wget</code>用の設定を行う。なんで<code>wget</code>の設定が必要かと言うと、あとでVS Codeを利用する際、VS CodeはVS Code用のサーバーをダウンロードしようとするのですが、どうもこれが<code>wget</code>を用いて行われているようです。そのため、事前に<code>wget</code>に対してProxy設定を施さないと、このダウンロード処理がコケてしまい詰んでしまいます。</p>
+<p>次に<code>wget</code>用の設定を行います。なんで<code>wget</code>の設定が必要かと言うと、あとでVS Codeを利用する際、VS CodeはVS Code用のサーバーをダウンロードしようとするのですが、どうもこれが<code>wget</code>を用いて行われているようです。そのため、事前に<code>wget</code>に対してProxy設定を施さないと、このダウンロード処理がコケてしまい詰んでしまいます。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">cd
 cat &lt;&lt;EOF &gt; .wgetrc
 http_proxy=http://&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/
@@ -243,13 +243,29 @@ EOF</code></pre></div>
 export HTTPS_PROXY=&#34;http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXY_SERVER&gt;:&lt;PORT&gt;/&#34;</code></pre></div>
 <p><code>export</code>を忘れないように上記の編集を行います。</p>
 
-<h3 id="vs-codeにremote-wslをインストールする">VS CodeにRemote-WSLをインストールする</h3>
+<h3 id="vs-codeに拡張機能をインストールする">VS Codeに拡張機能をインストールする</h3>
 
 <p>すでにVS Codeはインストール済みである想定ですが、まだインストールされていない場合は<a href="https://code.visualstudio.com/">ここ</a>からインストールしておきます。</p>
 
-<p>次に、VS Codeの拡張機能である「Remote-WSL」をインストールします。</p>
+<p>次に、VS Codeの拡張機能である「Remote-WSL」と「Remote-Containers」をインストールします。</p>
 
 <p><img src="2022-01-29-22-30-53.png" alt="pic" /></p>
+
+<h4 id="追記">追記</h4>
+
+<p>上記のように、拡張機能を個別にインストールしてもいいのですが、リモート開発用の拡張機能をまとめたパッケージがあります。それが「<a href="https://code.visualstudio.com/docs/remote/remote-overview">Remote Development</a>」です。</p>
+
+<p><img src="2022-05-19-10-00-00.png" alt="pic" /></p>
+
+<p>これをインストールするだけで、リモート開発に必要な3つの拡張機能を導入できます。</p>
+
+<ul>
+<li>Remote-SSH</li>
+<li>Remote-Containers</li>
+<li>Remote-WSL</li>
+</ul>
+
+<p>なので、わざわざ個別にインストールするよりはこの拡張機能をインストールするほうが簡単です。</p>
 
 <p>拡張機能のインストールが終了したら、いったんVS Codeは終了します。</p>
 
