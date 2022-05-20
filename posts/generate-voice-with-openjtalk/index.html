@@ -8,7 +8,7 @@
 今回は、このOpenJTalk用の環境をDockerを使って構築しようと思います。
 前提 OpenJTalkは、使用するプラットフォームによって環境構築の難易度に差が存在します。macOSやLinuxでの環境構築は比較的楽な反面、Windowsは自分自身でビルドしないといけないのがちょっと・・・いや、かなり面倒。
 そんなわけで、ここではmacOSにてDockerコンテナを用いてOpenJTalkの環境を構築します。多分、WindowsでもWSLを用いるとか、Dockerコンテナ上で構築する方が楽だと思います。
-ちなみに、ここではPython3のコンテナをベースに環境構築してますが、これは将来的に「文字列を渡すと音声合成したWaveファイルを返す」というような、サーバーとして機能させたい想定があるためです。ええ、要はFlaskのためですｗ
+ちなみに、ここではPython3のコンテナをベースに環境構築してますが、他で使っていたDockerfileを使いまわしただけで意味はありません＿(　_´ω`)_ﾍﾟｼｮ
 環境構築 Dockerfileは、前述のとおりPythonのコンテナをベースとします。
 FROMpython:3.10-busterENVACCEPT_EULA=YRUN apt-get update \  &amp;&amp; apt-get install -y g&#43;&#43; \  apt-utils \  apt-transport-https \  gcc \  build-essential \  open-jtalk \  open-jtalk-mecab-naist-jdic \  &amp;&amp; apt-get upgrade -y \  &amp;&amp; apt-get clean \  &amp;&amp; pip install --upgrade pip \  &amp;&amp; pip install --no-cache-dir \  autopep8 \  flake8 \  &amp;&amp; rm -rf /var/lib/apt/lists/*ADD." />
 <meta property="og:type" content="article" />
@@ -19,7 +19,7 @@ FROMpython:3.10-busterENVACCEPT_EULA=YRUN apt-get update \  &amp;&amp; apt-get i
 今回は、このOpenJTalk用の環境をDockerを使って構築しようと思います。
 前提 OpenJTalkは、使用するプラットフォームによって環境構築の難易度に差が存在します。macOSやLinuxでの環境構築は比較的楽な反面、Windowsは自分自身でビルドしないといけないのがちょっと・・・いや、かなり面倒。
 そんなわけで、ここではmacOSにてDockerコンテナを用いてOpenJTalkの環境を構築します。多分、WindowsでもWSLを用いるとか、Dockerコンテナ上で構築する方が楽だと思います。
-ちなみに、ここではPython3のコンテナをベースに環境構築してますが、これは将来的に「文字列を渡すと音声合成したWaveファイルを返す」というような、サーバーとして機能させたい想定があるためです。ええ、要はFlaskのためですｗ
+ちなみに、ここではPython3のコンテナをベースに環境構築してますが、他で使っていたDockerfileを使いまわしただけで意味はありません＿(　_´ω`)_ﾍﾟｼｮ
 環境構築 Dockerfileは、前述のとおりPythonのコンテナをベースとします。
 FROMpython:3.10-busterENVACCEPT_EULA=YRUN apt-get update \  &amp;&amp; apt-get install -y g&#43;&#43; \  apt-utils \  apt-transport-https \  gcc \  build-essential \  open-jtalk \  open-jtalk-mecab-naist-jdic \  &amp;&amp; apt-get upgrade -y \  &amp;&amp; apt-get clean \  &amp;&amp; pip install --upgrade pip \  &amp;&amp; pip install --no-cache-dir \  autopep8 \  flake8 \  &amp;&amp; rm -rf /var/lib/apt/lists/*ADD."/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
@@ -93,7 +93,7 @@ FROMpython:3.10-busterENVACCEPT_EULA=YRUN apt-get update \  &amp;&amp; apt-get i
 
 <p>そんなわけで、ここではmacOSにてDockerコンテナを用いてOpenJTalkの環境を構築します。多分、WindowsでもWSLを用いるとか、Dockerコンテナ上で構築する方が楽だと思います。</p>
 
-<p>ちなみに、ここではPython3のコンテナをベースに環境構築してますが、これは将来的に「文字列を渡すと音声合成したWaveファイルを返す」というような、サーバーとして機能させたい想定があるためです。ええ、要は<a href="https://github.com/pallets/flask">Flask</a>のためですｗ</p>
+<p>ちなみに、ここではPython3のコンテナをベースに環境構築してますが、他で使っていたDockerfileを使いまわしただけで意味はありません＿(　_´ω`)_ﾍﾟｼｮ</p>
 
 <h2 id="環境構築">環境構築</h2>
 
