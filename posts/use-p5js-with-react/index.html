@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>ReactとTypeScriptで始めるp5.js - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="ReactとTypeScriptで始めるp5.js" />
+<meta property="og:description" content="概要 この記事では、ReactとTypeScriptを使ってp5.jsをコーディングする開発環境を構築します。
+p5.jsでやりたいのは、たとえば「カラフルな線がゆらゆらと動く」だったり「ゆっくりと降り注ぐパーティクルのアニメーション」といった、ダイナミックでクリエイティブな表現だと思います。そんなp5.jsを使って何かしら動かすだけなら、p5.js editorを使えばすぐにコーディングが始められるでしょう。
+まぁ実際のところはこれらの表現方法を前面に押し出すよりも、「SSRしているwebサイトの背景でラインアニメーションを実装したい」とか「冬には雪を、春には桜の花びらをトップページに散りばめたい」といったような、webサイトのクオリティを上げるための付加的要素として用いるケースのほうが多いんじゃないかとも思います。
+もちろん「ジェネラティブアート」としてp5.jsをダイナミックに使ってるところもあるとは思いますが、そのケースでもただ単純にindex.htmlとそれが参照するsketch.jsだけより、今ならVue.jsや後述するReactと言ったフレームワークやライブラリを使った方がwebページとして扱いやすくなって保守性を向上できるはずです。
+そこで、今回はただ利用するだけでなくより現実的にp5.jsを活用する方法として、ReactとTypeScriptをベースにp5.jsによるクリエイティブなコーディングが可能な環境を構築します。
+プロジェクト作成の手順 まずはReactの環境を作らないことには始まりません。ここでは、手前味噌ですが事前に作っておいたReact用のDockerコンテナを流用することとします。
+git clone https://github.com/ysko909/docker_for_react_sample.git app_name ここではgit cloneしていますが、ZIPファイルによるダウンロードでもOKです。
+次にVisual Studio Code（以下、Vs code）を起動し、クローンした先のフォルダを開きます。なお、ここではVs codeの拡張機能であるRemote Containerなどはインストール済みである前提です。Vs codeのメニューから「Reopen in container」を選択して、コンテナのビルドを実行します。コンテナのビルドには時間がかかるため、しばらく放置してコーヒーでも飲みましょう。
+npx create-react-app app_name --template typescript cd app_name yarn start コンテナのビルドが終わったら、シェルを開きnpx create-react-app app_nameを実行してReactの環境を構築します。app_nameの部分は任意です。今回はTypeScriptで作りたいので、--template typescriptのオプションをつけています。環境構築が終わったら、フォルダを移動してyarn startを実行して、ブラウザで「localhost:3000」にアクセスしましょう。Reactの画面が表示されればここまでは成功です。
+yarn add p5 yarn add react-p5-wrapper yarn add @types/p5 次に肝心のp5.jsを追加します。react-p5-wrapperは、Reactのコンポーネントとしてp5.jsを利用するためのライブラリです。一応これがなくても自分でラッパーを作成することでp5.jsをコンポーネントとして利用できるのですが、ここでは環境構築を優先してもともとあるものを活用しています。
+ここまでで開発環境の準備は完了です。
+p5.jsを試してみる 開発環境の構築が終わったので、ここからは実際にTSファイルなどを作成してp5.jsを動かしてみましょう。ここでは、p5.jsのGet Stertedページのサンプルをもとにして、p5.jsが動作することを確認してみます。
+まず、今存在するファイルの整理を行います。create-react-appを実行した直後だと、srcフォルダの内容は上記のスクリーンショットのようになっているはずです。必要なのは後述する2ファイルだけなので、他のファイルはとりあえず削除します。いやまぁ*.text.tsxとかテスト用に必要なファイルはもちろんあるんだけど、とりあえず今必要じゃないからいいかなーって_(┐「ε:)_
+import React from &#39;react&#39;; import ReactDOM from &#39;react-dom/client&#39;; import App from &#39;./App&#39;; const root = ReactDOM.createRoot( document." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/use-p5js-with-react/" /><meta property="article:published_time" content="2022-05-25T00:06:25&#43;09:00"/>
+<meta property="article:modified_time" content="2022-05-25T00:06:25&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ReactとTypeScriptで始めるp5.js"/>
+<meta name="twitter:description" content="概要 この記事では、ReactとTypeScriptを使ってp5.jsをコーディングする開発環境を構築します。
+p5.jsでやりたいのは、たとえば「カラフルな線がゆらゆらと動く」だったり「ゆっくりと降り注ぐパーティクルのアニメーション」といった、ダイナミックでクリエイティブな表現だと思います。そんなp5.jsを使って何かしら動かすだけなら、p5.js editorを使えばすぐにコーディングが始められるでしょう。
+まぁ実際のところはこれらの表現方法を前面に押し出すよりも、「SSRしているwebサイトの背景でラインアニメーションを実装したい」とか「冬には雪を、春には桜の花びらをトップページに散りばめたい」といったような、webサイトのクオリティを上げるための付加的要素として用いるケースのほうが多いんじゃないかとも思います。
+もちろん「ジェネラティブアート」としてp5.jsをダイナミックに使ってるところもあるとは思いますが、そのケースでもただ単純にindex.htmlとそれが参照するsketch.jsだけより、今ならVue.jsや後述するReactと言ったフレームワークやライブラリを使った方がwebページとして扱いやすくなって保守性を向上できるはずです。
+そこで、今回はただ利用するだけでなくより現実的にp5.jsを活用する方法として、ReactとTypeScriptをベースにp5.jsによるクリエイティブなコーディングが可能な環境を構築します。
+プロジェクト作成の手順 まずはReactの環境を作らないことには始まりません。ここでは、手前味噌ですが事前に作っておいたReact用のDockerコンテナを流用することとします。
+git clone https://github.com/ysko909/docker_for_react_sample.git app_name ここではgit cloneしていますが、ZIPファイルによるダウンロードでもOKです。
+次にVisual Studio Code（以下、Vs code）を起動し、クローンした先のフォルダを開きます。なお、ここではVs codeの拡張機能であるRemote Containerなどはインストール済みである前提です。Vs codeのメニューから「Reopen in container」を選択して、コンテナのビルドを実行します。コンテナのビルドには時間がかかるため、しばらく放置してコーヒーでも飲みましょう。
+npx create-react-app app_name --template typescript cd app_name yarn start コンテナのビルドが終わったら、シェルを開きnpx create-react-app app_nameを実行してReactの環境を構築します。app_nameの部分は任意です。今回はTypeScriptで作りたいので、--template typescriptのオプションをつけています。環境構築が終わったら、フォルダを移動してyarn startを実行して、ブラウザで「localhost:3000」にアクセスしましょう。Reactの画面が表示されればここまでは成功です。
+yarn add p5 yarn add react-p5-wrapper yarn add @types/p5 次に肝心のp5.jsを追加します。react-p5-wrapperは、Reactのコンポーネントとしてp5.jsを利用するためのライブラリです。一応これがなくても自分でラッパーを作成することでp5.jsをコンポーネントとして利用できるのですが、ここでは環境構築を優先してもともとあるものを活用しています。
+ここまでで開発環境の準備は完了です。
+p5.jsを試してみる 開発環境の構築が終わったので、ここからは実際にTSファイルなどを作成してp5.jsを動かしてみましょう。ここでは、p5.jsのGet Stertedページのサンプルをもとにして、p5.jsが動作することを確認してみます。
+まず、今存在するファイルの整理を行います。create-react-appを実行した直後だと、srcフォルダの内容は上記のスクリーンショットのようになっているはずです。必要なのは後述する2ファイルだけなので、他のファイルはとりあえず削除します。いやまぁ*.text.tsxとかテスト用に必要なファイルはもちろんあるんだけど、とりあえず今必要じゃないからいいかなーって_(┐「ε:)_
+import React from &#39;react&#39;; import ReactDOM from &#39;react-dom/client&#39;; import App from &#39;./App&#39;; const root = ReactDOM.createRoot( document."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">ReactとTypeScriptで始めるp5.js</h1>
+			<div class="meta">Posted at &mdash; May 25, 2022</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>この記事では、ReactとTypeScriptを使ってp5.jsをコーディングする開発環境を構築します。</p>
+
+<p><a href="https://p5js.org/">p5.js</a>でやりたいのは、たとえば「カラフルな線がゆらゆらと動く」だったり「ゆっくりと降り注ぐパーティクルのアニメーション」といった、ダイナミックでクリエイティブな表現だと思います。そんなp5.jsを使って何かしら動かすだけなら、<a href="https://editor.p5js.org/">p5.js editor</a>を使えばすぐにコーディングが始められるでしょう。</p>
+
+<p>まぁ実際のところはこれらの表現方法を前面に押し出すよりも、「SSRしているwebサイトの背景でラインアニメーションを実装したい」とか「冬には雪を、春には桜の花びらをトップページに散りばめたい」といったような、webサイトのクオリティを上げるための付加的要素として用いるケースのほうが多いんじゃないかとも思います。</p>
+
+<p>もちろん「ジェネラティブアート」としてp5.jsをダイナミックに使ってるところもあるとは思いますが、そのケースでもただ単純に<code>index.html</code>とそれが参照する<code>sketch.js</code>だけより、今ならVue.jsや後述するReactと言ったフレームワークやライブラリを使った方がwebページとして扱いやすくなって保守性を向上できるはずです。</p>
+
+<p>そこで、今回はただ利用するだけでなくより現実的にp5.jsを活用する方法として、ReactとTypeScriptをベースにp5.jsによるクリエイティブなコーディングが可能な環境を構築します。</p>
+
+<h2 id="プロジェクト作成の手順">プロジェクト作成の手順</h2>
+
+<p>まずはReactの環境を作らないことには始まりません。ここでは、手前味噌ですが事前に作っておいた<a href="https://github.com/ysko909/docker_for_react_sample">React用のDockerコンテナ</a>を流用することとします。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">git clone https://github.com/ysko909/docker_for_react_sample.git app_name</code></pre></div>
+<p>ここでは<code>git clone</code>していますが、ZIPファイルによるダウンロードでもOKです。</p>
+
+<p>次にVisual Studio Code（以下、Vs code）を起動し、クローンした先のフォルダを開きます。なお、ここではVs codeの拡張機能であるRemote Containerなどはインストール済みである前提です。Vs codeのメニューから「Reopen in container」を選択して、コンテナのビルドを実行します。コンテナのビルドには時間がかかるため、しばらく放置してコーヒーでも飲みましょう。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">npx create-react-app app_name --template typescript
+cd app_name
+yarn start</code></pre></div>
+<p>コンテナのビルドが終わったら、シェルを開き<code>npx create-react-app app_name</code>を実行してReactの環境を構築します。<code>app_name</code>の部分は任意です。今回はTypeScriptで作りたいので、<code>--template typescript</code>のオプションをつけています。環境構築が終わったら、フォルダを移動して<code>yarn start</code>を実行して、ブラウザで「localhost:3000」にアクセスしましょう。Reactの画面が表示されればここまでは成功です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">yarn add p5
+yarn add react-p5-wrapper
+yarn add @types/p5</code></pre></div>
+<p>次に肝心のp5.jsを追加します。<code>react-p5-wrapper</code>は、<a href="https://github.com/P5-wrapper/react">Reactのコンポーネントとしてp5.jsを利用するためのライブラリ</a>です。一応これがなくても<a href="https://www.bauhausify.com/2019-09-17_p5-js%E3%82%92react%E3%81%AE%E3%82%B3%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%8D%E3%83%B3%E3%83%88%E3%81%A8%E3%81%97%E3%81%A6%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95/">自分でラッパーを作成することでp5.jsをコンポーネントとして利用できるのです</a>が、ここでは環境構築を優先してもともとあるものを活用しています。</p>
+
+<p>ここまでで開発環境の準備は完了です。</p>
+
+<h2 id="p5-jsを試してみる">p5.jsを試してみる</h2>
+
+<p>開発環境の構築が終わったので、ここからは実際にTSファイルなどを作成してp5.jsを動かしてみましょう。ここでは、<a href="https://p5js.org/get-started/">p5.jsのGet Stertedページ</a>のサンプルをもとにして、p5.jsが動作することを確認してみます。</p>
+
+<p><img src="2022-05-25-00-09-46.png" alt="pic" /></p>
+
+<p>まず、今存在するファイルの整理を行います。<code>create-react-app</code>を実行した直後だと、<code>src</code>フォルダの内容は上記のスクリーンショットのようになっているはずです。必要なのは後述する2ファイルだけなので、他のファイルはとりあえず削除します。いやまぁ<code>*.text.tsx</code>とかテスト用に必要なファイルはもちろんあるんだけど、とりあえず今必要じゃないからいいかなーって_(┐「ε:)_</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-tsx" data-lang="tsx"><span style="color:#00f">import</span> React from <span style="color:#a31515">&#39;react&#39;</span>;
+<span style="color:#00f">import</span> ReactDOM from <span style="color:#a31515">&#39;react-dom/client&#39;</span>;
+<span style="color:#00f">import</span> App from <span style="color:#a31515">&#39;./App&#39;</span>;
+
+<span style="color:#00f">const</span> root = ReactDOM.createRoot(
+  document.getElementById(<span style="color:#a31515">&#39;root&#39;</span>) <span style="color:#00f">as</span> HTMLElement
+);
+root.render(
+  &lt;App <span style="">/&gt;</span>
+);</code></pre></div>
+<p>まず、なにはともあれ必要なのが<code>index.tsx</code>です。このファイルは何をしているかというと、後述する<code>App.tsx</code>を読み込んで、<code>index.html</code>の<code>root</code>という要素部分に書き出しているだけ。つまり、ほぼ何もしていないです。このファイルに関しては、CSSファイルをインポートしているような必要ない箇所を削除しました。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-tsx" data-lang="tsx"><span style="color:#00f">import</span> p5 from <span style="color:#a31515">&#39;p5&#39;</span>;
+<span style="color:#00f">import</span> { ReactP5Wrapper } from <span style="color:#a31515">&#39;react-p5-wrapper&#39;</span>;
+
+<span style="color:#00f">const</span> App = () =&gt; {
+  <span style="color:#00f">return</span> (
+    &lt;div className=<span style="color:#a31515">&#34;App&#34;</span>&gt;
+      &lt;ReactP5Wrapper sketch={sketch}&gt;&lt;<span style="">/ReactP5Wrapper&gt;</span>
+    &lt;<span style="">/div&gt;</span>
+  );
+}
+
+<span style="color:#00f">const</span> sketch = (p: <span style="color:#2b91af">p5</span>) =&gt; {
+  p.setup = () =&gt; {
+    p.createCanvas(400, 400);
+  };
+
+  p.draw = () =&gt; {
+    <span style="color:#00f">if</span> (p.mouseIsPressed) {
+      p.fill(0);
+    } <span style="color:#00f">else</span> {
+      p.fill(255);
+    }
+
+    p.ellipse(p.mouseX, p.mouseY, 80, 80);
+  }
+}
+
+<span style="color:#00f">export</span> <span style="color:#00f">default</span> App;</code></pre></div>
+<p>次に<code>App.tsx</code>です。こちらが実際の処理を担当しているファイルです。こちらにp5.jsの処理を記述します。ここではGet Startedページのサンプルである「マウスポインタに追随する円」を描画するコードを記述しています。ただし、ここではp5.jsのインスタンスモードを使用するよう、もともとのコードから少し書き換えています。これは、p5.jsの関数がグローバルに展開されてしまうのを防ぐためです。詳細な理由は<a href="https://ics.media/entry/210129/">話すと長くなるので割愛</a>しますが、インスタンスモードでp5.jsを利用することでグローバルを汚染せず、エディタのサジェスト機能を有効活用できる重要な効果を発揮してくれます。</p>
+
+<p>ここまでコーディングが済んだら<code>yarn start</code>です。ブラウザで<code>http://localhost:3000</code>にアクセスしましょう。</p>
+
+<p><img src="2022-05-25-00-10-19.png" alt="pic" /></p>
+
+<p>Canvasの背景が白なのでぱっと見はCanvasがわかりにくいですが、マウスの左ボタンをクリックしたり離したりしながらマウスポインタをぐりぐりと動かすと、Canvas上に上記のような描画が実行されるはずです。これで、ReactとTypeScriptを使ったp5.jsのコーディング環境が構築できました。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>当初、この環境は軽量化のためAlpineベースのNode.jsを採用しようとしたり、<a href="https://parceljs.org/">Parcel</a>を採用しようとしたりして、そこそこ迷走していました。ただ、現実問題として「p5.jsを利用するのにp5.jsを単体で利用することってあんまりないよね？なんかのフロントエンド用フレームワーク使うの前提じゃない？」という考えが背景にあったので、「それならフロントエンド開発でメジャーなReactとTypeScriptの組み合わせにp5.jsを加えるのが最適解では」という観点から環境構築を進めてきました。</p>
+
+<p>というわけで当初の「AlpineでParcel環境構築しようとしたら<a href="https://hirooka.pro/error_usr_src_app_node_modules_deasync_command_failed/">エラー吐く</a>」というような苦労は、まさに徒労となったわけですが・・・ツラみ。</p>
+
+<p>なにはともあれ、多分「ふつーにwebサイトの構築ができてp5.jsも利用できる」という目的に対して、TypeScriptを含めモダンな開発環境が用意できたのではないかと思います。</p>
+
+<p>ちなみになんですが、そもそもなんでp5.jsをいじろうと思ったかって言うと、<a href="https://nishanc.medium.com/audio-visualization-in-javascript-with-p5-js-cf3bc7f1be07">オーディオビジュアライズ</a>したかったからなんですね。p5.jsだと見た目だけでなく音声も使えるので、なんかおもしろいことができそう・・・と思いつつ、今回は環境構築で終わろうとしているわけですが。あふん_(┐「ε:)_</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://p5js.org/get-started/">p5.js Get Started</a></li>
+<li><a href="https://github.com/P5-wrapper/react">P5-wrapper/react</a></li>
+<li><a href="https://ics.media/entry/210129/">VS Code &amp; TypeScriptとp5.jsで始めるモダンなクリエイティブコーディング入門</a></li>
+<li><a href="https://qiita.com/shunp/items/05fe060fa37ae6f4b217">React+TypeScriptではじめるp5.jsチュートリアル</a></li>
+<li><a href="https://nishanc.medium.com/audio-visualization-in-javascript-with-p5-js-cf3bc7f1be07">Audio Visualization in JavaScript with p5.js</a></li>
+<li><a href="https://tomoyukim.hatenablog.com/entry/2015/05/09/223834">p5.js : 加算合成を試してみる</a></li>
+<li><a href="https://www.bauhausify.com/2019-09-17_p5-js%E3%82%92react%E3%81%AE%E3%82%B3%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%8D%E3%83%B3%E3%83%88%E3%81%A8%E3%81%97%E3%81%A6%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95/">p5.jsをReactのコンポーネントとして実行する方法</a></li>
+<li><a href="https://nishanc.medium.com/audio-visualization-in-javascript-with-p5-js-cf3bc7f1be07">Audio Visualization in JavaScript with p5.js</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

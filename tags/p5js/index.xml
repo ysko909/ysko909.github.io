@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Typescript on 頑張らないために頑張る</title>
-    <link>https://ysko909.github.io/tags/typescript/</link>
-    <description>Recent content in Typescript on 頑張らないために頑張る</description>
+    <title>P5js on 頑張らないために頑張る</title>
+    <link>https://ysko909.github.io/tags/p5js/</link>
+    <description>Recent content in P5js on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Wed, 25 May 2022 00:06:25 +0900</lastBuildDate>
     
-	<atom:link href="https://ysko909.github.io/tags/typescript/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/p5js/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -32,30 +32,6 @@ yarn add p5 yarn add react-p5-wrapper yarn add @types/p5 次に肝心のp5.jsを
 p5.jsを試してみる 開発環境の構築が終わったので、ここからは実際にTSファイルなどを作成してp5.jsを動かしてみましょう。ここでは、p5.jsのGet Stertedページのサンプルをもとにして、p5.jsが動作することを確認してみます。
 まず、今存在するファイルの整理を行います。create-react-appを実行した直後だと、srcフォルダの内容は上記のスクリーンショットのようになっているはずです。必要なのは後述する2ファイルだけなので、他のファイルはとりあえず削除します。いやまぁ*.text.tsxとかテスト用に必要なファイルはもちろんあるんだけど、とりあえず今必要じゃないからいいかなーって_(┐「ε:)_
 import React from &amp;#39;react&amp;#39;; import ReactDOM from &amp;#39;react-dom/client&amp;#39;; import App from &amp;#39;./App&amp;#39;; const root = ReactDOM.createRoot( document.</description>
-    </item>
-    
-    <item>
-      <title>Phaser3を使ってボタン用のクラスを作る</title>
-      <link>https://ysko909.github.io/posts/make-button-class-with-phaserjs/</link>
-      <pubDate>Mon, 10 May 2021 23:45:04 +0900</pubDate>
-      
-      <guid>https://ysko909.github.io/posts/make-button-class-with-phaserjs/</guid>
-      <description>Phaser3を使ってボタンを作ろう 任意の文字列と押されたときの挙動を記述したコールバック関数などを引数として受け取って、画面にボタンを配置するクラスを作ってみました。
-メニュー画面やRPGの戦闘シーンなどで、コマンドなどを一覧描画したりする際に利用できます。また、ボタンとしての機能を持たせるため、カーソルオーバーなどのイベントに何かしらの反応を示す要素が記述されています。
-ソース // 設定用オブジェクト type Props = { width: number; height: number; onClick: Function; align: string; fontSize: number; color: string; } class OriginalButtonClass extends Phaser.GameObjects.Container{ text: Phaser.GameObjects.Text; container: Phaser.GameObjects.Rectangle; constructor (scene: Phaser.Scene, x:number, y:number, text:string, props: Props){ super(scene, x, y); // 入力されたオブジェクトから各要素を取り出す  const{ width = 90, height = 40, onClick, align = &amp;#39;center&amp;#39;, fontSize = 30, color = &amp;#39;black&amp;#39; } = props; // シーンにボタンを追加  this.scene = scene; this.</description>
-    </item>
-    
-    <item>
-      <title>TypeScriptの関数で引数をいろいろする方法</title>
-      <link>https://ysko909.github.io/posts/define-args-of-function-with-typescript/</link>
-      <pubDate>Tue, 04 May 2021 12:36:38 +0900</pubDate>
-      
-      <guid>https://ysko909.github.io/posts/define-args-of-function-with-typescript/</guid>
-      <description>いろいろするって雑すぎるだろ いい表現方法が思い浮かばなかったんだよぅ。
-たとえば 基本的な関数における引数の指定方法は、引数名:引数のデータ型という感じで宣言します。
-const func = (str: string):string =&amp;gt; &amp;#39;input: &amp;#39; + str; console.log(func(&amp;#39;hoge&amp;#39;)); これが基本形。ここでは、これをもう少し便利に使える記述方法だったり、拡張機能を見ていこうと思います。
-関数の引数にオブジェクトを指定する 当たり前ですが、関数の引数は文字列や数値などのプリミティブな型以外に、オブジェクトを指定できます。
-const func = (arg:{x: string, y: string, z: string}): string =&amp;gt; arg.x + arg.y + arg.z; const func2 = (arg:{x: number, y: number, z: string}, arg2: string) =&amp;gt; { return arg.x.toString() + arg.y.toString() + arg.z + arg2; } console.log(func({x:&amp;#39;foo&amp;#39;, y: &amp;#39;bar&amp;#39;, z: &amp;#39;baz&amp;#39;})); console.log(func2({x: 1, y: 2, z: &amp;#39;funcfunc&amp;#39;}, &amp;#39;fugafuga&amp;#39;)); 記述方法は上記のとおりで、引数のオブジェクト自体に名前をつけて、各プロパティにそれぞれ型情報を付与してやります。関数内で引数を参照する場合は、オブジェクトの名前.プロパティ名で参照できます。基本的には、普段のTypeScriptの書き方で問題ありません。</description>
     </item>
     
   </channel>

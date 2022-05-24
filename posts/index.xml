@@ -7,10 +7,32 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Thu, 28 Apr 2022 00:01:16 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 25 May 2022 00:06:25 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>ReactとTypeScriptで始めるp5.js</title>
+      <link>https://ysko909.github.io/posts/use-p5js-with-react/</link>
+      <pubDate>Wed, 25 May 2022 00:06:25 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/use-p5js-with-react/</guid>
+      <description>概要 この記事では、ReactとTypeScriptを使ってp5.jsをコーディングする開発環境を構築します。
+p5.jsでやりたいのは、たとえば「カラフルな線がゆらゆらと動く」だったり「ゆっくりと降り注ぐパーティクルのアニメーション」といった、ダイナミックでクリエイティブな表現だと思います。そんなp5.jsを使って何かしら動かすだけなら、p5.js editorを使えばすぐにコーディングが始められるでしょう。
+まぁ実際のところはこれらの表現方法を前面に押し出すよりも、「SSRしているwebサイトの背景でラインアニメーションを実装したい」とか「冬には雪を、春には桜の花びらをトップページに散りばめたい」といったような、webサイトのクオリティを上げるための付加的要素として用いるケースのほうが多いんじゃないかとも思います。
+もちろん「ジェネラティブアート」としてp5.jsをダイナミックに使ってるところもあるとは思いますが、そのケースでもただ単純にindex.htmlとそれが参照するsketch.jsだけより、今ならVue.jsや後述するReactと言ったフレームワークやライブラリを使った方がwebページとして扱いやすくなって保守性を向上できるはずです。
+そこで、今回はただ利用するだけでなくより現実的にp5.jsを活用する方法として、ReactとTypeScriptをベースにp5.jsによるクリエイティブなコーディングが可能な環境を構築します。
+プロジェクト作成の手順 まずはReactの環境を作らないことには始まりません。ここでは、手前味噌ですが事前に作っておいたReact用のDockerコンテナを流用することとします。
+git clone https://github.com/ysko909/docker_for_react_sample.git app_name ここではgit cloneしていますが、ZIPファイルによるダウンロードでもOKです。
+次にVisual Studio Code（以下、Vs code）を起動し、クローンした先のフォルダを開きます。なお、ここではVs codeの拡張機能であるRemote Containerなどはインストール済みである前提です。Vs codeのメニューから「Reopen in container」を選択して、コンテナのビルドを実行します。コンテナのビルドには時間がかかるため、しばらく放置してコーヒーでも飲みましょう。
+npx create-react-app app_name --template typescript cd app_name yarn start コンテナのビルドが終わったら、シェルを開きnpx create-react-app app_nameを実行してReactの環境を構築します。app_nameの部分は任意です。今回はTypeScriptで作りたいので、--template typescriptのオプションをつけています。環境構築が終わったら、フォルダを移動してyarn startを実行して、ブラウザで「localhost:3000」にアクセスしましょう。Reactの画面が表示されればここまでは成功です。
+yarn add p5 yarn add react-p5-wrapper yarn add @types/p5 次に肝心のp5.jsを追加します。react-p5-wrapperは、Reactのコンポーネントとしてp5.jsを利用するためのライブラリです。一応これがなくても自分でラッパーを作成することでp5.jsをコンポーネントとして利用できるのですが、ここでは環境構築を優先してもともとあるものを活用しています。
+ここまでで開発環境の準備は完了です。
+p5.jsを試してみる 開発環境の構築が終わったので、ここからは実際にTSファイルなどを作成してp5.jsを動かしてみましょう。ここでは、p5.jsのGet Stertedページのサンプルをもとにして、p5.jsが動作することを確認してみます。
+まず、今存在するファイルの整理を行います。create-react-appを実行した直後だと、srcフォルダの内容は上記のスクリーンショットのようになっているはずです。必要なのは後述する2ファイルだけなので、他のファイルはとりあえず削除します。いやまぁ*.text.tsxとかテスト用に必要なファイルはもちろんあるんだけど、とりあえず今必要じゃないからいいかなーって_(┐「ε:)_
+import React from &amp;#39;react&amp;#39;; import ReactDOM from &amp;#39;react-dom/client&amp;#39;; import App from &amp;#39;./App&amp;#39;; const root = ReactDOM.createRoot( document.</description>
+    </item>
     
     <item>
       <title>OpenJTalkを使って音声合成する</title>

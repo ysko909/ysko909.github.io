@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/use-p5js-with-react/</loc>
+    <lastmod>2022-05-25T00:06:25+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/generate-voice-with-openjtalk/</loc>
     <lastmod>2022-04-28T00:01:16+09:00</lastmod>
   </url>
@@ -639,6 +644,12 @@
   </url>
   
   <url>
+    <loc>https://ysko909.github.io/tags/p5js/</loc>
+    <lastmod>2022-05-25T00:06:25+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/tags/pandas/</loc>
     <lastmod>2022-02-26T14:49:22+09:00</lastmod>
     <priority>0</priority>
@@ -688,7 +699,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2022-04-28T00:01:16+09:00</lastmod>
+    <lastmod>2022-05-25T00:06:25+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -707,6 +718,12 @@
   <url>
     <loc>https://ysko909.github.io/tags/python/</loc>
     <lastmod>2022-04-28T00:01:16+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ysko909.github.io/tags/react/</loc>
+    <lastmod>2022-05-25T00:06:25+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -778,7 +795,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/typescript/</loc>
-    <lastmod>2021-05-10T23:45:04+09:00</lastmod>
+    <lastmod>2022-05-25T00:06:25+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -856,7 +873,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2022-04-28T00:01:16+09:00</lastmod>
+    <lastmod>2022-05-25T00:06:25+09:00</lastmod>
     <priority>0</priority>
   </url>
   
