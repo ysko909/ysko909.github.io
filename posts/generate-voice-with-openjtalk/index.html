@@ -137,7 +137,7 @@ FROMpython:3.10-busterENVACCEPT_EULA=YRUN apt-get update \  &amp;&amp; apt-get i
 
 <p>ちなみに、VS Codeを使っているなら「Reopen in container」を選択して、コンテナの環境構築を行ってもOK。こっちのほうが、環境構築後にコンテナへのログインをせずともVS Codeのコンソールで音声合成のコマンド発行できるので、少しだけ早いです。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">flask</code></pre></div>
-<p>なお、requirements.txtは上記の内容で作成してます。これは、前述のとおり将来的にサーバーを立てる想定だったので導入しているわけですが、単純に音声合成だけしたいのならPython環境は不要です。DebianならBusterかBullseye、Ubuntuあたりで環境構築しておけば特段困ることはないと思います。</p>
+<p>なお、requirements.txtは上記の内容で作成してます。作成してますっていうよりは、単純に流用してます。これは、前述のとおりFlaskを使ってサーバーを立ててた他のDockerfileを流用しているせいで、単純に音声合成だけしたいのならPythonを基準にしてDockerfileを作成する必要ないです。OSだけ指定して、環境構築すればいいわけなので。DebianならBusterかBullseye、Ubuntuあたりで環境構築しておけば特段困ることはないと思います。</p>
 
 <p>コンテナのビルドが完了したら試しに音声合成を行ってみましょう。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">echo こんにちは、世界。 | open_jtalk -x /var/lib/mecab/dic/open-jtalk/naist-jdic/ -m /usr/share/hts-voice/mei_normal.htsvoice -ow hello.wav</code></pre></div>
