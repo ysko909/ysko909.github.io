@@ -20,8 +20,9 @@
       <guid>https://ysko909.github.io/posts/use-p5js-with-react/</guid>
       <description>概要 この記事では、ReactとTypeScriptを使ってp5.jsをコーディングする開発環境を構築します。
 p5.jsでやりたいのは、たとえば「カラフルな線がゆらゆらと動く」だったり「ゆっくりと降り注ぐパーティクルのアニメーション」といった、ダイナミックでクリエイティブな表現だと思います。そんなp5.jsを使って何かしら動かすだけなら、p5.js editorを使えばすぐにコーディングが始められるでしょう。
-まぁ実際のところはこれらの表現方法を前面に押し出すよりも、「SSRしているwebサイトの背景でラインアニメーションを実装したい」とか「冬には雪を、春には桜の花びらをトップページに散りばめたい」といったような、webサイトのクオリティを上げるための付加的要素として用いるケースのほうが多いんじゃないかとも思います。
+まぁ実際のところはこれらの表現方法を前面に押し出すよりも、「SSRしているwebサイトの背景でラインアニメーションを実装したい」とか「冬には雪を、春には桜の花びらをトップページに散りばめたい」といったような、webサイトが持つUXをもっと上げるための付加的要素として用いるケースのほうが多いんじゃないかとも思います。
 もちろん「ジェネラティブアート」としてp5.jsをダイナミックに使ってるところもあるとは思いますが、そのケースでもただ単純にindex.htmlとそれが参照するsketch.jsだけより、今ならVue.jsや後述するReactと言ったフレームワークやライブラリを使った方がwebページとして扱いやすくなって保守性を向上できるはずです。
+それと個人的に「Reactとp5.jsって、同居させたときフツーに使えるんだよね？なんか変なところで衝突したりしないよね？」という確認をしたかった・・・というのもあります＿(　_´ω`)_ﾍﾟｼｮ
 そこで、今回はただ利用するだけでなくより現実的にp5.jsを活用する方法として、ReactとTypeScriptをベースにp5.jsによるクリエイティブなコーディングが可能な環境を構築します。
 プロジェクト作成の手順 まずはReactの環境を作らないことには始まりません。ここでは、手前味噌ですが事前に作っておいたReact用のDockerコンテナを流用することとします。
 git clone https://github.com/ysko909/docker_for_react_sample.git app_name ここではgit cloneしていますが、ZIPファイルによるダウンロードでもOKです。
@@ -31,7 +32,7 @@ yarn add p5 yarn add react-p5-wrapper yarn add @types/p5 次に肝心のp5.jsを
 ここまでで開発環境の準備は完了です。
 p5.jsを試してみる 開発環境の構築が終わったので、ここからは実際にTSファイルなどを作成してp5.jsを動かしてみましょう。ここでは、p5.jsのGet Stertedページのサンプルをもとにして、p5.jsが動作することを確認してみます。
 まず、今存在するファイルの整理を行います。create-react-appを実行した直後だと、srcフォルダの内容は上記のスクリーンショットのようになっているはずです。必要なのは後述する2ファイルだけなので、他のファイルはとりあえず削除します。いやまぁ*.text.tsxとかテスト用に必要なファイルはもちろんあるんだけど、とりあえず今必要じゃないからいいかなーって_(┐「ε:)_
-import React from &amp;#39;react&amp;#39;; import ReactDOM from &amp;#39;react-dom/client&amp;#39;; import App from &amp;#39;./App&amp;#39;; const root = ReactDOM.createRoot( document.</description>
+import React from &amp;#39;react&amp;#39;; import ReactDOM from &amp;#39;react-dom/client&amp;#39;; import App from &amp;#39;./App&amp;#39;; const root = ReactDOM.</description>
     </item>
     
     <item>
