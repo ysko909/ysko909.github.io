@@ -183,6 +183,69 @@ root.render(
 
 <p>Canvasの背景が白なのでぱっと見はCanvasがわかりにくいですが、マウスの左ボタンをクリックしたり離したりしながらマウスポインタをぐりぐりと動かすと、Canvas上に上記のような描画が実行されるはずです。これで、ReactとTypeScriptを使ったp5.jsのコーディング環境が構築できました。</p>
 
+<h2 id="注意点">注意点</h2>
+
+<h3 id="typescriptで書くとp5-sound-jsが使えない">TypeScriptで書くとp5.sound.jsが使えない</h3>
+
+<p>p5.jsとReactを組み合わせた環境は、今までの手順で構築可能です。ただ、p5.jsの音声処理用ライブラリである「p5.sound.js」を利用しようとすると、<a href="https://github.com/P5-wrapper/react/issues/61">エラー</a>が出て面倒なことになります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">import</span> { ReactP5Wrapper } from <span style="color:#a31515">&#39;react-p5-wrapper&#39;</span>;
+<span style="color:#00f">import</span> p5 from <span style="color:#a31515">&#39;p5&#39;</span>;
+<span style="color:#00f">import</span> <span style="color:#a31515">&#34;p5/lib/addons/p5.sound&#34;</span>
+
+<span style="color:#00f">const</span> App = () =&gt; {
+    <span style="color:#00f">return</span> (
+        &lt;div className=<span style="color:#a31515">&#34;App&#34;</span>&gt;
+            &lt;ReactP5Wrapper sketch={sketch}&gt;&lt;<span style="">/ReactP5Wrapper&gt;</span>
+        &lt;<span style="">/div&gt;</span>
+    );
+}
+
+<span style="color:#00f">const</span> sketch = (p: <span style="color:#2b91af">p5</span>) =&gt; {
+
+    <span style="color:#00f">let</span> song: <span style="color:#2b91af">p5.SoundFile</span>;
+
+    p.preload=()=&gt;{
+        song = p.loadSound(<span style="color:#a31515">&#39;https://upload.wikimedia.org/wikipedia/commons/e/ee/30sec_EDITOR_wiki_loop_library_-_by_Andy_R._Jordan.wav&#39;</span>);
+    }
+    p.setup = () =&gt; {
+        p.createCanvas(400, 400);
+        song.play();
+    };
+
+    p.draw = () =&gt; {
+        <span style="color:#00f">if</span> (p.mouseIsPressed) {
+            p.fill(0);
+        } <span style="color:#00f">else</span> {
+            p.fill(255);
+        }
+
+        p.ellipse(p.mouseX, p.mouseY, 80, 80);
+    }
+}
+
+<span style="color:#00f">export</span> <span style="color:#00f">default</span> App;</code></pre></div>
+<p>前述のp5.jsについて動作確認を行ったソースに、p5.sound.jsの<code>import</code>文なんかを追加しただけのソースです。</p>
+
+<p><img src="2022-06-20-21-26-18.png" alt="pic" /></p>
+
+<p>当たり前のようにコンパイルはOKだったのでブラウザで見てみます。</p>
+
+<p><img src="2022-06-20-21-26-34.png" alt="pic" /></p>
+
+<p>画面真っ白・・・。ブラウザの開発者ツールからコンソールを見てみると、なんかエラーが出てますね。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">p5.sound.js:543 Uncaught ReferenceError: p5 is not defined
+    at Object.&lt;anonymous&gt; (p5.sound.js:543:1)
+    at __nested_webpack_require_3678__ (p5.sound.js:84:1)
+    at Module.&lt;anonymous&gt; (p5.sound.js:686:1)
+    at __nested_webpack_require_3678__ (p5.sound.js:84:1)
+    at p5.sound.js:120:1
+    at ./node_modules/p5/lib/addons/p5.sound.js (p5.sound.js:121:1)
+    at options.factory (react refresh:6:1)
+    at __webpack_require__ (bootstrap:24:1)
+    at fn (hot module replacement:62:1)
+    at ./src/App.tsx (bundle.js:16:80)</code></pre></div>
+<p>「p5 is not defined」ってどういうこと・・・。このエラーですが、今のところ<strong>回避策が見つけられていません</strong>。こんなわけで、<a href="https://memo.sugyan.com/entry/2021/10/11/132400">p5.soundがTypeScript環境だとうまく利用できない</a>んですよね。Reactとp5.jsを組み合わせたい場合はp5.sound.jsの利用は現状だとあきらめたほうが良さげです。もったいない・・・。</p>
+
 <h2 id="まとめ">まとめ</h2>
 
 <p>当初、この環境は軽量化のためAlpineベースのNode.jsを採用しようとしたり、<a href="https://parceljs.org/">Parcel</a>を採用しようとしたりして、そこそこ迷走していました。ただ、現実問題として「p5.jsを利用するのにp5.jsを単体で利用することってあんまりないよね？なんかのフロントエンド用フレームワーク使うの前提じゃない？」という考えが背景にあったので、「それならフロントエンド開発でメジャーなReactとTypeScriptの組み合わせにp5.jsを加えるのが最適解では」という観点から環境構築を進めてきました。</p>
