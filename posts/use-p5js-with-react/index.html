@@ -246,6 +246,45 @@ root.render(
     at ./src/App.tsx (bundle.js:16:80)</code></pre></div>
 <p>「p5 is not defined」ってどういうこと・・・。このエラーですが、今のところ<strong>回避策が見つけられていません</strong>。こんなわけで、<a href="https://memo.sugyan.com/entry/2021/10/11/132400">p5.soundがTypeScript環境だとうまく利用できない</a>んですよね。Reactとp5.jsを組み合わせたい場合はp5.sound.jsの利用は現状だとあきらめたほうが良さげです。もったいない・・・。</p>
 
+<h3 id="追記-reactとtypescriptとp5-jsを同居できました">追記：ReactとTypeScriptとp5.jsを同居できました</h3>
+
+<p>上記で「同居できないよー」と言ってたReactとTypeScriptとp5.jsですが、とある方法を使ったらなんと同居できました。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">import</span> p5 from <span style="color:#a31515">&#34;p5&#34;</span>;
+window.p5 = p5;
+</code></pre></div>
+<p>上記の内容で、ここでは<code>globals.js</code>という名前のファイルを作成します。<code>globals.js</code>は、<code>index.tsx</code>や<code>App.tsx</code>などが存在するフォルダに保存しておいてください。なお、ファイル名は何でもいいですが、ここでは（自分にとって）わかりやすいファイル名にしてます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">import</span> <span style="color:#a31515">&#34;./globals&#34;</span>;
+<span style="color:#00f">import</span> <span style="color:#a31515">&#34;p5/lib/addons/p5.sound&#34;</span>;
+<span style="color:#00f">import</span> p5 from <span style="color:#a31515">&#34;p5&#34;</span>;
+<span style="color:#00f">import</span> { ReactP5Wrapper } from <span style="color:#a31515">&#39;react-p5-wrapper&#39;</span>;
+
+<span style="color:#00f">const</span> App = () =&gt; {
+  <span style="color:#00f">return</span> (
+    &lt;div className=<span style="color:#a31515">&#34;App&#34;</span>&gt;
+      &lt;ReactP5Wrapper sketch={sketch}&gt;&lt;<span style="">/ReactP5Wrapper&gt;</span>
+    &lt;<span style="">/div&gt;</span>
+  );
+}
+
+<span style="color:#00f">const</span> sketch = (p: <span style="color:#2b91af">p5</span>) =&gt; {
+<span style="">・・・以下省略</span></code></pre></div>
+<p>上記はApp.tsxです。さっき作成した<code>globals.js</code>をインポートしています。はい、インポートしてるんです。</p>
+
+<p><strong>おわかりいただけただろうか</strong>。つまり、p5.jsの<code>inport</code>をわざわざ別ファイルを作っています。しかもjsファイル内で<code>import p5 from &quot;p5&quot;;</code>を宣言しておいて、App.tsx側でも<code>import p5 from &quot;p5&quot;;</code>してます。冗長じゃないの？なんなんですかね？</p>
+
+<p>正直、ちゃんと理解しているわけではないんですが<strong>これでしっかり動作します</strong>。JS側ではwindowオブジェクトにp5プロパティを追加して、そこにp5の内容をまるっと代入し、App.tsx側では改めてp5をインポートして、p5.sound.jsもインポートするという手順です。なお、App.tsx側の<code>import p5 from &quot;p5&quot;;</code>は<strong>必須です</strong>。これがないとエラーになります。そのため、同じ<code>import p5 from &quot;p5&quot;;</code>とは言っても、効果を発揮する対象がJSファイル内では<code>window.p5 = p5;</code>ですが、App.tsx側ではTypeScriptのコードそのものということになります。</p>
+
+<p>ところで、「インポートするくらいなら、JSファイルの中身をApp.tsxに直接書いちゃだめなの？」と思われるかもしれません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">import</span> p5 from <span style="color:#a31515">&#34;p5&#34;</span>;
+window.p5 = p5;
+<span style="color:#00f">import</span> <span style="color:#a31515">&#34;p5/lib/addons/p5.sound&#34;</span>;
+<span style="color:#00f">import</span> { ReactP5Wrapper } from <span style="color:#a31515">&#39;react-p5-wrapper&#39;</span>;</code></pre></div>
+<p>こんな感じですかね。結論から言ってしまうと、上記のコードは<strong>エラーになります</strong>。実行できません。なんでやねん。</p>
+
+<p>というのは、<code>window.p5 = p5;</code>をTypeScriptが「Windowオブジェクトにそんなプロパティは存在しねぇよ！」ってエラーにするからなんですね。いや、そんなん知っとるがなって言いたいところなんですが、この1文はReactとTypeScriptとp5.jsを同居させるためには必須です。よって、プログラムとしては実装しつつ、TypeScriptに怒られないよう対処する必要があります。そこでApp.tsx内に記述するのではなく、<code>global.js</code>というJSファイルにして外出しし、TypeScriptに怒られるのを回避したわけですねぇ。へー。</p>
+
+<p>まぁ、こんな回避策を講じなくても実行できるようにはなってほしいところですが、難しいものです。</p>
+
 <h2 id="まとめ">まとめ</h2>
 
 <p>当初、この環境は軽量化のためAlpineベースのNode.jsを採用しようとしたり、<a href="https://parceljs.org/">Parcel</a>を採用しようとしたりして、そこそこ迷走していました。ただ、現実問題として「p5.jsを利用するのにp5.jsを単体で利用することってあんまりないよね？なんかのフロントエンド用フレームワーク使うの前提じゃない？」という考えが背景にあったので、「それならフロントエンド開発でメジャーなReactとTypeScriptの組み合わせにp5.jsを加えるのが最適解では」という観点から環境構築を進めてきました。</p>
