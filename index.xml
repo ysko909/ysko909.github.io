@@ -7,10 +7,29 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sun, 24 Jul 2022 18:25:29 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 29 Jul 2022 19:54:52 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Dockerfileに書いた&#39;CMD&#39;がVS Code経由だと実行されない</title>
+      <link>https://ysko909.github.io/posts/docker-does-not-run-cmd-in-dockerfile-with-using-vscode/</link>
+      <pubDate>Fri, 29 Jul 2022 19:54:52 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/docker-does-not-run-cmd-in-dockerfile-with-using-vscode/</guid>
+      <description>概要 docker-composeのチュートリアルを進めている際に気付いたことです。
+「どうも、コマンドラインでdocker-compose upからコンテナをビルドして実行するときと、Visual Studio Codeの拡張機能であるRemoteを使うのでは、同じファイル使っててもコンテナ構築後の挙動が違うぞ・・・？」
+環境の情報  Windows 10のWSL（Ubuntu20.04）を利用 Docker version 20.10.17, build 100c701 Visual Studio Code Version: 1.69.2 (system setup)  上記の環境で実行しています。
+何したのよ docker-composeのチュートリアルでは、Pythonのwebアプリケーション用フレームワークであるFlaskとNoSQLデータベースのRedisを使った、簡単なwebアプリケーションの作成を行います。Flaskが稼働するコンテナと、Redisが稼働するコンテナをそれぞれ構築します。コンテナを構築したあとで、ブラウザでローカルホストに対しアクセスすると「n回アクセスしたよ」と表示されます。
+こんな感じ。なお、表示されている回数はページ更新の際に増加します。
+チュートリアルではdocker compose upを実行してコンテナを構築します。このとき、たまたまいつものクセでVS CodeのRemote機能を使ってコンテナをビルドしちゃったんですね。「Reopen in container」っていう、いつものおなじみの処理です。「まぁ、別にコマンドラインでビルドしても、VS Code経由でビルドしても変わらないだろ」・・・そんなふうに考えていた時期が俺にもありました。
+実際は違ったわけですが。
+どう違うのよ  コマンドラインからdocker compose upで実行すると、Flaskが起動してブラウザでアクセス可能。 VSから実行すると、ブラウザからアクセスしても反応がない。調べてみたらFlaskが起動していなかった。  上記がコマンドラインによる実行と、VS Code経由による実行の差です。こんな感じで、VS Codeから実行したらFlaskが起動せず、ブラウザからアクセスができませんでした。
+FROMpython:3.7-alpineWORKDIR/codeENVFLASK_APP=app.pyENVFLASK_RUN_HOST=0.0.0.0RUN apk add --no-cache gcc musl-dev linux-headersCOPY requirements.txt requirements.txtRUN pip install -r requirements.txtEXPOSE5000COPY . .CMD[&amp;#34;flask&amp;#34;, &amp;#34;run&amp;#34;] 上記は、チュートリアルに記載されているDockerfileの内容です。Flaskは、最終行のCMDで起動するように指定されています。この行が無視されてFlaskが起動されていないか、起動されてもすぐさま終了してしまってアクセスできないのかなー、と思っていました。
+原因調査 当初、ttyの永続化が原因かなーと思っていました。つまり、「起動はしたんだけど、すぐさま終了してしまっている」ケースです。
+version: &amp;#34;3.9&amp;#34; services: web: build: .</description>
+    </item>
     
     <item>
       <title>イルミラージュ・ソーダはいいぞ</title>

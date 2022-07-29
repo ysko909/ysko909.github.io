@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Vs Code on Come as you are</title>
-    <link>https://idontwannawork.github.io/tags/vs-code/</link>
-    <description>Recent content in Vs Code on Come as you are</description>
+    <title>Vs Code on 頑張らないために頑張る</title>
+    <link>https://ysko909.github.io/tags/vs-code/</link>
+    <description>Recent content in Vs Code on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Mon, 10 Jun 2019 00:52:30 +0900</lastBuildDate>
+    <copyright>© Copyright ysko</copyright>
+    <lastBuildDate>Fri, 29 Jul 2022 19:54:52 +0900</lastBuildDate>
     
-	<atom:link href="https://idontwannawork.github.io/tags/vs-code/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/vs-code/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>VS CodeでDockerコンテナーのPython開発環境にリモート接続する</title>
-      <link>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</link>
-      <pubDate>Mon, 10 Jun 2019 00:52:30 +0900</pubDate>
-      
-      <guid>https://idontwannawork.github.io/posts/connect-to-docker-with-vscode-extension/</guid>
-      <description>はじめに Visual Studio Code（以下、vscode）を使って、Dockerのコンテナー上にある開発環境へリモートで接続します。このとき、ptvsdでは</description>
-    </item>
     
     <item>
-      <title>VS CodeでMarkdownをPDFに自動で変換する</title>
-      <link>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</link>
-      <pubDate>Wed, 15 May 2019 13:44:12 +0900</pubDate>
+      <title>Dockerfileに書いた&#39;CMD&#39;がVS Code経由だと実行されない</title>
+      <link>https://ysko909.github.io/posts/docker-does-not-run-cmd-in-dockerfile-with-using-vscode/</link>
+      <pubDate>Fri, 29 Jul 2022 19:54:52 +0900</pubDate>
       
-      <guid>https://idontwannawork.github.io/posts/convert-markdown-to-pdf-with-vscode/</guid>
-      <description>はじめに Markdownで記述したmdファイルは、エンジニア間ではそのまま利用することが多いように思います（GitHubなどにREADME.</description>
+      <guid>https://ysko909.github.io/posts/docker-does-not-run-cmd-in-dockerfile-with-using-vscode/</guid>
+      <description>概要 docker-composeのチュートリアルを進めている際に気付いたことです。
+「どうも、コマンドラインでdocker-compose upからコンテナをビルドして実行するときと、Visual Studio Codeの拡張機能であるRemoteを使うのでは、同じファイル使っててもコンテナ構築後の挙動が違うぞ・・・？」
+環境の情報  Windows 10のWSL（Ubuntu20.04）を利用 Docker version 20.10.17, build 100c701 Visual Studio Code Version: 1.69.2 (system setup)  上記の環境で実行しています。
+何したのよ docker-composeのチュートリアルでは、Pythonのwebアプリケーション用フレームワークであるFlaskとNoSQLデータベースのRedisを使った、簡単なwebアプリケーションの作成を行います。Flaskが稼働するコンテナと、Redisが稼働するコンテナをそれぞれ構築します。コンテナを構築したあとで、ブラウザでローカルホストに対しアクセスすると「n回アクセスしたよ」と表示されます。
+こんな感じ。なお、表示されている回数はページ更新の際に増加します。
+チュートリアルではdocker compose upを実行してコンテナを構築します。このとき、たまたまいつものクセでVS CodeのRemote機能を使ってコンテナをビルドしちゃったんですね。「Reopen in container」っていう、いつものおなじみの処理です。「まぁ、別にコマンドラインでビルドしても、VS Code経由でビルドしても変わらないだろ」・・・そんなふうに考えていた時期が俺にもありました。
+実際は違ったわけですが。
+どう違うのよ  コマンドラインからdocker compose upで実行すると、Flaskが起動してブラウザでアクセス可能。 VSから実行すると、ブラウザからアクセスしても反応がない。調べてみたらFlaskが起動していなかった。  上記がコマンドラインによる実行と、VS Code経由による実行の差です。こんな感じで、VS Codeから実行したらFlaskが起動せず、ブラウザからアクセスができませんでした。
+FROMpython:3.7-alpineWORKDIR/codeENVFLASK_APP=app.pyENVFLASK_RUN_HOST=0.0.0.0RUN apk add --no-cache gcc musl-dev linux-headersCOPY requirements.txt requirements.txtRUN pip install -r requirements.txtEXPOSE5000COPY . .CMD[&amp;#34;flask&amp;#34;, &amp;#34;run&amp;#34;] 上記は、チュートリアルに記載されているDockerfileの内容です。Flaskは、最終行のCMDで起動するように指定されています。この行が無視されてFlaskが起動されていないか、起動されてもすぐさま終了してしまってアクセスできないのかなー、と思っていました。
+原因調査 当初、ttyの永続化が原因かなーと思っていました。つまり、「起動はしたんだけど、すぐさま終了してしまっている」ケースです。
+version: &amp;#34;3.9&amp;#34; services: web: build: .</description>
     </item>
     
   </channel>

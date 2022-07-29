@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Dockerfileに書いた&#39;CMD&#39;がVS Code経由だと実行されない - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Dockerfileに書いた&#39;CMD&#39;がVS Code経由だと実行されない" />
+<meta property="og:description" content="概要 docker-composeのチュートリアルを進めている際に気付いたことです。
+「どうも、コマンドラインでdocker-compose upからコンテナをビルドして実行するときと、Visual Studio Codeの拡張機能であるRemoteを使うのでは、同じファイル使っててもコンテナ構築後の挙動が違うぞ・・・？」
+環境の情報  Windows 10のWSL（Ubuntu20.04）を利用 Docker version 20.10.17, build 100c701 Visual Studio Code Version: 1.69.2 (system setup)  上記の環境で実行しています。
+何したのよ docker-composeのチュートリアルでは、Pythonのwebアプリケーション用フレームワークであるFlaskとNoSQLデータベースのRedisを使った、簡単なwebアプリケーションの作成を行います。Flaskが稼働するコンテナと、Redisが稼働するコンテナをそれぞれ構築します。コンテナを構築したあとで、ブラウザでローカルホストに対しアクセスすると「n回アクセスしたよ」と表示されます。
+こんな感じ。なお、表示されている回数はページ更新の際に増加します。
+チュートリアルではdocker compose upを実行してコンテナを構築します。このとき、たまたまいつものクセでVS CodeのRemote機能を使ってコンテナをビルドしちゃったんですね。「Reopen in container」っていう、いつものおなじみの処理です。「まぁ、別にコマンドラインでビルドしても、VS Code経由でビルドしても変わらないだろ」・・・そんなふうに考えていた時期が俺にもありました。
+実際は違ったわけですが。
+どう違うのよ  コマンドラインからdocker compose upで実行すると、Flaskが起動してブラウザでアクセス可能。 VSから実行すると、ブラウザからアクセスしても反応がない。調べてみたらFlaskが起動していなかった。  上記がコマンドラインによる実行と、VS Code経由による実行の差です。こんな感じで、VS Codeから実行したらFlaskが起動せず、ブラウザからアクセスができませんでした。
+FROMpython:3.7-alpineWORKDIR/codeENVFLASK_APP=app.pyENVFLASK_RUN_HOST=0.0.0.0RUN apk add --no-cache gcc musl-dev linux-headersCOPY requirements.txt requirements.txtRUN pip install -r requirements.txtEXPOSE5000COPY . .CMD[&#34;flask&#34;, &#34;run&#34;] 上記は、チュートリアルに記載されているDockerfileの内容です。Flaskは、最終行のCMDで起動するように指定されています。この行が無視されてFlaskが起動されていないか、起動されてもすぐさま終了してしまってアクセスできないのかなー、と思っていました。
+原因調査 当初、ttyの永続化が原因かなーと思っていました。つまり、「起動はしたんだけど、すぐさま終了してしまっている」ケースです。
+version: &#34;3.9&#34; services: web: build: ." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/docker-does-not-run-cmd-in-dockerfile-with-using-vscode/" /><meta property="article:published_time" content="2022-07-29T19:54:52&#43;09:00"/>
+<meta property="article:modified_time" content="2022-07-29T19:54:52&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Dockerfileに書いた&#39;CMD&#39;がVS Code経由だと実行されない"/>
+<meta name="twitter:description" content="概要 docker-composeのチュートリアルを進めている際に気付いたことです。
+「どうも、コマンドラインでdocker-compose upからコンテナをビルドして実行するときと、Visual Studio Codeの拡張機能であるRemoteを使うのでは、同じファイル使っててもコンテナ構築後の挙動が違うぞ・・・？」
+環境の情報  Windows 10のWSL（Ubuntu20.04）を利用 Docker version 20.10.17, build 100c701 Visual Studio Code Version: 1.69.2 (system setup)  上記の環境で実行しています。
+何したのよ docker-composeのチュートリアルでは、Pythonのwebアプリケーション用フレームワークであるFlaskとNoSQLデータベースのRedisを使った、簡単なwebアプリケーションの作成を行います。Flaskが稼働するコンテナと、Redisが稼働するコンテナをそれぞれ構築します。コンテナを構築したあとで、ブラウザでローカルホストに対しアクセスすると「n回アクセスしたよ」と表示されます。
+こんな感じ。なお、表示されている回数はページ更新の際に増加します。
+チュートリアルではdocker compose upを実行してコンテナを構築します。このとき、たまたまいつものクセでVS CodeのRemote機能を使ってコンテナをビルドしちゃったんですね。「Reopen in container」っていう、いつものおなじみの処理です。「まぁ、別にコマンドラインでビルドしても、VS Code経由でビルドしても変わらないだろ」・・・そんなふうに考えていた時期が俺にもありました。
+実際は違ったわけですが。
+どう違うのよ  コマンドラインからdocker compose upで実行すると、Flaskが起動してブラウザでアクセス可能。 VSから実行すると、ブラウザからアクセスしても反応がない。調べてみたらFlaskが起動していなかった。  上記がコマンドラインによる実行と、VS Code経由による実行の差です。こんな感じで、VS Codeから実行したらFlaskが起動せず、ブラウザからアクセスができませんでした。
+FROMpython:3.7-alpineWORKDIR/codeENVFLASK_APP=app.pyENVFLASK_RUN_HOST=0.0.0.0RUN apk add --no-cache gcc musl-dev linux-headersCOPY requirements.txt requirements.txtRUN pip install -r requirements.txtEXPOSE5000COPY . .CMD[&#34;flask&#34;, &#34;run&#34;] 上記は、チュートリアルに記載されているDockerfileの内容です。Flaskは、最終行のCMDで起動するように指定されています。この行が無視されてFlaskが起動されていないか、起動されてもすぐさま終了してしまってアクセスできないのかなー、と思っていました。
+原因調査 当初、ttyの永続化が原因かなーと思っていました。つまり、「起動はしたんだけど、すぐさま終了してしまっている」ケースです。
+version: &#34;3.9&#34; services: web: build: ."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Dockerfileに書いた&#39;CMD&#39;がVS Code経由だと実行されない</h1>
+			<div class="meta">Posted at &mdash; Jul 29, 2022</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p><a href="https://docs.docker.com/compose/gettingstarted/">docker-composeのチュートリアル</a>を進めている際に気付いたことです。</p>
+
+<p>「どうも、コマンドラインで<code>docker-compose up</code>からコンテナをビルドして実行するときと、Visual Studio Codeの拡張機能であるRemoteを使うのでは、同じファイル使っててもコンテナ構築後の<strong>挙動が違う</strong>ぞ・・・？」</p>
+
+<h2 id="環境の情報">環境の情報</h2>
+
+<ul>
+<li>Windows 10のWSL（Ubuntu20.04）を利用</li>
+<li>Docker version 20.10.17, build 100c701</li>
+<li>Visual Studio Code Version: 1.69.2 (system setup)</li>
+</ul>
+
+<p>上記の環境で実行しています。</p>
+
+<h2 id="何したのよ">何したのよ</h2>
+
+<p><a href="https://docs.docker.com/compose/gettingstarted/">docker-composeのチュートリアル</a>では、Pythonのwebアプリケーション用フレームワークである<a href="https://flask.palletsprojects.com/">Flask</a>とNoSQLデータベースの<a href="https://redis.io/">Redis</a>を使った、簡単なwebアプリケーションの作成を行います。Flaskが稼働するコンテナと、Redisが稼働するコンテナをそれぞれ構築します。コンテナを構築したあとで、ブラウザでローカルホストに対しアクセスすると「n回アクセスしたよ」と表示されます。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/181685268-5c182bd3-92b6-4452-824f-c2accf2cbc36.png" alt="image" /></p>
+
+<p>こんな感じ。なお、表示されている回数はページ更新の際に増加します。</p>
+
+<p>チュートリアルでは<code>docker compose up</code>を実行してコンテナを構築します。このとき、たまたまいつものクセで<strong>VS CodeのRemote機能を使ってコンテナをビルドしちゃった</strong>んですね。「Reopen in container」っていう、いつものおなじみの処理です。「まぁ、別にコマンドラインでビルドしても、VS Code経由でビルドしても変わらないだろ」・・・そんなふうに考えていた時期が俺にもありました。</p>
+
+<p>実際は<strong>違った</strong>わけですが。</p>
+
+<h2 id="どう違うのよ">どう違うのよ</h2>
+
+<ul>
+<li>コマンドラインから<code>docker compose up</code>で実行すると、Flaskが起動してブラウザでアクセス可能。</li>
+<li>VSから実行すると、ブラウザからアクセスしても<strong>反応がない</strong>。調べてみたらFlaskが起動していなかった。</li>
+</ul>
+
+<p>上記がコマンドラインによる実行と、VS Code経由による実行の差です。こんな感じで、VS Codeから実行したらFlaskが起動せず、ブラウザからアクセスができませんでした。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#00f">FROM</span><span style="color:#a31515"> python:3.7-alpine</span><span style="">
+</span><span style=""></span><span style="color:#00f">WORKDIR</span><span style="color:#a31515"> /code</span><span style="">
+</span><span style=""></span><span style="color:#00f">ENV</span><span style="color:#a31515"> FLASK_APP=app.py</span><span style="">
+</span><span style=""></span><span style="color:#00f">ENV</span><span style="color:#a31515"> FLASK_RUN_HOST=0.0.0.0</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> apk add --no-cache gcc musl-dev linux-headers<span style="">
+</span><span style=""></span>COPY requirements.txt requirements.txt<span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> pip install -r requirements.txt<span style="">
+</span><span style=""></span><span style="color:#00f">EXPOSE</span><span style="color:#a31515"> 5000</span><span style="">
+</span><span style=""></span>COPY . .<span style="">
+</span><span style=""></span><span style="color:#00f">CMD</span><span style="color:#a31515"> [&#34;flask&#34;, &#34;run&#34;]</span></code></pre></div>
+<p>上記は、チュートリアルに記載されているDockerfileの内容です。Flaskは、最終行の<code>CMD</code>で起動するように指定されています。この行が無視されてFlaskが起動されていないか、起動されてもすぐさま終了してしまってアクセスできないのかなー、と思っていました。</p>
+
+<h2 id="原因調査">原因調査</h2>
+
+<p>当初、<code>tty</code>の永続化が原因かなーと思っていました。つまり、「起動はしたんだけど、すぐさま終了してしまっている」ケースです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml">version: <span style="color:#a31515">&#34;3.9&#34;</span>
+services:
+  web:
+    build: .
+    ports:
+      - <span style="color:#a31515">&#34;8000:5000&#34;</span>
+  redis:
+    image: <span style="color:#a31515">&#34;redis:alpine&#34;</span></code></pre></div>
+<p>上記のとおり、チュートリアルにはのdocker-compose.ymlには<code>tty</code>の記載がないため、永続化はされていないのです。そのため、「ああなんだ、<code>tty: true</code>にすればいいんじゃん」と思って<code>tty</code>の記載を追加しました。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml">version: <span style="color:#a31515">&#34;3.9&#34;</span>
+services:
+  web:
+    build: .
+    ports:
+      - <span style="color:#a31515">&#34;8000:5000&#34;</span>
+    tty: <span style="color:#00f">true</span>  ← ここ
+  redis:
+    image: <span style="color:#a31515">&#34;redis:buster&#34;</span></code></pre></div>
+<p>追加してリビルドしてみます・・・が、<strong>結果は変わらず</strong>。<code>tty</code>が直接の原因ではありませんでした。となると、「<code>CMD</code>が無視されている」という線を考えなければなりません。</p>
+
+<p>けど、そんなことってあるの？という半信半疑のまま、Flaskが起動するような方法を探します。最終的にはdocker-compose.ymlに<code>entrypoint</code>でFlaskを起動するコマンドを仕込んでおく、という手段で解決しました。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml">version: <span style="color:#a31515">&#34;3.9&#34;</span>
+services:
+  web:
+    build: .
+    ports:
+      - <span style="color:#a31515">&#34;8000:5000&#34;</span>
+    entrypoint: <span style="color:#a31515">&#34;/bin/sh -c &#39;flask run&#39;&#34;</span>  ← ここ
+    tty: <span style="color:#00f">true</span>
+  redis:
+    image: <span style="color:#a31515">&#34;redis:buster&#34;</span></code></pre></div>
+<p>docker-compose.yml側でFlaskを起動するため、Dockerfileの<code>CMD</code>は削除します。</p>
+
+<p>この修正を行うと、コマンドラインから<code>docker compose up</code>で実行しても、VS Codeから実行してもFlaskが起動するようになりました。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>正直、VS Codeで<code>CMD</code>が無視される原因はいまだに不明です（参考にしたとあるwebページには、「VS Code経由で<code>docker run</code>すると<code>--entrypoint</code>オプションを自動的に付与するので、<code>CMD</code>が無視される」という記載があったのですが、当方の環境では<code>--entrypoint</code>オプションの自動付与を確認できませんでした）。こういうのが一番困る・・・のですが、とりあえず回避できました。</p>
+
+<p>ベストプラクティスかどうかはかなり怪しいですが、とりあえず困ったらこんな回避方法はいかがでしょうか、というところでひとつよろしくお願いしまーす_(┐「ε:)_</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://docs.docker.com/compose/gettingstarted/">Get started with Docker Compose</a></li>
+<li><a href="https://qiita.com/nasuvitz/items/68ff25fe18674560d939">VS Code Remote Containers で &ndash;privileged と /sbin/init を渡したコンテナで開発する方法</a></li>
+<li><a href="https://www.tohoho-web.com/docker/dockerfile.html">Dockerfileによるビルド</a></li>
+<li><a href="https://qiita.com/yuta-ushijima/items/d3d98177e1b28f736f04">docker-compose.ymlの書き方について解説してみた</a></li>
+<li><a href="https://github.com/microsoft/VS Code-remote-release/issues/4209">Docker entrypoint not used</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
