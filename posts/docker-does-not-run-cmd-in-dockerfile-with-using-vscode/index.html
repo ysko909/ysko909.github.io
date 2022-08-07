@@ -7,11 +7,11 @@
 <meta property="og:description" content="概要 docker-composeのチュートリアルを進めている際に気付いたことです。
 「どうも、コマンドラインでdocker-compose upからコンテナをビルドして実行するときと、Visual Studio Codeの拡張機能であるRemoteを使うのでは、同じファイル使っててもコンテナ構築後の挙動が違うぞ・・・？」
 環境の情報  Windows 10のWSL（Ubuntu20.04）を利用 Docker version 20.10.17, build 100c701 Visual Studio Code Version: 1.69.2 (system setup)  上記の環境で実行しています。
-何したのよ docker-composeのチュートリアルでは、Pythonのwebアプリケーション用フレームワークであるFlaskとNoSQLデータベースのRedisを使った、簡単なwebアプリケーションの作成を行います。Flaskが稼働するコンテナと、Redisが稼働するコンテナをそれぞれ構築します。コンテナを構築したあとで、ブラウザでローカルホストに対しアクセスすると「n回アクセスしたよ」と表示されます。
+何したのよ docker-composeのチュートリアルでは、Pythonのwebアプリケーション用フレームワークであるFlaskとNoSQLデータベースのRedisを使った、簡単なwebアプリケーションの作成を行います。ここではFlaskが稼働するコンテナと、Redisが稼働するコンテナをそれぞれ構築します。コンテナを構築したあとで、ブラウザでローカルホストに対しアクセスすると「n回アクセスしたよ」と表示されます。表示されるはずなんです。
 こんな感じ。なお、表示されている回数はページ更新の際に増加します。
-チュートリアルではdocker compose upを実行してコンテナを構築します。このとき、たまたまいつものクセでVS CodeのRemote機能を使ってコンテナをビルドしちゃったんですね。「Reopen in container」っていう、いつものおなじみの処理です。「まぁ、別にコマンドラインでビルドしても、VS Code経由でビルドしても変わらないだろ」・・・そんなふうに考えていた時期が俺にもありました。
-実際は違ったわけですが。
-どう違うのよ  コマンドラインからdocker compose upで実行すると、Flaskが起動してブラウザでアクセス可能。 VSから実行すると、ブラウザからアクセスしても反応がない。調べてみたらFlaskが起動していなかった。  上記がコマンドラインによる実行と、VS Code経由による実行の差です。こんな感じで、VS Codeから実行したらFlaskが起動せず、ブラウザからアクセスができませんでした。
+チュートリアルではdocker compose upを実行してコンテナを構築します。ところがこのとき、たまたまいつものクセでVS CodeのRemote機能を使ってコンテナをビルドしちゃったんですね。「Reopen in container」っていう、VS Codeユーザーにはいつもの「おなじみの処理」です。「まぁ、別にコマンドラインでビルドしても、VS Code経由でビルドしても結果は変わらないだろ」・・・そんなふうに考えていた時期が俺にもありました。
+ご想像のとおり、実際は違ったわけです。
+どう違うのよ  コマンドラインからdocker compose upで実行すると、Flaskが起動してブラウザでアクセス可能。これが本来想定している挙動。 VSから実行すると、ブラウザからアクセスしても反応がない。調べてみたらFlaskが起動していなかった。  上記がコマンドラインによる実行と、VS Code経由による実行の差です。こんな感じで、VS Codeから実行したらFlaskが起動せず、ブラウザからアクセスができませんでした。
 FROMpython:3.7-alpineWORKDIR/codeENVFLASK_APP=app.pyENVFLASK_RUN_HOST=0.0.0.0RUN apk add --no-cache gcc musl-dev linux-headersCOPY requirements.txt requirements.txtRUN pip install -r requirements.txtEXPOSE5000COPY . .CMD[&#34;flask&#34;, &#34;run&#34;] 上記は、チュートリアルに記載されているDockerfileの内容です。Flaskは、最終行のCMDで起動するように指定されています。この行が無視されてFlaskが起動されていないか、起動されてもすぐさま終了してしまってアクセスできないのかなー、と思っていました。
 原因調査 当初、ttyの永続化が原因かなーと思っていました。つまり、「起動はしたんだけど、すぐさま終了してしまっている」ケースです。
 version: &#34;3.9&#34; services: web: build: ." />
@@ -22,11 +22,11 @@ version: &#34;3.9&#34; services: web: build: ." />
 <meta name="twitter:description" content="概要 docker-composeのチュートリアルを進めている際に気付いたことです。
 「どうも、コマンドラインでdocker-compose upからコンテナをビルドして実行するときと、Visual Studio Codeの拡張機能であるRemoteを使うのでは、同じファイル使っててもコンテナ構築後の挙動が違うぞ・・・？」
 環境の情報  Windows 10のWSL（Ubuntu20.04）を利用 Docker version 20.10.17, build 100c701 Visual Studio Code Version: 1.69.2 (system setup)  上記の環境で実行しています。
-何したのよ docker-composeのチュートリアルでは、Pythonのwebアプリケーション用フレームワークであるFlaskとNoSQLデータベースのRedisを使った、簡単なwebアプリケーションの作成を行います。Flaskが稼働するコンテナと、Redisが稼働するコンテナをそれぞれ構築します。コンテナを構築したあとで、ブラウザでローカルホストに対しアクセスすると「n回アクセスしたよ」と表示されます。
+何したのよ docker-composeのチュートリアルでは、Pythonのwebアプリケーション用フレームワークであるFlaskとNoSQLデータベースのRedisを使った、簡単なwebアプリケーションの作成を行います。ここではFlaskが稼働するコンテナと、Redisが稼働するコンテナをそれぞれ構築します。コンテナを構築したあとで、ブラウザでローカルホストに対しアクセスすると「n回アクセスしたよ」と表示されます。表示されるはずなんです。
 こんな感じ。なお、表示されている回数はページ更新の際に増加します。
-チュートリアルではdocker compose upを実行してコンテナを構築します。このとき、たまたまいつものクセでVS CodeのRemote機能を使ってコンテナをビルドしちゃったんですね。「Reopen in container」っていう、いつものおなじみの処理です。「まぁ、別にコマンドラインでビルドしても、VS Code経由でビルドしても変わらないだろ」・・・そんなふうに考えていた時期が俺にもありました。
-実際は違ったわけですが。
-どう違うのよ  コマンドラインからdocker compose upで実行すると、Flaskが起動してブラウザでアクセス可能。 VSから実行すると、ブラウザからアクセスしても反応がない。調べてみたらFlaskが起動していなかった。  上記がコマンドラインによる実行と、VS Code経由による実行の差です。こんな感じで、VS Codeから実行したらFlaskが起動せず、ブラウザからアクセスができませんでした。
+チュートリアルではdocker compose upを実行してコンテナを構築します。ところがこのとき、たまたまいつものクセでVS CodeのRemote機能を使ってコンテナをビルドしちゃったんですね。「Reopen in container」っていう、VS Codeユーザーにはいつもの「おなじみの処理」です。「まぁ、別にコマンドラインでビルドしても、VS Code経由でビルドしても結果は変わらないだろ」・・・そんなふうに考えていた時期が俺にもありました。
+ご想像のとおり、実際は違ったわけです。
+どう違うのよ  コマンドラインからdocker compose upで実行すると、Flaskが起動してブラウザでアクセス可能。これが本来想定している挙動。 VSから実行すると、ブラウザからアクセスしても反応がない。調べてみたらFlaskが起動していなかった。  上記がコマンドラインによる実行と、VS Code経由による実行の差です。こんな感じで、VS Codeから実行したらFlaskが起動せず、ブラウザからアクセスができませんでした。
 FROMpython:3.7-alpineWORKDIR/codeENVFLASK_APP=app.pyENVFLASK_RUN_HOST=0.0.0.0RUN apk add --no-cache gcc musl-dev linux-headersCOPY requirements.txt requirements.txtRUN pip install -r requirements.txtEXPOSE5000COPY . .CMD[&#34;flask&#34;, &#34;run&#34;] 上記は、チュートリアルに記載されているDockerfileの内容です。Flaskは、最終行のCMDで起動するように指定されています。この行が無視されてFlaskが起動されていないか、起動されてもすぐさま終了してしまってアクセスできないのかなー、と思っていました。
 原因調査 当初、ttyの永続化が原因かなーと思っていました。つまり、「起動はしたんだけど、すぐさま終了してしまっている」ケースです。
 version: &#34;3.9&#34; services: web: build: ."/>
@@ -107,20 +107,20 @@ version: &#34;3.9&#34; services: web: build: ."/>
 
 <h2 id="何したのよ">何したのよ</h2>
 
-<p><a href="https://docs.docker.com/compose/gettingstarted/">docker-composeのチュートリアル</a>では、Pythonのwebアプリケーション用フレームワークである<a href="https://flask.palletsprojects.com/">Flask</a>とNoSQLデータベースの<a href="https://redis.io/">Redis</a>を使った、簡単なwebアプリケーションの作成を行います。Flaskが稼働するコンテナと、Redisが稼働するコンテナをそれぞれ構築します。コンテナを構築したあとで、ブラウザでローカルホストに対しアクセスすると「n回アクセスしたよ」と表示されます。</p>
+<p><a href="https://docs.docker.com/compose/gettingstarted/">docker-composeのチュートリアル</a>では、Pythonのwebアプリケーション用フレームワークである<a href="https://flask.palletsprojects.com/">Flask</a>とNoSQLデータベースの<a href="https://redis.io/">Redis</a>を使った、簡単なwebアプリケーションの作成を行います。ここではFlaskが稼働するコンテナと、Redisが稼働するコンテナをそれぞれ構築します。コンテナを構築したあとで、ブラウザでローカルホストに対しアクセスすると「n回アクセスしたよ」と表示されます。<strong>表示されるはずなんです</strong>。</p>
 
 <p><img src="https://user-images.githubusercontent.com/42630040/181685268-5c182bd3-92b6-4452-824f-c2accf2cbc36.png" alt="image" /></p>
 
 <p>こんな感じ。なお、表示されている回数はページ更新の際に増加します。</p>
 
-<p>チュートリアルでは<code>docker compose up</code>を実行してコンテナを構築します。このとき、たまたまいつものクセで<strong>VS CodeのRemote機能を使ってコンテナをビルドしちゃった</strong>んですね。「Reopen in container」っていう、いつものおなじみの処理です。「まぁ、別にコマンドラインでビルドしても、VS Code経由でビルドしても変わらないだろ」・・・そんなふうに考えていた時期が俺にもありました。</p>
+<p>チュートリアルでは<code>docker compose up</code>を実行してコンテナを構築します。ところがこのとき、たまたまいつものクセで<strong>VS CodeのRemote機能を使ってコンテナをビルドしちゃった</strong>んですね。「Reopen in container」っていう、VS Codeユーザーにはいつもの「おなじみの処理」です。「まぁ、別にコマンドラインでビルドしても、VS Code経由でビルドしても結果は変わらないだろ」・・・<strong>そんなふうに考えていた時期が俺にもありました</strong>。</p>
 
-<p>実際は<strong>違った</strong>わけですが。</p>
+<p>ご想像のとおり、実際は違ったわけです。</p>
 
 <h2 id="どう違うのよ">どう違うのよ</h2>
 
 <ul>
-<li>コマンドラインから<code>docker compose up</code>で実行すると、Flaskが起動してブラウザでアクセス可能。</li>
+<li>コマンドラインから<code>docker compose up</code>で実行すると、Flaskが起動してブラウザでアクセス可能。これが本来想定している挙動。</li>
 <li>VSから実行すると、ブラウザからアクセスしても<strong>反応がない</strong>。調べてみたらFlaskが起動していなかった。</li>
 </ul>
 
@@ -171,13 +171,13 @@ services:
     tty: <span style="color:#00f">true</span>
   redis:
     image: <span style="color:#a31515">&#34;redis:buster&#34;</span></code></pre></div>
-<p>docker-compose.yml側でFlaskを起動するため、Dockerfileの<code>CMD</code>は削除します。</p>
+<p>docker-compose.yml側でFlaskを起動するため、Dockerfile側の<code>CMD</code>は削除しておきます。</p>
 
 <p>この修正を行うと、コマンドラインから<code>docker compose up</code>で実行しても、VS Codeから実行してもFlaskが起動するようになりました。</p>
 
 <h2 id="まとめ">まとめ</h2>
 
-<p>正直、VS Codeで<code>CMD</code>が無視される原因はいまだに不明です（参考にしたとあるwebページには、「VS Code経由で<code>docker run</code>すると<code>--entrypoint</code>オプションを自動的に付与するので、<code>CMD</code>が無視される」という記載があったのですが、当方の環境では<code>--entrypoint</code>オプションの自動付与を確認できませんでした）。こういうのが一番困る・・・のですが、とりあえず回避できました。</p>
+<p>正直、VS Codeで<code>CMD</code>が無視される原因はいまだに不明です（参考にしたとあるwebページには、「VS Code経由で<code>docker run</code>すると<code>--entrypoint</code>オプションを自動的に付与するので、<code>CMD</code>が無視される」という記載があったのですが、当方の環境では<code>--entrypoint</code>オプションの自動付与を確認できませんでした）。こういう「原因がわからないけどなんか回避できた」っていうケースが一番困る・・・のですが、とりあえず回避できました。</p>
 
 <p>ベストプラクティスかどうかはかなり怪しいですが、とりあえず困ったらこんな回避方法はいかがでしょうか、というところでひとつよろしくお願いしまーす_(┐「ε:)_</p>
 
