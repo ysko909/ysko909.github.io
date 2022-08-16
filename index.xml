@@ -7,10 +7,40 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Fri, 29 Jul 2022 19:54:52 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 16 Aug 2022 08:45:06 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>TopDown engineを使って見下ろし型のゲームを作る（１）〜インストールからテンプレートの実行まで〜</title>
+      <link>https://ysko909.github.io/posts/develop-game-with-topdown-engine-series-1/</link>
+      <pubDate>Tue, 16 Aug 2022 08:45:06 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/develop-game-with-topdown-engine-series-1/</guid>
+      <description>概要 TopDown engineとは、Unityで「見下ろし型（TopDown）」ゲームを作成するためのアセットです。3D、2D問わず利用可能ですが、見下ろし型というゲームの形式上2Dのほうが直感的にわかりやすいでしょう。
+なお、同じデベロッパーが開発している有名なエンジンでCorgi Engineがあります。こっちはいわゆる2D横スクロールアクションゲームを作るためのエンジンです。
+今回からは、このTopDown Engineを使ったゲーム開発を行います。とはいえ、この1記事では言及できないほどの機能や設定を備えているので数回に分けて書いていきます。数回で終わるんかな？_(┐「ε:)_
+なにはともあれインストール 基本的には、普段のUnityにおける新規作成の手順に準拠しています。違いは、新規作成した直後のプレーンな状態のプロジェクトに、TopDown Engineをインポートすること。既存のプロジェクトにインポートする場合、競合を避けるため少なくとも（存在するなら）古いTopDown Engineのフォルダを最初に削除することをオススメします。
+また、TopDown Engineが機能するためにいくつかのアセットと依存関係にあります。インポート時にエラーが発生することは考えられますが、これ自体は通常のことらしいです。エラーが出た場合は、こことかを参考にしつつインポートを進めることになると思います。
+今回はインストール時を含め、発生したエラーは基本的に掲載する方向で記事を作成しています。ただし、当方の環境では発生しなかったと言って、別の環境で発生する可能性がないわけではないので、そのあたりはご了承ください。
+新規プロジェクトを作成する まずは、Unity Hubでいつもどおり新規プロジェクトを作成します。ここはいつもどおり。
+ここでは2Dを選択しています。名称は適当に「TopDown」としました。
+アセットのインポート 新規プロジェクトが立ち上がったらTopDown Engineを追加します。メニュー「Window」＞「Package Manager」を選択します。
+Package Managerの画面は、起動した直後だとPackageの欄が「In Project」になっているはず。
+Packageを「My Assets」に変更すると、購入済みのアセットが一覧になって表示されるはず。表示されない場合はUnityエディタのコンソールを確認します。
+上記のようにエラーメッセージが出ていることがあります。今回は「1回サインアウトしてから再度サインインしてね」とメッセージが表示されているので、そのとおりに従います。
+正常にサインインできていれば、上記のように購入済みのアセットが表示されるはず。TopDown Engineが表示されているはずなので、選択して右下のDownloadボタンを押してからImportボタンを押します。ダウンロード済みの場合は最初からImportボタンが押せます。
+「本当にインポートしていいの？」と聞かれるので、Importボタンを押します。
+上記のようなメッセージが表示された場合は、Install/Upgradeボタンを押します。
+今度は、TopDown Engineのどのコンポーネントをインポートするか選択するウィンドウが表示されます。基本的には全部インポートするので、そのままImportボタンを押せばOKです。あとはインポートが終わるまでしばらく待ちます。そこそこ時間がかかる（5分くらい？）なので、軽く休憩でも取りましょう。
+インポートが終わると、Assetsフォルダの中にTopDown Engineのフォルダが作成されています。このフォルダには各種デモが格納されています。その中の「LevelSelection」というフォルダ内にあるSceneを実行すると、各種デモを選択できる画面が表示されます。
+上記スクショは、LevelSelectionのSceneファイルをダブルクリックして選択した様子。ここからゲームを実行してみます。
+任意のゲームを選択すると、自動的にシーンが切り替わってゲームが開始されます。ゲーム実行中にEscキーを押すと左側にメニューが表示され、LevelSelection画面に戻れます。
+ WASD、上下左右キー：上下左右に移動 Space：ジャンプ、キャラクターとの会話 I：装備選択画面 マウスポインタ：照準の方向 マウス左ボタン：弾の発射 F：ダッシュ E：攻撃  デモゲーム本体でのキー操作は上記の通りです。ゲームによってキー設定が異なっています。
+ただ、現状だと当方の環境では「KoalaProcedural」というデモゲームを実行しようとするとエラーが表示されます。
+Tilemap Generator : you need to specify a Tile to paint with. UnityEngine.Debug:LogError (object) MoreMountains.Tools.MMTilemapGenerator:GenerateLayer (MoreMountains.Tools.MMTilemapGeneratorLayer) (at Assets/TopDownEngine/ThirdParty/MoreMountains/MMTools/Tools/MMProcedural/MMTilemapGenerator/MMTilemapGenerator.cs:108) MoreMountains.Tools.MMTilemapGenerator:Generate () (at Assets/TopDownEngine/ThirdParty/MoreMountains/MMTools/Tools/MMProcedural/MMTilemapGenerator/MMTilemapGenerator.</description>
+    </item>
     
     <item>
       <title>Dockerfileに書いた&#39;CMD&#39;がVS Code経由だと実行されない</title>

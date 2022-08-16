@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>TopDown engineを使って見下ろし型のゲームを作る（１）〜インストールからテンプレートの実行まで〜 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="TopDown engineを使って見下ろし型のゲームを作る（１）〜インストールからテンプレートの実行まで〜" />
+<meta property="og:description" content="概要 TopDown engineとは、Unityで「見下ろし型（TopDown）」ゲームを作成するためのアセットです。3D、2D問わず利用可能ですが、見下ろし型というゲームの形式上2Dのほうが直感的にわかりやすいでしょう。
+なお、同じデベロッパーが開発している有名なエンジンでCorgi Engineがあります。こっちはいわゆる2D横スクロールアクションゲームを作るためのエンジンです。
+今回からは、このTopDown Engineを使ったゲーム開発を行います。とはいえ、この1記事では言及できないほどの機能や設定を備えているので数回に分けて書いていきます。数回で終わるんかな？_(┐「ε:)_
+なにはともあれインストール 基本的には、普段のUnityにおける新規作成の手順に準拠しています。違いは、新規作成した直後のプレーンな状態のプロジェクトに、TopDown Engineをインポートすること。既存のプロジェクトにインポートする場合、競合を避けるため少なくとも（存在するなら）古いTopDown Engineのフォルダを最初に削除することをオススメします。
+また、TopDown Engineが機能するためにいくつかのアセットと依存関係にあります。インポート時にエラーが発生することは考えられますが、これ自体は通常のことらしいです。エラーが出た場合は、こことかを参考にしつつインポートを進めることになると思います。
+今回はインストール時を含め、発生したエラーは基本的に掲載する方向で記事を作成しています。ただし、当方の環境では発生しなかったと言って、別の環境で発生する可能性がないわけではないので、そのあたりはご了承ください。
+新規プロジェクトを作成する まずは、Unity Hubでいつもどおり新規プロジェクトを作成します。ここはいつもどおり。
+ここでは2Dを選択しています。名称は適当に「TopDown」としました。
+アセットのインポート 新規プロジェクトが立ち上がったらTopDown Engineを追加します。メニュー「Window」＞「Package Manager」を選択します。
+Package Managerの画面は、起動した直後だとPackageの欄が「In Project」になっているはず。
+Packageを「My Assets」に変更すると、購入済みのアセットが一覧になって表示されるはず。表示されない場合はUnityエディタのコンソールを確認します。
+上記のようにエラーメッセージが出ていることがあります。今回は「1回サインアウトしてから再度サインインしてね」とメッセージが表示されているので、そのとおりに従います。
+正常にサインインできていれば、上記のように購入済みのアセットが表示されるはず。TopDown Engineが表示されているはずなので、選択して右下のDownloadボタンを押してからImportボタンを押します。ダウンロード済みの場合は最初からImportボタンが押せます。
+「本当にインポートしていいの？」と聞かれるので、Importボタンを押します。
+上記のようなメッセージが表示された場合は、Install/Upgradeボタンを押します。
+今度は、TopDown Engineのどのコンポーネントをインポートするか選択するウィンドウが表示されます。基本的には全部インポートするので、そのままImportボタンを押せばOKです。あとはインポートが終わるまでしばらく待ちます。そこそこ時間がかかる（5分くらい？）なので、軽く休憩でも取りましょう。
+インポートが終わると、Assetsフォルダの中にTopDown Engineのフォルダが作成されています。このフォルダには各種デモが格納されています。その中の「LevelSelection」というフォルダ内にあるSceneを実行すると、各種デモを選択できる画面が表示されます。
+上記スクショは、LevelSelectionのSceneファイルをダブルクリックして選択した様子。ここからゲームを実行してみます。
+任意のゲームを選択すると、自動的にシーンが切り替わってゲームが開始されます。ゲーム実行中にEscキーを押すと左側にメニューが表示され、LevelSelection画面に戻れます。
+ WASD、上下左右キー：上下左右に移動 Space：ジャンプ、キャラクターとの会話 I：装備選択画面 マウスポインタ：照準の方向 マウス左ボタン：弾の発射 F：ダッシュ E：攻撃  デモゲーム本体でのキー操作は上記の通りです。ゲームによってキー設定が異なっています。
+ただ、現状だと当方の環境では「KoalaProcedural」というデモゲームを実行しようとするとエラーが表示されます。
+Tilemap Generator : you need to specify a Tile to paint with. UnityEngine.Debug:LogError (object) MoreMountains.Tools.MMTilemapGenerator:GenerateLayer (MoreMountains.Tools.MMTilemapGeneratorLayer) (at Assets/TopDownEngine/ThirdParty/MoreMountains/MMTools/Tools/MMProcedural/MMTilemapGenerator/MMTilemapGenerator.cs:108) MoreMountains.Tools.MMTilemapGenerator:Generate () (at Assets/TopDownEngine/ThirdParty/MoreMountains/MMTools/Tools/MMProcedural/MMTilemapGenerator/MMTilemapGenerator." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/develop-game-with-topdown-engine-series-1/" /><meta property="article:published_time" content="2022-08-16T08:45:06&#43;09:00"/>
+<meta property="article:modified_time" content="2022-08-16T08:45:06&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="TopDown engineを使って見下ろし型のゲームを作る（１）〜インストールからテンプレートの実行まで〜"/>
+<meta name="twitter:description" content="概要 TopDown engineとは、Unityで「見下ろし型（TopDown）」ゲームを作成するためのアセットです。3D、2D問わず利用可能ですが、見下ろし型というゲームの形式上2Dのほうが直感的にわかりやすいでしょう。
+なお、同じデベロッパーが開発している有名なエンジンでCorgi Engineがあります。こっちはいわゆる2D横スクロールアクションゲームを作るためのエンジンです。
+今回からは、このTopDown Engineを使ったゲーム開発を行います。とはいえ、この1記事では言及できないほどの機能や設定を備えているので数回に分けて書いていきます。数回で終わるんかな？_(┐「ε:)_
+なにはともあれインストール 基本的には、普段のUnityにおける新規作成の手順に準拠しています。違いは、新規作成した直後のプレーンな状態のプロジェクトに、TopDown Engineをインポートすること。既存のプロジェクトにインポートする場合、競合を避けるため少なくとも（存在するなら）古いTopDown Engineのフォルダを最初に削除することをオススメします。
+また、TopDown Engineが機能するためにいくつかのアセットと依存関係にあります。インポート時にエラーが発生することは考えられますが、これ自体は通常のことらしいです。エラーが出た場合は、こことかを参考にしつつインポートを進めることになると思います。
+今回はインストール時を含め、発生したエラーは基本的に掲載する方向で記事を作成しています。ただし、当方の環境では発生しなかったと言って、別の環境で発生する可能性がないわけではないので、そのあたりはご了承ください。
+新規プロジェクトを作成する まずは、Unity Hubでいつもどおり新規プロジェクトを作成します。ここはいつもどおり。
+ここでは2Dを選択しています。名称は適当に「TopDown」としました。
+アセットのインポート 新規プロジェクトが立ち上がったらTopDown Engineを追加します。メニュー「Window」＞「Package Manager」を選択します。
+Package Managerの画面は、起動した直後だとPackageの欄が「In Project」になっているはず。
+Packageを「My Assets」に変更すると、購入済みのアセットが一覧になって表示されるはず。表示されない場合はUnityエディタのコンソールを確認します。
+上記のようにエラーメッセージが出ていることがあります。今回は「1回サインアウトしてから再度サインインしてね」とメッセージが表示されているので、そのとおりに従います。
+正常にサインインできていれば、上記のように購入済みのアセットが表示されるはず。TopDown Engineが表示されているはずなので、選択して右下のDownloadボタンを押してからImportボタンを押します。ダウンロード済みの場合は最初からImportボタンが押せます。
+「本当にインポートしていいの？」と聞かれるので、Importボタンを押します。
+上記のようなメッセージが表示された場合は、Install/Upgradeボタンを押します。
+今度は、TopDown Engineのどのコンポーネントをインポートするか選択するウィンドウが表示されます。基本的には全部インポートするので、そのままImportボタンを押せばOKです。あとはインポートが終わるまでしばらく待ちます。そこそこ時間がかかる（5分くらい？）なので、軽く休憩でも取りましょう。
+インポートが終わると、Assetsフォルダの中にTopDown Engineのフォルダが作成されています。このフォルダには各種デモが格納されています。その中の「LevelSelection」というフォルダ内にあるSceneを実行すると、各種デモを選択できる画面が表示されます。
+上記スクショは、LevelSelectionのSceneファイルをダブルクリックして選択した様子。ここからゲームを実行してみます。
+任意のゲームを選択すると、自動的にシーンが切り替わってゲームが開始されます。ゲーム実行中にEscキーを押すと左側にメニューが表示され、LevelSelection画面に戻れます。
+ WASD、上下左右キー：上下左右に移動 Space：ジャンプ、キャラクターとの会話 I：装備選択画面 マウスポインタ：照準の方向 マウス左ボタン：弾の発射 F：ダッシュ E：攻撃  デモゲーム本体でのキー操作は上記の通りです。ゲームによってキー設定が異なっています。
+ただ、現状だと当方の環境では「KoalaProcedural」というデモゲームを実行しようとするとエラーが表示されます。
+Tilemap Generator : you need to specify a Tile to paint with. UnityEngine.Debug:LogError (object) MoreMountains.Tools.MMTilemapGenerator:GenerateLayer (MoreMountains.Tools.MMTilemapGeneratorLayer) (at Assets/TopDownEngine/ThirdParty/MoreMountains/MMTools/Tools/MMProcedural/MMTilemapGenerator/MMTilemapGenerator.cs:108) MoreMountains.Tools.MMTilemapGenerator:Generate () (at Assets/TopDownEngine/ThirdParty/MoreMountains/MMTools/Tools/MMProcedural/MMTilemapGenerator/MMTilemapGenerator."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">TopDown engineを使って見下ろし型のゲームを作る（１）〜インストールからテンプレートの実行まで〜</h1>
+			<div class="meta">Posted at &mdash; Aug 16, 2022</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p><a href="https://TopDown-engine.moremountains.com/">TopDown engine</a>とは、<a href="https://unity.com/">Unity</a>で「見下ろし型（TopDown）」ゲームを作成するためのアセットです。3D、2D問わず利用可能ですが、見下ろし型というゲームの形式上2Dのほうが直感的にわかりやすいでしょう。</p>
+
+<p>なお、同じデベロッパーが開発している有名なエンジンで<a href="https://assetstore.unity.com/packages/templates/systems/corgi-engine-2d-2-5d-platformer-26617">Corgi Engine</a>があります。こっちはいわゆる2D横スクロールアクションゲームを作るためのエンジンです。</p>
+
+<p>今回からは、このTopDown Engineを使ったゲーム開発を行います。とはいえ、この1記事では言及できないほどの機能や設定を備えているので数回に分けて書いていきます。数回で終わるんかな？_(┐「ε:)_</p>
+
+<h2 id="なにはともあれインストール">なにはともあれインストール</h2>
+
+<p>基本的には、普段のUnityにおける新規作成の手順に準拠しています。違いは、新規作成した直後の<strong>プレーンな状態</strong>のプロジェクトに、TopDown Engineをインポートすること。既存のプロジェクトにインポートする場合、競合を避けるため少なくとも（存在するなら）古いTopDown Engineのフォルダを最初に削除することをオススメします。</p>
+
+<p>また、TopDown Engineが機能するためにいくつかのアセットと依存関係にあります。インポート時にエラーが発生することは考えられますが、これ自体は通常のことらしいです。エラーが出た場合は、<a href="https://TopDown-engine-docs.moremountains.com/install.html">ここ</a>とかを参考にしつつインポートを進めることになると思います。</p>
+
+<p>今回はインストール時を含め、発生したエラーは基本的に掲載する方向で記事を作成しています。ただし、当方の環境では発生しなかったと言って、別の環境で発生する可能性がないわけではないので、そのあたりはご了承ください。</p>
+
+<h3 id="新規プロジェクトを作成する">新規プロジェクトを作成する</h3>
+
+<p>まずは、Unity Hubでいつもどおり新規プロジェクトを作成します。ここはいつもどおり。</p>
+
+<p><img src="2022-08-16-12-22-19.png" alt="" /></p>
+
+<p>ここでは2Dを選択しています。名称は適当に「TopDown」としました。</p>
+
+<h3 id="アセットのインポート">アセットのインポート</h3>
+
+<p>新規プロジェクトが立ち上がったらTopDown Engineを追加します。メニュー「Window」＞「Package Manager」を選択します。</p>
+
+<p><img src="2022-08-16-12-22-35.png" alt="" /></p>
+
+<p>Package Managerの画面は、起動した直後だとPackageの欄が「In Project」になっているはず。</p>
+
+<p><img src="2022-08-16-12-30-04.png" alt="" /></p>
+
+<p>Packageを「My Assets」に変更すると、購入済みのアセットが一覧になって表示されるはず。表示されない場合はUnityエディタのコンソールを確認します。</p>
+
+<p><img src="2022-08-16-12-30-21.png" alt="" /></p>
+
+<p>上記のようにエラーメッセージが出ていることがあります。今回は「1回サインアウトしてから再度サインインしてね」とメッセージが表示されているので、そのとおりに従います。</p>
+
+<p><img src="2022-08-16-12-30-32.png" alt="" /></p>
+
+<p>正常にサインインできていれば、上記のように購入済みのアセットが表示されるはず。TopDown Engineが表示されているはずなので、選択して右下のDownloadボタンを押してからImportボタンを押します。ダウンロード済みの場合は最初からImportボタンが押せます。</p>
+
+<p><img src="2022-08-16-12-30-48.png" alt="" /></p>
+
+<p>「本当にインポートしていいの？」と聞かれるので、Importボタンを押します。</p>
+
+<p><img src="2022-08-16-19-50-51.png" alt="" /></p>
+
+<p>上記のようなメッセージが表示された場合は、Install/Upgradeボタンを押します。</p>
+
+<p><img src="2022-08-16-19-51-07.png" alt="" /></p>
+
+<p>今度は、TopDown Engineのどのコンポーネントをインポートするか選択するウィンドウが表示されます。基本的には全部インポートするので、そのままImportボタンを押せばOKです。あとはインポートが終わるまでしばらく待ちます。そこそこ時間がかかる（5分くらい？）なので、軽く休憩でも取りましょう。</p>
+
+<p><img src="2022-08-16-19-51-22.png" alt="" /></p>
+
+<p>インポートが終わると、Assetsフォルダの中にTopDown Engineのフォルダが作成されています。このフォルダには各種デモが格納されています。その中の「LevelSelection」というフォルダ内にあるSceneを実行すると、各種デモを選択できる画面が表示されます。</p>
+
+<p><img src="2022-08-16-19-51-56.png" alt="" /></p>
+
+<p>上記スクショは、LevelSelectionのSceneファイルをダブルクリックして選択した様子。ここからゲームを実行してみます。</p>
+
+<p><img src="2022-08-16-19-52-22.png" alt="" /></p>
+
+<p>任意のゲームを選択すると、自動的にシーンが切り替わってゲームが開始されます。ゲーム実行中にEscキーを押すと左側にメニューが表示され、LevelSelection画面に戻れます。</p>
+
+<ul>
+<li>WASD、上下左右キー：上下左右に移動</li>
+<li>Space：ジャンプ、キャラクターとの会話</li>
+<li>I：装備選択画面</li>
+<li>マウスポインタ：照準の方向</li>
+<li>マウス左ボタン：弾の発射</li>
+<li>F：ダッシュ</li>
+<li>E：攻撃</li>
+</ul>
+
+<p>デモゲーム本体でのキー操作は上記の通りです。ゲームによってキー設定が異なっています。</p>
+
+<p>ただ、現状だと当方の環境では「KoalaProcedural」というデモゲームを実行しようとするとエラーが表示されます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">Tilemap Generator : you need to specify a Tile to paint with.
+UnityEngine.Debug:LogError (object)
+MoreMountains.Tools.MMTilemapGenerator:GenerateLayer (MoreMountains.Tools.MMTilemapGeneratorLayer) (at Assets/TopDownEngine/ThirdParty/MoreMountains/MMTools/Tools/MMProcedural/MMTilemapGenerator/MMTilemapGenerator.cs:108)
+MoreMountains.Tools.MMTilemapGenerator:Generate () (at Assets/TopDownEngine/ThirdParty/MoreMountains/MMTools/Tools/MMProcedural/MMTilemapGenerator/MMTilemapGenerator.cs:82)
+MoreMountains.TopDownEngine.TilemapLevelGenerator:Generate () (at Assets/TopDownEngine/Common/Scripts/Procedural/TilemapLevelGenerator.cs:64)
+MoreMountains.TopDownEngine.TilemapLevelGenerator:Awake () (at Assets/TopDownEngine/Common/Scripts/Procedural/TilemapLevelGenerator.cs:55)</code></pre></div>
+<p>「KoalaProcedural」以外のゲームはとりあえず動作するので、そっちで確認しています。なお、この記事を書いている現在でもまだエラーが解消していないです。どうしよ_(┐「ε:)_</p>
+
+<h2 id="最小構成のシーン">最小構成のシーン</h2>
+
+<p>デモにも含まれていますが、2Dまたは3Dのゲーム向けに「最小構成のシーン」が用意されています。</p>
+
+<p>「Minimal」と名前のつくシーンがそれで、「Minimal3D」なら3D向け、「Minimal2D」なら2D向けのシーンとなっています。「Minimal2D」フォルダに2Dシーンのサンプルが、「Minimal3D」フォルダに3Dシーンのサンプルが格納されています。基本的な内容は一緒だが<a href="https://topdown-engine-docs.moremountains.com/minimal-scene-requirements.html">カメラのみ異なっている</a>ので注意。</p>
+
+<ul>
+<li>GameManager：ゲームを実行する際に必要なオブジェクト。</li>
+<li>SoundManager：音声を再生するために必要なオブジェクト。こちらもゲームの体裁を取るなら基本的には必要。</li>
+<li>Other managers
+
+<ul>
+<li>LevelManager：LevelManagerは、キャラクタのスポーンやそのステージ特有の処理を担当する。インスペクタで、このステージが使用するキャラクターと、初期スポーンポイントを指定する必要がある。</li>
+<li>InitialSpawnPoint：LevelManagerにキャラクターを出現させる場所を指定する。</li>
+<li>TimeManager：時間に関係する処理を担当。これは、時間を遅くするような高度なものから、一時停止のような簡単なものまで含まれている。</li>
+<li>AchievementRules：このステージでアンロックできるアチーブメントを記述する。アンロックするような対象がない場合は使用しない。</li>
+</ul></li>
+<li>Camera：通常、ゲームステージにはカメラが必要で、ミニマルシーンにはCinemachineバーチャルカメラやUIエレメントをサポートするUICameraなどの高度なカメラセットアップが用意されている。もちろん、これらをすべて取り除きシンプルなカメラを使用することも可能。ちなみに、UICameraにはInputManagerも含まれていることに注意。InputManagerが存在しない場合、キャラクターは動かないため、UICameraを削除する場合はシーンのどこかにInputManagerがあることを確認する必要がある。
+
+<ul>
+<li>InputManager</li>
+</ul></li>
+<li>Level：TopDown Engineは<a href="https://blog.gigacreation.jp/entry/2020/06/30/164303">いわゆるゲームステージのことをレベルと呼ぶ</a>。「レベルアップ」とかで言うところのレベルとは意味合いが異なるので、TopDown Engine関連のドキュメントを参照する場合は注意が必要。最小構成のシーンでは基本的な地面と壁のみが存在している。</li>
+</ul>
+
+<p>ここでは、Minimal2Dからもっともプレーンなシーン「MinimalScene2D」を選択します。このシーンを任意のフォルダへコピーします。</p>
+
+<p><img src="2022-08-16-19-52-54.png" alt="" /></p>
+
+<p>ここではAssetsフォルダ配下に「topdown」というフォルダを作成してコピーし、「MainGameScene」という名前にリネームしています。ここでリネームしたシーンをダブルクリックして開き、ゲームを開始します。</p>
+
+<p><img src="2022-08-16-19-53-05.png" alt="" /></p>
+
+<p>開始すると、こんな感じのゲームが始まるはずです。デモ画面で見たゲームを同じものなのでWASDで動かせますが、最小構成であるためアイテムなどが存在しません。</p>
+
+<p>このシーンをベースにして、プレイヤーキャラクターを自作のものに変更したり、ゲームステージ（TDEではステージのことをレベルというのでTDE関連のドキュメントを読む際は注意）を作成したり、BGMやSEが再生されるよう編集したりなどを行っていくわけです。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>ここまででインストールから最小構成のシーンまでを準備しました。2Dに限りませんが、ゲームシステムを含めた環境構築は、ゲームの根っこ部分であり大事なわりに、どうしても派手さがないのでやっててツラくなりがちです。ならない？</p>
+
+<p>こういうアセットで根っこ部分を代用して自分が欲しいシステムを構築するっていうのも、時間や労力の節約になるしその分フォーカスしたいところに注力できるので、個人的にはどんどん取り入れていきたいものです。</p>
+
+<p>次はデモ用プレイヤーを自作のプレイヤーに置き換えるところから再開したいと思います。</p>
+
+<h2 id="reference">reference</h2>
+
+<ol>
+<li><a href="https://TopDown-engine.moremountains.com/">TopDown engine</a></li>
+<li><a href="https://topdown-engine-docs.moremountains.com/install.html">How to install the TopDown Engine</a></li>
+<li><a href="https://topdown-engine-docs.moremountains.com/recipes.html">Recipes</a></li>
+<li><a href="https://ikeball.hatenablog.com/entry/2021/08/25/091127">【Unity】【TopDownEngine】TopDown Engine の使い方紹介</a></li>
+<li><a href="https://blog.gigacreation.jp/entry/2020/06/29/141307">TopDown Engine 入門 Part 3 ～最小構成編～</a></li>
+<li><a href="https://blog.gigacreation.jp/entry/2020/06/30/164303"> TopDown Engine 入門 Part 4 ～ステージ編～</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
