@@ -21,10 +21,11 @@
       <description>概要 docker-composeのチュートリアルを進めている際に気付いたことです。
 「どうも、コマンドラインでdocker-compose upからコンテナをビルドして実行するときと、Visual Studio Codeの拡張機能であるRemoteを使うのでは、同じファイル使っててもコンテナ構築後の挙動が違うぞ・・・？」
 環境の情報  Windows 10のWSL（Ubuntu20.04）を利用 Docker version 20.10.17, build 100c701 Visual Studio Code Version: 1.69.2 (system setup)  上記の環境で実行しています。
-何したのよ docker-composeのチュートリアルでは、Pythonのwebアプリケーション用フレームワークであるFlaskとNoSQLデータベースのRedisを使った、簡単なwebアプリケーションの作成を行います。ここではFlaskが稼働するコンテナと、Redisが稼働するコンテナをそれぞれ構築します。コンテナを構築したあとで、ブラウザでローカルホストに対しアクセスすると「n回アクセスしたよ」と表示されます。表示されるはずなんです。
-こんな感じ。なお、表示されている回数はページ更新の際に増加します。
-チュートリアルではdocker compose upを実行してコンテナを構築します。ところがこのとき、たまたまいつものクセでVS CodeのRemote機能を使ってコンテナをビルドしちゃったんですね。「Reopen in container」っていう、VS Codeユーザーにはいつもの「おなじみの処理」です。「まぁ、別にコマンドラインでビルドしても、VS Code経由でビルドしても結果は変わらないだろ」・・・そんなふうに考えていた時期が俺にもありました。
-ご想像のとおり、実際は違ったわけです。
+何したのよ docker-composeのチュートリアルでは、Pythonのwebアプリケーション用フレームワークであるFlaskとNoSQLデータベースのRedisを使った、簡単なwebアプリケーションの作成を行います。ここではFlaskが稼働するコンテナと、Redisが稼働するコンテナをそれぞれ構築します。コンテナを構築したあとで、ブラウザでローカルホストに対しアクセスすると「n回アクセスしたよ」と表示されます。
+ええ、表示されるはずなんです。
+こんな感じ。なお、表示されている回数はページ更新の際に増加しますので、更新ボタンをポチポチ押せばどんどん数が増えていきます。
+チュートリアルでは、ターミナルでdocker compose upを実行してコンテナを構築します。ところがこのとき、たまたまいつものクセでVS CodeのRemote機能を使ってコンテナをビルドしちゃったんですね。「Reopen in container」っていう、VS Codeユーザーにはいつもの「おなじみの処理」です。「まぁ、別にコマンドでビルドしても、VS Code経由でビルドしても結果は変わらないだろ」・・・そんなふうに考えていた時期が俺にもありました。
+ご想像のとおり、実際は違ったわけです。どういうことだってばよ。
 どう違うのよ  コマンドラインからdocker compose upで実行すると、Flaskが起動してブラウザでアクセス可能。これが本来想定している挙動。 VSから実行すると、ブラウザからアクセスしても反応がない。調べてみたらFlaskが起動していなかった。  上記がコマンドラインによる実行と、VS Code経由による実行の差です。こんな感じで、VS Codeから実行したらFlaskが起動せず、ブラウザからアクセスができませんでした。
 FROMpython:3.7-alpineWORKDIR/codeENVFLASK_APP=app.pyENVFLASK_RUN_HOST=0.0.0.0RUN apk add --no-cache gcc musl-dev linux-headersCOPY requirements.txt requirements.txtRUN pip install -r requirements.txtEXPOSE5000COPY . .CMD[&amp;#34;flask&amp;#34;, &amp;#34;run&amp;#34;] 上記は、チュートリアルに記載されているDockerfileの内容です。Flaskは、最終行のCMDで起動するように指定されています。この行が無視されてFlaskが起動されていないか、起動されてもすぐさま終了してしまってアクセスできないのかなー、と思っていました。
 原因調査 当初、ttyの永続化が原因かなーと思っていました。つまり、「起動はしたんだけど、すぐさま終了してしまっている」ケースです。
