@@ -131,7 +131,7 @@ Tilemap Generator : you need to specify a Tile to paint with. UnityEngine.Debug:
 
 <p>まずは、Unity Hubでいつもどおり新規プロジェクトを作成します。ここはいつもどおり。</p>
 
-<p><img src="2022-08-16-12-22-19.png" alt="" /></p>
+<p><img src="2022-08-16-12-22-19.png" alt="pic" /></p>
 
 <p>ここでは2Dを選択しています。名称は適当に「TopDown」としました。</p>
 
@@ -139,43 +139,43 @@ Tilemap Generator : you need to specify a Tile to paint with. UnityEngine.Debug:
 
 <p>新規プロジェクトが立ち上がったらTopDown Engineを追加します。メニュー「Window」＞「Package Manager」を選択します。</p>
 
-<p><img src="2022-08-16-12-22-35.png" alt="" /></p>
+<p><img src="2022-08-16-12-22-35.png" alt="pic" /></p>
 
 <p>Package Managerの画面は、起動した直後だとPackageの欄が「In Project」になっているはず。</p>
 
-<p><img src="2022-08-16-12-30-04.png" alt="" /></p>
+<p><img src="2022-08-16-12-30-04.png" alt="pic" /></p>
 
 <p>Packageを「My Assets」に変更すると、購入済みのアセットが一覧になって表示されるはず。表示されない場合はUnityエディタのコンソールを確認します。</p>
 
-<p><img src="2022-08-16-12-30-21.png" alt="" /></p>
+<p><img src="2022-08-16-12-30-21.png" alt="pic" /></p>
 
 <p>上記のようにエラーメッセージが出ていることがあります。今回は「1回サインアウトしてから再度サインインしてね」とメッセージが表示されているので、そのとおりに従います。</p>
 
-<p><img src="2022-08-16-12-30-32.png" alt="" /></p>
+<p><img src="2022-08-16-12-30-32.png" alt="pic" /></p>
 
 <p>正常にサインインできていれば、上記のように購入済みのアセットが表示されるはず。TopDown Engineが表示されているはずなので、選択して右下のDownloadボタンを押してからImportボタンを押します。ダウンロード済みの場合は最初からImportボタンが押せます。</p>
 
-<p><img src="2022-08-16-12-30-48.png" alt="" /></p>
+<p><img src="2022-08-16-12-30-48.png" alt="pic" /></p>
 
 <p>「本当にインポートしていいの？」と聞かれるので、Importボタンを押します。</p>
 
-<p><img src="2022-08-16-19-50-51.png" alt="" /></p>
+<p><img src="2022-08-16-19-50-51.png" alt="pic" /></p>
 
 <p>上記のようなメッセージが表示された場合は、Install/Upgradeボタンを押します。</p>
 
-<p><img src="2022-08-16-19-51-07.png" alt="" /></p>
+<p><img src="2022-08-16-19-51-07.png" alt="pic" /></p>
 
 <p>今度は、TopDown Engineのどのコンポーネントをインポートするか選択するウィンドウが表示されます。基本的には全部インポートするので、そのままImportボタンを押せばOKです。あとはインポートが終わるまでしばらく待ちます。そこそこ時間がかかる（5分くらい？）なので、軽く休憩でも取りましょう。</p>
 
-<p><img src="2022-08-16-19-51-22.png" alt="" /></p>
+<p><img src="2022-08-16-19-51-22.png" alt="pic" /></p>
 
 <p>インポートが終わると、Assetsフォルダの中にTopDown Engineのフォルダが作成されています。このフォルダには各種デモが格納されています。その中の「LevelSelection」というフォルダ内にあるSceneを実行すると、各種デモを選択できる画面が表示されます。</p>
 
-<p><img src="2022-08-16-19-51-56.png" alt="" /></p>
+<p><img src="2022-08-16-19-51-56.png" alt="pic" /></p>
 
 <p>上記スクショは、LevelSelectionのSceneファイルをダブルクリックして選択した様子。ここからゲームを実行してみます。</p>
 
-<p><img src="2022-08-16-19-52-22.png" alt="" /></p>
+<p><img src="2022-08-16-19-52-22.png" alt="pic" /></p>
 
 <p>任意のゲームを選択すると、自動的にシーンが切り替わってゲームが開始されます。ゲーム実行中にEscキーを押すと左側にメニューが表示され、LevelSelection画面に戻れます。</p>
 
@@ -227,11 +227,11 @@ MoreMountains.TopDownEngine.TilemapLevelGenerator:Awake () (at Assets/TopDownEng
 
 <p>ここでは、Minimal2Dからもっともプレーンなシーン「MinimalScene2D」を選択します。このシーンを任意のフォルダへコピーします。</p>
 
-<p><img src="2022-08-16-19-52-54.png" alt="" /></p>
+<p><img src="2022-08-16-19-52-54.png" alt="pic" /></p>
 
 <p>ここではAssetsフォルダ配下に「topdown」というフォルダを作成してコピーし、「MainGameScene」という名前にリネームしています。ここでリネームしたシーンをダブルクリックして開き、ゲームを開始します。</p>
 
-<p><img src="2022-08-16-19-53-05.png" alt="" /></p>
+<p><img src="2022-08-16-19-53-05.png" alt="pic" /></p>
 
 <p>開始すると、こんな感じのゲームが始まるはずです。デモ画面で見たゲームを同じものなのでWASDで動かせますが、最小構成であるためアイテムなどが存在しません。</p>
 
@@ -253,7 +253,7 @@ MoreMountains.TopDownEngine.TilemapLevelGenerator:Awake () (at Assets/TopDownEng
 <li><a href="https://topdown-engine-docs.moremountains.com/recipes.html">Recipes</a></li>
 <li><a href="https://ikeball.hatenablog.com/entry/2021/08/25/091127">【Unity】【TopDownEngine】TopDown Engine の使い方紹介</a></li>
 <li><a href="https://blog.gigacreation.jp/entry/2020/06/29/141307">TopDown Engine 入門 Part 3 ～最小構成編～</a></li>
-<li><a href="https://blog.gigacreation.jp/entry/2020/06/30/164303"> TopDown Engine 入門 Part 4 ～ステージ編～</a></li>
+<li><a href="https://blog.gigacreation.jp/entry/2020/06/30/164303">TopDown Engine 入門 Part 4 ～ステージ編～</a></li>
 </ol>
 
 		</div><div id="disqus_thread"></div>
