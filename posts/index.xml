@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Tue, 16 Aug 2022 08:45:06 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 27 Aug 2022 22:34:45 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>DataFrameの行と列を入れ替える</title>
+      <link>https://ysko909.github.io/posts/swap-row-for-columns-of-dataframe/</link>
+      <pubDate>Sat, 27 Aug 2022 22:34:45 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/swap-row-for-columns-of-dataframe/</guid>
+      <description>概要 pandasのDataFrameにおいて、行と列は交互に入れ替えることが可能です。ここでは入れ替える方法についていくつか紹介します。
+行と列を単純に入れ替える DataFrameの行と列を単純に入れ替える場合、T属性かtranspose()メソッドを使います。
+&amp;gt;&amp;gt;&amp;gt; import pandas &amp;gt;&amp;gt;&amp;gt; import io &amp;gt;&amp;gt;&amp;gt; s = &amp;#39;&amp;#39;&amp;#39;a,b,c ... hoge,1,2 ... fuga,3,4 ... hoge,5,6 ... hoge,7,8 ... piyo,9,10 ... fuga,11,12 ... piyo,3,6 ... hoge,7,12 ... fuga,1,8 ... piyo,1,2 ... &amp;#39;&amp;#39;&amp;#39; &amp;gt;&amp;gt;&amp;gt; df = pandas.read_csv(io.StringIO(s)) &amp;gt;&amp;gt;&amp;gt; df a b c 0 hoge 1 2 1 fuga 3 4 2 hoge 5 6 3 hoge 7 8 4 piyo 9 10 5 fuga 11 12 6 piyo 3 6 7 hoge 7 12 8 fuga 1 8 9 piyo 1 2 &amp;gt;&amp;gt;&amp;gt; df.</description>
+    </item>
     
     <item>
       <title>TopDown engineを使って見下ろし型のゲームを作る（１）〜インストールからテンプレートの実行まで〜</title>
