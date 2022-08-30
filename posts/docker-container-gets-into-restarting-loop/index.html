@@ -10,7 +10,7 @@ docker-compose ps psコマンドでコンテナの状態（status）を見てみ
 結論から言うと、コンテナ自体が悪いわけではなく起動の際にコンテナ内でエラーが起こっている可能性が高いです。よって、その原因が解消できればコンテナは正常に起動するはずです。
 トラブったdocker-compose.yml version: &#39;3&#39; services: postgres: image: postgres container_name: postgres_hoge restart: always environment: TZ: &#34;Asia/Tokyo&#34; POSTGRES_USER: pg_hoge_admin POSTGRES_PASSWORD: pg_hoge_admin POSTGRES_DB: pg_hoge ports: - 30000:5432 volumes: - postgres:/var/lib/postgresql/data - ./postgres/initdb:/docker-entrypoint-initdb.d pgadmin: image: dpage/pgadmin4 container_name: pgadmin_hoge restart: always ports: - 30001:80 environment: PGADMIN_DEFAULT_EMAIL: admin@example.com PGADMIN_DEFAULT_PASSWORD: admin volumes: - pgadmin:/var/lib/pgadmin depends_on: - postgres volumes: postgres: pgadmin: 上記のようなdocker-compose.ymlを作成してdocker-compose up -dしたところ、PostgreSQL側のコンテナだけRestartingから抜け出せなくなってしまいました。コンテナのリビルドやイメージの再取得をしてもダメです。ダメです。ダメだってば(/ω＼)ｲﾔﾝ
 エラーの回避策 こういう場合は、正常起動しないコンテナのログを参照してみて、何らかのエラーが起きていないかチェックした方がいいです。
-というのは、「少なくとも1度は正常起動するコンテナ」なので、イメージやコンテナのビルドそのものには問題がないと考えるのが自然です。そうなると、コンテナが正常起動した直後になんらかのエラーがコンテナ内部で発生していると考えられ、そのエラーを解消する手がかりがログに残っていると考えられます。
+というのは、「少なくとも1度は正常起動するコンテナ」なので、イメージやコンテナのビルドそのものには問題がないと考えるのが自然です。そうなると、コンテナが正常起動した直後になんらかのエラーがコンテナ内部で発生していると考えられるため、そのエラーを解消する手がかりがログに残っているはずです。残っているはずなんです。残っているといいなぁ。
 docker logs --tail 50 --follow --timestamps postgres_hoge 上記のコマンドを実行すると、指定したコンテナ（上記だとpostgres_hogeコンテナを指します）のログの最新50件分を表示します。大抵の場合、これくらいの件数だけ直近のログを見てみれば何かしらのエラーログを見つけられるはずです。エラーログが見当たらなければ、もうちょっと出力する件数を増やしてみます。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ysko909.github.io/posts/docker-container-gets-into-restarting-loop/" /><meta property="article:published_time" content="2021-04-03T09:05:43&#43;09:00"/>
@@ -22,7 +22,7 @@ docker-compose ps psコマンドでコンテナの状態（status）を見てみ
 結論から言うと、コンテナ自体が悪いわけではなく起動の際にコンテナ内でエラーが起こっている可能性が高いです。よって、その原因が解消できればコンテナは正常に起動するはずです。
 トラブったdocker-compose.yml version: &#39;3&#39; services: postgres: image: postgres container_name: postgres_hoge restart: always environment: TZ: &#34;Asia/Tokyo&#34; POSTGRES_USER: pg_hoge_admin POSTGRES_PASSWORD: pg_hoge_admin POSTGRES_DB: pg_hoge ports: - 30000:5432 volumes: - postgres:/var/lib/postgresql/data - ./postgres/initdb:/docker-entrypoint-initdb.d pgadmin: image: dpage/pgadmin4 container_name: pgadmin_hoge restart: always ports: - 30001:80 environment: PGADMIN_DEFAULT_EMAIL: admin@example.com PGADMIN_DEFAULT_PASSWORD: admin volumes: - pgadmin:/var/lib/pgadmin depends_on: - postgres volumes: postgres: pgadmin: 上記のようなdocker-compose.ymlを作成してdocker-compose up -dしたところ、PostgreSQL側のコンテナだけRestartingから抜け出せなくなってしまいました。コンテナのリビルドやイメージの再取得をしてもダメです。ダメです。ダメだってば(/ω＼)ｲﾔﾝ
 エラーの回避策 こういう場合は、正常起動しないコンテナのログを参照してみて、何らかのエラーが起きていないかチェックした方がいいです。
-というのは、「少なくとも1度は正常起動するコンテナ」なので、イメージやコンテナのビルドそのものには問題がないと考えるのが自然です。そうなると、コンテナが正常起動した直後になんらかのエラーがコンテナ内部で発生していると考えられ、そのエラーを解消する手がかりがログに残っていると考えられます。
+というのは、「少なくとも1度は正常起動するコンテナ」なので、イメージやコンテナのビルドそのものには問題がないと考えるのが自然です。そうなると、コンテナが正常起動した直後になんらかのエラーがコンテナ内部で発生していると考えられるため、そのエラーを解消する手がかりがログに残っているはずです。残っているはずなんです。残っているといいなぁ。
 docker logs --tail 50 --follow --timestamps postgres_hoge 上記のコマンドを実行すると、指定したコンテナ（上記だとpostgres_hogeコンテナを指します）のログの最新50件分を表示します。大抵の場合、これくらいの件数だけ直近のログを見てみれば何かしらのエラーログを見つけられるはずです。エラーログが見当たらなければ、もうちょっと出力する件数を増やしてみます。"/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
@@ -135,7 +135,7 @@ volumes:
 
 <p>こういう場合は、正常起動しないコンテナの<strong>ログを参照</strong>してみて、何らかのエラーが起きていないかチェックした方がいいです。</p>
 
-<p>というのは、「少なくとも1度は正常起動するコンテナ」なので、イメージやコンテナのビルドそのものには問題がないと考えるのが自然です。そうなると、コンテナが正常起動した直後になんらかのエラーが<strong>コンテナ内部で発生している</strong>と考えられ、そのエラーを解消する手がかりがログに残っていると考えられます。</p>
+<p>というのは、「少なくとも1度は正常起動するコンテナ」なので、イメージやコンテナのビルドそのものには問題がないと考えるのが自然です。そうなると、コンテナが正常起動した直後になんらかのエラーが<strong>コンテナ内部で発生している</strong>と考えられるため、そのエラーを解消する手がかりがログに残っているはずです。残っているはずなんです。残っているといいなぁ。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker logs --tail 50 --follow --timestamps postgres_hoge</code></pre></div>
 <p>上記のコマンドを実行すると、指定したコンテナ（上記だと<code>postgres_hoge</code>コンテナを指します）のログの最新50件分を表示します。大抵の場合、これくらいの件数だけ直近のログを見てみれば何かしらのエラーログを見つけられるはずです。エラーログが見当たらなければ、もうちょっと出力する件数を増やしてみます。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">initdb: error: superuser name &#34;pg_hoge_admin&#34; is disallowed; role names cannot begin with &#34;pg_&#34;</code></pre></div>
