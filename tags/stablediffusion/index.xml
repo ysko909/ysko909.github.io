@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Stablediffusion on 頑張らないために頑張る</title>
+    <link>https://ysko909.github.io/tags/stablediffusion/</link>
+    <description>Recent content in Stablediffusion on 頑張らないために頑張る</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© Copyright ysko</copyright>
+    <lastBuildDate>Mon, 05 Sep 2022 22:09:55 +0900</lastBuildDate>
+    
+	<atom:link href="https://ysko909.github.io/tags/stablediffusion/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Stable Diffusionを使ってGoogle Colaboratory上で画像を生成する</title>
+      <link>https://ysko909.github.io/posts/execute-stable-diffusion-on-google-colaboratory/</link>
+      <pubDate>Mon, 05 Sep 2022 22:09:55 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/execute-stable-diffusion-on-google-colaboratory/</guid>
+      <description>概要 Stable Diffusion（以下、SD）とは、Midjourneyのように「テキストから画像を生成する」AIです。Midjourneyと異なるのはやっぱりなんといっても、そのAIモデルがまるっと公開されていることでしょうか。そのため、現状のモデルをそのまま使うことも可能ですし、自分オリジナルのモデルを作ることも可能です。そして、そのモデルを組み込んだwebアプリなんかを作ることも可能なわけです。
+「世界変革の前夜は思ったより静か」を読んだのですが、まぁすごい熱量です。一エンジニアとして、この熱量に当てられたら行動してみたくなるってもんです。そんなわけで、今回はこれをGoogle Colaboratory（以下、Colab）で動作させて、とくにimg2img（元画像と文章から画像を生成する）をやってみたいのですよ。
+というわけで行きましょう。やらいでか。
+目的 最終的なゴールは「SDをColab上で動作させて、img2imgを利用して画像生成を実行してみる」です。テキストから画像生成するのも楽しいけど、入力の画像に対してどんなエフェクトかましてくれるのよ？っていう興味があります。というわけで今回は、王道の「テキストから画像を生成する」ところをまるっとすっ飛ばして、いきなりimg2imgもやってみます。
+SDはめちゃくちゃ優秀なので、エンドユーザーが買えるような端末（たとえばM1が搭載されているようなMac）でも動作するよう調整された状態で配布されています。そのため、もちろんローカルで環境構築してもいいのです・・・が、最近ちょっとストレージの容量がないんですよねぇ。というわけでGoogle Colaboratoryを利用します。もちろん、SDはちゃんとColab上で動作してくれます。
+あ、ちなみにですがGoogle Colaboratoryとは、ブラウザで利用できるPythonの環境です。GPUも利用できます。スゲェ、さすがGoogle。
+手順 ざっくりした手順はこんな感じ。
+ Hugging Faceアカウント登録 Hugging Faceのトークン発行 Colabの初期設定 Stable Diffusionの初期設定 入力画像の準備とpromptの作成 画像生成！お気に入りのものが生成されるまでひたすら生成！  手順自体がそもそも少ないうえに、コードもほぼコピペで動かせるので困ることはあまりないかもしれません。強いて言えば、後述する「prompt」が鬼門かな、というくらいです。
+では行ってみましょう。
+Hugging Faceアカウント登録 Stable Diffusionを利用するにはHugging Faceのアカウントを取得し、トークンを発行する必要があります。
+まず、Hugging Faceのwebページにアクセスして、右上の「Sign Up」をクリックします。
+あるいはStable Diffusionのページにアクセスします。
+ページ下部の「Access repository」をクリックします。すると、Hugging Faceのログイン画面が表示されるので、そこで「Sign Up」をクリックしてください。
+メールアドレスと設定したいパスワードをクリックします。
+今度はユーザー名などを入力します。必要に応じて、GitHubやTwitterのアカウントなどを登録できます。最後に「I have read and agree with the Terms of Service and the Code of Conduct」の部分をチェックして「Create Account」をクリックします。ちなみに、ユーザー名は早いもの勝ちのようです。最初取ろうとしたユーザー名は「すでにあるぜ！」と言われて取得できませんでした。
+なお、この時点でさっき入力したメールアドレス宛に認証メールが来ているはずです。到着していたら記載されているURLをクリックして、メールアドレスを認証します。
+これでアカウント登録が完了しました。
+Hugging Faceのトークン発行 この時点でHugging Faceにログインできているはずなので、Settings＞Access Tokenにアクセスします。Settingsは、画面右上の円形アイコンをクリックすると表示されるメニューの中にいます。
+上記の「Access Token」をクリックします。
+こんな画面が表示されるはずなので、「New Token」をクリックします。</description>
+    </item>
+    
+  </channel>
+</rss>

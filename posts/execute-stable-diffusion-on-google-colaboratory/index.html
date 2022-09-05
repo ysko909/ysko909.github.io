@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Stable Diffusionを使ってGoogle Colaboratory上で画像を生成する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Stable Diffusionを使ってGoogle Colaboratory上で画像を生成する" />
+<meta property="og:description" content="概要 Stable Diffusion（以下、SD）とは、Midjourneyのように「テキストから画像を生成する」AIです。Midjourneyと異なるのはやっぱりなんといっても、そのAIモデルがまるっと公開されていることでしょうか。そのため、現状のモデルをそのまま使うことも可能ですし、自分オリジナルのモデルを作ることも可能です。そして、そのモデルを組み込んだwebアプリなんかを作ることも可能なわけです。
+「世界変革の前夜は思ったより静か」を読んだのですが、まぁすごい熱量です。一エンジニアとして、この熱量に当てられたら行動してみたくなるってもんです。そんなわけで、今回はこれをGoogle Colaboratory（以下、Colab）で動作させて、とくにimg2img（元画像と文章から画像を生成する）をやってみたいのですよ。
+というわけで行きましょう。やらいでか。
+目的 最終的なゴールは「SDをColab上で動作させて、img2imgを利用して画像生成を実行してみる」です。テキストから画像生成するのも楽しいけど、入力の画像に対してどんなエフェクトかましてくれるのよ？っていう興味があります。というわけで今回は、王道の「テキストから画像を生成する」ところをまるっとすっ飛ばして、いきなりimg2imgもやってみます。
+SDはめちゃくちゃ優秀なので、エンドユーザーが買えるような端末（たとえばM1が搭載されているようなMac）でも動作するよう調整された状態で配布されています。そのため、もちろんローカルで環境構築してもいいのです・・・が、最近ちょっとストレージの容量がないんですよねぇ。というわけでGoogle Colaboratoryを利用します。もちろん、SDはちゃんとColab上で動作してくれます。
+あ、ちなみにですがGoogle Colaboratoryとは、ブラウザで利用できるPythonの環境です。GPUも利用できます。スゲェ、さすがGoogle。
+手順 ざっくりした手順はこんな感じ。
+ Hugging Faceアカウント登録 Hugging Faceのトークン発行 Colabの初期設定 Stable Diffusionの初期設定 入力画像の準備とpromptの作成 画像生成！お気に入りのものが生成されるまでひたすら生成！  手順自体がそもそも少ないうえに、コードもほぼコピペで動かせるので困ることはあまりないかもしれません。強いて言えば、後述する「prompt」が鬼門かな、というくらいです。
+では行ってみましょう。
+Hugging Faceアカウント登録 Stable Diffusionを利用するにはHugging Faceのアカウントを取得し、トークンを発行する必要があります。
+まず、Hugging Faceのwebページにアクセスして、右上の「Sign Up」をクリックします。
+あるいはStable Diffusionのページにアクセスします。
+ページ下部の「Access repository」をクリックします。すると、Hugging Faceのログイン画面が表示されるので、そこで「Sign Up」をクリックしてください。
+メールアドレスと設定したいパスワードをクリックします。
+今度はユーザー名などを入力します。必要に応じて、GitHubやTwitterのアカウントなどを登録できます。最後に「I have read and agree with the Terms of Service and the Code of Conduct」の部分をチェックして「Create Account」をクリックします。ちなみに、ユーザー名は早いもの勝ちのようです。最初取ろうとしたユーザー名は「すでにあるぜ！」と言われて取得できませんでした。
+なお、この時点でさっき入力したメールアドレス宛に認証メールが来ているはずです。到着していたら記載されているURLをクリックして、メールアドレスを認証します。
+これでアカウント登録が完了しました。
+Hugging Faceのトークン発行 この時点でHugging Faceにログインできているはずなので、Settings＞Access Tokenにアクセスします。Settingsは、画面右上の円形アイコンをクリックすると表示されるメニューの中にいます。
+上記の「Access Token」をクリックします。
+こんな画面が表示されるはずなので、「New Token」をクリックします。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/execute-stable-diffusion-on-google-colaboratory/" /><meta property="article:published_time" content="2022-09-05T22:09:55&#43;09:00"/>
+<meta property="article:modified_time" content="2022-09-05T22:09:55&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Stable Diffusionを使ってGoogle Colaboratory上で画像を生成する"/>
+<meta name="twitter:description" content="概要 Stable Diffusion（以下、SD）とは、Midjourneyのように「テキストから画像を生成する」AIです。Midjourneyと異なるのはやっぱりなんといっても、そのAIモデルがまるっと公開されていることでしょうか。そのため、現状のモデルをそのまま使うことも可能ですし、自分オリジナルのモデルを作ることも可能です。そして、そのモデルを組み込んだwebアプリなんかを作ることも可能なわけです。
+「世界変革の前夜は思ったより静か」を読んだのですが、まぁすごい熱量です。一エンジニアとして、この熱量に当てられたら行動してみたくなるってもんです。そんなわけで、今回はこれをGoogle Colaboratory（以下、Colab）で動作させて、とくにimg2img（元画像と文章から画像を生成する）をやってみたいのですよ。
+というわけで行きましょう。やらいでか。
+目的 最終的なゴールは「SDをColab上で動作させて、img2imgを利用して画像生成を実行してみる」です。テキストから画像生成するのも楽しいけど、入力の画像に対してどんなエフェクトかましてくれるのよ？っていう興味があります。というわけで今回は、王道の「テキストから画像を生成する」ところをまるっとすっ飛ばして、いきなりimg2imgもやってみます。
+SDはめちゃくちゃ優秀なので、エンドユーザーが買えるような端末（たとえばM1が搭載されているようなMac）でも動作するよう調整された状態で配布されています。そのため、もちろんローカルで環境構築してもいいのです・・・が、最近ちょっとストレージの容量がないんですよねぇ。というわけでGoogle Colaboratoryを利用します。もちろん、SDはちゃんとColab上で動作してくれます。
+あ、ちなみにですがGoogle Colaboratoryとは、ブラウザで利用できるPythonの環境です。GPUも利用できます。スゲェ、さすがGoogle。
+手順 ざっくりした手順はこんな感じ。
+ Hugging Faceアカウント登録 Hugging Faceのトークン発行 Colabの初期設定 Stable Diffusionの初期設定 入力画像の準備とpromptの作成 画像生成！お気に入りのものが生成されるまでひたすら生成！  手順自体がそもそも少ないうえに、コードもほぼコピペで動かせるので困ることはあまりないかもしれません。強いて言えば、後述する「prompt」が鬼門かな、というくらいです。
+では行ってみましょう。
+Hugging Faceアカウント登録 Stable Diffusionを利用するにはHugging Faceのアカウントを取得し、トークンを発行する必要があります。
+まず、Hugging Faceのwebページにアクセスして、右上の「Sign Up」をクリックします。
+あるいはStable Diffusionのページにアクセスします。
+ページ下部の「Access repository」をクリックします。すると、Hugging Faceのログイン画面が表示されるので、そこで「Sign Up」をクリックしてください。
+メールアドレスと設定したいパスワードをクリックします。
+今度はユーザー名などを入力します。必要に応じて、GitHubやTwitterのアカウントなどを登録できます。最後に「I have read and agree with the Terms of Service and the Code of Conduct」の部分をチェックして「Create Account」をクリックします。ちなみに、ユーザー名は早いもの勝ちのようです。最初取ろうとしたユーザー名は「すでにあるぜ！」と言われて取得できませんでした。
+なお、この時点でさっき入力したメールアドレス宛に認証メールが来ているはずです。到着していたら記載されているURLをクリックして、メールアドレスを認証します。
+これでアカウント登録が完了しました。
+Hugging Faceのトークン発行 この時点でHugging Faceにログインできているはずなので、Settings＞Access Tokenにアクセスします。Settingsは、画面右上の円形アイコンをクリックすると表示されるメニューの中にいます。
+上記の「Access Token」をクリックします。
+こんな画面が表示されるはずなので、「New Token」をクリックします。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Stable Diffusionを使ってGoogle Colaboratory上で画像を生成する</h1>
+			<div class="meta">Posted at &mdash; Sep 5, 2022</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p><a href="https://huggingface.co/spaces/stabilityai/stable-diffusion">Stable Diffusion</a>（以下、SD）とは、<a href="https://www.midjourney.com/home/">Midjourney</a>のように「テキストから画像を生成する」AIです。Midjourneyと異なるのはやっぱりなんといっても、そのAIモデルが<strong>まるっと公開されている</strong>ことでしょうか。そのため、現状のモデルをそのまま使うことも可能ですし、自分オリジナルのモデルを作ることも可能です。そして、そのモデルを組み込んだwebアプリなんかを作ることも可能なわけです。</p>
+
+<p>「<a href="https://note.com/fladdict/n/n13c1413c40de">世界変革の前夜は思ったより静か</a>」を読んだのですが、まぁすごい熱量です。一エンジニアとして、この熱量に当てられたら行動してみたくなるってもんです。そんなわけで、今回はこれをGoogle Colaboratory（以下、Colab）で動作させて、とくにimg2img（元画像と文章から画像を生成する）をやってみたいのですよ。</p>
+
+<p>というわけで行きましょう。やらいでか。</p>
+
+<h2 id="目的">目的</h2>
+
+<p>最終的なゴールは「SDをColab上で動作させて、img2imgを利用して画像生成を実行してみる」です。テキストから画像生成するのも楽しいけど、入力の画像に対してどんなエフェクトかましてくれるのよ？っていう興味があります。というわけで今回は、王道の「テキストから画像を生成する」ところをまるっとすっ飛ばして、いきなりimg2imgもやってみます。</p>
+
+<p>SDはめちゃくちゃ優秀なので、エンドユーザーが買えるような端末（たとえばM1が搭載されているようなMac）でも動作するよう調整された状態で配布されています。そのため、もちろんローカルで環境構築してもいいのです・・・が、<strong>最近ちょっとストレージの容量がない</strong>んですよねぇ。というわけで<a href="https://colab.research.google.com/?hl=ja">Google Colaboratory</a>を利用します。もちろん、SDはちゃんとColab上で動作してくれます。</p>
+
+<p>あ、ちなみにですがGoogle Colaboratoryとは、ブラウザで利用できるPythonの環境です。GPUも利用できます。スゲェ、さすがGoogle。</p>
+
+<h2 id="手順">手順</h2>
+
+<p>ざっくりした手順はこんな感じ。</p>
+
+<ol>
+<li>Hugging Faceアカウント登録</li>
+<li>Hugging Faceのトークン発行</li>
+<li>Colabの初期設定</li>
+<li>Stable Diffusionの初期設定</li>
+<li>入力画像の準備とpromptの作成</li>
+<li>画像生成！お気に入りのものが生成されるまでひたすら生成！</li>
+</ol>
+
+<p>手順自体がそもそも少ないうえに、コードもほぼコピペで動かせるので困ることはあまりないかもしれません。強いて言えば、後述する「prompt」が鬼門かな、というくらいです。</p>
+
+<p>では行ってみましょう。</p>
+
+<h2 id="hugging-faceアカウント登録">Hugging Faceアカウント登録</h2>
+
+<p>Stable Diffusionを利用するにはHugging Faceのアカウントを取得し、トークンを発行する必要があります。</p>
+
+<p><img src="2022-09-06-01-13-17.png" alt="pic" /></p>
+
+<p>まず、<a href="https://huggingface.co/">Hugging Face</a>のwebページにアクセスして、右上の「Sign Up」をクリックします。</p>
+
+<p>あるいは<a href="https://huggingface.co/CompVis/stable-diffusion-v1-4">Stable Diffusionのページ</a>にアクセスします。</p>
+
+<p><img src="2022-09-06-01-13-37.png" alt="pic" /></p>
+
+<p>ページ下部の「Access repository」をクリックします。すると、Hugging Faceのログイン画面が表示されるので、そこで「Sign Up」をクリックしてください。</p>
+
+<p><img src="2022-09-06-01-13-55.png" alt="pic" /></p>
+
+<p>メールアドレスと設定したいパスワードをクリックします。</p>
+
+<p><img src="2022-09-06-01-14-09.png" alt="pic" /></p>
+
+<p>今度はユーザー名などを入力します。必要に応じて、GitHubやTwitterのアカウントなどを登録できます。最後に「I have read and agree with the Terms of Service and the Code of Conduct」の部分をチェックして「Create Account」をクリックします。ちなみに、ユーザー名は早いもの勝ちのようです。最初取ろうとしたユーザー名は「すでにあるぜ！」と言われて取得できませんでした。</p>
+
+<p>なお、この時点でさっき入力したメールアドレス宛に認証メールが来ているはずです。到着していたら記載されているURLをクリックして、メールアドレスを認証します。</p>
+
+<p>これでアカウント登録が完了しました。</p>
+
+<h2 id="hugging-faceのトークン発行">Hugging Faceのトークン発行</h2>
+
+<p>この時点でHugging Faceにログインできているはずなので、Settings＞Access Tokenにアクセスします。Settingsは、画面右上の円形アイコンをクリックすると表示されるメニューの中にいます。</p>
+
+<p><img src="2022-09-06-01-14-23.png" alt="pic" /></p>
+
+<p>上記の「Access Token」をクリックします。</p>
+
+<p><img src="2022-09-06-01-14-32.png" alt="pic" /></p>
+
+<p>こんな画面が表示されるはずなので、「New Token」をクリックします。</p>
+
+<p><img src="2022-09-06-01-14-43.png" alt="pic" /></p>
+
+<p>今度はこんな画面が表示されます。トークンの名前は任意ですが、何か適当なものを入力しておきます。roleはそのまま「read」で。入力できたら「Generate a token」をクリックします。すると、アクセストークンが発行されます。</p>
+
+<p><img src="2022-09-06-01-14-53.png" alt="pic" /></p>
+
+<p>「Show」の右側にあるアイコンをクリックすると、クリックボードにアクセストークンをコピーできます。</p>
+
+<p>これでアクセストークンの発行が完了しました。</p>
+
+<h2 id="colabの初期設定">Colabの初期設定</h2>
+
+<p>まずは<a href="https://colab.research.google.com/?hl=ja">Google Colaboratory</a>にアクセスします。</p>
+
+<p><img src="2022-09-06-01-15-05.png" alt="pic" /></p>
+
+<p>ここで右上の「ログイン」をクリックして、Googleアカウントでログインします。Googleアカウントがない場合は、事前に作成しておいてください。まぁ最近は、Googleのアカウントを持ってない人ってかなりレアだと思いますが・・・。</p>
+
+<p><img src="2022-09-06-01-15-16.png" alt="pic" /></p>
+
+<p>ログインできたらこんな画面が表示されるはずです。ここでは右下の「ノートブックを新規作成」をクリックします。</p>
+
+<p><img src="2022-09-06-01-15-26.png" alt="pic" /></p>
+
+<p>すると、新規のnotebookが作成されます。ここで1回設定の変更を行う必要があります。編集＞ノートブックの設定をクリックします。</p>
+
+<p><img src="2022-09-06-01-15-37.png" alt="pic" /></p>
+
+<p>するとこんな画面が表示されます。この画面は現在編集しているnotebookで利用するハードウェアを指定できるのですが、デフォルトだとハードウェアアクセラレータは「None」の設定になっているはずです。</p>
+
+<p><img src="2022-09-06-01-15-46.png" alt="pic" /></p>
+
+<p>今編集しているnotebookは、SD実行のためにGPUを使います。そのため、上記のようにハードウェアアクセラレータの欄を「GPU」に設定します。設定したら「保存」を押します。これでGPUが使えるようになりました。</p>
+
+<p>これでColabの初期設定は完了です。</p>
+
+<h2 id="stable-diffusionの初期設定">Stable Diffusionの初期設定</h2>
+
+<p>この時点では「とりあえずPythonの環境が揃っただけ」なので、SDを実行できるような環境ではまったくありません。そこでまずはSDを利用できる環境を構築します。と言っても、そんなに難しいことはなく必要なパッケージなんかをインポートすればいいだけです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="">!</span>pip install transformers scipy ftfy
+<span style="">!</span>pip install git+https://github.com/huggingface/diffusers.git</code></pre></div>
+<p>まずは新規のnotebookを作成して、上記を実行し必要なパッケージをインストールします。普通に<code>pip install diffusers</code>と実行すると現状（2022年9月冒頭）では0.2.4がインストールされるのですが、このバージョンはimg2imgに対応していません。そこで、img2img対応したバージョンをインストールするために、GitHubのリポジトリを指定しています。</p>
+
+<p>ちなみに、<code>pip</code>の先頭に<code>!</code>をつけて実行するのは、Jupyter Notebookにおいてパッケージをインストールするためです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># Token setting</span>
+ACCESS_TOKEN=<span style="color:#a31515">&#34;&lt;さっき取得したHugging Faceのトークン&gt;&#34;</span></code></pre></div>
+<p>次はトークン設定です。先ほど取得したHugging Faceのアクセストークンを上記の形で設定します。アクセストークンは、Hugging Faceのページからコピーしておいてください。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> torch
+<span style="color:#00f">from</span> diffusers <span style="color:#00f">import</span> StableDiffusionImg2ImgPipeline
+
+pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
+    <span style="color:#a31515">&#34;CompVis/stable-diffusion-v1-4&#34;</span>,
+    revision=<span style="color:#a31515">&#34;fp16&#34;</span>, 
+    torch_dtype=torch.float16,
+    use_auth_token=ACCESS_TOKEN
+).to(<span style="color:#a31515">&#34;cuda&#34;</span>)</code></pre></div>
+<p>今度は実際にSDのパイプラインを準備します。これは上記をそのままコピペして実行すればOKです。</p>
+
+<h2 id="入力画像の準備とpromptの作成から画像生成">入力画像の準備とpromptの作成から画像生成</h2>
+
+<p>さて、ここで入力にしたい画像を用意します。サンプルとして、ここでは<a href="https://www.pexels.com/photo/two-yellow-labrador-retriever-puppies-1108099/">この子犬の画像</a>を入力に利用することとします。<strong>イッヌかわいい</strong>。このファイルは適当な名前でColabにアップロードしておきましょう。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">from</span> PIL <span style="color:#00f">import</span> Image
+<span style="color:#00f">from</span> torch <span style="color:#00f">import</span> autocast
+
+<span style="color:#008000"># 画像生成</span>
+prompt = <span style="color:#a31515">&#34;Concept art of puppies wearing red bow tie. Background is beautiful histroical theater.&#34;</span>
+init_image = Image.open(<span style="color:#a31515">&#34;&lt;アップロードしておいたファイルの名前&gt;&#34;</span>).convert(<span style="color:#a31515">&#34;RGB&#34;</span>)
+init_image = init_image.resize((512, 512)) <span style="color:#008000"># 512x512にリサイズしないとエラーになります</span>
+<span style="color:#00f">with</span> autocast(<span style="color:#a31515">&#34;cuda&#34;</span>):
+    images = pipe(
+        prompt=prompt,
+        init_image=init_image,
+        strength=0.85
+        )[<span style="color:#a31515">&#34;sample&#34;</span>]
+
+images[0].save(<span style="color:#a31515">&#34;output.png&#34;</span>)</code></pre></div>
+<p>上記のコードではアップロードしておいたファイル名を指定し、512x512のサイズにリサイズしています。このサイズにしておかないと画像の生成時にエラーを吐いてしまうため、ここでリサイズが必要です（widthに関してはもうちょっとだけ多くてもいいらしい）。あとはこのコードを実行すれば、<code>output.png</code>というファイル名で画像が生成されます。Colabの左側にファイルをツリー表示できるので、そこでこのファイルをダブルクリックすると内容を参照できます。</p>
+
+<p>さて、ここで画像生成に係る重要な部分を編集します。さっきの画像もimg2imgはもちろん大事ですが、それ以上に大事なのが変数<code>prompt</code>に格納された<strong>文字列</strong>です。ここでは&rdquo;Concept art of puppies wearing red bow tie. Background is beautiful histroical theater.&ldquo;と入力している箇所に当たります。このprompt、<strong>生成したい画像の画風や背景などの内容などについて記述する</strong>必要があります。つまり、ここで「どんな画像を生成したいかをAIに依頼するわけです。</p>
+
+<p>のですが、これが結構難易度高いというかなんというか・・・。平たく言えば「XXXみたいな感じで描いてー」とAIに依頼している感じです。なのですが、依頼内容が<strong>無視されることもまあまあ多い</strong>です。しっかり再現されることもあれば、「うーん、こんな依頼じゃなかったんだけどなー」と、首をひねりたくなるようなことがそこそこあります。まぁ、人間同士でも起きうることが、AIにお願いするときにも起きるとは、変なところでAIに対しても人間味を感じてしまうところです。</p>
+
+<p>そして、ここの箇所のコードを実行することで<code>output.png</code>、つまり生成された画像が出力されます。おっしゃー、やるぞー。</p>
+
+<h2 id="生成結果">生成結果</h2>
+
+<p>そんなわけで、実際に上記のソースを使って生成してみました。</p>
+
+<p><img src="2022-09-06-01-16-13.png" alt="pic" /></p>
+
+<p>このイッヌたちを入力としました。</p>
+
+<p>前述の通り、promptは「Concept art of puppies wearing red bow tie. Background is beautiful histroical theater.」です。どんな感じに生成されるでしょうか？見てみましょう。</p>
+
+<p><img src="2022-09-06-01-16-24.png" alt="pic" /></p>
+
+<p>うん、悪くない。悪くないが、左側でなんか胴体が延長されてるぞ。</p>
+
+<p><img src="2022-09-06-01-16-36.png" alt="pic" /></p>
+
+<p>おお、なんか妙なえんじ色の楕円が描画されているが、なかなかどうして「コンセプトアート」っぽい感じがしますね。背景も悪くない。まぁ、ちょっとボウタイが変なところにありますが・・・。</p>
+
+<p><img src="2022-09-06-01-17-04.png" alt="pic" /></p>
+
+<p>カトゥーン調。でもこれもpromptの内容からしていい感じですね。片耳が「ペロン」って折れてるのかわいい。</p>
+
+<p><img src="2022-09-06-01-17-56.png" alt="pic" /></p>
+
+<p>渋い・・・なんか、色合いといいレイアウトといい、額に入れて飾りたい感じの「肖像画」っぽい出来ですな。</p>
+
+<p>何回か生成していると気づくのですが、これ、入力の犬種にかかわらずいろいろな犬種を出力してくれます。多分、犬と猫はいろんな種類が学習データに入っているんでしょうね。入力はラブラドールレトリーバーですが、コーギーやパグっぽい出力もあったりして、そういう部分もバリエーション豊かです。生成ボタンを押せば、こんな感じにどんどん生成されていきます。<strong>楽しい</strong>_(┐「ε:)_</p>
+
+<p>ただ、全体的に描画が甘くなりやすいのは悩ましいところかなー。「絵としての味」として見られることもあれば、「単純になぐり書きだろこれ」みたいな絵も生成されることもあり・・・。少なくとも「撮って出し（生成出し？）」でなんの編集もせずに即利用可能か、と聞かれればちょっと難しいよねと言わざる得ないのですがどうでしょう。画風の指定をもう少し別なものにすれば改善するかもしれません。そのあたりは入力の画像や、promptのチューニングが必須だと思います。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>これ、<strong>めちゃくちゃおもしろいんだけど</strong>。</p>
+
+<p>今回はStable Diffusionを使って画像生成を試してみました。「狙ったとおりか？」と聞かれるとちょっと首を傾げるところもなくはないですが、それでもこんなに簡単かつ手軽に楽しい体験ができるというのは、とっても貴重なことだと思います。</p>
+
+<p>いや、ホントに楽しいわコレ_(┐「ε:)_</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://huggingface.co/spaces/stabilityai/stable-diffusion">Stable Diffusion</a></li>
+<li><a href="https://colab.research.google.com/?hl=ja">Google Colaboratory</a></li>
+<li><a href="https://zenn.dev/karaage0703/articles/22ee47b71fab9c">Stable Diffusionのサンプルコード(text2img/img2img)をGoogle Colabで動かす方法</a></li>
+<li><a href="https://note.com/yamkaz/n/n9fd522bb012e#473f8063-c070-43da-8c09-f3f022020bbd">やばすぎるAI画像生成サービス「Stable Diffusion」始まる。 【簡単解説 &amp; 応用 &amp; Prompt付生成事例集】</a></li>
+<li><a href="https://note.com/npaka/n/ndd549d2ce556">Google Colab で はじめる Stable Diffusion v1.4</a></li>
+<li><a href="https://gigazine.net/news/20220824-stable-diffusion-google-colaboratory/">画像生成AI「Stable Diffusion」を低スペックPCでも無料かつ待ち時間なしで使う方法まとめ</a></li>
+<li><a href="https://zenn.dev/mosku/articles/78a457bf12d925">Stable Diffusionのimg2imgで好みの絵を作成するまでの過程</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
