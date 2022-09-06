@@ -219,7 +219,9 @@ Hugging Faceのトークン発行 この時点でHugging Faceにログインで�
 <p>この時点では「とりあえずPythonの環境が揃っただけ」なので、SDを実行できるような環境ではまったくありません。そこでまずはSDを利用できる環境を構築します。と言っても、そんなに難しいことはなく必要なパッケージなんかをインポートすればいいだけです。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="">!</span>pip install transformers scipy ftfy
 <span style="">!</span>pip install git+https://github.com/huggingface/diffusers.git</code></pre></div>
-<p>まずは新規のnotebookを作成して、上記を実行し必要なパッケージをインストールします。普通に<code>pip install diffusers</code>と実行すると現状（2022年9月冒頭）では0.2.4がインストールされるのですが、このバージョンはimg2imgに対応していません。そこで、img2img対応したバージョンをインストールするために、GitHubのリポジトリを指定しています。</p>
+<p>まずは新規のnotebookを作成して、上記のコードを入力し再生ボタンのようなアイコンをクリックします。すると、該当のセルが実行され、必要なパッケージがインストールされます。以降も、セルを実行する際は同様に再生ボタンを押せばセル単位に実行してくれます。</p>
+
+<p>ここで普通に<code>pip install diffusers</code>と実行すると現状（2022年9月冒頭）では0.2.4がインストールされるのですが、このバージョンはimg2imgに対応していません。そこで、img2img対応したバージョンをインストールするために、GitHubのリポジトリを指定しています。</p>
 
 <p>ちなみに、<code>pip</code>の先頭に<code>!</code>をつけて実行するのは、Jupyter Notebookにおいてパッケージをインストールするためです。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># Token setting</span>
@@ -239,6 +241,10 @@ pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
 <h2 id="入力画像の準備とpromptの作成から画像生成">入力画像の準備とpromptの作成から画像生成</h2>
 
 <p>さて、ここで入力にしたい画像を用意します。サンプルとして、ここでは<a href="https://www.pexels.com/photo/two-yellow-labrador-retriever-puppies-1108099/">この子犬の画像</a>を入力に利用することとします。<strong>イッヌかわいい</strong>。このファイルは適当な名前でColabにアップロードしておきましょう。</p>
+
+<p><img src="2022-09-06-21-31-59.png" alt="pic" /></p>
+
+<p>アップロードする方法は、Colabの左側にあるフォルダアイコンをクリックしてファイルの一覧を表示してから、アップロードしたいファイルをローカルのエクスプローラーやFinderからColabのファイル一覧へドラッグアンドドロップするだけです。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">from</span> PIL <span style="color:#00f">import</span> Image
 <span style="color:#00f">from</span> torch <span style="color:#00f">import</span> autocast
 
@@ -262,6 +268,10 @@ images[0].save(<span style="color:#a31515">&#34;output.png&#34;</span>)</code></
 
 <p>そして、ここの箇所のコードを実行することで<code>output.png</code>、つまり生成された画像が出力されます。おっしゃー、やるぞー。</p>
 
+<p><img src="2022-09-06-21-37-10.png" alt="pic" /></p>
+
+<p>処理が終わったら、左側のファイル一覧のアイコンのうち「更新」というアイコンを押して表示を更新しましょう。すると、「output.png」というファイルが追加されているはずです。このファイルこそが生成された画像です。このファイルをダブルクリックすると、右側にプレビューされます。好みの画像が生成されましたでしょうか？</p>
+
 <h2 id="生成結果">生成結果</h2>
 
 <p>そんなわけで、実際に上記のソースを使って生成してみました。</p>
@@ -283,6 +293,10 @@ images[0].save(<span style="color:#a31515">&#34;output.png&#34;</span>)</code></
 <p><img src="2022-09-06-01-17-04.png" alt="pic" /></p>
 
 <p>カトゥーン調。でもこれもpromptの内容からしていい感じですね。片耳が「ペロン」って折れてるのかわいい。</p>
+
+<p><img src="2022-09-06-21-39-32.png" alt="pic" /></p>
+
+<p><strong>ドヤアァァァァァァ</strong>。好き。</p>
 
 <p><img src="2022-09-06-01-17-56.png" alt="pic" /></p>
 
