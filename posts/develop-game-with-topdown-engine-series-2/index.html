@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>TopDown engineを使って見下ろし型のゲームを作る（２）〜インストールからテンプレートの実行まで〜 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="TopDown engineを使って見下ろし型のゲームを作る（２）〜インストールからテンプレートの実行まで〜" />
+<meta property="og:description" content="概要 TopDown Engine（以下、TDE）のデモは、四角いデモ用プレイヤーがPrefabとしてインポートされています。このデモ用プレイヤーを、自作したプレイヤーに置き換えるのが今回の内容です。
+実際にゲームを作成する場合は、このデモ用プレイヤーを自作のスプライトシートなどから作成したプレイヤーに変更するか、既存のAssetなどをインポートすることになるでしょう。新規のオブジェクトとしてインポート・アタッチする場合、アタッチ時点でオブジェクトをPrefab化してあると扱いが楽なので、ここではPrefab化してからアタッチすることとします。
+手順 TDEをインポートする インポートの方法は以前の別記事で触れているとおりなので、ここでは割愛します。
+シーンを作成する Minimal2Dのテンプレートを用いてシーンを作成します。具体的な手順は以前の別記事で触れているので、ここでは割愛します。
+ここではAssetsフォルダ下に「topdown」というフォルダを新規作成し、コピーしてきたシーンを「MainGameScene」という名前にリネームして保存しましました。一度このタイミングでゲームを実行してみて、正常に動作することを確認しておくと良いでしょう。WASDでテンプレートのデモ用キャラクターを動かせるので、試してみると吉。以降は、基本的にこのシーンを編集することになります。
+自作アセットをインポートする ここでは、プレイヤー用オブジェクトのために自作したスプライトシートをインポートします。
+ここではAssetsフォルダ配下にキャラクター用スプライトシートのフォルダを新規作成し、その中にスプライトシートをインポートしました。
+スプライトシートを編集する インポートした直後のスプライトシートは、Inspectorウィンドウを見るとTexture Typeが「Default」になっている（はず）なので、この設定を「Sprite（2D and UI）」に変更します。さらに、今回のスプライトシートは32x32のスプライトを集めたものなので、32x32で各スプライトごとに切り分けておきます。
+Sprite Modeを「Multiple」に、Pixels Per Unitを32に変更してApplyしてから、Sprite Editorを使ってスプライトの切り分けを行います。
+おなじみのSprite Editorではいつもの設定「Grid by Cell size」で32x32に設定、Sliceボタンを押してスプライトを切り分けます。正常に切り分けられたらApplyします。
+スプライトの切り分けが終わると、Projectウィンドウのオブジェクトに三角の書かれた丸いアイコンが、スプライトシートの右側に表示されます。
+このアイコンをクリックすると、切り分けた各スプライトがそれぞれ個別に表示されます。ここまで来ればスプライトシートの編集は終わりです。本来だと切り分けたスプライトを組み合わせてアニメーションの設定などを行ったりするのですが、ここではスプライトシートの導入だけとしておきます。
+スプライトシートをシーンに追加する 切り分けたスプライトシートをシーンに追加します。このとき、追加するのにドラッグアンドドロップする先はHierarchyウィンドウ一択であることに注意です。スプライトシートをSceneウィンドウのドラッグアンドドロップしてはいけません。Sceneウィンドウに対しドラッグアンドドロップしてスプライトシートを追加すると、追加と同時にアニメーションの設定を行うファイルを生成しようとします。
+上記のようなウィンドウが表示されたとき、Saveを押すとアニメーション用のファイルが生成されます。それだけなら支障はあまりないのですが、追加したスプライトシートにAnimatorコンポーネントが自動的に追加されます。このコンポーネントがオブジェクトに付与されていると、あとでTDEにオブジェクトをアタッチするときにエラーが発生します。一応エラーを回避する方法もあるのですが、最初からエラーの遠因となるような要素はなるべく除外しておきたいので、ここではHierarchyウィンドウに対してオブジェクトを追加するようにしましょう。
+一番下のオブジェクトが、先ほど切り分けたスプライトシートをドラッグアンドドロップして追加したプレイヤー用オブジェクトです。
+Inspectorウィンドウを見ると、Animatorコンポーネントが追加されていないことがわかります。
+プレイヤーオブジェクトにTDEのコンポーネントを追加する TDEには、プレイヤーキャラクター用の各種設定が可能なコンポーネントを用意しています。便利なことに、このコンポーネントを付与して多少の設定を行うだけでプレイヤー移動などの基本的な操作が可能になります。
+先ほど追加したプレイヤー用オブジェクトを選択し、Inspectorウィンドウの「Add Component」をクリックします。
+ここでは検索窓に「chara」などと入力して、「Character」コンポーネントを選択します。このコンポーネントが、TDEによって用意されたプレイヤーやNPC用のコンポーネントです。
+Characterコンポーネントを付与すると、「Autobuild」という項目が用意されます。これは、表示されている各種ボタンをおすことで、そのオブジェクトに対して「2D（or3D）のプレイヤー（orNPC）に必要な各種コンポーネントの付与や設定」を自動的にやってくれる便利機能です。ここでは対象がプレイヤー用の2Dオブジェクトなので「Autobuild Player Character 2D」を押す。
+ボタンを押すと、Colliderなどのオブジェクトに必要なコンポーネントが付与され、デフォルト値が設定されます。
+付与されるコンポーネントが多いため、設定できる要素はかなり多いです。が、ここでは基本的にデフォルト値を採用します。例外として、「Ridibody 2D」配下にある「Interpolate」という設定項目はNoneに設定しておきます（デフォルト値はInterpolate）。
+レイヤー設定を行う TDEのシーンには、もともと基本的なレイヤー設定が準備されています。
+Sprite RendererのAdditional SettingsにあるSorting Layerを見ると、すでに背景用やキャラクター用のレイヤーが存在しています。追加したオブジェクトはたいていの場合、これらの準備されたレイヤーを設定してやればいいはずです。
+ここでは追加したオブジェクトがプレイヤーであるため、Sorting Layerを「Character」に設定します。Order in Layerは、同一レイヤー内に複数のオブジェクトが存在する場合に指定すればいいでしょう。現状では追加したオブジェクト以外には同一レイヤー内に他オブジェクトが存在しないため、ここでは設定せずデフォルト値の0をそのまま採用します。
+ゲームを実行してみる ここまでの段階で一度試しにゲームを実行してみます。
+この時点で、スプライトシートをベースにしたオブジェクトを追加した以外はもとのシーンをそのまま採用しているので、シーンに設定されているデモ用プレイヤー（黄色い四角いヤツ）も表示されています。デモ用プレイヤーと自作したプレイヤーはどちらもWASDキーで移動できるはずなので、試しに動かしてみます。多分移動するスピードなどが異なるはずですが、それはあとで調整できるのでここでは気にしなくて大丈夫です。Fキーを押すと一瞬ダッシュします。
+Prefab化してLevel Managerに設定する TDEではプレイヤーをPrefab化して、そのPrefabをLevel Managerに設定することを推奨しています。現状ではHierarchy直下にプレイヤーのオブジェクトが存在しているため、ここではPrefab化してLevel Managerに設定します。
+プレイヤーのオブジェクトを、HierarchyウィンドウからProjectウィンドウにドラッグアンドドロップします。Hierarchyウィンドウのプレイヤーオブジェクトが青くなったら、そのオブジェクトはPrefab化できています。
+プレイヤーのPrefabは、後々のためにPrefabだとわかるようリネームしておくと良いでしょう。Prefab化が完了したら、Hierarchyウィンドウにいるプレイヤーオブジェクトは不要なので削除しておきます。
+次にHierarchyウィンドウでManagerを選択します。
+配下にLevel Managerがいるはずなので選択し、Inspectorウィンドウを参照します。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/develop-game-with-topdown-engine-series-2/" /><meta property="article:published_time" content="2022-09-24T00:38:38&#43;09:00"/>
+<meta property="article:modified_time" content="2022-09-24T00:38:38&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="TopDown engineを使って見下ろし型のゲームを作る（２）〜インストールからテンプレートの実行まで〜"/>
+<meta name="twitter:description" content="概要 TopDown Engine（以下、TDE）のデモは、四角いデモ用プレイヤーがPrefabとしてインポートされています。このデモ用プレイヤーを、自作したプレイヤーに置き換えるのが今回の内容です。
+実際にゲームを作成する場合は、このデモ用プレイヤーを自作のスプライトシートなどから作成したプレイヤーに変更するか、既存のAssetなどをインポートすることになるでしょう。新規のオブジェクトとしてインポート・アタッチする場合、アタッチ時点でオブジェクトをPrefab化してあると扱いが楽なので、ここではPrefab化してからアタッチすることとします。
+手順 TDEをインポートする インポートの方法は以前の別記事で触れているとおりなので、ここでは割愛します。
+シーンを作成する Minimal2Dのテンプレートを用いてシーンを作成します。具体的な手順は以前の別記事で触れているので、ここでは割愛します。
+ここではAssetsフォルダ下に「topdown」というフォルダを新規作成し、コピーしてきたシーンを「MainGameScene」という名前にリネームして保存しましました。一度このタイミングでゲームを実行してみて、正常に動作することを確認しておくと良いでしょう。WASDでテンプレートのデモ用キャラクターを動かせるので、試してみると吉。以降は、基本的にこのシーンを編集することになります。
+自作アセットをインポートする ここでは、プレイヤー用オブジェクトのために自作したスプライトシートをインポートします。
+ここではAssetsフォルダ配下にキャラクター用スプライトシートのフォルダを新規作成し、その中にスプライトシートをインポートしました。
+スプライトシートを編集する インポートした直後のスプライトシートは、Inspectorウィンドウを見るとTexture Typeが「Default」になっている（はず）なので、この設定を「Sprite（2D and UI）」に変更します。さらに、今回のスプライトシートは32x32のスプライトを集めたものなので、32x32で各スプライトごとに切り分けておきます。
+Sprite Modeを「Multiple」に、Pixels Per Unitを32に変更してApplyしてから、Sprite Editorを使ってスプライトの切り分けを行います。
+おなじみのSprite Editorではいつもの設定「Grid by Cell size」で32x32に設定、Sliceボタンを押してスプライトを切り分けます。正常に切り分けられたらApplyします。
+スプライトの切り分けが終わると、Projectウィンドウのオブジェクトに三角の書かれた丸いアイコンが、スプライトシートの右側に表示されます。
+このアイコンをクリックすると、切り分けた各スプライトがそれぞれ個別に表示されます。ここまで来ればスプライトシートの編集は終わりです。本来だと切り分けたスプライトを組み合わせてアニメーションの設定などを行ったりするのですが、ここではスプライトシートの導入だけとしておきます。
+スプライトシートをシーンに追加する 切り分けたスプライトシートをシーンに追加します。このとき、追加するのにドラッグアンドドロップする先はHierarchyウィンドウ一択であることに注意です。スプライトシートをSceneウィンドウのドラッグアンドドロップしてはいけません。Sceneウィンドウに対しドラッグアンドドロップしてスプライトシートを追加すると、追加と同時にアニメーションの設定を行うファイルを生成しようとします。
+上記のようなウィンドウが表示されたとき、Saveを押すとアニメーション用のファイルが生成されます。それだけなら支障はあまりないのですが、追加したスプライトシートにAnimatorコンポーネントが自動的に追加されます。このコンポーネントがオブジェクトに付与されていると、あとでTDEにオブジェクトをアタッチするときにエラーが発生します。一応エラーを回避する方法もあるのですが、最初からエラーの遠因となるような要素はなるべく除外しておきたいので、ここではHierarchyウィンドウに対してオブジェクトを追加するようにしましょう。
+一番下のオブジェクトが、先ほど切り分けたスプライトシートをドラッグアンドドロップして追加したプレイヤー用オブジェクトです。
+Inspectorウィンドウを見ると、Animatorコンポーネントが追加されていないことがわかります。
+プレイヤーオブジェクトにTDEのコンポーネントを追加する TDEには、プレイヤーキャラクター用の各種設定が可能なコンポーネントを用意しています。便利なことに、このコンポーネントを付与して多少の設定を行うだけでプレイヤー移動などの基本的な操作が可能になります。
+先ほど追加したプレイヤー用オブジェクトを選択し、Inspectorウィンドウの「Add Component」をクリックします。
+ここでは検索窓に「chara」などと入力して、「Character」コンポーネントを選択します。このコンポーネントが、TDEによって用意されたプレイヤーやNPC用のコンポーネントです。
+Characterコンポーネントを付与すると、「Autobuild」という項目が用意されます。これは、表示されている各種ボタンをおすことで、そのオブジェクトに対して「2D（or3D）のプレイヤー（orNPC）に必要な各種コンポーネントの付与や設定」を自動的にやってくれる便利機能です。ここでは対象がプレイヤー用の2Dオブジェクトなので「Autobuild Player Character 2D」を押す。
+ボタンを押すと、Colliderなどのオブジェクトに必要なコンポーネントが付与され、デフォルト値が設定されます。
+付与されるコンポーネントが多いため、設定できる要素はかなり多いです。が、ここでは基本的にデフォルト値を採用します。例外として、「Ridibody 2D」配下にある「Interpolate」という設定項目はNoneに設定しておきます（デフォルト値はInterpolate）。
+レイヤー設定を行う TDEのシーンには、もともと基本的なレイヤー設定が準備されています。
+Sprite RendererのAdditional SettingsにあるSorting Layerを見ると、すでに背景用やキャラクター用のレイヤーが存在しています。追加したオブジェクトはたいていの場合、これらの準備されたレイヤーを設定してやればいいはずです。
+ここでは追加したオブジェクトがプレイヤーであるため、Sorting Layerを「Character」に設定します。Order in Layerは、同一レイヤー内に複数のオブジェクトが存在する場合に指定すればいいでしょう。現状では追加したオブジェクト以外には同一レイヤー内に他オブジェクトが存在しないため、ここでは設定せずデフォルト値の0をそのまま採用します。
+ゲームを実行してみる ここまでの段階で一度試しにゲームを実行してみます。
+この時点で、スプライトシートをベースにしたオブジェクトを追加した以外はもとのシーンをそのまま採用しているので、シーンに設定されているデモ用プレイヤー（黄色い四角いヤツ）も表示されています。デモ用プレイヤーと自作したプレイヤーはどちらもWASDキーで移動できるはずなので、試しに動かしてみます。多分移動するスピードなどが異なるはずですが、それはあとで調整できるのでここでは気にしなくて大丈夫です。Fキーを押すと一瞬ダッシュします。
+Prefab化してLevel Managerに設定する TDEではプレイヤーをPrefab化して、そのPrefabをLevel Managerに設定することを推奨しています。現状ではHierarchy直下にプレイヤーのオブジェクトが存在しているため、ここではPrefab化してLevel Managerに設定します。
+プレイヤーのオブジェクトを、HierarchyウィンドウからProjectウィンドウにドラッグアンドドロップします。Hierarchyウィンドウのプレイヤーオブジェクトが青くなったら、そのオブジェクトはPrefab化できています。
+プレイヤーのPrefabは、後々のためにPrefabだとわかるようリネームしておくと良いでしょう。Prefab化が完了したら、Hierarchyウィンドウにいるプレイヤーオブジェクトは不要なので削除しておきます。
+次にHierarchyウィンドウでManagerを選択します。
+配下にLevel Managerがいるはずなので選択し、Inspectorウィンドウを参照します。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">TopDown engineを使って見下ろし型のゲームを作る（２）〜インストールからテンプレートの実行まで〜</h1>
+			<div class="meta">Posted at &mdash; Sep 24, 2022</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>TopDown Engine（以下、TDE）のデモは、四角いデモ用プレイヤーがPrefabとしてインポートされています。このデモ用プレイヤーを、自作したプレイヤーに置き換えるのが今回の内容です。</p>
+
+<p>実際にゲームを作成する場合は、このデモ用プレイヤーを自作のスプライトシートなどから作成したプレイヤーに変更するか、既存のAssetなどをインポートすることになるでしょう。新規のオブジェクトとしてインポート・アタッチする場合、アタッチ時点でオブジェクトをPrefab化してあると扱いが楽なので、ここではPrefab化してからアタッチすることとします。</p>
+
+<h2 id="手順">手順</h2>
+
+<h3 id="tdeをインポートする">TDEをインポートする</h3>
+
+<p>インポートの方法は<a href="https://ysko909.github.io/posts/develop-game-with-topdown-engine-series-1/">以前の別記事</a>で触れているとおりなので、ここでは割愛します。</p>
+
+<h3 id="シーンを作成する">シーンを作成する</h3>
+
+<p>Minimal2Dのテンプレートを用いてシーンを作成します。具体的な手順は<a href="/posts/develop-game-with-topdown-engine-series-1/">以前の別記事</a>で触れているので、ここでは割愛します。</p>
+
+<p><img src="2022-09-24-01-02-31.png" alt="pic" /></p>
+
+<p>ここではAssetsフォルダ下に「topdown」というフォルダを新規作成し、コピーしてきたシーンを「MainGameScene」という名前にリネームして保存しましました。一度このタイミングでゲームを実行してみて、正常に動作することを確認しておくと良いでしょう。WASDでテンプレートのデモ用キャラクターを動かせるので、試してみると吉。以降は、基本的にこのシーンを編集することになります。</p>
+
+<h3 id="自作アセットをインポートする">自作アセットをインポートする</h3>
+
+<p>ここでは、プレイヤー用オブジェクトのために自作したスプライトシートをインポートします。</p>
+
+<p><img src="2022-09-24-01-02-45.png" alt="pic" /></p>
+
+<p>ここではAssetsフォルダ配下にキャラクター用スプライトシートのフォルダを新規作成し、その中にスプライトシートをインポートしました。</p>
+
+<h3 id="スプライトシートを編集する">スプライトシートを編集する</h3>
+
+<p>インポートした直後のスプライトシートは、Inspectorウィンドウを見るとTexture Typeが「Default」になっている（はず）なので、この設定を「Sprite（2D and UI）」に変更します。さらに、今回のスプライトシートは32x32のスプライトを集めたものなので、32x32で各スプライトごとに切り分けておきます。</p>
+
+<p><img src="2022-09-24-01-02-58.png" alt="pic" /></p>
+
+<p>Sprite Modeを「Multiple」に、Pixels Per Unitを32に変更してApplyしてから、Sprite Editorを使ってスプライトの切り分けを行います。</p>
+
+<p><img src="2022-09-24-01-03-20.png" alt="pic" /></p>
+
+<p>おなじみのSprite Editorではいつもの設定「Grid by Cell size」で32x32に設定、Sliceボタンを押してスプライトを切り分けます。正常に切り分けられたらApplyします。</p>
+
+<p><img src="2022-09-24-01-03-34.png" alt="pic" /></p>
+
+<p>スプライトの切り分けが終わると、Projectウィンドウのオブジェクトに三角の書かれた丸いアイコンが、スプライトシートの右側に表示されます。</p>
+
+<p><img src="2022-09-24-01-05-16.png" alt="pic" /></p>
+
+<p>このアイコンをクリックすると、切り分けた各スプライトがそれぞれ個別に表示されます。ここまで来ればスプライトシートの編集は終わりです。本来だと切り分けたスプライトを組み合わせてアニメーションの設定などを行ったりするのですが、ここではスプライトシートの導入だけとしておきます。</p>
+
+<h3 id="スプライトシートをシーンに追加する">スプライトシートをシーンに追加する</h3>
+
+<p>切り分けたスプライトシートをシーンに追加します。このとき、追加するのに<strong>ドラッグアンドドロップする先はHierarchyウィンドウ一択</strong>であることに注意です。スプライトシートをSceneウィンドウのドラッグアンドドロップしてはいけません。Sceneウィンドウに対しドラッグアンドドロップしてスプライトシートを追加すると、追加と同時にアニメーションの設定を行うファイルを生成しようとします。</p>
+
+<p><img src="2022-09-24-01-08-17.png" alt="pic" /></p>
+
+<p>上記のようなウィンドウが表示されたとき、Saveを押すとアニメーション用のファイルが生成されます。それだけなら支障はあまりないのですが、追加したスプライトシートにAnimatorコンポーネントが自動的に追加されます。このコンポーネントがオブジェクトに付与されていると、あとでTDEにオブジェクトをアタッチするときに<strong>エラーが発生します</strong>。一応エラーを回避する方法もあるのですが、最初からエラーの遠因となるような要素はなるべく除外しておきたいので、ここではHierarchyウィンドウに対してオブジェクトを追加するようにしましょう。</p>
+
+<p><img src="2022-09-24-01-08-26.png" alt="pic" /></p>
+
+<p>一番下のオブジェクトが、先ほど切り分けたスプライトシートをドラッグアンドドロップして追加したプレイヤー用オブジェクトです。</p>
+
+<p><img src="2022-09-24-01-08-34.png" alt="pic" /></p>
+
+<p>Inspectorウィンドウを見ると、Animatorコンポーネントが<strong>追加されていない</strong>ことがわかります。</p>
+
+<h3 id="プレイヤーオブジェクトにtdeのコンポーネントを追加する">プレイヤーオブジェクトにTDEのコンポーネントを追加する</h3>
+
+<p>TDEには、プレイヤーキャラクター用の各種設定が可能なコンポーネントを用意しています。便利なことに、このコンポーネントを付与して多少の設定を行うだけでプレイヤー移動などの基本的な操作が可能になります。</p>
+
+<p>先ほど追加したプレイヤー用オブジェクトを選択し、Inspectorウィンドウの「Add Component」をクリックします。</p>
+
+<p><img src="2022-09-24-01-08-49.png" alt="pic" /></p>
+
+<p>ここでは検索窓に「chara」などと入力して、「Character」コンポーネントを選択します。このコンポーネントが、TDEによって用意されたプレイヤーやNPC用のコンポーネントです。</p>
+
+<p><img src="2022-09-24-01-08-56.png" alt="pic" /></p>
+
+<p>Characterコンポーネントを付与すると、「Autobuild」という項目が用意されます。これは、表示されている各種ボタンをおすことで、そのオブジェクトに対して「2D（or3D）のプレイヤー（orNPC）に必要な各種コンポーネントの付与や設定」を<strong>自動的にやってくれる便利機能</strong>です。ここでは対象がプレイヤー用の2Dオブジェクトなので「Autobuild Player Character 2D」を押す。</p>
+
+<p><img src="2022-09-24-01-09-05.png" alt="pic" /></p>
+
+<p>ボタンを押すと、Colliderなどのオブジェクトに必要なコンポーネントが付与され、デフォルト値が設定されます。</p>
+
+<p>付与されるコンポーネントが多いため、設定できる要素はかなり多いです。が、ここでは基本的にデフォルト値を採用します。例外として、「Ridibody 2D」配下にある「Interpolate」という設定項目はNoneに設定しておきます（デフォルト値はInterpolate）。</p>
+
+<h3 id="レイヤー設定を行う">レイヤー設定を行う</h3>
+
+<p>TDEのシーンには、もともと基本的なレイヤー設定が準備されています。</p>
+
+<p><img src="2022-09-24-01-09-18.png" alt="pic" /></p>
+
+<p>Sprite RendererのAdditional SettingsにあるSorting Layerを見ると、すでに背景用やキャラクター用のレイヤーが存在しています。追加したオブジェクトはたいていの場合、これらの準備されたレイヤーを設定してやればいいはずです。</p>
+
+<p><img src="2022-09-24-01-09-24.png" alt="pic" /></p>
+
+<p>ここでは追加したオブジェクトがプレイヤーであるため、Sorting Layerを「Character」に設定します。Order in Layerは、同一レイヤー内に複数のオブジェクトが存在する場合に指定すればいいでしょう。現状では追加したオブジェクト以外には同一レイヤー内に他オブジェクトが存在しないため、ここでは設定せずデフォルト値の0をそのまま採用します。</p>
+
+<h3 id="ゲームを実行してみる">ゲームを実行してみる</h3>
+
+<p>ここまでの段階で一度試しにゲームを実行してみます。</p>
+
+<p><img src="2022-09-24-01-09-32.png" alt="pic" /></p>
+
+<p>この時点で、スプライトシートをベースにしたオブジェクトを追加した以外はもとのシーンをそのまま採用しているので、シーンに設定されているデモ用プレイヤー（黄色い四角いヤツ）も表示されています。デモ用プレイヤーと自作したプレイヤーはどちらもWASDキーで移動できるはずなので、試しに動かしてみます。多分移動するスピードなどが異なるはずですが、それはあとで調整できるのでここでは気にしなくて大丈夫です。Fキーを押すと一瞬ダッシュします。</p>
+
+<h3 id="prefab化してlevel-managerに設定する">Prefab化してLevel Managerに設定する</h3>
+
+<p>TDEではプレイヤーをPrefab化して、そのPrefabをLevel Managerに設定することを推奨しています。現状ではHierarchy直下にプレイヤーのオブジェクトが存在しているため、ここではPrefab化してLevel Managerに設定します。</p>
+
+<p><img src="2022-09-24-01-09-40.png" alt="pic" /></p>
+
+<p>プレイヤーのオブジェクトを、HierarchyウィンドウからProjectウィンドウにドラッグアンドドロップします。Hierarchyウィンドウのプレイヤーオブジェクトが青くなったら、そのオブジェクトはPrefab化できています。</p>
+
+<p>プレイヤーのPrefabは、後々のためにPrefabだとわかるようリネームしておくと良いでしょう。Prefab化が完了したら、Hierarchyウィンドウにいるプレイヤーオブジェクトは不要なので削除しておきます。</p>
+
+<p>次にHierarchyウィンドウでManagerを選択します。</p>
+
+<p><img src="2022-09-24-01-09-51.png" alt="pic" /></p>
+
+<p>配下にLevel Managerがいるはずなので選択し、Inspectorウィンドウを参照します。</p>
+
+<p><img src="2022-09-24-01-10-00.png" alt="pic" /></p>
+
+<p>Player Prefabsというメニューがありますが、ここにプレイヤーとして利用したPrefabを設定します。現状ではデモ用プレイヤーのPrefabが設定されているので、これを先ほど作成したプレイヤー用Prefabと差し替えます。</p>
+
+<p><img src="2022-09-24-01-10-08.png" alt="pic" /></p>
+
+<p>プレイヤー用Prefabを、ProjectウィンドウからLevelManagerの「Player Prefabs」部分にドラッグアンドドロップします。もともとElement 0として作成されている枠にドロップすれば大丈夫です。</p>
+
+<p><img src="2022-09-24-01-10-15.png" alt="pic" /></p>
+
+<p>ここで再度ゲームを実行してみます。今度はプレイヤーをデモ用プレイヤーから自作のPrefabへ差し替えたため、黄色い資格のデモ用プレイヤーが表示されなくなったはずです。</p>
+
+<p>これで、自作のスプライトシートからプレイヤーのオブジェクトを配置できました。</p>
+
+<h4 id="各種調整">各種調整</h4>
+
+<p>ここまででプレイヤーのオブジェクト配置は完了したのですが、ゲーム制作や進行のためにオブジェクトの調整を行います。</p>
+
+<h3 id="colliderの調整">Colliderの調整</h3>
+
+<p>デフォルトの状態では、プレイヤーのスプライトと同じサイズでColliderが設定されています。</p>
+
+<p><img src="2022-09-24-01-10-33.png" alt="pic" /></p>
+
+<p>これはBox Collider 2DのSizeがXYともに1となっているためで、「縦横がそれぞれオブジェクトのサイズの1倍で設定されている」ということを意味しています。動作確認を行うにはこれで問題ありません。ただし、実際にゲームを実行する際には、少し調整が必要になるかもしれません。</p>
+
+<p><img src="2022-09-24-01-10-41.png" alt="pic" /></p>
+
+<p>XYがそれぞれ1のデフォルト設定で壁と接触させると、上記のようになります。見た目上はなんとなくもう少し壁に向かって進めそうな感じがします。が、実際にはこの位置以上に上方向や右方向に進めません。このように、「見た目には接触していないように見えるがColliderの設定数値上は接触している」ことになります。この感覚と実際の挙動のギャップを埋めるために、Colliderを最適な値に調整します。</p>
+
+<p><img src="2022-09-24-01-10-51.png" alt="pic" /></p>
+
+<p>具体的には、<strong>キャラクターの下半身を囲う</strong>ような位置にColliderが設定されるよう調整します。黄緑色の細い線で囲われている部分がCollider設定された位置です。</p>
+
+<p><img src="2022-09-24-01-10-58.png" alt="pic" /></p>
+
+<p>Colliderを調節したことで、デフォルト設定のときよりも「壁に密着している」感じが出ています。</p>
+
+<h3 id="スプライトシートのフィルター設定変更">スプライトシートのフィルター設定変更</h3>
+
+<p>スプライトシート表示時の設定がデフォルトだと、ドット絵が滲んで見えることがあります。</p>
+
+<p><img src="2022-09-24-01-11-07.png" alt="pic" /></p>
+
+<p>上記はPrefab化した後の表示だが、ドット絵が滲んでいるのがわかるかと思います。これだと見た目がイマイチです。</p>
+
+<p><img src="2022-09-24-01-11-14.png" alt="pic" /></p>
+
+<p>これを解消するには、スプライトシートを選択したときのInspectorウィンドウ＞Advanced＞Filter Modeの値を「Bilinear」から「Point (no Filter)」に変更します。</p>
+
+<p><img src="2022-09-24-01-11-23.png" alt="pic" /></p>
+
+<p>変更したらApplyボタンを押します。</p>
+
+<p><img src="2022-09-24-01-11-31.png" alt="pic" /></p>
+
+<p>滲んでいたドット絵が、はっきり表示されているのがわかるかと思います。</p>
+
+<p>この設定変更は、Prefab作成におけるどのタイミングでも有効です。なので、思い出したタイミングで変更すれば良いと思います。</p>
+
+<h3 id="移動速度の調整">移動速度の調整</h3>
+
+<p>必要に応じてプレイヤーの移動速度を調節します。今回は「デフォルトだとちょっと早いなー」と感じたため、遅くする方向で調節しています。</p>
+
+<p><img src="2022-09-24-01-11-42.png" alt="pic" /></p>
+
+<p>移動速度を調節するには、作成したプレイヤーのPrefabのInspectorウィンドウからCharacter Movement＞Speed＞Walk Speedの値を編集します。</p>
+
+<p><img src="2022-09-24-01-11-50.png" alt="pic" /></p>
+
+<p>デフォルト値は6ですが、3に変更しました。</p>
+
+<p>変更したら、再度ゲームを実行してみましょう。移動速度が変化しているはずです。</p>
+
+<h3 id="まとめ">まとめ</h3>
+
+<p>今回は、デモ用プレイヤーを自作のプレイヤーに置き換えるところまでを行いました。まだまだゲームとしての体裁は整っていませんが、ぼちぼちやっていきましょう。</p>
+
+<p>次回は、今回追加したプレイヤーのアニメーションを設定し、キー操作にて歩行モーションを表示するところをやる予定です。</p>
+
+<h2 id="refarence">refarence</h2>
+
+<ol>
+<li><a href="https://topdown-engine-docs.moremountains.com/adding-character-level.html">Adding your character to your scene</a></li>
+<li><a href="https://topdown-engine-docs.moremountains.com/character-classes.html">Character classes</a></li>
+<li><a href="https://blog.gigacreation.jp/entry/2020/06/29/141307">TopDown Engine 入門 Part 3 ～最小構成編～</a></li>
+<li><a href="https://baba-s.hatenablog.com/entry/2018/01/31/213000">【Unity】ドット絵がぼやけてしまう問題を解決する方法</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
