@@ -147,9 +147,14 @@ volumes:
 <p>ゴミが残ってるなら、捨てればいいわけです。やったるぞー。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker volume ls
 docker volume rm hogehoge</code></pre></div>
-<p><code>docker volume ls</code>で、volumeの一覧が参照できます。このうち削除したいvolumeを<code>docker volume rm hogehoge</code>で指定します。これでvolumeが削除可能です。</p>
+<p><code>docker volume ls</code>で、volumeの一覧が参照できます。このうち削除したいvolumeを<code>docker volume rm hogehoge</code>と指定します。これでvolumeが削除可能です。</p>
 
-<p>残存していたデータボリュームを削除しコンテナをリビルドしたところ、無事に新しいアカウント情報でログインできました。</p>
+<p>ちなみに、<code>volume rm</code>のコマンドは削除対象のボリュームがコンテナで利用されているときは削除できません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console"># docker volume rm hogehoge
+Error response from daemon: remove hogehoge: volume is in use - [xxx]</code></pre></div>
+<p>利用中のボリュームを削除しようとすると上記のようなエラーメッセージが表示されます。そのため、削除対象のボリュームを利用しているコンテナを落とすなどして未使用の状態にしてから、再度<code>volume rm</code>を実行します。なお、<code>-f</code>オプションをつけることで強制的にボリュームを削除できるのですが、ボリュームが利用中である場合はこのオプションをつけても削除できません。いいんだか悪いんだか・・・。</p>
+
+<p>何はともあれ、これで残存していたデータボリュームを削除しコンテナをリビルドしたところ、無事に新しいアカウント情報でログインできました。</p>
 
 <p>やった。</p>
 
@@ -164,6 +169,7 @@ docker volume rm hogehoge</code></pre></div>
 <ol>
 <li><a href="https://docs.docker.com/storage/volumes/">Use volumes</a></li>
 <li><a href="https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes-ja">Dockerのイメージ、コンテナおよびボリュームを削除する方法</a></li>
+<li><a href="https://www.memotansu.jp/docker/833/">docker volume rmコマンドの使い方（実例付）</a></li>
 </ol>
 
 		</div><div id="disqus_thread"></div>
