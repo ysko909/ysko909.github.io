@@ -7,10 +7,31 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sat, 24 Sep 2022 00:38:38 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 09 Oct 2022 23:14:09 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Dockerコンテナ上のpgAdminに接続できないときはログを確認して権限を変更する</title>
+      <link>https://ysko909.github.io/posts/can-not-connect-to-pdadmin-on-docker-container/</link>
+      <pubDate>Sun, 09 Oct 2022 23:14:09 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/can-not-connect-to-pdadmin-on-docker-container/</guid>
+      <description>概要 Dockerコンテナで構築したPostgreSQLとpgAdminの組み合わせで、ブラウザからpgAdminに接続できないケースを確認したのでメモしてみます。同じ症状に見舞われている方の参考になれば幸いです。
+症状 ブラウザからpgAdminへアクセスできません。
+docker-compose.ymlのファイル内にて定義したpgAdminのコンテナに対し、ブラウザからlocalhost:8000（URLの例。ポートはymlの設定次第で可変）などのURLにアクセスすると、本来はpgAdminのログイン画面が表示されるはずです。
+上記のようなログイン画面が本来は表示されるはずなんです。
+が、なぜか表示されません。
+タイムアウトになるわけでもなく、ただただ真っ白な画面が表示されるだけです。こりゃおかしいぞ、というわけで調査開始。
+原因 コンテナそのものではなく、コンテナ内で利用するボリュームの権限が問題でした。以下で解説します。
+調査 version: &amp;#34;3&amp;#34; services: postgres: image: postgres container_name: sample_postgres ports: - 5432:5432 environment: POSTGRES_USER: root POSTGRES_PASSWORD: root POSTGRES_DB: sample_db volumes: - ./initdb:/docker-entrypoint-initdb.d - ./postgres:/var/lib/postgresql/data pgadmin: image: dpage/pgadmin4 container_name: sample_pgadmin restart: always ports: - 8000:80 environment: PGADMIN_DEFAULT_EMAIL: admin@example.com PGADMIN_DEFAULT_PASSWORD: admin volumes: - ./pgadmin:/var/lib/pgadmin depends_on: - postgres volumes: postgres: pgadmin: 今回のDockerコンテナは、上記のようなdocker-compose.ymlを基に作成しました。内容としてはPostgreSQLとpgAdminのみです。コンテナのビルド時もとくにエラーは出ずに正常終了しました。
+ただ、構築したコンテナのpgAdminにブラウザからアクセスすると「あれ？表示されないぞ？」になった、というわけですね。
+タイムアウトにならないところを見ると、ブラウザ自体はコンテナに対しアクセスできており、コンテナからの返答も返ってきていると考えるのが妥当です。そうなると、少なくともコンテナ自体は正常に起動しており、ブラウザからのアクセスを受け付ける状態にはなっているのでしょう。ただ、ブラウザには何も表示されないことから、アクセスを受け付けた後の処理で何かしらの異常が出ていると考えられます。
+こういう場合はコンテナのログを確認します。
+docker logs sample_pgadmin 上記のコマンドを実行することで、コンテナのログを出力可能です。
+[2022-10-04 01:10:25 +0000] [24430] [INFO] Booting worker with pid: 24430 [2022-10-04 01:10:27 +0000] [24430] [INFO] Worker exiting (pid: 24430) ERROR : Failed to create the directory /var/lib/pgadmin/sessions: [Errno 13] Permission denied: &amp;#39;/var/lib/pgadmin/sessions&amp;#39; HINT : Create the directory /var/lib/pgadmin/sessions, ensure it is writeable by &amp;#39;pgadmin&amp;#39;, and try again, or, create a config_local.</description>
+    </item>
     
     <item>
       <title>TopDown engineを使って見下ろし型のゲームを作る（２）〜インストールからテンプレートの実行まで〜</title>

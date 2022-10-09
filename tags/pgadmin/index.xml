@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Postgresql on 頑張らないために頑張る</title>
-    <link>https://ysko909.github.io/tags/postgresql/</link>
-    <description>Recent content in Postgresql on 頑張らないために頑張る</description>
+    <title>Pgadmin on 頑張らないために頑張る</title>
+    <link>https://ysko909.github.io/tags/pgadmin/</link>
+    <description>Recent content in Pgadmin on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Sun, 09 Oct 2022 23:14:09 +0900</lastBuildDate>
     
-	<atom:link href="https://ysko909.github.io/tags/postgresql/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/pgadmin/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -31,23 +31,6 @@ docker-compose.ymlのファイル内にて定義したpgAdminのコンテナに�
 こういう場合はコンテナのログを確認します。
 docker logs sample_pgadmin 上記のコマンドを実行することで、コンテナのログを出力可能です。
 [2022-10-04 01:10:25 +0000] [24430] [INFO] Booting worker with pid: 24430 [2022-10-04 01:10:27 +0000] [24430] [INFO] Worker exiting (pid: 24430) ERROR : Failed to create the directory /var/lib/pgadmin/sessions: [Errno 13] Permission denied: &amp;#39;/var/lib/pgadmin/sessions&amp;#39; HINT : Create the directory /var/lib/pgadmin/sessions, ensure it is writeable by &amp;#39;pgadmin&amp;#39;, and try again, or, create a config_local.</description>
-    </item>
-    
-    <item>
-      <title>pyodbcでDockerコンテナのPostgreSQLに接続する</title>
-      <link>https://ysko909.github.io/posts/access-to-postgresql-in-docker-container-with-python/</link>
-      <pubDate>Sat, 11 Apr 2020 09:18:31 +0900</pubDate>
-      
-      <guid>https://ysko909.github.io/posts/access-to-postgresql-in-docker-container-with-python/</guid>
-      <description>はじめに Pythonを使ってDB操作をする場合、pyodbcを利用すると思います。そこで、Dockerコンテナで立ち上がっているPostgreSQLに対して、pyodbcで接続する手順をメモします。なお、確認用としてPostgreSQLにはテスト用のデータを少しだけ格納しておきます。
-ちなみに、今回のソースはこちらにあります。
-環境  macOS : 10.15.4 Python : 3.7.5 pyodbc : 4.0.30 Docker : 19.0.3.8 psql : 12.2  ざっくりした手順  psqlとpyodbcをインストールする。 DockerでPostgreSQLのコンテナを起動する。 Pythonから接続してみる。  詳しい手順 各種インストール psqlをインストールする まずは、何はなくともpsqlが必要です。インストールします。
- psqlとはPostgreSQLのターミナル型フロントエンドです。 対話的に問い合わせを入力し、それをPostgreSQLに対して発行して、結果を確認することができます。
- macOSなのでHomebrewを使うのが1番早いです。
-brew update brew install postgresql 次にODBCの設定ファイルを変更します。もともと（多分）何も記述されていないファイル「odbcinst.ini」に、PostgreSQL用の部分を追記します。
-$ cat /usr/local/etc/odbcinst.ini [PostgreSQL] Driver=/usr/local/lib/psqlodbcw.so  追記の仕方は、下記のようにヒアドキュメントを使うのが多分早いです。
-cat &amp;lt;&amp;lt;EOF &amp;gt;&amp;gt; /usr/local/etc/odbcinst.ini heredoc else&amp;gt; [PostgreSQL] heredoc else&amp;gt; Driver=/usr/local/lib/psqlodbcw.so heredoc else&amp;gt; EOF とりあえずバージョンでも見ておきます。
-$ psql --version psql (PostgreSQL) 12.2 これでpsqlの準備が整いました。</description>
     </item>
     
   </channel>
