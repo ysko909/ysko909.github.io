@@ -132,7 +132,7 @@
     <item>
       <title>Docker</title>
       <link>https://ysko909.github.io/tags/docker/</link>
-      <pubDate>Sun, 09 Oct 2022 23:14:09 +0900</pubDate>
+      <pubDate>Mon, 10 Oct 2022 16:52:53 +0900</pubDate>
       
       <guid>https://ysko909.github.io/tags/docker/</guid>
       <description></description>
@@ -420,7 +420,7 @@
     <item>
       <title>Pgadmin</title>
       <link>https://ysko909.github.io/tags/pgadmin/</link>
-      <pubDate>Sun, 09 Oct 2022 23:14:09 +0900</pubDate>
+      <pubDate>Mon, 10 Oct 2022 16:52:53 +0900</pubDate>
       
       <guid>https://ysko909.github.io/tags/pgadmin/</guid>
       <description></description>
@@ -459,6 +459,15 @@
       <pubDate>Sat, 13 Mar 2021 10:51:59 +0900</pubDate>
       
       <guid>https://ysko909.github.io/tags/pickle/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Postgres</title>
+      <link>https://ysko909.github.io/tags/postgres/</link>
+      <pubDate>Mon, 10 Oct 2022 16:52:53 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/tags/postgres/</guid>
       <description></description>
     </item>
     

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Docker上のPostgreSQLで「FATAL: password authentication failed for user &#34;xxx&#34;」と言われたらボリュームを削除する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Docker上のPostgreSQLで「FATAL: password authentication failed for user &#34;xxx&#34;」と言われたらボリュームを削除する" />
+<meta property="og:description" content="概要 Dockerを使いPostgreSQLの環境を立ち上げた後で、認証情報を変更するとなぜか正しいはずなのに認証が通らずエラーを吐くようになってしまうケースに遭遇しました。現象と対処法をご紹介します。
+エラーの内容 pgAdminなどを使ってDockerコンテナ上に構築したPostgreSQLへログインしようとすると、エラーが発生してログインできません。
+error: password authentication failed for user &#34;xxx&#34; 上記がそのエラーメッセージでして、xxxの部分にはユーザー名が入ります。xxxというユーザーのパスワード認証に失敗したと言っています・・・が、実際は正しい認証情報を入力していてもエラーになります。入力が正しくても間違っていてもダメと言われるわけですね。
+pgAdminだと上記のように表示されます。
+エラーの再現手順 このエラーは特定の手順を踏むと再現します。
+ docker-compose.ymlなどによりPostgreSQLのコンテナを構築する。 PostgreSQLにログインする。この時点では正常にログインできる。 ymlに記述してある&#43;&#43;PostgreSQLの認証情報を変更する&#43;&#43;。 コンテナをリビルドする。 新しい認証情報を使ってPostgreSQLにログインしようとするとエラーを吐く。  ここで言う認証情報とはPOSTGRES_USERやPOSTGRES_PASSWORDを指します。これらの設定値を変更すると、新しい認証情報を使ったログインができなくなってしまいます。
+version: &#34;3&#34; services: postgres: image: postgres container_name: sample_postgres ports: - 5432:5432 environment: POSTGRES_USER: admin POSTGRES_PASSWORD: admin POSTGRES_DB: sample_db volumes: - ./initdb:/docker-entrypoint-initdb.d - ./postgres:/var/lib/postgresql/data pgadmin: image: dpage/pgadmin4 container_name: sample_pgadmin restart: always ports: - 30001:80 environment: PGADMIN_DEFAULT_EMAIL: admin@example.com PGADMIN_DEFAULT_PASSWORD: admin volumes: - pgadmin:/var/lib/pgadmin depends_on: - postgres volumes: postgres: pgadmin: たとえば上記のようなdocker-compose." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/delete-volume-when-get-password-authentication-failed-error/" /><meta property="article:published_time" content="2022-10-10T16:52:53&#43;09:00"/>
+<meta property="article:modified_time" content="2022-10-10T16:52:53&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Docker上のPostgreSQLで「FATAL: password authentication failed for user &#34;xxx&#34;」と言われたらボリュームを削除する"/>
+<meta name="twitter:description" content="概要 Dockerを使いPostgreSQLの環境を立ち上げた後で、認証情報を変更するとなぜか正しいはずなのに認証が通らずエラーを吐くようになってしまうケースに遭遇しました。現象と対処法をご紹介します。
+エラーの内容 pgAdminなどを使ってDockerコンテナ上に構築したPostgreSQLへログインしようとすると、エラーが発生してログインできません。
+error: password authentication failed for user &#34;xxx&#34; 上記がそのエラーメッセージでして、xxxの部分にはユーザー名が入ります。xxxというユーザーのパスワード認証に失敗したと言っています・・・が、実際は正しい認証情報を入力していてもエラーになります。入力が正しくても間違っていてもダメと言われるわけですね。
+pgAdminだと上記のように表示されます。
+エラーの再現手順 このエラーは特定の手順を踏むと再現します。
+ docker-compose.ymlなどによりPostgreSQLのコンテナを構築する。 PostgreSQLにログインする。この時点では正常にログインできる。 ymlに記述してある&#43;&#43;PostgreSQLの認証情報を変更する&#43;&#43;。 コンテナをリビルドする。 新しい認証情報を使ってPostgreSQLにログインしようとするとエラーを吐く。  ここで言う認証情報とはPOSTGRES_USERやPOSTGRES_PASSWORDを指します。これらの設定値を変更すると、新しい認証情報を使ったログインができなくなってしまいます。
+version: &#34;3&#34; services: postgres: image: postgres container_name: sample_postgres ports: - 5432:5432 environment: POSTGRES_USER: admin POSTGRES_PASSWORD: admin POSTGRES_DB: sample_db volumes: - ./initdb:/docker-entrypoint-initdb.d - ./postgres:/var/lib/postgresql/data pgadmin: image: dpage/pgadmin4 container_name: sample_pgadmin restart: always ports: - 30001:80 environment: PGADMIN_DEFAULT_EMAIL: admin@example.com PGADMIN_DEFAULT_PASSWORD: admin volumes: - pgadmin:/var/lib/pgadmin depends_on: - postgres volumes: postgres: pgadmin: たとえば上記のようなdocker-compose."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Docker上のPostgreSQLで「FATAL: password authentication failed for user &#34;xxx&#34;」と言われたらボリュームを削除する</h1>
+			<div class="meta">Posted at &mdash; Oct 10, 2022</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>Dockerを使いPostgreSQLの環境を立ち上げた後で、<strong>認証情報を変更するとなぜか正しいはずなのに認証が通らずエラーを吐く</strong>ようになってしまうケースに遭遇しました。現象と対処法をご紹介します。</p>
+
+<h2 id="エラーの内容">エラーの内容</h2>
+
+<p>pgAdminなどを使ってDockerコンテナ上に構築したPostgreSQLへログインしようとすると、エラーが発生してログインできません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">error: password authentication failed for user &#34;xxx&#34;</code></pre></div>
+<p>上記がそのエラーメッセージでして、<code>xxx</code>の部分にはユーザー名が入ります。<code>xxx</code>というユーザーのパスワード認証に失敗したと言っています・・・が、実際は<strong>正しい認証情報を入力していてもエラーになります</strong>。入力が正しくても間違っていてもダメと言われるわけですね。</p>
+
+<p><img src="2022-10-10-16-55-03.png" alt="pic" /></p>
+
+<p>pgAdminだと上記のように表示されます。</p>
+
+<h2 id="エラーの再現手順">エラーの再現手順</h2>
+
+<p>このエラーは特定の手順を踏むと再現します。</p>
+
+<ol>
+<li>docker-compose.ymlなどによりPostgreSQLのコンテナを構築する。</li>
+<li>PostgreSQLにログインする。この時点では正常にログインできる。</li>
+<li>ymlに記述してある++PostgreSQLの認証情報を変更する++。</li>
+<li>コンテナをリビルドする。</li>
+<li>新しい認証情報を使ってPostgreSQLにログインしようとするとエラーを吐く。</li>
+</ol>
+
+<p>ここで言う認証情報とは<code>POSTGRES_USER</code>や<code>POSTGRES_PASSWORD</code>を指します。これらの設定値を変更すると、新しい認証情報を使ったログインができなくなってしまいます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml">version: <span style="color:#a31515">&#34;3&#34;</span>
+services:    
+  postgres:
+    image: postgres
+    container_name: sample_postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: sample_db
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+      - ./postgres:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name:  sample_pgadmin
+    restart: always
+    ports:
+      - 30001:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
+
+volumes:
+  postgres:
+  pgadmin:</code></pre></div>
+<p>たとえば上記のようなdocker-compose.ymlで考えてみます。</p>
+
+<p>PostgreSQLの部分で指定している<code>POSTGRES_USER: admin</code>や<code>POSTGRES_PASSWORD: admin</code>の部分を、一度コンテナを構築しPostgreSQLにログインたあとで、<code>POSTGRES_USER: hoge</code>や<code>POSTGRES_PASSWORD: fuga</code>などに変更してコンテナをリビルドします。その後、コンテナの構築直後と同様にpgAdminなどを使ってPostgreSQLにログインしようとすると、入力した認証情報が正しくてもエラーを吐くようになってしまいます。</p>
+
+<h2 id="原因">原因</h2>
+
+<p>認証情報を<strong>一度コンテナを構築したあとで</strong>変更した際に上記のようなエラーを吐くようになる理由は、認証情報を<strong>初期起動の際に設定するため</strong>のようです。その後、認証情報を変えて起動しようとしても、最初に設定した認証情報と一致しないのでエラーになってしまうと思われます。そして、この認証情報はリビルドでは更新されないようで、</p>
+
+<h2 id="対処法">対処法</h2>
+
+<h3 id="postgresqlの各ファイルを削除する">PostgreSQLの各ファイルを削除する</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml">volumes:
+  - ./initdb:/docker-entrypoint-initdb.d
+  - ./postgres:/var/lib/postgresql/data</code></pre></div>
+<p>ymlファイルの中では、PostgreSQLのコンテナ指定においてボリュームを上記のように指定しています。コンテナを構築すると、各種設定ファイルが指定されたフォルダである<code>./postgres</code>に格納されるのですが、エラーが発生した場合はこのフォルダを<strong>丸ごと削除</strong>すると解消します。</p>
+
+<p>コンテナのリビルトではエラーが解消されないのは、このフォルダ内にある古い認証情報がログインの際に参照されるためです。このフォルダを削除することで、当初設定された古い認証情報を破棄し、新たに設定し直せるわけです。</p>
+
+<h3 id="dockerのコマンドを実行する">Dockerのコマンドを実行する</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker rm -v &lt;CONTAINER_ID&gt;</code></pre></div>
+<p>上記のコマンドを実行して、PostgreSQLのコンテナだけでなく紐づいたボリュームも一緒に削除します。なお、上記のコマンドはコンテナが実行中だとエラーになって削除できないため、事前に停止しておくことが必要です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker system prune
+docker volume prune</code></pre></div>
+<p>他のコンテナに紐付いているボリュームも一緒に削除してかまわないなら、個別にコンテナを指定するのではなく「存在するボリュームはすべて削除する」上記のコマンドを実行しても良いかもしれません。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>自分は、「なんか変ならコンテナをリビルトすればいいや」と思ってしまうタイプなのですが、そのリビルトでは解決しないケースをご紹介しました。このエラーに限りませんが、何かおかしいならコンテナの再作成だけでなく「ボリューム削除」を実行する必要があるケースについて、頭の片隅にでも入れておく必要があるかもしれません。</p>
+
+<h2 id="reference">reference</h2>
+
+<ol>
+<li><a href="https://qiita.com/piggydev/items/c61f830f94c86b937fb2">Docker/Postgresでpassword authentication failedが出た場合の対処法</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
