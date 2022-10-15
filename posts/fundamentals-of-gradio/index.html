@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>gradioでお手軽にnotebookをwebアプリ化する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="gradioでお手軽にnotebookをwebアプリ化する" />
+<meta property="og:description" content="概要 gradioとはPython用のパッケージであり、Jupyter Notebook上で用いることによりwebアプリケーションのようなUIを実装できます。これにより、Notebookで作成した機械学習モデルを簡単なwebアプリ化でき、公開できる限度はあるものの作成したアプリケーションを独自のURLでwebアプリとして共有できるという優れものです。
+つまり、学習モデルというバックエンドさえ作っておけば、JSでフロントエンドを用意しなくてもgradioがその肩代わりしてくれるわけです。しかも、UIを構築する際も少ないコードで済むため、「作成したモデルの入出力をコードではなくGUIで行いたい。けどそこまで凝ったUIを作る必要はない」という場合に効果を発揮するでしょう。
+Google Collaboratory（以下、Colab）上でも動作するため、Colabで利用するとより実装が楽かもしれません。共有するのも、Colabでのソース本体でなく生成したwebアプリを共有すればいいのもポイント高いです。
+ここでは利用するシチュエーションが多いと思われるColabで、gradioを使用する方法について記述してみます。
+導入方法 導入は簡単で、他のPython用パッケージと同様にpipでインストールすれば問題ありません。gradioが要求する動作環境はPython 3.7以上なので、たいていの環境ではフツーに導入できるはずです。
+!pip install gradio 新規のセルに上記のコードを記述しておけばインストールしてくれます。
+簡単な入出力サンプル ここでは、入力された文字列について簡単な編集を行って出力する機能を実装してみます。
+import gradio as gr def greet(name): return &#34;Hello &#34; &#43; name &#43; &#34;!!&#34; demo = gr.Interface(fn=greet, inputs=&#34;text&#34;, outputs=&#34;text&#34;) demo.launch() 処理自体は簡単で、入力された名前に挨拶を付与するだけのものです。この場合、入出力のインターフェイスを用意するのはgradio.Interface()の1行で問題ありません。あとは、UIのインスタンスをlaunch()すると、Colab上に入出力のフロントが表示されます。コレ、地味にちゃんと日本語表示されるんですよね、何もコードの中で指定しなくても。
+実際にColab上で実行してみると上記のようなに表示されます。
+名前を入力して「送信」を押すと、右側に編集された文字列が表示されます。
+また、このとき生成されるURLは72時間の間保持されます。このURLは、gradioを利用して作成したUIをColabの外部で利用できるものです。つまり、Colab上作成した機能にgradioで簡易的なUIを作りさえすれば、あとはこのURLを共有することでwebアプリを実装できます。
+72時間しかURLが有効じゃないので、恒久的な利用には向きません。が、「とりあえず利用してみたい」という短期的なニーズを満たすための用途としては素晴らしい機能だと言えるのではないでしょうか。
+上記のようにブラウザでアクセスすれば、Colab上じゃなくても実行できます。
+そしてちゃんとColab上と同様に利用できます。
+画像を入出力としたサンプル 簡易的とはいえちゃんとUIを実装できるので、テキストだけでなく画像などのデータを入出力の対象にもできます。
+import numpy as np import gradio as gr def sepia(input_img): sepia_filter = np.array([ [0.393, 0.769, 0.189], [0.349, 0.686, 0.168], [0.272, 0.534, 0.131] ]) sepia_img = input_img." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-gradio/" /><meta property="article:published_time" content="2022-10-15T22:01:10&#43;09:00"/>
+<meta property="article:modified_time" content="2022-10-15T22:01:10&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="gradioでお手軽にnotebookをwebアプリ化する"/>
+<meta name="twitter:description" content="概要 gradioとはPython用のパッケージであり、Jupyter Notebook上で用いることによりwebアプリケーションのようなUIを実装できます。これにより、Notebookで作成した機械学習モデルを簡単なwebアプリ化でき、公開できる限度はあるものの作成したアプリケーションを独自のURLでwebアプリとして共有できるという優れものです。
+つまり、学習モデルというバックエンドさえ作っておけば、JSでフロントエンドを用意しなくてもgradioがその肩代わりしてくれるわけです。しかも、UIを構築する際も少ないコードで済むため、「作成したモデルの入出力をコードではなくGUIで行いたい。けどそこまで凝ったUIを作る必要はない」という場合に効果を発揮するでしょう。
+Google Collaboratory（以下、Colab）上でも動作するため、Colabで利用するとより実装が楽かもしれません。共有するのも、Colabでのソース本体でなく生成したwebアプリを共有すればいいのもポイント高いです。
+ここでは利用するシチュエーションが多いと思われるColabで、gradioを使用する方法について記述してみます。
+導入方法 導入は簡単で、他のPython用パッケージと同様にpipでインストールすれば問題ありません。gradioが要求する動作環境はPython 3.7以上なので、たいていの環境ではフツーに導入できるはずです。
+!pip install gradio 新規のセルに上記のコードを記述しておけばインストールしてくれます。
+簡単な入出力サンプル ここでは、入力された文字列について簡単な編集を行って出力する機能を実装してみます。
+import gradio as gr def greet(name): return &#34;Hello &#34; &#43; name &#43; &#34;!!&#34; demo = gr.Interface(fn=greet, inputs=&#34;text&#34;, outputs=&#34;text&#34;) demo.launch() 処理自体は簡単で、入力された名前に挨拶を付与するだけのものです。この場合、入出力のインターフェイスを用意するのはgradio.Interface()の1行で問題ありません。あとは、UIのインスタンスをlaunch()すると、Colab上に入出力のフロントが表示されます。コレ、地味にちゃんと日本語表示されるんですよね、何もコードの中で指定しなくても。
+実際にColab上で実行してみると上記のようなに表示されます。
+名前を入力して「送信」を押すと、右側に編集された文字列が表示されます。
+また、このとき生成されるURLは72時間の間保持されます。このURLは、gradioを利用して作成したUIをColabの外部で利用できるものです。つまり、Colab上作成した機能にgradioで簡易的なUIを作りさえすれば、あとはこのURLを共有することでwebアプリを実装できます。
+72時間しかURLが有効じゃないので、恒久的な利用には向きません。が、「とりあえず利用してみたい」という短期的なニーズを満たすための用途としては素晴らしい機能だと言えるのではないでしょうか。
+上記のようにブラウザでアクセスすれば、Colab上じゃなくても実行できます。
+そしてちゃんとColab上と同様に利用できます。
+画像を入出力としたサンプル 簡易的とはいえちゃんとUIを実装できるので、テキストだけでなく画像などのデータを入出力の対象にもできます。
+import numpy as np import gradio as gr def sepia(input_img): sepia_filter = np.array([ [0.393, 0.769, 0.189], [0.349, 0.686, 0.168], [0.272, 0.534, 0.131] ]) sepia_img = input_img."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">gradioでお手軽にnotebookをwebアプリ化する</h1>
+			<div class="meta">Posted at &mdash; Oct 15, 2022</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p><a href="https://www.gradio.app/">gradio</a>とはPython用のパッケージであり、Jupyter Notebook上で用いることによりwebアプリケーションのようなUIを実装できます。これにより、Notebookで作成した機械学習モデルを簡単なwebアプリ化でき、公開できる限度はあるものの作成したアプリケーションを独自のURLでwebアプリとして共有できるという優れものです。</p>
+
+<p>つまり、学習モデルというバックエンドさえ作っておけば、JSでフロントエンドを用意しなくてもgradioがその肩代わりしてくれるわけです。しかも、UIを構築する際も少ないコードで済むため、「作成したモデルの入出力をコードではなくGUIで行いたい。けどそこまで凝ったUIを作る必要はない」という場合に効果を発揮するでしょう。</p>
+
+<p>Google Collaboratory（以下、Colab）上でも動作するため、Colabで利用するとより実装が楽かもしれません。共有するのも、Colabでのソース本体でなく生成したwebアプリを共有すればいいのもポイント高いです。</p>
+
+<p>ここでは利用するシチュエーションが多いと思われるColabで、gradioを使用する方法について記述してみます。</p>
+
+<h2 id="導入方法">導入方法</h2>
+
+<p>導入は簡単で、他のPython用パッケージと同様に<code>pip</code>でインストールすれば問題ありません。gradioが要求する動作環境はPython 3.7以上なので、たいていの環境ではフツーに導入できるはずです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">!pip install gradio</code></pre></div>
+<p>新規のセルに上記のコードを記述しておけばインストールしてくれます。</p>
+
+<h2 id="簡単な入出力サンプル">簡単な入出力サンプル</h2>
+
+<p>ここでは、入力された文字列について簡単な編集を行って出力する機能を実装してみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> gradio <span style="color:#00f">as</span> gr
+
+<span style="color:#00f">def</span> greet(name):
+    <span style="color:#00f">return</span> <span style="color:#a31515">&#34;Hello &#34;</span> + name + <span style="color:#a31515">&#34;!!&#34;</span>
+
+demo = gr.Interface(fn=greet, inputs=<span style="color:#a31515">&#34;text&#34;</span>, outputs=<span style="color:#a31515">&#34;text&#34;</span>)
+
+demo.launch()</code></pre></div>
+<p>処理自体は簡単で、入力された名前に挨拶を付与するだけのものです。この場合、入出力のインターフェイスを用意するのは<code>gradio.Interface()</code>の1行で問題ありません。あとは、UIのインスタンスを<code>launch()</code>すると、Colab上に入出力のフロントが表示されます。コレ、地味にちゃんと日本語表示されるんですよね、何もコードの中で指定しなくても。</p>
+
+<p><img src="2022-10-15-22-06-23.png" alt="pic" /></p>
+
+<p>実際にColab上で実行してみると上記のようなに表示されます。</p>
+
+<p><img src="2022-10-15-22-06-35.png" alt="pic" /></p>
+
+<p>名前を入力して「送信」を押すと、右側に編集された文字列が表示されます。</p>
+
+<p>また、このとき生成されるURLは72時間の間保持されます。このURLは、gradioを利用して作成したUIを<strong>Colabの外部で利用できるもの</strong>です。つまり、Colab上作成した機能にgradioで簡易的なUIを作りさえすれば、あとはこのURLを共有することでwebアプリを実装できます。</p>
+
+<p>72時間しかURLが有効じゃないので、恒久的な利用には向きません。が、「とりあえず利用してみたい」という短期的なニーズを満たすための用途としては素晴らしい機能だと言えるのではないでしょうか。</p>
+
+<p><img src="2022-10-15-22-06-45.png" alt="pic" /></p>
+
+<p>上記のようにブラウザでアクセスすれば、Colab上じゃなくても実行できます。</p>
+
+<p><img src="2022-10-15-22-06-59.png" alt="pic" /></p>
+
+<p>そしてちゃんとColab上と同様に利用できます。</p>
+
+<h2 id="画像を入出力としたサンプル">画像を入出力としたサンプル</h2>
+
+<p>簡易的とはいえちゃんとUIを実装できるので、テキストだけでなく画像などのデータを入出力の対象にもできます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> numpy <span style="color:#00f">as</span> np
+<span style="color:#00f">import</span> gradio <span style="color:#00f">as</span> gr
+
+<span style="color:#00f">def</span> sepia(input_img):
+    sepia_filter = np.array([
+        [0.393, 0.769, 0.189], 
+        [0.349, 0.686, 0.168], 
+        [0.272, 0.534, 0.131]
+    ])
+    sepia_img = input_img.dot(sepia_filter.T)
+    sepia_img /= sepia_img.max()
+    <span style="color:#00f">return</span> sepia_img
+
+demo = gr.Interface(sepia, gr.Image(shape=(200, 200)), <span style="color:#a31515">&#34;image&#34;</span>)
+demo.launch()</code></pre></div>
+<p>当たり前のようにテキストのオブジェクトも入出力に採用できるので、ここでは画像を入力してセピアカラーに変更するコードを実行し結果を出力します。</p>
+
+<p><img src="2022-10-15-22-07-17.png" alt="pic" /></p>
+
+<p>実行すると上記のような画面が表示されます。左側の枠にドラッグアンドドロップなどで画像を入力し、「送信」を押すと処理を実行して結果を返してくれます。</p>
+
+<p><img src="2022-10-15-22-07-25.png" alt="pic" /></p>
+
+<p>適当な画像で処理を実行してみました。</p>
+
+<h2 id="他のコンポーネントを試す">他のコンポーネントを試す</h2>
+
+<p>テキストや画像の入出力が簡単に実装できるだけでも助かりますが、チェックボックスやスライダーなどのコンポーネントも実装できます。これらを入力のUIとして利用すれば、より使いやすいUIにできるでしょう。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> numpy <span style="color:#00f">as</span> np
+<span style="color:#00f">import</span> gradio <span style="color:#00f">as</span> gr
+<span style="color:#00f">from</span> PIL <span style="color:#00f">import</span> Image
+
+<span style="color:#00f">def</span> img_process(input_img, is_sepia_filter, is_negative_filter, slider):
+  process_img = np.array(input_img)
+
+  <span style="color:#00f">if</span> is_sepia_filter:
+    sepia_filter = np.array([
+        [0.393, 0.769, 0.189], 
+        [0.349, 0.686, 0.168], 
+        [0.272, 0.534, 0.131]
+    ])
+    sepia_img = process_img.dot(sepia_filter.T)
+    sepia_img /= sepia_img.max()
+    process_img = sepia_img
+
+  <span style="color:#00f">if</span> is_negative_filter:
+    process_img = process_img.max() - process_img
+
+    
+  <span style="color:#00f">return</span> process_img, slider * 2
+
+
+demo = gr.Interface(fn=img_process, 
+                    inputs=[gr.Image(shape=(200, 200)), <span style="color:#a31515">&#39;checkbox&#39;</span>, <span style="color:#a31515">&#39;checkbox&#39;</span>, gr.Slider(0, 100)], 
+                    outputs=[<span style="color:#a31515">&#39;image&#39;</span>, <span style="color:#a31515">&#39;text&#39;</span>])
+demo.launch()</code></pre></div>
+<p>上記では、画像を指定するコンポーネントの他にチェックボックスとスライダーを実装しています。</p>
+
+<p><img src="2022-10-15-22-07-38.png" alt="pic" /></p>
+
+<p>実際に実行してみると、チェックボックスやスライダーにそれぞれ項目が割り当てられているのがわかります。これは、<code>Interface()</code>でインスタンスを宣言する際に、引数として指定した関数である<code>img_process</code>の引数と対応しています。</p>
+
+<p><code>inputs</code>オプションに指定したリストは関数<code>img_process</code>の引数と1つずつ対応しています。つまり、<code>input_img</code>という引数はUIのImageコンポーネントと紐付いており、引数<code>is_sepia_filter</code>はチェックボックスの1つ目と紐付いています。さらに、入力と同様に出力である<code>outputs</code>オプションで指定したリストは、関数<code>img_process</code>の戻り値と1つずつ対応しています。今回は戻り値が処理後の画像と数値の2つで、それらに1つずつ出力のImageコンポーネントとテキストフィールドが対応しています。わかりやすいわー。</p>
+
+<p>このように、gradioはインスタンスの宣言の際に引数と戻り値をUIのコンポーネントと1つずつ紐付けることが可能です。</p>
+
+<p><img src="2022-10-15-22-07-46.png" alt="pic" /></p>
+
+<p>任意の画像をドラッグアンドドロップしてチェックそ送信すると、入力した内容に基づき処理された画像が返ってきます。ここでは、セピアカラー処理したあとにネガポジ反転させています。ここでは1度に両方の処理を実行していますが、それぞれの処理を別個に処理することももちろん可能です。</p>
+
+<h2 id="interface-クラスを使わずuiを実装する"><code>Interface</code>クラスを使わずUIを実装する</h2>
+
+<p>今まではUIの実装に<code>Interface()</code>を使ってきました。実際、これを使うだけで関数とUIを紐付けつつ実装が可能なのでめちゃくちゃ有用ではあるのですが、細かい描画の調整ができないというデメリットが存在します。とくに<code>Tab()</code>を利用して機能ごとにタブを実装した際、<code>Interface()</code>でUIを実装すると、妙な誤り方をした描画になってしまいます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> numpy <span style="color:#00f">as</span> np
+<span style="color:#00f">import</span> gradio <span style="color:#00f">as</span> gr
+
+<span style="color:#00f">def</span> img_process(input_img, is_sepia_filter, is_negative_filter, slider):
+  process_img = np.array(input_img)
+
+  <span style="color:#00f">if</span> is_sepia_filter:
+    sepia_filter = np.array([
+        [0.393, 0.769, 0.189], 
+        [0.349, 0.686, 0.168], 
+        [0.272, 0.534, 0.131]
+    ])
+    sepia_img = process_img.dot(sepia_filter.T)
+    sepia_img /= sepia_img.max()
+    process_img = sepia_img
+
+  <span style="color:#00f">if</span> is_negative_filter:
+    process_img = process_img.max() - process_img
+
+  <span style="color:#00f">return</span> process_img, slider * 2
+
+<span style="color:#00f">def</span> flip_image(x):
+    <span style="color:#00f">return</span> np.fliplr(x)
+
+<span style="color:#00f">with</span> gr.Blocks() <span style="color:#00f">as</span> demo:
+    gr.Markdown(<span style="color:#a31515">&#34;Flip text or image files using this demo.&#34;</span>)
+    <span style="color:#00f">with</span> gr.Tab(<span style="color:#a31515">&#34;Flip Text&#34;</span>):
+        gr.Interface(fn=img_process, 
+                    inputs=[gr.Image(shape=(200, 200)), <span style="color:#a31515">&#39;checkbox&#39;</span>, <span style="color:#a31515">&#39;checkbox&#39;</span>, gr.Slider(0, 100)], 
+                    outputs=[<span style="color:#a31515">&#39;image&#39;</span>, <span style="color:#a31515">&#39;text&#39;</span>])
+    <span style="color:#00f">with</span> gr.Tab(<span style="color:#a31515">&#34;Flip Image&#34;</span>):
+        <span style="color:#00f">with</span> gr.Row():
+            image_input = gr.Image()
+            image_output = gr.Image()
+        image_button = gr.Button(<span style="color:#a31515">&#34;Flip&#34;</span>)
+
+    <span style="color:#00f">with</span> gr.Accordion(<span style="color:#a31515">&#34;Open for More!&#34;</span>):
+        gr.Markdown(<span style="color:#a31515">&#34;Look at me...&#34;</span>)
+
+    <span style="color:#008000"># text_button.click(flip_text, inputs=text_input, outputs=text_output)</span>
+    image_button.click(flip_image, inputs=image_input, outputs=image_output)
+
+demo.launch()</code></pre></div>
+<p>上記のように、2つの機能をタブ分けして片方は<code>Interface()</code>を使ってUIを実装してみます。</p>
+
+<p><img src="2022-10-15-22-08-03.png" alt="pic" /></p>
+
+<p><img src="2022-10-15-22-08-10.png" alt="pic" /></p>
+
+<p><img src="2022-10-15-22-08-20.png" alt="pic" /></p>
+
+<p>実行してみるとわかりますが、1つしかないはずの画像の入力フィールドやスライダーが、なぜか余計に表示されてしまっています。そのため、このような場合では後述する<code>Blocks()</code>を使った実装のほうが良いかと思います。</p>
+
+<p>ちなみに、このような表示になってしまうのは<code>Interface()</code>が細かい調整を肩代わりしてくれる反面、プログラマー自身による細かい調整ができなくなっているのでは、と個人的に思っています。</p>
+
+<p>次に<code>Blocks()</code>を使って実装してみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> numpy <span style="color:#00f">as</span> np
+<span style="color:#00f">import</span> gradio <span style="color:#00f">as</span> gr
+
+<span style="color:#00f">def</span> img_process(input_img, is_sepia_filter, is_negative_filter, slider):
+  process_img = np.array(input_img)
+
+  <span style="color:#00f">if</span> is_sepia_filter:
+    sepia_filter = np.array([
+        [0.393, 0.769, 0.189], 
+        [0.349, 0.686, 0.168], 
+        [0.272, 0.534, 0.131]
+    ])
+    sepia_img = process_img.dot(sepia_filter.T)
+    sepia_img /= sepia_img.max()
+    process_img = sepia_img
+
+  <span style="color:#00f">if</span> is_negative_filter:
+    process_img = process_img.max() - process_img
+
+  <span style="color:#00f">return</span> process_img, slider * 2
+
+<span style="color:#00f">def</span> flip_image(x):
+    <span style="color:#00f">return</span> np.fliplr(x)
+
+<span style="color:#00f">with</span> gr.Blocks() <span style="color:#00f">as</span> demo:
+    gr.Markdown(<span style="color:#a31515">&#34;Process image or flip image files using this demo.&#34;</span>)
+    <span style="color:#00f">with</span> gr.Tab(<span style="color:#a31515">&#34;Process image&#34;</span>):
+        p_image_input = gr.Image()
+        p_check_sepia = gr.Checkbox(label=<span style="color:#a31515">&#39;is_sepia_filter&#39;</span>)
+        p_check_negative = gr.Checkbox(label=<span style="color:#a31515">&#39;is_negative_filter&#39;</span>)
+        p_image_slider = gr.Slider(0, 100)
+        p_image_button = gr.Button(<span style="color:#a31515">&#34;Send&#34;</span>)
+        p_image_output = gr.Image()
+        p_image_output2 = gr.Text()
+        
+    <span style="color:#00f">with</span> gr.Tab(<span style="color:#a31515">&#34;Flip Image&#34;</span>):
+        <span style="color:#00f">with</span> gr.Row():
+            image_input = gr.Image()
+            image_output = gr.Image()
+        image_button = gr.Button(<span style="color:#a31515">&#34;Flip&#34;</span>)
+
+    <span style="color:#00f">with</span> gr.Accordion(<span style="color:#a31515">&#34;Open for More!&#34;</span>):
+        gr.Markdown(<span style="color:#a31515">&#34;Look at me...&#34;</span>)
+
+    p_image_button.click(img_process, inputs=[p_image_input, p_check_sepia, p_check_negative, p_image_slider], outputs=[p_image_output, p_image_output2])
+    image_button.click(flip_image, inputs=image_input, outputs=image_output)
+
+demo.launch()</code></pre></div>
+<p>先ほどのケースとは異なり、タブ内のコンポーネントをすべて<code>gradio.クラス名</code>で宣言します。なお、各コンポーネントを宣言する方法は<a href="https://www.gradio.app/docs/">gradioのDocs</a>を参照すると書いてあります。</p>
+
+<p>今度はこの内容で実行してみます。</p>
+
+<p><img src="2022-10-15-22-08-36.png" alt="pic" /></p>
+
+<p><img src="2022-10-15-22-08-46.png" alt="pic" /></p>
+
+<p><img src="2022-10-15-22-08-54.png" alt="pic" /></p>
+
+<p>今回は先ほどとは異なり、本来想定した順番と場所でコンポーネントが表示されています。</p>
+
+<p>なお、タブ化されて今までの「左側に入力、右側に出力」というレイアウトとは異なるものの、中身のコンポーネントは今までと同様なので操作方法も変わりません。</p>
+
+<p><img src="2022-10-15-22-09-02.png" alt="pic" /></p>
+
+<p>画像をドラッグアンドドロップで入力し、必要なチェックボックスにチェックしスライダーを適当に動かしてみます。その後「Send」ボタンを押します。</p>
+
+<p><img src="2022-10-15-22-09-10.png" alt="pic" /></p>
+
+<p>Colabの表示スペースが少ないために出力された画像が見切れてしまっていますが、ちゃんと動作しています。</p>
+
+<h2 id="reference">reference</h2>
+
+<ol>
+<li><a href="https://www.gradio.app/">gradio</a></li>
+<li><a href="https://www.gradio.app/getting_started/">Quickstart</a></li>
+<li><a href="https://www.gradio.app/docs/">gradioのDocs</a></li>
+<li><a href="https://cpp-learning.com/gradio/">【Gradio】爆速で機械学習アプリを作る -PyTorch・TensorFlow・scikit-learnの好きなモデルで遊ぼう-</a></li>
+<li><a href="https://note.nkmk.me/python-numpy-image-processing/">Python, NumPyで画像処理（読み込み、演算、保存）</a></li>
+<li><a href="https://yabirgb.com/sepia_filter/">Creating a sepia filter with python</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

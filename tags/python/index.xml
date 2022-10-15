@@ -7,10 +7,34 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Mon, 05 Sep 2022 22:09:55 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 15 Oct 2022 22:01:10 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>gradioでお手軽にnotebookをwebアプリ化する</title>
+      <link>https://ysko909.github.io/posts/fundamentals-of-gradio/</link>
+      <pubDate>Sat, 15 Oct 2022 22:01:10 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/fundamentals-of-gradio/</guid>
+      <description>概要 gradioとはPython用のパッケージであり、Jupyter Notebook上で用いることによりwebアプリケーションのようなUIを実装できます。これにより、Notebookで作成した機械学習モデルを簡単なwebアプリ化でき、公開できる限度はあるものの作成したアプリケーションを独自のURLでwebアプリとして共有できるという優れものです。
+つまり、学習モデルというバックエンドさえ作っておけば、JSでフロントエンドを用意しなくてもgradioがその肩代わりしてくれるわけです。しかも、UIを構築する際も少ないコードで済むため、「作成したモデルの入出力をコードではなくGUIで行いたい。けどそこまで凝ったUIを作る必要はない」という場合に効果を発揮するでしょう。
+Google Collaboratory（以下、Colab）上でも動作するため、Colabで利用するとより実装が楽かもしれません。共有するのも、Colabでのソース本体でなく生成したwebアプリを共有すればいいのもポイント高いです。
+ここでは利用するシチュエーションが多いと思われるColabで、gradioを使用する方法について記述してみます。
+導入方法 導入は簡単で、他のPython用パッケージと同様にpipでインストールすれば問題ありません。gradioが要求する動作環境はPython 3.7以上なので、たいていの環境ではフツーに導入できるはずです。
+!pip install gradio 新規のセルに上記のコードを記述しておけばインストールしてくれます。
+簡単な入出力サンプル ここでは、入力された文字列について簡単な編集を行って出力する機能を実装してみます。
+import gradio as gr def greet(name): return &amp;#34;Hello &amp;#34; + name + &amp;#34;!!&amp;#34; demo = gr.Interface(fn=greet, inputs=&amp;#34;text&amp;#34;, outputs=&amp;#34;text&amp;#34;) demo.launch() 処理自体は簡単で、入力された名前に挨拶を付与するだけのものです。この場合、入出力のインターフェイスを用意するのはgradio.Interface()の1行で問題ありません。あとは、UIのインスタンスをlaunch()すると、Colab上に入出力のフロントが表示されます。コレ、地味にちゃんと日本語表示されるんですよね、何もコードの中で指定しなくても。
+実際にColab上で実行してみると上記のようなに表示されます。
+名前を入力して「送信」を押すと、右側に編集された文字列が表示されます。
+また、このとき生成されるURLは72時間の間保持されます。このURLは、gradioを利用して作成したUIをColabの外部で利用できるものです。つまり、Colab上作成した機能にgradioで簡易的なUIを作りさえすれば、あとはこのURLを共有することでwebアプリを実装できます。
+72時間しかURLが有効じゃないので、恒久的な利用には向きません。が、「とりあえず利用してみたい」という短期的なニーズを満たすための用途としては素晴らしい機能だと言えるのではないでしょうか。
+上記のようにブラウザでアクセスすれば、Colab上じゃなくても実行できます。
+そしてちゃんとColab上と同様に利用できます。
+画像を入出力としたサンプル 簡易的とはいえちゃんとUIを実装できるので、テキストだけでなく画像などのデータを入出力の対象にもできます。
+import numpy as np import gradio as gr def sepia(input_img): sepia_filter = np.array([ [0.393, 0.769, 0.189], [0.349, 0.686, 0.168], [0.272, 0.534, 0.131] ]) sepia_img = input_img.</description>
+    </item>
     
     <item>
       <title>Stable Diffusionを使ってGoogle Colaboratory上でimg2imgして画像を生成する</title>
