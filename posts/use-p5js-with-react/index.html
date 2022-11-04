@@ -270,7 +270,7 @@ window.p5 = p5;
 <span style="">・・・以下省略</span></code></pre></div>
 <p>上記はApp.tsxです。さっき作成した<code>globals.js</code>をインポートしています。はい、インポートしてるんです。</p>
 
-<p><strong>おわかりいただけただろうか</strong>。つまり、p5.jsの<code>inport</code>をわざわざ別ファイルを作っています。しかもjsファイル内で<code>import p5 from &quot;p5&quot;;</code>を宣言しておいて、App.tsx側でも<code>import p5 from &quot;p5&quot;;</code>してます。冗長じゃないの？なんなんですかね？</p>
+<p><strong>おわかりいただけただろうか</strong>。つまり、p5.jsの<code>import</code>をわざわざ別ファイルを作っています。しかもjsファイル内で<code>import p5 from &quot;p5&quot;;</code>を宣言しておいて、App.tsx側でも<code>import p5 from &quot;p5&quot;;</code>してます。冗長じゃないの？なんなんですかね？</p>
 
 <p>正直、ちゃんと理解しているわけではないんですが<strong>これでしっかり動作します</strong>。JS側ではwindowオブジェクトにp5プロパティを追加して、そこにp5の内容をまるっと代入し、App.tsx側では改めてp5をインポートして、p5.sound.jsもインポートするという手順です。なお、App.tsx側の<code>import p5 from &quot;p5&quot;;</code>は<strong>必須です</strong>。これがないとエラーになります。そのため、同じ<code>import p5 from &quot;p5&quot;;</code>とは言っても、効果を発揮する対象がJSファイル内では<code>window.p5 = p5;</code>ですが、App.tsx側ではTypeScriptのコードそのものということになります。</p>
 
