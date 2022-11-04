@@ -23,7 +23,7 @@
 error: password authentication failed for user &amp;#34;xxx&amp;#34; 上記がそのエラーメッセージでして、xxxの部分にはユーザー名が入ります。xxxというユーザーのパスワード認証に失敗したと言っています・・・が、実際は正しい認証情報を入力していてもエラーになります。入力が正しくても間違っていてもダメと言われるわけですね。
 pgAdminだと上記のように表示されます。
 エラーの再現手順 このエラーは特定の手順を踏むと再現します。
- docker-compose.ymlなどによりPostgreSQLのコンテナを構築する。 PostgreSQLにログインする。この時点では正常にログインできる。 ymlに記述してある++PostgreSQLの認証情報を変更する++。 コンテナをリビルドする。 新しい認証情報を使ってPostgreSQLにログインしようとするとエラーを吐く。  ここで言う認証情報とはPOSTGRES_USERやPOSTGRES_PASSWORDを指します。これらの設定値を変更すると、新しい認証情報を使ったログインができなくなってしまいます。
+ docker-compose.ymlなどによりPostgreSQLのコンテナを構築する。 PostgreSQLにログインする。この時点では正常にログインできる。 ymlに記述してあるPostgreSQLの認証情報を変更する。 コンテナをリビルドする。 変更後の認証情報を使ってPostgreSQLにログインしようとするとエラーを吐く。  ここで言う認証情報とはPOSTGRES_USERやPOSTGRES_PASSWORDを指します。これらの設定値を変更すると、新しい認証情報を使ったログインができなくなってしまいます。もちろん、変更前の認証情報でもダメです。
 version: &amp;#34;3&amp;#34; services: postgres: image: postgres container_name: sample_postgres ports: - 5432:5432 environment: POSTGRES_USER: admin POSTGRES_PASSWORD: admin POSTGRES_DB: sample_db volumes: - ./initdb:/docker-entrypoint-initdb.d - ./postgres:/var/lib/postgresql/data pgadmin: image: dpage/pgadmin4 container_name: sample_pgadmin restart: always ports: - 30001:80 environment: PGADMIN_DEFAULT_EMAIL: admin@example.com PGADMIN_DEFAULT_PASSWORD: admin volumes: - pgadmin:/var/lib/pgadmin depends_on: - postgres volumes: postgres: pgadmin: たとえば上記のようなdocker-compose.</description>
     </item>
     

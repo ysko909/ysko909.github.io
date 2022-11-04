@@ -9,7 +9,7 @@
 error: password authentication failed for user &#34;xxx&#34; 上記がそのエラーメッセージでして、xxxの部分にはユーザー名が入ります。xxxというユーザーのパスワード認証に失敗したと言っています・・・が、実際は正しい認証情報を入力していてもエラーになります。入力が正しくても間違っていてもダメと言われるわけですね。
 pgAdminだと上記のように表示されます。
 エラーの再現手順 このエラーは特定の手順を踏むと再現します。
- docker-compose.ymlなどによりPostgreSQLのコンテナを構築する。 PostgreSQLにログインする。この時点では正常にログインできる。 ymlに記述してある&#43;&#43;PostgreSQLの認証情報を変更する&#43;&#43;。 コンテナをリビルドする。 新しい認証情報を使ってPostgreSQLにログインしようとするとエラーを吐く。  ここで言う認証情報とはPOSTGRES_USERやPOSTGRES_PASSWORDを指します。これらの設定値を変更すると、新しい認証情報を使ったログインができなくなってしまいます。
+ docker-compose.ymlなどによりPostgreSQLのコンテナを構築する。 PostgreSQLにログインする。この時点では正常にログインできる。 ymlに記述してあるPostgreSQLの認証情報を変更する。 コンテナをリビルドする。 変更後の認証情報を使ってPostgreSQLにログインしようとするとエラーを吐く。  ここで言う認証情報とはPOSTGRES_USERやPOSTGRES_PASSWORDを指します。これらの設定値を変更すると、新しい認証情報を使ったログインができなくなってしまいます。もちろん、変更前の認証情報でもダメです。
 version: &#34;3&#34; services: postgres: image: postgres container_name: sample_postgres ports: - 5432:5432 environment: POSTGRES_USER: admin POSTGRES_PASSWORD: admin POSTGRES_DB: sample_db volumes: - ./initdb:/docker-entrypoint-initdb.d - ./postgres:/var/lib/postgresql/data pgadmin: image: dpage/pgadmin4 container_name: sample_pgadmin restart: always ports: - 30001:80 environment: PGADMIN_DEFAULT_EMAIL: admin@example.com PGADMIN_DEFAULT_PASSWORD: admin volumes: - pgadmin:/var/lib/pgadmin depends_on: - postgres volumes: postgres: pgadmin: たとえば上記のようなdocker-compose." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ysko909.github.io/posts/delete-volume-when-get-password-authentication-failed-error/" /><meta property="article:published_time" content="2022-10-10T16:52:53&#43;09:00"/>
@@ -20,7 +20,7 @@ version: &#34;3&#34; services: postgres: image: postgres container_name: sample_
 error: password authentication failed for user &#34;xxx&#34; 上記がそのエラーメッセージでして、xxxの部分にはユーザー名が入ります。xxxというユーザーのパスワード認証に失敗したと言っています・・・が、実際は正しい認証情報を入力していてもエラーになります。入力が正しくても間違っていてもダメと言われるわけですね。
 pgAdminだと上記のように表示されます。
 エラーの再現手順 このエラーは特定の手順を踏むと再現します。
- docker-compose.ymlなどによりPostgreSQLのコンテナを構築する。 PostgreSQLにログインする。この時点では正常にログインできる。 ymlに記述してある&#43;&#43;PostgreSQLの認証情報を変更する&#43;&#43;。 コンテナをリビルドする。 新しい認証情報を使ってPostgreSQLにログインしようとするとエラーを吐く。  ここで言う認証情報とはPOSTGRES_USERやPOSTGRES_PASSWORDを指します。これらの設定値を変更すると、新しい認証情報を使ったログインができなくなってしまいます。
+ docker-compose.ymlなどによりPostgreSQLのコンテナを構築する。 PostgreSQLにログインする。この時点では正常にログインできる。 ymlに記述してあるPostgreSQLの認証情報を変更する。 コンテナをリビルドする。 変更後の認証情報を使ってPostgreSQLにログインしようとするとエラーを吐く。  ここで言う認証情報とはPOSTGRES_USERやPOSTGRES_PASSWORDを指します。これらの設定値を変更すると、新しい認証情報を使ったログインができなくなってしまいます。もちろん、変更前の認証情報でもダメです。
 version: &#34;3&#34; services: postgres: image: postgres container_name: sample_postgres ports: - 5432:5432 environment: POSTGRES_USER: admin POSTGRES_PASSWORD: admin POSTGRES_DB: sample_db volumes: - ./initdb:/docker-entrypoint-initdb.d - ./postgres:/var/lib/postgresql/data pgadmin: image: dpage/pgadmin4 container_name: sample_pgadmin restart: always ports: - 30001:80 environment: PGADMIN_DEFAULT_EMAIL: admin@example.com PGADMIN_DEFAULT_PASSWORD: admin volumes: - pgadmin:/var/lib/pgadmin depends_on: - postgres volumes: postgres: pgadmin: たとえば上記のようなdocker-compose."/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
@@ -102,12 +102,12 @@ version: &#34;3&#34; services: postgres: image: postgres container_name: sample_
 <ol>
 <li>docker-compose.ymlなどによりPostgreSQLのコンテナを構築する。</li>
 <li>PostgreSQLにログインする。この時点では正常にログインできる。</li>
-<li>ymlに記述してある++PostgreSQLの認証情報を変更する++。</li>
+<li>ymlに記述してある<strong>PostgreSQLの認証情報を変更する</strong>。</li>
 <li>コンテナをリビルドする。</li>
-<li>新しい認証情報を使ってPostgreSQLにログインしようとするとエラーを吐く。</li>
+<li>変更後の認証情報を使ってPostgreSQLにログインしようとするとエラーを吐く。</li>
 </ol>
 
-<p>ここで言う認証情報とは<code>POSTGRES_USER</code>や<code>POSTGRES_PASSWORD</code>を指します。これらの設定値を変更すると、新しい認証情報を使ったログインができなくなってしまいます。</p>
+<p>ここで言う認証情報とは<code>POSTGRES_USER</code>や<code>POSTGRES_PASSWORD</code>を指します。これらの設定値を変更すると、新しい認証情報を使ったログインができなくなってしまいます。もちろん、変更前の認証情報でもダメです。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml">version: <span style="color:#a31515">&#34;3&#34;</span>
 services:    
   postgres:
@@ -147,6 +147,8 @@ volumes:
 <h2 id="原因">原因</h2>
 
 <p>認証情報を<strong>一度コンテナを構築したあとで</strong>変更した際に上記のようなエラーを吐くようになる理由は、認証情報を<strong>初期起動の際に設定するため</strong>のようです。その後、認証情報を変えて起動しようとしても、最初に設定した認証情報と一致しないのでエラーになってしまうと思われます。そして、この認証情報は原因がはっきりしないもののリビルドでは更新されないようです。</p>
+
+<p>ただ、変更前の認証情報も同様にダメになるのはよくわかりません＿(　_´ω`)_ﾍﾟｼｮ</p>
 
 <h2 id="対処法">対処法</h2>
 
