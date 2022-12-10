@@ -175,7 +175,9 @@ root.render(
 }
 
 <span style="color:#00f">export</span> <span style="color:#00f">default</span> App;</code></pre></div>
-<p>次に<code>App.tsx</code>です。こちらが実際の処理を担当しているファイルです。こちらにp5.jsの処理を記述します。ここではGet Startedページのサンプルである「マウスポインタに追随する円」を描画するコードを記述しています。ただし、ここではp5.jsのインスタンスモードを使用するよう、もともとのコードから少し書き換えています。これは、p5.jsの関数がグローバルに展開されてしまうのを防ぐためです。詳細な理由は<a href="https://ics.media/entry/210129/">話すと長くなるので割愛</a>しますが、インスタンスモードでp5.jsを利用することでグローバルを汚染せず、エディタのサジェスト機能を有効活用できる重要な効果を発揮してくれます。</p>
+<p>次に<code>App.tsx</code>です。こちらが実際の処理を担当しているファイルです。</p>
+
+<p>こちらにp5.jsの処理を記述します。ここではGet Startedページのサンプルである「マウスポインタに追随する円」を描画するコードを記述しています。ただし、ここではp5.jsのインスタンスモードを使用するよう、もともとのコードから少し書き換えています。これは、p5.jsの関数がグローバルに展開されてしまうのを防ぐためです。詳細な理由は<a href="https://ics.media/entry/210129/">話すと長くなるので割愛</a>しますが、インスタンスモードでp5.jsを利用することでグローバルを汚染せず、エディタのサジェスト機能を有効活用できる重要な効果を発揮してくれます。</p>
 
 <p>ここまでコーディングが済んだら<code>yarn start</code>です。ブラウザで<code>http://localhost:3000</code>にアクセスしましょう。</p>
 
@@ -244,7 +246,7 @@ root.render(
     at __webpack_require__ (bootstrap:24:1)
     at fn (hot module replacement:62:1)
     at ./src/App.tsx (bundle.js:16:80)</code></pre></div>
-<p>「p5 is not defined」ってどういうこと・・・。このエラーですが、今のところ<strong>回避策が見つけられていません</strong>。こんなわけで、<a href="https://memo.sugyan.com/entry/2021/10/11/132400">p5.soundがTypeScript環境だとうまく利用できない</a>んですよね。Reactとp5.jsを組み合わせたい場合はp5.sound.jsの利用は現状だとあきらめたほうが良さげです。もったいない・・・。</p>
+<p>「p5 is not defined」ってどういうこと・・・。このエラーですが、今のところ<del>回避策が見つけられていません</del>（後述しますが回避しました。追記分をご参照ください）。こんなわけで、<a href="https://memo.sugyan.com/entry/2021/10/11/132400">p5.soundがTypeScript環境だとうまく利用できない</a>んですよね。Reactとp5.jsを組み合わせたい場合はp5.sound.jsの利用は現状だとあきらめたほうが良さげです。もったいない・・・。</p>
 
 <h3 id="追記-reactとtypescriptとp5-jsを同居できました">追記：ReactとTypeScriptとp5.jsを同居できました</h3>
 
