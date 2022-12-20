@@ -5,12 +5,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>ペルソナ玲音を召喚するARをA-Frameで作る - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta property="og:title" content="ペルソナ玲音を召喚するARをA-Frameで作る" />
 <meta property="og:description" content="作ったもの ペルソナ玲音を召喚するARを、A-Frameを使って実装しました。今回はマーカーに依存しないマーカーレスなARで、任意の座標にペルソナ玲音の3Dモデルが「浮いている」ARを実装してみることにします。
-実装結果はこちら。Netlifyにデプロイしました。いやー、ファイルさえアップロードすればあとは勝手にやってくれるので楽ですね。
 マーカーベースなARじゃないです 前述しましたが、今回はマーカーレスなARです。
 マーカーベースなARは「3Dモデルを召喚する」手法としては王道ですが、ユーザーにURLを渡しただけでは動作しません。何らかの方法で、ユーザーにマーカーを準備させなければならないのが難点です。名刺とかにマーカーを印刷してURLと一緒に渡すなど、フィジカルなものを利用すれば手段がないわけではありません。とはいえ、ネット上でのみやり取りする際にはこの方法が使えないため、やっぱりマーカーの分どうしても手間は増えます。
 その点、マーカーレスなARはユーザーにURLさえ渡せばすぐ動作するのが最大のメリット。SNSなどにURLだけ掲載しておけば、あとはユーザーにブラウザ経由でアクセスさせるだけです。場合によっては、SNSアプリの内部ブラウザでは動作しないケースがありますが、そこはChromeやFirefoxでアクセスするよう誘導すれば問題ありません。JSによるwebARの実装である以上、現状では3DoFでしか実現できない（XYZ軸の回転のみ検出する）のが難点ですが、そこはアイデアで乗り切るしかありません。あとは、ブラウザとライブラリの進化に期待するしか・・・（他力本願
 ペルソナ玲音の3Dモデルについて ペルソナ玲音の3Dモデルは、MagicaVoxelとBlenderを利用し自作しました。モデルの形式ですが、今回はglTFを利用します。glTFだとモーションまで含んだ3Dモデルとして扱えるため、ただ3Dモデルが「そこにある」だけでなく「動く」ので、UXの観点から非常に有利です。
-3Dモデルの作り方は割愛しますが、簡単に紹介すると下記のような手順で動く3Dモデルを作成可能です。
+3Dモデルの作り方は割愛しますが、簡単に紹介すると下記のような手順で動く3Dモデルを作成可能です。というか、これ書くだけで1つ記事ができそうな内容ではあるのでちょっと割愛しないとテキスト量が大変なことに＿(　_´ω`)_ﾍﾟｼｮ
  MagicaVoxelでボクセルモデルを作成する。 objファイルとしてエクスポートする。 エクスポートしたファイル一式をZIPで圧縮する。 MixAmoにアクセスし好きなモーションを付与する。 MixAmoのメニューからFBX形式でダウンロードする。 Blenderで新規プロジェクトを作成し、ダウンロードしたFBXをインポートする。 3Dモデルのサイズや位置、角度などを必要に応じて調整する。 glTF形式でエクスポートする。  ちなみに、MixAmoからダウンロードする際は、FBX形式じゃなくてもBlenderにはインポートできると思いますが、とりあえずFBXを選択しておけば問題ないと思います。
 実際のコード 実際に記述したコードは下記のHTMLソースだけです。HTMLと3Dモデルだけ準備すればARが実装できるのは、本当にA-Frame様様ですね。
 &lt;html&gt; &lt;head&gt; &lt;script src=&#34;https://aframe.io/releases/1.0.4/aframe.min.js&#34;&gt;&lt;/script&gt; &lt;script src=&#34;https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js&#34;&gt;&lt;/script&gt; &lt;script src=&#34;https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js&#34;&gt;&lt;/script&gt; &lt;/head&gt; &lt;body&gt; &lt;a-scene embedded arjs=&#34;debugUIEnabled:false;&#34; renderer=&#34;gammaOutput: true;&#34; vr-mode-ui=&#34;enabled: false&#34;&gt; &lt;a-assets&gt; &lt;a-asset-item id=&#34;model&#34; src=&#34;persona_lain_blender.glb&#34;&gt;&lt;/a-asset-item&gt; &lt;/a-assets&gt; &lt;a-entity scale=&#34;100 100 100&#34; position=&#34;0 0.4 -3&#34; animation-mixer=&#34;clip:*&#34; gltf-model=&#34;#model&#34; visible=&#34;true&#34;&gt; &lt;/a-entity&gt; &lt;a-light type=&#34;ambient&#34; color=&#34;#ffffff&#34;&gt;&lt;/a-light&gt; &lt;a-light type=&#34;point&#34; intensity=&#34;2&#34; position=&#34;0 4 0&#34;&gt;&lt;/a-light&gt; &lt;/a-scene&gt; &lt;/body&gt; &lt;/html&gt; 本来、glTFやFBXをそのまま3DモデルとしてAR空間上に出現させる場合、A-Frame単体では実現できません。じゃあどうしているかというと、A-Frame extrasという、A-Frameの拡張機能を利用します。このアドオンを導入することで、glTFの実装が可能になります。" />
@@ -19,12 +18,11 @@
 <meta property="article:modified_time" content="2020-11-21T10:31:39&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="ペルソナ玲音を召喚するARをA-Frameで作る"/>
 <meta name="twitter:description" content="作ったもの ペルソナ玲音を召喚するARを、A-Frameを使って実装しました。今回はマーカーに依存しないマーカーレスなARで、任意の座標にペルソナ玲音の3Dモデルが「浮いている」ARを実装してみることにします。
-実装結果はこちら。Netlifyにデプロイしました。いやー、ファイルさえアップロードすればあとは勝手にやってくれるので楽ですね。
 マーカーベースなARじゃないです 前述しましたが、今回はマーカーレスなARです。
 マーカーベースなARは「3Dモデルを召喚する」手法としては王道ですが、ユーザーにURLを渡しただけでは動作しません。何らかの方法で、ユーザーにマーカーを準備させなければならないのが難点です。名刺とかにマーカーを印刷してURLと一緒に渡すなど、フィジカルなものを利用すれば手段がないわけではありません。とはいえ、ネット上でのみやり取りする際にはこの方法が使えないため、やっぱりマーカーの分どうしても手間は増えます。
 その点、マーカーレスなARはユーザーにURLさえ渡せばすぐ動作するのが最大のメリット。SNSなどにURLだけ掲載しておけば、あとはユーザーにブラウザ経由でアクセスさせるだけです。場合によっては、SNSアプリの内部ブラウザでは動作しないケースがありますが、そこはChromeやFirefoxでアクセスするよう誘導すれば問題ありません。JSによるwebARの実装である以上、現状では3DoFでしか実現できない（XYZ軸の回転のみ検出する）のが難点ですが、そこはアイデアで乗り切るしかありません。あとは、ブラウザとライブラリの進化に期待するしか・・・（他力本願
 ペルソナ玲音の3Dモデルについて ペルソナ玲音の3Dモデルは、MagicaVoxelとBlenderを利用し自作しました。モデルの形式ですが、今回はglTFを利用します。glTFだとモーションまで含んだ3Dモデルとして扱えるため、ただ3Dモデルが「そこにある」だけでなく「動く」ので、UXの観点から非常に有利です。
-3Dモデルの作り方は割愛しますが、簡単に紹介すると下記のような手順で動く3Dモデルを作成可能です。
+3Dモデルの作り方は割愛しますが、簡単に紹介すると下記のような手順で動く3Dモデルを作成可能です。というか、これ書くだけで1つ記事ができそうな内容ではあるのでちょっと割愛しないとテキスト量が大変なことに＿(　_´ω`)_ﾍﾟｼｮ
  MagicaVoxelでボクセルモデルを作成する。 objファイルとしてエクスポートする。 エクスポートしたファイル一式をZIPで圧縮する。 MixAmoにアクセスし好きなモーションを付与する。 MixAmoのメニューからFBX形式でダウンロードする。 Blenderで新規プロジェクトを作成し、ダウンロードしたFBXをインポートする。 3Dモデルのサイズや位置、角度などを必要に応じて調整する。 glTF形式でエクスポートする。  ちなみに、MixAmoからダウンロードする際は、FBX形式じゃなくてもBlenderにはインポートできると思いますが、とりあえずFBXを選択しておけば問題ないと思います。
 実際のコード 実際に記述したコードは下記のHTMLソースだけです。HTMLと3Dモデルだけ準備すればARが実装できるのは、本当にA-Frame様様ですね。
 &lt;html&gt; &lt;head&gt; &lt;script src=&#34;https://aframe.io/releases/1.0.4/aframe.min.js&#34;&gt;&lt;/script&gt; &lt;script src=&#34;https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js&#34;&gt;&lt;/script&gt; &lt;script src=&#34;https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js&#34;&gt;&lt;/script&gt; &lt;/head&gt; &lt;body&gt; &lt;a-scene embedded arjs=&#34;debugUIEnabled:false;&#34; renderer=&#34;gammaOutput: true;&#34; vr-mode-ui=&#34;enabled: false&#34;&gt; &lt;a-assets&gt; &lt;a-asset-item id=&#34;model&#34; src=&#34;persona_lain_blender.glb&#34;&gt;&lt;/a-asset-item&gt; &lt;/a-assets&gt; &lt;a-entity scale=&#34;100 100 100&#34; position=&#34;0 0.4 -3&#34; animation-mixer=&#34;clip:*&#34; gltf-model=&#34;#model&#34; visible=&#34;true&#34;&gt; &lt;/a-entity&gt; &lt;a-light type=&#34;ambient&#34; color=&#34;#ffffff&#34;&gt;&lt;/a-light&gt; &lt;a-light type=&#34;point&#34; intensity=&#34;2&#34; position=&#34;0 4 0&#34;&gt;&lt;/a-light&gt; &lt;/a-scene&gt; &lt;/body&gt; &lt;/html&gt; 本来、glTFやFBXをそのまま3DモデルとしてAR空間上に出現させる場合、A-Frame単体では実現できません。じゃあどうしているかというと、A-Frame extrasという、A-Frameの拡張機能を利用します。このアドオンを導入することで、glTFの実装が可能になります。"/>
@@ -91,8 +89,6 @@
 
 <p>ペルソナ玲音を召喚するARを、<a href="https://aframe.io/">A-Frame</a>を使って実装しました。今回はマーカーに依存しないマーカーレスなARで、任意の座標にペルソナ玲音の3Dモデルが「浮いている」ARを実装してみることにします。</p>
 
-<p><a href="https://sad-swanson-b3fbc1.netlify.app">実装結果はこちら</a>。Netlifyにデプロイしました。いやー、ファイルさえアップロードすればあとは勝手にやってくれるので楽ですね。</p>
-
 <h2 id="マーカーベースなarじゃないです">マーカーベースなARじゃないです</h2>
 
 <p>前述しましたが、今回は<strong>マーカーレスなAR</strong>です。</p>
@@ -105,7 +101,7 @@
 
 <p>ペルソナ玲音の3Dモデルは、<a href="https://ephtracy.github.io/">MagicaVoxel</a>と<a href="https://www.blender.org/">Blender</a>を利用し自作しました。モデルの形式ですが、今回は<a href="https://www.khronos.org/gltf/">glTF</a>を利用します。glTFだとモーションまで含んだ3Dモデルとして扱えるため、ただ3Dモデルが「そこにある」だけでなく「動く」ので、UXの観点から非常に有利です。</p>
 
-<p>3Dモデルの作り方は割愛しますが、簡単に紹介すると下記のような手順で動く3Dモデルを作成可能です。</p>
+<p>3Dモデルの作り方は割愛しますが、簡単に紹介すると下記のような手順で動く3Dモデルを作成可能です。というか、これ書くだけで1つ記事ができそうな内容ではあるのでちょっと割愛しないとテキスト量が大変なことに＿(　_´ω`)_ﾍﾟｼｮ</p>
 
 <ol>
 <li>MagicaVoxelでボクセルモデルを作成する。</li>
