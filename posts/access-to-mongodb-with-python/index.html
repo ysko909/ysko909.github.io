@@ -4,16 +4,17 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>PythonからMongoDB Atlasにアクセスする - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta property="og:title" content="PythonからMongoDB Atlasにアクセスする" />
-<meta property="og:description" content="はじめに PythonからMongoDBのクラウドサービスであるMongoDB Atlasにアクセスして、データを取得する方法についてメモしておきます。ここでは、将来的にはAPIサーバーとして運用することを想定して、Flaskをついでに導入しています。
-MongoDB Atlasについては日本語の記事があまり見受けられなかったので、同じような方法で接続しようとしています方の一助になれば幸いです。
+<meta property="og:description" content="はじめに PythonからMongoDBのクラウドサービスであるMongoDB Atlasにアクセスして、データを取得する方法についてメモしておきます。ここでは、将来的にはAPIサーバーとして運用することを想定してFlaskをついでに導入していますが、単純にアクセスするだけであればFlaskは必要ないので読み飛ばしてください。
+自分がざっくり調べた範囲ですが、MongoDB Atlasについては日本語の記事があまり見受けられなかったので、同じような方法で接続しようとしています方の一助になれば幸いです。
 前提 ここでは下記の処理が済んでいることを前提としています。
  MongoDB側にクラスターとデータベース、コレクションが既存である（もちろんなにかしらのデータが格納済み）。 Read権限あるいはReadとWrite権限を持ったユーザーを作成している。  プロジェクトのトップページから左メニュー内の「Database Access」を選択すると、ユーザーの一覧が表示されます。ここで「Add new database user」ボタンをクリックすると、新しいユーザーを追加できます。ここの権限設定で「Only read any database」を選択しておけば、プロジェクト内におけるどのデータベースでもRead権限でアクセスできるようになります。
-単純に接続確認をするだけなら初期ユーザーで行えばいいわけですが、初期ユーザーはAdmin権限なのでただ接続確認するだけなら権限としては不要でしょう。それに、今後恒常的に利用することを鑑みると、専用のユーザーを作成しておくほうが望ましいと思いました。
+単純に接続確認をするだけなら初期ユーザーで行えばいいわけですが、初期ユーザーはAdmin権限なのでただ接続確認するだけなら権限としては強力すぎるので不要でしょう。それに、今後恒常的に利用することを鑑みると、専用のユーザーを作成しておくほうが望ましいと思いました。
 手順  Pythonの環境を準備する。 pipで必要なライブラリをインストールする。 MongoDB Atlasで接続用のドライバーを発行する。 Pythonスクリプトを用意する。 接続確認を行う。  大雑把な手順は上記のとおりです。順に説明します。
 Pythonの環境を準備する Python自体の環境は、Dockerコンテナによる構築やローカルへのインストールなど好きな方法で準備します。接続用ドライバーはPythonのバージョンで内容が異なりますが、あまりに古いバージョンをあえて利用しなければならない場合を除けば、安定版を準備するべきと思います。どっちかって言うと注意が必要なのは、後述するMongoDBへの接続用のライブラリです。
 FROMpython:3.8-buster 今回、自分は上記のイメージでDockerコンテナを作成しています。まぁほかのプロジェクトのDockerfileを流用しただけなんですけど。
 pipで必要なライブラリをインストールする MongoDBへ接続するのに必要なライブラリはpymongoというもの。ところがこれをインストールする際には、ちょっとした記述が必要になります。
-python -m pip install pymongo[snappy,gssapi,srv,tls] あるいは pip3 install pymongo[srv] pip install pymongo[srv] 角カッコの中身なに？というところなのですが、この中で最低でもsrvは記述が必要です。pip install pymongoとだけ書くと、あとで実行したときに「dnspython must be installed error」というわかりにくいエラーになってしまうので注意が必要。なお、pipでこのように角カッコを記述するのは、インストール対象のライブラリについて環境を指定したい場合。つまり単純にpymongoとするだけではダメで、srv用環境としてのpymongoが必要なわけです。
+python -m pip install pymongo[snappy,gssapi,srv,tls] あるいは pip3 install pymongo[srv] pip install pymongo[srv] 角カッコの中身なに？というところなのですが、この中で最低でもsrvは記述が必要です。pip install pymongoとだけ書くと、あとで実行したときに「dnspython must be installed error」というわかりにくいエラーになってしまうので注意が必要。
+なお、pipでこのように角カッコを記述するのは、インストール対象のライブラリについて環境を指定したい場合。つまり単純にpymongoとするだけではダメで、srv用環境としてのpymongoが必要なわけです。
 とりあえず、最低限接続に必要なライブラリはこれだけなのですが、後々APIサーバーとして扱いたいので自分はFlaskもインストールしておきました。
 MongoDB Atlasで接続用のドライバーを発行する MongoDBには、いわゆるAPI Keyとは異なる接続用のドライバーが存在します。ドライバーは簡単に取得できます。
 まずはとりあえず、いつもどおりMongoDB Atlasにログインします。次に接続したいクラスタの「CONNECT」ボタンを押します。
@@ -24,16 +25,17 @@ MongoDB Atlasで接続用のドライバーを発行する MongoDBには、い�
 <meta property="og:url" content="https://ysko909.github.io/posts/access-to-mongodb-with-python/" /><meta property="article:published_time" content="2021-02-28T23:10:52&#43;09:00"/>
 <meta property="article:modified_time" content="2021-02-28T23:10:52&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="PythonからMongoDB Atlasにアクセスする"/>
-<meta name="twitter:description" content="はじめに PythonからMongoDBのクラウドサービスであるMongoDB Atlasにアクセスして、データを取得する方法についてメモしておきます。ここでは、将来的にはAPIサーバーとして運用することを想定して、Flaskをついでに導入しています。
-MongoDB Atlasについては日本語の記事があまり見受けられなかったので、同じような方法で接続しようとしています方の一助になれば幸いです。
+<meta name="twitter:description" content="はじめに PythonからMongoDBのクラウドサービスであるMongoDB Atlasにアクセスして、データを取得する方法についてメモしておきます。ここでは、将来的にはAPIサーバーとして運用することを想定してFlaskをついでに導入していますが、単純にアクセスするだけであればFlaskは必要ないので読み飛ばしてください。
+自分がざっくり調べた範囲ですが、MongoDB Atlasについては日本語の記事があまり見受けられなかったので、同じような方法で接続しようとしています方の一助になれば幸いです。
 前提 ここでは下記の処理が済んでいることを前提としています。
  MongoDB側にクラスターとデータベース、コレクションが既存である（もちろんなにかしらのデータが格納済み）。 Read権限あるいはReadとWrite権限を持ったユーザーを作成している。  プロジェクトのトップページから左メニュー内の「Database Access」を選択すると、ユーザーの一覧が表示されます。ここで「Add new database user」ボタンをクリックすると、新しいユーザーを追加できます。ここの権限設定で「Only read any database」を選択しておけば、プロジェクト内におけるどのデータベースでもRead権限でアクセスできるようになります。
-単純に接続確認をするだけなら初期ユーザーで行えばいいわけですが、初期ユーザーはAdmin権限なのでただ接続確認するだけなら権限としては不要でしょう。それに、今後恒常的に利用することを鑑みると、専用のユーザーを作成しておくほうが望ましいと思いました。
+単純に接続確認をするだけなら初期ユーザーで行えばいいわけですが、初期ユーザーはAdmin権限なのでただ接続確認するだけなら権限としては強力すぎるので不要でしょう。それに、今後恒常的に利用することを鑑みると、専用のユーザーを作成しておくほうが望ましいと思いました。
 手順  Pythonの環境を準備する。 pipで必要なライブラリをインストールする。 MongoDB Atlasで接続用のドライバーを発行する。 Pythonスクリプトを用意する。 接続確認を行う。  大雑把な手順は上記のとおりです。順に説明します。
 Pythonの環境を準備する Python自体の環境は、Dockerコンテナによる構築やローカルへのインストールなど好きな方法で準備します。接続用ドライバーはPythonのバージョンで内容が異なりますが、あまりに古いバージョンをあえて利用しなければならない場合を除けば、安定版を準備するべきと思います。どっちかって言うと注意が必要なのは、後述するMongoDBへの接続用のライブラリです。
 FROMpython:3.8-buster 今回、自分は上記のイメージでDockerコンテナを作成しています。まぁほかのプロジェクトのDockerfileを流用しただけなんですけど。
 pipで必要なライブラリをインストールする MongoDBへ接続するのに必要なライブラリはpymongoというもの。ところがこれをインストールする際には、ちょっとした記述が必要になります。
-python -m pip install pymongo[snappy,gssapi,srv,tls] あるいは pip3 install pymongo[srv] pip install pymongo[srv] 角カッコの中身なに？というところなのですが、この中で最低でもsrvは記述が必要です。pip install pymongoとだけ書くと、あとで実行したときに「dnspython must be installed error」というわかりにくいエラーになってしまうので注意が必要。なお、pipでこのように角カッコを記述するのは、インストール対象のライブラリについて環境を指定したい場合。つまり単純にpymongoとするだけではダメで、srv用環境としてのpymongoが必要なわけです。
+python -m pip install pymongo[snappy,gssapi,srv,tls] あるいは pip3 install pymongo[srv] pip install pymongo[srv] 角カッコの中身なに？というところなのですが、この中で最低でもsrvは記述が必要です。pip install pymongoとだけ書くと、あとで実行したときに「dnspython must be installed error」というわかりにくいエラーになってしまうので注意が必要。
+なお、pipでこのように角カッコを記述するのは、インストール対象のライブラリについて環境を指定したい場合。つまり単純にpymongoとするだけではダメで、srv用環境としてのpymongoが必要なわけです。
 とりあえず、最低限接続に必要なライブラリはこれだけなのですが、後々APIサーバーとして扱いたいので自分はFlaskもインストールしておきました。
 MongoDB Atlasで接続用のドライバーを発行する MongoDBには、いわゆるAPI Keyとは異なる接続用のドライバーが存在します。ドライバーは簡単に取得できます。
 まずはとりあえず、いつもどおりMongoDB Atlasにログインします。次に接続したいクラスタの「CONNECT」ボタンを押します。
@@ -101,9 +103,9 @@ MongoDB Atlasで接続用のドライバーを発行する MongoDBには、い�
 
 <h2 id="はじめに">はじめに</h2>
 
-<p>PythonからMongoDBのクラウドサービスである<a href="https://www.mongodb.com/cloud/atlas">MongoDB Atlas</a>にアクセスして、データを取得する方法についてメモしておきます。ここでは、将来的にはAPIサーバーとして運用することを想定して、Flaskをついでに導入しています。</p>
+<p>PythonからMongoDBのクラウドサービスである<a href="https://www.mongodb.com/cloud/atlas">MongoDB Atlas</a>にアクセスして、データを取得する方法についてメモしておきます。ここでは、将来的にはAPIサーバーとして運用することを想定してFlaskをついでに導入していますが、単純にアクセスするだけであればFlaskは必要ないので読み飛ばしてください。</p>
 
-<p>MongoDB Atlasについては日本語の記事があまり見受けられなかったので、同じような方法で接続しようとしています方の一助になれば幸いです。</p>
+<p>自分がざっくり調べた範囲ですが、MongoDB Atlasについては日本語の記事があまり見受けられなかったので、同じような方法で接続しようとしています方の一助になれば幸いです。</p>
 
 <h2 id="前提">前提</h2>
 
@@ -116,7 +118,7 @@ MongoDB Atlasで接続用のドライバーを発行する MongoDBには、い�
 
 <p>プロジェクトのトップページから左メニュー内の「Database Access」を選択すると、ユーザーの一覧が表示されます。ここで「Add new database user」ボタンをクリックすると、新しいユーザーを追加できます。ここの権限設定で「Only read any database」を選択しておけば、プロジェクト内におけるどのデータベースでもRead権限でアクセスできるようになります。</p>
 
-<p>単純に接続確認をするだけなら初期ユーザーで行えばいいわけですが、初期ユーザーはAdmin権限なのでただ接続確認するだけなら権限としては不要でしょう。それに、今後恒常的に利用することを鑑みると、専用のユーザーを作成しておくほうが望ましいと思いました。</p>
+<p>単純に接続確認をするだけなら初期ユーザーで行えばいいわけですが、初期ユーザーはAdmin権限なのでただ接続確認するだけなら権限としては強力すぎるので不要でしょう。それに、今後恒常的に利用することを鑑みると、専用のユーザーを作成しておくほうが望ましいと思いました。</p>
 
 <h2 id="手順">手順</h2>
 
@@ -143,7 +145,9 @@ MongoDB Atlasで接続用のドライバーを発行する MongoDBには、い�
 あるいは
 pip3 install pymongo[srv]
 pip install pymongo[srv]</code></pre></div>
-<p>角カッコの中身なに？というところなのですが、この中で最低でも<code>srv</code>は記述が必要です。<code>pip install pymongo</code>とだけ書くと、あとで実行したときに「dnspython must be installed error」という<a href="https://stackoverflow.com/questions/52930341/pymongo-mongodbsrv-dnspython-must-be-installed-error">わかりにくいエラーになってしまう</a>ので注意が必要。なお、<code>pip</code>でこのように角カッコを記述するのは、<strong>インストール対象のライブラリについて環境を指定したい</strong>場合。つまり単純に<code>pymongo</code>とするだけではダメで、<code>srv</code>用環境としての<code>pymongo</code>が必要なわけです。</p>
+<p>角カッコの中身なに？というところなのですが、この中で最低でも<code>srv</code>は記述が必要です。<code>pip install pymongo</code>とだけ書くと、あとで実行したときに「dnspython must be installed error」という<a href="https://stackoverflow.com/questions/52930341/pymongo-mongodbsrv-dnspython-must-be-installed-error">わかりにくいエラーになってしまう</a>ので注意が必要。</p>
+
+<p>なお、<code>pip</code>でこのように角カッコを記述するのは、<strong>インストール対象のライブラリについて環境を指定したい</strong>場合。つまり単純に<code>pymongo</code>とするだけではダメで、<code>srv</code>用環境としての<code>pymongo</code>が必要なわけです。</p>
 
 <p>とりあえず、最低限接続に必要なライブラリはこれだけなのですが、後々APIサーバーとして扱いたいので自分はFlaskもインストールしておきました。</p>
 
