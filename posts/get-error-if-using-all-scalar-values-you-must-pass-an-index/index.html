@@ -94,7 +94,7 @@ ValueError: If using all scalar values, you must <span style="color:#00f">pass</
 
 <h2 id="対処法">対処法</h2>
 
-<p>「スカラー値を使う場合、インデックスを渡さないとダメだよー」というエラーなので、解決策としては<strong>スカラー値を使わない</strong>か、<strong>インデックスを渡してやればいい</strong>ということになります。</p>
+<p>「スカラー値を使う場合、インデックスを渡さないとダメだよー」というエラーなので、解決策としては<strong>スカラー値を使わない</strong>か、<strong>インデックスを渡す</strong>のどちらかということになります。</p>
 
 <h3 id="スカラー値を使わない">スカラー値を使わない</h3>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; hoge_good = {<span style="color:#a31515">&#39;foo&#39;</span>: [1], <span style="color:#a31515">&#39;bar&#39;</span>: <span style="color:#a31515">&#39;aaa&#39;</span>, <span style="color:#a31515">&#39;baz&#39;</span>: 3}
@@ -106,7 +106,9 @@ ValueError: If using all scalar values, you must <span style="color:#00f">pass</
 &gt;&gt;&gt; df
    foo  bar  baz
 0    1  aaa    3</code></pre></div>
-<p>まず、元データの辞書内でスカラー値を使わないパターンです。1つ目の値を<code>1</code>から<code>[1]</code>に変更しています。つまり、スカラー値を使わないためにリストを用いているわけです。これを行うことで、何事もなかったかのように<strong>エラーが消えます</strong>。ただ、3つ目の要素の<code>3</code>もスカラー値なはずですが、なぜかこちらは何もしなくてもいいんですよね。<strong>ｺﾚｶﾞﾜｶﾗﾅｲ</strong>。いやホントに謎。ただ、とにかくなぜかこれで動作するんですよね。</p>
+<p>まず、元データの辞書内でスカラー値を使わないパターンです。1つ目の値を<code>1</code>から<code>[1]</code>に変更しています。つまり、スカラー値を使わないためにリストを用いているわけです。これを行うことで、何事もなかったかのように<strong>エラーが消えます</strong>。なんでだよ。</p>
+
+<p>ただ、3つ目の要素の<code>3</code>もスカラー値なはずですが、なぜかこちらは何もしなくてもいいんですよね。<strong>ｺﾚｶﾞﾜｶﾗﾅｲ</strong>。いやホントに謎。ただ、とにかくなぜかこれで動作するんですよね。</p>
 
 <h2 id="インデックスを指定する">インデックスを指定する</h2>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; df = pd.DataFrame(hoge, index=[0])
