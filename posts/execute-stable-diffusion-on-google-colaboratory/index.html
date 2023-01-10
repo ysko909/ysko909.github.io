@@ -5,8 +5,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Stable Diffusionを使ってGoogle Colaboratory上でimg2imgして画像を生成する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta property="og:title" content="Stable Diffusionを使ってGoogle Colaboratory上でimg2imgして画像を生成する" />
 <meta property="og:description" content="概要 Stable Diffusion（以下、SD）とは、Midjourneyのように「テキストから画像を生成する」AIです。Midjourneyと異なるのはやっぱりなんといっても、そのAIモデルがまるっと公開されていることでしょうか。そのため、現状のモデルをそのまま使うことも可能ですし、オリジナルのモデルを作ることも可能です。そして、そのモデルを組み込んだwebアプリなんかを作ることも可能なわけです。
-「世界変革の前夜は思ったより静か」を読んだのですが、まぁすごい熱量です。一エンジニアとして、この熱量に当てられたら行動してみたくなるってもんです。そうでしょう！？（迫真）
-そんなわけで、今回はこれをGoogle Colaboratory（以下、Colab）で動作させて、とくにimg2img（元画像と文章から画像を生成する）をやってみたいのですよ。というわけで行ってみましょう。やらいでか。
+そんなわけで、今回はこれをGoogle Colaboratory（以下、Colab）で動作させて、とくにimg2img（元画像と文章から画像を生成する）をやってみたいのですよ。というわけで行ってみましょう。
+注意 今回SDを利用して画像を生成するわけですが、生成物は個人利用の範囲で扱うことを想定しています。生成した結果を見て「AIすげーなー」とか言って楽しむ、それだけです。Colab使って商用サービスなんか作らないだろうけど、生成した結果をどっかで売りに出すとかそういうことは想定していません。また、当ページの処理はすべて自己責任で実施してください。この処理を実行したことで発生したトラブルなどについて、筆者は一切責任を負いません。
 目的 今回の最終的なゴールは、「SDをColab上で動作させて、img2imgを利用して画像生成を実行してみる」です。
 「img2img」って何よ、って話ですがこれは「入力された画像とテキストから画像を生成すること」を指します。SDやMidjourneyが有名になったのは「テキストから画像を生成すること」の「text2img」の方ですが、それに入力としてガイドのための画像を追加したのがimg2imgと言えます。テキストだけで生成するのではなく、ラフ画をガイドとして渡すことで生成の精度を向上させようというわけです。人間同士の打ち合わせでは、簡単なスケッチを書いてアイデアの集約やすり合わせを行ったりしますが、まさにそれです。そのすり合わせを人間とAIでやろうというわけです。
 もう1つの理由としては、テキストから画像生成するのも楽しいけど、入力の画像とテキストでどんな出力かましてくれるのよ？っていうところに興味があります。テキストだけよりは精度良いんでしょ？良いよね？良いと言ってくれ。
@@ -24,15 +24,14 @@ Hugging Faceアカウント登録 Stable Diffusionを利用するにはHugging F
 今度はユーザー名などを入力します。必要に応じて、GitHubやTwitterのアカウントなどを登録できます。最後に「I have read and agree with the Terms of Service and the Code of Conduct」の部分をチェックして「Create Account」をクリックします。ちなみに、ユーザー名は早いもの勝ちのようです。自分が最初取ろうとしたユーザー名は「すでにあるぜ！」と言われて取得できませんでした。
 なお、この時点でさっき入力したメールアドレス宛に認証メールが来ているはずです。到着していたら記載されているURLをクリックして、メールアドレスを認証します。
 これでアカウント登録が完了しました。
-Hugging Faceのトークン発行 この時点でHugging Faceにログインできているはずなので、Settings＞Access Tokenにアクセスします。Settingsは、画面右上の円形アイコンをクリックすると表示されるメニューの中にいます。
-上記の「Access Token」をクリックします。" />
+Hugging Faceのトークン発行 この時点でHugging Faceにログインできているはずなので、Settings＞Access Tokenにアクセスします。Settingsは、画面右上の円形アイコンをクリックすると表示されるメニューの中にいます。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ysko909.github.io/posts/execute-stable-diffusion-on-google-colaboratory/" /><meta property="article:published_time" content="2022-09-05T22:09:55&#43;09:00"/>
 <meta property="article:modified_time" content="2022-09-05T22:09:55&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Stable Diffusionを使ってGoogle Colaboratory上でimg2imgして画像を生成する"/>
 <meta name="twitter:description" content="概要 Stable Diffusion（以下、SD）とは、Midjourneyのように「テキストから画像を生成する」AIです。Midjourneyと異なるのはやっぱりなんといっても、そのAIモデルがまるっと公開されていることでしょうか。そのため、現状のモデルをそのまま使うことも可能ですし、オリジナルのモデルを作ることも可能です。そして、そのモデルを組み込んだwebアプリなんかを作ることも可能なわけです。
-「世界変革の前夜は思ったより静か」を読んだのですが、まぁすごい熱量です。一エンジニアとして、この熱量に当てられたら行動してみたくなるってもんです。そうでしょう！？（迫真）
-そんなわけで、今回はこれをGoogle Colaboratory（以下、Colab）で動作させて、とくにimg2img（元画像と文章から画像を生成する）をやってみたいのですよ。というわけで行ってみましょう。やらいでか。
+そんなわけで、今回はこれをGoogle Colaboratory（以下、Colab）で動作させて、とくにimg2img（元画像と文章から画像を生成する）をやってみたいのですよ。というわけで行ってみましょう。
+注意 今回SDを利用して画像を生成するわけですが、生成物は個人利用の範囲で扱うことを想定しています。生成した結果を見て「AIすげーなー」とか言って楽しむ、それだけです。Colab使って商用サービスなんか作らないだろうけど、生成した結果をどっかで売りに出すとかそういうことは想定していません。また、当ページの処理はすべて自己責任で実施してください。この処理を実行したことで発生したトラブルなどについて、筆者は一切責任を負いません。
 目的 今回の最終的なゴールは、「SDをColab上で動作させて、img2imgを利用して画像生成を実行してみる」です。
 「img2img」って何よ、って話ですがこれは「入力された画像とテキストから画像を生成すること」を指します。SDやMidjourneyが有名になったのは「テキストから画像を生成すること」の「text2img」の方ですが、それに入力としてガイドのための画像を追加したのがimg2imgと言えます。テキストだけで生成するのではなく、ラフ画をガイドとして渡すことで生成の精度を向上させようというわけです。人間同士の打ち合わせでは、簡単なスケッチを書いてアイデアの集約やすり合わせを行ったりしますが、まさにそれです。そのすり合わせを人間とAIでやろうというわけです。
 もう1つの理由としては、テキストから画像生成するのも楽しいけど、入力の画像とテキストでどんな出力かましてくれるのよ？っていうところに興味があります。テキストだけよりは精度良いんでしょ？良いよね？良いと言ってくれ。
@@ -50,8 +49,7 @@ Hugging Faceアカウント登録 Stable Diffusionを利用するにはHugging F
 今度はユーザー名などを入力します。必要に応じて、GitHubやTwitterのアカウントなどを登録できます。最後に「I have read and agree with the Terms of Service and the Code of Conduct」の部分をチェックして「Create Account」をクリックします。ちなみに、ユーザー名は早いもの勝ちのようです。自分が最初取ろうとしたユーザー名は「すでにあるぜ！」と言われて取得できませんでした。
 なお、この時点でさっき入力したメールアドレス宛に認証メールが来ているはずです。到着していたら記載されているURLをクリックして、メールアドレスを認証します。
 これでアカウント登録が完了しました。
-Hugging Faceのトークン発行 この時点でHugging Faceにログインできているはずなので、Settings＞Access Tokenにアクセスします。Settingsは、画面右上の円形アイコンをクリックすると表示されるメニューの中にいます。
-上記の「Access Token」をクリックします。"/>
+Hugging Faceのトークン発行 この時点でHugging Faceにログインできているはずなので、Settings＞Access Tokenにアクセスします。Settingsは、画面右上の円形アイコンをクリックすると表示されるメニューの中にいます。"/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
 
@@ -115,9 +113,11 @@ Hugging Faceのトークン発行 この時点でHugging Faceにログインで�
 
 <p><a href="https://huggingface.co/spaces/stabilityai/stable-diffusion">Stable Diffusion</a>（以下、SD）とは、<a href="https://www.midjourney.com/home/">Midjourney</a>のように「テキストから画像を生成する」AIです。Midjourneyと異なるのはやっぱりなんといっても、そのAIモデルが<strong>まるっと公開されている</strong>ことでしょうか。そのため、現状のモデルをそのまま使うことも可能ですし、オリジナルのモデルを作ることも可能です。そして、そのモデルを組み込んだwebアプリなんかを作ることも可能なわけです。</p>
 
-<p>「<a href="https://note.com/fladdict/n/n13c1413c40de">世界変革の前夜は思ったより静か</a>」を読んだのですが、まぁすごい熱量です。一エンジニアとして、この熱量に当てられたら行動してみたくなるってもんです。そうでしょう！？（迫真）</p>
+<p>そんなわけで、今回はこれをGoogle Colaboratory（以下、Colab）で動作させて、とくにimg2img（元画像と文章から画像を生成する）をやってみたいのですよ。というわけで行ってみましょう。</p>
 
-<p>そんなわけで、今回はこれをGoogle Colaboratory（以下、Colab）で動作させて、とくにimg2img（元画像と文章から画像を生成する）をやってみたいのですよ。というわけで行ってみましょう。やらいでか。</p>
+<h2 id="注意">注意</h2>
+
+<p>今回SDを利用して画像を生成するわけですが、生成物は<strong>個人利用の範囲で扱う</strong>ことを想定しています。生成した結果を見て「AIすげーなー」とか言って楽しむ、それだけです。Colab使って商用サービスなんか作らないだろうけど、生成した結果をどっかで売りに出すとかそういうことは想定していません。また、当ページの処理は<strong>すべて自己責任で実施してください</strong>。この処理を実行したことで発生したトラブルなどについて、筆者は一切責任を負いません。</p>
 
 <h2 id="目的">目的</h2>
 
