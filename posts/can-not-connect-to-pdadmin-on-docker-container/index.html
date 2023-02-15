@@ -199,22 +199,11 @@ drwxr-xr-x    2 root     root          4096 Oct  3 10:45 pgadmin
 drwx------    1 postfix  root          4096 Oct  3 10:46 postfix
 drwx--x--x    3 root     root          4096 Sep 20 09:26 sudo
 drwxr-xr-x    2 root     root          4096 Aug  9 08:47 udhcpd</code></pre></div>
-<p>該当フォルダの権限を確認してみます。<code>drwxr-xr-x</code>になっていますが、「これじゃ足りねぇよ！」ということらしいです。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">chmod -R 777 /var/lib/pgadmin</code></pre></div>
-<p>じゃあ<code>W</code>をつけりゃいいんでしょ？ということで、上記のコマンドを実行して、フォルダの権限を変更します。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console"># ls -al
-total 40
-drwxr-xr-x    1 root     root          4096 Sep 20 09:26 .
-drwxr-xr-x    1 root     root          4096 Sep 20 09:26 ..
-drwxr-xr-x    2 root     root          4096 Aug  9 08:47 apk
-drwxr-xr-x    2 root     root          4096 Aug  9 08:47 misc
-drwxrwxrwx    5 root     root          4096 Oct  4 02:07 pgadmin
-drwx------    1 postfix  root          4096 Oct  3 10:46 postfix
-drwx--x--x    3 root     root          4096 Sep 20 09:26 sudo
-drwxr-xr-x    2 root     root          4096 Aug  9 08:47 udhcpd</code></pre></div>
-<p>これでフォルダの権限が変更できました。</p>
+<p>該当フォルダの権限を確認してみます。<code>drwxr-xr-x</code>になっていますが、「これじゃ足りねぇよ！」ということらしいです。うーん？</p>
 
-<p>権限を変更後、ブラウザからpgAdminにアクセスすると・・・無事に表示されました！良かった良かった。</p>
+<p>調べてみると<a href="https://github.com/laradock/laradock/issues/2552">似たような内容でissuesが上がってました</a>。ここで言及されていたコマンドを実行してみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">chmod -R 777 ~/.laradock/data/pgadmin</code></pre></div>
+<p>上記のコマンドを実行して、フォルダの権限を変更します。権限を変更後、ブラウザからpgAdminにアクセスすると・・・無事に表示されました！良かった良かった。</p>
 
 <h2 id="まとめ">まとめ</h2>
 
