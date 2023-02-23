@@ -7,10 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sat, 15 Oct 2022 22:01:10 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 23 Feb 2023 21:49:40 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>オプショナルチェーン演算子の基本</title>
+      <link>https://ysko909.github.io/posts/fundamentals-of-optional-chaining/</link>
+      <pubDate>Thu, 23 Feb 2023 21:49:40 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/fundamentals-of-optional-chaining/</guid>
+      <description>概要 オプショナルチェーン演算子ってのは、JavaScript（以下、JS）にありがちな「一見すると何なのかよくわからない」かつ「ググラビリティが低い」系の記述方法です。個人的に見た目が似たようなタイプだと思っている三項演算子とかだと、まだなんとなーく解読できそうな見た目だったりしますが、この演算子は初見だと何やってるのかいまいちわかりにくい演算子です。なにせ、hoge?.fooみたいな見た目なので。
+ただ、オブジェクトにプロパティをいろいろ付与しがちなJSだと、この演算子の使いでが結構あるので覚えておいて損はないです。というか、得しかないかも。
+そんなコイツは一体なんなのかと言うと、undefinedやnullのプロパティに誤アクセスした際、発生するエラーを回避しながら可動性を確保できる書き方です。つまり、JSでありがちな「存在しないプロパティに誤アクセスしちゃってエラーが起きる」問題を回避できるわけです。
+具体的な使い方 プロパティに対して使う基本的な使い方 オプショナルチェーン演算子は、前述の通りhoge?.fooのように書きます。これで何をしているのかというとhogeオブジェクトのfooプロパティにアクセスしています。「ん？単純にアクセスするなら、そんな演算子使わなくてもhoge.fugaでいいじゃないか」と思うかもしれません。
+const hoge = { foo: 1, bar: &amp;#39;test&amp;#39; }; const fuga = hoge.foo;  つまり上記のように、hoge.fooと記述することでhogeオブジェクトのfooプロパティにアクセスするわけです。もちろんですが、上記のコードで実際にhoge.fooに問題なくアクセスできるため、エラーは発生せず処理が正常終了します。では、ここでhogeオブジェクトに存在しないプロパティを指定した場合は、どういう動作になるか考えてみます。
+const hoge = { foo: 1, bar: &amp;#39;test&amp;#39; }; const piyo = hoge.baz;  hoge.bazと書いてみました。hogeオブジェクトにはbazというプロパティが存在しないため、この場合だとundefinedが返ってきます。JSでは、undefinedやnullのプロパティにアクセスするとエラーが発生します。
+const hoge = { foo: 1, bar: &amp;#39;test&amp;#39; }; const fuga = hoge.foo; // これはOK const piyo = hoge.baz; // これはNG  alert(piyo); // TypeError: Cannot read properties of undefined  上記ではundefinedのプロパティをアクセスしてエラーが発生していますが、nullのプロパティでも同様にエラーが発生します。コーディングミスなら修正すればいいわけですが、何らかの理由でプロパティの存在が保証されていなくても、場合によっては処理を進める必要があるかもしれません。</description>
+    </item>
     
     <item>
       <title>gradioでお手軽にnotebookをwebアプリ化する</title>

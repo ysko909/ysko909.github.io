@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>オプショナルチェーン演算子の基本 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="オプショナルチェーン演算子の基本" />
+<meta property="og:description" content="概要 オプショナルチェーン演算子ってのは、JavaScript（以下、JS）にありがちな「一見すると何なのかよくわからない」かつ「ググラビリティが低い」系の記述方法です。個人的に見た目が似たようなタイプだと思っている三項演算子とかだと、まだなんとなーく解読できそうな見た目だったりしますが、この演算子は初見だと何やってるのかいまいちわかりにくい演算子です。なにせ、hoge?.fooみたいな見た目なので。
+ただ、オブジェクトにプロパティをいろいろ付与しがちなJSだと、この演算子の使いでが結構あるので覚えておいて損はないです。というか、得しかないかも。
+そんなコイツは一体なんなのかと言うと、undefinedやnullのプロパティに誤アクセスした際、発生するエラーを回避しながら可動性を確保できる書き方です。つまり、JSでありがちな「存在しないプロパティに誤アクセスしちゃってエラーが起きる」問題を回避できるわけです。
+具体的な使い方 プロパティに対して使う基本的な使い方 オプショナルチェーン演算子は、前述の通りhoge?.fooのように書きます。これで何をしているのかというとhogeオブジェクトのfooプロパティにアクセスしています。「ん？単純にアクセスするなら、そんな演算子使わなくてもhoge.fugaでいいじゃないか」と思うかもしれません。
+const hoge = { foo: 1, bar: &#39;test&#39; }; const fuga = hoge.foo;  つまり上記のように、hoge.fooと記述することでhogeオブジェクトのfooプロパティにアクセスするわけです。もちろんですが、上記のコードで実際にhoge.fooに問題なくアクセスできるため、エラーは発生せず処理が正常終了します。では、ここでhogeオブジェクトに存在しないプロパティを指定した場合は、どういう動作になるか考えてみます。
+const hoge = { foo: 1, bar: &#39;test&#39; }; const piyo = hoge.baz;  hoge.bazと書いてみました。hogeオブジェクトにはbazというプロパティが存在しないため、この場合だとundefinedが返ってきます。JSでは、undefinedやnullのプロパティにアクセスするとエラーが発生します。
+const hoge = { foo: 1, bar: &#39;test&#39; }; const fuga = hoge.foo; // これはOK const piyo = hoge.baz; // これはNG  alert(piyo); // TypeError: Cannot read properties of undefined  上記ではundefinedのプロパティをアクセスしてエラーが発生していますが、nullのプロパティでも同様にエラーが発生します。コーディングミスなら修正すればいいわけですが、何らかの理由でプロパティの存在が保証されていなくても、場合によっては処理を進める必要があるかもしれません。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-optional-chaining/" /><meta property="article:published_time" content="2023-02-23T21:49:40&#43;09:00"/>
+<meta property="article:modified_time" content="2023-02-23T21:49:40&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="オプショナルチェーン演算子の基本"/>
+<meta name="twitter:description" content="概要 オプショナルチェーン演算子ってのは、JavaScript（以下、JS）にありがちな「一見すると何なのかよくわからない」かつ「ググラビリティが低い」系の記述方法です。個人的に見た目が似たようなタイプだと思っている三項演算子とかだと、まだなんとなーく解読できそうな見た目だったりしますが、この演算子は初見だと何やってるのかいまいちわかりにくい演算子です。なにせ、hoge?.fooみたいな見た目なので。
+ただ、オブジェクトにプロパティをいろいろ付与しがちなJSだと、この演算子の使いでが結構あるので覚えておいて損はないです。というか、得しかないかも。
+そんなコイツは一体なんなのかと言うと、undefinedやnullのプロパティに誤アクセスした際、発生するエラーを回避しながら可動性を確保できる書き方です。つまり、JSでありがちな「存在しないプロパティに誤アクセスしちゃってエラーが起きる」問題を回避できるわけです。
+具体的な使い方 プロパティに対して使う基本的な使い方 オプショナルチェーン演算子は、前述の通りhoge?.fooのように書きます。これで何をしているのかというとhogeオブジェクトのfooプロパティにアクセスしています。「ん？単純にアクセスするなら、そんな演算子使わなくてもhoge.fugaでいいじゃないか」と思うかもしれません。
+const hoge = { foo: 1, bar: &#39;test&#39; }; const fuga = hoge.foo;  つまり上記のように、hoge.fooと記述することでhogeオブジェクトのfooプロパティにアクセスするわけです。もちろんですが、上記のコードで実際にhoge.fooに問題なくアクセスできるため、エラーは発生せず処理が正常終了します。では、ここでhogeオブジェクトに存在しないプロパティを指定した場合は、どういう動作になるか考えてみます。
+const hoge = { foo: 1, bar: &#39;test&#39; }; const piyo = hoge.baz;  hoge.bazと書いてみました。hogeオブジェクトにはbazというプロパティが存在しないため、この場合だとundefinedが返ってきます。JSでは、undefinedやnullのプロパティにアクセスするとエラーが発生します。
+const hoge = { foo: 1, bar: &#39;test&#39; }; const fuga = hoge.foo; // これはOK const piyo = hoge.baz; // これはNG  alert(piyo); // TypeError: Cannot read properties of undefined  上記ではundefinedのプロパティをアクセスしてエラーが発生していますが、nullのプロパティでも同様にエラーが発生します。コーディングミスなら修正すればいいわけですが、何らかの理由でプロパティの存在が保証されていなくても、場合によっては処理を進める必要があるかもしれません。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">オプショナルチェーン演算子の基本</h1>
+			<div class="meta">Posted at &mdash; Feb 23, 2023</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>オプショナルチェーン演算子ってのは、JavaScript（以下、JS）にありがちな「一見すると何なのかよくわからない」かつ「ググラビリティが低い」系の記述方法です。個人的に見た目が似たようなタイプだと思っている<a href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Operators/Conditional_Operator">三項演算子</a>とかだと、まだなんとなーく解読できそうな見た目だったりしますが、この演算子は初見だと何やってるのかいまいちわかりにくい演算子です。なにせ、<code>hoge?.foo</code>みたいな見た目なので。</p>
+
+<p>ただ、オブジェクトにプロパティをいろいろ付与しがちなJSだと、この演算子の使いでが結構あるので覚えておいて損はないです。というか、得しかないかも。</p>
+
+<p>そんなコイツは一体なんなのかと言うと、<code>undefined</code>や<code>null</code>のプロパティに誤アクセスした際、発生するエラーを回避しながら可動性を確保できる書き方です。つまり、JSでありがちな「存在しないプロパティに誤アクセスしちゃってエラーが起きる」問題を回避できるわけです。</p>
+
+<h2 id="具体的な使い方">具体的な使い方</h2>
+
+<h3 id="プロパティに対して使う基本的な使い方">プロパティに対して使う基本的な使い方</h3>
+
+<p>オプショナルチェーン演算子は、前述の通り<code>hoge?.foo</code>のように書きます。これで何をしているのかというと<code>hoge</code>オブジェクトの<code>foo</code>プロパティに<strong>アクセスしています</strong>。「ん？単純にアクセスするなら、そんな演算子使わなくても<code>hoge.fuga</code>でいいじゃないか」と思うかもしれません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">const</span> hoge = {
+    foo: 1,
+    bar: <span style="color:#a31515">&#39;test&#39;</span>
+};
+
+<span style="color:#00f">const</span> fuga = hoge.foo;
+</code></pre></div>
+<p>つまり上記のように、<code>hoge.foo</code>と記述することで<code>hoge</code>オブジェクトの<code>foo</code>プロパティにアクセスするわけです。もちろんですが、上記のコードで実際に<code>hoge.foo</code>に問題なくアクセスできるため、エラーは発生せず処理が正常終了します。では、ここで<code>hoge</code>オブジェクトに<strong>存在しないプロパティ</strong>を指定した場合は、どういう動作になるか考えてみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">const</span> hoge = {
+    foo: 1,
+    bar: <span style="color:#a31515">&#39;test&#39;</span>
+};
+
+<span style="color:#00f">const</span> piyo = hoge.baz;
+</code></pre></div>
+<p><code>hoge.baz</code>と書いてみました。<code>hoge</code>オブジェクトには<code>baz</code>というプロパティが存在しないため、この場合だと<code>undefined</code>が返ってきます。JSでは、<code>undefined</code>や<code>null</code>のプロパティにアクセスするとエラーが発生します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">const</span> hoge = {
+    foo: 1,
+    bar: <span style="color:#a31515">&#39;test&#39;</span>
+};
+
+<span style="color:#00f">const</span> fuga = hoge.foo; <span style="color:#008000">// これはOK
+</span><span style="color:#008000"></span><span style="color:#00f">const</span> piyo = hoge.baz; <span style="color:#008000">// これはNG
+</span><span style="color:#008000"></span>
+alert(piyo); <span style="color:#008000">// TypeError: Cannot read properties of undefined
+</span><span style="color:#008000"></span></code></pre></div>
+<p>上記では<code>undefined</code>のプロパティをアクセスしてエラーが発生していますが、<code>null</code>のプロパティでも同様にエラーが発生します。コーディングミスなら修正すればいいわけですが、何らかの理由でプロパティの存在が保証されていなくても、場合によっては処理を進める必要があるかもしれません。</p>
+
+<p>また、これとは別なケースとして、「アクセスしたプロパティが存在しないことは<strong>普段に限り正常である</strong>」という場合、エラー発生を避けつつ<code>undefined</code>や<code>null</code>を代入したいというニーズも考えられるかもしれません。このようなニーズを実装するには、<code>undefined</code>や<code>null</code>ではないかチェックする必要があります。ざっくり書いてみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">const</span> hoge = {
+    foo: 1,
+    bar: <span style="color:#a31515">&#39;test&#39;</span>
+};
+
+<span style="color:#00f">const</span> fuga = hoge.foo === <span style="color:#00f">undefined</span> || hoge.foo === <span style="color:#00f">null</span> ? <span style="color:#00f">undefined</span> : hoge.foo;
+</code></pre></div>
+<p>たとえば上記のようにチェックし代入することになりますが、お世辞にも見やすいコードとは言えないでしょう。チェックする対象が複数ある場合は、入れ子構造になったりして余計に可読性が下がります。</p>
+
+<p>つまり、チェックすればエラーは発生しなくなりますが、チェックのコードを記述することで可読性が損なわれてしまいます。そこで、「チェックはしたいが可読性は犠牲にしなくない」というニーズが出てくるわけです。このニーズを満たすために、オプショナルチェーン演算子を使います。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#00f">const</span> hoge = {
+    foo: 1,
+    bar: <span style="color:#a31515">&#39;test&#39;</span>
+};
+
+<span style="color:#00f">const</span> fuga = hoge?.baz; <span style="color:#008000">// ここ
+</span><span style="color:#008000"></span></code></pre></div>
+<p>繰り返しになりますが、オプショナルチェーン演算子は<code>オブジェクト名?.プロパティ名</code>の形で記述します。この形で記述することで、「プロパティにアクセスする」ことと「アクセスしたプロパティが<code>null</code>などの場合に発生するエラーを回避する」ことという2つを両立できます。<code>?.</code>に先行する変数やオブジェクトが<code>undefined</code>などである場合、その先のプロパティは評価されることがないため、エラーは発生しません。このように、オブジェクトが<code>undefined</code>であるか否かを明示的にチェックすることなく、プロパティに対し簡単にアクセスできるようになります。</p>
+
+<h3 id="関数に対して使う">関数に対して使う</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> func = (val: <span style="color:#2b91af">number</span>) :<span style="color:#2b91af">number</span>=&gt; {
+    <span style="color:#00f">return</span> val * 2;
+};
+
+<span style="color:#00f">const</span> funcNull = () =&gt; <span style="color:#00f">undefined</span>;
+
+<span style="color:#00f">const</span> result = func?.(1);
+
+<span style="color:#00f">const</span> resultNull = funcNull?.();
+
+console.log(result);
+console.log(resultNull);</code></pre></div>
+<p>オプショナルチェーンは関数に対しても利用可能です。ある関数について<code>undefined</code>が返ってくる可能性を含んでいる場合、関数に対しオプショナルチェーン演算子を付与することで明示的に戻り値をチェックする必要がなくなります。なお、関数に対しオプショナルチェーンを記述する場合は、引数カッコの前に書きます。</p>
+
+<h3 id="メソッドに対して使う">メソッドに対して使う</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> obj = {
+  func: (i: <span style="color:#2b91af">number</span>) =&gt; {
+    <span style="color:#00f">return</span> i*2 
+  },
+  funcNull: () =&gt; <span style="color:#00f">undefined</span>
+};
+
+<span style="color:#00f">const</span> result = obj.func(1);
+<span style="color:#00f">const</span> resultNull = obj.funcNull?.();
+
+console.log(result);
+console.log(resultNull);</code></pre></div>
+<p>オプショナルチェーン演算子はメソッドに対しても利用可能です。使い方の感覚は関数に対するケースと同じ。</p>
+
+<h3 id="undefined-や-null-が返ってきたときのためにnull合体演算子"><code>undefined</code>や<code>null</code>が返ってきたときのためにNull合体演算子</h3>
+
+<p><code>undefined</code>や<code>null</code>が返ってきた場合の初期値を設定したければ、<a href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing">Null合体演算子</a>を利用すると良いでしょう。まーたコイツもググラビリティがすこぶる低い演算子なんスけどね。なにせ<code>??</code>です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> func = (arg: <span style="color:#2b91af">any</span>) =&gt; {
+    <span style="color:#00f">const</span> foo = arg ?? <span style="color:#a31515">&#39;default string&#39;</span>;
+
+    console.log(foo);
+}
+
+func(1);
+func(<span style="color:#a31515">&#39;hoge&#39;</span>);
+func(<span style="color:#00f">undefined</span>);
+func(<span style="color:#00f">null</span>);</code></pre></div>
+<p>Null合体演算子は、演算子の左辺が<code>null</code>あるいは<code>undefined</code>である場合は演算子の右辺に設定した値を返し、それ以外の場合は左辺の値を返します。論理OR演算子<code>||</code>とは異なり、Null合体演算子は<code>null</code>と<code>undefined</code>のみが右辺の値を返す対象です。</p>
+
+<p>たとえば空文字やゼロはFalsy（偽値）ではなく「使用可能な値」として扱いたい場合、論理OR演算子ではなくNull合体演算子を利用することになります。そして、前述のとおりNull合体演算子は<code>null</code>と<code>undefined</code>を対象とするため、エラーを発生させず<code>undefined</code>を返すオプショナルチェーンとすこぶる相性が良いです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> func = (arg: <span style="color:#2b91af">any</span>) =&gt; {
+    <span style="color:#00f">const</span> foo = arg ?? <span style="color:#a31515">&#39;default string&#39;</span>;
+
+    console.log(foo);
+}
+
+<span style="color:#00f">const</span> hoge = {
+    foo: <span style="color:#2b91af">1</span>,
+    bar: <span style="color:#a31515">&#39;ham&#39;</span>
+};
+
+func(hoge?.foo);
+func(hoge?.bar);
+func(hoge?.baz);</code></pre></div>
+<p>上記のように、オプショナルチェーンとNull合体演算子を組み合わせることで、<code>null</code>や<code>undefined</code>だったときのデフォルト値を設定できます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> func = (arg: <span style="color:#2b91af">any</span>) =&gt; {
+    <span style="color:#00f">const</span> foo = arg ?? <span style="color:#a31515">&#39;default string&#39;</span>;
+
+    console.log(foo);
+}
+
+<span style="color:#00f">const</span> funcNull = () =&gt; <span style="color:#00f">undefined</span>;
+
+func(funcNull?.());</code></pre></div>
+<p>関数に関しても同様です。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>安全にプロパティを参照できる、便利な方法です。ネストが可能で関数にも利用できるように守備範囲が広いうえ、Null合体演算子と組み合わせることでデフォルト値の設定も可能と使い勝手が抜群です。JSでありがちな「存在しないプロパティに誤アクセスしちゃってエラーが起きる」問題を回避するためにも、積極的に使っていきたいですね。</p>
+
+<h2 id="reference">reference</h2>
+
+<ol>
+<li><a href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Operators/Optional_chaining">オプショナルチェーン</a></li>
+<li><a href="https://typescriptbook.jp/reference/values-types-variables/object/optional-chaining">オプショナルチェーン（optional chaining）</a></li>
+<li><a href="https://codelikes.com/javascript-optional-chaining/">JavaScriptのオプショナルチェーン演算子の使い方！</a></li>
+<li><a href="https://ja.javascript.info/optional-chaining">オプショナルチェーン</a></li>
+<li><a href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing">Null合体演算子</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
