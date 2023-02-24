@@ -155,7 +155,10 @@ alert(piyo); <span style="color:#008000">// TypeError: Cannot read properties of
 
 console.log(result);
 console.log(resultNull);</code></pre></div>
-<p>オプショナルチェーンは関数に対しても利用可能です。ある関数について<code>undefined</code>が返ってくる可能性を含んでいる場合、関数に対しオプショナルチェーン演算子を付与することで明示的に戻り値をチェックする必要がなくなります。なお、関数に対しオプショナルチェーンを記述する場合は、引数カッコの前に書きます。</p>
+<p><code>undefined</code>を返す関数について、オプショナルチェーンを使ってみます。なお、書き方は<code>function?.()</code>のように、関数名と引数カッコの間に<code>?.</code>を記述します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">2 
+undefined </code></pre></div>
+<p>オプショナルチェーンはプロパティと同様、関数に対しても利用可能です。ある関数について<code>undefined</code>が返ってくる可能性を含んでいる場合、関数に対しオプショナルチェーン演算子を付与することで明示的に戻り値をチェックする必要がなくなります。</p>
 
 <h3 id="メソッドに対して使う">メソッドに対して使う</h3>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> obj = {
@@ -170,7 +173,10 @@ console.log(resultNull);</code></pre></div>
 
 console.log(result);
 console.log(resultNull);</code></pre></div>
-<p>オプショナルチェーン演算子はメソッドに対しても利用可能です。使い方の感覚は関数に対するケースと同じ。</p>
+<p>メソッドも関数同様にオプショナルチェーンが利用できます。ここでは<code>undefined</code>を返すメソッドを定義して、そのメソッドにオプショナルチェーンを使ってみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">2 
+undefined </code></pre></div>
+<p>使い方の感覚は関数に対するケースと同じですね。</p>
 
 <h3 id="undefined-や-null-が返ってきたときのためにnull合体演算子"><code>undefined</code>や<code>null</code>が返ってきたときのためにNull合体演算子</h3>
 
@@ -185,9 +191,7 @@ func(1);
 func(<span style="color:#a31515">&#39;hoge&#39;</span>);
 func(<span style="color:#00f">undefined</span>);
 func(<span style="color:#00f">null</span>);</code></pre></div>
-<p>Null合体演算子は、演算子の左辺が<code>null</code>あるいは<code>undefined</code>である場合は演算子の右辺に設定した値を返し、それ以外の場合は左辺の値を返します。論理OR演算子<code>||</code>とは異なり、Null合体演算子は<code>null</code>と<code>undefined</code>のみが右辺の値を返す対象です。</p>
-
-<p>たとえば空文字やゼロはFalsy（偽値）ではなく「使用可能な値」として扱いたい場合、論理OR演算子ではなくNull合体演算子を利用することになります。そして、前述のとおりNull合体演算子は<code>null</code>と<code>undefined</code>を対象とするため、エラーを発生させず<code>undefined</code>を返すオプショナルチェーンとすこぶる相性が良いです。</p>
+<p>Null合体演算子は、演算子の左辺が<code>null</code>あるいは<code>undefined</code>である場合は演算子の右辺に設定した値を返し、それ以外の場合は左辺の値を返します。論理OR演算子<code>||</code>とは異なり、Null合体演算子は<code>null</code>と<code>undefined</code>のみが右辺の値を返す対象です。空文字やゼロは対象外ですので、Falsyな値全般を対象とするような使い方はできません。そのため、空文字やゼロをFalsy（偽値）ではなく「使用可能な値」として扱いたい場合、論理OR演算子ではなくNull合体演算子を利用することになります。そして、前述のとおりNull合体演算子は<code>null</code>と<code>undefined</code>を対象とするため、エラーを発生させず<code>undefined</code>を返すオプショナルチェーンとすこぶる相性が良いです。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">const</span> func = (arg: <span style="color:#2b91af">any</span>) =&gt; {
     <span style="color:#00f">const</span> foo = arg ?? <span style="color:#a31515">&#39;default string&#39;</span>;
 
