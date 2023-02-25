@@ -7,10 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Thu, 23 Feb 2023 21:49:40 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 25 Feb 2023 23:31:14 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>2つのリストと比較したとき一致しない要素をリスト内包表記で取り出す</title>
+      <link>https://ysko909.github.io/posts/select-unmatch-item-from-other-list/</link>
+      <pubDate>Sat, 25 Feb 2023 23:31:14 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/select-unmatch-item-from-other-list/</guid>
+      <description>detail 小ネタです。
+あるリストの要素について、別のリストと比較したときにマッチしない要素を取り出すコードを考えます。ここでは、1つだけでなく2つ以上の要素を1度に削除することを考慮します。
+&amp;gt;&amp;gt;&amp;gt; hoge = [1, &amp;#39;a&amp;#39;, &amp;#39;b&amp;#39;, 4, &amp;#39;c&amp;#39;, 6, 7, &amp;#39;d&amp;#39;, &amp;#39;e&amp;#39;] &amp;gt;&amp;gt;&amp;gt; fuga = [4, &amp;#39;c&amp;#39;, 6, 7] &amp;gt;&amp;gt;&amp;gt; piyo = [1, 4, 7, &amp;#39;e&amp;#39;] ここではリストhogeが持つ要素のうち、リストfugaやpiyoが持つ要素と一致しない要素を取り出します。
+[1, &amp;#39;a&amp;#39;, &amp;#39;b&amp;#39;, &amp;#39;d&amp;#39;, &amp;#39;e&amp;#39;] たとえばリストhogeとfugaを比較したとき、上記の結果が返ってくればOKです。これをどう取得しましょうか。
+&amp;gt;&amp;gt;&amp;gt; hoge.remove(fuga) Traceback (most recent call last): File &amp;#34;&amp;lt;stdin&amp;gt;&amp;#34;, line 1, in &amp;lt;module&amp;gt; ValueError: list.remove(x): x not in list 単純に考えると、リストfugaが持つ要素をhogeから「削除」してやればいいわけです。そして、リストから要素を削除するにはremove()メソッドを使います。
+ただ、remove()は引数に指定した「値」が存在したときに該当の要素を削除します。上記のように、remove()の引数にリストを指定すると、「リストである1要素」を削除しようとします。つまり、リストfugaと同じ要素を持つリストが1要素になっている箇所を探そうとするわけです。
+&amp;gt;&amp;gt;&amp;gt; foo [[1, 2, 3], [4, &amp;#39;A&amp;#39;]] &amp;gt;&amp;gt;&amp;gt; foo.remove([4, &amp;#39;A&amp;#39;]) &amp;gt;&amp;gt;&amp;gt; foo [[1, 2, 3]] たとえば、上記のように要素がリストであるならば、削除したい要素としてリストを指定できます。ただ、リストhogeにはリストである要素は存在しません。そのため、ValueError: list.</description>
+    </item>
     
     <item>
       <title>オプショナルチェーン演算子の基本</title>

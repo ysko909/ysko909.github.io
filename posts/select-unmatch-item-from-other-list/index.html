@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>2つのリストと比較したとき一致しない要素をリスト内包表記で取り出す - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="2つのリストと比較したとき一致しない要素をリスト内包表記で取り出す" />
+<meta property="og:description" content="detail 小ネタです。
+あるリストの要素について、別のリストと比較したときにマッチしない要素を取り出すコードを考えます。ここでは、1つだけでなく2つ以上の要素を1度に削除することを考慮します。
+&gt;&gt;&gt; hoge = [1, &#39;a&#39;, &#39;b&#39;, 4, &#39;c&#39;, 6, 7, &#39;d&#39;, &#39;e&#39;] &gt;&gt;&gt; fuga = [4, &#39;c&#39;, 6, 7] &gt;&gt;&gt; piyo = [1, 4, 7, &#39;e&#39;] ここではリストhogeが持つ要素のうち、リストfugaやpiyoが持つ要素と一致しない要素を取り出します。
+[1, &#39;a&#39;, &#39;b&#39;, &#39;d&#39;, &#39;e&#39;] たとえばリストhogeとfugaを比較したとき、上記の結果が返ってくればOKです。これをどう取得しましょうか。
+&gt;&gt;&gt; hoge.remove(fuga) Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; ValueError: list.remove(x): x not in list 単純に考えると、リストfugaが持つ要素をhogeから「削除」してやればいいわけです。そして、リストから要素を削除するにはremove()メソッドを使います。
+ただ、remove()は引数に指定した「値」が存在したときに該当の要素を削除します。上記のように、remove()の引数にリストを指定すると、「リストである1要素」を削除しようとします。つまり、リストfugaと同じ要素を持つリストが1要素になっている箇所を探そうとするわけです。
+&gt;&gt;&gt; foo [[1, 2, 3], [4, &#39;A&#39;]] &gt;&gt;&gt; foo.remove([4, &#39;A&#39;]) &gt;&gt;&gt; foo [[1, 2, 3]] たとえば、上記のように要素がリストであるならば、削除したい要素としてリストを指定できます。ただ、リストhogeにはリストである要素は存在しません。そのため、ValueError: list." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/select-unmatch-item-from-other-list/" /><meta property="article:published_time" content="2023-02-25T23:31:14&#43;09:00"/>
+<meta property="article:modified_time" content="2023-02-25T23:31:14&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="2つのリストと比較したとき一致しない要素をリスト内包表記で取り出す"/>
+<meta name="twitter:description" content="detail 小ネタです。
+あるリストの要素について、別のリストと比較したときにマッチしない要素を取り出すコードを考えます。ここでは、1つだけでなく2つ以上の要素を1度に削除することを考慮します。
+&gt;&gt;&gt; hoge = [1, &#39;a&#39;, &#39;b&#39;, 4, &#39;c&#39;, 6, 7, &#39;d&#39;, &#39;e&#39;] &gt;&gt;&gt; fuga = [4, &#39;c&#39;, 6, 7] &gt;&gt;&gt; piyo = [1, 4, 7, &#39;e&#39;] ここではリストhogeが持つ要素のうち、リストfugaやpiyoが持つ要素と一致しない要素を取り出します。
+[1, &#39;a&#39;, &#39;b&#39;, &#39;d&#39;, &#39;e&#39;] たとえばリストhogeとfugaを比較したとき、上記の結果が返ってくればOKです。これをどう取得しましょうか。
+&gt;&gt;&gt; hoge.remove(fuga) Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; ValueError: list.remove(x): x not in list 単純に考えると、リストfugaが持つ要素をhogeから「削除」してやればいいわけです。そして、リストから要素を削除するにはremove()メソッドを使います。
+ただ、remove()は引数に指定した「値」が存在したときに該当の要素を削除します。上記のように、remove()の引数にリストを指定すると、「リストである1要素」を削除しようとします。つまり、リストfugaと同じ要素を持つリストが1要素になっている箇所を探そうとするわけです。
+&gt;&gt;&gt; foo [[1, 2, 3], [4, &#39;A&#39;]] &gt;&gt;&gt; foo.remove([4, &#39;A&#39;]) &gt;&gt;&gt; foo [[1, 2, 3]] たとえば、上記のように要素がリストであるならば、削除したい要素としてリストを指定できます。ただ、リストhogeにはリストである要素は存在しません。そのため、ValueError: list."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">2つのリストと比較したとき一致しない要素をリスト内包表記で取り出す</h1>
+			<div class="meta">Posted at &mdash; Feb 25, 2023</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="detail">detail</h2>
+
+<p>小ネタです。</p>
+
+<p>あるリストの要素について、別のリストと比較したときにマッチしない要素を取り出すコードを考えます。ここでは、1つだけでなく2つ以上の要素を1度に削除することを考慮します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; hoge = [1, <span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;b&#39;</span>, 4, <span style="color:#a31515">&#39;c&#39;</span>, 6, 7, <span style="color:#a31515">&#39;d&#39;</span>, <span style="color:#a31515">&#39;e&#39;</span>]
+&gt;&gt;&gt; fuga = [4, <span style="color:#a31515">&#39;c&#39;</span>, 6, 7]
+&gt;&gt;&gt; piyo = [1, 4, 7, <span style="color:#a31515">&#39;e&#39;</span>]</code></pre></div>
+<p>ここではリスト<code>hoge</code>が持つ要素のうち、リスト<code>fuga</code>や<code>piyo</code>が持つ要素と一致しない要素を取り出します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">[1, <span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;b&#39;</span>, <span style="color:#a31515">&#39;d&#39;</span>, <span style="color:#a31515">&#39;e&#39;</span>]</code></pre></div>
+<p>たとえばリスト<code>hoge</code>と<code>fuga</code>を比較したとき、上記の結果が返ってくればOKです。これをどう取得しましょうか。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; hoge.remove(fuga)
+Traceback (most recent call last):
+  File <span style="color:#a31515">&#34;&lt;stdin&gt;&#34;</span>, line 1, <span style="color:#00f">in</span> &lt;module&gt;
+ValueError: list.remove(x): x <span style="color:#00f">not</span> <span style="color:#00f">in</span> list</code></pre></div>
+<p>単純に考えると、リスト<code>fuga</code>が持つ要素を<code>hoge</code>から「削除」してやればいいわけです。そして、リストから要素を削除するには<code>remove()</code>メソッドを使います。</p>
+
+<p>ただ、<code>remove()</code>は引数に指定した「値」が存在したときに該当の要素を削除します。上記のように、<code>remove()</code>の引数にリストを指定すると、「リストである1要素」を削除しようとします。つまり、リスト<code>fuga</code>と<strong>同じ要素を持つリストが1要素になっている箇所を探そうとする</strong>わけです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; foo
+[[1, 2, 3], [4, <span style="color:#a31515">&#39;A&#39;</span>]]
+&gt;&gt;&gt; foo.remove([4, <span style="color:#a31515">&#39;A&#39;</span>])
+&gt;&gt;&gt; foo
+[[1, 2, 3]]</code></pre></div>
+<p>たとえば、上記のように要素がリストであるならば、削除したい要素としてリストを指定できます。ただ、リスト<code>hoge</code>にはリストである要素は存在しません。そのため、<code>ValueError: list.remove(x): x not in list</code>と言われます。あくまでも引数には「削除したい要素」を指定するので、どんな形式や型であれ、もともとのリストに存在そなければこのエラーが返ってきます。</p>
+
+<p>というわけで、今回は単純に引数に比較したいリストを渡すわけには行かなさそうです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; hoge.remove(fuga[0])
+&gt;&gt;&gt; </code></pre></div>
+<p>となると、上記のようにリスト<code>fuga</code>の要素を1つずつ指定して<code>remove()</code>すればいいことになります。そうなると繰り返し文の出番です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; hoge
+[1, <span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;b&#39;</span>, 4, <span style="color:#a31515">&#39;c&#39;</span>, 6, 7, <span style="color:#a31515">&#39;d&#39;</span>, <span style="color:#a31515">&#39;e&#39;</span>]
+&gt;&gt;&gt; fuga
+[4, <span style="color:#a31515">&#39;c&#39;</span>, 6, 7]
+&gt;&gt;&gt; <span style="color:#00f">for</span> item <span style="color:#00f">in</span> fuga:
+...   hoge.remove(item)
+...   
+&gt;&gt;&gt; <span style="color:#00f">print</span>(hoge)
+[1, <span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;b&#39;</span>, <span style="color:#a31515">&#39;d&#39;</span>, <span style="color:#a31515">&#39;e&#39;</span>]</code></pre></div>
+<p>そのため、上記のように<code>for</code>文を使って<code>fuga</code>の要素を1つずつ指定しつつ<code>remove()</code>すれば、<strong>効率はともかく</strong>リスト<code>fuga</code>には存在しなかったリスト<code>hoge</code>の要素のみを抽出できます。</p>
+
+<p>ただ、リスト<code>hoge</code>本来の値を残しておきたい場合はこの処理がきません。なぜなら、<code>remove()</code>は要素を直接削除してリストの内容を変えてしまうしまうためです。</p>
+
+<p>そこでリスト内包表記を使います。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; hoge
+[1, <span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;b&#39;</span>, 4, <span style="color:#a31515">&#39;c&#39;</span>, 6, 7, <span style="color:#a31515">&#39;d&#39;</span>, <span style="color:#a31515">&#39;e&#39;</span>]
+&gt;&gt;&gt; fuga
+[4, <span style="color:#a31515">&#39;c&#39;</span>, 6, 7]
+&gt;&gt;&gt; piyo
+[1, 4, 7, <span style="color:#a31515">&#39;e&#39;</span>]
+&gt;&gt;&gt; [e <span style="color:#00f">for</span> e <span style="color:#00f">in</span> hoge <span style="color:#00f">if</span> e <span style="color:#00f">not</span> <span style="color:#00f">in</span> fuga]
+[1, <span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;b&#39;</span>, <span style="color:#a31515">&#39;d&#39;</span>, <span style="color:#a31515">&#39;e&#39;</span>]
+&gt;&gt;&gt; [e <span style="color:#00f">for</span> e <span style="color:#00f">in</span> hoge <span style="color:#00f">if</span> e <span style="color:#00f">not</span> <span style="color:#00f">in</span> piyo]
+[<span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;b&#39;</span>, <span style="color:#a31515">&#39;c&#39;</span>, 6, <span style="color:#a31515">&#39;d&#39;</span>]
+&gt;&gt;&gt; hoge
+[1, <span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;b&#39;</span>, 4, <span style="color:#a31515">&#39;c&#39;</span>, 6, 7, <span style="color:#a31515">&#39;d&#39;</span>, <span style="color:#a31515">&#39;e&#39;</span>]</code></pre></div>
+<p><code>for</code>を使って要素を1つずつ削除しなくとも、リスト内包表記は<code>if</code>をつけて「比較したいリストに存在しないこと」という条件を設定できます。ここではnotを付与して、「～ではない」という条件に合致する要素で新しいリストを作成しています。そう、出力されるのは<strong>新しいリスト</strong>です。つまり、既存のリストには変更を加えません。実際、リスト内包表記による要素の抽出を実行した前後、リスト<code>hoge</code>の内容は変化していません。</p>
+
+<p>さらには、上記のようにリスト内包表記を使って記述することで可読性を向上できます。1行で済むコンパクトさもありつつ、出力がリストであり要素の出力元から出力条件までがちゃんと収まっているわけです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; hoge
+[1, <span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;b&#39;</span>, 4, <span style="color:#a31515">&#39;c&#39;</span>, 6, 7, <span style="color:#a31515">&#39;d&#39;</span>, <span style="color:#a31515">&#39;e&#39;</span>]
+&gt;&gt;&gt; fuga
+[4, <span style="color:#a31515">&#39;c&#39;</span>, 6, 7]
+&gt;&gt;&gt; piyo
+[1, 4, 7, <span style="color:#a31515">&#39;e&#39;</span>]
+&gt;&gt;&gt; [e <span style="color:#00f">for</span> e <span style="color:#00f">in</span> hoge <span style="color:#00f">if</span> e <span style="color:#00f">not</span> <span style="color:#00f">in</span> (fuga + piyo)]
+[<span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;b&#39;</span>, <span style="color:#a31515">&#39;d&#39;</span>]</code></pre></div>
+<p>さらには、上記のように複数のリストを指定すれば複数のリストと比較が可能なので、どのリストとも一致しない要素を抽出したりもできます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; <span style="color:#00f">import</span> pandas <span style="color:#00f">as</span> pd
+&gt;&gt;&gt; <span style="color:#00f">import</span> io
+&gt;&gt;&gt; s = <span style="color:#a31515">&#39;&#39;&#39;a,b,c,d,e,f,g
+</span><span style="color:#a31515">... 1,2,3,4,5,6,7
+</span><span style="color:#a31515">... 8,9,10,11,12,13,14
+</span><span style="color:#a31515">... 15,16,17,18,19,20,21
+</span><span style="color:#a31515">... &#39;&#39;&#39;</span>
+&gt;&gt;&gt; df = pd.read_csv(io.StringIO(s))
+&gt;&gt;&gt; df
+    a   b   c   d   e   f   g
+0   1   2   3   4   5   6   7
+1   8   9  10  11  12  13  14
+2  15  16  17  18  19  20  21
+&gt;&gt;&gt; df.loc[:, [col <span style="color:#00f">for</span> col <span style="color:#00f">in</span> df.columns <span style="color:#00f">if</span> col <span style="color:#00f">not</span> <span style="color:#00f">in</span> [<span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;c&#39;</span>, <span style="color:#a31515">&#39;f&#39;</span>]]]
+    b   d   e   g
+0   2   4   5   7
+1   9  11  12  14
+2  16  18  19  21 </code></pre></div>
+<p>余談ですが、上記の考え方はpandasのDataFrameにて、列を抽出する場合にも利用できます。というか、リストの形式なので同様に処理できるわけですね。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://docs.python.org/ja/3.5/tutorial/datastructures.html#list-comprehensions">リストの内包表記</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
