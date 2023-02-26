@@ -151,23 +151,23 @@ allow_local_mode = true</code></pre></div>
 
 <p>次にデータソースなどの設定を行います。この作業は、ブラウザを使ってGrafanaにログインしてから行います。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/192720138-65368d56-b152-4a5d-8e36-8ff2fb363e48.png" alt="image" /></p>
+<p><img src="2023-02-26-20-00-41.png" alt="pic" /></p>
 
 <p>ログインしたら、左側にある歯車マークをクリックして設定のページを表示します。ここで「Add data source」をクリックします。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/192720444-0ec6fd07-b210-4424-93fd-17e352d815cb.png" alt="image" /></p>
+<p><img src="2023-02-26-20-00-53.png" alt="pic" /></p>
 
 <p>すると、データソースとして登録できる一覧が表示されます。上から探してもいいのですが、検索窓があるのでそこに「csv」と入力します。小文字大文字の区別はありません。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/192720748-61d076f1-e771-451c-81f0-aef50b4ab9a3.png" alt="image" /></p>
+<p><img src="2023-02-26-20-01-06.png" alt="pic" /></p>
 
 <p>出ました。CSV。これをクリックします。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/192720891-774910bc-b209-4fe5-aa7e-46653bc16d57.png" alt="image" /></p>
+<p><img src="2023-02-26-20-01-16.png" alt="pic" /></p>
 
 <p>デフォルトの状態では上記のように「HTTP」が選択されています。今回動作確認で使いたいCSVはローカルのデータなので、「Local」を選択しましょう。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/192721270-194d935a-8824-44c0-bbc1-0795086722dd.png" alt="image" /></p>
+<p><img src="2023-02-26-20-01-26.png" alt="pic" /></p>
 
 <p>「Local」を選択すると、いきなり入力フィールドがシンプルになりました。これは参照するファイルだけを指定すれば、あとはGrafanaのプラグインがいい感じに処理してくれます。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">id,date,item_id,sales,number_of_registered
@@ -183,15 +183,15 @@ allow_local_mode = true</code></pre></div>
 102,2022-03-16,fe1e05f2-ff3f-4c99-b360-b8c0374f903d,325,1559</code></pre></div>
 <p>なお、今回指定する<code>date.csv</code>というデータは上記のような内容です。当たり前ですが、テストデータです。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/192721771-efd6c9a8-b3f3-4e62-861d-6d15537e150b.png" alt="image" /></p>
+<p><img src="2023-02-26-20-01-39.png" alt="pic" /></p>
 
 <p>参照先のCSVのパスを設定して、「Save ＆ Test」をクリックします。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/192721890-16f3157e-ba0c-4d3e-ae59-f7c62da6783b.png" alt="image" /></p>
+<p><img src="2023-02-26-20-01-48.png" alt="pic" /></p>
 
 <p>設定内容に問題がなければ、上記のように「Success」と表示されるはずです。問題ないようでしたら、次は「Explore」というボタンをクリックしてみます。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/193001498-45e508ba-6250-4c81-9276-65a62f53bc7b.png" alt="image" /></p>
+<p><img src="2023-02-26-20-01-56.png" alt="pic" /></p>
 
 <p>すると、指定したファイルをGrafanaが参照して一覧化してくれます。ちなみに、今回のようにCSVをデータソースにしている場合は、データがどんな内容であってもExploreの画面上ではすべての列が文字列のデータとして扱われます。これは、データソースがCSVっていうテキストファイルである以上は致し方ないところかと。</p>
 
@@ -201,47 +201,47 @@ allow_local_mode = true</code></pre></div>
 
 <p>次は、このCSVファイルを入力としてチャートを出力してみます。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/193175802-e37952c7-ced3-4d1a-8bbe-32d0470266d2.png" alt="image" /></p>
+<p><img src="2023-02-26-20-02-14.png" alt="pic" /></p>
 
 <p>左側で「田」みたいなアイコンがDashboardsです。これをクリックすると、ダッシュボードの一覧が表示されます。上記では1つだけ「General/Home」というダッシュボードが存在していますが、新規で環境構築を行った直後の場合は1つもダッシュボードが存在していません。そのため、右側にある「New」というボタンを押し、表示されたメニューから「New Dashborard」を選択して新しいダッシュボードを追加しておきます。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/193176428-f54c2362-c027-4465-a91a-4c6ccbb6a057.png" alt="image" /></p>
+<p><img src="2023-02-26-20-02-26.png" alt="pic" /></p>
 
 <p>ダッシュボードを開くと右側にアイコンがいくつか表示されます。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/193176454-70272b8a-e482-4d19-bc53-32e1dd2e3958.png" alt="image" /></p>
+<p><img src="2023-02-26-20-02-34.png" alt="pic" /></p>
 
 <p>このうち、「Add Panel」をクリックします。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/193176574-536d1412-ba13-4c7e-b8a5-75fb82368665.png" alt="image" /></p>
+<p><img src="2023-02-26-20-02-44.png" alt="pic" /></p>
 
 <p>すると、新しいPanelが追加されます。このパネルが、チャートや表を出力するためのスペースになります。このうち、「Add New Panel」をクリックします。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/193176753-4238d6dc-363c-433d-bcb4-d6214ea2293b.png" alt="image" /></p>
+<p><img src="2023-02-26-20-02-59.png" alt="pic" /></p>
 
 <p>すると、パネルの編集画面が表示されます。ここで、どんなデータソースを選択して、どんなデータ列をどんなグラフで表示するかなどを設定するわけです。ここでは折れ線グラフを作成します。右上で「Time Series」が選択されていることを確認しておいてください。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/193180950-c8470e71-ff94-40d8-9f8e-b5da2555975d.png" alt="image" /></p>
+<p><img src="2023-02-26-20-03-10.png" alt="pic" /></p>
 
 <p>ページ下部のQueryを使ってどの列を出力するかを設定します。ここでは「Time Series」のグラフを選択しているため、X軸が時間や日次、Y軸がなんらかの値を持つ列を指定します。指定方法は「Field」の欄に出力したい項目列を選択するだけです。前述のとおり、データソースがCSVだとデフォルトですべての列が文字列扱いされてしまいます。そのため、「Field」では列の設定をする際に、正しいデータ型を指定してやってください。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/193181196-53fe156b-37c1-470d-93a1-2ab5e410f2fe.png" alt="image" /></p>
+<p><img src="2023-02-26-20-03-20.png" alt="pic" /></p>
 
 <p>グラフの出力設定を編集すると、自動的にページ上部にあるグラフのプレビュー表示に変化があるはずです。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/193181360-03ee74ff-2348-4ae4-ad3a-6149dcfccbdf.png" alt="image" /></p>
+<p><img src="2023-02-26-20-03-28.png" alt="pic" /></p>
 
 <p>ページ右側にあるのは、グラフのタイトルや折れ線の太さやスタイルなどを設定する部分です。ここではタイトルと折れ線のスタイルを変更してみます。タイトルは「Title」という箇所を、表示したいタイトルに編集すればOKです。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/193181538-af1b59df-850c-4b2a-8091-f10624d4a580.png" alt="image" /></p>
+<p><img src="2023-02-26-20-03-41.png" alt="pic" /></p>
 
 <p>「Graph style」という部分で、グラフのスタイルを指定できます。たとえば折れ線グラフの線を実線じゃなく点線にしたいとか、線の太さを変えたいという場合はここで設定します。ネックは、複数のグラフがある場合、すべてのグラフに影響を及ぼす点です。2つグラフがあるうちの1つだけ点線にしたい、という場合は「Overrides」という箇所で個別に設定する必要があります。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/193193988-ab28aea7-547e-4482-8d55-ab24bee09943.png" alt="image" /></p>
+<p><img src="2023-02-26-20-03-51.png" alt="pic" /></p>
 
 <p>ここではこれ以上の変更は行わないものとして、変更した内容を保存しましょう。「Save」ボタンを押してダッシュボードの内容を保存しておきます。</p>
 
-<p><img src="https://user-images.githubusercontent.com/42630040/193194156-c6e37b3d-5fe7-4365-9572-0bb44acc445e.png" alt="image" /></p>
+<p><img src="2023-02-26-20-04-00.png" alt="pic" /></p>
 
 <p>変更した内容を保存しダッシュボードを見てみると、先ほど作成したパネルに折れ線グラフが表示されています。</p>
 
