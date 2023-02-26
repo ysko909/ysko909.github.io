@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Dockerコンテナ上にGrafanaをインストールしてCSVデータをチャート出力してみる - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Dockerコンテナ上にGrafanaをインストールしてCSVデータをチャート出力してみる" />
+<meta property="og:description" content="details GrafanaとはOSSのデータ可視化ツールで、データソースからデータを取得してさまざまなグラフやチャート、テーブルなどで可視化できます。このGrafanaはオフィシャルでDockerコンテナが用意されており、このコンテナを利用することで簡単に環境構築が可能です。
+今回はDockerコンテナを利用してGrafanaを構築し、テスト用のCSVデータを参照して簡単なチャート出力を実行してみます。
+環境  Windows 10上のWSL Ubuntu 20.04 LTS Docker 20.10.16  上記の環境において実行しています。
+ Grafanaコンテナ  GrafanaのコンテナはDocker Hubにあるものを利用しています。
+ CSV Data Source for Grafana  動作確認のため、CSVファイルをデータソースとして扱えるプラグインを導入します。
+本来であれば、Grafanaの入力に利用できるデータソースとして、何らかのDBを用意する必要があります。たとえばinfluxDBとかPrometheusですね。ただ、まぁ、動作確認のためだけにDB用意するのはメンドくさい大変なので、ここではCSVを使って動作確認します。とはいえ、デフォルトの状態ではGrafanaはCSVをデータソースとして利用できないので、CSVもデータソースに指定できるプラグインをインストールします。DBの用意が面倒でCSVを読むためのプラグインをインストールしてるとか若干本末転倒な感があるような。
+Dockerコンテナの準備 GrafanaのコンテナはDocker Hubに存在するものをそのまま利用します。なのでdocker pullして実行すればそれで終わりです。
+docker pull grafana/grafana docker run -d --name=grafana -p 3000:3000 grafana/grafana 上記のコマンドをWSLで実行すれば、あとは自動的に処理が進みます。
+docker pull -e HTTP_PROXY=http://&lt;PROXYSERVER&gt;:&lt;PROXYPORT&gt; -e HTTPS_PROXY=http://&lt;PROXYSERVER&gt;:&lt;PROXYPORT&gt; grafana/grafana docker pull -e HTTP_PROXY=http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXYSERVER&gt;:&lt;PROXYPORT&gt; -e HTTPS_PROXY=http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXYSERVER&gt;:&lt;PROXYPORT&gt; grafana/grafana Proxy環境下では、上記のように-eコマンドを使って、環境変数としてProxyのアドレスなどを設定します。なお、docker composeを使う方法もありますが、今回は単純にコマンドをガシガシと実行していくスタイルとします。
+処理が完了したら、Grafanaのコンテナが起動しているはずです。ブラウザでhttp://localhost:3000にアクセスすると、Grafanaのログインページが表示されます。ここではIDがadmin、パスワードもadminと入力することでログインできます。なお、「パスワード変えてね」という表示が出ますが、無慈悲にもここでは「Skip」を押して見なかったことにします。どうせ、動作確認したらコンテナ終了させるしね（ﾊﾅﾎｼﾞｰ
+CSV Data Source for Grafanaをインストールする 動作確認のためだけにDBを用意するのは面倒なので（えっ）、ここは適当なCSVファイルを入力にします。するのですが、Grafanaはデフォルトの状態だとCSVファイルをデータソースをして参照してくれません。そこで、CSVをデータソースとして扱ってくれるプラグインを導入します。
+docker exec -it grafana /bin/bash grafana-cli plugins install marcusolsson-csv-datasource Grafanaが稼働しているコンテナに入り、grafana-cliを使ってプラグインをインストールします。インストールが終わったら、「リスタートしてね」というメッセージが表示されます。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/install-grafana-on-docker-contailner-and-show-chart-with-csv-file/" /><meta property="article:published_time" content="2023-02-26T18:33:04&#43;09:00"/>
+<meta property="article:modified_time" content="2023-02-26T18:33:04&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Dockerコンテナ上にGrafanaをインストールしてCSVデータをチャート出力してみる"/>
+<meta name="twitter:description" content="details GrafanaとはOSSのデータ可視化ツールで、データソースからデータを取得してさまざまなグラフやチャート、テーブルなどで可視化できます。このGrafanaはオフィシャルでDockerコンテナが用意されており、このコンテナを利用することで簡単に環境構築が可能です。
+今回はDockerコンテナを利用してGrafanaを構築し、テスト用のCSVデータを参照して簡単なチャート出力を実行してみます。
+環境  Windows 10上のWSL Ubuntu 20.04 LTS Docker 20.10.16  上記の環境において実行しています。
+ Grafanaコンテナ  GrafanaのコンテナはDocker Hubにあるものを利用しています。
+ CSV Data Source for Grafana  動作確認のため、CSVファイルをデータソースとして扱えるプラグインを導入します。
+本来であれば、Grafanaの入力に利用できるデータソースとして、何らかのDBを用意する必要があります。たとえばinfluxDBとかPrometheusですね。ただ、まぁ、動作確認のためだけにDB用意するのはメンドくさい大変なので、ここではCSVを使って動作確認します。とはいえ、デフォルトの状態ではGrafanaはCSVをデータソースとして利用できないので、CSVもデータソースに指定できるプラグインをインストールします。DBの用意が面倒でCSVを読むためのプラグインをインストールしてるとか若干本末転倒な感があるような。
+Dockerコンテナの準備 GrafanaのコンテナはDocker Hubに存在するものをそのまま利用します。なのでdocker pullして実行すればそれで終わりです。
+docker pull grafana/grafana docker run -d --name=grafana -p 3000:3000 grafana/grafana 上記のコマンドをWSLで実行すれば、あとは自動的に処理が進みます。
+docker pull -e HTTP_PROXY=http://&lt;PROXYSERVER&gt;:&lt;PROXYPORT&gt; -e HTTPS_PROXY=http://&lt;PROXYSERVER&gt;:&lt;PROXYPORT&gt; grafana/grafana docker pull -e HTTP_PROXY=http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXYSERVER&gt;:&lt;PROXYPORT&gt; -e HTTPS_PROXY=http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXYSERVER&gt;:&lt;PROXYPORT&gt; grafana/grafana Proxy環境下では、上記のように-eコマンドを使って、環境変数としてProxyのアドレスなどを設定します。なお、docker composeを使う方法もありますが、今回は単純にコマンドをガシガシと実行していくスタイルとします。
+処理が完了したら、Grafanaのコンテナが起動しているはずです。ブラウザでhttp://localhost:3000にアクセスすると、Grafanaのログインページが表示されます。ここではIDがadmin、パスワードもadminと入力することでログインできます。なお、「パスワード変えてね」という表示が出ますが、無慈悲にもここでは「Skip」を押して見なかったことにします。どうせ、動作確認したらコンテナ終了させるしね（ﾊﾅﾎｼﾞｰ
+CSV Data Source for Grafanaをインストールする 動作確認のためだけにDBを用意するのは面倒なので（えっ）、ここは適当なCSVファイルを入力にします。するのですが、Grafanaはデフォルトの状態だとCSVファイルをデータソースをして参照してくれません。そこで、CSVをデータソースとして扱ってくれるプラグインを導入します。
+docker exec -it grafana /bin/bash grafana-cli plugins install marcusolsson-csv-datasource Grafanaが稼働しているコンテナに入り、grafana-cliを使ってプラグインをインストールします。インストールが終わったら、「リスタートしてね」というメッセージが表示されます。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Dockerコンテナ上にGrafanaをインストールしてCSVデータをチャート出力してみる</h1>
+			<div class="meta">Posted at &mdash; Feb 26, 2023</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="details">details</h2>
+
+<p><a href="https://grafana.com/">Grafana</a>とはOSSのデータ可視化ツールで、データソースからデータを取得してさまざまなグラフやチャート、テーブルなどで可視化できます。このGrafanaはオフィシャルでDockerコンテナが用意されており、このコンテナを利用することで簡単に環境構築が可能です。</p>
+
+<p>今回はDockerコンテナを利用してGrafanaを構築し、テスト用のCSVデータを参照して簡単なチャート出力を実行してみます。</p>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+<li>Windows 10上のWSL</li>
+<li>Ubuntu 20.04 LTS</li>
+<li>Docker 20.10.16</li>
+</ul>
+
+<p>上記の環境において実行しています。</p>
+
+<ul>
+<li>Grafanaコンテナ</li>
+</ul>
+
+<p>Grafanaのコンテナは<a href="https://hub.docker.com/r/grafana/grafana/">Docker Hubにあるもの</a>を利用しています。</p>
+
+<ul>
+<li>CSV Data Source for Grafana</li>
+</ul>
+
+<p>動作確認のため、CSVファイルをデータソースとして扱えるプラグインを導入します。</p>
+
+<p>本来であれば、Grafanaの入力に利用できるデータソースとして、何らかのDBを用意する必要があります。たとえば<a href="https://www.influxdata.com/">influxDB</a>とか<a href="https://prometheus.io/">Prometheus</a>ですね。ただ、まぁ、動作確認のためだけにDB用意するのは<del>メンドくさい</del>大変なので、ここではCSVを使って動作確認します。とはいえ、デフォルトの状態ではGrafanaはCSVをデータソースとして利用できないので、CSVもデータソースに指定できるプラグインをインストールします。<del>DBの用意が面倒でCSVを読むためのプラグインをインストールしてるとか若干本末転倒な感があるような。</del></p>
+
+<h2 id="dockerコンテナの準備">Dockerコンテナの準備</h2>
+
+<p>GrafanaのコンテナはDocker Hubに存在するものをそのまま利用します。なので<code>docker pull</code>して実行すればそれで終わりです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker pull grafana/grafana
+docker run -d --name=grafana -p 3000:3000 grafana/grafana</code></pre></div>
+<p>上記のコマンドをWSLで実行すれば、あとは自動的に処理が進みます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker pull -e HTTP_PROXY=http://&lt;PROXYSERVER&gt;:&lt;PROXYPORT&gt; -e HTTPS_PROXY=http://&lt;PROXYSERVER&gt;:&lt;PROXYPORT&gt; grafana/grafana
+docker pull -e HTTP_PROXY=http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXYSERVER&gt;:&lt;PROXYPORT&gt; -e HTTPS_PROXY=http://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@&lt;PROXYSERVER&gt;:&lt;PROXYPORT&gt; grafana/grafana</code></pre></div>
+<p>Proxy環境下では、上記のように<code>-e</code>コマンドを使って、環境変数としてProxyのアドレスなどを設定します。なお、<code>docker compose</code>を使う方法もありますが、今回は単純にコマンドをガシガシと実行していくスタイルとします。</p>
+
+<p>処理が完了したら、Grafanaのコンテナが起動しているはずです。ブラウザで<code>http://localhost:3000</code>にアクセスすると、Grafanaのログインページが表示されます。ここではIDが<code>admin</code>、パスワードも<code>admin</code>と入力することでログインできます。なお、「パスワード変えてね」という表示が出ますが、無慈悲にもここでは「Skip」を押して見なかったことにします。どうせ、動作確認したらコンテナ終了させるしね（ﾊﾅﾎｼﾞｰ</p>
+
+<h2 id="csv-data-source-for-grafanaをインストールする">CSV Data Source for Grafanaをインストールする</h2>
+
+<p><strong>動作確認のためだけにDBを用意するのは面倒</strong>なので（えっ）、ここは適当なCSVファイルを入力にします。するのですが、Grafanaはデフォルトの状態だとCSVファイルをデータソースをして参照してくれません。そこで、CSVをデータソースとして扱ってくれるプラグインを導入します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker exec -it grafana /bin/bash
+grafana-cli plugins install marcusolsson-csv-datasource</code></pre></div>
+<p>Grafanaが稼働しているコンテナに入り、<code>grafana-cli</code>を使ってプラグインをインストールします。インストールが終わったら、「リスタートしてね」というメッセージが表示されます。</p>
+
+<p>次にGrafanaの設定ファイルに追記します。対象の設定ファイルは<code>/etc/grafana/grafana.ini</code>です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">[plugin.marcusolsson-csv-datasource]
+allow_local_mode = true</code></pre></div>
+<p>上記の2行を追記します。この設定がないと、ローカルにあるファイルをアクセスしてくれません。動作確認で用いるCSVは、ローカルに置いたものなのでこの設定が必要なのです。ここまで設定できたら、コンテナを一度リスタートします。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker restart grafana</code></pre></div>
+<p>上記のリスタート自体はすぐ終わると思います。</p>
+
+<h3 id="環境設定">環境設定</h3>
+
+<p>次にデータソースなどの設定を行います。この作業は、ブラウザを使ってGrafanaにログインしてから行います。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/192720138-65368d56-b152-4a5d-8e36-8ff2fb363e48.png" alt="image" /></p>
+
+<p>ログインしたら、左側にある歯車マークをクリックして設定のページを表示します。ここで「Add data source」をクリックします。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/192720444-0ec6fd07-b210-4424-93fd-17e352d815cb.png" alt="image" /></p>
+
+<p>すると、データソースとして登録できる一覧が表示されます。上から探してもいいのですが、検索窓があるのでそこに「csv」と入力します。小文字大文字の区別はありません。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/192720748-61d076f1-e771-451c-81f0-aef50b4ab9a3.png" alt="image" /></p>
+
+<p>出ました。CSV。これをクリックします。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/192720891-774910bc-b209-4fe5-aa7e-46653bc16d57.png" alt="image" /></p>
+
+<p>デフォルトの状態では上記のように「HTTP」が選択されています。今回動作確認で使いたいCSVはローカルのデータなので、「Local」を選択しましょう。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/192721270-194d935a-8824-44c0-bbc1-0795086722dd.png" alt="image" /></p>
+
+<p>「Local」を選択すると、いきなり入力フィールドがシンプルになりました。これは参照するファイルだけを指定すれば、あとはGrafanaのプラグインがいい感じに処理してくれます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">id,date,item_id,sales,number_of_registered
+107,2022-01-21,9c03bd45-e091-4104-913c-4ec08d166b90,423,1471
+105,2022-01-22,5a123402-f73d-40da-99e8-ae14bf89a238,332,1555
+101,2022-01-28,76854b96-f080-45a5-b031-84deba543114,394,1112
+104,2022-02-01,cf7eae19-5058-4bab-9910-0b446aa6d2b5,472,1161
+106,2022-02-08,954f2611-f7cc-4e76-9d55-1ad7e1d90248,352,1582
+103,2022-02-12,a3bb8474-c375-4509-a781-4141ded1f20a,383,1464
+100,2022-03-01,84b21306-2e37-4384-b40b-9d53ca49f622,486,1153
+108,2022-03-06,dc1b4e72-7aae-4bef-be1f-650ba1939779,391,1416
+109,2022-03-07,627b7377-8ada-4d02-8039-03ee331b3bd0,472,1522
+102,2022-03-16,fe1e05f2-ff3f-4c99-b360-b8c0374f903d,325,1559</code></pre></div>
+<p>なお、今回指定する<code>date.csv</code>というデータは上記のような内容です。当たり前ですが、テストデータです。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/192721771-efd6c9a8-b3f3-4e62-861d-6d15537e150b.png" alt="image" /></p>
+
+<p>参照先のCSVのパスを設定して、「Save ＆ Test」をクリックします。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/192721890-16f3157e-ba0c-4d3e-ae59-f7c62da6783b.png" alt="image" /></p>
+
+<p>設定内容に問題がなければ、上記のように「Success」と表示されるはずです。問題ないようでしたら、次は「Explore」というボタンをクリックしてみます。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/193001498-45e508ba-6250-4c81-9276-65a62f53bc7b.png" alt="image" /></p>
+
+<p>すると、指定したファイルをGrafanaが参照して一覧化してくれます。ちなみに、今回のようにCSVをデータソースにしている場合は、データがどんな内容であってもExploreの画面上ではすべての列が文字列のデータとして扱われます。これは、データソースがCSVっていうテキストファイルである以上は致し方ないところかと。</p>
+
+<p>なにはともあれ、これでCSVファイルをデータソースとして扱う準備ができました。</p>
+
+<h3 id="チャート出力の確認">チャート出力の確認</h3>
+
+<p>次は、このCSVファイルを入力としてチャートを出力してみます。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/193175802-e37952c7-ced3-4d1a-8bbe-32d0470266d2.png" alt="image" /></p>
+
+<p>左側で「田」みたいなアイコンがDashboardsです。これをクリックすると、ダッシュボードの一覧が表示されます。上記では1つだけ「General/Home」というダッシュボードが存在していますが、新規で環境構築を行った直後の場合は1つもダッシュボードが存在していません。そのため、右側にある「New」というボタンを押し、表示されたメニューから「New Dashborard」を選択して新しいダッシュボードを追加しておきます。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/193176428-f54c2362-c027-4465-a91a-4c6ccbb6a057.png" alt="image" /></p>
+
+<p>ダッシュボードを開くと右側にアイコンがいくつか表示されます。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/193176454-70272b8a-e482-4d19-bc53-32e1dd2e3958.png" alt="image" /></p>
+
+<p>このうち、「Add Panel」をクリックします。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/193176574-536d1412-ba13-4c7e-b8a5-75fb82368665.png" alt="image" /></p>
+
+<p>すると、新しいPanelが追加されます。このパネルが、チャートや表を出力するためのスペースになります。このうち、「Add New Panel」をクリックします。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/193176753-4238d6dc-363c-433d-bcb4-d6214ea2293b.png" alt="image" /></p>
+
+<p>すると、パネルの編集画面が表示されます。ここで、どんなデータソースを選択して、どんなデータ列をどんなグラフで表示するかなどを設定するわけです。ここでは折れ線グラフを作成します。右上で「Time Series」が選択されていることを確認しておいてください。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/193180950-c8470e71-ff94-40d8-9f8e-b5da2555975d.png" alt="image" /></p>
+
+<p>ページ下部のQueryを使ってどの列を出力するかを設定します。ここでは「Time Series」のグラフを選択しているため、X軸が時間や日次、Y軸がなんらかの値を持つ列を指定します。指定方法は「Field」の欄に出力したい項目列を選択するだけです。前述のとおり、データソースがCSVだとデフォルトですべての列が文字列扱いされてしまいます。そのため、「Field」では列の設定をする際に、正しいデータ型を指定してやってください。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/193181196-53fe156b-37c1-470d-93a1-2ab5e410f2fe.png" alt="image" /></p>
+
+<p>グラフの出力設定を編集すると、自動的にページ上部にあるグラフのプレビュー表示に変化があるはずです。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/193181360-03ee74ff-2348-4ae4-ad3a-6149dcfccbdf.png" alt="image" /></p>
+
+<p>ページ右側にあるのは、グラフのタイトルや折れ線の太さやスタイルなどを設定する部分です。ここではタイトルと折れ線のスタイルを変更してみます。タイトルは「Title」という箇所を、表示したいタイトルに編集すればOKです。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/193181538-af1b59df-850c-4b2a-8091-f10624d4a580.png" alt="image" /></p>
+
+<p>「Graph style」という部分で、グラフのスタイルを指定できます。たとえば折れ線グラフの線を実線じゃなく点線にしたいとか、線の太さを変えたいという場合はここで設定します。ネックは、複数のグラフがある場合、すべてのグラフに影響を及ぼす点です。2つグラフがあるうちの1つだけ点線にしたい、という場合は「Overrides」という箇所で個別に設定する必要があります。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/193193988-ab28aea7-547e-4482-8d55-ab24bee09943.png" alt="image" /></p>
+
+<p>ここではこれ以上の変更は行わないものとして、変更した内容を保存しましょう。「Save」ボタンを押してダッシュボードの内容を保存しておきます。</p>
+
+<p><img src="https://user-images.githubusercontent.com/42630040/193194156-c6e37b3d-5fe7-4365-9572-0bb44acc445e.png" alt="image" /></p>
+
+<p>変更した内容を保存しダッシュボードを見てみると、先ほど作成したパネルに折れ線グラフが表示されています。</p>
+
+<h2 id="reference">reference</h2>
+
+<ol>
+<li><a href="https://grafana.com/docs/grafana/latest/setup-grafana/installation/">Install Grafana</a></li>
+<li><a href="https://github.com/grafana/grafana-csv-datasource">grafana/grafana-csv-datasource</a></li>
+<li><a href="https://marcus.se.net/grafana-csv-datasource/">CSV Data Source for Grafana</a></li>
+<li><a href="https://grafana.com/docs/grafana/latest/setup-grafana/restart-grafana/">Restart Grafana</a></li>
+<li><a href="https://zenn.dev/rabitarochan/articles/f76ecb5e484185">Proxy 環境下でがんばる Docker for Windows チュートリアル</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

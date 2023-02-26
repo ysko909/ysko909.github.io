@@ -7,10 +7,30 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sat, 25 Feb 2023 23:31:14 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 26 Feb 2023 18:33:04 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Dockerコンテナ上にGrafanaをインストールしてCSVデータをチャート出力してみる</title>
+      <link>https://ysko909.github.io/posts/install-grafana-on-docker-contailner-and-show-chart-with-csv-file/</link>
+      <pubDate>Sun, 26 Feb 2023 18:33:04 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/install-grafana-on-docker-contailner-and-show-chart-with-csv-file/</guid>
+      <description>details GrafanaとはOSSのデータ可視化ツールで、データソースからデータを取得してさまざまなグラフやチャート、テーブルなどで可視化できます。このGrafanaはオフィシャルでDockerコンテナが用意されており、このコンテナを利用することで簡単に環境構築が可能です。
+今回はDockerコンテナを利用してGrafanaを構築し、テスト用のCSVデータを参照して簡単なチャート出力を実行してみます。
+環境  Windows 10上のWSL Ubuntu 20.04 LTS Docker 20.10.16  上記の環境において実行しています。
+ Grafanaコンテナ  GrafanaのコンテナはDocker Hubにあるものを利用しています。
+ CSV Data Source for Grafana  動作確認のため、CSVファイルをデータソースとして扱えるプラグインを導入します。
+本来であれば、Grafanaの入力に利用できるデータソースとして、何らかのDBを用意する必要があります。たとえばinfluxDBとかPrometheusですね。ただ、まぁ、動作確認のためだけにDB用意するのはメンドくさい大変なので、ここではCSVを使って動作確認します。とはいえ、デフォルトの状態ではGrafanaはCSVをデータソースとして利用できないので、CSVもデータソースに指定できるプラグインをインストールします。DBの用意が面倒でCSVを読むためのプラグインをインストールしてるとか若干本末転倒な感があるような。
+Dockerコンテナの準備 GrafanaのコンテナはDocker Hubに存在するものをそのまま利用します。なのでdocker pullして実行すればそれで終わりです。
+docker pull grafana/grafana docker run -d --name=grafana -p 3000:3000 grafana/grafana 上記のコマンドをWSLで実行すれば、あとは自動的に処理が進みます。
+docker pull -e HTTP_PROXY=http://&amp;lt;PROXYSERVER&amp;gt;:&amp;lt;PROXYPORT&amp;gt; -e HTTPS_PROXY=http://&amp;lt;PROXYSERVER&amp;gt;:&amp;lt;PROXYPORT&amp;gt; grafana/grafana docker pull -e HTTP_PROXY=http://&amp;lt;USERNAME&amp;gt;:&amp;lt;PASSWORD&amp;gt;@&amp;lt;PROXYSERVER&amp;gt;:&amp;lt;PROXYPORT&amp;gt; -e HTTPS_PROXY=http://&amp;lt;USERNAME&amp;gt;:&amp;lt;PASSWORD&amp;gt;@&amp;lt;PROXYSERVER&amp;gt;:&amp;lt;PROXYPORT&amp;gt; grafana/grafana Proxy環境下では、上記のように-eコマンドを使って、環境変数としてProxyのアドレスなどを設定します。なお、docker composeを使う方法もありますが、今回は単純にコマンドをガシガシと実行していくスタイルとします。
+処理が完了したら、Grafanaのコンテナが起動しているはずです。ブラウザでhttp://localhost:3000にアクセスすると、Grafanaのログインページが表示されます。ここではIDがadmin、パスワードもadminと入力することでログインできます。なお、「パスワード変えてね」という表示が出ますが、無慈悲にもここでは「Skip」を押して見なかったことにします。どうせ、動作確認したらコンテナ終了させるしね（ﾊﾅﾎｼﾞｰ
+CSV Data Source for Grafanaをインストールする 動作確認のためだけにDBを用意するのは面倒なので（えっ）、ここは適当なCSVファイルを入力にします。するのですが、Grafanaはデフォルトの状態だとCSVファイルをデータソースをして参照してくれません。そこで、CSVをデータソースとして扱ってくれるプラグインを導入します。
+docker exec -it grafana /bin/bash grafana-cli plugins install marcusolsson-csv-datasource Grafanaが稼働しているコンテナに入り、grafana-cliを使ってプラグインをインストールします。インストールが終わったら、「リスタートしてね」というメッセージが表示されます。</description>
+    </item>
     
     <item>
       <title>2つのリストと比較したとき一致しない要素をリスト内包表記で取り出す</title>
