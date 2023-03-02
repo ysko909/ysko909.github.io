@@ -4,22 +4,22 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>2つのリストと比較したとき一致しない要素をリスト内包表記で取り出す - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta property="og:title" content="2つのリストと比較したとき一致しない要素をリスト内包表記で取り出す" />
-<meta property="og:description" content="detail 小ネタです。
+<meta property="og:description" content="概要 小ネタです。
 あるリストの要素について、別のリストと比較したときにマッチしない要素を取り出すコードを考えます。ここでは、1つだけでなく2つ以上の要素を1度に削除することを考慮します。
 &gt;&gt;&gt; hoge = [1, &#39;a&#39;, &#39;b&#39;, 4, &#39;c&#39;, 6, 7, &#39;d&#39;, &#39;e&#39;] &gt;&gt;&gt; fuga = [4, &#39;c&#39;, 6, 7] &gt;&gt;&gt; piyo = [1, 4, 7, &#39;e&#39;] ここではリストhogeが持つ要素のうち、リストfugaやpiyoが持つ要素と一致しない要素を取り出します。
 [1, &#39;a&#39;, &#39;b&#39;, &#39;d&#39;, &#39;e&#39;] たとえばリストhogeとfugaを比較したとき、上記の結果が返ってくればOKです。これをどう取得しましょうか。
-&gt;&gt;&gt; hoge.remove(fuga) Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; ValueError: list.remove(x): x not in list 単純に考えると、リストfugaが持つ要素をhogeから「削除」してやればいいわけです。そして、リストから要素を削除するにはremove()メソッドを使います。
+コード &gt;&gt;&gt; hoge.remove(fuga) Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; ValueError: list.remove(x): x not in list 単純に考えると、リストfugaが持つ要素をhogeから「削除」してやればいいわけです。そして、リストから要素を削除するにはremove()メソッドを使います。
 ただ、remove()は引数に指定した「値」が存在したときに該当の要素を削除します。上記のように、remove()の引数にリストを指定すると、「リストである1要素」を削除しようとします。つまり、リストfugaと同じ要素を持つリストが1要素になっている箇所を探そうとするわけです。
 &gt;&gt;&gt; foo [[1, 2, 3], [4, &#39;A&#39;]] &gt;&gt;&gt; foo.remove([4, &#39;A&#39;]) &gt;&gt;&gt; foo [[1, 2, 3]] たとえば、上記のように要素がリストであるならば、削除したい要素としてリストを指定できます。ただ、リストhogeにはリストである要素は存在しません。そのため、ValueError: list." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ysko909.github.io/posts/select-unmatch-item-from-other-list/" /><meta property="article:published_time" content="2023-02-25T23:31:14&#43;09:00"/>
 <meta property="article:modified_time" content="2023-02-25T23:31:14&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="2つのリストと比較したとき一致しない要素をリスト内包表記で取り出す"/>
-<meta name="twitter:description" content="detail 小ネタです。
+<meta name="twitter:description" content="概要 小ネタです。
 あるリストの要素について、別のリストと比較したときにマッチしない要素を取り出すコードを考えます。ここでは、1つだけでなく2つ以上の要素を1度に削除することを考慮します。
 &gt;&gt;&gt; hoge = [1, &#39;a&#39;, &#39;b&#39;, 4, &#39;c&#39;, 6, 7, &#39;d&#39;, &#39;e&#39;] &gt;&gt;&gt; fuga = [4, &#39;c&#39;, 6, 7] &gt;&gt;&gt; piyo = [1, 4, 7, &#39;e&#39;] ここではリストhogeが持つ要素のうち、リストfugaやpiyoが持つ要素と一致しない要素を取り出します。
 [1, &#39;a&#39;, &#39;b&#39;, &#39;d&#39;, &#39;e&#39;] たとえばリストhogeとfugaを比較したとき、上記の結果が返ってくればOKです。これをどう取得しましょうか。
-&gt;&gt;&gt; hoge.remove(fuga) Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; ValueError: list.remove(x): x not in list 単純に考えると、リストfugaが持つ要素をhogeから「削除」してやればいいわけです。そして、リストから要素を削除するにはremove()メソッドを使います。
+コード &gt;&gt;&gt; hoge.remove(fuga) Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; ValueError: list.remove(x): x not in list 単純に考えると、リストfugaが持つ要素をhogeから「削除」してやればいいわけです。そして、リストから要素を削除するにはremove()メソッドを使います。
 ただ、remove()は引数に指定した「値」が存在したときに該当の要素を削除します。上記のように、remove()の引数にリストを指定すると、「リストである1要素」を削除しようとします。つまり、リストfugaと同じ要素を持つリストが1要素になっている箇所を探そうとするわけです。
 &gt;&gt;&gt; foo [[1, 2, 3], [4, &#39;A&#39;]] &gt;&gt;&gt; foo.remove([4, &#39;A&#39;]) &gt;&gt;&gt; foo [[1, 2, 3]] たとえば、上記のように要素がリストであるならば、削除したい要素としてリストを指定できます。ただ、リストhogeにはリストである要素は存在しません。そのため、ValueError: list."/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
@@ -81,7 +81,7 @@
 		<div class="markdown">
 			
 
-<h2 id="detail">detail</h2>
+<h2 id="概要">概要</h2>
 
 <p>小ネタです。</p>
 
@@ -92,6 +92,8 @@
 <p>ここではリスト<code>hoge</code>が持つ要素のうち、リスト<code>fuga</code>や<code>piyo</code>が持つ要素と一致しない要素を取り出します。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">[1, <span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;b&#39;</span>, <span style="color:#a31515">&#39;d&#39;</span>, <span style="color:#a31515">&#39;e&#39;</span>]</code></pre></div>
 <p>たとえばリスト<code>hoge</code>と<code>fuga</code>を比較したとき、上記の結果が返ってくればOKです。これをどう取得しましょうか。</p>
+
+<h2 id="コード">コード</h2>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; hoge.remove(fuga)
 Traceback (most recent call last):
   File <span style="color:#a31515">&#34;&lt;stdin&gt;&#34;</span>, line 1, <span style="color:#00f">in</span> &lt;module&gt;
