@@ -7,10 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sun, 26 Feb 2023 18:33:04 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 03 Mar 2023 21:13:27 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>「&#39;hoge.ts&#39; cannot be compiled under &#39;--isolatedModules&#39; because it is considered a global script file. Add an import, export, or an empty &#39;export {}&#39; statement to make it a module」と出たら`export {}`を追記しよう</title>
+      <link>https://ysko909.github.io/posts/got-error-ts-file-cannot-be-compiled-under-isolatedmodules/</link>
+      <pubDate>Fri, 03 Mar 2023 21:13:27 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/got-error-ts-file-cannot-be-compiled-under-isolatedmodules/</guid>
+      <description> 概要 小ネタです。
+&amp;#39;hoge.ts&amp;#39; cannot be compiled under &amp;#39;--isolatedModules&amp;#39; because it is considered a global script file. Add an import, export, or an empty &amp;#39;export {}&amp;#39; statement to make it a module. ちょっと長いですが、TypeScriptを書いているときにこんなエラーメッセージが出たりします。
+このエラーメッセージは通常、モジュールに含まれていないTypeScriptファイル（この場合はhoge.ts）をコンパイルしようとしているときに、--isolatedModulesコンパイラフラグが有効になっていると表示されます。
+--isolatedModulesフラグはTypeScriptコンパイラのフラグで、モジュール間の分離を強化し、各ファイルが自己完結したモジュールであることを保証するものです。これにより、グローバルな名前空間汚染などの問題を防ぐことができます。
+このエラーを修正するには、ファイルの先頭にexport {}を追加してhoge.tsファイルをモジュール化する必要があります。このステートメントは、実際に何かをエクスポートする必要がない場合でも、アプリケーション内の他のモジュールによってインポートされることができる空のモジュールを作成します。export {}ステートメントを追加した後は、通常通りファイル内の残りのコードを書き続けることができます。
+export {}; // 以降にコードを普段どおりに書く 上記のようにhoge.tsファイルにexport {}文を追加したら、--isolatedModulesフラグを有効にしてTypeScriptコードを再コンパイルしてみると、エラーメッセージは消えるはずです。
+参考  cannot be compiled under &amp;lsquo;&amp;ndash;isolatedModules&amp;rsquo;が出た時の対処方法  </description>
+    </item>
     
     <item>
       <title>Dockerコンテナ上にGrafanaをインストールしてCSVデータをチャート出力してみる</title>
