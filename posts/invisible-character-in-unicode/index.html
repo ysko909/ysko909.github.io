@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Unicodeには「あるのに見えない文字」が存在する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Unicodeには「あるのに見えない文字」が存在する" />
+<meta property="og:description" content=" もともとの経緯 ある日、Linuxで実行するためのとあるコマンドをとあるwebページからコピペし実行しようとしましたが、「そんなフォルダもファイルもねぇよ」と怒られてしまいました。存在するのに。
+細かい内容は割愛しますが、実行したのはcd /hoge/fuga/...(結構長いアドレス).../みたいなコマンドです。このアドレスのフォルダは、特定のアプリケーションをインストールしていると自動的に作成されるため、アプリケーションが導入されているのにこのフォルダが存在しない、ということはあり得ません。
+この移動先のアドレスがそこそこ長く、手で入力するのも面倒なので入力間違いがあると困るので、webにあるものをコピペして実行したわけです。コピペしているので、もともとの状態から一言一句変更しておらず、先述のとおりフォルダは存在しているのでエラーが出るようなコマンドでもないはずです。
+しかし、なぜかエラーになってしまいました。
+ただ、ここでふと気付きました。コピペしたコマンドは動かない。けれど、自分で同じ内容を手で入力すると動く。もちろん、見た目はまったく一緒なのに。怪奇現象かなにかかいな。
+・・・ちょっと待って。見えない何かがいるんじゃない？
+ZWSPって何者よ 結論から言うと、います。見えなくても「ヤツ」はそこに。その「ヤツ」は「ゼロ幅スペース」という文字です。ええ、文字です、文字じゃないけど。
+UnicodeにはZWSP（ゼロ幅スペース）という文字コードが存在しており、webページの組版に用いられることがあります。これはゼロ幅なので一見しただけでは存在しないように見えますが、文字コードとしては確かに存在するデータです。
+Wikipediaのゼロ幅スペースによると・・・。
+ 通常、英語などのわかち書きをする言語において、文の途中で改行を入れる場合はスペースの位置で行われる。しかし、スラッシュなどの記号の後などスペースは入らないが改行をしても良い箇所や、日本語などのわかち書きをしない言語において、改行できる位置を明示するためにゼロ幅スペースが用いられる。
+ とのこと。
+たとえば・・・
+ WordPress「めっちゃ長い文字列・・・改行したい・・・でもスペースで区切られてないからどこで改行すべきかイマイチわからん。せや、スラッシュあるからその直後で改行すりゃ見た目にそんな大きな影響ないやろ」
+ ・・・と、スラッシュの後にZWSPを代入してこれを基準に改行することで、見た目に影響を及ぼさないまま改行する位置を明確に指定することが可能です。
+大抵の場合、改行位置という見た目だけの問題なので、それ以外の影響を及ぼすようなことはないでしょう。大抵の場合は。
+例外は、たとえば「めちゃ長いアドレスを含むコマンドをコピペしたとき」などです。
+上記の例で行くと、「めちゃ長いからスラッシュの後にZWSP入れて、それ基準で改行しよ」と処理されるため、見た目には何もないのに実際にはZWSPが存在するせいで、「見た目と実際のデータの内容に差がある」ことになってしまいます。webからコピペしたコマンドが見た目正しいのにエラーを吐くなんていうケースは、このZWSPが悪さをしているかもしれません。許さん。
+ZWSPの影響例 一例をば。
+cdを使ってフォルダ移動するのですが、移動先フォルダのアドレスが長いため、webページからコピペするとしましょう。ここではcd /usr/hoge/...なんかもうめちゃくちゃ長いアドレス.../testとしています。なお、ここでは移動先フォルダは存在するものとします。
+$ cd /usr/hoge/...なんかもうめちゃくちゃ長いアドレス.../test -bash: cd: /usr/hoge/...なんかもうめちゃくちゃ長いアドレス.../test: No such file or directory ← 存在するのに？ このように、移動先フォルダは存在するという前提にもかかわらず、「そんなフォルダないけど」とエラーが返ってきてしまいました。
+webからコピペしたコマンドには、たまたま移動先フォルダ部分にZWSPが含まれていたため、本来意図したフォルダ名とは異なった「ZWSPを含むフォルダ」に向かってcdしようとしてしまい、「そんなフォルダないぞ」を怒られたわけです。やっぱり許さん。
+対処法 エラーの原因がZWSPであると思われる場合は、文字コードを指定して除外するのが最速です。ただし、ZWSPの文字コードにもいくつかパターンがあり、どれに該当しているかを調査するのは少し手間かもしれません。また、そもそも文字コードベースでの指定ができないエディタでは、この方法が利用できません。
+「それなら同じ内容を手で入力すればいいじゃん」は、まぁ、単純かつ有効な方法ではあります。ただ、今回はそもそも手入力したくないような長い文字列をコピペしようとしているのに、手入力するってのは本末転倒になってしまうのが悩ましいところ。
+なお、意図せずZWSPを含ませないようにするには、Markdownならコマンドやプログラムコードをバッククォートで囲うべきでしょう。HTMLであれば&lt;code&gt;タグを利用すれば良いかと。よくコマンドやコードをバッククォートで囲うのは、CMSやSSGがHTMLを生成する際にコードであることを主張するようなレイアウトでページを生成するほか、余計なコードを埋め込まないよう制御できる利点があるわけなんですね。
+まとめ 余計な文字を入れんな。いや、ホント。
+見えないとかどんなトラップよ？ただ、こういう制御を行う文字があるっていうのを知っているなら対処は可能です。実際にトラブルになっても、知っているのと知らないのとでは天と地ほどの差があるでしょう。
+参考  ゼロ幅スペース Unicode ゼロ幅スペースを利用して情報を隠して仕込む ゼロ幅スペースの謎を解く 本当に大切なものは目に見えない ~Unicodeの目に見えない改行文字に苦しめられた話~  " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/invisible-character-in-unicode/" /><meta property="article:published_time" content="2023-03-16T02:19:03&#43;09:00"/>
+<meta property="article:modified_time" content="2023-03-16T02:19:03&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Unicodeには「あるのに見えない文字」が存在する"/>
+<meta name="twitter:description" content=" もともとの経緯 ある日、Linuxで実行するためのとあるコマンドをとあるwebページからコピペし実行しようとしましたが、「そんなフォルダもファイルもねぇよ」と怒られてしまいました。存在するのに。
+細かい内容は割愛しますが、実行したのはcd /hoge/fuga/...(結構長いアドレス).../みたいなコマンドです。このアドレスのフォルダは、特定のアプリケーションをインストールしていると自動的に作成されるため、アプリケーションが導入されているのにこのフォルダが存在しない、ということはあり得ません。
+この移動先のアドレスがそこそこ長く、手で入力するのも面倒なので入力間違いがあると困るので、webにあるものをコピペして実行したわけです。コピペしているので、もともとの状態から一言一句変更しておらず、先述のとおりフォルダは存在しているのでエラーが出るようなコマンドでもないはずです。
+しかし、なぜかエラーになってしまいました。
+ただ、ここでふと気付きました。コピペしたコマンドは動かない。けれど、自分で同じ内容を手で入力すると動く。もちろん、見た目はまったく一緒なのに。怪奇現象かなにかかいな。
+・・・ちょっと待って。見えない何かがいるんじゃない？
+ZWSPって何者よ 結論から言うと、います。見えなくても「ヤツ」はそこに。その「ヤツ」は「ゼロ幅スペース」という文字です。ええ、文字です、文字じゃないけど。
+UnicodeにはZWSP（ゼロ幅スペース）という文字コードが存在しており、webページの組版に用いられることがあります。これはゼロ幅なので一見しただけでは存在しないように見えますが、文字コードとしては確かに存在するデータです。
+Wikipediaのゼロ幅スペースによると・・・。
+ 通常、英語などのわかち書きをする言語において、文の途中で改行を入れる場合はスペースの位置で行われる。しかし、スラッシュなどの記号の後などスペースは入らないが改行をしても良い箇所や、日本語などのわかち書きをしない言語において、改行できる位置を明示するためにゼロ幅スペースが用いられる。
+ とのこと。
+たとえば・・・
+ WordPress「めっちゃ長い文字列・・・改行したい・・・でもスペースで区切られてないからどこで改行すべきかイマイチわからん。せや、スラッシュあるからその直後で改行すりゃ見た目にそんな大きな影響ないやろ」
+ ・・・と、スラッシュの後にZWSPを代入してこれを基準に改行することで、見た目に影響を及ぼさないまま改行する位置を明確に指定することが可能です。
+大抵の場合、改行位置という見た目だけの問題なので、それ以外の影響を及ぼすようなことはないでしょう。大抵の場合は。
+例外は、たとえば「めちゃ長いアドレスを含むコマンドをコピペしたとき」などです。
+上記の例で行くと、「めちゃ長いからスラッシュの後にZWSP入れて、それ基準で改行しよ」と処理されるため、見た目には何もないのに実際にはZWSPが存在するせいで、「見た目と実際のデータの内容に差がある」ことになってしまいます。webからコピペしたコマンドが見た目正しいのにエラーを吐くなんていうケースは、このZWSPが悪さをしているかもしれません。許さん。
+ZWSPの影響例 一例をば。
+cdを使ってフォルダ移動するのですが、移動先フォルダのアドレスが長いため、webページからコピペするとしましょう。ここではcd /usr/hoge/...なんかもうめちゃくちゃ長いアドレス.../testとしています。なお、ここでは移動先フォルダは存在するものとします。
+$ cd /usr/hoge/...なんかもうめちゃくちゃ長いアドレス.../test -bash: cd: /usr/hoge/...なんかもうめちゃくちゃ長いアドレス.../test: No such file or directory ← 存在するのに？ このように、移動先フォルダは存在するという前提にもかかわらず、「そんなフォルダないけど」とエラーが返ってきてしまいました。
+webからコピペしたコマンドには、たまたま移動先フォルダ部分にZWSPが含まれていたため、本来意図したフォルダ名とは異なった「ZWSPを含むフォルダ」に向かってcdしようとしてしまい、「そんなフォルダないぞ」を怒られたわけです。やっぱり許さん。
+対処法 エラーの原因がZWSPであると思われる場合は、文字コードを指定して除外するのが最速です。ただし、ZWSPの文字コードにもいくつかパターンがあり、どれに該当しているかを調査するのは少し手間かもしれません。また、そもそも文字コードベースでの指定ができないエディタでは、この方法が利用できません。
+「それなら同じ内容を手で入力すればいいじゃん」は、まぁ、単純かつ有効な方法ではあります。ただ、今回はそもそも手入力したくないような長い文字列をコピペしようとしているのに、手入力するってのは本末転倒になってしまうのが悩ましいところ。
+なお、意図せずZWSPを含ませないようにするには、Markdownならコマンドやプログラムコードをバッククォートで囲うべきでしょう。HTMLであれば&lt;code&gt;タグを利用すれば良いかと。よくコマンドやコードをバッククォートで囲うのは、CMSやSSGがHTMLを生成する際にコードであることを主張するようなレイアウトでページを生成するほか、余計なコードを埋め込まないよう制御できる利点があるわけなんですね。
+まとめ 余計な文字を入れんな。いや、ホント。
+見えないとかどんなトラップよ？ただ、こういう制御を行う文字があるっていうのを知っているなら対処は可能です。実際にトラブルになっても、知っているのと知らないのとでは天と地ほどの差があるでしょう。
+参考  ゼロ幅スペース Unicode ゼロ幅スペースを利用して情報を隠して仕込む ゼロ幅スペースの謎を解く 本当に大切なものは目に見えない ~Unicodeの目に見えない改行文字に苦しめられた話~  "/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Unicodeには「あるのに見えない文字」が存在する</h1>
+			<div class="meta">Posted at &mdash; Mar 16, 2023</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="もともとの経緯">もともとの経緯</h2>
+
+<p>ある日、Linuxで実行するためのとあるコマンドをとあるwebページからコピペし実行しようとしましたが、「そんなフォルダもファイルもねぇよ」と怒られてしまいました。<strong>存在するのに</strong>。</p>
+
+<p>細かい内容は割愛しますが、実行したのは<code>cd /hoge/fuga/...(結構長いアドレス).../</code>みたいなコマンドです。このアドレスのフォルダは、特定のアプリケーションをインストールしていると自動的に作成されるため、アプリケーションが導入されているのにこのフォルダが存在しない、ということはあり得ません。</p>
+
+<p>この移動先のアドレスがそこそこ長く、<del>手で入力するのも面倒なので</del>入力間違いがあると困るので、webにあるものをコピペして実行したわけです。コピペしているので、もともとの状態から一言一句変更しておらず、先述のとおりフォルダは存在しているのでエラーが出るようなコマンドでもないはずです。</p>
+
+<p>しかし、なぜかエラーになってしまいました。</p>
+
+<p>ただ、ここでふと気付きました。コピペしたコマンドは動かない。けれど、<strong>自分で同じ内容を手で入力すると動く</strong>。もちろん、見た目はまったく一緒なのに。怪奇現象かなにかかいな。</p>
+
+<p>・・・ちょっと待って。見えない<strong>何か</strong>がいるんじゃない？</p>
+
+<h2 id="zwspって何者よ">ZWSPって何者よ</h2>
+
+<p>結論から言うと、<strong>います</strong>。見えなくても「ヤツ」はそこに。その「ヤツ」は「ゼロ幅スペース」という文字です。ええ、<strong>文字です</strong>、文字じゃないけど。</p>
+
+<p>UnicodeにはZWSP（ゼロ幅スペース）という文字コードが存在しており、webページの組版に用いられることがあります。これはゼロ幅なので一見しただけでは存在しないように見えますが、文字コードとしては確かに存在するデータです。</p>
+
+<p>Wikipediaの<a href="https://ja.wikipedia.org/wiki/%E3%82%BC%E3%83%AD%E5%B9%85%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9">ゼロ幅スペース</a>によると・・・。</p>
+
+<blockquote>
+<p>通常、英語などのわかち書きをする言語において、文の途中で改行を入れる場合はスペースの位置で行われる。しかし、スラッシュなどの記号の後などスペースは入らないが改行をしても良い箇所や、日本語などのわかち書きをしない言語において、改行できる位置を明示するためにゼロ幅スペースが用いられる。</p>
+</blockquote>
+
+<p>とのこと。</p>
+
+<p>たとえば・・・</p>
+
+<blockquote>
+<p>WordPress「めっちゃ長い文字列・・・改行したい・・・でもスペースで区切られてないからどこで改行すべきかイマイチわからん。せや、スラッシュあるからその直後で改行すりゃ見た目にそんな大きな影響ないやろ」</p>
+</blockquote>
+
+<p>・・・と、スラッシュの後にZWSPを代入してこれを基準に改行することで、見た目に影響を及ぼさないまま改行する位置を明確に指定することが可能です。</p>
+
+<p>大抵の場合、改行位置という見た目だけの問題なので、それ以外の影響を及ぼすようなことはないでしょう。<strong>大抵の場合は</strong>。</p>
+
+<p>例外は、たとえば「めちゃ長いアドレスを含むコマンドをコピペしたとき」などです。</p>
+
+<p>上記の例で行くと、「めちゃ長いからスラッシュの後にZWSP入れて、それ基準で改行しよ」と処理されるため、見た目には何もないのに実際にはZWSPが存在するせいで、「見た目と実際のデータの内容に差がある」ことになってしまいます。webからコピペしたコマンドが<strong>見た目正しいのにエラーを吐く</strong>なんていうケースは、このZWSPが悪さをしているかもしれません。許さん。</p>
+
+<h2 id="zwspの影響例">ZWSPの影響例</h2>
+
+<p>一例をば。</p>
+
+<p><code>cd</code>を使ってフォルダ移動するのですが、移動先フォルダのアドレスが長いため、webページからコピペするとしましょう。ここでは<code>cd /usr/hoge/...なんかもうめちゃくちゃ長いアドレス.../test</code>としています。なお、ここでは移動先フォルダは<strong>存在するものとします</strong>。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ cd /usr/hoge/...なんかもうめちゃくちゃ長いアドレス.../test
+-bash: cd: /usr/hoge/...なんかもうめちゃくちゃ長いアドレス.../test: No such file or directory ← 存在するのに？</code></pre></div>
+<p>このように、移動先フォルダは存在するという前提にもかかわらず、「そんなフォルダないけど」とエラーが返ってきてしまいました。</p>
+
+<p>webからコピペしたコマンドには、たまたま移動先フォルダ部分に<strong>ZWSPが含まれて</strong>いたため、本来意図したフォルダ名とは異なった「ZWSPを含むフォルダ」に向かって<code>cd</code>しようとしてしまい、「そんなフォルダないぞ」を怒られたわけです。やっぱり許さん。</p>
+
+<h2 id="対処法">対処法</h2>
+
+<p>エラーの原因がZWSPであると思われる場合は、文字コードを指定して除外するのが最速です。ただし、ZWSPの文字コードにもいくつかパターンがあり、どれに該当しているかを調査するのは少し手間かもしれません。また、そもそも文字コードベースでの指定ができないエディタでは、この方法が利用できません。</p>
+
+<p>「それなら同じ内容を手で入力すればいいじゃん」は、まぁ、単純かつ有効な方法ではあります。ただ、今回はそもそも手入力したくないような長い文字列をコピペしようとしているのに、手入力するってのは本末転倒になってしまうのが悩ましいところ。</p>
+
+<p>なお、意図せずZWSPを含ませないようにするには、Markdownならコマンドやプログラムコードをバッククォートで囲うべきでしょう。HTMLであれば<code>&lt;code&gt;</code>タグを利用すれば良いかと。よくコマンドやコードをバッククォートで囲うのは、CMSやSSGがHTMLを生成する際にコードであることを主張するようなレイアウトでページを生成するほか、余計なコードを埋め込まないよう制御できる利点があるわけなんですね。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p><strong>余計な文字を入れんな</strong>。いや、ホント。</p>
+
+<p>見えないとかどんなトラップよ？ただ、こういう制御を行う文字があるっていうのを知っているなら対処は可能です。実際にトラブルになっても、知っているのと知らないのとでは天と地ほどの差があるでしょう。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://ja.wikipedia.org/wiki/%E3%82%BC%E3%83%AD%E5%B9%85%E3%82%B9%E3%83%9A%E3%83%BC%E3%82%B9">ゼロ幅スペース</a></li>
+<li><a href="https://raintrees.net/news/124">Unicode ゼロ幅スペースを利用して情報を隠して仕込む</a></li>
+<li><a href="https://gxliu.hatenablog.com/entry/2020/10/21/000444">ゼロ幅スペースの謎を解く</a></li>
+<li><a href="https://qiita.com/lilpacy/items/57a0257dbbf69f36ac05">本当に大切なものは目に見えない ~Unicodeの目に見えない改行文字に苦しめられた話~</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
