@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Pythonにおける型アノテーションとmypyによる型チェック - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Pythonにおける型アノテーションとmypyによる型チェック" />
+<meta property="og:description" content="動的型付け言語のおさらい ご存じの通り、Pythonは動的型付け言語ですので、関数や変数などのオブジェクトに対して型の宣言を強制することはありません。動的型付け言語では、値自体に型情報が含まれており、変数には固定された型情報が存在しません。
+hoge = 123 fuga = &#39;ham&#39; ここでは変数hogeに数値が、fugaには文字列が格納されています。
+hoge = 123 hoge = &#39;ham&#39; 先述の通り、Pythonのような動的型付け言語では、変数には型情報が付与されません。そのため、上記のようなコードもエラーになりません。
+一方、静的型付け言語であるC言語やJavaでは、変数hogeの宣言時に型情報を指定します。
+#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt; int hoge(int num) { return num * 2; } int main() { char str[BUFSIZ]; sprintf(str, &#34;%d&#34;, hoge(3)); printf(&#34;%s&#34;, str); return 0; } たとえばC言語だと、上記のように関数や変数の宣言時に型を指定します。
+そのため、先述のPythonコードの例において、もし変数hogeに数値型であるという型情報が付与されている場合、文字列を代入しようとする行でエラーが発生するわけです。
+型が想定と違ったら def piyo(foo): return foo * 2 上記の例だと、関数piyo()は引数を取りそれを2倍した結果を返しています。その実装から推測すると、引数fooはおそらく数値が入ることを前提としているように見えます。
+ところが、関数piyo()の引数に文字列を入れても動作します。つまり、本来想定しているであろう型以外の型を代入することが可能です。これって大丈夫？
+もちろん、大丈夫ではありません。しっかり実行時にエラーを吐きます。
+なお、上記で「引数が数値であることを前提にしていそうだ」とあいまいに書いたのは、必ずしも数値のみを前提としているわけではない可能性があるためです。Pythonでは、文字列*2というコードを実行すると「文字列文字列」という結果が返されます。そのため、こっちの挙動を意図している場合、引数が文字列でないと困ることになります。いずれにしても、ここでは関数の目的がコメントなどで明示されていないため、文字列を繰り返す用途よりも数値を2倍する用途が一般的だと仮定しました。
+このようなどっちつかずの状況を避けるには、関数を実装する際にその関数の目的を明記することが重要です。そうしないと、上記のようにメンテナンスの際に問題が生じる可能性があるわけですね。
+動的型付け言語特有の問題 piyo({&#39;hoge&#39;: &#39;foo&#39;, &#39;fuga&#39;: 2}) 問題となるのは、本来想定していた型とは異なる型が代入される場合などです。上記の例では、関数piyo()は引数として数値を想定しているのに、辞書型のオブジェクトが渡されています。このコードは正しく動作するでしょうか。まぁ、しそうにないですよね。
+&gt;&gt;&gt; piyo({&#39;hoge&#39;: &#39;foo&#39;, &#39;fuga&#39;: 2}) Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; File &#34;&lt;stdin&gt;&#34;, line 2, in foo TypeError: unsupported operand type(s) for *: &#39;dict&#39; and &#39;int&#39; 予想通り、実行時エラーが発生します。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/type-annotation-in-python-and-type-checking-with-mypy/" /><meta property="article:published_time" content="2023-06-14T00:16:55&#43;09:00"/>
+<meta property="article:modified_time" content="2023-06-14T00:16:55&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Pythonにおける型アノテーションとmypyによる型チェック"/>
+<meta name="twitter:description" content="動的型付け言語のおさらい ご存じの通り、Pythonは動的型付け言語ですので、関数や変数などのオブジェクトに対して型の宣言を強制することはありません。動的型付け言語では、値自体に型情報が含まれており、変数には固定された型情報が存在しません。
+hoge = 123 fuga = &#39;ham&#39; ここでは変数hogeに数値が、fugaには文字列が格納されています。
+hoge = 123 hoge = &#39;ham&#39; 先述の通り、Pythonのような動的型付け言語では、変数には型情報が付与されません。そのため、上記のようなコードもエラーになりません。
+一方、静的型付け言語であるC言語やJavaでは、変数hogeの宣言時に型情報を指定します。
+#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt; int hoge(int num) { return num * 2; } int main() { char str[BUFSIZ]; sprintf(str, &#34;%d&#34;, hoge(3)); printf(&#34;%s&#34;, str); return 0; } たとえばC言語だと、上記のように関数や変数の宣言時に型を指定します。
+そのため、先述のPythonコードの例において、もし変数hogeに数値型であるという型情報が付与されている場合、文字列を代入しようとする行でエラーが発生するわけです。
+型が想定と違ったら def piyo(foo): return foo * 2 上記の例だと、関数piyo()は引数を取りそれを2倍した結果を返しています。その実装から推測すると、引数fooはおそらく数値が入ることを前提としているように見えます。
+ところが、関数piyo()の引数に文字列を入れても動作します。つまり、本来想定しているであろう型以外の型を代入することが可能です。これって大丈夫？
+もちろん、大丈夫ではありません。しっかり実行時にエラーを吐きます。
+なお、上記で「引数が数値であることを前提にしていそうだ」とあいまいに書いたのは、必ずしも数値のみを前提としているわけではない可能性があるためです。Pythonでは、文字列*2というコードを実行すると「文字列文字列」という結果が返されます。そのため、こっちの挙動を意図している場合、引数が文字列でないと困ることになります。いずれにしても、ここでは関数の目的がコメントなどで明示されていないため、文字列を繰り返す用途よりも数値を2倍する用途が一般的だと仮定しました。
+このようなどっちつかずの状況を避けるには、関数を実装する際にその関数の目的を明記することが重要です。そうしないと、上記のようにメンテナンスの際に問題が生じる可能性があるわけですね。
+動的型付け言語特有の問題 piyo({&#39;hoge&#39;: &#39;foo&#39;, &#39;fuga&#39;: 2}) 問題となるのは、本来想定していた型とは異なる型が代入される場合などです。上記の例では、関数piyo()は引数として数値を想定しているのに、辞書型のオブジェクトが渡されています。このコードは正しく動作するでしょうか。まぁ、しそうにないですよね。
+&gt;&gt;&gt; piyo({&#39;hoge&#39;: &#39;foo&#39;, &#39;fuga&#39;: 2}) Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; File &#34;&lt;stdin&gt;&#34;, line 2, in foo TypeError: unsupported operand type(s) for *: &#39;dict&#39; and &#39;int&#39; 予想通り、実行時エラーが発生します。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Pythonにおける型アノテーションとmypyによる型チェック</h1>
+			<div class="meta">Posted at &mdash; Jun 14, 2023</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="動的型付け言語のおさらい">動的型付け言語のおさらい</h2>
+
+<p>ご存じの通り、Pythonは動的型付け言語ですので、関数や変数などのオブジェクトに対して型の宣言を強制することはありません。動的型付け言語では、値自体に型情報が含まれており、変数には固定された型情報が存在しません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">hoge = 123
+fuga = <span style="color:#a31515">&#39;ham&#39;</span></code></pre></div>
+<p>ここでは変数<code>hoge</code>に数値が、<code>fuga</code>には文字列が格納されています。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">hoge = 123
+hoge = <span style="color:#a31515">&#39;ham&#39;</span></code></pre></div>
+<p>先述の通り、Pythonのような動的型付け言語では、変数には型情報が付与されません。そのため、上記のようなコードもエラーになりません。</p>
+
+<p>一方、静的型付け言語であるC言語やJavaでは、変数<code>hoge</code>の宣言時に型情報を指定します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#00f">#include</span> <span style="color:#00f">&lt;stdio.h&gt;</span><span style="color:#00f">
+</span><span style="color:#00f">#include</span> <span style="color:#00f">&lt;stdlib.h&gt;</span><span style="color:#00f">
+</span><span style="color:#00f"></span>
+<span style="color:#2b91af">int</span> hoge(<span style="color:#2b91af">int</span> num) {
+    <span style="color:#00f">return</span> num * 2;
+}
+
+<span style="color:#2b91af">int</span> main() {
+    <span style="color:#2b91af">char</span> str[BUFSIZ];
+    
+    sprintf(str, <span style="color:#a31515">&#34;%d&#34;</span>, hoge(3));
+    printf(<span style="color:#a31515">&#34;%s&#34;</span>, str);
+    
+    <span style="color:#00f">return</span> 0;
+}</code></pre></div>
+<p>たとえばC言語だと、上記のように関数や変数の宣言時に型を指定します。</p>
+
+<p>そのため、先述のPythonコードの例において、もし変数<code>hoge</code>に数値型であるという型情報が付与されている場合、文字列を代入しようとする行でエラーが発生するわけです。</p>
+
+<h2 id="型が想定と違ったら">型が想定と違ったら</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> piyo(foo):
+  <span style="color:#00f">return</span> foo * 2</code></pre></div>
+<p>上記の例だと、関数<code>piyo()</code>は引数を取りそれを2倍した結果を返しています。その実装から推測すると、引数<code>foo</code>はおそらく数値が入ることを前提としているように見えます。</p>
+
+<p>ところが、関数<code>piyo()</code>の引数に文字列を入れても動作します。つまり、本来想定しているであろう型以外の型を代入することが可能です。これって大丈夫？</p>
+
+<p>もちろん、<strong>大丈夫ではありません</strong>。しっかり実行時にエラーを吐きます。</p>
+
+<p>なお、上記で「引数が数値であることを前提にして<strong>いそうだ</strong>」とあいまいに書いたのは、必ずしも数値のみを前提としているわけではない可能性があるためです。Pythonでは、<code>文字列*2</code>というコードを実行すると「文字列文字列」という結果が返されます。そのため、こっちの挙動を意図している場合、引数が文字列でないと困ることになります。いずれにしても、ここでは関数の目的がコメントなどで明示されていないため、文字列を繰り返す用途よりも数値を2倍する用途が一般的だと仮定しました。</p>
+
+<p>このようなどっちつかずの状況を避けるには、関数を実装する際にその関数の目的を明記することが重要です。そうしないと、上記のようにメンテナンスの際に問題が生じる可能性があるわけですね。</p>
+
+<h2 id="動的型付け言語特有の問題">動的型付け言語特有の問題</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">piyo({<span style="color:#a31515">&#39;hoge&#39;</span>: <span style="color:#a31515">&#39;foo&#39;</span>, <span style="color:#a31515">&#39;fuga&#39;</span>: 2})</code></pre></div>
+<p>問題となるのは、本来想定していた型とは異なる型が代入される場合などです。上記の例では、関数<code>piyo()</code>は引数として数値を想定しているのに、辞書型のオブジェクトが渡されています。このコードは正しく動作するでしょうか。まぁ、しそうにないですよね。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">&gt;&gt;&gt; piyo({&#39;hoge&#39;: &#39;foo&#39;, &#39;fuga&#39;: 2})
+Traceback (most recent call last):
+  File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt;
+  File &#34;&lt;stdin&gt;&#34;, line 2, in foo
+TypeError: unsupported operand type(s) for *: &#39;dict&#39; and &#39;int&#39;</code></pre></div>
+<p>予想通り、実行時エラーが発生します。</p>
+
+<p>静的型付け言語では、このようなデータ型が異なるという問題はコンパイル時に検出され、コンパイルエラーとして報告されます。しかし、Pythonは動的型付け言語であるため、このような問題は実際にコードを実行するまでエラーが発生しません。実行してはじめてエラーに気付き、コードを修正することになります。</p>
+
+<p>この問題を回避するためには、意図しない型が入力されないように制御する必要があります。ただし、Pythonのような動的型付け言語では、「コンパイルエラーによる型の不整合の排除」はできません。そのため、コンパイル時に対処することができない場合は、実行時のエラーを避けるためにコードで適切な制御を行う必要があります。</p>
+
+<h2 id="型アノテーション">型アノテーション</h2>
+
+<p>これらの問題を解決するため、Python3.5から型アノテーションがサポートされることになりました。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; hoge: int = 123
+&gt;&gt;&gt; hoge
+123
+&gt;&gt;&gt; type(hoge)
+&lt;<span style="color:#00f">class</span> <span style="">&#39;</span><span style="color:#2b91af">int</span><span style="color:#a31515">&#39;&gt;</span></code></pre></div>
+<p>型アノテーションは、変数や引数などを宣言する際に<code>&lt;名前&gt;: &lt;型情報&gt;</code>という形式で型情報を付与することを意味します。</p>
+
+<p>従来通り、pydocなどのコメントに型情報を記述することも可能ですが、型アノテーションを使用すると明確に「このオブジェクトには指定したXXX型の値が入ることを期待している」と表現できます。さらに、IDEによる入力支援も期待できます。</p>
+
+<p>なお、先ほどの例では<code>type()</code>の結果がintになっていますが、これは型アノテーションの効果<strong>ではありません</strong>。実際に入力された値<code>123</code>を参照しており、変数<code>hoge</code>は現時点では数値型であると解釈されているだけです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; hoge: int = 123
+&gt;&gt;&gt; hoge
+123
+&gt;&gt;&gt; type(hoge)
+&lt;<span style="color:#00f">class</span> <span style="">&#39;</span><span style="color:#2b91af">int</span><span style="color:#a31515">&#39;&gt;</span><span style="">
+</span><span style=""></span><span style="color:#a31515">&gt;&gt;&gt; hoge = &#39;</span>foo<span style="color:#a31515">&#39;</span><span style="">
+</span><span style=""></span><span style="color:#a31515">&gt;&gt;&gt; type(hoge)</span><span style="">
+</span><span style=""></span><span style="color:#a31515">&lt;class &#39;</span>str<span style="color:#a31515">&#39;&gt;</span></code></pre></div>
+<p>つまり、型アノテーションは単に「この型を想定している」という<strong>注釈</strong>であり、型チェックが実行されるわけではありません。</p>
+
+<p>実際に上記のようにint型と宣言された変数<code>hoge</code>に対して文字列を代入しても、処理は継続されますし、<code>type()</code>関数の結果は普通にstr型となります。つまり、書かれた型アノテーションは無視されてしまうのです。したがって、型アノテーションは<strong>あくまでも注釈</strong>であり、それ以上の意味を持ちません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; <span style="color:#00f">def</span> hoge(foo: int, bar: str) -&gt; str:
+...   <span style="color:#00f">return</span> bar * foo
+...
+&gt;&gt;&gt; hoge(3, <span style="color:#a31515">&#39;ham&#39;</span>)
+<span style="color:#a31515">&#39;hamhamham&#39;</span>
+&gt;&gt;&gt; hoge(2,3)
+6
+&gt;&gt;&gt; hoge(2, [1, <span style="color:#a31515">&#39;eggs&#39;</span>])
+[1, <span style="color:#a31515">&#39;eggs&#39;</span>, 1, <span style="color:#a31515">&#39;eggs&#39;</span>]
+&gt;&gt;&gt; hoge(2, {<span style="color:#a31515">&#39;aaa&#39;</span>: <span style="color:#a31515">&#39;bbb&#39;</span>, <span style="color:#a31515">&#39;ccc&#39;</span>: 4})
+Traceback (most recent call last):
+  File <span style="color:#a31515">&#34;&lt;stdin&gt;&#34;</span>, line 1, <span style="color:#00f">in</span> &lt;module&gt;
+  File <span style="color:#a31515">&#34;&lt;stdin&gt;&#34;</span>, line 2, <span style="color:#00f">in</span> hoge
+TypeError: unsupported operand type(s) <span style="color:#00f">for</span> *: <span style="color:#a31515">&#39;dict&#39;</span> <span style="color:#00f">and</span> <span style="color:#a31515">&#39;int&#39;</span></code></pre></div>
+<p>関数においても、型アノテーションを記述できます。先ほどの例では、<code>def function_name(arg: &lt;type&gt;) -&gt; &lt;return type&gt;:</code>の形式で型アノテーションを行います。関数のアノテーションも、前述の通り<strong>あくまで注釈</strong>です。そのため、引数に「数値と文字列が必要」というようにアノテーションを記述しても、実際には型チェックが行われないため、<code>hoge(2, 3)</code>のような「アノテーションに反している」入力値を受け取ってしまう可能性がある点に留意する必要があります。</p>
+
+<h2 id="mypyで型チェックしてみる">mypyで型チェックしてみる</h2>
+
+<p>「型アノテーション書いても、注意喚起だけでチェックしてくれないんじゃ意味ないじゃん」と言われると、まぁその通りなわけです。IDEの仕組みに頼るのもありですが、ここは「それ用のツール」を導入します。</p>
+
+<p>それは<a href="https://mypy.readthedocs.io/en/stable/index.html">mypy</a>です。これを導入することで、型アノテーションをもとにコードの型チェックを行うことが可能です。</p>
+
+<p>mypyはPythonの静的型チェッカーです。型チェッカーは、コード内の変数や関数を正しく使用しているかどうかを確認するのに役立ちます。mypyを使用すると、Pythonプログラムに型ヒント（PEP 484）を追加し、型が正しく使用されていない場合に警告が表示されます²。</p>
+
+<p>mypyをインストールするには、<code>pip</code>を使用します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">pip install mypy</code></pre></div>
+<p>mypyがインストールされたら、mypyを実行します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">mypy hoge.py</code></pre></div>
+<p>蒸気のコマンドを実行すると、hoge.pyファイルを型チェックします。なんらかのエラーが見つかったら、そのエラーを出力します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> greeting(name):
+    <span style="color:#00f">return</span> <span style="color:#a31515">&#39;Hello &#39;</span> + name
+    
+greeting(1)</code></pre></div>
+<p>たとえば、上記のようなコードを含むファイルがあるとします。</p>
+
+<p>この関数は、動的型付けされているとmypyによって判断されます。型情報が書いてないわけですからね。デフォルトでは、mypyは動的型付けされた関数の型チェックを行いません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ cat hoge.py
+def greeting(name):
+    return &#39;Hello &#39; + name
+
+greeting(1)
+
+$ mypy hoge.py 
+Success: no issues found in 1 source file</code></pre></div>
+<p>実際にmypyで先述のコードをチェックしてみた結果です。「Success」って言われてますね。</p>
+
+<p>これは、いくつかの例外を除けば、通常の注釈のないPythonコードにおいては型チェックが実行されずエラーが報告されないことを意味しています。ただ、引数に想定している型以外のデータが入力されると困るからチェックしたいのに、このままだと型チェックされないっていうのはちょっと待てと言いたくなります。</p>
+
+<p>じゃあ、mypyでエラーを検出するにはどうするかって言うと、型アノテーションを追記するわけです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> greeting(name: str) -&gt; str:
+    <span style="color:#00f">return</span> <span style="color:#a31515">&#39;Hello &#39;</span> + name
+    
+greeting(1)</code></pre></div>
+<p>たとえば、上記のように型アノテーションを追記することで、<code>greeting()</code>関数が文字列を受け取り文字列を返すことをmypyに伝えることができます。これで、mypyは提供された型アノテーションを使用して、<code>greeting()</code>関数の不正な使用や<code>greeting()</code>関数内の変数の不正な使用を検出できるようになります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ cat hoge.py 
+def greeting(name: str) -&gt; str:
+    return &#39;Hello &#39; + name
+
+greeting(1)
+
+$ mypy hoge.py 
+hoge.py:4: error: Argument 1 to &#34;greeting&#34; has incompatible type &#34;int&#34;; expected &#34;str&#34;  [arg-type]
+Found 1 error in 1 file (checked 1 source file)</code></pre></div>
+<p>追記された型アノテーションの情報に準拠しつつ、今度こそmypyが型チェックを実行してくれます。めでたく（？）、エラーが表示されています。</p>
+
+<h2 id="mypyを使わない型チェック">mypyを使わない型チェック</h2>
+
+<p>mypyを導入しなくても一部のIDEでは、型アノテーションの内容に基づいて解析を行い、型が不一致の場合などには<strong>警告</strong>を表示する機能も存在するようです。ただし、これはIDEごとに対応が異なるため、Python自体の機能ではない点は注意が必要です。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>実は今回の話、「<a href="https://www.oreilly.co.jp/books/9784814400171/">ロバストPython</a>」という本で型ヒントについて学んだアウトプットです。最近買ったばっかりでまだ読み終わってないのですが、Pythonを使って保守性高く開発しようとするなら必読書ではないでしょうか。わりと冒頭部分の正論連打で心が折れそうですが_(:3」∠)_</p>
+
+<p>Pythonはシンプルで構文も比較的読みやすい動的型付け言語であるため、ガーッとプログラムを書いてとにかく動作させることを最重要視するのももちろんひとつの観点です。が、ロバストにする機能もしっかり備えています。せっかくそんな便利機能があるのですから、使わない手はないわけです。クリーンで保守しやすいコードが書けるようになりたいものです。</p>
+
+<h2 id="参照">参照</h2>
+
+<ol>
+<li><a href="https://docs.python.org/ja/3/library/typing.html">typing &mdash; 型ヒントのサポート</a></li>
+<li><a href="https://peps.python.org/pep-0484/">PEP 484 – Type Hints</a></li>
+<li><a href="https://www.oreilly.co.jp/books/9784814400171/">ロバストPython</a></li>
+<li><a href="https://xaro.hatenablog.jp/entry/2023/03/26/093035">『ロバストPython』を監訳しました</a></li>
+<li><a href="https://note.nkmk.me/python-function-annotations-typing/">Pythonの関数アノテーションと型ヒント、typingモジュール</a></li>
+<li><a href="https://mypy.readthedocs.io/en/stable/index.html">mypy</a></li>
+<li><a href="https://developers.microad.co.jp/entry/2021/10/04/063000">最強のPython型チェッカーmypy</a></li>
+<li><a href="https://mypy.readthedocs.io/en/stable/cheat_sheet_py3.html">Type hints cheat sheet</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

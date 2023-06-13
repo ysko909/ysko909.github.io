@@ -7,10 +7,31 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Thu, 16 Mar 2023 02:19:03 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 14 Jun 2023 00:16:55 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Pythonにおける型アノテーションとmypyによる型チェック</title>
+      <link>https://ysko909.github.io/posts/type-annotation-in-python-and-type-checking-with-mypy/</link>
+      <pubDate>Wed, 14 Jun 2023 00:16:55 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/type-annotation-in-python-and-type-checking-with-mypy/</guid>
+      <description>動的型付け言語のおさらい ご存じの通り、Pythonは動的型付け言語ですので、関数や変数などのオブジェクトに対して型の宣言を強制することはありません。動的型付け言語では、値自体に型情報が含まれており、変数には固定された型情報が存在しません。
+hoge = 123 fuga = &amp;#39;ham&amp;#39; ここでは変数hogeに数値が、fugaには文字列が格納されています。
+hoge = 123 hoge = &amp;#39;ham&amp;#39; 先述の通り、Pythonのような動的型付け言語では、変数には型情報が付与されません。そのため、上記のようなコードもエラーになりません。
+一方、静的型付け言語であるC言語やJavaでは、変数hogeの宣言時に型情報を指定します。
+#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt; int hoge(int num) { return num * 2; } int main() { char str[BUFSIZ]; sprintf(str, &amp;#34;%d&amp;#34;, hoge(3)); printf(&amp;#34;%s&amp;#34;, str); return 0; } たとえばC言語だと、上記のように関数や変数の宣言時に型を指定します。
+そのため、先述のPythonコードの例において、もし変数hogeに数値型であるという型情報が付与されている場合、文字列を代入しようとする行でエラーが発生するわけです。
+型が想定と違ったら def piyo(foo): return foo * 2 上記の例だと、関数piyo()は引数を取りそれを2倍した結果を返しています。その実装から推測すると、引数fooはおそらく数値が入ることを前提としているように見えます。
+ところが、関数piyo()の引数に文字列を入れても動作します。つまり、本来想定しているであろう型以外の型を代入することが可能です。これって大丈夫？
+もちろん、大丈夫ではありません。しっかり実行時にエラーを吐きます。
+なお、上記で「引数が数値であることを前提にしていそうだ」とあいまいに書いたのは、必ずしも数値のみを前提としているわけではない可能性があるためです。Pythonでは、文字列*2というコードを実行すると「文字列文字列」という結果が返されます。そのため、こっちの挙動を意図している場合、引数が文字列でないと困ることになります。いずれにしても、ここでは関数の目的がコメントなどで明示されていないため、文字列を繰り返す用途よりも数値を2倍する用途が一般的だと仮定しました。
+このようなどっちつかずの状況を避けるには、関数を実装する際にその関数の目的を明記することが重要です。そうしないと、上記のようにメンテナンスの際に問題が生じる可能性があるわけですね。
+動的型付け言語特有の問題 piyo({&amp;#39;hoge&amp;#39;: &amp;#39;foo&amp;#39;, &amp;#39;fuga&amp;#39;: 2}) 問題となるのは、本来想定していた型とは異なる型が代入される場合などです。上記の例では、関数piyo()は引数として数値を想定しているのに、辞書型のオブジェクトが渡されています。このコードは正しく動作するでしょうか。まぁ、しそうにないですよね。
+&amp;gt;&amp;gt;&amp;gt; piyo({&amp;#39;hoge&amp;#39;: &amp;#39;foo&amp;#39;, &amp;#39;fuga&amp;#39;: 2}) Traceback (most recent call last): File &amp;#34;&amp;lt;stdin&amp;gt;&amp;#34;, line 1, in &amp;lt;module&amp;gt; File &amp;#34;&amp;lt;stdin&amp;gt;&amp;#34;, line 2, in foo TypeError: unsupported operand type(s) for *: &amp;#39;dict&amp;#39; and &amp;#39;int&amp;#39; 予想通り、実行時エラーが発生します。</description>
+    </item>
     
     <item>
       <title>Unicodeには「あるのに見えない文字」が存在する</title>
