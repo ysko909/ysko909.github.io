@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>「Import &#39;ライブラリ名&#39; could not be resolved」というエラーがVS Codeで出たらインタプリタを変えてみる - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="「Import &#39;ライブラリ名&#39; could not be resolved」というエラーがVS Codeで出たらインタプリタを変えてみる" />
+<meta property="og:description" content="概要 とあるFlask向けのコードをVisual Studio Code（以下、VS Code）で書いていたら、こんなエラーが出力されました。
+Import &#34;flask&#34; could not be resolved Import &#34;pandas&#34; could not be resolved from source Import &#34;numpy&#34; could not be resolved ﾊｧ？（うさぎ）
+$ pip list Package Version ------------------------- ------- Flask 2.3.2 numpy 1.24.3 pandas 2.0.2 上記はインストール済みライブラリの一部を抜粋したもの。Flaskもnumpyもpandasもインストール済みです。そりゃ、ライブラリがなかったらもうちょっと違うエラーメッセージでるよなぁ？
+from flask import Flask, jsonify, request, abort, json import pandas as pd import numpy as np # 以下、コード 上記はそのコードの一部分を抜粋したものです。えー、なんも変なことしてないんだけど。
+なお、これ以外のエラーメッセージは表示されませんでした。謎。
+回避策 VS Codeでインタプリタを別のものに変更します。自分の場合は、なぜかこの方法でこのエラーを回避できました。
+VS CodeでF1を押し、表示されるメッセージウィンドウに「Python: Select Interpreter」と入力します。全部入力しなくても途中まで入力したら、表示されている一覧の中から該当のものを選択してしまっても問題ありません。
+すると上記のような画面が表示されます。これらは現状の環境で選択可能なインタプリタの一覧が表示されているため、他の環境ではまた違った内容で表示されるはずです。現状は/usr/bin/python3が選択されています。これを別のものに変えます。usr/local/bin/pythonに変えてみます。
+エラーメッセージが消えました。ﾊｧ？（うさぎ）" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/get-error-import-lib-could-not-be-resolved-on-vscode/" /><meta property="article:published_time" content="2023-06-18T10:24:44&#43;09:00"/>
+<meta property="article:modified_time" content="2023-06-18T10:24:44&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="「Import &#39;ライブラリ名&#39; could not be resolved」というエラーがVS Codeで出たらインタプリタを変えてみる"/>
+<meta name="twitter:description" content="概要 とあるFlask向けのコードをVisual Studio Code（以下、VS Code）で書いていたら、こんなエラーが出力されました。
+Import &#34;flask&#34; could not be resolved Import &#34;pandas&#34; could not be resolved from source Import &#34;numpy&#34; could not be resolved ﾊｧ？（うさぎ）
+$ pip list Package Version ------------------------- ------- Flask 2.3.2 numpy 1.24.3 pandas 2.0.2 上記はインストール済みライブラリの一部を抜粋したもの。Flaskもnumpyもpandasもインストール済みです。そりゃ、ライブラリがなかったらもうちょっと違うエラーメッセージでるよなぁ？
+from flask import Flask, jsonify, request, abort, json import pandas as pd import numpy as np # 以下、コード 上記はそのコードの一部分を抜粋したものです。えー、なんも変なことしてないんだけど。
+なお、これ以外のエラーメッセージは表示されませんでした。謎。
+回避策 VS Codeでインタプリタを別のものに変更します。自分の場合は、なぜかこの方法でこのエラーを回避できました。
+VS CodeでF1を押し、表示されるメッセージウィンドウに「Python: Select Interpreter」と入力します。全部入力しなくても途中まで入力したら、表示されている一覧の中から該当のものを選択してしまっても問題ありません。
+すると上記のような画面が表示されます。これらは現状の環境で選択可能なインタプリタの一覧が表示されているため、他の環境ではまた違った内容で表示されるはずです。現状は/usr/bin/python3が選択されています。これを別のものに変えます。usr/local/bin/pythonに変えてみます。
+エラーメッセージが消えました。ﾊｧ？（うさぎ）"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">「Import &#39;ライブラリ名&#39; could not be resolved」というエラーがVS Codeで出たらインタプリタを変えてみる</h1>
+			<div class="meta">Posted at &mdash; Jun 18, 2023</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>とあるFlask向けのコードをVisual Studio Code（以下、VS Code）で書いていたら、こんなエラーが出力されました。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">Import &#34;flask&#34; could not be resolved
+Import &#34;pandas&#34; could not be resolved from source
+Import &#34;numpy&#34; could not be resolved</code></pre></div>
+<p><img src="2023-06-18-10-26-14.png" alt="pic" /></p>
+
+<p><strong>ﾊｧ？</strong>（<del><a href="https://www.anime-chiikawa.jp/chara.html">うさぎ</a></del>）</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ pip list
+Package                   Version
+------------------------- -------
+Flask                     2.3.2
+numpy                     1.24.3
+pandas                    2.0.2</code></pre></div>
+<p>上記はインストール済みライブラリの一部を抜粋したもの。Flaskもnumpyもpandasもインストール済みです。そりゃ、ライブラリがなかったらもうちょっと違うエラーメッセージでるよなぁ？</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">from</span> flask <span style="color:#00f">import</span> Flask, jsonify, request, abort, json
+<span style="color:#00f">import</span> pandas <span style="color:#00f">as</span> pd
+<span style="color:#00f">import</span> numpy <span style="color:#00f">as</span> np
+
+<span style="color:#008000"># 以下、コード</span></code></pre></div>
+<p>上記はそのコードの一部分を抜粋したものです。えー、なんも変なことしてないんだけど。</p>
+
+<p>なお、これ以外のエラーメッセージは表示されませんでした。謎。</p>
+
+<h2 id="回避策">回避策</h2>
+
+<p>VS Codeでインタプリタを別のものに変更します。自分の場合は、<strong>なぜか</strong>この方法でこのエラーを回避できました。</p>
+
+<p>VS CodeでF1を押し、表示されるメッセージウィンドウに「Python: Select Interpreter」と入力します。全部入力しなくても途中まで入力したら、表示されている一覧の中から該当のものを選択してしまっても問題ありません。</p>
+
+<p><img src="2023-06-18-10-26-44.png" alt="pic" /></p>
+
+<p>すると上記のような画面が表示されます。これらは現状の環境で選択可能なインタプリタの一覧が表示されているため、他の環境ではまた違った内容で表示されるはずです。現状は<code>/usr/bin/python3</code>が選択されています。これを別のものに変えます。<code>usr/local/bin/python</code>に変えてみます。</p>
+
+<p><img src="2023-06-18-10-26-53.png" alt="pic" /></p>
+
+<p>エラーメッセージが消えました。<strong>ﾊｧ？</strong>（<del><a href="https://www.anime-chiikawa.jp/chara.html">うさぎ</a></del>）</p>
+
+<p>参考にしたブログにもあるとおり、もともと存在していて使ってない別のインタプリタを選択しただけです。新規で現状とは別バージョンのインタプリタをインストールしたとか、そういうことはしていません。そのため、「インタプリタが1つしかなくて変更できないんだけど」という場合には使えなさそうです。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://dntf.hatenablog.com/entry/2021/08/07/021123">VS CodeでImport &ldquo;flask&rdquo; could not be resolvedがvirtual envでなった場合の対処法</a></li>
+<li><a href="https://stackoverflow.com/questions/65694813/import-flask-could-not-be-resolved-from-source-pylance">import flask could not be resolved from source pylance</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

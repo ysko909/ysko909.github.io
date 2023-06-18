@@ -7,10 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Wed, 19 Aug 2020 20:40:06 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 18 Jun 2023 10:24:44 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/vscode/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>「Import &#39;ライブラリ名&#39; could not be resolved」というエラーがVS Codeで出たらインタプリタを変えてみる</title>
+      <link>https://ysko909.github.io/posts/get-error-import-lib-could-not-be-resolved-on-vscode/</link>
+      <pubDate>Sun, 18 Jun 2023 10:24:44 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/get-error-import-lib-could-not-be-resolved-on-vscode/</guid>
+      <description>概要 とあるFlask向けのコードをVisual Studio Code（以下、VS Code）で書いていたら、こんなエラーが出力されました。
+Import &amp;#34;flask&amp;#34; could not be resolved Import &amp;#34;pandas&amp;#34; could not be resolved from source Import &amp;#34;numpy&amp;#34; could not be resolved ﾊｧ？（うさぎ）
+$ pip list Package Version ------------------------- ------- Flask 2.3.2 numpy 1.24.3 pandas 2.0.2 上記はインストール済みライブラリの一部を抜粋したもの。Flaskもnumpyもpandasもインストール済みです。そりゃ、ライブラリがなかったらもうちょっと違うエラーメッセージでるよなぁ？
+from flask import Flask, jsonify, request, abort, json import pandas as pd import numpy as np # 以下、コード 上記はそのコードの一部分を抜粋したものです。えー、なんも変なことしてないんだけど。
+なお、これ以外のエラーメッセージは表示されませんでした。謎。
+回避策 VS Codeでインタプリタを別のものに変更します。自分の場合は、なぜかこの方法でこのエラーを回避できました。
+VS CodeでF1を押し、表示されるメッセージウィンドウに「Python: Select Interpreter」と入力します。全部入力しなくても途中まで入力したら、表示されている一覧の中から該当のものを選択してしまっても問題ありません。
+すると上記のような画面が表示されます。これらは現状の環境で選択可能なインタプリタの一覧が表示されているため、他の環境ではまた違った内容で表示されるはずです。現状は/usr/bin/python3が選択されています。これを別のものに変えます。usr/local/bin/pythonに変えてみます。
+エラーメッセージが消えました。ﾊｧ？（うさぎ）</description>
+    </item>
     
     <item>
       <title>Debian busterベースのPython用コンテナでvscodeとpyodbcを使ってSQL Serverにアクセスにする</title>
