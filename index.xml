@@ -7,10 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sun, 18 Jun 2023 10:24:44 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 28 Jun 2023 19:45:51 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Pythonやライブラリの非推奨あるいは非主流なコード</title>
+      <link>https://ysko909.github.io/posts/deprecations-in-python-and-libs/</link>
+      <pubDate>Wed, 28 Jun 2023 19:45:51 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/deprecations-in-python-and-libs/</guid>
+      <description> 概要 Pythonやそのライブラリを含む他の要素においても、バージョンアップが行われるたびに、これまでの書き方が非推奨とされるケースが相当あります。ただし、インターネット上には古いコードや非推奨の情報が存在しています。それが非推奨であるということを知らない場合には、新しい書き方があるにもかかわらず古い書き方を使用してしまうケースが考えられます。
+「この書き方は何だ？見たことないぞ」と思って調査してみると、現在では非推奨になった昔ながらの書き方だったりすることがあります。時間を費やして調査した結果、それが非推奨だったりすると困るわけです。ムダな時間を省くためにも、そのような「現在は使えない、または将来的に使えなくなる（非推奨）」の書き方についてメモします。
+とはいえ、気付いた時に追記する予定ですので、増えすぎることはないでしょう。
+Pythonや標準ライブラリ関連 書式化演算子%を使った文字列の書式設定 文字列のフォーマットを定義する際、format()やf文字列を使った記法が現在の主流です。ただ、C言語のprintf()に準拠したような演算子を使った記法で表現する方法もあります。
+&amp;gt;&amp;gt;&amp;gt; num = 100 &amp;gt;&amp;gt;&amp;gt; print(&amp;#39;%sis %din decimal and 0x%xin hexadecimal.&amp;#39; % (num, num, num)) 100 is 100 in decimal and 0x64 in hexadecimal. C言語のprintf()では、任意の文字列において「値を出力する位置にどんな型で出力するか」をパーセント付の識別子で表現します。%sだった場合、文字列を指定された箇所に出力する、といった具合です。この記法がPythonでも使えます。
+ただ、「せっかく動的型付け言語なのに、文字列編集をするときに型を気にしないといけないのは面倒だぜ！」と思ったのかはわかりませんが、前述のとおりformat()関数などを使った表現方法が今は主流だと思います。
+ 書式化演算子%を使った文字列の書式設定(printf形式の書式化) Python♪「% 演算子」を使った古い文字列書式設定  ライブラリ関連 pandas pandasからNumPyの関数などを使うpd.np pandasをインポートすると、同時にNumPyもインポートされます。このとき、pd.npという書き方をすることで明示的にNumPyをインポートしていなくてもNumPyが持つ機能にアクセスできるようになります。import numpyを書かなくてもいいという、メリット？うーん、メリットかなぁこれ。
+import pandas as pd hoge = pd.np.arange(10) print(pd.np.pi) 上記のように、pandasしかインポートしてなくてもNumPyが使えるようになります。というか、なりました。ただ、NumPyの関数などを使うならちゃんとインポートした方がコードの保守性が高いと思われたのか、現在では非推奨です。そのうち、この機能が削除されると思います。
+ pandasからNumPyの関数などを使う方法（pd.np） What’s new in 1.0.0 (January 29, 2020) - Deprecations Import both Pandas and Numpy?  </description>
+    </item>
     
     <item>
       <title>「Import &#39;ライブラリ名&#39; could not be resolved」というエラーがVS Codeで出たらインタプリタを変えてみる</title>

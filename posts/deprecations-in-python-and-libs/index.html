@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Pythonやライブラリの非推奨あるいは非主流なコード - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Pythonやライブラリの非推奨あるいは非主流なコード" />
+<meta property="og:description" content=" 概要 Pythonやそのライブラリを含む他の要素においても、バージョンアップが行われるたびに、これまでの書き方が非推奨とされるケースが相当あります。ただし、インターネット上には古いコードや非推奨の情報が存在しています。それが非推奨であるということを知らない場合には、新しい書き方があるにもかかわらず古い書き方を使用してしまうケースが考えられます。
+「この書き方は何だ？見たことないぞ」と思って調査してみると、現在では非推奨になった昔ながらの書き方だったりすることがあります。時間を費やして調査した結果、それが非推奨だったりすると困るわけです。ムダな時間を省くためにも、そのような「現在は使えない、または将来的に使えなくなる（非推奨）」の書き方についてメモします。
+とはいえ、気付いた時に追記する予定ですので、増えすぎることはないでしょう。
+Pythonや標準ライブラリ関連 書式化演算子%を使った文字列の書式設定 文字列のフォーマットを定義する際、format()やf文字列を使った記法が現在の主流です。ただ、C言語のprintf()に準拠したような演算子を使った記法で表現する方法もあります。
+&gt;&gt;&gt; num = 100 &gt;&gt;&gt; print(&#39;%sis %din decimal and 0x%xin hexadecimal.&#39; % (num, num, num)) 100 is 100 in decimal and 0x64 in hexadecimal. C言語のprintf()では、任意の文字列において「値を出力する位置にどんな型で出力するか」をパーセント付の識別子で表現します。%sだった場合、文字列を指定された箇所に出力する、といった具合です。この記法がPythonでも使えます。
+ただ、「せっかく動的型付け言語なのに、文字列編集をするときに型を気にしないといけないのは面倒だぜ！」と思ったのかはわかりませんが、前述のとおりformat()関数などを使った表現方法が今は主流だと思います。
+ 書式化演算子%を使った文字列の書式設定(printf形式の書式化) Python♪「% 演算子」を使った古い文字列書式設定  ライブラリ関連 pandas pandasからNumPyの関数などを使うpd.np pandasをインポートすると、同時にNumPyもインポートされます。このとき、pd.npという書き方をすることで明示的にNumPyをインポートしていなくてもNumPyが持つ機能にアクセスできるようになります。import numpyを書かなくてもいいという、メリット？うーん、メリットかなぁこれ。
+import pandas as pd hoge = pd.np.arange(10) print(pd.np.pi) 上記のように、pandasしかインポートしてなくてもNumPyが使えるようになります。というか、なりました。ただ、NumPyの関数などを使うならちゃんとインポートした方がコードの保守性が高いと思われたのか、現在では非推奨です。そのうち、この機能が削除されると思います。
+ pandasからNumPyの関数などを使う方法（pd.np） What’s new in 1.0.0 (January 29, 2020) - Deprecations Import both Pandas and Numpy?  " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/deprecations-in-python-and-libs/" /><meta property="article:published_time" content="2023-06-28T19:45:51&#43;09:00"/>
+<meta property="article:modified_time" content="2023-06-28T19:45:51&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Pythonやライブラリの非推奨あるいは非主流なコード"/>
+<meta name="twitter:description" content=" 概要 Pythonやそのライブラリを含む他の要素においても、バージョンアップが行われるたびに、これまでの書き方が非推奨とされるケースが相当あります。ただし、インターネット上には古いコードや非推奨の情報が存在しています。それが非推奨であるということを知らない場合には、新しい書き方があるにもかかわらず古い書き方を使用してしまうケースが考えられます。
+「この書き方は何だ？見たことないぞ」と思って調査してみると、現在では非推奨になった昔ながらの書き方だったりすることがあります。時間を費やして調査した結果、それが非推奨だったりすると困るわけです。ムダな時間を省くためにも、そのような「現在は使えない、または将来的に使えなくなる（非推奨）」の書き方についてメモします。
+とはいえ、気付いた時に追記する予定ですので、増えすぎることはないでしょう。
+Pythonや標準ライブラリ関連 書式化演算子%を使った文字列の書式設定 文字列のフォーマットを定義する際、format()やf文字列を使った記法が現在の主流です。ただ、C言語のprintf()に準拠したような演算子を使った記法で表現する方法もあります。
+&gt;&gt;&gt; num = 100 &gt;&gt;&gt; print(&#39;%sis %din decimal and 0x%xin hexadecimal.&#39; % (num, num, num)) 100 is 100 in decimal and 0x64 in hexadecimal. C言語のprintf()では、任意の文字列において「値を出力する位置にどんな型で出力するか」をパーセント付の識別子で表現します。%sだった場合、文字列を指定された箇所に出力する、といった具合です。この記法がPythonでも使えます。
+ただ、「せっかく動的型付け言語なのに、文字列編集をするときに型を気にしないといけないのは面倒だぜ！」と思ったのかはわかりませんが、前述のとおりformat()関数などを使った表現方法が今は主流だと思います。
+ 書式化演算子%を使った文字列の書式設定(printf形式の書式化) Python♪「% 演算子」を使った古い文字列書式設定  ライブラリ関連 pandas pandasからNumPyの関数などを使うpd.np pandasをインポートすると、同時にNumPyもインポートされます。このとき、pd.npという書き方をすることで明示的にNumPyをインポートしていなくてもNumPyが持つ機能にアクセスできるようになります。import numpyを書かなくてもいいという、メリット？うーん、メリットかなぁこれ。
+import pandas as pd hoge = pd.np.arange(10) print(pd.np.pi) 上記のように、pandasしかインポートしてなくてもNumPyが使えるようになります。というか、なりました。ただ、NumPyの関数などを使うならちゃんとインポートした方がコードの保守性が高いと思われたのか、現在では非推奨です。そのうち、この機能が削除されると思います。
+ pandasからNumPyの関数などを使う方法（pd.np） What’s new in 1.0.0 (January 29, 2020) - Deprecations Import both Pandas and Numpy?  "/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Pythonやライブラリの非推奨あるいは非主流なコード</h1>
+			<div class="meta">Posted at &mdash; Jun 28, 2023</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>Pythonやそのライブラリを含む他の要素においても、バージョンアップが行われるたびに、これまでの書き方が非推奨とされるケースが相当あります。ただし、インターネット上には古いコードや非推奨の情報が存在しています。それが非推奨であるということを知らない場合には、新しい書き方があるにもかかわらず古い書き方を使用してしまうケースが考えられます。</p>
+
+<p>「この書き方は何だ？見たことないぞ」と思って調査してみると、現在では非推奨になった昔ながらの書き方だったりすることがあります。時間を費やして調査した結果、それが非推奨だったりすると困るわけです。ムダな時間を省くためにも、そのような「現在は使えない、または将来的に使えなくなる（非推奨）」の書き方についてメモします。</p>
+
+<p>とはいえ、気付いた時に追記する予定ですので、増えすぎることはないでしょう。</p>
+
+<h2 id="pythonや標準ライブラリ関連">Pythonや標準ライブラリ関連</h2>
+
+<h3 id="書式化演算子-を使った文字列の書式設定">書式化演算子<code>%</code>を使った文字列の書式設定</h3>
+
+<p>文字列のフォーマットを定義する際、<code>format()</code>や<code>f文字列</code>を使った記法が現在の主流です。ただ、C言語の<code>printf()</code>に準拠したような演算子を使った記法で表現する方法もあります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; num = 100
+&gt;&gt;&gt; <span style="color:#00f">print</span>(<span style="color:#a31515">&#39;</span><span style="color:#a31515">%s</span><span style="color:#a31515"> is </span><span style="color:#a31515">%d</span><span style="color:#a31515"> in decimal and 0x</span><span style="color:#a31515">%x</span><span style="color:#a31515"> in hexadecimal.&#39;</span> % (num, num, num))
+100 <span style="color:#00f">is</span> 100 <span style="color:#00f">in</span> decimal <span style="color:#00f">and</span> 0x64 <span style="color:#00f">in</span> hexadecimal.</code></pre></div>
+<p>C言語の<code>printf()</code>では、任意の文字列において「値を出力する位置にどんな型で出力するか」をパーセント付の識別子で表現します。<code>%s</code>だった場合、文字列を指定された箇所に出力する、といった具合です。この記法がPythonでも使えます。</p>
+
+<p>ただ、「せっかく動的型付け言語なのに、文字列編集をするときに型を気にしないといけないのは面倒だぜ！」と思ったのかはわかりませんが、前述のとおり<code>format()</code>関数などを使った表現方法が今は主流だと思います。</p>
+
+<ol>
+<li><a href="https://www.javadrive.jp/python/string/index23.html">書式化演算子%を使った文字列の書式設定(printf形式の書式化)</a></li>
+<li><a href="https://snowtree-injune.com/2019/03/13/sprintf-style-basic/">Python♪「% 演算子」を使った古い文字列書式設定</a></li>
+</ol>
+
+<h2 id="ライブラリ関連">ライブラリ関連</h2>
+
+<h3 id="pandas">pandas</h3>
+
+<h4 id="pandasからnumpyの関数などを使う-pd-np">pandasからNumPyの関数などを使う<code>pd.np</code></h4>
+
+<p>pandasをインポートすると、同時にNumPyもインポートされます。このとき、<code>pd.np</code>という書き方をすることで明示的にNumPyをインポートしていなくてもNumPyが持つ機能にアクセスできるようになります。<code>import numpy</code>を書かなくてもいいという、メリット？うーん、メリットかなぁこれ。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> pandas <span style="color:#00f">as</span> pd
+
+hoge = pd.np.arange(10)
+<span style="color:#00f">print</span>(pd.np.pi)</code></pre></div>
+<p>上記のように、pandasしかインポートしてなくてもNumPyが使えるようになります。というか、なりました。ただ、NumPyの関数などを使うならちゃんとインポートした方がコードの保守性が高いと思われたのか、現在では非推奨です。そのうち、この機能が削除されると思います。</p>
+
+<ol>
+<li><a href="https://note.nkmk.me/python-pandas-pd-np/">pandasからNumPyの関数などを使う方法（pd.np）</a></li>
+<li><a href="https://pandas.pydata.org/pandas-docs/stable/whatsnew/v1.0.0.html#deprecations">What’s new in 1.0.0 (January 29, 2020) - Deprecations</a></li>
+<li><a href="https://stackoverflow.com/questions/68567405/import-both-pandas-and-numpy">Import both Pandas and Numpy?</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
