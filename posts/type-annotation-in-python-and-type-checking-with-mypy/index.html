@@ -11,12 +11,10 @@ hoge = 123 hoge = &#39;ham&#39; 先述の通り、Pythonのような動的型付
 #include &lt;stdio.h&gt;#include &lt;stdlib.h&gt; int hoge(int num) { return num * 2; } int main() { char str[BUFSIZ]; sprintf(str, &#34;%d&#34;, hoge(3)); printf(&#34;%s&#34;, str); return 0; } たとえばC言語だと、上記のように関数や変数の宣言時に型を指定します。
 そのため、先述のPythonコードの例において、もし変数hogeに数値型であるという型情報が付与されている場合、文字列を代入しようとする行でエラーが発生するわけです。
 型が想定と違ったら def piyo(foo): return foo * 2 上記の例だと、関数piyo()は引数を取りそれを2倍した結果を返しています。その実装から推測すると、引数fooはおそらく数値が入ることを前提としているように見えます。
-ところが、関数piyo()の引数に文字列を入れても動作します。つまり、本来想定しているであろう型以外の型を代入することが可能です。これって大丈夫？
+ところが、関数piyo()の引数に文字列を入れても動作します。つまり、本来想定しているであろう型以外の型を代入することが可能です。たとえば真偽値とかリストとか辞書とか。これって大丈夫？
 もちろん、大丈夫ではありません。しっかり実行時にエラーを吐きます。
-なお、上記で「引数が数値であることを前提にしていそうだ」とあいまいに書いたのは、必ずしも数値のみを前提としているわけではない可能性があるためです。Pythonでは、文字列*2というコードを実行すると「文字列文字列」という結果が返されます。そのため、こっちの挙動を意図している場合、引数が文字列でないと困ることになります。いずれにしても、ここでは関数の目的がコメントなどで明示されていないため、文字列を繰り返す用途よりも数値を2倍する用途が一般的だと仮定しました。
-このようなどっちつかずの状況を避けるには、関数を実装する際にその関数の目的を明記することが重要です。そうしないと、上記のようにメンテナンスの際に問題が生じる可能性があるわけですね。
-動的型付け言語特有の問題 piyo({&#39;hoge&#39;: &#39;foo&#39;, &#39;fuga&#39;: 2}) 問題となるのは、本来想定していた型とは異なる型が代入される場合などです。上記の例では、関数piyo()は引数として数値を想定しているのに、辞書型のオブジェクトが渡されています。このコードは正しく動作するでしょうか。まぁ、しそうにないですよね。
-&gt;&gt;&gt; piyo({&#39;hoge&#39;: &#39;foo&#39;, &#39;fuga&#39;: 2}) Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; File &#34;&lt;stdin&gt;&#34;, line 2, in foo TypeError: unsupported operand type(s) for *: &#39;dict&#39; and &#39;int&#39; 予想通り、実行時エラーが発生します。" />
+ただし、エラーを吐かないケースもあります。
+&gt;&gt;&gt; def piyo(foo): ... return foo*2 ... &gt;&gt;&gt; piyo(13) 26 &gt;&gt;&gt; piyo(&#39;hoge&#39;) &#39;hogehoge&#39; &gt;&gt;&gt; piyo([&#39;a&#39;, &#39;bc&#39;, 3]) [&#39;a&#39;, &#39;bc&#39;, 3, &#39;a&#39;, &#39;bc&#39;, 3] &gt;&gt;&gt; piyo({&#39;ham&#39;: 10, &#39;eggs&#39;: 20, &#39;spam&#39;: 30}) Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; File &#34;&lt;stdin&gt;&#34;, line 2, in piyo TypeError: unsupported operand type(s) for *: &#39;dict&#39; and &#39;int&#39; 上記の例ですと、文字列やリストはとりあえず結果が返ってきます。ただ、辞書などはエラーになります（これは後述）。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ysko909.github.io/posts/type-annotation-in-python-and-type-checking-with-mypy/" /><meta property="article:published_time" content="2023-06-14T00:16:55&#43;09:00"/>
 <meta property="article:modified_time" content="2023-06-14T00:16:55&#43;09:00"/><meta name="twitter:card" content="summary"/>
@@ -28,12 +26,10 @@ hoge = 123 hoge = &#39;ham&#39; 先述の通り、Pythonのような動的型付
 #include &lt;stdio.h&gt;#include &lt;stdlib.h&gt; int hoge(int num) { return num * 2; } int main() { char str[BUFSIZ]; sprintf(str, &#34;%d&#34;, hoge(3)); printf(&#34;%s&#34;, str); return 0; } たとえばC言語だと、上記のように関数や変数の宣言時に型を指定します。
 そのため、先述のPythonコードの例において、もし変数hogeに数値型であるという型情報が付与されている場合、文字列を代入しようとする行でエラーが発生するわけです。
 型が想定と違ったら def piyo(foo): return foo * 2 上記の例だと、関数piyo()は引数を取りそれを2倍した結果を返しています。その実装から推測すると、引数fooはおそらく数値が入ることを前提としているように見えます。
-ところが、関数piyo()の引数に文字列を入れても動作します。つまり、本来想定しているであろう型以外の型を代入することが可能です。これって大丈夫？
+ところが、関数piyo()の引数に文字列を入れても動作します。つまり、本来想定しているであろう型以外の型を代入することが可能です。たとえば真偽値とかリストとか辞書とか。これって大丈夫？
 もちろん、大丈夫ではありません。しっかり実行時にエラーを吐きます。
-なお、上記で「引数が数値であることを前提にしていそうだ」とあいまいに書いたのは、必ずしも数値のみを前提としているわけではない可能性があるためです。Pythonでは、文字列*2というコードを実行すると「文字列文字列」という結果が返されます。そのため、こっちの挙動を意図している場合、引数が文字列でないと困ることになります。いずれにしても、ここでは関数の目的がコメントなどで明示されていないため、文字列を繰り返す用途よりも数値を2倍する用途が一般的だと仮定しました。
-このようなどっちつかずの状況を避けるには、関数を実装する際にその関数の目的を明記することが重要です。そうしないと、上記のようにメンテナンスの際に問題が生じる可能性があるわけですね。
-動的型付け言語特有の問題 piyo({&#39;hoge&#39;: &#39;foo&#39;, &#39;fuga&#39;: 2}) 問題となるのは、本来想定していた型とは異なる型が代入される場合などです。上記の例では、関数piyo()は引数として数値を想定しているのに、辞書型のオブジェクトが渡されています。このコードは正しく動作するでしょうか。まぁ、しそうにないですよね。
-&gt;&gt;&gt; piyo({&#39;hoge&#39;: &#39;foo&#39;, &#39;fuga&#39;: 2}) Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; File &#34;&lt;stdin&gt;&#34;, line 2, in foo TypeError: unsupported operand type(s) for *: &#39;dict&#39; and &#39;int&#39; 予想通り、実行時エラーが発生します。"/>
+ただし、エラーを吐かないケースもあります。
+&gt;&gt;&gt; def piyo(foo): ... return foo*2 ... &gt;&gt;&gt; piyo(13) 26 &gt;&gt;&gt; piyo(&#39;hoge&#39;) &#39;hogehoge&#39; &gt;&gt;&gt; piyo([&#39;a&#39;, &#39;bc&#39;, 3]) [&#39;a&#39;, &#39;bc&#39;, 3, &#39;a&#39;, &#39;bc&#39;, 3] &gt;&gt;&gt; piyo({&#39;ham&#39;: 10, &#39;eggs&#39;: 20, &#39;spam&#39;: 30}) Traceback (most recent call last): File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt; File &#34;&lt;stdin&gt;&#34;, line 2, in piyo TypeError: unsupported operand type(s) for *: &#39;dict&#39; and &#39;int&#39; 上記の例ですと、文字列やリストはとりあえず結果が返ってきます。ただ、辞書などはエラーになります（これは後述）。"/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
 
@@ -128,13 +124,30 @@ hoge = <span style="color:#a31515">&#39;ham&#39;</span></code></pre></div>
   <span style="color:#00f">return</span> foo * 2</code></pre></div>
 <p>上記の例だと、関数<code>piyo()</code>は引数を取りそれを2倍した結果を返しています。その実装から推測すると、引数<code>foo</code>はおそらく数値が入ることを前提としているように見えます。</p>
 
-<p>ところが、関数<code>piyo()</code>の引数に文字列を入れても動作します。つまり、本来想定しているであろう型以外の型を代入することが可能です。これって大丈夫？</p>
+<p>ところが、関数<code>piyo()</code>の引数に文字列を入れても動作します。つまり、本来想定しているであろう型<strong>以外</strong>の型を代入することが可能です。たとえば真偽値とかリストとか辞書とか。これって大丈夫？</p>
 
 <p>もちろん、<strong>大丈夫ではありません</strong>。しっかり実行時にエラーを吐きます。</p>
 
-<p>なお、上記で「引数が数値であることを前提にして<strong>いそうだ</strong>」とあいまいに書いたのは、必ずしも数値のみを前提としているわけではない可能性があるためです。Pythonでは、<code>文字列*2</code>というコードを実行すると「文字列文字列」という結果が返されます。そのため、こっちの挙動を意図している場合、引数が文字列でないと困ることになります。いずれにしても、ここでは関数の目的がコメントなどで明示されていないため、文字列を繰り返す用途よりも数値を2倍する用途が一般的だと仮定しました。</p>
+<p>ただし、エラーを吐かないケースもあります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; <span style="color:#00f">def</span> piyo(foo):
+...   <span style="color:#00f">return</span> foo*2
+...
+&gt;&gt;&gt; piyo(13)
+26
+&gt;&gt;&gt; piyo(<span style="color:#a31515">&#39;hoge&#39;</span>)
+<span style="color:#a31515">&#39;hogehoge&#39;</span>
+&gt;&gt;&gt; piyo([<span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;bc&#39;</span>, 3])
+[<span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;bc&#39;</span>, 3, <span style="color:#a31515">&#39;a&#39;</span>, <span style="color:#a31515">&#39;bc&#39;</span>, 3]
+&gt;&gt;&gt; piyo({<span style="color:#a31515">&#39;ham&#39;</span>: 10, <span style="color:#a31515">&#39;eggs&#39;</span>: 20, <span style="color:#a31515">&#39;spam&#39;</span>: 30})
+Traceback (most recent call last):
+  File <span style="color:#a31515">&#34;&lt;stdin&gt;&#34;</span>, line 1, <span style="color:#00f">in</span> &lt;module&gt;
+  File <span style="color:#a31515">&#34;&lt;stdin&gt;&#34;</span>, line 2, <span style="color:#00f">in</span> piyo
+TypeError: unsupported operand type(s) <span style="color:#00f">for</span> *: <span style="color:#a31515">&#39;dict&#39;</span> <span style="color:#00f">and</span> <span style="color:#a31515">&#39;int&#39;</span></code></pre></div>
+<p>上記の例ですと、文字列やリストはとりあえず結果が返ってきます。ただ、辞書などはエラーになります（これは後述）。</p>
 
-<p>このようなどっちつかずの状況を避けるには、関数を実装する際にその関数の目的を明記することが重要です。そうしないと、上記のようにメンテナンスの際に問題が生じる可能性があるわけですね。</p>
+<p>上記で「引数が数値であることを前提にしているように見える」とあいまいに書いたのは、これが原因です。つまり、必ずしも数値のみを前提としているわけではない可能性があるためです。Pythonでは、<code>文字列*2</code>というコードを実行すると「文字列文字列」という結果が返されます。そのため、こちらの挙動を目的としていた場合、引数が文字列なのは正規の使用方法です。いずれにしても、ここでは関数の目的がコメントなどで明示されていないため、文字列を繰り返す用途よりも数値を2倍する用途が一般的だと仮定しました。</p>
+
+<p>このようなどっちつかずの状況を避けるには、関数を実装する際にその関数の目的を明記することが重要です。そうしないと、上記のようにメンテナンスの際に問題が生じる可能性があるわけですね。コメントはこまめにね！</p>
 
 <h2 id="動的型付け言語特有の問題">動的型付け言語特有の問題</h2>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">piyo({<span style="color:#a31515">&#39;hoge&#39;</span>: <span style="color:#a31515">&#39;foo&#39;</span>, <span style="color:#a31515">&#39;fuga&#39;</span>: 2})</code></pre></div>
@@ -146,7 +159,7 @@ Traceback (most recent call last):
 TypeError: unsupported operand type(s) for *: &#39;dict&#39; and &#39;int&#39;</code></pre></div>
 <p>予想通り、実行時エラーが発生します。</p>
 
-<p>静的型付け言語では、このようなデータ型が異なるという問題はコンパイル時に検出され、コンパイルエラーとして報告されます。しかし、Pythonは動的型付け言語であるため、このような問題は実際にコードを実行するまでエラーが発生しません。実行してはじめてエラーに気付き、コードを修正することになります。</p>
+<p>静的型付け言語では、このようなデータ型が異なるという問題はコンパイル時に検出され、コンパイルエラーとして報告されます。しかし、Pythonは動的型付け言語であるため、このような問題は実際にコードを実行するまでエラーが発生しません。実行してはじめてエラーに気付き、コードを修正することになります。このようなバグを開発中に気付くことができたなら、対処はできるでしょう。ところがです。「デバッグしても気づかなくて、正式リリースしたあとにバグが顕在化した」なんてことになったら大変なことになります。</p>
 
 <p>この問題を回避するためには、意図しない型が入力されないように制御する必要があります。ただし、Pythonのような動的型付け言語では、「コンパイルエラーによる型の不整合の排除」はできません。そのため、コンパイル時に対処することができない場合は、実行時のエラーを避けるためにコードで適切な制御を行う必要があります。</p>
 
