@@ -7,10 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Wed, 28 Jun 2023 19:45:51 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 11 Jul 2023 15:08:38 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>PythonにおけるEnumの基本</title>
+      <link>https://ysko909.github.io/posts/fundamentals-of-enum-in-python/</link>
+      <pubDate>Tue, 11 Jul 2023 15:08:38 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/fundamentals-of-enum-in-python/</guid>
+      <description>概要 Pythonにおいて、Enumは列挙型クラスをサポートしています。列挙型とは「定義された値の有限集合を表すデータ型」です。
+これだけ読むと何のこっちゃという感じですが、たとえば血液型の「A型・B型・O型・AB型」のように、あるいはトランプのスートのようなもの、と考えればいいかもしれません。「あるカテゴリに属し、限られた選択肢の中から1つを取る」値たちのことを集合として扱えるデータ型、とという感じでいいでしょうか。血液型について言えば、1人の血液型は前述の4つ以外に存在しませんし、トランプで「スペードでありハートでもある」なんて状況はないはずです。
+プログラムではこれらを「順序を持たない識別子」として利用したいのですが、「スペード」や「AB型」のように文字列として持つとプログラム上の取り回しが非常に悪いです。そのため、識別子を一括管理できる列挙型で扱おうというわけです。
+なお、列挙型を実装する際は識別子に任意の整数値を割り当てることが多いです。これにより、コード上は文字列っぽい識別子として振舞っても、実際はその中身である整数値によって管理されている、という感じになります。このように実装することで、コードを管理しやすくなります。
+まとめると、列挙型を利用することで以下のようなメリットがあります。
+ コードを簡潔にして、保守性や可読性を向上 「あるカテゴリや集団に属する要素」として表現できる 値を限定することで入力ミスを防止し例外を予防  利用方法 定義 Enumをインポートし継承することで、オリジナルの列挙型を定義できます。
+&amp;gt;&amp;gt;&amp;gt; from enum import Enum &amp;gt;&amp;gt;&amp;gt; class BloodType(Enum): ... O = 1 ... A = 2 ... B = 3 ... AB = 4 ... &amp;gt;&amp;gt;&amp;gt; BloodType &amp;lt;enum &amp;#39;BloodType&amp;#39;&amp;gt; &amp;gt;&amp;gt;&amp;gt; type(BloodType) &amp;lt;class &amp;#39;enum.EnumMeta&amp;#39;&amp;gt; 血液型の列挙型のクラスを作成してみました。メンバーには列挙したい値を設定し、メンバーに対応する値に何らかのオブジェクトを代入します。クラスBloodTypeには上記の4つ以外に値が存在しないため、この集合は有限であると言えます。また、OやABというメンバーは「血液型」というカテゴリに属する識別子である、ということを表現できます。これにより、ある集団とそれに属する要素を表現できるわけです。
+前述のように列挙型では整数値を入力することのほうがおおいので、上記の例では数値を入力しています。ただ、上記のように連番で振る場合は、手書きでなくauto()関数を使う場合がほとんどだと思います。
+&amp;gt;&amp;gt;&amp;gt; class BloodType(Enum): ... O = auto() ... A = auto() ... B = auto() ... AB = auto() ... 上記のようにauto()関数を利用することで、手書きする必要なく連番を付与できます。</description>
+    </item>
     
     <item>
       <title>Pythonやライブラリの非推奨あるいは非主流なコード</title>

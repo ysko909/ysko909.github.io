@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>PythonにおけるEnumの基本 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="PythonにおけるEnumの基本" />
+<meta property="og:description" content="概要 Pythonにおいて、Enumは列挙型クラスをサポートしています。列挙型とは「定義された値の有限集合を表すデータ型」です。
+これだけ読むと何のこっちゃという感じですが、たとえば血液型の「A型・B型・O型・AB型」のように、あるいはトランプのスートのようなもの、と考えればいいかもしれません。「あるカテゴリに属し、限られた選択肢の中から1つを取る」値たちのことを集合として扱えるデータ型、とという感じでいいでしょうか。血液型について言えば、1人の血液型は前述の4つ以外に存在しませんし、トランプで「スペードでありハートでもある」なんて状況はないはずです。
+プログラムではこれらを「順序を持たない識別子」として利用したいのですが、「スペード」や「AB型」のように文字列として持つとプログラム上の取り回しが非常に悪いです。そのため、識別子を一括管理できる列挙型で扱おうというわけです。
+なお、列挙型を実装する際は識別子に任意の整数値を割り当てることが多いです。これにより、コード上は文字列っぽい識別子として振舞っても、実際はその中身である整数値によって管理されている、という感じになります。このように実装することで、コードを管理しやすくなります。
+まとめると、列挙型を利用することで以下のようなメリットがあります。
+ コードを簡潔にして、保守性や可読性を向上 「あるカテゴリや集団に属する要素」として表現できる 値を限定することで入力ミスを防止し例外を予防  利用方法 定義 Enumをインポートし継承することで、オリジナルの列挙型を定義できます。
+&gt;&gt;&gt; from enum import Enum &gt;&gt;&gt; class BloodType(Enum): ... O = 1 ... A = 2 ... B = 3 ... AB = 4 ... &gt;&gt;&gt; BloodType &lt;enum &#39;BloodType&#39;&gt; &gt;&gt;&gt; type(BloodType) &lt;class &#39;enum.EnumMeta&#39;&gt; 血液型の列挙型のクラスを作成してみました。メンバーには列挙したい値を設定し、メンバーに対応する値に何らかのオブジェクトを代入します。クラスBloodTypeには上記の4つ以外に値が存在しないため、この集合は有限であると言えます。また、OやABというメンバーは「血液型」というカテゴリに属する識別子である、ということを表現できます。これにより、ある集団とそれに属する要素を表現できるわけです。
+前述のように列挙型では整数値を入力することのほうがおおいので、上記の例では数値を入力しています。ただ、上記のように連番で振る場合は、手書きでなくauto()関数を使う場合がほとんどだと思います。
+&gt;&gt;&gt; class BloodType(Enum): ... O = auto() ... A = auto() ... B = auto() ... AB = auto() ... 上記のようにauto()関数を利用することで、手書きする必要なく連番を付与できます。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-enum-in-python/" /><meta property="article:published_time" content="2023-07-11T15:08:38&#43;09:00"/>
+<meta property="article:modified_time" content="2023-07-11T15:08:38&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="PythonにおけるEnumの基本"/>
+<meta name="twitter:description" content="概要 Pythonにおいて、Enumは列挙型クラスをサポートしています。列挙型とは「定義された値の有限集合を表すデータ型」です。
+これだけ読むと何のこっちゃという感じですが、たとえば血液型の「A型・B型・O型・AB型」のように、あるいはトランプのスートのようなもの、と考えればいいかもしれません。「あるカテゴリに属し、限られた選択肢の中から1つを取る」値たちのことを集合として扱えるデータ型、とという感じでいいでしょうか。血液型について言えば、1人の血液型は前述の4つ以外に存在しませんし、トランプで「スペードでありハートでもある」なんて状況はないはずです。
+プログラムではこれらを「順序を持たない識別子」として利用したいのですが、「スペード」や「AB型」のように文字列として持つとプログラム上の取り回しが非常に悪いです。そのため、識別子を一括管理できる列挙型で扱おうというわけです。
+なお、列挙型を実装する際は識別子に任意の整数値を割り当てることが多いです。これにより、コード上は文字列っぽい識別子として振舞っても、実際はその中身である整数値によって管理されている、という感じになります。このように実装することで、コードを管理しやすくなります。
+まとめると、列挙型を利用することで以下のようなメリットがあります。
+ コードを簡潔にして、保守性や可読性を向上 「あるカテゴリや集団に属する要素」として表現できる 値を限定することで入力ミスを防止し例外を予防  利用方法 定義 Enumをインポートし継承することで、オリジナルの列挙型を定義できます。
+&gt;&gt;&gt; from enum import Enum &gt;&gt;&gt; class BloodType(Enum): ... O = 1 ... A = 2 ... B = 3 ... AB = 4 ... &gt;&gt;&gt; BloodType &lt;enum &#39;BloodType&#39;&gt; &gt;&gt;&gt; type(BloodType) &lt;class &#39;enum.EnumMeta&#39;&gt; 血液型の列挙型のクラスを作成してみました。メンバーには列挙したい値を設定し、メンバーに対応する値に何らかのオブジェクトを代入します。クラスBloodTypeには上記の4つ以外に値が存在しないため、この集合は有限であると言えます。また、OやABというメンバーは「血液型」というカテゴリに属する識別子である、ということを表現できます。これにより、ある集団とそれに属する要素を表現できるわけです。
+前述のように列挙型では整数値を入力することのほうがおおいので、上記の例では数値を入力しています。ただ、上記のように連番で振る場合は、手書きでなくauto()関数を使う場合がほとんどだと思います。
+&gt;&gt;&gt; class BloodType(Enum): ... O = auto() ... A = auto() ... B = auto() ... AB = auto() ... 上記のようにauto()関数を利用することで、手書きする必要なく連番を付与できます。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">PythonにおけるEnumの基本</h1>
+			<div class="meta">Posted at &mdash; Jul 11, 2023</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>Pythonにおいて、<code>Enum</code>は<a href="https://docs.python.org/ja/3/library/enum.html">列挙型</a>クラスをサポートしています。列挙型とは「定義された値の有限集合を表すデータ型」です。</p>
+
+<p>これだけ読むと何のこっちゃという感じですが、たとえば血液型の「A型・B型・O型・AB型」のように、あるいはトランプのスートのようなもの、と考えればいいかもしれません。「あるカテゴリに属し、限られた選択肢の中から1つを取る」値たちのことを集合として扱えるデータ型、とという感じでいいでしょうか。血液型について言えば、1人の血液型は前述の4つ以外に存在しませんし、トランプで「スペードでありハートでもある」なんて状況はないはずです。</p>
+
+<p>プログラムではこれらを「順序を持たない識別子」として利用したいのですが、「スペード」や「AB型」のように文字列として持つとプログラム上の取り回しが非常に悪いです。そのため、識別子を一括管理できる列挙型で扱おうというわけです。</p>
+
+<p>なお、列挙型を実装する際は識別子に任意の整数値を割り当てることが多いです。これにより、コード上は文字列っぽい識別子として振舞っても、実際はその中身である整数値によって管理されている、という感じになります。このように実装することで、コードを管理しやすくなります。</p>
+
+<p>まとめると、列挙型を利用することで以下のようなメリットがあります。</p>
+
+<ul>
+<li>コードを簡潔にして、保守性や可読性を向上</li>
+<li>「あるカテゴリや集団に属する要素」として表現できる</li>
+<li>値を限定することで入力ミスを防止し例外を予防</li>
+</ul>
+
+<h2 id="利用方法">利用方法</h2>
+
+<h3 id="定義">定義</h3>
+
+<p><code>Enum</code>をインポートし継承することで、オリジナルの列挙型を定義できます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; <span style="color:#00f">from</span> enum <span style="color:#00f">import</span> Enum
+&gt;&gt;&gt; <span style="color:#00f">class</span> <span style="color:#2b91af">BloodType</span>(Enum):
+...   O = 1
+...   A = 2
+...   B = 3
+...   AB = 4
+...
+&gt;&gt;&gt; BloodType
+&lt;enum <span style="color:#a31515">&#39;BloodType&#39;</span>&gt;
+&gt;&gt;&gt; type(BloodType)
+&lt;<span style="color:#00f">class</span> <span style="">&#39;</span><span style="color:#2b91af">enum</span>.EnumMeta<span style="color:#a31515">&#39;&gt;</span></code></pre></div>
+<p>血液型の列挙型のクラスを作成してみました。メンバーには列挙したい値を設定し、メンバーに対応する値に何らかのオブジェクトを代入します。クラス<code>BloodType</code>には上記の4つ以外に値が存在しないため、この集合は有限であると言えます。また、<code>O</code>や<code>AB</code>というメンバーは「血液型」というカテゴリに属する識別子である、ということを表現できます。これにより、ある集団とそれに属する要素を表現できるわけです。</p>
+
+<p>前述のように列挙型では整数値を入力することのほうがおおいので、上記の例では数値を入力しています。ただ、上記のように連番で振る場合は、手書きでなく<code>auto()</code>関数を使う場合がほとんどだと思います。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; <span style="color:#00f">class</span> <span style="color:#2b91af">BloodType</span>(Enum):
+...   O = auto()
+...   A = auto()
+...   B = auto()
+...   AB = auto()
+...</code></pre></div>
+<p>上記のように<code>auto()</code>関数を利用することで、手書きする必要なく連番を付与できます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; <span style="color:#00f">class</span> <span style="color:#2b91af">BloodType</span>(Enum):
+...   O = <span style="color:#a31515">&#39;O型&#39;</span>
+...   A = <span style="color:#a31515">&#39;A型&#39;</span>
+...   B = <span style="color:#a31515">&#39;B型&#39;</span>
+...   AB = <span style="color:#a31515">&#39;AB型&#39;</span>
+...</code></pre></div>
+<p>上記のように文字列を付与することも可能です。</p>
+
+<p>列挙型の対象になるような集合において、値に何らかの意味を持たせる必要がない場合は<code>auto()</code>で連番を付与し、意味を持たせるなら文字列なり何らかのオブジェクトを設定することになるでしょう。</p>
+
+<p>なお、<code>Enum</code>は一度クラスを宣言すると、あとでデータを追加することができません。</p>
+
+<h3 id="イテレータとして利用">イテレータとして利用</h3>
+
+<p>列挙型はそれ自体をイテレータとして利用できます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; <span style="color:#00f">for</span> type <span style="color:#00f">in</span> BloodType:
+...   <span style="color:#00f">print</span>(type)
+...
+BloodType.O
+BloodType.A
+BloodType.B
+BloodType.AB
+&gt;&gt;&gt; <span style="color:#00f">for</span> type <span style="color:#00f">in</span> BloodType:
+...   <span style="color:#00f">print</span>(type.value)
+...
+O型
+A型
+B型
+AB型</code></pre></div>
+<p>上記の例では、イテレータとして<code>for</code>文で利用しています。なお、ループ処理する際の順序は、そのクラスのメンバーを宣言した順です。</p>
+
+<h3 id="メンバーの参照">メンバーの参照</h3>
+
+<p>メンバーを参照するには、メンバー名を直接指定するか、設定されている値を指定してメンバーを参照できます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; <span style="color:#00f">class</span> <span style="color:#2b91af">BloodType</span>(Enum):
+...   O = auto()
+...   A = auto()
+...   B = auto()
+...   AB = auto()
+...
+&gt;&gt;&gt;
+&gt;&gt;&gt; BloodType.O
+&lt;BloodType.O: 1&gt;
+&gt;&gt;&gt; BloodType.B
+&lt;BloodType.B: 3&gt;</code></pre></div>
+<p>ただし、メンバー名を直接指定した場合は<code>Enum</code>クラスが返ってくるので、単純にメンバー名だけ欲しいという場合はちょっと困ってしまいます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; BloodType.O.name
+<span style="color:#a31515">&#39;O&#39;</span></code></pre></div>
+<p>そこで、<code>.name</code>を付与することでメンバー名だけを抽出できます。</p>
+
+<p>しかし、メンバーの情報が欲しいのにメンバー名を指定して出力するなんてケースはあまりないと思うので、設定されている値からメンバーを参照する方が利用するケースは多いかもしれません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; BloodType(1)
+&lt;BloodType.O: 1&gt;
+&gt;&gt;&gt; BloodType(3)
+&lt;BloodType.B: 3&gt;</code></pre></div>
+<p><code>BloodType</code>クラスには連番が振られているため、その数値を指定することでメンバーを参照できます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; BloodType(<span style="color:#a31515">&#39;A型&#39;</span>)
+&lt;BloodType.A: <span style="color:#a31515">&#39;A型&#39;</span>&gt;</code></pre></div>
+<p>この方法は、メンバーに対応する値が文字列でも数値と同様に参照可能です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; BloodType(<span style="color:#a31515">&#39;くわがた&#39;</span>)
+ValueError: <span style="color:#a31515">&#39;くわがた&#39;</span> <span style="color:#00f">is</span> <span style="color:#00f">not</span> a valid BloodType
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File <span style="color:#a31515">&#34;&lt;stdin&gt;&#34;</span>, line 1, <span style="color:#00f">in</span> &lt;module&gt;
+  File <span style="color:#a31515">&#34;/usr/lib/python3.8/enum.py&#34;</span>, line 304, <span style="color:#00f">in</span> __call__
+    <span style="color:#00f">return</span> cls.__new__(cls, value)
+  File <span style="color:#a31515">&#34;/usr/lib/python3.8/enum.py&#34;</span>, line 595, <span style="color:#00f">in</span> __new__
+    <span style="color:#00f">raise</span> exc
+  File <span style="color:#a31515">&#34;/usr/lib/python3.8/enum.py&#34;</span>, line 579, <span style="color:#00f">in</span> __new__
+    result = cls._missing_(value)
+  File <span style="color:#a31515">&#34;/usr/lib/python3.8/enum.py&#34;</span>, line 608, <span style="color:#00f">in</span> _missing_
+    <span style="color:#00f">raise</span> ValueError(<span style="color:#a31515">&#34;</span><span style="color:#a31515">%r</span><span style="color:#a31515"> is not a valid </span><span style="color:#a31515">%s</span><span style="color:#a31515">&#34;</span> % (value, cls.__name__))
+ValueError: <span style="color:#a31515">&#39;くわがた&#39;</span> <span style="color:#00f">is</span> <span style="color:#00f">not</span> a valid BloodType</code></pre></div>
+<p>該当するような値が存在しない場合、エラーを吐きます。</p>
+
+<h3 id="値の参照と比較">値の参照と比較</h3>
+
+<p>列挙型で宣言した値の参照は、ちょっとコツが要ります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; BloodType.O
+&lt;BloodType.O: 1&gt;
+&gt;&gt;&gt; BloodType.B
+&lt;BloodType.B: 3&gt;</code></pre></div>
+<p>上記のようにメンバーのみを記述して参照しようとすると、<code>Enum</code>クラスとして結果が返ってきますが、対応する値そのものは返ってきません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; <span style="color:#00f">print</span>(BloodType.O)
+BloodType.O</code></pre></div>
+<p>ちなみに、<code>print()</code>で出力しようとするとクラス名とメンバ名だけが表示され、値の出力がなくなります。なんでや、今欲しいのは値の方なんだってば。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; BloodType.O.value
+1</code></pre></div>
+<p>じゃあ、値を参照したい場合はどうするかと言うと、上記のように<code>.value</code>を付与します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; <span style="color:#00f">print</span>(<span style="color:#a31515">&#39;matched&#39;</span>) <span style="color:#00f">if</span> BloodType.O == 1 <span style="color:#00f">else</span> <span style="color:#00f">print</span>(<span style="color:#a31515">&#39;unmatched&#39;</span>)
+unmatched
+&gt;&gt;&gt; <span style="color:#00f">print</span>(<span style="color:#a31515">&#39;matched&#39;</span>) <span style="color:#00f">if</span> BloodType.O.value == 1 <span style="color:#00f">else</span> <span style="color:#00f">print</span>(<span style="color:#a31515">&#39;unmatched&#39;</span>)
+matched</code></pre></div>
+<p>前述のとおり、<code>BloodType.O</code>とだけ記述すると<code>Enum</code>クラスとして扱われるため、<code>if</code>などにより値の比較をしたい場合は<code>.value</code>を付与する必要があります。<code>Enum</code>クラスと<code>int</code>で直接比較できないので、まぁ当然と言えば当然ですね。整数で直接比較したいなら、<code>Enum</code>ではなく<code>intEnum</code>クラスから継承しましょう。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; BloodType.A
+&lt;BloodType.A: <span style="color:#a31515">&#39;A型&#39;</span>&gt;
+&gt;&gt;&gt; BloodType.A == <span style="color:#a31515">&#39;A型&#39;</span>
+False</code></pre></div>
+<p>なお、この挙動は値が文字列でも同様です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; BloodType.O == BloodType.O
+True
+&gt;&gt;&gt; BloodType.O == BloodType.A
+False</code></pre></div>
+<p><code>Enum</code>クラス同士であれば比較は可能です。</p>
+
+<h2 id="literal-型との違い"><code>Literal</code>型との違い</h2>
+
+<p>有限の集合を表現する方法は<code>Enum</code>だけでなく、<code>typing.Literal</code>でも実現可能です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; <span style="color:#00f">from</span> typing <span style="color:#00f">import</span> Literal
+&gt;&gt;&gt; <span style="color:#00f">def</span> hoge(value: Literal[<span style="color:#a31515">&#39;foo&#39;</span>, <span style="color:#a31515">&#39;bar&#39;</span>, <span style="color:#a31515">&#39;baz&#39;</span>]) -&gt; None:
+...   <span style="color:#00f">print</span>(value)
+&gt;&gt;&gt; <span style="color:#00f">def</span> fuga(value: Literal[1, 2, 3]) -&gt; None:
+...   <span style="color:#00f">print</span>(value*2)</code></pre></div>
+<p>上記のように<code>typing</code>から<code>Literal</code>をインポートして利用します。</p>
+
+<p><code>Literal</code>を使用した場合、限定したい要素を数字や文字列などで直接指定します。一方、<code>Enum</code>を使用した場合は、<code>Enum</code>クラスを継承しメンバーと、そのメンバーに対する値をそれぞれ設定します。</p>
+
+<p>限定したいデータが「1つのカテゴリに属するもの」でなく、単純にデータの集合としてのみ表現したいなら、<code>Literal</code>を利用した方がコードの可読性向上を期待できそうです。また、「特定の箇所でのみ利用し使いまわさない」というような場合は、ラムダ式による無名関数を利用するように<code>Literal</code>を利用した方がムダがなくて見通しの良いコードになるでしょう。</p>
+
+<p>反面、<code>Literal</code>では、文字列なり数値なり何らかのオブジェクトをただただ列挙することしかできません。何かに属するメンバーとしてまとめて管理したい、名前だけでなくそれに対応する値も保持したい、コード全体で使いまわす必要がある・・・というような利用シチュエーションでは<code>Enum</code>に分があるでしょう。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; <span style="color:#00f">from</span> enum <span style="color:#00f">import</span> Enum
+&gt;&gt;&gt; <span style="color:#00f">class</span> <span style="color:#2b91af">AlartReasons</span>(Enum):
+...   NOTNUMBER = <span style="color:#a31515">&#39;数字じゃない&#39;</span>
+...   NOTSTRING = <span style="color:#a31515">&#39;文字列じゃない&#39;</span>
+...   ZEROLENGTH = <span style="color:#a31515">&#39;1文字も入力されていない&#39;</span>
+...
+&gt;&gt;&gt; AlartReasons
+&lt;enum <span style="color:#a31515">&#39;AlartReasons&#39;</span>&gt;
+&gt;&gt;&gt; AlartReasons.NOTNUMBER
+&lt;AlartReasons.NOTNUMBER: <span style="color:#a31515">&#39;数字じゃない&#39;</span>&gt;
+&gt;&gt;&gt; <span style="color:#00f">print</span>(AlartReasons.NOTNUMBER)
+AlartReasons.NOTNUMBER
+&gt;&gt;&gt; <span style="color:#00f">print</span>(AlartReasons.NOTNUMBER.value)
+<span style="">数字じゃない</span>
+&gt;&gt;&gt; <span style="color:#00f">print</span>(AlartReasons.NOTNUMBER.name)
+NOTNUMBER</code></pre></div>
+<p>上記のように「何らかの名前を付けた上でオブジェクトを宣言したい」など、名前と値をセットで利用したい場合は<code>Enum</code>の方がいいかもしれません。ただ、上記のような場合はそもそも<code>Enum</code>じゃなくて辞書型でも使った方がいいような気がしますし、もう少し複雑になるようであれば独自のクラスを作成した方が読みやすいでしょう。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://docs.python.org/ja/3/library/enum.html">enum &mdash; 列挙型のサポート</a></li>
+<li><a href="https://docs.python.org/ja/3/howto/enum.html#enum-class-differences">EnumとFlagはどう違うのか？</a></li>
+<li><a href="https://mizzsugar.hatenablog.com/entry/2019/12/17/210725">そのif文、Enumにしてみませんか。</a></li>
+<li><a href="https://nainaistar.hatenablog.com/entry/2021/11/22/120000">PythonでEnumをfor文で回したら値をすべて出力しなかった</a></li>
+<li><a href="https://zenn.dev/yutabeee/articles/e2d0e149c26b45">Pythonで列挙型（Enum）を使いこなす</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
