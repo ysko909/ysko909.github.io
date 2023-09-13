@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Raspberry PiのGPIO基礎 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Raspberry PiのGPIO基礎" />
+<meta property="og:description" content="概要 Raspberry PI（以下、ラズパイ）には「GPIO」と呼ばれるコネクタが搭載されており、そこに接続した外部機器と簡単に信号をやりとりできるよう設計されています。今回は、GPIOに接続したボタンが押されると特定のプログラムが実行されるような仕組みの構築を通じて、ラズパイのGPIOにちょっと触れてみようという話です。
+GPIOとは GPIOの概要 ラズパイのGPIO（General-Purpose Input/Output）は、ラズパイボード上に備わっている汎用入出力ピンのことを指しています。GPIOピンは、ユーザーがデジタル信号を入出力するためのピンで、ラズパイにさまざまな信号を入出力させるのが目的です。
+ラズパイのGPIOピンは、ユーザーがデジタル信号を制御するために使用できる40本のピンから構成されています。これらのピンは、低電圧（0V）と高電圧（3.3Vまたは5V、モデルに依存）の2つの電圧レベルで動作します。
+GPIOピン GPIOピンの主要な用途には以下のものがあります。
+電源ピン（Power Pins） 下記の2つが存在します。
+ 3.3V（3.3ボルト電源）：このピンは、外部デバイスを駆動するための3.3ボルトの電源を提供します。 5V（5ボルト電源）：このピンは、5ボルトの電源を提供し、高電力デバイスを駆動するために使用されます。  GNDピン（Ground Pins）  GND（グランド）：これらのピンは、グランドを提供します。グランドに接続するために使用されます。  DNC（Do Not Connect） 古いラズパイにはDNCというピンがありました。最近のモデルにはないはずです。
+ DNC（Do Not Connect）：このピンは使用しないでください。将来のボードバージョンのために予約されています。  I/Oピン（Input/Output Pins） 残りのGPIOピンは、デジタル入出力ピンとして使用されます。これらのピンは、ユーザーがデジタル信号の入力と出力を制御するために利用できます。各ピンには固有の番号（BCM番号と物理ピン番号）が割り当てられています。使用例に応じて、これらのピンを制御するためのPythonコードを書くことができます。
+GPIOピンで何ができるのよ どんな信号を入力したり出力したりするかにより、さまざまな利用用途が考えられます。
+ デジタルセンサーの接続とデータの読み取り デジタルアクチュエータ（LED、モーター、リレー）の制御 ピン間のデジタル通信（SPI、I2C、UART）のサポート PWM（Pulse Width Modulation）制御によるアナログデバイスの制御 ボタンやスイッチの状態の監視 特定のイベントの検出とリアルタイム制御の実現  実装方法 必要な機器、デバイスなど 今回の実装に必要な機器やデバイスを考えます。
+ ラズパイ本体 ブレッドボード タクトスイッチ ジャンパーワイヤー  ラズパイ本体 ラズパイ本体は任意のモデルで問題ありません。新しい方がもちろん良いですが、今回動かす処理はさほど重くないので、ラズパイZeroなんかでも多分大丈夫だと思います。
+$ cat /etc/os-release PRETTY_NAME=&#34;Raspbian GNU/Linux 10 (buster)&#34; NAME=&#34;Raspbian GNU/Linux&#34; VERSION_ID=&#34;10&#34; VERSION=&#34;10 (buster)&#34; VERSION_CODENAME=buster ID=raspbian ID_LIKE=debian HOME_URL=&#34;http://www." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-gpio-of-raspberry-pi/" /><meta property="article:published_time" content="2023-09-13T21:39:05&#43;09:00"/>
+<meta property="article:modified_time" content="2023-09-13T21:39:05&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Raspberry PiのGPIO基礎"/>
+<meta name="twitter:description" content="概要 Raspberry PI（以下、ラズパイ）には「GPIO」と呼ばれるコネクタが搭載されており、そこに接続した外部機器と簡単に信号をやりとりできるよう設計されています。今回は、GPIOに接続したボタンが押されると特定のプログラムが実行されるような仕組みの構築を通じて、ラズパイのGPIOにちょっと触れてみようという話です。
+GPIOとは GPIOの概要 ラズパイのGPIO（General-Purpose Input/Output）は、ラズパイボード上に備わっている汎用入出力ピンのことを指しています。GPIOピンは、ユーザーがデジタル信号を入出力するためのピンで、ラズパイにさまざまな信号を入出力させるのが目的です。
+ラズパイのGPIOピンは、ユーザーがデジタル信号を制御するために使用できる40本のピンから構成されています。これらのピンは、低電圧（0V）と高電圧（3.3Vまたは5V、モデルに依存）の2つの電圧レベルで動作します。
+GPIOピン GPIOピンの主要な用途には以下のものがあります。
+電源ピン（Power Pins） 下記の2つが存在します。
+ 3.3V（3.3ボルト電源）：このピンは、外部デバイスを駆動するための3.3ボルトの電源を提供します。 5V（5ボルト電源）：このピンは、5ボルトの電源を提供し、高電力デバイスを駆動するために使用されます。  GNDピン（Ground Pins）  GND（グランド）：これらのピンは、グランドを提供します。グランドに接続するために使用されます。  DNC（Do Not Connect） 古いラズパイにはDNCというピンがありました。最近のモデルにはないはずです。
+ DNC（Do Not Connect）：このピンは使用しないでください。将来のボードバージョンのために予約されています。  I/Oピン（Input/Output Pins） 残りのGPIOピンは、デジタル入出力ピンとして使用されます。これらのピンは、ユーザーがデジタル信号の入力と出力を制御するために利用できます。各ピンには固有の番号（BCM番号と物理ピン番号）が割り当てられています。使用例に応じて、これらのピンを制御するためのPythonコードを書くことができます。
+GPIOピンで何ができるのよ どんな信号を入力したり出力したりするかにより、さまざまな利用用途が考えられます。
+ デジタルセンサーの接続とデータの読み取り デジタルアクチュエータ（LED、モーター、リレー）の制御 ピン間のデジタル通信（SPI、I2C、UART）のサポート PWM（Pulse Width Modulation）制御によるアナログデバイスの制御 ボタンやスイッチの状態の監視 特定のイベントの検出とリアルタイム制御の実現  実装方法 必要な機器、デバイスなど 今回の実装に必要な機器やデバイスを考えます。
+ ラズパイ本体 ブレッドボード タクトスイッチ ジャンパーワイヤー  ラズパイ本体 ラズパイ本体は任意のモデルで問題ありません。新しい方がもちろん良いですが、今回動かす処理はさほど重くないので、ラズパイZeroなんかでも多分大丈夫だと思います。
+$ cat /etc/os-release PRETTY_NAME=&#34;Raspbian GNU/Linux 10 (buster)&#34; NAME=&#34;Raspbian GNU/Linux&#34; VERSION_ID=&#34;10&#34; VERSION=&#34;10 (buster)&#34; VERSION_CODENAME=buster ID=raspbian ID_LIKE=debian HOME_URL=&#34;http://www."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Raspberry PiのGPIO基礎</h1>
+			<div class="meta">Posted at &mdash; Sep 13, 2023</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>Raspberry PI（以下、ラズパイ）には「GPIO」と呼ばれるコネクタが搭載されており、そこに接続した外部機器と簡単に信号をやりとりできるよう設計されています。今回は、GPIOに接続したボタンが押されると特定のプログラムが実行されるような仕組みの構築を通じて、ラズパイのGPIOにちょっと触れてみようという話です。</p>
+
+<h2 id="gpioとは">GPIOとは</h2>
+
+<h3 id="gpioの概要">GPIOの概要</h3>
+
+<p>ラズパイのGPIO（General-Purpose Input/Output）は、ラズパイボード上に備わっている汎用入出力ピンのことを指しています。GPIOピンは、ユーザーがデジタル信号を入出力するためのピンで、ラズパイにさまざまな信号を入出力させるのが目的です。</p>
+
+<p>ラズパイのGPIOピンは、ユーザーがデジタル信号を制御するために使用できる40本のピンから構成されています。これらのピンは、低電圧（0V）と高電圧（3.3Vまたは5V、モデルに依存）の2つの電圧レベルで動作します。</p>
+
+<h3 id="gpioピン">GPIOピン</h3>
+
+<p>GPIOピンの主要な用途には以下のものがあります。</p>
+
+<h4 id="電源ピン-power-pins">電源ピン（Power Pins）</h4>
+
+<p>下記の2つが存在します。</p>
+
+<ul>
+<li>3.3V（3.3ボルト電源）：このピンは、外部デバイスを駆動するための3.3ボルトの電源を提供します。</li>
+<li>5V（5ボルト電源）：このピンは、5ボルトの電源を提供し、高電力デバイスを駆動するために使用されます。</li>
+</ul>
+
+<h4 id="gndピン-ground-pins">GNDピン（Ground Pins）</h4>
+
+<ul>
+<li>GND（グランド）：これらのピンは、グランドを提供します。グランドに接続するために使用されます。</li>
+</ul>
+
+<h4 id="dnc-do-not-connect">DNC（Do Not Connect）</h4>
+
+<p>古いラズパイにはDNCというピンがありました。最近のモデルにはないはずです。</p>
+
+<ul>
+<li>DNC（Do Not Connect）：このピンは使用しないでください。将来のボードバージョンのために予約されています。</li>
+</ul>
+
+<h4 id="i-oピン-input-output-pins">I/Oピン（Input/Output Pins）</h4>
+
+<p>残りのGPIOピンは、デジタル入出力ピンとして使用されます。これらのピンは、ユーザーがデジタル信号の入力と出力を制御するために利用できます。各ピンには固有の番号（BCM番号と物理ピン番号）が割り当てられています。使用例に応じて、これらのピンを制御するためのPythonコードを書くことができます。</p>
+
+<h3 id="gpioピンで何ができるのよ">GPIOピンで何ができるのよ</h3>
+
+<p>どんな信号を入力したり出力したりするかにより、さまざまな利用用途が考えられます。</p>
+
+<ul>
+<li>デジタルセンサーの接続とデータの読み取り</li>
+<li>デジタルアクチュエータ（LED、モーター、リレー）の制御</li>
+<li>ピン間のデジタル通信（SPI、I2C、UART）のサポート</li>
+<li>PWM（Pulse Width Modulation）制御によるアナログデバイスの制御</li>
+<li>ボタンやスイッチの状態の監視</li>
+<li>特定のイベントの検出とリアルタイム制御の実現</li>
+</ul>
+
+<h2 id="実装方法">実装方法</h2>
+
+<h3 id="必要な機器-デバイスなど">必要な機器、デバイスなど</h3>
+
+<p>今回の実装に必要な機器やデバイスを考えます。</p>
+
+<ol>
+<li>ラズパイ本体</li>
+<li>ブレッドボード</li>
+<li>タクトスイッチ</li>
+<li>ジャンパーワイヤー</li>
+</ol>
+
+<h4 id="ラズパイ本体">ラズパイ本体</h4>
+
+<p>ラズパイ本体は任意のモデルで問題ありません。新しい方がもちろん良いですが、今回動かす処理はさほど重くないので、ラズパイZeroなんかでも多分大丈夫だと思います。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ cat /etc/os-release 
+PRETTY_NAME=&#34;Raspbian GNU/Linux 10 (buster)&#34;
+NAME=&#34;Raspbian GNU/Linux&#34;
+VERSION_ID=&#34;10&#34;
+VERSION=&#34;10 (buster)&#34;
+VERSION_CODENAME=buster
+ID=raspbian
+ID_LIKE=debian
+HOME_URL=&#34;http://www.raspbian.org/&#34;
+SUPPORT_URL=&#34;http://www.raspbian.org/RaspbianForums&#34;
+BUG_REPORT_URL=&#34;http://www.raspbian.org/RaspbianBugs&#34;
+$ python3 --version
+Python 3.7.3
+$ pip3 --version
+pip 18.1 from /usr/lib/python3/dist-packages/pip (python 3.7)</code></pre></div>
+<p>自分は上記の環境で実装しました。Pythonのバージョンが若干古いですが、これはbuster版Raspbianをインストールしてから、とくにアップデートしていないためです。</p>
+
+<h4 id="ブレッドボード">ブレッドボード</h4>
+
+<p><a href="https://ja.wikipedia.org/wiki/%E3%83%96%E3%83%AC%E3%83%83%E3%83%89%E3%83%9C%E3%83%BC%E3%83%89">ブレッドボード</a>とは、本来はんだ付けが必要なLEDやセンサ、スイッチなどのデバイスを、はんだ付けなしで利用できるようにする、規則的に穴の空いた板のことです。</p>
+
+<blockquote>
+<p>ブレッドボードとは電子回路の実験や試作をするための板のことである。「プロトタイプ基板」や「プロトタイピング基板」とも。</p>
+</blockquote>
+
+<p>いくつか種類があるものの、現在ではブレッドボードといったら差し込み式のものを指すと思います。その名の通り、ジャンパピンやLED、抵抗などの足を差し込んで回路を作るものです。これのおかげで、誤った回路にしてしまっても、別の場所に差し替えるだけですぐ修正できます。トライアンドエラーしやすく、デバッグがすこぶる簡単になります。はんだ付けしてしまうケースだと、こういう修正が非常に面倒なんですね。</p>
+
+<h4 id="タクトスイッチ">タクトスイッチ</h4>
+
+<p><a href="https://components.omron.com/jp-ja/products/switches/tactile-switches/tactile-switch_features">タクタイルスイッチ</a>とも（どっちが一般的かは不明）言う、要は「ボタン」です。</p>
+
+<blockquote>
+<p>プリント基板上に設置され、人が操作部を押し込むことで電気回路を通電させる小形のスイッチです。操作部を押すとオン、離すとオフになる｢モーメンタリ動作｣をします。
+タクタイルスイッチは｢感触のあるスイッチ｣という意味です。</p>
+</blockquote>
+
+<p>今回は、このボタンを押すと特定のプログラムが開始されるような仕組みを目指します。</p>
+
+<h4 id="ジャンパーワイヤー">ジャンパーワイヤー</h4>
+
+<p>差し込み式のブレッドボードを利用する場合、抵抗やボタンなどの機器を指してもそれが直接ラズパイのGPIOと接続されるわけではありません。じゃあどうやって機器とGPIOと接続するかというと、それぞれをジャンパーワイヤーという線で交互に接続します。</p>
+
+<p>オスメスがありますが、ここではブレッドボードで利用するため基本的に両端がオス、あるいは「オス-メス」であるジャンパーワイヤーを利用します。ブレッドボード上では両端がオスのジャンパーワイヤーを利用しますが、GPIOとブレッドボードを接続する場合のみ、「オス-メス」のジャンパーワイヤーが必要になります。</p>
+
+<h4 id="その他">その他</h4>
+
+<h5 id="t型拡張ボード">T型拡張ボード</h5>
+
+<p>ラズパイのGPIOはボードから直接突き出ています。つまり、活電部がそのまま露出していることになるので、誤ってショートさせたりする危険があります。また、ブレッドボードと接続する際、「ラズパイのGPIOの位置を確認してからジャンパーワイヤーで接続して、ブレッドボード側で機器を接続して、うまく動作しなければGPIOを再度確認して、ブレッドボードを確認して・・・」という感じで、まあまあ面倒です。</p>
+
+<p>このT型拡張ボードを利用すると、活電部の露出をなくしつつ、すべてブレッドボード上で完結できるようになります。大して高くないので買っておくと、とくにデバッグ時に幸せになれます。</p>
+
+<h3 id="機器のセットアップ">機器のセットアップ</h3>
+
+<p>ここでは詳細な機器のセットアップは割愛します。</p>
+
+<h3 id="まずはlピカ">まずはLピカ</h3>
+
+<p>まずはラズパイとブレッドボードなどの機器が確実に接続できたか確認するために、「Lピカ」をやってみます。</p>
+
+<p>わりとよくGPIO制御のチュートリアルとして出てくる「Lチカ」は、PythonコードなどによりLEDを点滅させるよう制御することです。が、ここでは単純に接続ができたか否かを確認できればいいので、GPIOから電源を取って単純にLEDを光らせる「Lピカ」をやってみます。</p>
+
+<p>といっても、方法は特定の回路をブレッドボード上に構築するだけです。回路は<a href="https://magpi.raspberrypi.com/articles/breadboard-tutorial">このあたり</a>を参考にすればいいかと思います。</p>
+
+<p>ここでLEDが光らない場合、いくつか原因が考えられます。</p>
+
+<ul>
+<li>LEDの極性が逆転している: LEDは極性があり、陰極（カソード、-）と陽極（アノード、+）が異なります。確認して、LEDの長い端子が3.3V電源ピンに、短い端子が抵抗器に接続されていることを確認してください。</li>
+<li>抵抗器の値が極端に高い: 使用する抵抗器の値が適切でない場合、LEDが点灯しないことがあります。通常、220Ωまたは330Ωの抵抗器を使用します。抵抗器の値を確認し、必要に応じて適切な値の抵抗器を使用してください。</li>
+<li>GPIOピンの接続が誤っている: LEDの陰極がGPIOピンに正しく接続されているか確認してください。また、3.3V電源ピンからの電流パスが確立されていることを確認してください。</li>
+<li>Raspberry Piが正常に動作していない: Raspberry Piが正常に起動していること、GPIOピンが有効になっていることを確認してください。必要に応じてRaspberry Piを再起動し、再試行してみてください。</li>
+</ul>
+
+<p>また、T型拡張ボードを利用している場合、ラズパイと拡張ボードの方向が正しく装着されているか確認してください。T型拡張ボード側のコネクタには凹部があるので、これがケーブルを指す手がかりになります。コネクタの凹部とケーブルの凸部がハマるよう、ケーブルを差し込んで接続すればいいので簡単です。</p>
+
+<p>問題はラズパイのGPIO側です。GPIO側は差し込む方向の手がかりがなく、とりあえず指してみて確認するしかありません。が、GPIOに差し込む方向が誤っていると、拡張ボードに記述してあるPINがGPIOのPINが正しく対応しません。とりあえず正しいと思われる方向で指してみて、「Lピカ」で動作を確認するのが、回り道ですが確実だと思います。ここでLEDが光らなければケーブルを逆に挿している可能性がありますので、GPIO側のケーブルを指し直して再度Lピカをやってみましょう。今度はLEDが光るはずです。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>Raspberry PiのGPIOピンは、電子プロジェクトや制御システムの構築に非常に役立ちます。電源ピン、GNDピン、I/Oピンの機能を理解し、適切に使用することで、Raspberry Piをさまざまなアプリケーションに適用できます。</p>
+
+<p>今回はだいぶ簡単な制御を実装しました。が、多くのセンサーだったりボタンなどの入力措置、アクチュエータやディスプレイなどの出力装置をGPIOピンで活用することにより、さまざまなデジタルデバイスと連携して、ラズパイをベースにした複雑なシステムを構築できます。電源とかラズパイ自身の処理能力って問題もあるけどね！</p>
+
+<p>GPIOピンの入出力は、ラズパイによる機器制御の基礎になる必須の知識です。色々試して、電子工作に活用してみます。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://www.raspberrypi.com/documentation/computers/os.html#gpio-and-the-40-pin-header">GPIO and the 40-pin Header</a></li>
+<li><a href="https://deviceplus.jp/raspberrypi/raspberrypi-gpio/">ラズパイ（Raspberry Pi）のGPIOを再確認！</a></li>
+<li><a href="https://deviceplus.jp/raspberrypi/raspberrypi_entry_009/">第9回「ラズベリーパイで電子工作！Lチカ…の前にLピカ！」</a></li>
+<li><a href="https://www.fabshop.jp/%E3%80%90-%E7%AC%AC2%E5%9B%9E-%E3%80%91t%E5%9E%8Bgpio%E6%8B%A1%E5%BC%B5%E3%83%9C%E3%83%BC%E3%83%89%E3%81%A7%E3%80%81%E5%85%88%E3%81%9A%E3%81%AFl%E3%83%94%E3%82%AB%EF%BC%81/">【 第2回 】T型GPIO拡張ボードで、先ずはLピカ！</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

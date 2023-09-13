@@ -7,10 +7,29 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Tue, 11 Jul 2023 15:08:38 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 13 Sep 2023 21:39:05 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Raspberry PiのGPIO基礎</title>
+      <link>https://ysko909.github.io/posts/fundamentals-of-gpio-of-raspberry-pi/</link>
+      <pubDate>Wed, 13 Sep 2023 21:39:05 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/fundamentals-of-gpio-of-raspberry-pi/</guid>
+      <description>概要 Raspberry PI（以下、ラズパイ）には「GPIO」と呼ばれるコネクタが搭載されており、そこに接続した外部機器と簡単に信号をやりとりできるよう設計されています。今回は、GPIOに接続したボタンが押されると特定のプログラムが実行されるような仕組みの構築を通じて、ラズパイのGPIOにちょっと触れてみようという話です。
+GPIOとは GPIOの概要 ラズパイのGPIO（General-Purpose Input/Output）は、ラズパイボード上に備わっている汎用入出力ピンのことを指しています。GPIOピンは、ユーザーがデジタル信号を入出力するためのピンで、ラズパイにさまざまな信号を入出力させるのが目的です。
+ラズパイのGPIOピンは、ユーザーがデジタル信号を制御するために使用できる40本のピンから構成されています。これらのピンは、低電圧（0V）と高電圧（3.3Vまたは5V、モデルに依存）の2つの電圧レベルで動作します。
+GPIOピン GPIOピンの主要な用途には以下のものがあります。
+電源ピン（Power Pins） 下記の2つが存在します。
+ 3.3V（3.3ボルト電源）：このピンは、外部デバイスを駆動するための3.3ボルトの電源を提供します。 5V（5ボルト電源）：このピンは、5ボルトの電源を提供し、高電力デバイスを駆動するために使用されます。  GNDピン（Ground Pins）  GND（グランド）：これらのピンは、グランドを提供します。グランドに接続するために使用されます。  DNC（Do Not Connect） 古いラズパイにはDNCというピンがありました。最近のモデルにはないはずです。
+ DNC（Do Not Connect）：このピンは使用しないでください。将来のボードバージョンのために予約されています。  I/Oピン（Input/Output Pins） 残りのGPIOピンは、デジタル入出力ピンとして使用されます。これらのピンは、ユーザーがデジタル信号の入力と出力を制御するために利用できます。各ピンには固有の番号（BCM番号と物理ピン番号）が割り当てられています。使用例に応じて、これらのピンを制御するためのPythonコードを書くことができます。
+GPIOピンで何ができるのよ どんな信号を入力したり出力したりするかにより、さまざまな利用用途が考えられます。
+ デジタルセンサーの接続とデータの読み取り デジタルアクチュエータ（LED、モーター、リレー）の制御 ピン間のデジタル通信（SPI、I2C、UART）のサポート PWM（Pulse Width Modulation）制御によるアナログデバイスの制御 ボタンやスイッチの状態の監視 特定のイベントの検出とリアルタイム制御の実現  実装方法 必要な機器、デバイスなど 今回の実装に必要な機器やデバイスを考えます。
+ ラズパイ本体 ブレッドボード タクトスイッチ ジャンパーワイヤー  ラズパイ本体 ラズパイ本体は任意のモデルで問題ありません。新しい方がもちろん良いですが、今回動かす処理はさほど重くないので、ラズパイZeroなんかでも多分大丈夫だと思います。
+$ cat /etc/os-release PRETTY_NAME=&amp;#34;Raspbian GNU/Linux 10 (buster)&amp;#34; NAME=&amp;#34;Raspbian GNU/Linux&amp;#34; VERSION_ID=&amp;#34;10&amp;#34; VERSION=&amp;#34;10 (buster)&amp;#34; VERSION_CODENAME=buster ID=raspbian ID_LIKE=debian HOME_URL=&amp;#34;http://www.</description>
+    </item>
     
     <item>
       <title>PythonにおけるEnumの基本</title>
