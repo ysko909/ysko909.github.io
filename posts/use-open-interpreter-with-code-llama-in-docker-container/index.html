@@ -12,7 +12,7 @@ Open Interpreterとは Open Interpreter（以下、OI）は、自然言語によ
 今回は、「ローカルで動かす」という部分にフォーカスしてOIを利用してみようと思います。さて、そもそもちゃんと動作してくれるんでしょうか。
 環境 環境は手近にあった、ロクなGPUのないショボショボPCを利用しました。この時点で大分「ちゃんと動作する感」がしませんが、まぁそのなんだ、こまけぇこたぁいいんだよ！
  CPU: Intel&reg; Core&trade; i9-11900 @ 2.50GHz 2.50 GHz RAM: 16.0 GB OS: Windows 10上のWSL Ubuntu20.04  WSLのUbuntu上にDockerコンテナでOI用の環境を構築して、そのコンテナ内でOIをいじってみます。これでOIが何らかのライブラリをインストールしたり、あるいはファイルを削除するなどしても、コンテナ内に限定された出来事になります。
-Dockerによる環境構築 話を聞く限り、環境構築のためにOIが勝手に各種のライブラリをインストールするらしいので、Dockerコンテナを構築することで環境を汚さないよう対処します。
+Dockerによる環境構築 入力したプロンプトによっては、環境構築のためにOIが勝手に各種のライブラリをインストールするらしいです。そのため、Dockerコンテナを構築してほかの環境を汚さないよう対処します。
 Dockerfileの内容 とりあえずOIが動く程度の準備をざっくりします。
 FROMpython:3.10-bookwormRUN apt-get update &amp;&amp; \  apt-get upgrade -y &amp;&amp; \  rm -rf /var/lib/apt/lists/*RUN pip install open-interpreter==0." />
 <meta property="og:type" content="article" />
@@ -27,7 +27,7 @@ Open Interpreterとは Open Interpreter（以下、OI）は、自然言語によ
 今回は、「ローカルで動かす」という部分にフォーカスしてOIを利用してみようと思います。さて、そもそもちゃんと動作してくれるんでしょうか。
 環境 環境は手近にあった、ロクなGPUのないショボショボPCを利用しました。この時点で大分「ちゃんと動作する感」がしませんが、まぁそのなんだ、こまけぇこたぁいいんだよ！
  CPU: Intel&reg; Core&trade; i9-11900 @ 2.50GHz 2.50 GHz RAM: 16.0 GB OS: Windows 10上のWSL Ubuntu20.04  WSLのUbuntu上にDockerコンテナでOI用の環境を構築して、そのコンテナ内でOIをいじってみます。これでOIが何らかのライブラリをインストールしたり、あるいはファイルを削除するなどしても、コンテナ内に限定された出来事になります。
-Dockerによる環境構築 話を聞く限り、環境構築のためにOIが勝手に各種のライブラリをインストールするらしいので、Dockerコンテナを構築することで環境を汚さないよう対処します。
+Dockerによる環境構築 入力したプロンプトによっては、環境構築のためにOIが勝手に各種のライブラリをインストールするらしいです。そのため、Dockerコンテナを構築してほかの環境を汚さないよう対処します。
 Dockerfileの内容 とりあえずOIが動く程度の準備をざっくりします。
 FROMpython:3.10-bookwormRUN apt-get update &amp;&amp; \  apt-get upgrade -y &amp;&amp; \  rm -rf /var/lib/apt/lists/*RUN pip install open-interpreter==0."/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
@@ -121,7 +121,7 @@ FROMpython:3.10-bookwormRUN apt-get update &amp;&amp; \  apt-get upgrade -y &amp
 
 <h2 id="dockerによる環境構築">Dockerによる環境構築</h2>
 
-<p>話を聞く限り、環境構築のためにOIが勝手に各種のライブラリをインストールするらしいので、Dockerコンテナを構築することで環境を汚さないよう対処します。</p>
+<p>入力したプロンプトによっては、環境構築のためにOIが勝手に各種のライブラリをインストールするらしいです。そのため、Dockerコンテナを構築してほかの環境を汚さないよう対処します。</p>
 
 <h3 id="dockerfileの内容">Dockerfileの内容</h3>
 
