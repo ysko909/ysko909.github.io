@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Code LlamaによるOpen InterpreterをDockerコンテナ内で使う - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Code LlamaによるOpen InterpreterをDockerコンテナ内で使う" />
+<meta property="og:description" content="概要 今回は、話題のOpen InterpreterをCode Llamaを使ってローカル環境で使ってみようという話です。
+Open Interpreterとは Open Interpreter（以下、OI）は、自然言語による対話からPythonやTypeScriptなどのプログラミングコードを生成し、実行する環境も整備してくれるオープンソースのソフトウェアです。OpenAIのChatGPTや、MetaのCode LlamaのLLMに基づいて動作します。
+ An open-source, locally running implementation of OpenAI&rsquo;s Code Interpreter.
+ ここまで聞くと、ChatGPTの「Advanced Data Analysis」とよく似てるなーと思いますが、それのオープンソース版だと思ってもらえればいいかもしれません。ただ、このソフトはAdvanced Data Analysisと違ってローカル環境で動くことです。ChatGPTのAPIを利用することでGPT-3.5などを使って生成する場合、当たり前ですがインターネット環境は必須です。その点、Code Llamaを利用した場合は、完全にローカル環境で動作するため、ネット接続がない環境でも動作させることが可能です。
+そのため、OIとCode Llamaの組み合わせを使えば、ブラウザの制御やファイル操作などのさまざまな作業を、チャット形式で生成し実行できます。しかもローカル環境で、です。
+今回は、「ローカルで動かす」という部分にフォーカスしてOIを利用してみようと思います。さて、そもそもちゃんと動作してくれるんでしょうか。
+環境 環境は手近にあった、ロクなGPUのないショボショボPCを利用しました。この時点で大分「ちゃんと動作する感」がしませんが、まぁそのなんだ、こまけぇこたぁいいんだよ！
+ CPU: Intel&reg; Core&trade; i9-11900 @ 2.50GHz 2.50 GHz RAM: 16.0 GB OS: Windows 10上のWSL Ubuntu20.04  WSLのUbuntu上にDockerコンテナでOI用の環境を構築して、そのコンテナ内でOIをいじってみます。これでOIが何らかのライブラリをインストールしたり、あるいはファイルを削除するなどしても、コンテナ内に限定された出来事になります。
+Dockerによる環境構築 話を聞く限り、環境構築のためにOIが勝手に各種のライブラリをインストールするらしいので、Dockerコンテナを構築することで環境を汚さないよう対処します。
+Dockerfileの内容 とりあえずOIが動く程度の準備をざっくりします。
+FROMpython:3.10-bookwormRUN apt-get update &amp;&amp; \  apt-get upgrade -y &amp;&amp; \  rm -rf /var/lib/apt/lists/*RUN pip install open-interpreter==0." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/use-open-interpreter-with-code-llama-in-docker-container/" /><meta property="article:published_time" content="2023-10-03T16:03:44&#43;09:00"/>
+<meta property="article:modified_time" content="2023-10-03T16:03:44&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Code LlamaによるOpen InterpreterをDockerコンテナ内で使う"/>
+<meta name="twitter:description" content="概要 今回は、話題のOpen InterpreterをCode Llamaを使ってローカル環境で使ってみようという話です。
+Open Interpreterとは Open Interpreter（以下、OI）は、自然言語による対話からPythonやTypeScriptなどのプログラミングコードを生成し、実行する環境も整備してくれるオープンソースのソフトウェアです。OpenAIのChatGPTや、MetaのCode LlamaのLLMに基づいて動作します。
+ An open-source, locally running implementation of OpenAI&rsquo;s Code Interpreter.
+ ここまで聞くと、ChatGPTの「Advanced Data Analysis」とよく似てるなーと思いますが、それのオープンソース版だと思ってもらえればいいかもしれません。ただ、このソフトはAdvanced Data Analysisと違ってローカル環境で動くことです。ChatGPTのAPIを利用することでGPT-3.5などを使って生成する場合、当たり前ですがインターネット環境は必須です。その点、Code Llamaを利用した場合は、完全にローカル環境で動作するため、ネット接続がない環境でも動作させることが可能です。
+そのため、OIとCode Llamaの組み合わせを使えば、ブラウザの制御やファイル操作などのさまざまな作業を、チャット形式で生成し実行できます。しかもローカル環境で、です。
+今回は、「ローカルで動かす」という部分にフォーカスしてOIを利用してみようと思います。さて、そもそもちゃんと動作してくれるんでしょうか。
+環境 環境は手近にあった、ロクなGPUのないショボショボPCを利用しました。この時点で大分「ちゃんと動作する感」がしませんが、まぁそのなんだ、こまけぇこたぁいいんだよ！
+ CPU: Intel&reg; Core&trade; i9-11900 @ 2.50GHz 2.50 GHz RAM: 16.0 GB OS: Windows 10上のWSL Ubuntu20.04  WSLのUbuntu上にDockerコンテナでOI用の環境を構築して、そのコンテナ内でOIをいじってみます。これでOIが何らかのライブラリをインストールしたり、あるいはファイルを削除するなどしても、コンテナ内に限定された出来事になります。
+Dockerによる環境構築 話を聞く限り、環境構築のためにOIが勝手に各種のライブラリをインストールするらしいので、Dockerコンテナを構築することで環境を汚さないよう対処します。
+Dockerfileの内容 とりあえずOIが動く程度の準備をざっくりします。
+FROMpython:3.10-bookwormRUN apt-get update &amp;&amp; \  apt-get upgrade -y &amp;&amp; \  rm -rf /var/lib/apt/lists/*RUN pip install open-interpreter==0."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Code LlamaによるOpen InterpreterをDockerコンテナ内で使う</h1>
+			<div class="meta">Posted at &mdash; Oct 3, 2023</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>今回は、話題のOpen InterpreterをCode Llamaを使ってローカル環境で使ってみようという話です。</p>
+
+<h2 id="open-interpreterとは">Open Interpreterとは</h2>
+
+<p><a href="https://github.com/KillianLucas/open-interpreter">Open Interpreter</a>（以下、OI）は、自然言語による対話からPythonやTypeScriptなどのプログラミングコードを生成し、実行する環境も整備してくれるオープンソースのソフトウェアです。OpenAIのChatGPTや、MetaのCode LlamaのLLMに基づいて動作します。</p>
+
+<blockquote>
+<p>An open-source, locally running implementation of OpenAI&rsquo;s Code Interpreter.</p>
+</blockquote>
+
+<p>ここまで聞くと、ChatGPTの「Advanced Data Analysis」とよく似てるなーと思いますが、それのオープンソース版だと思ってもらえればいいかもしれません。ただ、このソフトはAdvanced Data Analysisと違ってローカル環境で動くことです。ChatGPTのAPIを利用することでGPT-3.5などを使って生成する場合、当たり前ですがインターネット環境は必須です。その点、Code Llamaを利用した場合は、<a href="https://github.com/KillianLucas/open-interpreter/blob/main/README.md#running-open-interpreter-locally">完全にローカル環境で動作する</a>ため、ネット接続がない環境でも動作させることが可能です。</p>
+
+<p>そのため、OIとCode Llamaの組み合わせを使えば、ブラウザの制御やファイル操作などのさまざまな作業を、チャット形式で生成し実行できます。しかもローカル環境で、です。</p>
+
+<p>今回は、「ローカルで動かす」という部分にフォーカスしてOIを利用してみようと思います。さて、そもそもちゃんと動作してくれるんでしょうか。</p>
+
+<h2 id="環境">環境</h2>
+
+<p>環境は手近にあった、ロクなGPUのないショボショボPCを利用しました。この時点で大分「ちゃんと動作する感」がしませんが、まぁそのなんだ、こまけぇこたぁいいんだよ！</p>
+
+<ul>
+<li>CPU: Intel&reg; Core&trade; i9-11900 @ 2.50GHz   2.50 GHz</li>
+<li>RAM: 16.0 GB</li>
+<li>OS: Windows 10上のWSL Ubuntu20.04</li>
+</ul>
+
+<p>WSLのUbuntu上にDockerコンテナでOI用の環境を構築して、そのコンテナ内でOIをいじってみます。これでOIが何らかのライブラリをインストールしたり、あるいはファイルを削除するなどしても、コンテナ内に限定された出来事になります。</p>
+
+<h2 id="dockerによる環境構築">Dockerによる環境構築</h2>
+
+<p>話を聞く限り、環境構築のためにOIが勝手に各種のライブラリをインストールするらしいので、Dockerコンテナを構築することで環境を汚さないよう対処します。</p>
+
+<h3 id="dockerfileの内容">Dockerfileの内容</h3>
+
+<p>とりあえずOIが動く程度の準備をざっくりします。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#00f">FROM</span><span style="color:#a31515"> python:3.10-bookworm</span><span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> apt-get update &amp;&amp; <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>  apt-get upgrade -y &amp;&amp; <span style="color:#a31515">\
+</span><span style="color:#a31515"></span>  rm -rf /var/lib/apt/lists/*<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> pip install open-interpreter==0.1.4<span style="">
+</span><span style=""></span><span style="color:#00f">RUN</span> pip install numpy matplotlib pandas<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#00f">WORKDIR</span><span style="color:#a31515"> /root</span></code></pre></div>
+<p>これだけです。Dockerfileを任意の場所に保存したら、コンテナを構築してログインしてみます。</p>
+
+<h3 id="環境構築">環境構築</h3>
+
+<p>コンテナにログインしたら、コマンドを1つ実行するだけです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">interpreter --local</code></pre></div>
+<p><code>--local</code>というオプションが、「ローカル環境で動かすぜ！」という指定です。このオプションを指定した場合、Code Llamaの仕様を指定する選択肢が出現します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ cd foropeninterpreter
+$ docker run -it --rm -v $(pwd):/root foropeninterpreter /bin/sh
+# interpreter --local
+
+[?] Parameter count (smaller is faster, larger is more capable): 7B
+ &gt; 7B
+   13B
+   34B
+
+[?] Quality (smaller is faster, larger is more capable): Small | Size: 2.6 GB, Estimated RAM usage: 5.1 GB
+ &gt; Small | Size: 2.6 GB, Estimated RAM usage: 5.1 GB
+   Medium | Size: 3.8 GB, Estimated RAM usage: 6.3 GB
+   Large | Size: 6.7 GB, Estimated RAM usage: 9.2 GB
+   See More
+
+[?] Use GPU? (Large models might crash on GPU, but will run more quickly) (Y/n):</code></pre></div>
+<p><code>--local</code>オプション指定で出現する選択肢で、使いたいモデルを指定します。パラメータが小さいほど応答速度が速くなりますが、パラメータが大きいほど返答のクオリティが向上します。ここでは「7B」「Small」「GPUあり」という、最小構成を選択しています。早く試したかったので・・・。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">Model found at /root/.local/share/Open Interpreter/models/codellama-7b-instruct.Q2_K.gguf
+[<span style="">?</span>] Local LLM <span style="color:#00f">interface</span> <span style="color:#00f">package</span> not found. Install <span style="color:#a31515">`llama-cpp-python`</span><span style="">?</span> (Y/n):</code></pre></div>
+<p><code>llama-cpp-python</code>が存在しない場合、インストールする？と聞かれるのでインストールします。改行キーを押すだけでOKです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">Collecting llama-cpp-python
+  Downloading llama_cpp_python-0.2.11.tar.gz (3.6 MB)
+     <span style="">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> 3.6/3.6 MB 4.2 MB/s eta 0:00:00
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Installing backend dependencies ... done
+  Preparing metadata (pyproject.toml) ... done
+Requirement already satisfied: numpy&gt;=1.20.0 in /usr/local/lib/python3.10/site-packages (from llama-cpp-python) (1.26.0)
+Collecting diskcache&gt;=5.6.1
+  Using cached diskcache-5.6.3-py3-none-any.whl (45 kB)
+Requirement already satisfied: typing-extensions&gt;=4.5.0 in /usr/local/lib/python3.10/site-packages (from llama-cpp-python) (4.8.0)
+Building wheels <span style="color:#00f">for</span> collected packages: llama-cpp-python
+  Building wheel <span style="color:#00f">for</span> llama-cpp-python (pyproject.toml) ... done
+  Created wheel <span style="color:#00f">for</span> llama-cpp-python: filename=llama_cpp_python-0.2.11-cp310-cp310-manylinux_2_36_x86_64.whl size=1011305 sha256=366014b9f9538230fb02b80d45f1e1c0652f6a64a0cf5497e1cbffa8d6ab4d65
+  Stored in directory: /root/.cache/pip/wheels/dc/42/77/a3ab0d02700427ea364de5797786c0272779dce795f62c3bc2
+Successfully built llama-cpp-python
+Installing collected packages: diskcache, llama-cpp-python
+Successfully installed diskcache-5.6.3 llama-cpp-python-0.2.11
+WARNING: Running pip as the <span style="">&#39;</span>root<span style="">&#39;</span> user can result in broken permissions and conflicting behaviour with the system <span style="color:#00f">package</span> manager. It is recommended to use a virtual environment instead: https:<span style="color:#008000">//pip.pypa.io/warnings/venv
+</span><span style="color:#008000"></span>
+[notice] A new release of pip is available: 23.0.1 -&gt; 23.2.1
+[notice] To update, run: pip install --upgrade pip
+
+Finished downloading Code-Llama <span style="color:#00f">interface</span>.
+
+
+<span style="">▌</span> Model set to TheBloke/CodeLlama-7B-Instruct-GGUF
+
+Open Interpreter will require approval before running code. Use interpreter -y to bypass this.
+
+Press CTRL-C to exit.
+
+&gt;</code></pre></div>
+<p>あとは自動的に処理が進んで、OIの実行環境ができあがります。すげー。</p>
+
+<h3 id="使ってみる">使ってみる</h3>
+
+<p>環境構築が終わったので、早速使ってみましょう。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">&gt; Create a Python function to generate a Fibonacci sequence.</code></pre></div>
+<p>「フィボナッチ数列を生成するPythonの関数を作って」とお願いしました。なお、今回は英語でお願いしてますが、日本語でも同じ結果を出力してくれました。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">  Let&#39;s start with creating a function that generates a Fibonacci sequence. We can use a recursive approach to
+  generate the sequence. Here is an example of how we can define such a function:
+
+
+
+  def fibonacci(n):
+      if n &lt;= 1:
+          return n
+      else:
+          return fibonacci(n-1) + fibonacci(n-2)
+
+
+  Would you like to run this code? (y/n)</code></pre></div>
+<p>実行が終わると上記のようにPythonのコードを生成してくれます。「このコードを実行しますか？」と聞かれるので「ｙ」を入力してみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">  def fibonacci(n):
+      if n &lt;= 1:
+          return n
+      else:
+          return fibonacci(n-1) + fibonacci(n-2)
+
+
+
+  it&#39;s likely that there was a syntax error in the code. Let me try to identify the issue and fix it.
+
+  The function definition is missing a colon after the def keyword. It should be:
+
+
+
+  def fibonacci(n):
+      if n &lt;= 1:
+          return n
+      else:
+          return fibonacci(n-1) + fibonacci(n-2)
+
+
+  Would you like to run this code? (y/n)</code></pre></div>
+<p>「文法エラーがあるようです、修正してみます・・・今度はどうですか？」って、修正前同じコードを出してんじゃねぇ！「実行します？」とか聞いてきますが、当たり前のように、「文法エラーがあるようです・・・」となります。ドジっ子ちゃんか。</p>
+
+<p>まぁ、このあたりは入力が悪かったかもしれません。「関数を生成しろ」とお願いしているので、出力結果をそのまま実行できるようなコードじゃないんですよね。</p>
+
+<p>「実行する？」という質問に対し「n」を入力することで、別の依頼を入力できる状態に戻ります。</p>
+
+<p>終了する場合は「Ctrl+C」です。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>OIはCode Llamaを使うことで、完全ローカルでの動作が可能です。とりあえずOIの雰囲気や操作感を体験してみるには手っ取り早くて良い・・・のですが、生成される結果はちょーっと首をひねりたくなるというか、まだまだだよねという印象です。ChatGPTv4を使ったケースがX（旧Twitter）などで上がっていますが、そちらだといい感じの結果が返ってきているようです。Code Llamaもそこまで進化してくれるとありがたいのですけどね。</p>
+
+<p>お読みいただきありがとうございました。</p>
+
+<h2 id="参照">参照</h2>
+
+<ol>
+<li><a href="https://github.com/KillianLucas/open-interpreter">KillianLucas/open-interpreter</a></li>
+<li><a href="https://github.com/nwiizo/open-interpreter-docker">nwiizo/open-interpreter-docker</a></li>
+<li><a href="https://note.com/shi3zblog/n/n7eaba88ffe4a">OpenInterpreter / ついにAIがガチのアシスタントに!これは凄い、というか凄すぎる</a></li>
+<li><a href="https://zenn.dev/bathtimefish/articles/4988990670ee7d">Open InterpreterをローカルモデルでWSL上で使ってみる</a></li>
+<li><a href="https://zenn.dev/karaage0703/articles/e2e6417fb003dd">Open InterpreterをDockerで動かす</a></li>
+<li><a href="https://github.com/karaage0703/open-interpreter-docker">karaage0703/open-interpreter-docker</a></li>
+<li><a href="https://generativeinfo365.com/?p=1785">Open Interpreterでアンケート分析をやってもらったら1時間以上かかる作業が一瞬で完了した。ヤバい</a></li>
+<li><a href="https://qiita.com/ot12/items/d2672144b914cb6f252f">凄すぎると話題の「Open Interpreter」の始め方・使い方まとめ</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
