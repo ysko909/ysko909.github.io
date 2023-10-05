@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>ReturnTypeを使って関数の戻り値の型を生成する方法 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="ReturnTypeを使って関数の戻り値の型を生成する方法" />
+<meta property="og:description" content="概要 ライブラリ内の関数を利用する場合において、その関数の戻り値がオブジェクトであるとき、自分でtypeやinterfaceを記述しなくても、関数の戻り値を参照して自動的に型情報を生成してくれる機能があります。それがUtility Typesの一機能でReturnTypeというもの。
+ReturnTypeはTypeScriptのユーティリティ型で、指定した関数の戻り値の型を確定する機能を提供します。これにより、関数の戻り値の型をプログラマーが明示的に指定することなく、すでにある関数の仕様から抽出して戻り値の型を使用できます。これにより、型の安全性を提供し、バグの防止と修正しやすさを支援することで、コード品質の向上が期待できます。
+メリット  型の安全性：ReturnTypeを使用することで、想定している型と実際に関数から返ってくる値の型が一致するため、実行時のエラーを防止できます。 コードの可読性：ReturnTypeは、関数の期待される戻り値の型を抽出してくれるため、型情報を記述する必要がなくなります。オブジェクトの型情報を記述しなくてよいので、全体的な記述を削減でき可読性の向上が期待できます。 リファクタリング：関数の戻り値の型を変更すると、ReturnTypeは自動的に変更後の型宣言を参照してくれます。そのため、とくに複数人でリファクタリングしなければならない場面などで役立ちそうです。 エラーの検出：たとえば、あるライブラリが更新され関数の戻り値の型が変わったことに気付かなかったとします。それでも、ReturnTypeで変更後の型情報を取得しておけば、IDEの機能などにより型が異なる不具合を表示してくれるため、プログラマーが不具合に気付ける可能性が高まります。このように、プログラミング時における不具合を早期発見が期待できそうです。  サンプルコード ReturnTypeを使ったサンプルコードを考えます。
+type Hoge ={ foo: string; bar: number; baz: Array&lt;string | number&gt;; } function hoge(): Hoge{ return { foo: &#39;eggs&#39;, bar: 1, baz: [2, &#39;ham&#39;, 3, 4, &#39;spam&#39;] }; } type HogeReturnType = ReturnType&lt;typeof hoge&gt; let resultOfHoge: Hoge = hoge(); let resultOfHoge2: HogeReturnType = hoge(); 型情報のHogeは自分で記述したものです。対して、関数hogeの戻り値をtypeofで調べ、結果をReturnTypeを用いて格納したのがHogeReturnTypeです。こうすることで、型情報を記述する手間を省き、誤った内容を記述したり誤った値が格納されるリスクを軽減しています。
+使いどころ 複雑なオブジェクトを扱う場合 プロパティが多かったり複雑なオブジェクトを返す関数がある場合、ReturnTypeを使用することで戻り値の型を明確に定義し強制することが可能です。
+function calc(a: number, b: number) { return { add: a &#43; b, sub: a - b, mul: a * b, div: a / b, mod: a % b, formula: &#39;Calculation result using the values of &#39; &#43; a." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/use-returntype-for-generating-return-type-on-typescript/" /><meta property="article:published_time" content="2023-10-03T16:59:48&#43;09:00"/>
+<meta property="article:modified_time" content="2023-10-03T16:59:48&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ReturnTypeを使って関数の戻り値の型を生成する方法"/>
+<meta name="twitter:description" content="概要 ライブラリ内の関数を利用する場合において、その関数の戻り値がオブジェクトであるとき、自分でtypeやinterfaceを記述しなくても、関数の戻り値を参照して自動的に型情報を生成してくれる機能があります。それがUtility Typesの一機能でReturnTypeというもの。
+ReturnTypeはTypeScriptのユーティリティ型で、指定した関数の戻り値の型を確定する機能を提供します。これにより、関数の戻り値の型をプログラマーが明示的に指定することなく、すでにある関数の仕様から抽出して戻り値の型を使用できます。これにより、型の安全性を提供し、バグの防止と修正しやすさを支援することで、コード品質の向上が期待できます。
+メリット  型の安全性：ReturnTypeを使用することで、想定している型と実際に関数から返ってくる値の型が一致するため、実行時のエラーを防止できます。 コードの可読性：ReturnTypeは、関数の期待される戻り値の型を抽出してくれるため、型情報を記述する必要がなくなります。オブジェクトの型情報を記述しなくてよいので、全体的な記述を削減でき可読性の向上が期待できます。 リファクタリング：関数の戻り値の型を変更すると、ReturnTypeは自動的に変更後の型宣言を参照してくれます。そのため、とくに複数人でリファクタリングしなければならない場面などで役立ちそうです。 エラーの検出：たとえば、あるライブラリが更新され関数の戻り値の型が変わったことに気付かなかったとします。それでも、ReturnTypeで変更後の型情報を取得しておけば、IDEの機能などにより型が異なる不具合を表示してくれるため、プログラマーが不具合に気付ける可能性が高まります。このように、プログラミング時における不具合を早期発見が期待できそうです。  サンプルコード ReturnTypeを使ったサンプルコードを考えます。
+type Hoge ={ foo: string; bar: number; baz: Array&lt;string | number&gt;; } function hoge(): Hoge{ return { foo: &#39;eggs&#39;, bar: 1, baz: [2, &#39;ham&#39;, 3, 4, &#39;spam&#39;] }; } type HogeReturnType = ReturnType&lt;typeof hoge&gt; let resultOfHoge: Hoge = hoge(); let resultOfHoge2: HogeReturnType = hoge(); 型情報のHogeは自分で記述したものです。対して、関数hogeの戻り値をtypeofで調べ、結果をReturnTypeを用いて格納したのがHogeReturnTypeです。こうすることで、型情報を記述する手間を省き、誤った内容を記述したり誤った値が格納されるリスクを軽減しています。
+使いどころ 複雑なオブジェクトを扱う場合 プロパティが多かったり複雑なオブジェクトを返す関数がある場合、ReturnTypeを使用することで戻り値の型を明確に定義し強制することが可能です。
+function calc(a: number, b: number) { return { add: a &#43; b, sub: a - b, mul: a * b, div: a / b, mod: a % b, formula: &#39;Calculation result using the values of &#39; &#43; a."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">ReturnTypeを使って関数の戻り値の型を生成する方法</h1>
+			<div class="meta">Posted at &mdash; Oct 3, 2023</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>ライブラリ内の関数を利用する場合において、その関数の戻り値がオブジェクトであるとき、自分で<code>type</code>や<code>interface</code>を記述しなくても、関数の戻り値を参照して自動的に型情報を生成してくれる機能があります。それがUtility Typesの一機能で<code>ReturnType</code>というもの。</p>
+
+<p>ReturnTypeはTypeScriptのユーティリティ型で、指定した関数の戻り値の型を確定する機能を提供します。これにより、関数の戻り値の型をプログラマーが明示的に指定することなく、すでにある関数の仕様から抽出して戻り値の型を使用できます。これにより、型の安全性を提供し、バグの防止と修正しやすさを支援することで、コード品質の向上が期待できます。</p>
+
+<h2 id="メリット">メリット</h2>
+
+<ul>
+<li>型の安全性：ReturnTypeを使用することで、想定している型と実際に関数から返ってくる値の型が一致するため、実行時のエラーを防止できます。</li>
+<li>コードの可読性：ReturnTypeは、関数の期待される戻り値の型を抽出してくれるため、型情報を記述する必要がなくなります。オブジェクトの型情報を記述しなくてよいので、全体的な記述を削減でき可読性の向上が期待できます。</li>
+<li>リファクタリング：関数の戻り値の型を変更すると、ReturnTypeは自動的に変更後の型宣言を参照してくれます。そのため、とくに複数人でリファクタリングしなければならない場面などで役立ちそうです。</li>
+<li>エラーの検出：たとえば、あるライブラリが更新され関数の戻り値の型が変わったことに気付かなかったとします。それでも、ReturnTypeで変更後の型情報を取得しておけば、IDEの機能などにより型が異なる不具合を表示してくれるため、プログラマーが不具合に気付ける可能性が高まります。このように、プログラミング時における不具合を早期発見が期待できそうです。</li>
+</ul>
+
+<h2 id="サンプルコード">サンプルコード</h2>
+
+<p>ReturnTypeを使ったサンプルコードを考えます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript">type Hoge ={
+    foo: <span style="color:#2b91af">string</span>;
+    bar: <span style="color:#2b91af">number</span>;
+    baz: <span style="color:#2b91af">Array</span>&lt;<span style="color:#2b91af">string</span> | <span style="color:#2b91af">number</span>&gt;;
+}
+
+<span style="color:#00f">function</span> hoge(): Hoge{
+    <span style="color:#00f">return</span> {
+        foo: <span style="color:#a31515">&#39;eggs&#39;</span>,
+        bar: <span style="color:#2b91af">1</span>,
+        baz: [2, <span style="color:#a31515">&#39;ham&#39;</span>, 3, 4, <span style="color:#a31515">&#39;spam&#39;</span>]
+    };
+}
+
+type HogeReturnType = ReturnType&lt;<span style="color:#00f">typeof</span> hoge&gt;
+
+<span style="color:#00f">let</span> resultOfHoge: <span style="color:#2b91af">Hoge</span> = hoge();
+
+<span style="color:#00f">let</span> resultOfHoge2: <span style="color:#2b91af">HogeReturnType</span> = hoge();</code></pre></div>
+<p>型情報の<code>Hoge</code>は自分で記述したものです。対して、関数<code>hoge</code>の戻り値を<code>typeof</code>で調べ、結果を<code>ReturnType</code>を用いて格納したのが<code>HogeReturnType</code>です。こうすることで、型情報を記述する手間を省き、誤った内容を記述したり誤った値が格納されるリスクを軽減しています。</p>
+
+<h2 id="使いどころ">使いどころ</h2>
+
+<h3 id="複雑なオブジェクトを扱う場合">複雑なオブジェクトを扱う場合</h3>
+
+<p>プロパティが多かったり複雑なオブジェクトを返す関数がある場合、ReturnTypeを使用することで戻り値の型を明確に定義し強制することが可能です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">function</span> calc(a: <span style="color:#2b91af">number</span>, b: <span style="color:#2b91af">number</span>) {
+  <span style="color:#00f">return</span> {
+    add: <span style="color:#2b91af">a</span> + b,
+    sub: <span style="color:#2b91af">a</span> - b,
+    mul: <span style="color:#2b91af">a</span> * b,
+    div: <span style="color:#2b91af">a</span> <span style="">/ b,</span>
+    mod: <span style="color:#2b91af">a</span> % b,
+    formula: <span style="color:#a31515">&#39;Calculation result using the values of &#39;</span> + a.toString() + <span style="color:#a31515">&#39; and &#39;</span> + b.toString()
+    }
+}
+
+type calcReturnType = ReturnType&lt;<span style="color:#00f">typeof</span> calc&gt;;
+<span style="color:#00f">const</span> result: <span style="color:#2b91af">calcReturnType</span> = calc(10, 4);
+
+console.log(result);</code></pre></div>
+<p>上記のサンプルコードにおいて、関数<code>calc</code>は2つの数値の計算結果と文章を返す関数です。ReturnTypeを使用することで、戻り値の型の内容をプログラマーが記述することなく使用できます。</p>
+
+<p>とは言え、「そもそも、プロパティが複雑で数も多いようなオブジェクトを作るんじゃない！」っていうのはまさにその通りなので、上記の例で言うならまず対応すべきはオブジェクトのシンプル化だとは思います。<del>ワイトもそう思います</del>。</p>
+
+<h3 id="サードパーティのライブラリやapiを扱う場合">サードパーティのライブラリやAPIを扱う場合</h3>
+
+<p>外部のライブラリやAPIを扱う場合、関数の戻り値の型が必ずしも明確でないことがあります。そのような場合、ReturnTypeを使用することで、ライブラリが提供する戻り値の型を抽出して利用することが可能です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#00f">import</span> axios from <span style="color:#a31515">&#39;axios&#39;</span>;
+
+async <span style="color:#00f">function</span> fetchData(): Promise&lt;any&gt; {
+  <span style="color:#00f">const</span> response = await axios.get(<span style="color:#a31515">&#39;https://example.com/posts&#39;</span>);
+  <span style="color:#00f">return</span> response.data;
+}
+
+type FetchDataReturnType = ReturnType&lt;<span style="color:#00f">typeof</span> fetchData&gt;;
+
+async <span style="color:#00f">function</span> processData(): Promise&lt;<span style="color:#00f">void</span>&gt; {
+  <span style="color:#00f">const</span> data: <span style="color:#2b91af">FetchDataReturnType</span> = await fetchData();
+  console.log(data);
+}</code></pre></div>
+<p>この例において、関数<code>fetchData</code>はAxiosを使用してデータを取得しあｍす。<code>fetchData</code>の実際の戻り値の型は、 ReturnTypeを使用して取得します。これにより、関数を使用する際にデータに沿った型で宣言することが可能です。</p>
+
+<h3 id="既存のコードをリファクタリングまたは修正する場合">既存のコードをリファクタリングまたは修正する場合</h3>
+
+<p>ReturnTypeは、戻り値の型が変更される（可能性のある）既存のコードをリファクタリング、または修正する際に役立ちます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript"><span style="color:#008000">// ここの関数を変更中！
+</span><span style="color:#008000"></span><span style="color:#00f">function</span> getUser(): { name: <span style="color:#2b91af">string</span>; age: <span style="color:#2b91af">number</span> } {
+  <span style="color:#00f">return</span> {
+    name: <span style="color:#a31515">&#39;John&#39;</span>,
+    age: <span style="color:#2b91af">30</span>,
+  };
+}
+
+type GetUserReturnType = ReturnType&lt;<span style="color:#00f">typeof</span> getUser&gt;;
+
+<span style="color:#00f">const</span> user: <span style="color:#2b91af">GetUserReturnType</span> = getUser();</code></pre></div>
+<p>この例では、関数<code>getUser</code>は特定の構造を持つオブジェクトを返します。その際、何らかの形で返されるオブジェクトの構造が変更された場合でも、ReturnTypeは自動的に型情報を実行ごとに取得するため、変更後の情報を取得できます。</p>
+
+<h2 id="余談">余談</h2>
+
+<p><code>ReturnType</code>で得た結果の型情報を出力することはどうもできないらしく、TypeScriptのPlaygroundで試してみたらエラーになりました。</p>
+
+<blockquote>
+<p>&lsquo;HogeReturnType&rsquo; only refers to a type, but is being used as a value here.</p>
+</blockquote>
+
+<p>「&rsquo;HogeReturnType&rsquo;は型情報であって値そのものではないっすよ。なのに値として扱われている（表示しようとしている）っすよ」というエラーです。ただ、とりあえず型をちゃんと取得できていれば、オブジェクトの構造はIDE上でサジェストされるはずなのでそんなに気にならないはずだとは思います。<del>ワイトもそう思います</del>。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>ReturnTypeはTypeScriptの便利なユーティリティ型で、関数の戻り値の型を抽出して利用することができます。ReturnTypeは型の安全性を提供し、コードの可読性を向上させ、リファクタリングを支援し、エラーの検出と修正を支援することでコードの品質を向上させてくれます。</p>
+
+<p>ReturnTypeを有効に活用することで、より信頼性が高く保守性の高いコードを書くことができそうです。</p>
+
+<h2 id="reference">reference</h2>
+
+<ol>
+<li><a href="https://www.typescriptlang.org/docs/handbook/utility-types.html">Utility Types</a></li>
+<li><a href="https://www.typescriptlang.org/docs/handbook/2/objects.html">Object Types</a></li>
+<li><a href="https://qiita.com/NOMURA_keibyou38/items/fc9d21aee217b4213430">【TypeScript】Utility TypesのReturnTypeを深く理解する</a></li>
+<li><a href="https://uiuifree.com/blog/develop/type-script-return-type/">【TypeScript】型定義で関数の戻り値を直接使えるReturnType</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
