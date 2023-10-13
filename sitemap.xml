@@ -548,14 +548,14 @@
   </url>
   
   <url>
-    <loc>https://ysko909.github.io/tags/chatgpt/</loc>
-    <lastmod>2023-10-03T16:03:44+09:00</lastmod>
+    <loc>https://ysko909.github.io/tags/chrome/</loc>
+    <lastmod>2019-11-13T15:14:28+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://ysko909.github.io/tags/chrome/</loc>
-    <lastmod>2019-11-13T15:14:28+09:00</lastmod>
+    <loc>https://ysko909.github.io/tags/codellama/</loc>
+    <lastmod>2023-10-03T16:03:44+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -742,6 +742,12 @@
   <url>
     <loc>https://ysko909.github.io/tags/office/</loc>
     <lastmod>2019-09-07T10:31:55+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ysko909.github.io/tags/openinterpreter/</loc>
+    <lastmod>2023-10-03T16:03:44+09:00</lastmod>
     <priority>0</priority>
   </url>
   

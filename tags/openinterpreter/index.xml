@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Openinterpreter on 頑張らないために頑張る</title>
+    <link>https://ysko909.github.io/tags/openinterpreter/</link>
+    <description>Recent content in Openinterpreter on 頑張らないために頑張る</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© Copyright ysko</copyright>
+    <lastBuildDate>Tue, 03 Oct 2023 16:03:44 +0900</lastBuildDate>
+    
+	<atom:link href="https://ysko909.github.io/tags/openinterpreter/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Code LlamaによるOpen InterpreterをDockerコンテナ内で使う</title>
+      <link>https://ysko909.github.io/posts/use-open-interpreter-with-code-llama-in-docker-container/</link>
+      <pubDate>Tue, 03 Oct 2023 16:03:44 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/use-open-interpreter-with-code-llama-in-docker-container/</guid>
+      <description>概要 今回は、話題のOpen InterpreterをCode Llamaを使ってローカル環境で使ってみようという話です。
+Open Interpreterとは Open Interpreter（以下、OI）は、自然言語による対話からPythonやTypeScriptなどのプログラミングコードを生成し、実行する環境も整備してくれるオープンソースのソフトウェアです。OpenAIのChatGPTや、MetaのCode LlamaのLLMに基づいて動作します。
+ An open-source, locally running implementation of OpenAI&amp;rsquo;s Code Interpreter.
+ ここまで聞くと、ChatGPTの「Advanced Data Analysis」とよく似てるなーと思いますが、それのオープンソース版だと思ってもらえればいいかもしれません。ただ、このソフトはAdvanced Data Analysisと違ってローカル環境で動くことです。ChatGPTのAPIを利用することでGPT-3.5などを使って生成する場合、当たり前ですがインターネット環境は必須です。その点、Code Llamaを利用した場合は、完全にローカル環境で動作するため、ネット接続がない環境でも動作させることが可能です。
+そのため、OIとCode Llamaの組み合わせを使えば、ブラウザの制御やファイル操作などのさまざまな作業を、チャット形式で生成し実行できます。しかもローカル環境で、です。
+今回は、「ローカルで動かす」という部分にフォーカスしてOIを利用してみようと思います。さて、そもそもちゃんと動作してくれるんでしょうか。
+環境 環境は手近にあった、ロクなGPUのないショボショボPCを利用しました。この時点で大分「ちゃんと動作する感」がしませんが、まぁそのなんだ、こまけぇこたぁいいんだよ！
+ CPU: Intel&amp;reg; Core&amp;trade; i9-11900 @ 2.50GHz 2.50 GHz RAM: 16.0 GB OS: Windows 10上のWSL Ubuntu20.04  WSLのUbuntu上にDockerコンテナでOI用の環境を構築して、そのコンテナ内でOIをいじってみます。これでOIが何らかのライブラリをインストールしたり、あるいはファイルを削除するなどしても、コンテナ内に限定された出来事になります。
+Dockerによる環境構築 入力したプロンプトによっては、環境構築のためにOIが勝手に各種のライブラリをインストールするらしいです。そのため、Dockerコンテナを構築してほかの環境を汚さないよう対処します。
+Dockerfileの内容 とりあえずOIが動く程度の準備をざっくりします。
+FROMpython:3.10-bookwormRUN apt-get update &amp;amp;&amp;amp; \  apt-get upgrade -y &amp;amp;&amp;amp; \  rm -rf /var/lib/apt/lists/*RUN pip install open-interpreter==0.</description>
+    </item>
+    
+  </channel>
+</rss>
