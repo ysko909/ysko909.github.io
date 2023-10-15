@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Google ColabでOpen InterpreterをCode Llamaで動かす - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Google ColabでOpen InterpreterをCode Llamaで動かす" />
+<meta property="og:description" content="概要 相変わらず話題のOpen Interpreter（以下、OI）を、今回はGoogle Colab上で動かしてみようというお話です。相変わらず、ローカルやColab上の限定された環境での動作を想定しているので、Code Llama（以下、Llama）を利用します。
+以前の記事では、OIをは手元にあったショボショボPCを使ってローカルで動作させることをやってみました。このPCは、CPUはともかくロクなGPUも積んでないようなPCなので、OIを動作させたところでその真価を発揮できたかと言われると甚だ疑問です。そこで、「GPUをもうちょっと盛大に使ってOIを動作させたいー」という欲求を満たすため、Google Colaboratory（以下、Colab）を使います。
+Google Colaboratoryとは 最初にGoogle Colaboratory（通称：Colab）について触れておきます。Colabは、Googleが提供するクラウドベースのPython開発環境です。
+ Colab は、学生からデータ サイエンティスト、AI リサーチャーまで、皆さんの作業を効率化します。
+  ブラウザ上でJupyter Notebookを記述し実行できる 環境構築が不要 GPUに料金なしでアクセス可能 簡単に共有可能  ColabではJupyter notebookの形式で基本的に記述するため、Pythonの理解がある人はすぐ使いこなせるでしょう。notebookは、実行可能コードやMarkdownによるテキストを、1つのドキュメントでそれぞれ記述できます。Colabで作成したnotebookは、GoogleドライブにColabのドキュメントとして保存されます。また、作成したドキュメントはリンクなどにより簡単に共有が可能で、コメントの記入や編集をしてもらうことも可能です。とりあえず作ってみると、使用感がわかるかと思います。
+環境 先述のとおり、今回はColabを利用します。そのため、OIを動作させる環境の準備は、「Googleアカウントを取得してColabにログインする」で終わりです。あとは必要はライブラリやパッケージをインストールし、実行するだけです。この簡単さがColabの最大の利点ですね。
+なお、Colabには無料プランと有料プランで使えるリソースに差があります。また、無料プランだとGPUが割り当てられるかは結構運任せで、だいたい割り当ててもらえません。CPUオンリーでも動作は可能ですが、それはローカルPCでもできることなので、今回はしっかりGPUを使いたいわけです。とは言え、先述のとおり無料プランだとGPUが割り当てられるかは確定しませんし、だいたいダメです。運に頼らずGPUを使いたいので、ここは素直に課金します。おかねのちからってすげー！
+まぁ、課金するっていっても「Pro」です。さすがに「Pro＋」はオーバースペックじゃね・・・？いや、石油王とかならワンチャン？
+ちなみにGPUが割り当てられると、上記のようにどんなGPUが割り当てられているか、CPUなどのリソースがどの程度利用されているかが小さく表示されます。ここではV100というGPUが割り当てられています。
+OIを実行する方法 OIのインストール これは簡単です。pip installするだけですから。
+!pip install open-interpreter 上記のコードを入力して実行します。少し待てば実行が終わり、ライブラリがインストールされたはずです。
+OIの実行・・・ができない OIをインストールしたので、早速実行するぜ！・・・と行きたいところなんですが、残念。使えません。
+実は、ここまで言っておいてなんですが、Colab上でCode Llamaで動かそうとしても動作しません。というか、そもそもOIの起動ができません。それはLlamaを実行するのに必要な--localオプションを付与した際の環境設定で、キー入力を受け付けずパラメータを指定できないからです。
+!interpreter --local [?] Parameter count (smaller is faster, larger is more capable): 7B &gt; 7B 13B 34B OIをLlamaで動作させる場合、上記のようにLlamaのオプション指定するよう表示され、任意の選択肢1つを指定します。するのですが、その際はカーソルキーで選択してから改行キーを押す必要があります。単純にColab上で!interpreter --localを実行してしまうと、Llamaのオプション設定をしたくともColabがキー入力を受け付けてくれません。そのため、Llamaのオプション指定ができない＝先に進まない＝Colab上でLlamaによるOIが実行できないとなるわけです。
+また、OI公式を確認したところ、Open InterpreterのCode Llama利用については「Colabでの実行をサポートしていない」と書いてあります。
+ターミナルの導入 とはいえ、ここで引き下がったらエンジニアの名折れです（暴言）。サポートされてないってだけで、完全にダメってことじゃないでしょうからどうにかなるはずです。なんとかなれー！
+じゃあ、キー入力を受け付けてくれるにはどうするか？が問題になります。ここではColab上で動作するターミナルを導入します。
+!pip install colab-xterm %load_ext colabxterm %xterm 最後の%xtermを実行すると、Colab上にターミナルが表示されます。ターミナルが表示されたら、改めてOIを起動します。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/use-open-interpreter-with-code-llama-on-colab/" /><meta property="article:published_time" content="2023-10-13T22:57:00&#43;09:00"/>
+<meta property="article:modified_time" content="2023-10-13T22:57:00&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Google ColabでOpen InterpreterをCode Llamaで動かす"/>
+<meta name="twitter:description" content="概要 相変わらず話題のOpen Interpreter（以下、OI）を、今回はGoogle Colab上で動かしてみようというお話です。相変わらず、ローカルやColab上の限定された環境での動作を想定しているので、Code Llama（以下、Llama）を利用します。
+以前の記事では、OIをは手元にあったショボショボPCを使ってローカルで動作させることをやってみました。このPCは、CPUはともかくロクなGPUも積んでないようなPCなので、OIを動作させたところでその真価を発揮できたかと言われると甚だ疑問です。そこで、「GPUをもうちょっと盛大に使ってOIを動作させたいー」という欲求を満たすため、Google Colaboratory（以下、Colab）を使います。
+Google Colaboratoryとは 最初にGoogle Colaboratory（通称：Colab）について触れておきます。Colabは、Googleが提供するクラウドベースのPython開発環境です。
+ Colab は、学生からデータ サイエンティスト、AI リサーチャーまで、皆さんの作業を効率化します。
+  ブラウザ上でJupyter Notebookを記述し実行できる 環境構築が不要 GPUに料金なしでアクセス可能 簡単に共有可能  ColabではJupyter notebookの形式で基本的に記述するため、Pythonの理解がある人はすぐ使いこなせるでしょう。notebookは、実行可能コードやMarkdownによるテキストを、1つのドキュメントでそれぞれ記述できます。Colabで作成したnotebookは、GoogleドライブにColabのドキュメントとして保存されます。また、作成したドキュメントはリンクなどにより簡単に共有が可能で、コメントの記入や編集をしてもらうことも可能です。とりあえず作ってみると、使用感がわかるかと思います。
+環境 先述のとおり、今回はColabを利用します。そのため、OIを動作させる環境の準備は、「Googleアカウントを取得してColabにログインする」で終わりです。あとは必要はライブラリやパッケージをインストールし、実行するだけです。この簡単さがColabの最大の利点ですね。
+なお、Colabには無料プランと有料プランで使えるリソースに差があります。また、無料プランだとGPUが割り当てられるかは結構運任せで、だいたい割り当ててもらえません。CPUオンリーでも動作は可能ですが、それはローカルPCでもできることなので、今回はしっかりGPUを使いたいわけです。とは言え、先述のとおり無料プランだとGPUが割り当てられるかは確定しませんし、だいたいダメです。運に頼らずGPUを使いたいので、ここは素直に課金します。おかねのちからってすげー！
+まぁ、課金するっていっても「Pro」です。さすがに「Pro＋」はオーバースペックじゃね・・・？いや、石油王とかならワンチャン？
+ちなみにGPUが割り当てられると、上記のようにどんなGPUが割り当てられているか、CPUなどのリソースがどの程度利用されているかが小さく表示されます。ここではV100というGPUが割り当てられています。
+OIを実行する方法 OIのインストール これは簡単です。pip installするだけですから。
+!pip install open-interpreter 上記のコードを入力して実行します。少し待てば実行が終わり、ライブラリがインストールされたはずです。
+OIの実行・・・ができない OIをインストールしたので、早速実行するぜ！・・・と行きたいところなんですが、残念。使えません。
+実は、ここまで言っておいてなんですが、Colab上でCode Llamaで動かそうとしても動作しません。というか、そもそもOIの起動ができません。それはLlamaを実行するのに必要な--localオプションを付与した際の環境設定で、キー入力を受け付けずパラメータを指定できないからです。
+!interpreter --local [?] Parameter count (smaller is faster, larger is more capable): 7B &gt; 7B 13B 34B OIをLlamaで動作させる場合、上記のようにLlamaのオプション指定するよう表示され、任意の選択肢1つを指定します。するのですが、その際はカーソルキーで選択してから改行キーを押す必要があります。単純にColab上で!interpreter --localを実行してしまうと、Llamaのオプション設定をしたくともColabがキー入力を受け付けてくれません。そのため、Llamaのオプション指定ができない＝先に進まない＝Colab上でLlamaによるOIが実行できないとなるわけです。
+また、OI公式を確認したところ、Open InterpreterのCode Llama利用については「Colabでの実行をサポートしていない」と書いてあります。
+ターミナルの導入 とはいえ、ここで引き下がったらエンジニアの名折れです（暴言）。サポートされてないってだけで、完全にダメってことじゃないでしょうからどうにかなるはずです。なんとかなれー！
+じゃあ、キー入力を受け付けてくれるにはどうするか？が問題になります。ここではColab上で動作するターミナルを導入します。
+!pip install colab-xterm %load_ext colabxterm %xterm 最後の%xtermを実行すると、Colab上にターミナルが表示されます。ターミナルが表示されたら、改めてOIを起動します。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Google ColabでOpen InterpreterをCode Llamaで動かす</h1>
+			<div class="meta">Posted at &mdash; Oct 13, 2023</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>相変わらず話題の<a href="https://github.com/KillianLucas/open-interpreter">Open Interpreter</a>（以下、OI）を、今回はGoogle Colab上で動かしてみようというお話です。相変わらず、ローカルやColab上の限定された環境での動作を想定しているので、Code Llama（以下、Llama）を利用します。</p>
+
+<p>以前の記事では、OIをは手元にあったショボショボPCを使ってローカルで動作させることをやってみました。このPCは、CPUはともかくロクなGPUも積んでないようなPCなので、OIを動作させたところでその真価を発揮できたかと言われると甚だ疑問です。そこで、「GPUをもうちょっと盛大に使ってOIを動作させたいー」という欲求を満たすため、<a href="https://colab.research.google.com/">Google Colaboratory</a>（以下、Colab）を使います。</p>
+
+<h2 id="google-colaboratoryとは">Google Colaboratoryとは</h2>
+
+<p>最初にGoogle Colaboratory（通称：Colab）について触れておきます。Colabは、Googleが提供するクラウドベースのPython開発環境です。</p>
+
+<blockquote>
+<p>Colab は、学生からデータ サイエンティスト、AI リサーチャーまで、皆さんの作業を効率化します。</p>
+</blockquote>
+
+<ul>
+<li>ブラウザ上でJupyter Notebookを記述し実行できる</li>
+<li>環境構築が不要</li>
+<li>GPUに料金なしでアクセス可能</li>
+<li>簡単に共有可能</li>
+</ul>
+
+<p>ColabではJupyter notebookの形式で基本的に記述するため、Pythonの理解がある人はすぐ使いこなせるでしょう。notebookは、実行可能コードやMarkdownによるテキストを、1つのドキュメントでそれぞれ記述できます。Colabで作成したnotebookは、GoogleドライブにColabのドキュメントとして保存されます。また、作成したドキュメントはリンクなどにより簡単に共有が可能で、コメントの記入や編集をしてもらうことも可能です。とりあえず作ってみると、使用感がわかるかと思います。</p>
+
+<h2 id="環境">環境</h2>
+
+<p>先述のとおり、今回はColabを利用します。そのため、OIを動作させる環境の準備は、「Googleアカウントを取得してColabにログインする」で終わりです。あとは必要はライブラリやパッケージをインストールし、実行するだけです。この簡単さがColabの最大の利点ですね。</p>
+
+<p>なお、Colabには<a href="https://atmarkit.itmedia.co.jp/ait/articles/2106/07/news025.html">無料プランと有料プランで使えるリソースに差があります</a>。また、無料プランだとGPUが割り当てられるかは結構運任せで、だいたい割り当ててもらえません。CPUオンリーでも動作は可能ですが、それはローカルPCでもできることなので、今回はしっかりGPUを使いたいわけです。とは言え、先述のとおり無料プランだとGPUが割り当てられるかは確定しませんし、だいたいダメです。運に頼らずGPUを使いたいので、ここは素直に課金します。<strong>おかねのちからってすげー！</strong></p>
+
+<p>まぁ、課金するっていっても「Pro」です。さすがに「Pro＋」はオーバースペックじゃね・・・？いや、石油王とかならワンチャン？</p>
+
+<p><img src="2023-10-15-23-48-51.png" alt="pic" /></p>
+
+<p>ちなみにGPUが割り当てられると、上記のようにどんなGPUが割り当てられているか、CPUなどのリソースがどの程度利用されているかが小さく表示されます。ここではV100というGPUが割り当てられています。</p>
+
+<h2 id="oiを実行する方法">OIを実行する方法</h2>
+
+<h3 id="oiのインストール">OIのインストール</h3>
+
+<p>これは簡単です。<code>pip install</code>するだけですから。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="">!</span>pip install open-interpreter</code></pre></div>
+<p>上記のコードを入力して実行します。少し待てば実行が終わり、ライブラリがインストールされたはずです。</p>
+
+<h3 id="oiの実行-ができない">OIの実行・・・ができない</h3>
+
+<p>OIをインストールしたので、早速実行するぜ！・・・と行きたいところなんですが、残念。<strong>使えません</strong>。</p>
+
+<p>実は、ここまで言っておいてなんですが、Colab上でCode Llamaで動かそうとしても動作しません。というか、そもそも<strong>OIの起動ができません</strong>。それはLlamaを実行するのに必要な<code>--local</code>オプションを付与した際の環境設定で、<a href="https://note.com/tomot_shogi/n/n61aa99ab75ea">キー入力を受け付けずパラメータを指定できないから</a>です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">!interpreter --local
+
+[?] Parameter count (smaller is faster, larger is more capable): 7B
+ &gt; 7B
+   13B
+   34B</code></pre></div>
+<p>OIをLlamaで動作させる場合、上記のようにLlamaのオプション指定するよう表示され、任意の選択肢1つを指定します。するのですが、その際はカーソルキーで選択してから改行キーを押す必要があります。単純にColab上で<code>!interpreter --local</code>を実行してしまうと、Llamaのオプション設定をしたくとも<strong>Colabがキー入力を受け付けてくれません</strong>。そのため、<code>Llamaのオプション指定ができない＝先に進まない＝Colab上でLlamaによるOIが実行できない</code>となるわけです。</p>
+
+<p>また、<a href="https://github.com/KillianLucas/open-interpreter/issues/207">OI公式</a>を確認したところ、Open InterpreterのCode Llama利用については「Colabでの実行をサポートしていない」と書いてあります。</p>
+
+<h3 id="ターミナルの導入">ターミナルの導入</h3>
+
+<p>とはいえ、ここで引き下がったらエンジニアの名折れです（暴言）。サポートされてないってだけで、完全にダメってことじゃないでしょうからどうにかなるはずです。<strong>なんとかなれー！</strong></p>
+
+<p>じゃあ、キー入力を受け付けてくれるにはどうするか？が問題になります。ここではColab上で動作するターミナルを導入します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="">!</span>pip install colab-xterm
+%load_ext colabxterm
+%xterm</code></pre></div>
+<p>最後の<code>%xterm</code>を実行すると、Colab上にターミナルが表示されます。ターミナルが表示されたら、改めてOIを起動します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">interpreter --local</code></pre></div>
+<p>上記のコマンドをColab上のターミナルに入力して、実行します。ターミナルへの入力にタイムラグがあるので入力しにくいとは思いますが、そこは気合と根性あるいはノリと勢いでどうにかしましょう。今度はキー入力を受け付けてくれるので、Llamaの設定値を指定できます。</p>
+
+<h2 id="使ってみる">使ってみる</h2>
+
+<p>早速Colab上でLlamaのOIを使ってみます。ローカル環境がショボショボだったせいで、容量の小さいモデルを利用する必要があった前回とは違い、今回はそこそこのGPUメモリもあります。</p>
+
+<p>なお、notebookなので、以下のコードはすべて「セル」と呼ばれる領域に記述して実行します。ここではセルの追加方法などは割愛しますが、ググれば結構いろいろ出てきます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="">!</span>pip install open-interpreter
+<span style="">!</span>pip install colab-xterm
+%load_ext colabxterm
+%xterm</code></pre></div>
+<p>先述のとおり、上記のコードをセルに入力して実行しておきます。</p>
+
+<p><img src="2023-10-15-23-49-22.png" alt="pic" /></p>
+
+<p>すると、上記のようにColabの画面にコンソールのような画面が表示されます。以降は、このコンソール画面に入力していくことになります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">interpreter --local</code></pre></div>
+<p>表示されているコンソールに上記のコマンドを入力し実行することで、OIの環境を構築できます。</p>
+
+<p><img src="2023-10-15-23-49-43.png" alt="pic" /></p>
+
+<p>必要なファイルは順次自動的にインストールされますので、しばらく待ちます。結構待ちます。</p>
+
+<p><img src="2023-10-15-23-49-56.png" alt="pic" /></p>
+
+<p>上記のようにプロンプトが表示されたら準備完了です。使い倒しましょう。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>今回はColabでOIを実行してみました。</p>
+
+<p>とりあえずOIの雰囲気や操作感を体験してみるには手っ取り早いうえ、Pro以上のプランではそこそこリッチにGPUを利用できるため、自分のマシンがショボくてもなんとかなります。<del>なってくれ</del>。</p>
+
+<p>ColabはOIだけが動作するわけではないので、Colabを使ってみるきっかけにしてもいいかもしれません。Colab自体はいろんなことができるかなり優秀な環境なので、どんどん使ってみることをオススメします。</p>
+
+<h2 id="参照">参照</h2>
+
+<ol>
+<li><a href="https://github.com/KillianLucas/open-interpreter">KillianLucas/open-interpreter</a></li>
+<li><a href="https://colab.research.google.com/drive/1WKmRXZgsErej2xUriKzxrEAXdxMSgWbb?usp=sharing">Open Interpreter Demo on Google Colab</a></li>
+<li><a href="https://qiita.com/ot12/items/d2672144b914cb6f252f">凄すぎると話題の「Open Interpreter」の始め方・使い方まとめ</a></li>
+<li><a href="https://note.com/tomot_shogi/n/n61aa99ab75ea">[ChatGPT]Open InterpreterのCode LlamaバージョンをGoogle Colabで実行しようとしたらつまづいた話</a></li>
+<li><a href="https://atmarkit.itmedia.co.jp/ait/articles/2106/07/news025.html">Colab Pro／Pro+／Pay As You Goとは？　無料版との違い、比較表</a></li>
+<li><a href="https://github.com/InfuseAI/colab-xterm">InfuseAI/colab-xterm</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

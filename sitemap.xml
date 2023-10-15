@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/use-open-interpreter-with-code-llama-on-colab/</loc>
+    <lastmod>2023-10-13T22:57:00+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/use-returntype-for-generating-return-type-on-typescript/</loc>
     <lastmod>2023-10-03T16:59:48+09:00</lastmod>
   </url>
@@ -555,7 +560,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/codellama/</loc>
-    <lastmod>2023-10-03T16:03:44+09:00</lastmod>
+    <lastmod>2023-10-13T22:57:00+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -616,6 +621,12 @@
   <url>
     <loc>https://ysko909.github.io/tags/google/</loc>
     <lastmod>2019-11-22T09:50:35+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ysko909.github.io/tags/googlecolab/</loc>
+    <lastmod>2023-10-13T22:57:00+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -747,7 +758,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/openinterpreter/</loc>
-    <lastmod>2023-10-03T16:03:44+09:00</lastmod>
+    <lastmod>2023-10-13T22:57:00+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -831,7 +842,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2023-10-03T16:59:48+09:00</lastmod>
+    <lastmod>2023-10-13T22:57:00+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1023,7 +1034,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2023-10-03T16:59:48+09:00</lastmod>
+    <lastmod>2023-10-13T22:57:00+09:00</lastmod>
     <priority>0</priority>
   </url>
   
