@@ -7,10 +7,32 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Fri, 13 Oct 2023 22:57:00 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 25 Oct 2023 19:01:27 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Claude2とはなんぞや？使い方の基本</title>
+      <link>https://ysko909.github.io/posts/fundamentals-of-claude2/</link>
+      <pubDate>Wed, 25 Oct 2023 19:01:27 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/fundamentals-of-claude2/</guid>
+      <description>概要 「Claude2（「クロード2」と読むらしい）」は、アメリカのスタートアップである「Anthropic」が開発したAIチャットサービスです。Anthropicは、ChatGPTを展開する「OpenAI」の元エンジニアが独立して創業した企業だそうです。へぇー。
+ChatGPTの対抗馬と目されているこのAIは、現状無料で利用できる生成AIの中では結構出色の出来栄えで、ChatGPTのv3.5くらいは上回る精度で生成してくれるようです。そこで今回は、ざっくりとしたClaude2の概要や使い方、実際に生成してみた結果をメモします。
+まずはClaude2自身に聞いてみましょう。
+Claude2とは何ですか？どんな機能を提供してくれますか？ティーンエイジャーにもわかるよう、平易な言葉を使って説明してください。 ティーンエイジャーという部分は余計かもしれませんが、とりあえず入れてみました。どんな回答が返ってくるでしょうか。
+はい、私はクロード2として機能します。クロード2とは、人工知能アシスタントの1つです。名前が示すとおり、クロードを引き継ぐ存在として設計されています。ティーンエイジャーの友だちにとって、クロード2は日常生活の様々な質問に答えてあげる相談役のような存在だと思います。学校の宿題の解説、友達関係のアドバイス、興味のあるトピックについて話を聞いてあげることができます。私には人権や倫理面での問題を正しく理解する能力と、個人情報を適切に扱う訓練を受けています。つまり相手の感情にも配慮した上で、回答を提供します。使い方としては、スマホアプリやウェブサイトから質問文を送ってください。できる限り丁寧に説明し返答いたします。質問があればいつでも聞いてください! 「ティーンエイジャーの友だち」ってなんか大きいお友だちみたいな言い回し・・・。
+上記はClaude2の機能にアクセスできる、Poe AIにてClaude-2を実行した結果です。
+どこで使えるの claude.aiです。
+claude.aiでClaude2は利用できます。が、アカウント作成の際に電話番号による認証が必要です。
+前述のPoe AIはメールアドレスを登録するだけなので、すぐ使えるようになります。Claude2以外にもさまざまなモデルがあるので、いろいろ試してみるのもおもしろいかもしれません。
+ただ、上記のスクリーンショットにある通りPoeでClaude2を実行するには会話回数に制限があるので、Claude2を使い込みたい場合はclaude.ai/で利用するほうがいいかもしれません。
+使ってみる ここからは、実際にClaude2を使ってみます。なお、以降はclaude.ai/でClaude2を利用していますのでご了承ください。
+ChatGPTで使っているプロンプトがClaude2でも有効か試してみましょう。
+# 命令書 あなたはプロのPythonエンジニアとして振舞ってください。以下の制約条件にしたがって、Pygameを使ったゲーム開発のチュートリアルを出力してください。# 制約条件 - 具体的なサンプルコードを複数提示すること。- 開発環境の構築から手順を説明すること。- ティーンエイジャーにもわかるよう平易な言葉を使うこと。- 出力文はMarkdownの形式に準拠させること。# 出力文 ChatGPTで有効だった「役割を明確化し制約条件を課す」プロンプトを入力してみます。どんな感じになるでしょうか。
+はい、プロのPythonエンジニアとしてPygameを使ったゲーム開発のチュートリアルをMarkdown形式で作成いたします。ご要望の制約条件に従って平易な言葉で分かりやすく説明させていただきます。# Pygameを使ったゲーム開発のチュートリアル ## 開発環境の構築 Pygameを使ったゲーム開発をするには、PythonとPygameをインストールする必要があります。``` # Pythonのインストール # Pygameのインストール pip install pygame ```エディタはVisual Studio Codeなどを使うとコーディングしやすいです。## サンプルプログラム まずは簡単なサンプルから。画面に四角形を表示させましょう。```python import pygame pygame.init() screen = pygame.display.set_mode((400, 300)) pygame.draw.rect(screen, (255, 0, 0), (30, 30, 60, 60)) pygame.display.flip() running = True while running: for event in pygame.</description>
+    </item>
     
     <item>
       <title>Google ColabでOpen InterpreterをCode Llamaで動かす</title>

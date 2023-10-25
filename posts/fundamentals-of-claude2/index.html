@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Claude2とはなんぞや？使い方の基本 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Claude2とはなんぞや？使い方の基本" />
+<meta property="og:description" content="概要 「Claude2（「クロード2」と読むらしい）」は、アメリカのスタートアップである「Anthropic」が開発したAIチャットサービスです。Anthropicは、ChatGPTを展開する「OpenAI」の元エンジニアが独立して創業した企業だそうです。へぇー。
+ChatGPTの対抗馬と目されているこのAIは、現状無料で利用できる生成AIの中では結構出色の出来栄えで、ChatGPTのv3.5くらいは上回る精度で生成してくれるようです。そこで今回は、ざっくりとしたClaude2の概要や使い方、実際に生成してみた結果をメモします。
+まずはClaude2自身に聞いてみましょう。
+Claude2とは何ですか？どんな機能を提供してくれますか？ティーンエイジャーにもわかるよう、平易な言葉を使って説明してください。 ティーンエイジャーという部分は余計かもしれませんが、とりあえず入れてみました。どんな回答が返ってくるでしょうか。
+はい、私はクロード2として機能します。クロード2とは、人工知能アシスタントの1つです。名前が示すとおり、クロードを引き継ぐ存在として設計されています。ティーンエイジャーの友だちにとって、クロード2は日常生活の様々な質問に答えてあげる相談役のような存在だと思います。学校の宿題の解説、友達関係のアドバイス、興味のあるトピックについて話を聞いてあげることができます。私には人権や倫理面での問題を正しく理解する能力と、個人情報を適切に扱う訓練を受けています。つまり相手の感情にも配慮した上で、回答を提供します。使い方としては、スマホアプリやウェブサイトから質問文を送ってください。できる限り丁寧に説明し返答いたします。質問があればいつでも聞いてください! 「ティーンエイジャーの友だち」ってなんか大きいお友だちみたいな言い回し・・・。
+上記はClaude2の機能にアクセスできる、Poe AIにてClaude-2を実行した結果です。
+どこで使えるの claude.aiです。
+claude.aiでClaude2は利用できます。が、アカウント作成の際に電話番号による認証が必要です。
+前述のPoe AIはメールアドレスを登録するだけなので、すぐ使えるようになります。Claude2以外にもさまざまなモデルがあるので、いろいろ試してみるのもおもしろいかもしれません。
+ただ、上記のスクリーンショットにある通りPoeでClaude2を実行するには会話回数に制限があるので、Claude2を使い込みたい場合はclaude.ai/で利用するほうがいいかもしれません。
+使ってみる ここからは、実際にClaude2を使ってみます。なお、以降はclaude.ai/でClaude2を利用していますのでご了承ください。
+ChatGPTで使っているプロンプトがClaude2でも有効か試してみましょう。
+# 命令書 あなたはプロのPythonエンジニアとして振舞ってください。以下の制約条件にしたがって、Pygameを使ったゲーム開発のチュートリアルを出力してください。# 制約条件 - 具体的なサンプルコードを複数提示すること。- 開発環境の構築から手順を説明すること。- ティーンエイジャーにもわかるよう平易な言葉を使うこと。- 出力文はMarkdownの形式に準拠させること。# 出力文 ChatGPTで有効だった「役割を明確化し制約条件を課す」プロンプトを入力してみます。どんな感じになるでしょうか。
+はい、プロのPythonエンジニアとしてPygameを使ったゲーム開発のチュートリアルをMarkdown形式で作成いたします。ご要望の制約条件に従って平易な言葉で分かりやすく説明させていただきます。# Pygameを使ったゲーム開発のチュートリアル ## 開発環境の構築 Pygameを使ったゲーム開発をするには、PythonとPygameをインストールする必要があります。``` # Pythonのインストール # Pygameのインストール pip install pygame ```エディタはVisual Studio Codeなどを使うとコーディングしやすいです。## サンプルプログラム まずは簡単なサンプルから。画面に四角形を表示させましょう。```python import pygame pygame.init() screen = pygame.display.set_mode((400, 300)) pygame.draw.rect(screen, (255, 0, 0), (30, 30, 60, 60)) pygame.display.flip() running = True while running: for event in pygame." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-claude2/" /><meta property="article:published_time" content="2023-10-25T19:01:27&#43;09:00"/>
+<meta property="article:modified_time" content="2023-10-25T19:01:27&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Claude2とはなんぞや？使い方の基本"/>
+<meta name="twitter:description" content="概要 「Claude2（「クロード2」と読むらしい）」は、アメリカのスタートアップである「Anthropic」が開発したAIチャットサービスです。Anthropicは、ChatGPTを展開する「OpenAI」の元エンジニアが独立して創業した企業だそうです。へぇー。
+ChatGPTの対抗馬と目されているこのAIは、現状無料で利用できる生成AIの中では結構出色の出来栄えで、ChatGPTのv3.5くらいは上回る精度で生成してくれるようです。そこで今回は、ざっくりとしたClaude2の概要や使い方、実際に生成してみた結果をメモします。
+まずはClaude2自身に聞いてみましょう。
+Claude2とは何ですか？どんな機能を提供してくれますか？ティーンエイジャーにもわかるよう、平易な言葉を使って説明してください。 ティーンエイジャーという部分は余計かもしれませんが、とりあえず入れてみました。どんな回答が返ってくるでしょうか。
+はい、私はクロード2として機能します。クロード2とは、人工知能アシスタントの1つです。名前が示すとおり、クロードを引き継ぐ存在として設計されています。ティーンエイジャーの友だちにとって、クロード2は日常生活の様々な質問に答えてあげる相談役のような存在だと思います。学校の宿題の解説、友達関係のアドバイス、興味のあるトピックについて話を聞いてあげることができます。私には人権や倫理面での問題を正しく理解する能力と、個人情報を適切に扱う訓練を受けています。つまり相手の感情にも配慮した上で、回答を提供します。使い方としては、スマホアプリやウェブサイトから質問文を送ってください。できる限り丁寧に説明し返答いたします。質問があればいつでも聞いてください! 「ティーンエイジャーの友だち」ってなんか大きいお友だちみたいな言い回し・・・。
+上記はClaude2の機能にアクセスできる、Poe AIにてClaude-2を実行した結果です。
+どこで使えるの claude.aiです。
+claude.aiでClaude2は利用できます。が、アカウント作成の際に電話番号による認証が必要です。
+前述のPoe AIはメールアドレスを登録するだけなので、すぐ使えるようになります。Claude2以外にもさまざまなモデルがあるので、いろいろ試してみるのもおもしろいかもしれません。
+ただ、上記のスクリーンショットにある通りPoeでClaude2を実行するには会話回数に制限があるので、Claude2を使い込みたい場合はclaude.ai/で利用するほうがいいかもしれません。
+使ってみる ここからは、実際にClaude2を使ってみます。なお、以降はclaude.ai/でClaude2を利用していますのでご了承ください。
+ChatGPTで使っているプロンプトがClaude2でも有効か試してみましょう。
+# 命令書 あなたはプロのPythonエンジニアとして振舞ってください。以下の制約条件にしたがって、Pygameを使ったゲーム開発のチュートリアルを出力してください。# 制約条件 - 具体的なサンプルコードを複数提示すること。- 開発環境の構築から手順を説明すること。- ティーンエイジャーにもわかるよう平易な言葉を使うこと。- 出力文はMarkdownの形式に準拠させること。# 出力文 ChatGPTで有効だった「役割を明確化し制約条件を課す」プロンプトを入力してみます。どんな感じになるでしょうか。
+はい、プロのPythonエンジニアとしてPygameを使ったゲーム開発のチュートリアルをMarkdown形式で作成いたします。ご要望の制約条件に従って平易な言葉で分かりやすく説明させていただきます。# Pygameを使ったゲーム開発のチュートリアル ## 開発環境の構築 Pygameを使ったゲーム開発をするには、PythonとPygameをインストールする必要があります。``` # Pythonのインストール # Pygameのインストール pip install pygame ```エディタはVisual Studio Codeなどを使うとコーディングしやすいです。## サンプルプログラム まずは簡単なサンプルから。画面に四角形を表示させましょう。```python import pygame pygame.init() screen = pygame.display.set_mode((400, 300)) pygame.draw.rect(screen, (255, 0, 0), (30, 30, 60, 60)) pygame.display.flip() running = True while running: for event in pygame."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Claude2とはなんぞや？使い方の基本</h1>
+			<div class="meta">Posted at &mdash; Oct 25, 2023</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>「Claude2（「クロード2」と読むらしい）」は、アメリカのスタートアップである「Anthropic」が開発したAIチャットサービスです。Anthropicは、ChatGPTを展開する「OpenAI」の元エンジニアが独立して創業した企業だそうです。へぇー。</p>
+
+<p>ChatGPTの対抗馬と目されているこのAIは、現状無料で利用できる生成AIの中では結構出色の出来栄えで、ChatGPTのv3.5くらいは上回る精度で生成してくれるようです。そこで今回は、ざっくりとしたClaude2の概要や使い方、実際に生成してみた結果をメモします。</p>
+
+<p>まずはClaude2自身に聞いてみましょう。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">Claude2とは何ですか？どんな機能を提供してくれますか？ティーンエイジャーにもわかるよう、平易な言葉を使って説明してください。</code></pre></div>
+<p>ティーンエイジャーという部分は余計かもしれませんが、とりあえず入れてみました。どんな回答が返ってくるでしょうか。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">はい、私はクロード2として機能します。<span style="">
+</span><span style="">
+</span><span style=""></span>クロード2とは、人工知能アシスタントの1つです。名前が示すとおり、クロードを引き継ぐ存在として設計されています。<span style="">
+</span><span style="">
+</span><span style=""></span>ティーンエイジャーの友だちにとって、クロード2は日常生活の様々な質問に答えてあげる相談役のような存在だと思います。学校の宿題の解説、友達関係のアドバイス、興味のあるトピックについて話を聞いてあげることができます。<span style="">
+</span><span style="">
+</span><span style=""></span>私には人権や倫理面での問題を正しく理解する能力と、個人情報を適切に扱う訓練を受けています。つまり相手の感情にも配慮した上で、回答を提供します。<span style="">
+</span><span style="">
+</span><span style=""></span>使い方としては、スマホアプリやウェブサイトから質問文を送ってください。できる限り丁寧に説明し返答いたします。質問があればいつでも聞いてください!</code></pre></div>
+<p>「ティーンエイジャーの友だち」ってなんか大きいお友だちみたいな言い回し・・・。</p>
+
+<p>上記はClaude2の機能にアクセスできる、<a href="https://poe.com/">Poe AI</a>にて<a href="https://poe.com/Claude-2-100k">Claude-2</a>を実行した結果です。</p>
+
+<h2 id="どこで使えるの">どこで使えるの</h2>
+
+<p><a href="https://claude.ai/">claude.ai</a>です。</p>
+
+<p><img src="2023-10-25-19-12-42.png" alt="pic" /></p>
+
+<p><a href="https://claude.ai/">claude.ai</a>でClaude2は利用できます。が、アカウント作成の際に電話番号による認証が必要です。</p>
+
+<p>前述の<a href="https://poe.com/">Poe AI</a>はメールアドレスを登録するだけなので、すぐ使えるようになります。Claude2以外にもさまざまなモデルがあるので、いろいろ試してみるのもおもしろいかもしれません。</p>
+
+<p><img src="2023-10-25-19-12-59.png" alt="pic" /></p>
+
+<p>ただ、上記のスクリーンショットにある通りPoeでClaude2を実行するには会話回数に制限があるので、Claude2を使い込みたい場合は<a href="https://claude.ai/">claude.ai/</a>で利用するほうがいいかもしれません。</p>
+
+<h2 id="使ってみる">使ってみる</h2>
+
+<p>ここからは、実際にClaude2を使ってみます。なお、以降は<a href="https://claude.ai/">claude.ai/</a>でClaude2を利用していますのでご了承ください。</p>
+
+<p>ChatGPTで使っているプロンプトがClaude2でも有効か試してみましょう。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"><span style="font-weight:bold">#</span> 命令書
+あなたはプロのPythonエンジニアとして振舞ってください。以下の制約条件にしたがって、Pygameを使ったゲーム開発のチュートリアルを出力してください。<span style="">
+</span><span style=""></span><span style="font-weight:bold">#</span> 制約条件
+<span style="color:#00f">-</span> 具体的なサンプルコードを複数提示すること。<span style="">
+</span><span style=""></span><span style="color:#00f">-</span> 開発環境の構築から手順を説明すること。<span style="">
+</span><span style=""></span><span style="color:#00f">-</span> ティーンエイジャーにもわかるよう平易な言葉を使うこと。<span style="">
+</span><span style=""></span><span style="color:#00f">-</span> 出力文はMarkdownの形式に準拠させること。<span style="">
+</span><span style=""></span># 出力文</code></pre></div>
+<p>ChatGPTで有効だった「役割を明確化し制約条件を課す」プロンプトを入力してみます。どんな感じになるでしょうか。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">はい、プロのPythonエンジニアとしてPygameを使ったゲーム開発のチュートリアルをMarkdown形式で作成いたします。ご要望の制約条件に従って平易な言葉で分かりやすく説明させていただきます。<span style="">
+</span><span style="">
+</span><span style=""></span><span style="font-weight:bold">#</span> Pygameを使ったゲーム開発のチュートリアル
+<span style="">
+</span><span style=""></span><span style="font-weight:bold">##</span> 開発環境の構築
+<span style="">
+</span><span style=""></span>Pygameを使ったゲーム開発をするには、PythonとPygameをインストールする必要があります。<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#a31515">```
+</span><span style="color:#a31515"></span># Pythonのインストール
+# Pygameのインストール
+pip install pygame
+<span style="color:#a31515">```</span><span style="">
+</span><span style="">
+</span><span style=""></span>エディタはVisual Studio Codeなどを使うとコーディングしやすいです。<span style="">
+</span><span style="">
+</span><span style=""></span><span style="font-weight:bold">##</span> サンプルプログラム
+<span style="">
+</span><span style=""></span>まずは簡単なサンプルから。画面に四角形を表示させましょう。<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#a31515">```python
+</span><span style="color:#a31515"></span><span style="color:#00f">import</span> pygame
+
+pygame.init() 
+
+screen = pygame.display.set_mode((400, 300))
+
+pygame.draw.rect(screen, (255, 0, 0), (30, 30, 60, 60))
+
+pygame.display.flip() 
+
+running = True
+<span style="color:#00f">while</span> running:
+    <span style="color:#00f">for</span> event <span style="color:#00f">in</span> pygame.event.get():
+        <span style="color:#00f">if</span> event.type == pygame.QUIT:
+            running = False
+<span style="color:#a31515">```</span><span style="">
+</span><span style="">
+</span><span style=""></span>このプログラムでは、画面サイズ400x300のウィンドウを作り、その上に赤い四角形を置いています。<span style="">
+</span><span style="">
+</span><span style=""></span>もう少し複雑な例も見てみましょう。<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#a31515">```python
+</span><span style="color:#a31515"></span><span style="color:#008000"># キャラクターと背景の画像を読み込む</span>
+player_img = pygame.image.load(<span style="color:#a31515">&#39;player.png&#39;</span>) 
+bg_img = pygame.image.load(<span style="color:#a31515">&#39;bg.jpg&#39;</span>)
+
+<span style="color:#008000"># キャラクターの位置を定義</span>
+player_x = 200 
+player_y = 150
+
+<span style="color:#008000"># メインループ</span>
+<span style="color:#00f">while</span> running:
+  
+  <span style="color:#008000"># 背景を描画</span>
+  screen.blit(bg_img, (0, 0))
+
+  <span style="color:#008000"># キャラクターを描画</span>
+  screen.blit(player_img, (player_x, player_y))
+
+  pygame.display.flip()
+
+  <span style="color:#008000"># キー入力でキャラクターを移動</span>
+  <span style="color:#00f">if</span> pygame.key.get_pressed()[pygame.K_UP]:
+    player_y -= 5 
+  <span style="color:#00f">if</span> pygame.key.get_pressed()[pygame.K_DOWN]:  
+    player_y += 5
+<span style="color:#a31515">```</span><span style="">
+</span><span style="">
+</span><span style=""></span>この例では、画像を読み込んでキャラクターと背景を描画し、キー入力でキャラクターを動かしています。<span style="">
+</span><span style="">
+</span><span style=""></span>Pygameにはこのほかにも、音楽再生、衝突判定、画面切り替えなどの機能があります。自分のアイデアを実現するのに便利なツールですので、ぜひ使ってみてください。分からないことがあれば聞いてくださいね!<span style="">
+</span><span style="">
+</span><span style=""></span>以上でPygameのチュートリアルを終わります。平易な言葉で説明できていれば幸いです。ご要望の制約条件に従って記述させていただきました。どうぞご確認ください。</code></pre></div>
+<p>すると、上記の結果が返ってきました。</p>
+
+<p><img src="2023-10-25-19-13-24.png" alt="pic" /></p>
+
+<p>実際に入出力が表示された結果が上記のスクリーンショットです。出力結果をテキストとしてコピーしてみると、制約条件通りMarkdownの書式で出力されているので、Markdownで出力されたClaude2の結果に基づいてPoeのUIが整形しているっぽいです。この辺はClaude2自体の機能ではありませんが好印象ですね。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">先ほど作成したPythonのソースコードに、キー入力でキャラクターが左右に移動するコードを追加してください。追加する前と追加した後をそれぞれ表示して、どこが変わったかを説明してください。</code></pre></div>
+<p>先ほどの回答に、ロジックを追加するようなプロンプトを入力してみます。すでに回答された内容が引き継げるか確認します。まぁできるとは思いますが。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">はい、ご指示のとおりPythonのソースコードにキャラクターの左右移動のコードを追加して、変更点を説明いたします。<span style="">
+</span><span style="">
+</span><span style=""></span>追加前のコード:<span style="">
+</span><span style="">
+</span><span style=""></span><span style="color:#a31515">```python
+</span><span style="color:#a31515"></span><span style="color:#008000"># キャラクターの位置を定義</span>
+player_x = 200  
+player_y = 150
+
+<span style="color:#008000"># メインループ </span>
+<span style="color:#00f">while</span> running:
+
+  <span style="color:#008000"># キャラクターを描画</span>
+  screen.blit(player_img, (player_x, player_y))
+    
+  <span style="color:#008000"># キー入力でキャラクターを上下に移動</span>
+  <span style="color:#00f">if</span> pygame.key.get_pressed()[pygame.K_UP]:
+    player_y -= 5
+  <span style="color:#00f">if</span> pygame.key.get_pressed()[pygame.K_DOWN]:
+    player_y += 5
+<span style="color:#a31515">```</span><span style="">
+</span><span style="">
+</span><span style=""></span>追加後のコード:<span style="">
+</span><span style="">
+</span><span style=""></span>```python <span style="">
+</span><span style=""></span><span style="font-weight:bold">#</span> キャラクターの位置を定義
+player_x = 200<span style="">
+</span><span style=""></span>player_y = 150<span style="">
+</span><span style="">
+</span><span style=""></span><span style="font-weight:bold">#</span> メインループ
+while running:<span style="">
+</span><span style="">
+</span><span style=""></span>  <span style="font-weight:bold">#</span> キャラクターを描画  
+  screen.blit(player_img, (player_x, player_y))<span style="">
+</span><span style=""></span>   <span style="">
+</span><span style=""></span>  <span style="font-weight:bold">#</span> キー入力でキャラクターを上下左右に移動
+  if pygame.key.get_pressed()[pygame.K_UP]:<span style="">
+</span><span style=""></span>    player_y -= 5<span style="">
+</span><span style=""></span>  if pygame.key.get_pressed()[pygame.K_DOWN]:<span style="">
+</span><span style=""></span>    player_y += 5<span style="">
+</span><span style=""></span>  if pygame.key.get_pressed()[pygame.K_LEFT]:  <span style="">
+</span><span style=""></span>    player_x -= 5<span style="">
+</span><span style=""></span>  if pygame.key.get_pressed()[pygame.K_RIGHT]:<span style="">
+</span><span style=""></span>    player_x += 5<span style="">
+</span><span style=""></span>```<span style="">
+</span><span style="">
+</span><span style=""></span>変更点は、K_LEFTとK_RIGHTのキー入力でplayer_xを増減する処理を追加した点です。<span style="">
+</span><span style=""></span>これによりキーボードの左右キーを押すとキャラクターが左右に移動するようになります。<span style="">
+</span><span style="">
+</span><span style=""></span>以上、ご指示のとおりコードの追加と変更点の説明を行いました。ご確認ください。</code></pre></div>
+<p>と言うわけで、しっかり先に出力されたコードを引き継げました。よかった。コードを引き継ぐにも全体でなく一部を抜粋しているのは好みが分かれそうですが、まぁこの辺は好みの問題なので大丈夫でしょう。</p>
+
+<h2 id="使ってみた感想">使ってみた感想</h2>
+
+<ul>
+<li>レスポンスがめちゃくちゃ早いです。これだけで推せますが、利用者がまだ多くない今だけかもしれません。</li>
+<li>「日本語で会話せよ」という指定をしなくても、入力文が日本語だったら日本語で返事してくれるようです。偉い。</li>
+<li>プログラムコードの生成に関しては、今のところ問題ない印象を受けます。あと、Claude2はChatGPTよりは最近のデータを学習元にしているらしいので、「この機能って非推奨だよな・・・?」みたいなコードが生成される可能性は低そうです。ただ、今後使いこんでいくとまた違った感想を持つかもしれません。</li>
+<li>Claude2というよりはwebページのおかげだと思いますが、UIが好みな作りでわかりやすいです。好印象です。</li>
+</ul>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://www.anthropic.com/index/claude-2">Claude-2</a></li>
+<li><a href="https://poe.com/">Poe AI</a></li>
+<li><a href="https://www.sedesign.co.jp/dxinsight/claude2">Claude2とは？特徴やChatGPTとの違い、使い方、活用例などを解説</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

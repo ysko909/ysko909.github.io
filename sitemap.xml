@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/fundamentals-of-claude2/</loc>
+    <lastmod>2023-10-25T19:01:27+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/use-open-interpreter-with-code-llama-on-colab/</loc>
     <lastmod>2023-10-13T22:57:00+09:00</lastmod>
   </url>
@@ -559,6 +564,12 @@
   </url>
   
   <url>
+    <loc>https://ysko909.github.io/tags/claude2/</loc>
+    <lastmod>2023-10-25T19:01:27+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/tags/codellama/</loc>
     <lastmod>2023-10-13T22:57:00+09:00</lastmod>
     <priority>0</priority>
@@ -842,7 +853,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2023-10-13T22:57:00+09:00</lastmod>
+    <lastmod>2023-10-25T19:01:27+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1034,7 +1045,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2023-10-13T22:57:00+09:00</lastmod>
+    <lastmod>2023-10-25T19:01:27+09:00</lastmod>
     <priority>0</priority>
   </url>
   
