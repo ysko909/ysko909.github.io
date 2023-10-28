@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>externally-managed-environmentエラーへの対処法 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="externally-managed-environmentエラーへの対処法" />
+<meta property="og:description" content="概要 pip installコマンドでライブラリをインストールしようとした時に、次のようなエラーが発生することがあります。
+$ pip install -U pygame --user error: externally-managed-environment × This environment is externally managed ╰─&gt; To install Python packages system-wide, try apt install python3-xyz, where xyz is the package you are trying to install. If you wish to install a non-Debian-packaged Python package, create a virtual environment using python3 -m venv path/to/venv. Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make sure you have python3-full installed. For more information visit http://rptl." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/get-error-externally-managed-environment/" /><meta property="article:published_time" content="2023-10-28T18:45:07&#43;09:00"/>
+<meta property="article:modified_time" content="2023-10-28T18:45:07&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="externally-managed-environmentエラーへの対処法"/>
+<meta name="twitter:description" content="概要 pip installコマンドでライブラリをインストールしようとした時に、次のようなエラーが発生することがあります。
+$ pip install -U pygame --user error: externally-managed-environment × This environment is externally managed ╰─&gt; To install Python packages system-wide, try apt install python3-xyz, where xyz is the package you are trying to install. If you wish to install a non-Debian-packaged Python package, create a virtual environment using python3 -m venv path/to/venv. Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make sure you have python3-full installed. For more information visit http://rptl."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">externally-managed-environmentエラーへの対処法</h1>
+			<div class="meta">Posted at &mdash; Oct 28, 2023</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p><code>pip install</code>コマンドでライブラリをインストールしようとした時に、次のようなエラーが発生することがあります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console"><span style="">$</span> pip install -U pygame --user
+<span style="color:#2b91af">error</span>: externally-managed-environment
+
+<span style="">×</span> This environment is externally managed
+<span style="">╰─</span>&gt; To install Python packages system-wide, try apt install
+    python3-xyz, where xyz is the <span style="color:#00f">package</span> you are trying to
+    install.
+    
+    If you wish to install a non-Debian-packaged Python <span style="color:#00f">package</span>,
+    create a virtual environment using python3 -m venv path/to/venv.
+    Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make
+    sure you have python3-full installed.
+    
+    For more information visit http:<span style="color:#008000">//rptl.io/venv
+</span><span style="color:#008000"></span>
+note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --<span style="color:#00f">break</span>-system-packages.
+hint: See PEP 668 <span style="color:#00f">for</span> the detailed specification.</code></pre></div>
+<p>この <code>externally-managed-environment</code> エラーは、Pythonの実行環境がシステム管理者によって管理されており、ユーザーが自由にパッケージをインストールできないことを示しています。</p>
+
+<h2 id="原因">原因</h2>
+
+<p>このエラーが発生する主な原因は以下の2つです。</p>
+
+<ul>
+<li>サーバや共有ホスティングなどの管理された環境でPythonを使用している場合</li>
+<li>仮想環境をactivateしていない場合</li>
+</ul>
+
+<p>管理者権限がない環境では、<code>pip</code>を用いたパッケージのインストールはできません。</p>
+
+<h2 id="対処法">対処法</h2>
+
+<p>このエラーを解決するには、次の2つの対処法があります。</p>
+
+<ol>
+<li>管理者に依頼して必要なパッケージをインストールしてもらう</li>
+<li>ローカル環境か自分が管理権限を持つサーバ上でPythonを使用する</li>
+</ol>
+
+<p>ローカルで開発する場合は、仮想環境を作成してその中でパッケージをインストールするのが一般的です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">python -m venv venv # 仮想環境の作成
+source venv/bin/activate # 仮想環境のアクティベート
+pip install pygame # パッケージのインストール</code></pre></div>
+<p>このように、適切に仮想環境を設定することで、<code>pip install</code>エラーを回避できます。</p>
+
+<p>管理環境下ではパッケージのインストール権限が制限されているため、可能な限りローカル環境や自分のサーバ上でPythonを使用することをオススメします。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://docs.python.org/ja/3/library/venv.html">venv</a></li>
+<li><a href="https://stackoverflow.com/questions/75602063/pip-install-r-requirements-txt-is-failing-this-environment-is-externally-mana/75696359#75696359">pip install -r requirements.txt is failing: &ldquo;This environment is externally managed&rdquo;</a></li>
+<li><a href="https://stackoverflow.com/questions/75608323/how-do-i-solve-error-externally-managed-environment-every-time-i-use-pip-3">How do I solve &ldquo;error: externally-managed-environment&rdquo; every time I use pip 3?</a></li>
+<li><a href="https://www.makeuseof.com/fix-pip-error-externally-managed-environment-linux/">How to Fix the pip &ldquo;externally-managed-environment&rdquo; Error on Linux</a></li>
+<li><a href="https://qiita.com/toast-uz/items/f2df428f75b049b1d172">2021年のPython仮想環境〜いまやvenvを使わない理由はありません〜</a></li>
+<li><a href="https://qiita.com/shun_sakamoto/items/7944d0ac4d30edf91fde">venvで手軽にPythonの仮想環境を構築しよう</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

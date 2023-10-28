@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Wed, 25 Oct 2023 19:01:27 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 28 Oct 2023 18:45:07 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>externally-managed-environmentエラーへの対処法</title>
+      <link>https://ysko909.github.io/posts/get-error-externally-managed-environment/</link>
+      <pubDate>Sat, 28 Oct 2023 18:45:07 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/get-error-externally-managed-environment/</guid>
+      <description>概要 pip installコマンドでライブラリをインストールしようとした時に、次のようなエラーが発生することがあります。
+$ pip install -U pygame --user error: externally-managed-environment × This environment is externally managed ╰─&amp;gt; To install Python packages system-wide, try apt install python3-xyz, where xyz is the package you are trying to install. If you wish to install a non-Debian-packaged Python package, create a virtual environment using python3 -m venv path/to/venv. Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make sure you have python3-full installed. For more information visit http://rptl.</description>
+    </item>
     
     <item>
       <title>Claude2とはなんぞや？使い方の基本</title>
