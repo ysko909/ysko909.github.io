@@ -146,9 +146,19 @@ Pythonユーザーにとって、長年の実務上の問題は、OSのパッケ
 
 <h3 id="pep668が制定された目的">PEP668が制定された目的</h3>
 
-<p>Pythonのパッケージをインストールするには、大きく分けて2つの方法があります。<code>pip</code>を利用してインストールする方法と、<code>apt</code>のようなOSが提供するパッケージ管理の機能を使ってインストールする方法です。</p>
+<p>Pythonのパッケージをインストールするには、大きく分けて2つの方法があります。</p>
+
+<ul>
+<li><code>pip</code>を利用してインストールする方法</li>
+<li><code>apt</code>のようなOSが提供するパッケージ管理の機能を使ってインストールする方法</li>
+</ul>
 
 <p>ところが、<code>apt install python-pygame</code>と<code>pip install pygame</code>では、「Pygameを導入するぜ」という行為そのものが同じであるものの、OS固有のパッケージ管理機能からすると<code>pip</code>でインストールされたパッケージは<strong>管理外</strong>です。そのため、不用意に使うとOSのPython環境に対して悪影響を与える可能性があります。</p>
+
+<ul>
+<li>そのパッケージが利用可能なユーザーがわかりにくい。</li>
+<li><code>apt</code>で導入したパッケージが使いたかったのに、<code>pip</code>で導入してしまったパッケージが優先されてしまう。</li>
+</ul>
 
 <p>PEP668は、この問題を解決するための新しいルールです。</p>
 
@@ -221,6 +231,7 @@ pip install pygame # パッケージのインストール</code></pre></div>
 <li><a href="https://peps.python.org/pep-0668/">PEP668</a></li>
 <li><a href="https://docs.python.org/ja/3/library/venv.html">venv</a></li>
 <li><a href="https://blog.jp.square-enix.com/iteng-blog/posts/00043-play-with-the-pep668/">俺流！PEP668とうまくやっていく方法</a></li>
+<li><a href="https://qiita.com/gaichi/items/b3a7b566cece3a5a06cc">Pythonライブラリ導入時のapt/pipの違いについて</a></li>
 <li><a href="https://stackoverflow.com/questions/75602063/pip-install-r-requirements-txt-is-failing-this-environment-is-externally-mana/75696359#75696359">pip install -r requirements.txt is failing: &ldquo;This environment is externally managed&rdquo;</a></li>
 <li><a href="https://stackoverflow.com/questions/75608323/how-do-i-solve-error-externally-managed-environment-every-time-i-use-pip-3">How do I solve &ldquo;error: externally-managed-environment&rdquo; every time I use pip 3?</a></li>
 <li><a href="https://www.makeuseof.com/fix-pip-error-externally-managed-environment-linux/">How to Fix the pip &ldquo;externally-managed-environment&rdquo; Error on Linux</a></li>
