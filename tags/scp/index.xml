@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Scp on 頑張らないために頑張る</title>
+    <link>https://ysko909.github.io/tags/scp/</link>
+    <description>Recent content in Scp on 頑張らないために頑張る</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© Copyright ysko</copyright>
+    <lastBuildDate>Sun, 29 Oct 2023 23:21:48 +0900</lastBuildDate>
+    
+	<atom:link href="https://ysko909.github.io/tags/scp/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>`scp`の基本</title>
+      <link>https://ysko909.github.io/posts/fundamentals-of-scp-command/</link>
+      <pubDate>Sun, 29 Oct 2023 23:21:48 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/fundamentals-of-scp-command/</guid>
+      <description>概要 scpコマンドは、ローカルマシンとリモートマシンの間でファイルをセキュアにコピーするためのコマンドです。
+基本的な使い方 このコマンドの基本的な形式は以下のとおりです。
+scp [オプション] ユーザー名@リモートホスト:ファイルパス ローカルのディレクトリパス 上記のコマンドを実行すると、パスワードの入力画面が表示されます。パスワードを入力するとファイルの転送が開始されます。
+たとえば、リモートのRaspberry Pi（以下、ラズパイ）の /home/user/file.txt をローカルの ~/downloads/ ディレクトリにコピーする場合は、次のようにします。
+scp pi@raspberrypi.local:/home/user/file.txt ~/downloads/ 逆に、ローカルのファイルをリモートのラズパイにコピーする場合は、次のようにします。
+scp ~/downloads/file.txt pi@raspberrypi.local:/home/user オプション scpコマンドでは、オプションを指定できます。代表的なところを挙げます。
+ -r: ディレクトリを再帰的にコピーする -P: SSH接続時のポート番号を指定する -q: Quiet modeで実行する -C: 圧縮転送を有効にする -v: 詳細出力を表示する  たとえば、ポート2222のリモートホストの /home/user/docs ディレクトリ全体をローカルにコピーする場合は、次のようにします。
+scp -r -P 2222 user@remote:/home/user/docs ~/localdocs 利用シーン このコマンドは、以下のようなシーンで利用できます。
+ リモートホストとローカルマシン間でファイルを転送する ファイルのバックアップを取る 大容量のファイルを圧縮転送する 暗号化通信が必要なファイルを転送する  メリットとデメリット このコマンドのメリットは以下の通りです。
+ SSHを利用しており暗号化通信が可能。 簡単なコマンドで送受信が可能。 ファイル転送が結構高速。  一方で、デメリットとしては次の点があります。
+ SSH接続が必要なため、事前に設定が必要な場合あり。 プログレスバーなどがないので、ファイル転送の状況が分かりにくい。  たとえば、リモート側のラズパイが何らかの李湯でSSHを無効化している、とします。この場合は、ラズパイとの間でscpが利用できません。SSHを有効化すれば利用できるようになりますが、scpのためだけにSSHを有効化するのもなんだかなぁという感じです。
+現状は非推奨にだったり中身が変わったり scpは何十年も前のものであり、セキュリティ上のリスクや問題を抱えています。そのため、Linuxディストリビューションは、rsyncのような別のコマンドを使ってもらうためにscpコマンドを非推奨にするか、sftpプロトコルを使用する新しいバージョンのscpを作成することを提唱しています。</description>
+    </item>
+    
+  </channel>
+</rss>
