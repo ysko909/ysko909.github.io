@@ -7,21 +7,18 @@
 <meta property="og:description" content="Hugoとは Hugoとは、Golangで作られている静的サイトジェネレーター。なんでも、生成が速いらしいです。今回はコイツを使って、サイトを生成し公開してみようと思います。
 この記事が役立つであろう人 サイトを立ち上げたくて、ターミナルでの作業が苦でない人。また、自分でCSSなどをいじったりしてデザインするなら、記事を書くほうに労力を割きたい人。
 手順 基本的にはここを参考にしています。以下の手順はWindows 10にて行っていますが、多分macOSとかでも同様なはずです。なお、個人的な好みでWindowsのコマンドプロンプトではなくbusyboxで実行していますが、普通にコマンドプロンプトやPowerShellで実行しても問題ないと思います。
- Hugoのインストール
-HugoのGithubから、自分が利用するプラットフォーム用のインストーラーをダウンロードして展開します。この記事を書いている現在での最新は0.54.0。
+Hugoのインストール HugoのGithubから、自分が利用するプラットフォーム用のインストーラーをダウンロードして展開します。この記事を書いている現在での最新は0.54.0。
 インストール後、Hugoのbin（実行ファイルが格納されているアドレス）を環境変数に追加します。GUIでもいいし、setxコマンドを実行しても問題ありません。インストールしたあとで、下記コマンドを実行してみます。
 $ hugo version Hugo Static Site Generator v0.54.0-B1A82C61 windows/amd64 BuildDate: 2019-02-01T09:42:02Z 上記のように返ってくれば完了です。
- サイトを生成
-以下のコマンドを実行してサイトを生成します。hogeの部分は任意で、自分が生成したいサイト名でOKです。実行したら生成されたフォルダーに移動します。
-hugo new site hoge cd hoge テーマを決定
-Hugoのテーマを集めたページを参照して、好みのテーマを探します。カスタマイズしたり、自力で作成することももちろん可能ですが今回は割愛します。今回はミニマムなデザインが気に入ったので、Hermitにしてみました。
+サイトを生成 以下のコマンドを実行してサイトを生成します。hogeの部分は任意で、自分が生成したいサイト名でOKです。実行したら生成されたフォルダーに移動します。
+hugo new site hoge cd hoge テーマを決定 Hugoのテーマを集めたページを参照して、好みのテーマを探します。カスタマイズしたり、自力で作成することももちろん可能ですが今回は割愛します。今回はミニマムなデザインが気に入ったので、Hermitにしてみました。
 テーマを決めたら下記のコマンドを実行して、gitでGitHubから必要なファイルをダウンロードします。なお、導入手順はテーマのページにしっかり記述されていました。親切！
 git init git submodule add https://github.com/Track3/hermit.git themes/hermit ここまで実行すると、下記のようなフォルダーとファイルの構成ができ上がっているはずです。
 . ├── archetypes ├── config.toml ├── content ├── data ├── layouts ├── static └── themes この時点で下記のコマンドを実行すると、publicという名前でフォルダーが作成されて、その中に生成されたHTMLファイルなどが格納されるはずです。ただし、この時点ではコンテンツを作成していないため、トップページだけで中身はなにもありません。
-hugo 設定ファイルを変更
-ファイルconfig.tomlに設定を追記します。
+hugo 設定ファイルを変更 ファイルconfig.tomlに設定を追記します。
 オフィシャルでは下記のコマンドを実行するだけでいい、としています。要はテーマの名前を追加しています。なぜかというと、生成直後の設定ファイルの中身では、何のテーマを利用するか記述がないためわからないから追記してやる必要があるわけです。
-echo &#39;theme = &#34;ananke&#34;&#39; &gt;&gt; config.toml ただ、一応これ以外にも後々修正や追記したりする部分があるので、この時点で編集してしまっても問題ありません。それと、他のテーマについては不明ですがHermitに関して言えば、config." />
+echo &#39;theme = &#34;ananke&#34;&#39; &gt;&gt; config.toml ただ、一応これ以外にも後々修正や追記したりする部分があるので、この時点で編集してしまっても問題ありません。それと、他のテーマについては不明ですがHermitに関して言えば、config.tomlは自分で記述するのではなくて、用意されたものを流用して中身を編集した方が便利です。というのは、テーマによってはこの設定ファイル中に特定の設定値がないと、hugoコマンドでのサイト生成の際エラーになる可能性があるから・・・実際、それで30分ほどムダにしました_(┐「ε:)_
+記事を作成 下記のコマンドを実行するとcontentフォルダー配下にファイルを生成します。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ysko909.github.io/posts/make-site-with-hugo/" /><meta property="article:published_time" content="2019-04-05T10:15:49&#43;09:00"/>
 <meta property="article:modified_time" content="2019-04-05T10:15:49&#43;09:00"/><meta name="twitter:card" content="summary"/>
@@ -29,21 +26,18 @@ echo &#39;theme = &#34;ananke&#34;&#39; &gt;&gt; config.toml ただ、一応こ�
 <meta name="twitter:description" content="Hugoとは Hugoとは、Golangで作られている静的サイトジェネレーター。なんでも、生成が速いらしいです。今回はコイツを使って、サイトを生成し公開してみようと思います。
 この記事が役立つであろう人 サイトを立ち上げたくて、ターミナルでの作業が苦でない人。また、自分でCSSなどをいじったりしてデザインするなら、記事を書くほうに労力を割きたい人。
 手順 基本的にはここを参考にしています。以下の手順はWindows 10にて行っていますが、多分macOSとかでも同様なはずです。なお、個人的な好みでWindowsのコマンドプロンプトではなくbusyboxで実行していますが、普通にコマンドプロンプトやPowerShellで実行しても問題ないと思います。
- Hugoのインストール
-HugoのGithubから、自分が利用するプラットフォーム用のインストーラーをダウンロードして展開します。この記事を書いている現在での最新は0.54.0。
+Hugoのインストール HugoのGithubから、自分が利用するプラットフォーム用のインストーラーをダウンロードして展開します。この記事を書いている現在での最新は0.54.0。
 インストール後、Hugoのbin（実行ファイルが格納されているアドレス）を環境変数に追加します。GUIでもいいし、setxコマンドを実行しても問題ありません。インストールしたあとで、下記コマンドを実行してみます。
 $ hugo version Hugo Static Site Generator v0.54.0-B1A82C61 windows/amd64 BuildDate: 2019-02-01T09:42:02Z 上記のように返ってくれば完了です。
- サイトを生成
-以下のコマンドを実行してサイトを生成します。hogeの部分は任意で、自分が生成したいサイト名でOKです。実行したら生成されたフォルダーに移動します。
-hugo new site hoge cd hoge テーマを決定
-Hugoのテーマを集めたページを参照して、好みのテーマを探します。カスタマイズしたり、自力で作成することももちろん可能ですが今回は割愛します。今回はミニマムなデザインが気に入ったので、Hermitにしてみました。
+サイトを生成 以下のコマンドを実行してサイトを生成します。hogeの部分は任意で、自分が生成したいサイト名でOKです。実行したら生成されたフォルダーに移動します。
+hugo new site hoge cd hoge テーマを決定 Hugoのテーマを集めたページを参照して、好みのテーマを探します。カスタマイズしたり、自力で作成することももちろん可能ですが今回は割愛します。今回はミニマムなデザインが気に入ったので、Hermitにしてみました。
 テーマを決めたら下記のコマンドを実行して、gitでGitHubから必要なファイルをダウンロードします。なお、導入手順はテーマのページにしっかり記述されていました。親切！
 git init git submodule add https://github.com/Track3/hermit.git themes/hermit ここまで実行すると、下記のようなフォルダーとファイルの構成ができ上がっているはずです。
 . ├── archetypes ├── config.toml ├── content ├── data ├── layouts ├── static └── themes この時点で下記のコマンドを実行すると、publicという名前でフォルダーが作成されて、その中に生成されたHTMLファイルなどが格納されるはずです。ただし、この時点ではコンテンツを作成していないため、トップページだけで中身はなにもありません。
-hugo 設定ファイルを変更
-ファイルconfig.tomlに設定を追記します。
+hugo 設定ファイルを変更 ファイルconfig.tomlに設定を追記します。
 オフィシャルでは下記のコマンドを実行するだけでいい、としています。要はテーマの名前を追加しています。なぜかというと、生成直後の設定ファイルの中身では、何のテーマを利用するか記述がないためわからないから追記してやる必要があるわけです。
-echo &#39;theme = &#34;ananke&#34;&#39; &gt;&gt; config.toml ただ、一応これ以外にも後々修正や追記したりする部分があるので、この時点で編集してしまっても問題ありません。それと、他のテーマについては不明ですがHermitに関して言えば、config."/>
+echo &#39;theme = &#34;ananke&#34;&#39; &gt;&gt; config.toml ただ、一応これ以外にも後々修正や追記したりする部分があるので、この時点で編集してしまっても問題ありません。それと、他のテーマについては不明ですがHermitに関して言えば、config.tomlは自分で記述するのではなくて、用意されたものを流用して中身を編集した方が便利です。というのは、テーマによってはこの設定ファイル中に特定の設定値がないと、hugoコマンドでのサイト生成の際エラーになる可能性があるから・・・実際、それで30分ほどムダにしました_(┐「ε:)_
+記事を作成 下記のコマンドを実行するとcontentフォルダー配下にファイルを生成します。"/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
 
@@ -115,23 +109,21 @@ echo &#39;theme = &#34;ananke&#34;&#39; &gt;&gt; config.toml ただ、一応こ�
 
 <p>基本的には<a href="https://gohugo.io/getting-started/quick-start/">ここ</a>を参考にしています。以下の手順はWindows 10にて行っていますが、多分macOSとかでも同様なはずです。なお、個人的な好みでWindowsのコマンドプロンプトではなくbusyboxで実行していますが、普通にコマンドプロンプトやPowerShellで実行しても問題ないと思います。</p>
 
-<ol>
-<li><p>Hugoのインストール</p>
+<h3 id="hugoのインストール">Hugoのインストール</h3>
 
 <p>Hugoの<a href="https://github.com/gohugoio/hugo/releases">Github</a>から、自分が利用するプラットフォーム用のインストーラーをダウンロードして展開します。この記事を書いている現在での最新は0.54.0。</p>
 
 <p>インストール後、Hugoのbin（実行ファイルが格納されているアドレス）を環境変数に追加します。GUIでもいいし、<code>setx</code>コマンドを実行しても問題ありません。インストールしたあとで、下記コマンドを実行してみます。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ hugo version
 Hugo Static Site Generator v0.54.0-B1A82C61 windows/amd64 BuildDate: 2019-02-01T09:42:02Z</code></pre></div>
-<p>上記のように返ってくれば完了です。</p></li>
+<p>上記のように返ってくれば完了です。</p>
 
-<li><p>サイトを生成</p>
+<h3 id="サイトを生成">サイトを生成</h3>
 
 <p>以下のコマンドを実行してサイトを生成します。<code>hoge</code>の部分は任意で、自分が生成したいサイト名でOKです。実行したら生成されたフォルダーに移動します。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">hugo new site hoge
-cd hoge</code></pre></div></li>
-
-<li><p>テーマを決定</p>
+cd hoge</code></pre></div>
+<h3 id="テーマを決定">テーマを決定</h3>
 
 <p><a href="https://themes.gohugo.io/">Hugoのテーマを集めたページ</a>を参照して、好みのテーマを探します。カスタマイズしたり、自力で作成することももちろん可能ですが今回は割愛します。今回はミニマムなデザインが気に入ったので、<a href="https://themes.gohugo.io/hermit/">Hermit</a>にしてみました。</p>
 
@@ -150,17 +142,16 @@ git submodule add https://github.com/Track3/hermit.git themes/hermit</code></pre
 ├── static
 └── themes</code></pre></div>
 <p>この時点で下記のコマンドを実行すると、<code>public</code>という名前でフォルダーが作成されて、その中に生成されたHTMLファイルなどが格納されるはずです。ただし、この時点ではコンテンツを作成していないため、トップページだけで中身はなにもありません。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">hugo</code></pre></div></li>
-
-<li><p>設定ファイルを変更</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">hugo</code></pre></div>
+<h3 id="設定ファイルを変更">設定ファイルを変更</h3>
 
 <p>ファイル<code>config.toml</code>に設定を追記します。</p>
 
 <p>オフィシャルでは下記のコマンドを実行するだけでいい、としています。要はテーマの名前を追加しています。なぜかというと、生成直後の設定ファイルの中身では、何のテーマを利用するか記述がないためわからないから追記してやる必要があるわけです。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">echo &#39;theme = &#34;ananke&#34;&#39; &gt;&gt; config.toml</code></pre></div>
-<p>ただ、一応これ以外にも後々修正や追記したりする部分があるので、この時点で編集してしまっても問題ありません。それと、他のテーマについては不明ですがHermitに関して言えば、<code>config.toml</code>は自分で記述するのではなくて、<a href="https://github.com/Track3/hermit/blob/master/exampleSite/config.toml">用意されたもの</a>を流用して中身を編集した方が便利です。というのは、テーマによってはこの設定ファイル中に特定の設定値がないと、<code>hugo</code>コマンドでのサイト生成の際エラーになる可能性があるから・・・実際、それで30分ほどムダにしました_(┐「ε:)_</p></li>
+<p>ただ、一応これ以外にも後々修正や追記したりする部分があるので、この時点で編集してしまっても問題ありません。それと、他のテーマについては不明ですがHermitに関して言えば、<code>config.toml</code>は自分で記述するのではなくて、<a href="https://github.com/Track3/hermit/blob/master/exampleSite/config.toml">用意されたもの</a>を流用して中身を編集した方が便利です。というのは、テーマによってはこの設定ファイル中に特定の設定値がないと、<code>hugo</code>コマンドでのサイト生成の際エラーになる可能性があるから・・・実際、それで30分ほどムダにしました_(┐「ε:)_</p>
 
-<li><p>記事を作成</p>
+<h3 id="記事を作成">記事を作成</h3>
 
 <p>下記のコマンドを実行すると<code>content</code>フォルダー配下にファイルを生成します。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">hugo new hoge.md</code></pre></div>
@@ -174,17 +165,17 @@ draft: true
 ---</code></pre></div>
 <p>ここに記事をMarkdown形式で記述します。ちなみに、ファイル冒頭の<code>draft</code>はtrueだと下書き扱いになります。<code>hugo server</code>とかでファイル生成すると内容の確認はできるんだけど、<code>public</code>フォルダーには下書き扱いであるため出力されません。なので、サイト公開時には忘れずに<code>draft: false</code>としておく必要があります。じゃないと、地味に30分くらいハマることになるので_(┐「ε:)_</p>
 
-<p>なお、Windowsあるある・・・かどうかはよくわからないけど、UTF-8でファイルを保存しておかないとコマンド<code>hugo</code>の実行の際エラーになるので注意が必要です。</p></li>
+<p>なお、Windowsあるある・・・かどうかはよくわからないけど、UTF-8でファイルを保存しておかないとコマンド<code>hugo</code>の実行の際エラーになるので注意が必要です。</p>
 
-<li><p>サーバーを起動して確認</p>
+<h3 id="サーバーを起動して確認">サーバーを起動して確認</h3>
 
 <p>下記のコマンドを実行します。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">hugo server -D</code></pre></div>
 <p>その後ブラウザで<a href="http://localhost:1313/"><code>http://localhost:1313/</code></a>にアクセスします。なお、ブラウザで生成したサイトを表示させたまま<code>config.toml</code>や記事の内容をいじったりすると、そのままホットリロードされてすぐさま反映されます。スゲェ。</p>
 
-<p>ちなみに、Hugoのサーバーを終了するには<code>Ctrl+C</code>を押します。</p></li>
+<p>ちなみに、Hugoのサーバーを終了するには<code>Ctrl+C</code>を押します。</p>
 
-<li><p>固定ページなどの表示設定</p>
+<h3 id="固定ページなどの表示設定">固定ページなどの表示設定</h3>
 
 <p>ここからの作業は任意ですが、大抵のblogにはコンテンツ以外に「このページについて」みたいな固定ページが存在します。そういった、コンテンツ以外のページも必要に応じて追加します。</p>
 
@@ -199,26 +190,25 @@ draft: true
 └── about.md</code></pre></div>
 <p>この場合、設定ファイルの<code>config.toml</code>の内容を下記の通り記述することで、ファイルと生成後の出力内容を紐づけることができます。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">## コンテンツ用設定
-  [[menu.main]]
+    [[menu.main]]
     name = &#34;Posts&#34;
     url = &#34;posts/&#34;
     weight = 10
 
 ## 固定ページ用設定。
-  [[menu.main]]
+    [[menu.main]]
     name = &#34;pages&#34;
     url = &#34;page/&#34;
     weight = 10
 
 ## 「このページについて」ページの設定。
-  [[menu.main]]
+    [[menu.main]]
     name = &#34;About&#34;
     url = &#34;about/&#34;
     weight = 10</code></pre></div>
 <p>なお、ここで<code>*.md</code>ファイルを単体で置いておくと1枚の単体ページとしてHTMLファイル生成されます。が、1つ以上の<code>*.md</code>ファイルをフォルダー配下に格納しておくと、各記事をHTMLファイルに変換するのと同時に、自動的にリストページを生成してくれます。便利。</p>
 
-<p>ただし、前述の下書き設定<code>draft</code>がtrueになっていたりすると、Markdownファイルがあっても下書き扱いとなるのでHTMLファイルが生成されません。そのため、メニューに項目があってもファイルが存在せず404になってしまうので、そこだけは注意が必要です。</p></li>
-</ol>
+<p>ただし、前述の下書き設定<code>draft</code>がtrueになっていたりすると、Markdownファイルがあっても下書き扱いとなるのでHTMLファイルが生成されません。そのため、メニューに項目があってもファイルが存在せず404になってしまうので、そこだけは注意が必要です。</p>
 
 <h2 id="というわけで">というわけで</h2>
 
