@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/copy-files-from-other-branch/</loc>
+    <lastmod>2024-01-10T23:19:23+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/setup-raspberry-pi-from-remote/</loc>
     <lastmod>2023-11-23T22:54:44+09:00</lastmod>
   </url>
@@ -644,7 +649,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/git/</loc>
-    <lastmod>2020-05-11T22:02:34+09:00</lastmod>
+    <lastmod>2024-01-10T23:19:23+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -884,7 +889,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2023-11-23T22:54:44+09:00</lastmod>
+    <lastmod>2024-01-10T23:19:23+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1082,7 +1087,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2023-11-23T22:54:44+09:00</lastmod>
+    <lastmod>2024-01-10T23:19:23+09:00</lastmod>
     <priority>0</priority>
   </url>
   

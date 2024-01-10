@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>他ブランチからファイルをコピーする - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="他ブランチからファイルをコピーする" />
+<meta property="og:description" content=" 概要 新ブランチに他ブランチから特定のファイルをコピーしたい、という場面がある。
+たとえば、GitHub Pagesで公開するためにgh-pagesブランチにビルド済みのファイルのみ置いておきたい、という場合がそう。この場合、mainブランチではビルド前のソースコードやアセット用ファイルなどの他に、npmやyarnでビルドしたビルド済みファイルがある。gh-pagesブランチにはこのビルド済みのファイルだけが必要なので、mainブランチから必要な分だけのファイルをコピーしたい。
+このときの手順をメモしておく。
+コピー手順 ここでは、任意のブランチからmainブランチにファイルをコピーする手順についてメモする。つまり、mainブランチがコピー先になる。
+別ブランチにファイルをコピーするには、git checkoutを利用する。一応、いったんコピー前にファイルのアドレスなどをgit showを使って確認しておく。
+ 任意のブランチを新規作成し任意の修正をコミットする 作成したブランチに切り替える git showコマンドでコピー元のファイルのアドレスを確認する git checkoutコマンドでファイルを新しいブランチにコピーする 変更をコミットする  ざっくり手順を書き出すと上記のようになる。このように、git checkoutを使ったファイルのコピーは、今いるブランチがコピー先になるので注意が必要。
+任意のブランチを新規作成しコミットする git checkout -b new_branch おなじみの、新規ブランチを作成するコマンドを実行する。
+作成したブランチに切り替える git checkout new_branch コピー先である、新規ブランチに移動する。
+git showコマンドでコピー元のファイルのアドレスを確認する git show main:path/to/file1 git show main:path/to/file2  コピー元ブランチ名:ファイルパスの形式で指定する。
+上記を実行すると、指定したファイルの内容が表示される。このとき、ファイルでなくフォルダを指定した場合は、そのフォルダに格納されているファイルの一覧が表示される。
+git checkoutコマンドでファイルを新しいブランチにコピーする git checkout main -- path/to/file1 path/to/file2 前の手順で確認したファイルパスを指定する。
+上記を実行すると、現在のブランチにフォルダ構造ごとファイルがコピーされる。ファイル単体だけでなくフォルダ構成もコピー対象であることに注意。上記であれば、path/to/file1というフォルダ構成で現在のブランチにコピーされる。
+もし、現在のブランチでは別のフォルダ構成にしたい場合は、コピーしたあとでフォルダを新規作成しファイルを移動するなどして、フォルダ構成を変更する必要がある。
+変更をコミットする git commit -m &#34;Add some files from main&#34; 現在のブランチで変更をコミットする。
+参考  git show git checkout Git で特定のブランチからファイルをコピーする  " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/copy-files-from-other-branch/" /><meta property="article:published_time" content="2024-01-10T23:19:23&#43;09:00"/>
+<meta property="article:modified_time" content="2024-01-10T23:19:23&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="他ブランチからファイルをコピーする"/>
+<meta name="twitter:description" content=" 概要 新ブランチに他ブランチから特定のファイルをコピーしたい、という場面がある。
+たとえば、GitHub Pagesで公開するためにgh-pagesブランチにビルド済みのファイルのみ置いておきたい、という場合がそう。この場合、mainブランチではビルド前のソースコードやアセット用ファイルなどの他に、npmやyarnでビルドしたビルド済みファイルがある。gh-pagesブランチにはこのビルド済みのファイルだけが必要なので、mainブランチから必要な分だけのファイルをコピーしたい。
+このときの手順をメモしておく。
+コピー手順 ここでは、任意のブランチからmainブランチにファイルをコピーする手順についてメモする。つまり、mainブランチがコピー先になる。
+別ブランチにファイルをコピーするには、git checkoutを利用する。一応、いったんコピー前にファイルのアドレスなどをgit showを使って確認しておく。
+ 任意のブランチを新規作成し任意の修正をコミットする 作成したブランチに切り替える git showコマンドでコピー元のファイルのアドレスを確認する git checkoutコマンドでファイルを新しいブランチにコピーする 変更をコミットする  ざっくり手順を書き出すと上記のようになる。このように、git checkoutを使ったファイルのコピーは、今いるブランチがコピー先になるので注意が必要。
+任意のブランチを新規作成しコミットする git checkout -b new_branch おなじみの、新規ブランチを作成するコマンドを実行する。
+作成したブランチに切り替える git checkout new_branch コピー先である、新規ブランチに移動する。
+git showコマンドでコピー元のファイルのアドレスを確認する git show main:path/to/file1 git show main:path/to/file2  コピー元ブランチ名:ファイルパスの形式で指定する。
+上記を実行すると、指定したファイルの内容が表示される。このとき、ファイルでなくフォルダを指定した場合は、そのフォルダに格納されているファイルの一覧が表示される。
+git checkoutコマンドでファイルを新しいブランチにコピーする git checkout main -- path/to/file1 path/to/file2 前の手順で確認したファイルパスを指定する。
+上記を実行すると、現在のブランチにフォルダ構造ごとファイルがコピーされる。ファイル単体だけでなくフォルダ構成もコピー対象であることに注意。上記であれば、path/to/file1というフォルダ構成で現在のブランチにコピーされる。
+もし、現在のブランチでは別のフォルダ構成にしたい場合は、コピーしたあとでフォルダを新規作成しファイルを移動するなどして、フォルダ構成を変更する必要がある。
+変更をコミットする git commit -m &#34;Add some files from main&#34; 現在のブランチで変更をコミットする。
+参考  git show git checkout Git で特定のブランチからファイルをコピーする  "/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">他ブランチからファイルをコピーする</h1>
+			<div class="meta">Posted at &mdash; Jan 10, 2024</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>新ブランチに他ブランチから特定のファイルをコピーしたい、という場面がある。</p>
+
+<p>たとえば、GitHub Pagesで公開するためにgh-pagesブランチにビルド済みのファイルのみ置いておきたい、という場合がそう。この場合、mainブランチではビルド前のソースコードやアセット用ファイルなどの他に、<code>npm</code>や<code>yarn</code>でビルドしたビルド済みファイルがある。gh-pagesブランチにはこのビルド済みのファイルだけが必要なので、mainブランチから必要な分だけのファイルをコピーしたい。</p>
+
+<p>このときの手順をメモしておく。</p>
+
+<h2 id="コピー手順">コピー手順</h2>
+
+<p>ここでは、任意のブランチからmainブランチにファイルをコピーする手順についてメモする。つまり、mainブランチがコピー先になる。</p>
+
+<p>別ブランチにファイルをコピーするには、<code>git checkout</code>を利用する。一応、いったんコピー前にファイルのアドレスなどを<code>git show</code>を使って確認しておく。</p>
+
+<ol>
+<li>任意のブランチを新規作成し任意の修正をコミットする</li>
+<li>作成したブランチに切り替える</li>
+<li><code>git show</code>コマンドでコピー元のファイルのアドレスを確認する</li>
+<li><code>git checkout</code>コマンドでファイルを新しいブランチにコピーする</li>
+<li>変更をコミットする</li>
+</ol>
+
+<p>ざっくり手順を書き出すと上記のようになる。このように、<code>git checkout</code>を使ったファイルのコピーは、<strong>今いるブランチがコピー先になる</strong>ので注意が必要。</p>
+
+<h3 id="任意のブランチを新規作成しコミットする">任意のブランチを新規作成しコミットする</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">git checkout -b new_branch</code></pre></div>
+<p>おなじみの、新規ブランチを作成するコマンドを実行する。</p>
+
+<h3 id="作成したブランチに切り替える">作成したブランチに切り替える</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">git checkout new_branch</code></pre></div>
+<p>コピー先である、新規ブランチに移動する。</p>
+
+<h3 id="git-show-コマンドでコピー元のファイルのアドレスを確認する"><code>git show</code>コマンドでコピー元のファイルのアドレスを確認する</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">git show main:path/to/file1
+git show main:path/to/file2 </code></pre></div>
+<p><code>コピー元ブランチ名:ファイルパス</code>の形式で指定する。</p>
+
+<p>上記を実行すると、指定したファイルの内容が表示される。このとき、ファイルでなくフォルダを指定した場合は、そのフォルダに格納されているファイルの一覧が表示される。</p>
+
+<h3 id="git-checkout-コマンドでファイルを新しいブランチにコピーする"><code>git checkout</code>コマンドでファイルを新しいブランチにコピーする</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">git checkout main -- path/to/file1 path/to/file2</code></pre></div>
+<p>前の手順で確認したファイルパスを指定する。</p>
+
+<p>上記を実行すると、現在のブランチに<strong>フォルダ構造ごとファイルがコピーされる</strong>。ファイル単体だけでなくフォルダ構成もコピー対象であることに注意。上記であれば、<code>path/to/file1</code>というフォルダ構成で現在のブランチにコピーされる。</p>
+
+<p>もし、現在のブランチでは別のフォルダ構成にしたい場合は、コピーしたあとでフォルダを新規作成しファイルを移動するなどして、フォルダ構成を変更する必要がある。</p>
+
+<h3 id="変更をコミットする">変更をコミットする</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">git commit -m &#34;Add some files from main&#34;</code></pre></div>
+<p>現在のブランチで変更をコミットする。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://git-scm.com/docs/git-show">git show</a></li>
+<li><a href="https://git-scm.com/docs/git-checkout">git checkout</a></li>
+<li><a href="https://kakakakakku.hatenablog.com/entry/2016/01/14/224019">Git で特定のブランチからファイルをコピーする</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
