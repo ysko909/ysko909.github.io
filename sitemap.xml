@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/make-a-routine-time-with-phaser-js/</loc>
+    <lastmod>2024-02-25T23:19:55+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/copy-files-from-other-branch/</loc>
     <lastmod>2024-01-10T23:19:23+09:00</lastmod>
   </url>
@@ -709,7 +714,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/javascript/</loc>
-    <lastmod>2023-02-23T21:49:40+09:00</lastmod>
+    <lastmod>2024-02-25T23:19:55+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -858,6 +863,12 @@
   </url>
   
   <url>
+    <loc>https://ysko909.github.io/tags/phaserjs/</loc>
+    <lastmod>2024-02-25T23:19:55+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/tags/phinajs/</loc>
     <lastmod>2019-12-06T09:15:20+09:00</lastmod>
     <priority>0</priority>
@@ -889,7 +900,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2024-01-10T23:19:23+09:00</lastmod>
+    <lastmod>2024-02-25T23:19:55+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1087,7 +1098,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2024-01-10T23:19:23+09:00</lastmod>
+    <lastmod>2024-02-25T23:19:55+09:00</lastmod>
     <priority>0</priority>
   </url>
   
