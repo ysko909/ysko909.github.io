@@ -7,10 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sun, 25 Feb 2024 23:19:55 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 06 Mar 2024 16:25:46 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>docker logsコマンドの基本</title>
+      <link>https://ysko909.github.io/posts/fundamentals-of-docker-logs/</link>
+      <pubDate>Wed, 06 Mar 2024 16:25:46 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/fundamentals-of-docker-logs/</guid>
+      <description>概要 docker logsコマンドは、Dockerコンテナのログを表示するために使用されます。以下では、docker logsコマンドの基本的な使い方と利用可能なオプションについて解説します。
+基本的な使い方 docker logsコマンドの一般的な構文は以下の通りです。
+docker logs [オプション] &amp;lt;コンテナ名またはID&amp;gt; 具体的な使用例として、コンテナ名がmy-containerの場合、以下のようにコマンドを実行します。
+docker logs my-container このコマンドは、my-containerコンテナのログを表示します。
+利用可能なオプション docker logsコマンドには、以下のオプションが利用可能です。
+ --details: ログに提供する詳細情報を表示します。 -f, --follow: ログの末尾を追跡し、新しいログが追加されるたびに表示します。 -n, --tail &amp;lt;数値&amp;gt;: 直近の指定した数値のログ行を表示します。デフォルトはすべてのログ行を表示します。--tailだから省略版は-tかなって思ったら-nなので注意。 --since &amp;lt;日時&amp;gt;: 指定した日時以降のログ行のみを表示します。日時はISO 8601形式（例: &amp;ldquo;2022-01-01T00:00:00Z&amp;rdquo;）で指定します。 --until &amp;lt;日時&amp;gt;: 指定した日時以前のログ行のみを表示します。日時はISO 8601形式で指定します。 -t, --timestamps: ログ行の前にタイムスタンプを表示します。省略版の-tはこっちで、--tailじゃないので注意。  これらのオプションは、必要に応じて組み合わせて使用できます。以下に具体的な使用例を示します。
+ログの追跡とタイムスタンプの表示 docker logs -f --timestamps my-container 直近の10行のログの表示 docker logs --tail 10 my-container 特定の日時以降のログの表示 docker logs --since &amp;#34;2022-01-01T00:00:00Z&amp;#34; my-container 特定の日時以前のログの表示 docker logs --until &amp;#34;2022-01-01T00:00:00Z&amp;#34; my-container 備考 grepへのパイプはリダイレクトを併用する docker logsコマンドは、デフォルトでコンテナの標準エラー出力（stderr）に出力されるログを表示します。この仕様が、ログの出力結果をgrepでの抽出と食い合わせが悪いのです。</description>
+    </item>
     
     <item>
       <title>時計が読めない幼児でも朝のルーティンをスムーズに！Phaser.jsを使ったルーティンタイマーの作成</title>

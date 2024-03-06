@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>docker logsコマンドの基本 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="docker logsコマンドの基本" />
+<meta property="og:description" content="概要 docker logsコマンドは、Dockerコンテナのログを表示するために使用されます。以下では、docker logsコマンドの基本的な使い方と利用可能なオプションについて解説します。
+基本的な使い方 docker logsコマンドの一般的な構文は以下の通りです。
+docker logs [オプション] &lt;コンテナ名またはID&gt; 具体的な使用例として、コンテナ名がmy-containerの場合、以下のようにコマンドを実行します。
+docker logs my-container このコマンドは、my-containerコンテナのログを表示します。
+利用可能なオプション docker logsコマンドには、以下のオプションが利用可能です。
+ --details: ログに提供する詳細情報を表示します。 -f, --follow: ログの末尾を追跡し、新しいログが追加されるたびに表示します。 -n, --tail &lt;数値&gt;: 直近の指定した数値のログ行を表示します。デフォルトはすべてのログ行を表示します。--tailだから省略版は-tかなって思ったら-nなので注意。 --since &lt;日時&gt;: 指定した日時以降のログ行のみを表示します。日時はISO 8601形式（例: &ldquo;2022-01-01T00:00:00Z&rdquo;）で指定します。 --until &lt;日時&gt;: 指定した日時以前のログ行のみを表示します。日時はISO 8601形式で指定します。 -t, --timestamps: ログ行の前にタイムスタンプを表示します。省略版の-tはこっちで、--tailじゃないので注意。  これらのオプションは、必要に応じて組み合わせて使用できます。以下に具体的な使用例を示します。
+ログの追跡とタイムスタンプの表示 docker logs -f --timestamps my-container 直近の10行のログの表示 docker logs --tail 10 my-container 特定の日時以降のログの表示 docker logs --since &#34;2022-01-01T00:00:00Z&#34; my-container 特定の日時以前のログの表示 docker logs --until &#34;2022-01-01T00:00:00Z&#34; my-container 備考 grepへのパイプはリダイレクトを併用する docker logsコマンドは、デフォルトでコンテナの標準エラー出力（stderr）に出力されるログを表示します。この仕様が、ログの出力結果をgrepでの抽出と食い合わせが悪いのです。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-docker-logs/" /><meta property="article:published_time" content="2024-03-06T16:25:46&#43;09:00"/>
+<meta property="article:modified_time" content="2024-03-06T16:25:46&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="docker logsコマンドの基本"/>
+<meta name="twitter:description" content="概要 docker logsコマンドは、Dockerコンテナのログを表示するために使用されます。以下では、docker logsコマンドの基本的な使い方と利用可能なオプションについて解説します。
+基本的な使い方 docker logsコマンドの一般的な構文は以下の通りです。
+docker logs [オプション] &lt;コンテナ名またはID&gt; 具体的な使用例として、コンテナ名がmy-containerの場合、以下のようにコマンドを実行します。
+docker logs my-container このコマンドは、my-containerコンテナのログを表示します。
+利用可能なオプション docker logsコマンドには、以下のオプションが利用可能です。
+ --details: ログに提供する詳細情報を表示します。 -f, --follow: ログの末尾を追跡し、新しいログが追加されるたびに表示します。 -n, --tail &lt;数値&gt;: 直近の指定した数値のログ行を表示します。デフォルトはすべてのログ行を表示します。--tailだから省略版は-tかなって思ったら-nなので注意。 --since &lt;日時&gt;: 指定した日時以降のログ行のみを表示します。日時はISO 8601形式（例: &ldquo;2022-01-01T00:00:00Z&rdquo;）で指定します。 --until &lt;日時&gt;: 指定した日時以前のログ行のみを表示します。日時はISO 8601形式で指定します。 -t, --timestamps: ログ行の前にタイムスタンプを表示します。省略版の-tはこっちで、--tailじゃないので注意。  これらのオプションは、必要に応じて組み合わせて使用できます。以下に具体的な使用例を示します。
+ログの追跡とタイムスタンプの表示 docker logs -f --timestamps my-container 直近の10行のログの表示 docker logs --tail 10 my-container 特定の日時以降のログの表示 docker logs --since &#34;2022-01-01T00:00:00Z&#34; my-container 特定の日時以前のログの表示 docker logs --until &#34;2022-01-01T00:00:00Z&#34; my-container 備考 grepへのパイプはリダイレクトを併用する docker logsコマンドは、デフォルトでコンテナの標準エラー出力（stderr）に出力されるログを表示します。この仕様が、ログの出力結果をgrepでの抽出と食い合わせが悪いのです。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">docker logsコマンドの基本</h1>
+			<div class="meta">Posted at &mdash; Mar 6, 2024</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p><code>docker logs</code>コマンドは、Dockerコンテナのログを表示するために使用されます。以下では、<code>docker logs</code>コマンドの基本的な使い方と利用可能なオプションについて解説します。</p>
+
+<h2 id="基本的な使い方">基本的な使い方</h2>
+
+<p><code>docker logs</code>コマンドの一般的な構文は以下の通りです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker logs [オプション] &lt;コンテナ名またはID&gt;</code></pre></div>
+<p>具体的な使用例として、コンテナ名が<code>my-container</code>の場合、以下のようにコマンドを実行します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker logs my-container</code></pre></div>
+<p>このコマンドは、<code>my-container</code>コンテナのログを表示します。</p>
+
+<h2 id="利用可能なオプション">利用可能なオプション</h2>
+
+<p><code>docker logs</code>コマンドには、以下のオプションが利用可能です。</p>
+
+<ul>
+<li><code>--details</code>: ログに提供する詳細情報を表示します。</li>
+<li><code>-f, --follow</code>: ログの末尾を追跡し、新しいログが追加されるたびに表示します。</li>
+<li><code>-n, --tail &lt;数値&gt;</code>: 直近の指定した数値のログ行を表示します。デフォルトはすべてのログ行を表示します。<code>--tail</code>だから省略版は<code>-t</code>かなって思ったら<code>-n</code>なので注意。</li>
+<li><code>--since &lt;日時&gt;</code>: 指定した日時以降のログ行のみを表示します。日時はISO 8601形式（例: &ldquo;2022-01-01T00:00:00Z&rdquo;）で指定します。</li>
+<li><code>--until &lt;日時&gt;</code>: 指定した日時以前のログ行のみを表示します。日時はISO 8601形式で指定します。</li>
+<li><code>-t, --timestamps</code>: ログ行の前にタイムスタンプを表示します。省略版の<code>-t</code>はこっちで、<code>--tail</code>じゃないので注意。</li>
+</ul>
+
+<p>これらのオプションは、必要に応じて組み合わせて使用できます。以下に具体的な使用例を示します。</p>
+
+<h3 id="ログの追跡とタイムスタンプの表示">ログの追跡とタイムスタンプの表示</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker logs -f --timestamps my-container</code></pre></div>
+<h3 id="直近の10行のログの表示">直近の10行のログの表示</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker logs --tail 10 my-container</code></pre></div>
+<h3 id="特定の日時以降のログの表示">特定の日時以降のログの表示</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker logs --since &#34;2022-01-01T00:00:00Z&#34; my-container</code></pre></div>
+<h3 id="特定の日時以前のログの表示">特定の日時以前のログの表示</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker logs --until &#34;2022-01-01T00:00:00Z&#34; my-container</code></pre></div>
+<h2 id="備考">備考</h2>
+
+<h3 id="grep-へのパイプはリダイレクトを併用する"><code>grep</code>へのパイプはリダイレクトを併用する</h3>
+
+<p><code>docker logs</code>コマンドは、デフォルトでコンテナの標準エラー出力（stderr）に出力されるログを表示します。この仕様が、ログの出力結果を<code>grep</code>での抽出と食い合わせが悪いのです。</p>
+
+<h4 id="grep-へのパイプと-docker-logs"><code>grep</code>へのパイプと<code>docker logs</code></h4>
+
+<p><code>grep</code>コマンドは、ご存知のとおりテキストのパターンマッチングを行うためのツール。何らかのコマンドと<code>grep</code>をパイプでつないだ場合、<code>grep</code>コマンドは標準入力から受け取ったテキストを処理する。</p>
+
+<p>ところが、<code>docker logs</code>コマンドの出力を単純にパイプでつなげるだけだと、<code>grep</code>コマンドの対象となりません。</p>
+
+<p>たとえば、以下のようなコマンドを実行した場合、<code>grep</code>コマンドはパイプで接続されているものの何の効果も発揮しません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker logs my-container | grep &#34;error&#34;</code></pre></div>
+<p>‘grep &ldquo;error&rdquo;‘と書いても効力を発揮しないということは、書いてないものと一緒です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker logs my-container</code></pre></div>
+<p>つまり、上記と同じ出力になる、ということですね。</p>
+
+<h4 id="標準出力へリダイレクトさせる">標準出力へリダイレクトさせる</h4>
+
+<p>こうなってしまうのは、パイプの出力先は標準出力で機能するものなのに、<code>docker logs</code>の結果が標準エラー出力に書き込まれているためです。それなら、標準エラー出力に出力されている結果を、標準出力にリダイレクトしてやればいいわけです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">docker logs my-container 2&gt;&amp;1 | grep &#34;error&#34;</code></pre></div>
+<p>上記の<code>2&gt;&amp;1</code>が、そのリダイレクトです。</p>
+
+<p>|入出力 | 対応する値|
+|&ndash;|&ndash;|
+|標準入力|0|
+|標準出力|1|
+|標準エラー出力|2|</p>
+
+<p>Linuxでは上記のように入出力が割り当てられており、標準出力に標準エラー出力をリダイレクトさせたい場合は<code>2&gt;&amp;1</code>と書きます。<code>2&gt;</code>と書くことで、標準エラー出力をリダイレクトする、としているわけです。ちなみに、ここで<code>&amp;1</code>は何をしているかというと、標準出力と標準エラー出力の両方をまとめて標準出力にリダイレクトしています。</p>
+
+<p>なお、ここで言っている数値は正確には「ファイル・ディスクリプター」という名前があります。ファイル・ディスクリプターとは、プログラムがアクセスするファイルや標準入出力などをOSが識別するために用いる識別子です。0から順番に整数の値が割り当てられています。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://docs.docker.com/config/containers/logging/">View container logs</a></li>
+<li><a href="https://gist.github.com/roylee0704/b5c8090e6cbfe1a9ae6c63062623a7cd">how to grep docker log</a></li>
+<li><a href="https://stackoverflow.com/questions/34724980/finding-a-string-in-docker-logs-of-container">Finding a string in docker logs of container</a></li>
+<li><a href="https://linuxize.com/post/bash-redirect-stderr-stdout/">How to Redirect stderr to stdout in Bash</a></li>
+<li><a href="https://qiita.com/laikuaut/items/e1cc312ffc7ec2c872fc">bash: 標準出力、標準エラー出力をファイル、画面それぞれに出力する方法</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
