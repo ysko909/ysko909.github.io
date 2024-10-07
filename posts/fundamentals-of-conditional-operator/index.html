@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>三項演算子の基本 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="三項演算子の基本" />
+<meta property="og:description" content="概要 三項演算子（条件演算子、条件式）は、条件に基づいて異なる値を返すことができる演算子です。言ってしまえば、「簡易的なIF文」という感じです。if-else文と同様の機能を持ちますが、より簡潔な記述に振った機能が特徴的。そのため、「簡単な判定文をパッと書きたい」というシチュエーションでよく使われます。
+一般的な記述形式は、条件 ? 値1 : 値2です。条件が真の場合、値1 が返されます。偽の場合は値2 が返されます。
+各言語における三項演算子の書き方    プログラミング言語 if文 三項演算子 備考     Python if condition: action() action() if condition else other()    Ruby action if condition condition ? action : other    JavaScript if (condition) action() あるいは condition &amp;&amp; action() condition ? action() : other()    PHP if ($condition) action(); $condition ? action() : other();    Java if condition { action() } condition ?" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-conditional-operator/" /><meta property="article:published_time" content="2024-10-07T16:42:48&#43;09:00"/>
+<meta property="article:modified_time" content="2024-10-07T16:42:48&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="三項演算子の基本"/>
+<meta name="twitter:description" content="概要 三項演算子（条件演算子、条件式）は、条件に基づいて異なる値を返すことができる演算子です。言ってしまえば、「簡易的なIF文」という感じです。if-else文と同様の機能を持ちますが、より簡潔な記述に振った機能が特徴的。そのため、「簡単な判定文をパッと書きたい」というシチュエーションでよく使われます。
+一般的な記述形式は、条件 ? 値1 : 値2です。条件が真の場合、値1 が返されます。偽の場合は値2 が返されます。
+各言語における三項演算子の書き方    プログラミング言語 if文 三項演算子 備考     Python if condition: action() action() if condition else other()    Ruby action if condition condition ? action : other    JavaScript if (condition) action() あるいは condition &amp;&amp; action() condition ? action() : other()    PHP if ($condition) action(); $condition ? action() : other();    Java if condition { action() } condition ?"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">三項演算子の基本</h1>
+			<div class="meta">Posted at &mdash; Oct 7, 2024</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>三項演算子（条件演算子、条件式）は、条件に基づいて異なる値を返すことができる演算子です。言ってしまえば、「簡易的なIF文」という感じです。if-else文と同様の機能を持ちますが、より簡潔な記述に振った機能が特徴的。そのため、「簡単な判定文をパッと書きたい」というシチュエーションでよく使われます。</p>
+
+<p>一般的な記述形式は、<code>条件 ? 値1 : 値2</code>です。<code>条件</code>が真の場合、<code>値1</code> が返されます。偽の場合は<code>値2</code> が返されます。</p>
+
+<h2 id="各言語における三項演算子の書き方">各言語における三項演算子の書き方</h2>
+
+<table>
+<thead>
+<tr>
+<th>プログラミング言語</th>
+<th>if文</th>
+<th>三項演算子</th>
+<th>備考</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Python</td>
+<td><code>if condition: action()</code></td>
+<td><code>action() if condition else other()</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td>Ruby</td>
+<td><code>action if condition</code></td>
+<td><code>condition ? action : other</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td>JavaScript</td>
+<td><code>if (condition) action()</code> あるいは <code>condition &amp;&amp; action()</code></td>
+<td><code>condition ? action() : other()</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td>PHP</td>
+<td><code>if ($condition) action();</code></td>
+<td><code>$condition ? action() : other();</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td>Java</td>
+<td><code>if condition { action() }</code></td>
+<td><code>condition ? action() : other()</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td>Swift</td>
+<td><code>if condition { action() }</code></td>
+<td><code>condition ? action() : other()</code></td>
+<td></td>
+</tr>
+
+<tr>
+<td>Kotlin</td>
+<td><code>if (condition) action()</code></td>
+<td>なし</td>
+<td>Kotlinには三項演算子が存在しない。</td>
+</tr>
+
+<tr>
+<td>Go</td>
+<td><code>if condition { action() }</code></td>
+<td>なし</td>
+<td>Goには三項演算子が存在しない。</td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>Ruby, JavaScriptなど、多くの言語では<code>条件 ? 値1 : 値2</code> という一般的な形式で記述できる。</li>
+<li>Pythonは特殊で、<code>値1 if 条件 else 値2</code>と記述する。</li>
+<li>KotlinやGoは、三項演算子がサポートされていないため、if-else文を使用する。</li>
+</ul>
+
+<p>Pythonと言った例外はあるものの、おおむね<code>条件 ? 値1 : 値2</code>で三項演算子が実装できます。</p>
+
+<p>また、意外にもKotlinやGolangはそもそも三項演算子が存在しません。これらはIF文を利用することになります。</p>
+
+<h2 id="三項演算子のメリット">三項演算子のメリット</h2>
+
+<ul>
+<li>簡潔な記述: if-else文よりも少ないコードで表現できるため、可読性が向上する場合がある。</li>
+<li>一文での表現: 複雑な条件分岐でない場合、一行で記述できるため、コードがすっきりする。</li>
+<li>代入文との組み合わせ: 変数への代入と同時に条件分岐を行うことができる。</li>
+</ul>
+
+<h2 id="三項演算子のデメリット">三項演算子のデメリット</h2>
+
+<ul>
+<li>可読性の低下: 複雑な条件や長い式になると、可読性が低下する場合がある。</li>
+<li>過度な使用: あまりにも複雑なロジックを三項演算子で記述すると、バグの原因になる可能性がある。</li>
+<li>言語ごとの差異: 言語によって、三項演算子の書き方や評価順序が異なる場合がある。</li>
+</ul>
+
+<h2 id="三項演算子の使用の注意点">三項演算子の使用の注意点</h2>
+
+<p>三項演算子は非常に便利な一方で、誤った使い方をするとコードの可読性を下げたり、バグの原因になったりします。</p>
+
+<h3 id="可読性の低下">可読性の低下</h3>
+
+<p>三項演算子を深く入れ子にすると、コードが複雑になり、理解が難しくなります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#008000">// 可読性が低い例
+</span><span style="color:#008000"></span><span style="color:#00f">let</span> result = condition1 ? value1 : condition2 ? value2 : value3;
+
+<span style="color:#008000">// より良い例
+</span><span style="color:#008000"></span><span style="color:#00f">if</span> (condition1) {
+    result = value1;
+} <span style="color:#00f">else</span> <span style="color:#00f">if</span> (condition2) {
+    result = value2;
+} <span style="color:#00f">else</span> {
+    result = value3;
+}
+</code></pre></div>
+<p>また、条件式や値が長くなると、一目で処理内容が把握できなくなります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#008000">// 可読性が低い例
+</span><span style="color:#008000"></span><span style="color:#00f">let</span> result = veryLongCondition ? veryLongExpression1 : veryLongExpression2;
+
+<span style="color:#008000">// より良い例
+</span><span style="color:#008000"></span><span style="color:#00f">let</span> temp1 = veryLongCondition;
+<span style="color:#00f">let</span> result = temp1 ? veryLongExpression1 : veryLongExpression2;
+</code></pre></div>
+<h3 id="複雑なロジックの記述">複雑なロジックの記述</h3>
+
+<p>複数の条件を組み合わせた複雑なロジックは、三項演算子で記述すると、意図が分かりにくくなります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#008000">// 可読性が低い例
+</span><span style="color:#008000"></span><span style="color:#00f">let</span> result = condition1 &amp;&amp; condition2 ? value1 : condition3 || condition4 ? value2 : value3;
+
+<span style="color:#008000">// より良い例
+</span><span style="color:#008000"></span><span style="color:#00f">if</span> (condition1 &amp;&amp; condition2) {
+    result = value1;
+} <span style="color:#00f">else</span> <span style="color:#00f">if</span> (condition3 || condition4) {
+    result = value2;
+} <span style="color:#00f">else</span> {
+    result = value3;
+}
+</code></pre></div>
+<h3 id="null合体演算子との組み合わせ">null合体演算子との組み合わせ</h3>
+
+<p><a href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing">null合体演算子</a>と組み合わせると、より簡潔に記述できる場合があります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#008000">// null合体演算子との組み合わせ
+</span><span style="color:#008000"></span><span style="color:#00f">let</span> result = value1 ?? (condition ? value2 : value3);
+</code></pre></div>
+<p>ただ、これを狙うよりは「覚えてたら使う機会がたまに来るかもね」程度な気がします。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>三項演算子は、適切な場面で使用すれば、コードを簡潔に記述できます。しかし、可読性や実行順序に注意しないと、バグの原因となる可能性があります。</p>
+
+<ul>
+<li>シンプルな条件分岐 に適している。</li>
+<li>複雑なロジック は、if-else文など、より分かりやすい方法で記述する。</li>
+<li>null合体演算子 と組み合わせることで、より簡潔な記述が可能。</li>
+</ul>
+
+<p>重要なのは、コードの可読性を高め、保守性を向上させることです。 三項演算子を使うか、if-else文を使うかは、状況に応じて判断しましょう。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://docs.python.org/ja/3/reference/expressions.html#conditional-expressions">Pythonの仕様</a></li>
+<li><a href="https://docs.ruby-lang.org/ja/3.1/doc/spec=2foperator.html#cond">Rubyの仕様</a></li>
+<li><a href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Operators/Conditional_operator">JavaScriptの仕様</a></li>
+<li><a href="https://www.php.net/manual/ja/language.operators.comparison.php#language.operators.comparison.ternary">PHPの仕様</a></li>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html">Javaの仕様</a></li>
+<li><a href="https://www.swiftlangjp.com/language-guide/basic-operators.html#%E4%B8%89%E9%A0%85%E6%9D%A1%E4%BB%B6%E6%BC%94%E7%AE%97%E5%AD%90ternary-conditional-operator">Swiftの仕様</a></li>
+<li><a href="https://qiita.com/raccy/items/0b25b2f106e2a813828b">三項演算子?:は悪である。</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

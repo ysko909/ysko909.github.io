@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sun, 25 Feb 2024 23:19:55 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 07 Oct 2024 16:42:48 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>三項演算子の基本</title>
+      <link>https://ysko909.github.io/posts/fundamentals-of-conditional-operator/</link>
+      <pubDate>Mon, 07 Oct 2024 16:42:48 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/fundamentals-of-conditional-operator/</guid>
+      <description>概要 三項演算子（条件演算子、条件式）は、条件に基づいて異なる値を返すことができる演算子です。言ってしまえば、「簡易的なIF文」という感じです。if-else文と同様の機能を持ちますが、より簡潔な記述に振った機能が特徴的。そのため、「簡単な判定文をパッと書きたい」というシチュエーションでよく使われます。
+一般的な記述形式は、条件 ? 値1 : 値2です。条件が真の場合、値1 が返されます。偽の場合は値2 が返されます。
+各言語における三項演算子の書き方    プログラミング言語 if文 三項演算子 備考     Python if condition: action() action() if condition else other()    Ruby action if condition condition ? action : other    JavaScript if (condition) action() あるいは condition &amp;amp;&amp;amp; action() condition ? action() : other()    PHP if ($condition) action(); $condition ? action() : other();    Java if condition { action() } condition ?</description>
+    </item>
     
     <item>
       <title>時計が読めない幼児でも朝のルーティンをスムーズに！Phaser.jsを使ったルーティンタイマーの作成</title>
