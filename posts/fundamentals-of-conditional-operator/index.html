@@ -6,14 +6,14 @@
 	<meta property="og:title" content="三項演算子の基本" />
 <meta property="og:description" content="概要 三項演算子（条件演算子、条件式）は、条件に基づいて異なる値を返すことができる演算子です。言ってしまえば、「簡易的なIF文」という感じです。if-else文と同様の機能を持ちますが、より簡潔な記述に振った機能が特徴的。そのため、「簡単な判定文をパッと書きたい」というシチュエーションでよく使われます。
 一般的な記述形式は、条件 ? 値1 : 値2です。条件が真の場合、値1 が返されます。偽の場合は値2 が返されます。
-各言語における三項演算子の書き方    プログラミング言語 if文 三項演算子 備考     Python if condition: action() action() if condition else other()    Ruby action if condition condition ? action : other    JavaScript if (condition) action() あるいは condition &amp;&amp; action() condition ? action() : other()    PHP if ($condition) action(); $condition ? action() : other();    Java if condition { action() } condition ?" />
+各言語における三項演算子の書き方    プログラミング言語 if文 三項演算子 備考     Python if condition: action() action() if condition else other()    Ruby if condition then action end condition ? action : other    JavaScript if (condition) action() あるいは condition &amp;&amp; action() condition ? action() : other()    PHP if ($condition) action(); $condition ? action() : other();    Java if (condition) { action(); } condition ?" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-conditional-operator/" /><meta property="article:published_time" content="2024-10-07T16:42:48&#43;09:00"/>
 <meta property="article:modified_time" content="2024-10-07T16:42:48&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="三項演算子の基本"/>
 <meta name="twitter:description" content="概要 三項演算子（条件演算子、条件式）は、条件に基づいて異なる値を返すことができる演算子です。言ってしまえば、「簡易的なIF文」という感じです。if-else文と同様の機能を持ちますが、より簡潔な記述に振った機能が特徴的。そのため、「簡単な判定文をパッと書きたい」というシチュエーションでよく使われます。
 一般的な記述形式は、条件 ? 値1 : 値2です。条件が真の場合、値1 が返されます。偽の場合は値2 が返されます。
-各言語における三項演算子の書き方    プログラミング言語 if文 三項演算子 備考     Python if condition: action() action() if condition else other()    Ruby action if condition condition ? action : other    JavaScript if (condition) action() あるいは condition &amp;&amp; action() condition ? action() : other()    PHP if ($condition) action(); $condition ? action() : other();    Java if condition { action() } condition ?"/>
+各言語における三項演算子の書き方    プログラミング言語 if文 三項演算子 備考     Python if condition: action() action() if condition else other()    Ruby if condition then action end condition ? action : other    JavaScript if (condition) action() あるいは condition &amp;&amp; action() condition ? action() : other()    PHP if ($condition) action(); $condition ? action() : other();    Java if (condition) { action(); } condition ?"/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
 
@@ -101,14 +101,14 @@
 
 <tr>
 <td>Ruby</td>
-<td><code>action if condition</code></td>
+<td><code>if condition then action end</code></td>
 <td><code>condition ? action : other</code></td>
 <td></td>
 </tr>
 
 <tr>
 <td>JavaScript</td>
-<td><code>if (condition) action()</code> あるいは <code>condition &amp;&amp; action()</code></td>
+<td><code>if (condition) action()</code> あるいは <code>condition &amp;&amp; action()</code></td>
 <td><code>condition ? action() : other()</code></td>
 <td></td>
 </tr>
@@ -122,7 +122,7 @@
 
 <tr>
 <td>Java</td>
-<td><code>if condition { action() }</code></td>
+<td><code>if (condition) { action(); }</code></td>
 <td><code>condition ? action() : other()</code></td>
 <td></td>
 </tr>
