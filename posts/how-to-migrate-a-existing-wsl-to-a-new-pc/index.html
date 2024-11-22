@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>既存のWSL環境を別PCに移行する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="既存のWSL環境を別PCに移行する" />
+<meta property="og:description" content="Windows上でのWSL（Windows Subsystem for Linux）の既存環境を別のWindowsパソコンへ移行する手順は、主にエクスポートとインポートのプロセスを通じて行います。また、WSLのバージョンによっては、少し簡単な方法で環境の移行が可能です。
+前提条件 &gt; wsl -l -v NAME STATE VERSION * Ubuntu-20.04 Running 2 移行元PCおよび移行先PCの双方で、上記のコマンドが実行できることを確認してください。実行できない場合は、WSL2の環境セットアップを実行してください。
+ここでは、上記のとおりWSL2を対象としています。WSL1では動作しません。
+&gt; wsl --version WSL バージョン: 2.3.26.0 カーネル バージョン: 5.15.167.4-1 WSLg バージョン: 1.0.65 MSRDC バージョン: 1.2.5620 Direct3D バージョン: 1.611.1-81528511 DXCore バージョン: 10.0.26100.1-240331-1435.ge-release Windows バージョン: 10.0.22631.4317 PCによっては、上記のようにwsl --versionのコマンドが有効な場合があります。これは、もともとWindowsに組み込まれているWSLではなく、最新版の「WSL」です。この環境を利用するには，MicrosoftストアやGitHubからインストーラーをダウンロードし、インストールする必要があります。最新版の環境でも以下の手順は可能ですが、もう少し簡単な手順で移行できる--import-in-placeオプションが利用できます。
+WSL環境の移行手順（エクスポートとインポート） 現在のWSL環境のエクスポート まず、移行元のPCでWSL環境をエクスポートします。これにより、WSLディストリビューションを.tarファイルとして保存します。
+wsl --export &lt;ディストリビューション名&gt; &lt;保存先のパス&gt;\&lt;ファイル名&gt;.tar 例:
+wsl --export Ubuntu-22.04 D:\WSL\バックアップ\Ubuntu-22.04.tar なお、エクスポートの際に--vhdオプションを付与すると、tarファイルではなくvhdxファイルで出力されます。tarは圧縮ファイルであり、圧縮してから出力するため処理に時間がかかります。対して、vhdxファイルは現行環境のvhdxファイルから単純コピーするため、出力処理時間は短めです。ただし、tarファイルと比較すると出力されたvhdxファイルは非圧縮であるためサイズが大きくなり、記憶媒体を圧迫する可能性があります。ストレージの容量やネットワーク環境の具合を見て、どちらを利用するか決めると良いでしょう。
+エクスポートしたファイルを移行先へコピー エクスポートした.tarファイルを、移行先PCにコピーします。環境の運用状況次第ですが、ファイルサイズが10GBを超えるケースもあります。この場合は、ファイルのコピーをrobocopyなどの専用ツールにより実行したほうがいいでしょう。エクスプローラーを使ったコピーでは失敗するケースもあるからです。とくにファイルサイズが大きいと、その傾向が強くなります。vhdxファイルで出力した場合、1つのファイルサイズが数十GBを超えることもあるため、エクスプローラーではなくツールによるコピーをオススメします。
+移行先PCでのWSL環境のインポート 次に、移行先のPCでエクスポートした.tarファイルをインポートします。これにより、WSLディストリビューションが新しいPCにインストールされます。
+wsl --import &lt;ディストリビューション名&gt; &lt;インストール先のフォルダ&gt; &lt;エクスポートした.tarファイルのパス&gt; 例:
+wsl --import Ubuntu-22." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/how-to-migrate-a-existing-wsl-to-a-new-pc/" /><meta property="article:published_time" content="2024-11-22T14:30:47&#43;09:00"/>
+<meta property="article:modified_time" content="2024-11-22T14:30:47&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="既存のWSL環境を別PCに移行する"/>
+<meta name="twitter:description" content="Windows上でのWSL（Windows Subsystem for Linux）の既存環境を別のWindowsパソコンへ移行する手順は、主にエクスポートとインポートのプロセスを通じて行います。また、WSLのバージョンによっては、少し簡単な方法で環境の移行が可能です。
+前提条件 &gt; wsl -l -v NAME STATE VERSION * Ubuntu-20.04 Running 2 移行元PCおよび移行先PCの双方で、上記のコマンドが実行できることを確認してください。実行できない場合は、WSL2の環境セットアップを実行してください。
+ここでは、上記のとおりWSL2を対象としています。WSL1では動作しません。
+&gt; wsl --version WSL バージョン: 2.3.26.0 カーネル バージョン: 5.15.167.4-1 WSLg バージョン: 1.0.65 MSRDC バージョン: 1.2.5620 Direct3D バージョン: 1.611.1-81528511 DXCore バージョン: 10.0.26100.1-240331-1435.ge-release Windows バージョン: 10.0.22631.4317 PCによっては、上記のようにwsl --versionのコマンドが有効な場合があります。これは、もともとWindowsに組み込まれているWSLではなく、最新版の「WSL」です。この環境を利用するには，MicrosoftストアやGitHubからインストーラーをダウンロードし、インストールする必要があります。最新版の環境でも以下の手順は可能ですが、もう少し簡単な手順で移行できる--import-in-placeオプションが利用できます。
+WSL環境の移行手順（エクスポートとインポート） 現在のWSL環境のエクスポート まず、移行元のPCでWSL環境をエクスポートします。これにより、WSLディストリビューションを.tarファイルとして保存します。
+wsl --export &lt;ディストリビューション名&gt; &lt;保存先のパス&gt;\&lt;ファイル名&gt;.tar 例:
+wsl --export Ubuntu-22.04 D:\WSL\バックアップ\Ubuntu-22.04.tar なお、エクスポートの際に--vhdオプションを付与すると、tarファイルではなくvhdxファイルで出力されます。tarは圧縮ファイルであり、圧縮してから出力するため処理に時間がかかります。対して、vhdxファイルは現行環境のvhdxファイルから単純コピーするため、出力処理時間は短めです。ただし、tarファイルと比較すると出力されたvhdxファイルは非圧縮であるためサイズが大きくなり、記憶媒体を圧迫する可能性があります。ストレージの容量やネットワーク環境の具合を見て、どちらを利用するか決めると良いでしょう。
+エクスポートしたファイルを移行先へコピー エクスポートした.tarファイルを、移行先PCにコピーします。環境の運用状況次第ですが、ファイルサイズが10GBを超えるケースもあります。この場合は、ファイルのコピーをrobocopyなどの専用ツールにより実行したほうがいいでしょう。エクスプローラーを使ったコピーでは失敗するケースもあるからです。とくにファイルサイズが大きいと、その傾向が強くなります。vhdxファイルで出力した場合、1つのファイルサイズが数十GBを超えることもあるため、エクスプローラーではなくツールによるコピーをオススメします。
+移行先PCでのWSL環境のインポート 次に、移行先のPCでエクスポートした.tarファイルをインポートします。これにより、WSLディストリビューションが新しいPCにインストールされます。
+wsl --import &lt;ディストリビューション名&gt; &lt;インストール先のフォルダ&gt; &lt;エクスポートした.tarファイルのパス&gt; 例:
+wsl --import Ubuntu-22."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">既存のWSL環境を別PCに移行する</h1>
+			<div class="meta">Posted at &mdash; Nov 22, 2024</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<p>Windows上でのWSL（Windows Subsystem for Linux）の既存環境を別のWindowsパソコンへ移行する手順は、主にエクスポートとインポートのプロセスを通じて行います。また、WSLのバージョンによっては、少し簡単な方法で環境の移行が可能です。</p>
+
+<h2 id="前提条件">前提条件</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">&gt; wsl -l -v
+  NAME            STATE           VERSION
+* Ubuntu-20.04    Running         2</code></pre></div>
+<p>移行元PCおよび移行先PCの双方で、上記のコマンドが実行できることを確認してください。実行できない場合は、WSL2の環境セットアップを実行してください。</p>
+
+<p>ここでは、上記のとおりWSL2を対象としています。WSL1では動作しません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&gt; wsl --version
+WSL バージョン: 2.3.26.0
+カーネル バージョン: 5.15.167.4-1
+WSLg バージョン: 1.0.65
+MSRDC バージョン: 1.2.5620
+Direct3D バージョン: 1.611.1-81528511
+DXCore バージョン: 10.0.26100.1-240331-1435.ge-release
+Windows バージョン: 10.0.22631.4317</pre></div>
+<p>PCによっては、上記のように<code>wsl --version</code>のコマンドが有効な場合があります。これは、もともとWindowsに組み込まれているWSLではなく、最新版の「WSL」です。この環境を利用するには，Microsoftストアや<a href="https://github.com/microsoft/WSL">GitHub</a>からインストーラーをダウンロードし、インストールする必要があります。最新版の環境でも以下の手順は可能ですが、もう少し簡単な手順で移行できる<code>--import-in-place</code>オプションが利用できます。</p>
+
+<h2 id="wsl環境の移行手順-エクスポートとインポート">WSL環境の移行手順（エクスポートとインポート）</h2>
+
+<h3 id="現在のwsl環境のエクスポート">現在のWSL環境のエクスポート</h3>
+
+<p>まず、移行元のPCでWSL環境をエクスポートします。これにより、WSLディストリビューションを.tarファイルとして保存します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wsl --export &lt;ディストリビューション名&gt; &lt;保存先のパス&gt;<span style="color:#a31515">\&lt;</span>ファイル名&gt;.tar</code></pre></div>
+<p>例:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wsl --export Ubuntu-22.04 D:<span style="color:#a31515">\W</span>SL<span style="color:#a31515">\バ</span>ックアップ<span style="color:#a31515">\U</span>buntu-22.04.tar</code></pre></div>
+<p>なお、エクスポートの際に<code>--vhd</code>オプションを付与すると、tarファイルではなくvhdxファイルで出力されます。tarは圧縮ファイルであり、圧縮してから出力するため処理に時間がかかります。対して、vhdxファイルは現行環境のvhdxファイルから単純コピーするため、出力処理時間は短めです。ただし、tarファイルと比較すると出力されたvhdxファイルは非圧縮であるためサイズが大きくなり、記憶媒体を圧迫する可能性があります。ストレージの容量やネットワーク環境の具合を見て、どちらを利用するか決めると良いでしょう。</p>
+
+<h3 id="エクスポートしたファイルを移行先へコピー">エクスポートしたファイルを移行先へコピー</h3>
+
+<p>エクスポートした.tarファイルを、移行先PCにコピーします。環境の運用状況次第ですが、ファイルサイズが10GBを超えるケースもあります。この場合は、ファイルのコピーを<a href="https://learn.microsoft.com/ja-jp/windows-server/administration/windows-commands/robocopy">robocopy</a>などの専用ツールにより実行したほうがいいでしょう。エクスプローラーを使ったコピーでは失敗するケースもあるからです。とくにファイルサイズが大きいと、その傾向が強くなります。vhdxファイルで出力した場合、1つのファイルサイズが数十GBを超えることもあるため、エクスプローラーではなくツールによるコピーをオススメします。</p>
+
+<h3 id="移行先pcでのwsl環境のインポート">移行先PCでのWSL環境のインポート</h3>
+
+<p>次に、移行先のPCでエクスポートした.tarファイルをインポートします。これにより、WSLディストリビューションが新しいPCにインストールされます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wsl --import &lt;ディストリビューション名&gt; &lt;インストール先のフォルダ&gt; &lt;エクスポートした.tarファイルのパス&gt;</code></pre></div>
+<p>例:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wsl --import Ubuntu-22.04 D:<span style="color:#a31515">\W</span>SL<span style="color:#a31515">\U</span>buntu D:<span style="color:#a31515">\W</span>SL<span style="color:#a31515">\バ</span>ックアップ<span style="color:#a31515">\U</span>buntu-22.04.tar</code></pre></div>
+<h3 id="古いwslインスタンスの削除-オプション">古いWSLインスタンスの削除（オプション）</h3>
+
+<p>移行元のPCで古いWSLインスタンスを削除して、ディスクスペースを解放することができます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wsl --unregister &lt;古いディストリビューション名&gt;</code></pre></div>
+<p>例:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wsl --unregister Ubuntu-22.04</code></pre></div>
+<h3 id="新しいwslディストリビューションの起動">新しいWSLディストリビューションの起動</h3>
+
+<p>インポートしたディストリビューションを起動します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wsl -d &lt;新しいディストリビューション名&gt;</code></pre></div>
+<p>例:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wsl -d Ubuntu-22.04</code></pre></div>
+<h2 id="wsl環境の移行手順-import-in-place-オプション">WSL環境の移行手順（<code>--import-in-place</code>オプション）</h2>
+
+<p>WSLの環境を移行する際に、<code>--import-in-place</code>オプションを使用することで、既存環境のエクスポート作業をスキップしつつ、既存のVHDXファイルを新しいWSLディストリビューションとしてインポートすることができます。この方法は、特にWSL2の環境を複製したい場合に便利です。ただし、この方法が実行できるWSL2の環境かどうか、事前に確認する必要があります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">&gt; wsl --version</code></pre></div>
+<p>上記のコマンドを実行したさい、WSLのカーネルバージョンが表示されるようであれば、<code>--import-in-place</code>オプションが利用できます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">&gt; wsl --version
+WSL バージョン: 2.3.26.0
+カーネル バージョン: 5.15.167.4-1
+WSLg バージョン: 1.0.65
+MSRDC バージョン: 1.2.5620
+Direct3D バージョン: 1.611.1-81528511
+DXCore バージョン: 10.0.26100.1-240331-1435.ge-release
+Windows バージョン: 10.0.22631.4317</code></pre></div>
+<p>上記のような表示である場合、<code>--import-in-place</code>オプションが利用できる環境です。オプション一覧が表示されるようであれば、そのWSL2環境は<code>--import-in-place</code>オプションが利用できないバージョンです。その場合は、上記の「エクスポートとインポート」の手順で移行するか、Microsoftストアや<a href="https://github.com/microsoft/WSL">GitHub</a>から最新版のWSL2環境をインストールします。なお、環境によっては<code>wsl --update</code>を実行するとWSL2環境が最新盤になりますが、Proxy環境下ではこのコマンドを正常に実行できないと思われます。</p>
+
+<h3 id="wslディストリビューションの停止">WSLディストリビューションの停止</h3>
+
+<p>まず、WSLディストリビューションを停止します。これにより、VHDXファイルが安全にコピーできる状態になります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wsl --shutdown</code></pre></div>
+<h3 id="vhdxファイルのエクスポートあるいは退避-オプション">VHDXファイルのエクスポートあるいは退避（オプション）</h3>
+
+<p>次に、移行元のWSL環境からVHDXファイルをエクスポートします。以下のコマンドを使用して、VHDXファイルを指定の場所にエクスポートします。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wsl --export &lt;ディストリビューション名&gt; &lt;エクスポート先のパス&gt;<span style="color:#a31515">\&lt;</span>ファイル名&gt;.vhdx --vhd</code></pre></div>
+<p>例:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wsl --export Ubuntu-22.04 D:<span style="color:#a31515">\W</span>SL<span style="color:#a31515">\バ</span>ックアップ<span style="color:#a31515">\U</span>buntu-22.04.vhdx --vhd</code></pre></div>
+<p>ただし、<code>--export</code>オプションを使わなくても、既存環境のvhdxファイルを直接移行先にコピーする方法もあります。</p>
+
+<h3 id="vhdxファイルファイルを移行先へコピー">vhdxファイルファイルを移行先へコピー</h3>
+
+<p>vhdxファイルを、移行先PCにコピーします。</p>
+
+<p>前の作業でvhdxファイルをエクスポートした場合は、エクスポートした先に格納されているvhdxファイルを移行先へコピーします。エクスポートせず直接既存環境のvhdxファイルをコピーする場合、既存環境が格納されているフォルダを探す必要があります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">%LOCALAPPDATA%\Packages\CanonicalGroupLimited.&lt;&lt;環境名&gt;&gt;\LocalState\</code></pre></div>
+<p>インストールされているWSLの環境が複数ある場合は、ディストリビューション名やバージョンを頼りに対象を探します。対象環境のフォルダ内に存在する<code>LocalState</code>というフォルダについて見ると、<code>ext4.vhdx</code>というファイルがあるはずです。このファイルが既存環境そのものですので、このファイルを移行先へコピーします。</p>
+
+<p>vhdxファイルはファイルサイズが大きくなりがちなので、ファイルのコピーを<a href="https://learn.microsoft.com/ja-jp/windows-server/administration/windows-commands/robocopy">robocopy</a>などのツールにより実行することをオススメします。</p>
+
+<h3 id="3-移行先pcでのインポート">3. 移行先PCでのインポート</h3>
+
+<p>移行先のPCで、エクスポートしたVHDXファイルを新しいWSLディストリビューションとしてインポートします。以下のコマンドを使用します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wsl --import-in-place &lt;新しいディストリビューション名&gt; &lt;VHDXファイルのパス&gt;</code></pre></div>
+<p>例:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wsl --import-in-place NewUbuntu D:<span style="color:#a31515">\W</span>SL<span style="color:#a31515">\バ</span>ックアップ<span style="color:#a31515">\U</span>buntu-22.04.vhdx</code></pre></div>
+<h3 id="4-インポートしたディストリビューションの起動">4. インポートしたディストリビューションの起動</h3>
+
+<p>インポートが完了したら、新しいWSLディストリビューションを起動します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wsl -d &lt;新しいディストリビューション名&gt;</code></pre></div>
+<p>例:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wsl -d NewUbuntu</code></pre></div>
+<h2 id="import-オプションと-import-in-place-オプションの違い"><code>--import</code>オプションと<code>--import-in-place</code>オプションの違い</h2>
+
+<p>WSL（Windows Subsystem for Linux）の環境移行において、<code>--import</code>オプションと<code>--import-in-place</code>オプションは、それぞれ異なる方法でディストリビューションをインポートします。</p>
+
+<table>
+<thead>
+<tr>
+<th>特徴</th>
+<th><code>--import</code>オプション</th>
+<th><code>--import-in-place</code>オプション</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>基本的な機能</td>
+<td>指定した.tarまたは.vhdxファイルを新しいディストリビューションとしてインポートする。</td>
+<td>指定した.vhdxファイルをそのまま新しいディストリビューションとして登録する。</td>
+</tr>
+
+<tr>
+<td>ファイルのコピー</td>
+<td>インポート時に指定したファイルのコピーを作成し、指定したディレクトリに配置する。</td>
+<td>ファイルをコピーせず、指定した場所の.vhdxファイルを直接使用する。</td>
+</tr>
+
+<tr>
+<td>ディストリビューション名</td>
+<td>既存のディストリビューション名と重複しないように新しい名前を指定する。</td>
+<td>既存のディストリビューション名と重複しないように新しい名前を指定する。</td>
+</tr>
+
+<tr>
+<td>使用するファイル形式</td>
+<td>.tarまたは.vhdxファイルを使用可能。</td>
+<td>.vhdxファイルのみを使用。</td>
+</tr>
+
+<tr>
+<td>ディレクトリ構成</td>
+<td>指定したディレクトリにext4.vhdxという固定名で作成される。</td>
+<td>指定した.vhdxファイルの場所をそのまま使用するため、ディレクトリ構成が浅くなる。</td>
+</tr>
+
+<tr>
+<td>パフォーマンス</td>
+<td>ファイルのコピーが発生するため、若干のオーバーヘッドがある。</td>
+<td>コピーがない分、パフォーマンスが向上する。</td>
+</tr>
+
+<tr>
+<td>適用シナリオ</td>
+<td>異なるディレクトリに複数のWSL環境をインポートしたい場合に便利。</td>
+<td>既存の環境をそのまま複製したい場合に便利。</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="基本的な機能">基本的な機能</h3>
+
+<ul>
+<li><code>--import</code>オプションは、指定したバックアップファイル（.tarまたは.vhdx）を新しいWSLディストリビューションとしてインポートします。この際、ファイルのコピーが行われ、指定したディレクトリに新しいディストリビューションが作成されます。</li>
+<li>一方、<code>--import-in-place</code>オプションは、指定した.vhdxファイルをそのまま新しいディストリビューションとして登録します。このため、ファイルのコピーは行われず、元のファイルを直接利用します。</li>
+</ul>
+
+<h3 id="ファイルのコピー">ファイルのコピー</h3>
+
+<ul>
+<li><code>--import</code>では、指定したファイルのコピーが作成されるため、元のファイルはそのまま残ります。</li>
+<li><code>--import-in-place</code>では、ファイルをコピーせずに直接使用するため、ストレージの効率が良くなります。</li>
+</ul>
+
+<h3 id="ディストリビューション名">ディストリビューション名</h3>
+
+<ul>
+<li>両方のオプションで新しいディストリビューション名を指定する必要がありますが、<code>--import-in-place</code>では既存のディストリビューション名と重複しないように注意が必要です。</li>
+</ul>
+
+<h3 id="使用するファイル形式">使用するファイル形式</h3>
+
+<ul>
+<li><code>--import</code>は.tarファイルも受け入れますが、<code>--import-in-place</code>は.vhdxファイルのみを使用します。</li>
+</ul>
+
+<h3 id="ディレクトリ構成">ディレクトリ構成</h3>
+
+<ul>
+<li><code>--import</code>では、インポートされたディストリビューションはext4.vhdxという固定名で作成され、指定したディレクトリに配置されます。</li>
+<li><code>--import-in-place</code>では、指定した.vhdxファイルの場所をそのまま使用するため、ディレクトリ構成がシンプルになります。</li>
+</ul>
+
+<h3 id="パフォーマンス">パフォーマンス</h3>
+
+<ul>
+<li><code>--import</code>はファイルのコピーが発生するため、若干のオーバーヘッドがありますが、<code>--import-in-place</code>はそのまま使用するため、パフォーマンスが向上します。</li>
+</ul>
+
+<h3 id="適用シナリオ">適用シナリオ</h3>
+
+<ul>
+<li><code>--import</code>は、異なるディレクトリに複数のWSL環境をインポートしたい場合に便利です。</li>
+<li><code>--import-in-place</code>は、既存の環境をそのまま複製したい場合に特に有用です。</li>
+</ul>
+
+<p>このように、<code>--import</code>と<code>--import-in-place</code>はそれぞれ異なる用途に応じて使い分けることができます。移行の目的や環境に応じて、適切なオプションを選択してください。</p>
+
+<h2 id="注意事項">注意事項</h2>
+
+<ul>
+<li>ディストリビューション名は、<code>wsl --list --verbose</code>コマンドで確認できます。</li>
+<li>エクスポートとインポートの際には、十分なディスクスペースが必要です。</li>
+<li>インポート先のフォルダは、事前に作成しておく必要があります。</li>
+<li>WSLのバージョン: <code>--import-in-place</code>オプションは最新版のWSL2専用です。WSL1のディストリビューションには使用できません。</li>
+<li>新しいディストリビューション名は、既存のディストリビューション名と重複しないように設定してください。重複していると「もう存在します」というエラーになります。</li>
+</ul>
+
+<p>この手順を実行することで、WSL環境を別のPCに移行することができます。これにより、開発環境や設定をそのまま新しいPCで利用することが可能です。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://github.com/microsoft/WSL">microsoft/WSL</a></li>
+<li><a href="https://learn.microsoft.com/ja-jp/windows/wsl/basic-commands">WSL の基本的なコマンド</a></li>
+<li><a href="https://qiita.com/omu_kato/items/f9a6b5a02e25f5f2a487">WSLには3つの「バージョン」がある</a></li>
+<li><a href="https://blog.johtani.info/blog/2023/07/24/move-distribution-to-another-disk/">WSL2のディストリビューションの環境移行</a></li>
+<li><a href="https://qiita.com/shinsaka/items/71a234e71ebca3daf3c9">WSL2環境をコピー（複製）する方法</a></li>
+<li><a href="https://learn.microsoft.com/ja-jp/windows-server/administration/windows-commands/robocopy">robocopy</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

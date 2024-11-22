@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/how-to-migrate-a-existing-wsl-to-a-new-pc/</loc>
+    <lastmod>2024-11-22T14:30:47+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/fundamentals-of-conditional-operator/</loc>
     <lastmod>2024-10-07T16:42:48+09:00</lastmod>
   </url>
@@ -910,7 +915,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2024-10-07T16:42:48+09:00</lastmod>
+    <lastmod>2024-11-22T14:30:47+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1096,7 +1101,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/wsl/</loc>
-    <lastmod>2022-01-29T22:28:19+09:00</lastmod>
+    <lastmod>2024-11-22T14:30:47+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1108,7 +1113,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2024-10-07T16:42:48+09:00</lastmod>
+    <lastmod>2024-11-22T14:30:47+09:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -7,10 +7,29 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sat, 29 Jan 2022 22:28:19 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 22 Nov 2024 14:30:47 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/wsl/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>既存のWSL環境を別PCに移行する</title>
+      <link>https://ysko909.github.io/posts/how-to-migrate-a-existing-wsl-to-a-new-pc/</link>
+      <pubDate>Fri, 22 Nov 2024 14:30:47 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/how-to-migrate-a-existing-wsl-to-a-new-pc/</guid>
+      <description>Windows上でのWSL（Windows Subsystem for Linux）の既存環境を別のWindowsパソコンへ移行する手順は、主にエクスポートとインポートのプロセスを通じて行います。また、WSLのバージョンによっては、少し簡単な方法で環境の移行が可能です。
+前提条件 &amp;gt; wsl -l -v NAME STATE VERSION * Ubuntu-20.04 Running 2 移行元PCおよび移行先PCの双方で、上記のコマンドが実行できることを確認してください。実行できない場合は、WSL2の環境セットアップを実行してください。
+ここでは、上記のとおりWSL2を対象としています。WSL1では動作しません。
+&amp;gt; wsl --version WSL バージョン: 2.3.26.0 カーネル バージョン: 5.15.167.4-1 WSLg バージョン: 1.0.65 MSRDC バージョン: 1.2.5620 Direct3D バージョン: 1.611.1-81528511 DXCore バージョン: 10.0.26100.1-240331-1435.ge-release Windows バージョン: 10.0.22631.4317 PCによっては、上記のようにwsl --versionのコマンドが有効な場合があります。これは、もともとWindowsに組み込まれているWSLではなく、最新版の「WSL」です。この環境を利用するには，MicrosoftストアやGitHubからインストーラーをダウンロードし、インストールする必要があります。最新版の環境でも以下の手順は可能ですが、もう少し簡単な手順で移行できる--import-in-placeオプションが利用できます。
+WSL環境の移行手順（エクスポートとインポート） 現在のWSL環境のエクスポート まず、移行元のPCでWSL環境をエクスポートします。これにより、WSLディストリビューションを.tarファイルとして保存します。
+wsl --export &amp;lt;ディストリビューション名&amp;gt; &amp;lt;保存先のパス&amp;gt;\&amp;lt;ファイル名&amp;gt;.tar 例:
+wsl --export Ubuntu-22.04 D:\WSL\バックアップ\Ubuntu-22.04.tar なお、エクスポートの際に--vhdオプションを付与すると、tarファイルではなくvhdxファイルで出力されます。tarは圧縮ファイルであり、圧縮してから出力するため処理に時間がかかります。対して、vhdxファイルは現行環境のvhdxファイルから単純コピーするため、出力処理時間は短めです。ただし、tarファイルと比較すると出力されたvhdxファイルは非圧縮であるためサイズが大きくなり、記憶媒体を圧迫する可能性があります。ストレージの容量やネットワーク環境の具合を見て、どちらを利用するか決めると良いでしょう。
+エクスポートしたファイルを移行先へコピー エクスポートした.tarファイルを、移行先PCにコピーします。環境の運用状況次第ですが、ファイルサイズが10GBを超えるケースもあります。この場合は、ファイルのコピーをrobocopyなどの専用ツールにより実行したほうがいいでしょう。エクスプローラーを使ったコピーでは失敗するケースもあるからです。とくにファイルサイズが大きいと、その傾向が強くなります。vhdxファイルで出力した場合、1つのファイルサイズが数十GBを超えることもあるため、エクスプローラーではなくツールによるコピーをオススメします。
+移行先PCでのWSL環境のインポート 次に、移行先のPCでエクスポートした.tarファイルをインポートします。これにより、WSLディストリビューションが新しいPCにインストールされます。
+wsl --import &amp;lt;ディストリビューション名&amp;gt; &amp;lt;インストール先のフォルダ&amp;gt; &amp;lt;エクスポートした.tarファイルのパス&amp;gt; 例:
+wsl --import Ubuntu-22.</description>
+    </item>
     
     <item>
       <title>Proxy環境下のWSLにDockerを構築してVS Codeからアクセスする</title>
