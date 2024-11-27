@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/can-not-access-to-10080-on-web-browser/</loc>
+    <lastmod>2024-11-27T15:54:02+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/how-to-migrate-a-existing-wsl-to-a-new-pc/</loc>
     <lastmod>2024-11-22T14:30:47+09:00</lastmod>
   </url>
@@ -902,6 +907,12 @@
   </url>
   
   <url>
+    <loc>https://ysko909.github.io/tags/port/</loc>
+    <lastmod>2024-11-27T15:54:02+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/tags/postgres/</loc>
     <lastmod>2022-10-10T16:52:53+09:00</lastmod>
     <priority>0</priority>
@@ -915,7 +926,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2024-11-22T14:30:47+09:00</lastmod>
+    <lastmod>2024-11-27T15:54:02+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1113,7 +1124,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2024-11-22T14:30:47+09:00</lastmod>
+    <lastmod>2024-11-27T15:54:02+09:00</lastmod>
     <priority>0</priority>
   </url>
   

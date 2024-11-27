@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>10080ポートへの接続がブラウザ側でブロックされる - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="10080ポートへの接続がブラウザ側でブロックされる" />
+<meta property="og:description" content="概要 ChromeやFirefoxといった主要なブラウザでは、10080ポートがデフォルトでブロックされています。今回はそんな数年前の話のリバイバルです（それは、単に忘れていたと言う）。
+とあるwebシステムを作成していたとき、考えなしにポート10080を指定してブラウザからアクセスしました。ところが、ブラウザ側でこのポートへのアクセスがブロックされてしまいました。ブラウザにこの仕様が追加されたのは2021年ごろと記憶していますが、そんなことすっかり忘れて今回の事態に陥って「そういえばそんな仕様あったな」って思い出すまで若干時間を無駄にした次第なので、ここでメモしておこうと思います。また忘れた頃に同じことすると思うので(;´Д｀)
+10080ポートがブロックされる理由 簡単に言うと、セキュリティ対策のためです。10080ポートは、NAT Slipstreaming攻撃という（当時の）新たな攻撃手法に対するセキュリティ対策として、ブラウザがブロックするような仕様になっています。この攻撃は、特定のポートを利用してネットワーク内の他のデバイスに不正アクセスを試みるものです。
+ブロックされるポートは10080だけではありません。Fetch StandardでBad portという扱いになっているポートは、このようにブロックされる対象です。このあたりのポートはBugzillaにも記載のあったポートです。
+ 69 137 161 1719 6566 10080  このポートブロックに関してはFireFoxが先行していたようですが、Google Chromeもバージョン91以降からFirefoxに倣って、10080ポートをデフォルトでブロックするようになりました。
+10080ポートへのアクセス方法 ここからはこのポートブロックを解除する方法について検討します。
+webアプリ側のポートを10080以外に変更する 10080ポートをブロックする機能は、基本的にはセキュリティ対策のためのものですので、そのままブロックしておくのがベストな対応です。となると、アクセスする先のポートを変更し、ブロックされないポートに変更すべきでしょう。たとえば10080で指定していたポートを10085にする、などです。これであればブロック機能を確保しつつ、アクセスできるようになります。
+ブラウザのブロックを解除する 何らかの理由で「どーー－しても10080ポートを利用する必要がある」というケースでは、ブラウザ側のブロック機能を解除する必要があります。ここではChromeにおいてブロック機能を解除する方法を記述します。記述しますが、推奨しません。
+Chromeでの解除方法  デスクトップまたはタスクバーにあるChromeのショートカットを右クリックし、「プロパティ」を選択します。 「ショートカット」タブの「リンク先」欄の末尾にスペースを空けて--explicitly-allowed-ports=10080を追加します。 変更を適用し、Chromeを再起動します。  Firefoxでの解除方法  アドレスバーにabout:configと入力し、エンターキーを押します。 警告が表示されたら「危険を承知で使用」を選択します。 設定名検索欄にnetwork.security.ports.banned.overrideと入力し、新しい文字列として「10080」を追加します。 Firefoxを再起動します。  これらの手順により、一時的に10080ポートへのアクセスが可能になります。が、セキュリティの面からすれば、先述のとおり10080以外のポートを使用することが望ましいでしょう。
+参考  Google Chrome blocks port 10080 to stop NAT Slipstreaming attacks Google deploys Chrome mitigations against new NAT Slipstreaming attack NAT Slipstreaming v2.0 NAT Slipstreaming v2 攻撃とブラウザ側の対策 Issues with Port 10080 【IBM i情報】Zend Server標準ポート10080のブラウザブロックについて Web Application開発に10080番ポートは使ってはいけない 10080ポートにつながらない原因、解決方法について分かりやすく解説 2." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/can-not-access-to-10080-on-web-browser/" /><meta property="article:published_time" content="2024-11-27T15:54:02&#43;09:00"/>
+<meta property="article:modified_time" content="2024-11-27T15:54:02&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="10080ポートへの接続がブラウザ側でブロックされる"/>
+<meta name="twitter:description" content="概要 ChromeやFirefoxといった主要なブラウザでは、10080ポートがデフォルトでブロックされています。今回はそんな数年前の話のリバイバルです（それは、単に忘れていたと言う）。
+とあるwebシステムを作成していたとき、考えなしにポート10080を指定してブラウザからアクセスしました。ところが、ブラウザ側でこのポートへのアクセスがブロックされてしまいました。ブラウザにこの仕様が追加されたのは2021年ごろと記憶していますが、そんなことすっかり忘れて今回の事態に陥って「そういえばそんな仕様あったな」って思い出すまで若干時間を無駄にした次第なので、ここでメモしておこうと思います。また忘れた頃に同じことすると思うので(;´Д｀)
+10080ポートがブロックされる理由 簡単に言うと、セキュリティ対策のためです。10080ポートは、NAT Slipstreaming攻撃という（当時の）新たな攻撃手法に対するセキュリティ対策として、ブラウザがブロックするような仕様になっています。この攻撃は、特定のポートを利用してネットワーク内の他のデバイスに不正アクセスを試みるものです。
+ブロックされるポートは10080だけではありません。Fetch StandardでBad portという扱いになっているポートは、このようにブロックされる対象です。このあたりのポートはBugzillaにも記載のあったポートです。
+ 69 137 161 1719 6566 10080  このポートブロックに関してはFireFoxが先行していたようですが、Google Chromeもバージョン91以降からFirefoxに倣って、10080ポートをデフォルトでブロックするようになりました。
+10080ポートへのアクセス方法 ここからはこのポートブロックを解除する方法について検討します。
+webアプリ側のポートを10080以外に変更する 10080ポートをブロックする機能は、基本的にはセキュリティ対策のためのものですので、そのままブロックしておくのがベストな対応です。となると、アクセスする先のポートを変更し、ブロックされないポートに変更すべきでしょう。たとえば10080で指定していたポートを10085にする、などです。これであればブロック機能を確保しつつ、アクセスできるようになります。
+ブラウザのブロックを解除する 何らかの理由で「どーー－しても10080ポートを利用する必要がある」というケースでは、ブラウザ側のブロック機能を解除する必要があります。ここではChromeにおいてブロック機能を解除する方法を記述します。記述しますが、推奨しません。
+Chromeでの解除方法  デスクトップまたはタスクバーにあるChromeのショートカットを右クリックし、「プロパティ」を選択します。 「ショートカット」タブの「リンク先」欄の末尾にスペースを空けて--explicitly-allowed-ports=10080を追加します。 変更を適用し、Chromeを再起動します。  Firefoxでの解除方法  アドレスバーにabout:configと入力し、エンターキーを押します。 警告が表示されたら「危険を承知で使用」を選択します。 設定名検索欄にnetwork.security.ports.banned.overrideと入力し、新しい文字列として「10080」を追加します。 Firefoxを再起動します。  これらの手順により、一時的に10080ポートへのアクセスが可能になります。が、セキュリティの面からすれば、先述のとおり10080以外のポートを使用することが望ましいでしょう。
+参考  Google Chrome blocks port 10080 to stop NAT Slipstreaming attacks Google deploys Chrome mitigations against new NAT Slipstreaming attack NAT Slipstreaming v2.0 NAT Slipstreaming v2 攻撃とブラウザ側の対策 Issues with Port 10080 【IBM i情報】Zend Server標準ポート10080のブラウザブロックについて Web Application開発に10080番ポートは使ってはいけない 10080ポートにつながらない原因、解決方法について分かりやすく解説 2."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">10080ポートへの接続がブラウザ側でブロックされる</h1>
+			<div class="meta">Posted at &mdash; Nov 27, 2024</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>ChromeやFirefoxといった主要なブラウザでは、10080ポートがデフォルトでブロックされています。今回はそんな数年前の話のリバイバルです（それは、単に忘れていたと言う）。</p>
+
+<p>とあるwebシステムを作成していたとき、考えなしにポート10080を指定してブラウザからアクセスしました。ところが、ブラウザ側でこのポートへのアクセスがブロックされてしまいました。ブラウザにこの仕様が追加されたのは2021年ごろと記憶していますが、そんなことすっかり忘れて今回の事態に陥って「そういえばそんな仕様あったな」って思い出すまで若干時間を無駄にした次第なので、ここでメモしておこうと思います。また忘れた頃に同じことすると思うので(;´Д｀)</p>
+
+<h2 id="10080ポートがブロックされる理由">10080ポートがブロックされる理由</h2>
+
+<p>簡単に言うと、<strong>セキュリティ対策</strong>のためです。10080ポートは、<a href="https://samy.pl/slipstream/">NAT Slipstreaming攻撃</a>という（当時の）新たな攻撃手法に対するセキュリティ対策として、ブラウザがブロックするような仕様になっています。この攻撃は、特定のポートを利用してネットワーク内の他のデバイスに不正アクセスを試みるものです。</p>
+
+<p>ブロックされるポートは10080だけではありません。Fetch Standardで<a href="https://fetch.spec.whatwg.org/#port-blocking">Bad port</a>という扱いになっているポートは、このようにブロックされる対象です。このあたりのポートは<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1677940">Bugzilla</a>にも記載のあったポートです。</p>
+
+<ul>
+<li>69</li>
+<li>137</li>
+<li>161</li>
+<li>1719</li>
+<li>6566</li>
+<li>10080</li>
+</ul>
+
+<p>このポートブロックに関してはFireFoxが先行していたようですが、Google Chromeもバージョン91以降からFirefoxに倣って、10080ポートをデフォルトでブロックするようになりました。</p>
+
+<h2 id="10080ポートへのアクセス方法">10080ポートへのアクセス方法</h2>
+
+<p>ここからはこのポートブロックを解除する方法について検討します。</p>
+
+<h3 id="webアプリ側のポートを10080以外に変更する">webアプリ側のポートを10080以外に変更する</h3>
+
+<p>10080ポートをブロックする機能は、基本的にはセキュリティ対策のためのものですので、そのままブロックしておくのがベストな対応です。となると、アクセスする先のポートを変更し、<strong>ブロックされないポートに変更すべき</strong>でしょう。たとえば10080で指定していたポートを10085にする、などです。これであればブロック機能を確保しつつ、アクセスできるようになります。</p>
+
+<h3 id="ブラウザのブロックを解除する">ブラウザのブロックを解除する</h3>
+
+<p>何らかの理由で「どーー－しても10080ポートを利用する必要がある」というケースでは、ブラウザ側のブロック機能を解除する必要があります。ここではChromeにおいてブロック機能を解除する方法を記述します。記述しますが、<strong>推奨しません</strong>。</p>
+
+<h4 id="chromeでの解除方法">Chromeでの解除方法</h4>
+
+<ol>
+<li>デスクトップまたはタスクバーにあるChromeのショートカットを右クリックし、「プロパティ」を選択します。</li>
+<li>「ショートカット」タブの「リンク先」欄の末尾にスペースを空けて<code>--explicitly-allowed-ports=10080</code>を追加します。</li>
+<li>変更を適用し、Chromeを再起動します。</li>
+</ol>
+
+<h3 id="firefoxでの解除方法">Firefoxでの解除方法</h3>
+
+<ol>
+<li>アドレスバーに<code>about:config</code>と入力し、エンターキーを押します。</li>
+<li>警告が表示されたら「危険を承知で使用」を選択します。</li>
+<li>設定名検索欄に<code>network.security.ports.banned.override</code>と入力し、新しい文字列として「10080」を追加します。</li>
+<li>Firefoxを再起動します。</li>
+</ol>
+
+<p>これらの手順により、一時的に10080ポートへのアクセスが可能になります。が、セキュリティの面からすれば、先述のとおり10080以外のポートを使用することが望ましいでしょう。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://www.bleepingcomputer.com/news/security/google-chrome-blocks-port-10080-to-stop-nat-slipstreaming-attacks/">Google Chrome blocks port 10080 to stop NAT Slipstreaming attacks</a></li>
+<li><a href="https://www.zdnet.com/article/google-deploys-new-chrome-mitigations-against-new-nat-slipstreaming-attack/">Google deploys Chrome mitigations against new NAT Slipstreaming attack</a></li>
+<li><a href="https://samy.pl/slipstream/">NAT Slipstreaming v2.0</a></li>
+<li><a href="https://asnokaze.hatenablog.com/entry/2021/01/29/014759">NAT Slipstreaming v2 攻撃とブラウザ側の対策</a></li>
+<li><a href="https://www.seidengroup.com/2021/06/02/issues-with-port-10080/">Issues with Port 10080</a></li>
+<li><a href="https://www.cscweb.jp/2021/06/18/%E3%80%90ibm-i%E6%83%85%E5%A0%B1%E3%80%91zend-server%E6%A8%99%E6%BA%96%E3%83%9D%E3%83%BC%E3%83%8810080%E3%81%AE%E3%83%96%E3%83%A9%E3%82%A6%E3%82%B6%E3%83%96%E3%83%AD%E3%83%83%E3%82%AF%E3%81%AB/">【IBM i情報】Zend Server標準ポート10080のブラウザブロックについて</a></li>
+<li><a href="https://zenn.dev/ota42y/articles/127fee3353bafe">Web Application開発に10080番ポートは使ってはいけない</a></li>
+<li><a href="https://www.netassist.ne.jp/techblog/13309/">10080ポートにつながらない原因、解決方法について分かりやすく解説</a></li>
+<li><a href="https://fetch.spec.whatwg.org/#port-blocking">2.9 Port blocking</a></li>
+<li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1677940">Consider blocking ports 69, 137, 161, 1719, 6566, 10080</a></li>
+<li><a href="https://asnokaze.hatenablog.com/entry/2021/01/29/014759">NAT Slipstreaming v2 攻撃とブラウザ側の対策</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
