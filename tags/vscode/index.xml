@@ -7,10 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sun, 18 Jun 2023 10:24:44 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 17 Mar 2025 09:48:05 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/vscode/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Roo Codeの基本</title>
+      <link>https://ysko909.github.io/posts/fundamentals-of-roo-code/</link>
+      <pubDate>Mon, 17 Mar 2025 09:48:05 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/fundamentals-of-roo-code/</guid>
+      <description>概要 近年、AI技術の進化により、プログラミングの現場でもAIを活用した開発支援ツールが注目を集めています。その中でも、Visual Studio Code（VSCode）の拡張機能である「Roo Code（旧Roo Cline）」は、AIによるコード生成や編集を支援し、開発効率を大幅に向上させるツールとして人気です。
+この記事では、Roo Codeの概要、導入方法、メリット・デメリット、そしてGoogleのGemini APIと連携した具体的な活用方法について解説します。
+Roo Codeとは？ Roo Codeは、VSCode上で動作するAIコーディング支援ツールです。自然言語による指示やコードのコンテキストを理解し、適切なコードの生成、編集、補完などを実行します。
+以前は「Roo Cline」という名称でしたが、バージョン3.2以降で「Roo Code」に名称変更されました。
+Roo Codeの主な機能  コード生成: 自然言語による指示から、コードを自動生成します。 コード編集: 既存のコードに対して、修正やリファクタリングを提案します。 コード補完: コードの文脈から、次のコードを予測して補完します。 ドキュメント生成: コードのドキュメントを自動生成します。 テストコード生成: コードに対応するテストコードを自動生成します。  Roo Codeのメリット  開発効率の向上: コード生成や編集の自動化により、開発時間を短縮できます。 コーディング品質の向上: AIによるコード提案により、品質の高いコードを作成できます。 学習コストの削減: 新しい言語やフレームワークの学習コストを削減できます。 アイデア出しの支援: コードのアイデア出しや設計を支援します。  Roo Codeのデメリット  生成されるコードの品質: 常に高品質なコードが生成されるとは限りません。生成されたコードは、必ずレビューとテストが必要です。 セキュリティ: APIキーなどの機密情報を適切に管理する必要があります。 インターネット接続: Roo Codeの利用には、インターネット接続が必須です。  Gemini API連携によるRoo Codeの活用 Roo Codeは、様々なAIモデルと連携可能ですが、ここではGoogleのGemini APIと連携した活用方法について解説します。
+Gemini APIの準備  Google Cloud Platform（GCP）アカウントを作成し、Gemini APIを有効化します。 Gemini APIのAPIキーを取得します。このキーはあとでRoo Codeに設定します。  Roo Codeの導入  VSCodeを開き、拡張機能ビューを開きます。 検索ボックスに「Roo Code」と入力し、拡張機能をインストールします。  Roo Codeの設定  VSCodeでRoo Code拡張機能をインストールします。 Roo Codeの設定画面を開き、Gemini APIのAPIキーを設定します。 拡張機能の指示に従い、必要な設定を行います。基本的にはデフォルトの設定で問題ないかと思います。</description>
+    </item>
     
     <item>
       <title>「Import &#39;ライブラリ名&#39; could not be resolved」というエラーがVS Codeで出たらインタプリタを変えてみる</title>

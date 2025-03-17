@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Roo Codeの基本 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Roo Codeの基本" />
+<meta property="og:description" content="概要 近年、AI技術の進化により、プログラミングの現場でもAIを活用した開発支援ツールが注目を集めています。その中でも、Visual Studio Code（VSCode）の拡張機能である「Roo Code（旧Roo Cline）」は、AIによるコード生成や編集を支援し、開発効率を大幅に向上させるツールとして人気です。
+この記事では、Roo Codeの概要、導入方法、メリット・デメリット、そしてGoogleのGemini APIと連携した具体的な活用方法について解説します。
+Roo Codeとは？ Roo Codeは、VSCode上で動作するAIコーディング支援ツールです。自然言語による指示やコードのコンテキストを理解し、適切なコードの生成、編集、補完などを実行します。
+以前は「Roo Cline」という名称でしたが、バージョン3.2以降で「Roo Code」に名称変更されました。
+Roo Codeの主な機能  コード生成: 自然言語による指示から、コードを自動生成します。 コード編集: 既存のコードに対して、修正やリファクタリングを提案します。 コード補完: コードの文脈から、次のコードを予測して補完します。 ドキュメント生成: コードのドキュメントを自動生成します。 テストコード生成: コードに対応するテストコードを自動生成します。  Roo Codeのメリット  開発効率の向上: コード生成や編集の自動化により、開発時間を短縮できます。 コーディング品質の向上: AIによるコード提案により、品質の高いコードを作成できます。 学習コストの削減: 新しい言語やフレームワークの学習コストを削減できます。 アイデア出しの支援: コードのアイデア出しや設計を支援します。  Roo Codeのデメリット  生成されるコードの品質: 常に高品質なコードが生成されるとは限りません。生成されたコードは、必ずレビューとテストが必要です。 セキュリティ: APIキーなどの機密情報を適切に管理する必要があります。 インターネット接続: Roo Codeの利用には、インターネット接続が必須です。  Gemini API連携によるRoo Codeの活用 Roo Codeは、様々なAIモデルと連携可能ですが、ここではGoogleのGemini APIと連携した活用方法について解説します。
+Gemini APIの準備  Google Cloud Platform（GCP）アカウントを作成し、Gemini APIを有効化します。 Gemini APIのAPIキーを取得します。このキーはあとでRoo Codeに設定します。  Roo Codeの導入  VSCodeを開き、拡張機能ビューを開きます。 検索ボックスに「Roo Code」と入力し、拡張機能をインストールします。  Roo Codeの設定  VSCodeでRoo Code拡張機能をインストールします。 Roo Codeの設定画面を開き、Gemini APIのAPIキーを設定します。 拡張機能の指示に従い、必要な設定を行います。基本的にはデフォルトの設定で問題ないかと思います。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-roo-code/" /><meta property="article:published_time" content="2025-03-17T09:48:05&#43;09:00"/>
+<meta property="article:modified_time" content="2025-03-17T09:48:05&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Roo Codeの基本"/>
+<meta name="twitter:description" content="概要 近年、AI技術の進化により、プログラミングの現場でもAIを活用した開発支援ツールが注目を集めています。その中でも、Visual Studio Code（VSCode）の拡張機能である「Roo Code（旧Roo Cline）」は、AIによるコード生成や編集を支援し、開発効率を大幅に向上させるツールとして人気です。
+この記事では、Roo Codeの概要、導入方法、メリット・デメリット、そしてGoogleのGemini APIと連携した具体的な活用方法について解説します。
+Roo Codeとは？ Roo Codeは、VSCode上で動作するAIコーディング支援ツールです。自然言語による指示やコードのコンテキストを理解し、適切なコードの生成、編集、補完などを実行します。
+以前は「Roo Cline」という名称でしたが、バージョン3.2以降で「Roo Code」に名称変更されました。
+Roo Codeの主な機能  コード生成: 自然言語による指示から、コードを自動生成します。 コード編集: 既存のコードに対して、修正やリファクタリングを提案します。 コード補完: コードの文脈から、次のコードを予測して補完します。 ドキュメント生成: コードのドキュメントを自動生成します。 テストコード生成: コードに対応するテストコードを自動生成します。  Roo Codeのメリット  開発効率の向上: コード生成や編集の自動化により、開発時間を短縮できます。 コーディング品質の向上: AIによるコード提案により、品質の高いコードを作成できます。 学習コストの削減: 新しい言語やフレームワークの学習コストを削減できます。 アイデア出しの支援: コードのアイデア出しや設計を支援します。  Roo Codeのデメリット  生成されるコードの品質: 常に高品質なコードが生成されるとは限りません。生成されたコードは、必ずレビューとテストが必要です。 セキュリティ: APIキーなどの機密情報を適切に管理する必要があります。 インターネット接続: Roo Codeの利用には、インターネット接続が必須です。  Gemini API連携によるRoo Codeの活用 Roo Codeは、様々なAIモデルと連携可能ですが、ここではGoogleのGemini APIと連携した活用方法について解説します。
+Gemini APIの準備  Google Cloud Platform（GCP）アカウントを作成し、Gemini APIを有効化します。 Gemini APIのAPIキーを取得します。このキーはあとでRoo Codeに設定します。  Roo Codeの導入  VSCodeを開き、拡張機能ビューを開きます。 検索ボックスに「Roo Code」と入力し、拡張機能をインストールします。  Roo Codeの設定  VSCodeでRoo Code拡張機能をインストールします。 Roo Codeの設定画面を開き、Gemini APIのAPIキーを設定します。 拡張機能の指示に従い、必要な設定を行います。基本的にはデフォルトの設定で問題ないかと思います。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Roo Codeの基本</h1>
+			<div class="meta">Posted at &mdash; Mar 17, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>近年、AI技術の進化により、プログラミングの現場でもAIを活用した開発支援ツールが注目を集めています。その中でも、Visual Studio Code（VSCode）の拡張機能である「Roo Code（旧Roo Cline）」は、AIによるコード生成や編集を支援し、開発効率を大幅に向上させるツールとして人気です。</p>
+
+<p>この記事では、Roo Codeの概要、導入方法、メリット・デメリット、そしてGoogleのGemini APIと連携した具体的な活用方法について解説します。</p>
+
+<h2 id="roo-codeとは">Roo Codeとは？</h2>
+
+<p>Roo Codeは、VSCode上で動作するAIコーディング支援ツールです。自然言語による指示やコードのコンテキストを理解し、適切なコードの生成、編集、補完などを実行します。</p>
+
+<p>以前は「Roo Cline」という名称でしたが、バージョン3.2以降で「Roo Code」に名称変更されました。</p>
+
+<h2 id="roo-codeの主な機能">Roo Codeの主な機能</h2>
+
+<ul>
+<li><strong>コード生成</strong>: 自然言語による指示から、コードを自動生成します。</li>
+<li><strong>コード編集</strong>: 既存のコードに対して、修正やリファクタリングを提案します。</li>
+<li><strong>コード補完</strong>: コードの文脈から、次のコードを予測して補完します。</li>
+<li><strong>ドキュメント生成</strong>: コードのドキュメントを自動生成します。</li>
+<li><strong>テストコード生成</strong>: コードに対応するテストコードを自動生成します。</li>
+</ul>
+
+<h2 id="roo-codeのメリット">Roo Codeのメリット</h2>
+
+<ul>
+<li><strong>開発効率の向上</strong>: コード生成や編集の自動化により、開発時間を短縮できます。</li>
+<li><strong>コーディング品質の向上</strong>: AIによるコード提案により、品質の高いコードを作成できます。</li>
+<li><strong>学習コストの削減</strong>: 新しい言語やフレームワークの学習コストを削減できます。</li>
+<li><strong>アイデア出しの支援</strong>: コードのアイデア出しや設計を支援します。</li>
+</ul>
+
+<h2 id="roo-codeのデメリット">Roo Codeのデメリット</h2>
+
+<ul>
+<li><strong>生成されるコードの品質</strong>: 常に高品質なコードが生成されるとは限りません。生成されたコードは、必ずレビューとテストが必要です。</li>
+<li><strong>セキュリティ</strong>: APIキーなどの機密情報を適切に管理する必要があります。</li>
+<li><strong>インターネット接続</strong>: Roo Codeの利用には、インターネット接続が必須です。</li>
+</ul>
+
+<h2 id="gemini-api連携によるroo-codeの活用">Gemini API連携によるRoo Codeの活用</h2>
+
+<p>Roo Codeは、様々なAIモデルと連携可能ですが、ここではGoogleのGemini APIと連携した活用方法について解説します。</p>
+
+<h3 id="gemini-apiの準備">Gemini APIの準備</h3>
+
+<ol>
+<li>Google Cloud Platform（GCP）アカウントを作成し、Gemini APIを有効化します。</li>
+<li>Gemini APIのAPIキーを取得します。このキーはあとでRoo Codeに設定します。</li>
+</ol>
+
+<h3 id="roo-codeの導入">Roo Codeの導入</h3>
+
+<ol>
+<li>VSCodeを開き、拡張機能ビューを開きます。</li>
+<li>検索ボックスに「Roo Code」と入力し、拡張機能をインストールします。</li>
+</ol>
+
+<h3 id="roo-codeの設定">Roo Codeの設定</h3>
+
+<ol>
+<li>VSCodeでRoo Code拡張機能をインストールします。</li>
+<li>Roo Codeの設定画面を開き、Gemini APIのAPIキーを設定します。</li>
+
+<li><p>拡張機能の指示に従い、必要な設定を行います。基本的にはデフォルトの設定で問題ないかと思います。</p>
+
+<p><img src="capture_image.png" alt="alt text" /></p></li>
+</ol>
+
+<p>「Auto-approve」はチェックを入れないと、AIが都度「これ実行していい？」「ファイル読み込みしていい？」って聞いてきます。正直毎回答えるのは億劫ではあるものの、チェックを入れると今度はどんどんファイルを<strong>勝手に</strong>編集しはじめます。そのため、よほど信用できる場合を除いてはチェックを入れないほうがいいかと思います。
+4. 開発するフォルダのルートに<code>.clinerules</code>ファイルを作成します。これはRoo Codeに対し、どのような振舞いをすべきか指示するものです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">  # Cline Rules
+
+  ## ロール定義
+  
+  あなたは熟練のJavaScriptプログラマとしてコードを書いてください。
+  
+  
+  ## 期待する回答
+  
+  - 実装コードは省略せず、完全な形で提供
+  - 日本語での詳細な説明
+  
+  
+  ## 注意事項
+  
+  ### 設計書
+  
+  - 新規開発時は docs ディレクトリ以下に以下の内容を含む設計書 `design.md`を作成してください：
+    - 要件定義書
+    - 設計書（概略・機能・クラス構成）
+  - 既存のソフトウェアを修正する場合：
+    - 既存の設計書を参照してソフトウェアを開発してください
+    - 修正内容に応じて設計書も更新してください
+  - 設計書を作成したら、コードを作成する前にユーザーに設計書のチェックを依頼してください
+  
+  ### コーディング規約
+  
+  - 「Google TypeScript Style Guide」に従ったコードを書いてください
+  - Eslintのフォーマッタでファイルの保存と同時に自動整形するので、フォーマットの修正は不要です
+  - GoogleスタイルのDocstringを書いてください
+  
+  ### テストコード
+  
+  - テストコードを tests ディレクトリ以下に src ディレクトリと同じ構成で作成してください
+  - テストコードを作成したら pytest を実行してエラー無いことを確認してください。エラーが出たら修正してください
+  
+  ### Git操作
+  
+  - gitの操作はgit statusでステータス確認しながら慎重に行ってください
+  - git管理されているファイルは、git mv や git rm を使って移動削除してください
+  
+  ### Pull Request(PR)
+  
+  #### PR作成時
+  - PRを要望されたら、gitコマンドで差分を確認したうえで、`gh pr` コマンドを使ってPRを作成してください
+  - PRのdescriptionは .github/pull_request_template.md を読み取ってフォーマットを合わせてください
+  
+  #### PRレビュー時
+  以下の手順でファイルごとにコメントを付けてください：
+  
+  1. チェックする観点は .github/pull_request_template.md を参照してください
+  2. PRの差分を確認:
+     ```bash
+     gh pr diff &lt;PR番号&gt;
+     ```
+  
+  3. ファイルごとに、変更後のファイル全体とPRの差分を確認した上でレビューコメントを追加:
+     ```bash
+     gh api repos/&lt;owner&gt;/&lt;repo&gt;/pulls/&lt;PR番号&gt;/comments \
+       -F body=&#34;レビューコメント&#34; \
+       -F commit_id=&#34;$(gh pr view &lt;PR番号&gt; --json headRefOid --jq .headRefOid)&#34; \
+       -F path=&#34;対象ファイルのパス&#34; \
+       -F position=&lt;diffの行番号&gt;
+     ```
+  
+     パラメータの説明：
+     - position: diffの行番号（新規ファイルの場合は1から開始）
+     - commit_id: PRの最新のコミットIDを自動取得</code></pre></div>
+<h3 id="コード生成の実行">コード生成の実行</h3>
+
+<ol>
+<li>VSCodeのエディタで、コードを生成したい箇所にカーソルを合わせます。</li>
+<li>Roo Codeのチャットインターフェースを開き、自然言語で指示を入力します。</li>
+<li>Gemini APIが指示を解釈し、コードを生成します。</li>
+</ol>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>Roo Codeは、Gemini APIと連携することで、より高度なコード生成や編集を可能にします。AIコーディング支援ツールを導入することで、開発者はより創造的な作業に集中し、開発効率を大幅に向上させることができるでしょう。</p>
+
+<p>ただし、生成されるコードの品質には注意が必要であり、適切なレビューとテストが不可欠です。AIはあくまで開発を支援するツールであり、最終的な責任は開発者が負うことを忘れないようにしましょう。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://github.com/RooVetGit/Roo-Code">RooVetGit/Roo-Code</a></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=RooVeterinaryInc.roo-cline">Roo Code（vscode marketplace）</a></li>
+<li><a href="https://docs.roocode.com/">Roo Code Docs</a></li>
+<li><a href="https://ai.google.dev/gemini-api/docs/rate-limits">レート制限</a></li>
+<li><a href="https://zenn.dev/mkj/articles/cf8536923d9cd7">AIコーディング時代の開発環境構築：VS Code × Cline（Roo Code）で爆速開発！</a></li>
+<li><a href="https://note.com/brightiers/n/n96152217ecbe">【最新解説】Googleの最強AI「Gemini 2.0 Pro」登場！全ラインナップの違いと活用方法</a></li>
+<li><a href="https://qiita.com/nasuvitz/items/96584a21b56b37d68ef6">Roo Code (旧Roo-Cline) でアプリケーション開発を安全に進めるプラクティスを考える</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
