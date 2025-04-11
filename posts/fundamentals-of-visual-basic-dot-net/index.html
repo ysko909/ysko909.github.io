@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Visual Basic .NETの基本 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Visual Basic .NETの基本" />
+<meta property="og:description" content="はじめに 令和のこの世になって、Visual Basic .NET（以下、VB.NET）で開発された資産をメンテする必要が出てきたため、勉強がてら資料を作成しました。
+最終的な目標は、VB.NETの基本的な仕組みを理解し、ご自身で簡単なプログラムを作成できるようになることです。難しく考える必要はありません。プログラミングとは、いわば「コンピューターに対する指示書を書く」作業です。私たちが普段使う言葉を、コンピューターが理解できる言葉（プログラミング言語）に翻訳していくようなもの、と考えてみてください。一つ一つのステップを丁寧に解説していきますので、焦らず、ご自身のペースで学習を進めていきましょう。
+Visual Basic .NETとは Visual Basic .NETは、Microsoft社が開発したプログラミング言語の一つです。特に、私たちが日常的に使っているWindows上で動作するアプリケーション（ソフトウェア）を作成するのに適しています。
+VB.NETの大きな特徴は、他のプログラミング言語と比較して、人間にとって読み書きしやすい構文（文法）を持っていることです。まるで、箇条書きで指示を出すように、比較的直感的にプログラムを記述することができます。
+また、VB.NETは「.NET」（ドットネット）という、Microsoftが提供する大きな開発基盤の上で動作します。この.NETは、プログラム開発を助けるための様々な機能（部品や道具箱のようなもの）を提供しており、VB.NETはその恩恵を受けて、効率的にプログラムを作成することができます。例えるなら、VB.NETは「.NET」という名の、非常に設備の整った大きなキッチンで使える、使いやすい調理器具の一つ、といったところでしょうか。
+対象読者 このマニュアルは、以下のような方を対象としています。
+ プログラミングに初めて触れる方 他のプログラミング言語の経験はあるが、VB.NETは初めて学ぶ方 業務でVB.NETを使用する必要があり、基礎から学びたい方  開発環境について このマニュアルでは、プログラムを作成するための統合開発環境（IDE：Integrated Development Environment）として、「Visual Studio 2022」を使用します。Visual Studioは、プログラムの記述、間違い探し（デバッグ）、実行などを効率的に行うための、高機能なソフトウェアです。次の章で、このVisual Studioの準備について説明します。
+開発環境のセットアップ プログラミングを始めるには、まずそのための道具、つまり「開発環境」を整える必要があります。料理をするのにキッチンや調理器具が必要なのと同じですね。VB.NETでの開発では、主に「Visual Studio」というソフトウェアを使用します。この章では、Visual Studioの準備と基本的な使い方について学びましょう。
+Visual Studio 2022とは Visual Studioは、Microsoft社が提供する「統合開発環境（IDE: Integrated Development Environment）」と呼ばれるソフトウェアです。
+「統合開発環境」と聞くと難しく感じるかもしれませんが、要するにプログラム開発に必要な様々なツールが一つにまとまった、非常に高機能な作業台のようなものです。
+ コードを書く（エディター）: プログラムの指示を書き込むためのテキストエディター機能です。文字の色分けや入力補助など、書きやすくするための機能が充実しています。 デザインする（デザイナー）: Windowsアプリケーションの画面（見た目）を、まるで絵を描くように部品を配置して作成できます。 間違いを探す（デバッガー）: プログラムが思った通りに動かない場合に、どこに問題があるのかを探し出す手助けをしてくれます。虫眼鏡で問題箇所を探すようなイメージです。 組み立てる（コンパイラー）: 人間が書いたプログラムコードを、コンピューターが理解できる言葉（機械語）に翻訳してくれます。 管理する（ソリューションエクスプローラー）: 作成するプログラムに関連するファイル（設計図や部品リストなど）を整理・管理してくれます。  このように、Visual Studioがあれば、プログラム作成の様々な工程をスムーズに進めることができます。
+Visual Studioのインストール Visual Studio 2022は、Microsoftの公式サイトからダウンロードしてインストールできます。インストール時には、「ワークロード」と呼ばれる、開発したいものの種類に応じた機能セットを選択する必要があります。VB.NETでWindowsアプリケーション（Windows Formsなど）を作成する場合は、「.NET デスクトップ開発」というワークロードを選択してください。なお、必要なワークロードが不明である場合は、リーダーなどの上席者に確認してください。
+インストール手順  Microsoftの公式からインストーラーをダウンロードして実行します。開発環境という性質上、インストール準備のためのダウンロードもそこそこ時間がかかります。 インストールするワークロードを選択する。  前述のとおり、ここでは「.NET デスクトップ開発」を選択してください。なお、他にインストールすべきコンポーネントがある場合、個別にインストールするコンポーネントを選択可能です。 3." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-visual-basic-dot-net/" /><meta property="article:published_time" content="2025-04-11T16:24:08&#43;09:00"/>
+<meta property="article:modified_time" content="2025-04-11T16:24:08&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Visual Basic .NETの基本"/>
+<meta name="twitter:description" content="はじめに 令和のこの世になって、Visual Basic .NET（以下、VB.NET）で開発された資産をメンテする必要が出てきたため、勉強がてら資料を作成しました。
+最終的な目標は、VB.NETの基本的な仕組みを理解し、ご自身で簡単なプログラムを作成できるようになることです。難しく考える必要はありません。プログラミングとは、いわば「コンピューターに対する指示書を書く」作業です。私たちが普段使う言葉を、コンピューターが理解できる言葉（プログラミング言語）に翻訳していくようなもの、と考えてみてください。一つ一つのステップを丁寧に解説していきますので、焦らず、ご自身のペースで学習を進めていきましょう。
+Visual Basic .NETとは Visual Basic .NETは、Microsoft社が開発したプログラミング言語の一つです。特に、私たちが日常的に使っているWindows上で動作するアプリケーション（ソフトウェア）を作成するのに適しています。
+VB.NETの大きな特徴は、他のプログラミング言語と比較して、人間にとって読み書きしやすい構文（文法）を持っていることです。まるで、箇条書きで指示を出すように、比較的直感的にプログラムを記述することができます。
+また、VB.NETは「.NET」（ドットネット）という、Microsoftが提供する大きな開発基盤の上で動作します。この.NETは、プログラム開発を助けるための様々な機能（部品や道具箱のようなもの）を提供しており、VB.NETはその恩恵を受けて、効率的にプログラムを作成することができます。例えるなら、VB.NETは「.NET」という名の、非常に設備の整った大きなキッチンで使える、使いやすい調理器具の一つ、といったところでしょうか。
+対象読者 このマニュアルは、以下のような方を対象としています。
+ プログラミングに初めて触れる方 他のプログラミング言語の経験はあるが、VB.NETは初めて学ぶ方 業務でVB.NETを使用する必要があり、基礎から学びたい方  開発環境について このマニュアルでは、プログラムを作成するための統合開発環境（IDE：Integrated Development Environment）として、「Visual Studio 2022」を使用します。Visual Studioは、プログラムの記述、間違い探し（デバッグ）、実行などを効率的に行うための、高機能なソフトウェアです。次の章で、このVisual Studioの準備について説明します。
+開発環境のセットアップ プログラミングを始めるには、まずそのための道具、つまり「開発環境」を整える必要があります。料理をするのにキッチンや調理器具が必要なのと同じですね。VB.NETでの開発では、主に「Visual Studio」というソフトウェアを使用します。この章では、Visual Studioの準備と基本的な使い方について学びましょう。
+Visual Studio 2022とは Visual Studioは、Microsoft社が提供する「統合開発環境（IDE: Integrated Development Environment）」と呼ばれるソフトウェアです。
+「統合開発環境」と聞くと難しく感じるかもしれませんが、要するにプログラム開発に必要な様々なツールが一つにまとまった、非常に高機能な作業台のようなものです。
+ コードを書く（エディター）: プログラムの指示を書き込むためのテキストエディター機能です。文字の色分けや入力補助など、書きやすくするための機能が充実しています。 デザインする（デザイナー）: Windowsアプリケーションの画面（見た目）を、まるで絵を描くように部品を配置して作成できます。 間違いを探す（デバッガー）: プログラムが思った通りに動かない場合に、どこに問題があるのかを探し出す手助けをしてくれます。虫眼鏡で問題箇所を探すようなイメージです。 組み立てる（コンパイラー）: 人間が書いたプログラムコードを、コンピューターが理解できる言葉（機械語）に翻訳してくれます。 管理する（ソリューションエクスプローラー）: 作成するプログラムに関連するファイル（設計図や部品リストなど）を整理・管理してくれます。  このように、Visual Studioがあれば、プログラム作成の様々な工程をスムーズに進めることができます。
+Visual Studioのインストール Visual Studio 2022は、Microsoftの公式サイトからダウンロードしてインストールできます。インストール時には、「ワークロード」と呼ばれる、開発したいものの種類に応じた機能セットを選択する必要があります。VB.NETでWindowsアプリケーション（Windows Formsなど）を作成する場合は、「.NET デスクトップ開発」というワークロードを選択してください。なお、必要なワークロードが不明である場合は、リーダーなどの上席者に確認してください。
+インストール手順  Microsoftの公式からインストーラーをダウンロードして実行します。開発環境という性質上、インストール準備のためのダウンロードもそこそこ時間がかかります。 インストールするワークロードを選択する。  前述のとおり、ここでは「.NET デスクトップ開発」を選択してください。なお、他にインストールすべきコンポーネントがある場合、個別にインストールするコンポーネントを選択可能です。 3."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Visual Basic .NETの基本</h1>
+			<div class="meta">Posted at &mdash; Apr 11, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>令和のこの世になって、Visual Basic .NET（以下、VB.NET）で開発された資産をメンテする必要が出てきたため、勉強がてら資料を作成しました。</p>
+
+<p>最終的な目標は、VB.NETの基本的な仕組みを理解し、ご自身で簡単なプログラムを作成できるようになることです。難しく考える必要はありません。プログラミングとは、いわば「コンピューターに対する指示書を書く」作業です。私たちが普段使う言葉を、コンピューターが理解できる言葉（プログラミング言語）に翻訳していくようなもの、と考えてみてください。一つ一つのステップを丁寧に解説していきますので、焦らず、ご自身のペースで学習を進めていきましょう。</p>
+
+<h3 id="visual-basic-netとは">Visual Basic .NETとは</h3>
+
+<p>Visual Basic .NETは、Microsoft社が開発したプログラミング言語の一つです。特に、私たちが日常的に使っているWindows上で動作するアプリケーション（ソフトウェア）を作成するのに適しています。</p>
+
+<p>VB.NETの大きな特徴は、他のプログラミング言語と比較して、人間にとって読み書きしやすい構文（文法）を持っていることです。まるで、箇条書きで指示を出すように、比較的直感的にプログラムを記述することができます。</p>
+
+<p>また、VB.NETは「.NET」（ドットネット）という、Microsoftが提供する大きな開発基盤の上で動作します。この.NETは、プログラム開発を助けるための様々な機能（部品や道具箱のようなもの）を提供しており、VB.NETはその恩恵を受けて、効率的にプログラムを作成することができます。例えるなら、VB.NETは「.NET」という名の、非常に設備の整った大きなキッチンで使える、使いやすい調理器具の一つ、といったところでしょうか。</p>
+
+<h3 id="対象読者">対象読者</h3>
+
+<p>このマニュアルは、以下のような方を対象としています。</p>
+
+<ul>
+<li>プログラミングに初めて触れる方</li>
+<li>他のプログラミング言語の経験はあるが、VB.NETは初めて学ぶ方</li>
+<li>業務でVB.NETを使用する必要があり、基礎から学びたい方</li>
+</ul>
+
+<h3 id="開発環境について">開発環境について</h3>
+
+<p>このマニュアルでは、プログラムを作成するための統合開発環境（IDE：Integrated Development Environment）として、「Visual Studio 2022」を使用します。Visual Studioは、プログラムの記述、間違い探し（デバッグ）、実行などを効率的に行うための、高機能なソフトウェアです。次の章で、このVisual Studioの準備について説明します。</p>
+
+<h2 id="開発環境のセットアップ">開発環境のセットアップ</h2>
+
+<p>プログラミングを始めるには、まずそのための道具、つまり「開発環境」を整える必要があります。料理をするのにキッチンや調理器具が必要なのと同じですね。VB.NETでの開発では、主に「Visual Studio」というソフトウェアを使用します。この章では、Visual Studioの準備と基本的な使い方について学びましょう。</p>
+
+<h3 id="visual-studio-2022とは">Visual Studio 2022とは</h3>
+
+<p>Visual Studioは、Microsoft社が提供する「統合開発環境（IDE: Integrated Development Environment）」と呼ばれるソフトウェアです。</p>
+
+<p>「統合開発環境」と聞くと難しく感じるかもしれませんが、要するに<strong>プログラム開発に必要な様々なツールが一つにまとまった、非常に高機能な作業台</strong>のようなものです。</p>
+
+<ul>
+<li><strong>コードを書く（エディター）:</strong> プログラムの指示を書き込むためのテキストエディター機能です。文字の色分けや入力補助など、書きやすくするための機能が充実しています。</li>
+<li><strong>デザインする（デザイナー）:</strong> Windowsアプリケーションの画面（見た目）を、まるで絵を描くように部品を配置して作成できます。</li>
+<li><strong>間違いを探す（デバッガー）:</strong> プログラムが思った通りに動かない場合に、どこに問題があるのかを探し出す手助けをしてくれます。虫眼鏡で問題箇所を探すようなイメージです。</li>
+<li><strong>組み立てる（コンパイラー）:</strong> 人間が書いたプログラムコードを、コンピューターが理解できる言葉（機械語）に翻訳してくれます。</li>
+<li><strong>管理する（ソリューションエクスプローラー）:</strong> 作成するプログラムに関連するファイル（設計図や部品リストなど）を整理・管理してくれます。</li>
+</ul>
+
+<p>このように、Visual Studioがあれば、プログラム作成の様々な工程をスムーズに進めることができます。</p>
+
+<h3 id="visual-studioのインストール">Visual Studioのインストール</h3>
+
+<p>Visual Studio 2022は、Microsoftの公式サイトからダウンロードしてインストールできます。インストール時には、「ワークロード」と呼ばれる、開発したいものの種類に応じた機能セットを選択する必要があります。VB.NETでWindowsアプリケーション（Windows Formsなど）を作成する場合は、「<strong>.NET デスクトップ開発</strong>」というワークロードを選択してください。なお、必要なワークロードが不明である場合は、リーダーなどの上席者に確認してください。</p>
+
+<h4 id="インストール手順">インストール手順</h4>
+
+<ol>
+<li>Microsoftの公式からインストーラーをダウンロードして実行します。開発環境という性質上、インストール準備のためのダウンロードもそこそこ時間がかかります。</li>
+<li>インストールするワークロードを選択する。</li>
+</ol>
+
+<p><img src="2025-04-11-16-41-08.png" alt="" /></p>
+
+<p>前述のとおり、ここでは「.NET デスクトップ開発」を選択してください。なお、他にインストールすべきコンポーネントがある場合、個別にインストールするコンポーネントを選択可能です。
+3. インストール方法は2通りありますが、ネットワークが不安定である場合は「全部ダウンロードしてからインストールする」を選択してから「インストール」ボタンを押します。</p>
+
+<p><img src="2025-04-11-16-37-28.png" alt="" /></p>
+
+<ol>
+<li>あとはインストールが終了するまで待機します。</li>
+</ol>
+
+<h3 id="最初のプロジェクトを作成する">最初のプロジェクトを作成する</h3>
+
+<p>Visual Studioを使ってプログラム開発を始めるには、まず「プロジェクト」を作成します。プロジェクトとは、一つのアプリケーションを作るために必要なファイル一式をまとめたものです。</p>
+
+<p>ここでは例として、Windowsの画面を持つ簡単なアプリケーション（Windows Forms アプリケーション）のプロジェクトを作成する手順の概要を示します。</p>
+
+<ol>
+<li>Visual Studioを起動し、「新しいプロジェクトの作成」を選択します。
+<br /></li>
+</ol>
+
+<p><img src="2025-04-11-16-37-42.png" alt="" /></p>
+
+<ol>
+<li>言語として「Visual Basic」を選択し、プラットフォームで「Windows」、プロジェクトの種類で「デスクトップ」などを選択すると、候補が絞り込まれます。</li>
+<li><strong>「Windows Forms アプリ (.NET Framework)」</strong> または <strong>「Windows Forms アプリ」</strong> を選択します。（環境によって表示が若干異なりますが、Windows Formsと書かれたものを選択します）</li>
+<li>「次へ」をクリックします。</li>
+<li>プロジェクト名（例: <code>MyFirstApp</code> など、分かりやすい名前）と、プロジェクトを保存する場所を指定します。</li>
+<li>フレームワークのバージョンを選択します。（通常はデフォルトの推奨バージョンで問題ありません）</li>
+<li>「作成」ボタンをクリックします。</li>
+</ol>
+
+<p>これで、空のWindowsフォーム（ウィンドウ）が表示され、プログラム開発を開始する準備が整いました。</p>
+
+<h3 id="visual-studioの基本的な使い方">Visual Studioの基本的な使い方</h3>
+
+<p>インストールが完了したら、Visual Studioを起動してみましょう。スタートメニューなどから「Visual Studio 2022」を選択します。</p>
+
+<p>起動すると、いくつかのウィンドウが表示されます。最初は少し戸惑うかもしれませんが、よく使う主要なウィンドウの役割を覚えておきましょう。</p>
+
+<ul>
+<li><strong>ソリューション エクスプローラー:</strong>
+
+<ul>
+<li>主に画面右側に表示されます。</li>
+<li>現在開いているプロジェクト（プログラム開発の単位）に含まれるファイル（フォームのデザイン、コードなど）の一覧が表示されます。プロジェクト全体の構成を把握するための「目次」や「ファイル棚」のようなものです。</li>
+</ul></li>
+<li><strong>プロパティ ウィンドウ:</strong>
+
+<ul>
+<li>ソリューション エクスプローラーの下や右側に表示されることが多いです。</li>
+<li>選択している要素（例えば、画面上のボタンやテキストボックス）の色、サイズ、表示文字などの「設定項目（プロパティ）」を一覧表示し、変更することができます。部品の「設定変更パネル」のようなイメージです。</li>
+</ul></li>
+<li><strong>コード エディター:</strong>
+
+<ul>
+<li>中央の最も広い領域を占めるウィンドウです。</li>
+<li>プログラムのコード（指示書）を実際に記述する場所です。</li>
+</ul></li>
+<li><strong>ツールボックス:</strong>
+
+<ul>
+<li>主に画面左側に表示されます。（表示されていない場合は、メニューの「表示」&gt;「ツールボックス」で表示できます）</li>
+<li>Windows Formsアプリケーションなどを作成する際に、画面に配置するボタン、テキストボックスなどの「部品（コントロール）」が格納されています。必要な部品をここからドラッグ＆ドロップで画面上に配置できます。「部品箱」のようなものです。</li>
+</ul></li>
+</ul>
+
+<p>これらのウィンドウの配置は、使いやすいように自由に変更することも可能です。ここではいったんデフォルトのままを採用します。</p>
+
+<h2 id="最初のプログラムは-hello-world">最初のプログラムは<code>Hello, World!</code></h2>
+
+<p>前の章で、プログラム開発の作業場であるVisual Studioの準備が整いました。この章では、そのVisual Studioを使って、コンピューターに最初の「お仕事」をさせてみましょう。プログラミングの世界では、最初に画面に「Hello, World!」という文字を表示させるのが、伝統的な第一歩となっています。これは、プログラミング環境が正しく設定され、基本的な動作を確認するための、いわば「準備運動」のようなものです。</p>
+
+<h3 id="プログラムとは何か-おさらい">プログラムとは何か？（おさらい）</h3>
+
+<p>もう一度思い出してみましょう。プログラムとは、<strong>コンピューターに対する一連の指示書</strong>でしたね。私たちがこれから行うのは、この指示書をVB.NETという言語で記述していく作業です。</p>
+
+<h3 id="画面に文字を表示してみよう">画面に文字を表示してみよう</h3>
+
+<p>ここでは、前の章で作成した「Windows Forms アプリケーション」のプロジェクトを使います。</p>
+
+<p>目標は、<strong>画面に配置したボタンをクリックしたら、「Hello, World!」というメッセージが小さなウィンドウ（メッセージボックス）に表示される</strong>プログラムを作ることです。</p>
+
+<p>手順は以下の通りです。</p>
+
+<ol>
+<li><p><strong>フォームにボタンを配置する:</strong></p>
+
+<ul>
+<li>Visual Studioの画面中央に、ウィンドウのデザインが表示されているはずです（もし表示されていなければ、「ソリューション エクスプローラー」で <code>Form1.vb</code> [デザイン] のようなファイルをダブルクリックします）。これは、アプリケーションの「顔」となるフォームです。</li>
+<li>画面左側の「ツールボックス」から、「Button」を探し、フォームの上にドラッグ＆ドロップします。まるで、画用紙にシールを貼るような感覚です。</li>
+<li>これで、フォーム上にボタンが一つ配置されました。</li>
+</ul></li>
+
+<li><p><strong>ボタンがクリックされたときの処理を書く:</strong></p>
+
+<ul>
+<li>今配置したボタンを<strong>ダブルクリック</strong>してください。</li>
+<li>すると、画面が切り替わり、「コード エディター」が表示されます。そこには、以下のようなコードが自動的に入力されているはずです。</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+
+End Sub</code></pre></div>
+<ul>
+<li>これは、「もし<code>Button1</code>（先ほど配置したボタン）がクリック(<code>Click</code>)されたら、この<code>Sub</code>から<code>End Sub</code>までの間の指示を実行してください」という意味の、特別な場所（<strong>イベントハンドラ</strong> と呼ばれます）です。料理で言えば、「オーブンが温まったら、これを入れてください」という指示を書いておくレシピのようなものです。</li>
+</ul></li>
+
+<li><p><strong>メッセージを表示するコードを書く:</strong></p>
+
+<ul>
+<li><code>Private Sub Button1_Click(...)</code> と <code>End Sub</code> の間に、カーソルを合わせて、以下のコードを入力してください。（大文字・小文字は区別されませんが、Visual Studioが自動で整形してくれます）</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">MessageBox.Show(&#34;Hello, World!&#34;)</code></pre></div>
+<ul>
+<li>入力すると、以下のようになります。</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    MessageBox.Show(&#34;Hello, World!&#34;)
+End Sub</code></pre></div>
+<ul>
+<li><code>MessageBox.Show(...)</code> は、「カッコの中に書かれた文字を、メッセージボックスに表示してください」というVB.NETの命令です。</li>
+</ul></li>
+</ol>
+
+<h3 id="コードの入力と実行">コードの入力と実行</h3>
+
+<p>コードの入力が完了したら、いよいよプログラムを実行してみましょう。</p>
+
+<ol>
+<li>Visual Studioの上部にある緑色の三角ボタン（「開始」と表示されています）をクリックします。キーボードの <code>F5</code> キーを押しても同じです。</li>
+<li>すると、プログラムが「ビルド」（コンピューターが理解できる形への翻訳）され、実行されます。</li>
+<li>先ほどデザインしたウィンドウ（フォーム）が表示され、その上にボタンが配置されているのが確認できます。</li>
+<li>そのボタンをクリックしてみてください。</li>
+<li>「Hello, World!」と書かれた小さなメッセージボックスが表示されれば、成功です！</li>
+<li>メッセージボックスの「OK」ボタンをクリックし、ウィンドウ右上の「×」ボタンでプログラムを終了します。</li>
+</ol>
+
+<h3 id="簡単なコードの解説">簡単なコードの解説</h3>
+
+<p>今回記述したコードについて、少しだけ解説します。</p>
+
+<ul>
+<li><code>Private Sub Button1_Click(...) Handles Button1.Click ... End Sub</code>:
+
+<ul>
+<li>これは「<code>Button1</code>がクリックされたときに実行される処理のまとまり（Subプロシージャ）」を定義しています。<code>Handles Button1.Click</code>の部分が、「この処理は<code>Button1</code>の<code>Click</code>イベント（クリックされたという出来事）に対応しますよ」と関連付けています。</li>
+</ul></li>
+<li><code>MessageBox.Show(&quot;Hello, World!&quot;)</code>:
+
+<ul>
+<li><code>MessageBox</code> は、メッセージボックスという部品（クラス）を表します。</li>
+<li><code>.Show()</code> は、その部品が持っている機能（メソッド）の一つで、「メッセージを表示する」という動作を意味します。</li>
+<li><code>(&quot;Hello, World!&quot;)</code> は、その機能を使う際に渡す情報（引数）で、「表示するメッセージはこれですよ」と指定しています。 <code>&quot; &quot;</code> (ダブルクォーテーション) で囲まれた部分は、文字列（文字の並び）として扱われます。</li>
+</ul></li>
+</ul>
+
+<p>まるで、「メッセージボックスさん(<code>MessageBox</code>)、表示機能(<code>.Show</code>)を使って、この言葉(<code>&quot;Hello, World!&quot;</code>)を見せてください」とお願いしているようなイメージですね。</p>
+
+<h2 id="vb-netの基礎文法">VB.NETの基礎文法</h2>
+
+<p>前の章では、簡単なプログラムを作成し、実行する流れを体験しました。この章では、より複雑な指示をコンピューターに出すために必要となる、VB.NETの基本的な「文法」について学んでいきましょう。家を建てるためには、柱や壁の基本的な構造を知る必要があるように、プログラミングにも基礎となるルールが存在します。</p>
+
+<h3 id="変数">変数</h3>
+
+<p>プログラムを書いていると、計算の途中結果や、ユーザーが入力した文字などを、一時的にどこかに保存しておきたくなることがあります。そのようなときに使うのが「変数」です。</p>
+
+<p><strong>変数とは、データ（数値や文字など）を入れておくための、名前が付いた「箱」のようなもの</strong>と考えてください。</p>
+
+<p>例えば、ユーザーの年齢を覚えておきたい場合、「Age」という名前の箱を用意して、そこに年齢の数値（例えば <code>30</code>）を入れておく、といった使い方をします。</p>
+
+<p><strong>変数の使い方（宣言と代入）:</strong></p>
+
+<p>VB.NETで変数を使うには、まず「こういう名前の箱を使いますよ」と宣言する必要があります。これには <code>Dim</code> というキーワードを使います。そして、その箱にデータを入れる（代入する）には <code>=</code> （イコール）を使います。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">&#39; 年齢を入れるための「Age」という名前の箱（変数）を宣言します
+Dim Age As Integer
+
+&#39; 名前を入れるための「UserName」という名前の箱（変数）を宣言します
+Dim UserName As String
+
+&#39; 「Age」という箱に 30 という数値を入れます（代入）
+Age = 30
+
+&#39; 「UserName」という箱に &#34;山田 太郎&#34; という文字列を入れます（代入）
+UserName = &#34;山田 太郎&#34;
+
+&#39; 箱の中身を表示してみましょう
+MessageBox.Show(&#34;名前: &#34; &amp; UserName &amp; &#34;, 年齢: &#34; &amp; Age)
+&#39; 上記コードを実行すると、「名前: 山田 太郎, 年齢: 30」と表示されます。
+&#39; (&amp; は文字列を連結する記号です)</code></pre></div>
+<p><strong>なぜ変数が必要？</strong></p>
+
+<p>変数を使うことで、データを一時的に記憶し、後で再利用したり、計算に使ったりすることができます。名前が付いているので、「あのデータどこだっけ？」と迷うこともありません。プログラムを分かりやすく、柔軟にするための重要な道具です。</p>
+
+<h3 id="データ型">データ型</h3>
+
+<p>先ほどの例で <code>As Integer</code> や <code>As String</code> という記述がありました。これは、変数という「箱」に入れるデータの「種類（データ型）」を指定するものです。</p>
+
+<p>コンピューターはデータを厳密に区別するため、<strong>どのような種類のデータを入れる箱なのかを、あらかじめ決めておく必要があります</strong>。例えるなら、数字を入れる専用の箱、文字を入れる専用の箱、といった具合です。</p>
+
+<p>VB.NETには様々なデータ型がありますが、まずは基本的なものを覚えましょう。</p>
+
+<ul>
+<li><strong>Integer (整数型):</strong> <code>1</code>, <code>0</code>, <code>-10</code> のような整数を入れるための箱です。年齢や個数などによく使います。</li>
+<li><strong>String (文字列型):</strong> <code>&quot;Hello&quot;</code> や <code>&quot;山田 太郎&quot;</code> のような文字や文章を入れるための箱です。名前や住所など、文字情報を扱う際に使います。文字データは <code>&quot;</code> (ダブルクォーテーション) で囲むルールがあります。</li>
+<li><strong>Double (倍精度浮動小数点数型):</strong> <code>3.14</code> や <code>-0.5</code> のような小数を含む数値を入れるための箱です。身長や体重、計算結果など、より精密な数値を扱いたい場合に使います。</li>
+<li><strong>Boolean (ブール型):</strong> <code>True</code> (真) か <code>False</code> (偽) のどちらか一方の値だけを入れるための箱です。条件が満たされているか（Yes/No）を判断するような場合に使います。（例: 会員ですか？ -&gt; True / False）</li>
+<li><strong>Date (日付型):</strong> 日付や時刻を入れるための箱です。（例: <code>#2023/10/27#</code>）</li>
+</ul>
+
+<p>変数を使うときは、入れるデータに合わせて適切なデータ型を選ぶことが大切です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">&#39; 整数を入れる箱
+Dim Count As Integer = 10
+
+&#39; 文字列を入れる箱
+Dim Message As String = &#34;処理が完了しました。&#34;
+
+&#39; 小数を入れる箱
+Dim Pi As Double = 3.14159
+
+&#39; 真偽値を入れる箱 (はい/いいえ)
+Dim IsMember As Boolean = True
+
+&#39; 日付を入れる箱
+Dim Today As Date = Date.Today &#39; 今日の日付を取得して入れる</code></pre></div>
+<h3 id="演算子">演算子</h3>
+
+<p>プログラムでは、数値の計算や、値の比較を頻繁に行います。そのために使われる記号を「演算子」と呼びます。まるで、<strong>計算や比較を行うための特別な道具</strong>のようなものです。</p>
+
+<p>よく使う演算子をいくつか紹介します。</p>
+
+<ul>
+<li><strong>算術演算子（計算用）:</strong>
+
+<ul>
+<li><code>+</code> (足し算): <code>5 + 3</code> -&gt; <code>8</code></li>
+<li><code>-</code> (引き算): <code>5 - 3</code> -&gt; <code>2</code></li>
+<li><code>*</code> (掛け算): <code>5 * 3</code> -&gt; <code>15</code></li>
+<li><code>/</code> (割り算): <code>6 / 3</code> -&gt; <code>2</code></li>
+</ul></li>
+<li><strong>比較演算子（比べる用、結果は True か False になります）:</strong>
+
+<ul>
+<li><code>=</code> (等しい): <code>Age = 20</code> -&gt; もし変数 <code>Age</code> の中身が <code>20</code> なら <code>True</code></li>
+<li><code>&lt;&gt;</code> (等しくない): <code>UserName &lt;&gt; &quot;Guest&quot;</code> -&gt; もし変数 <code>UserName</code> の中身が <code>&quot;Guest&quot;</code> でなければ <code>True</code></li>
+<li><code>&gt;</code> (より大きい): <code>Score &gt; 80</code> -&gt; もし変数 <code>Score</code> の中身が <code>80</code> より大きければ <code>True</code></li>
+<li><code>&lt;</code> (より小さい): <code>Count &lt; 10</code> -&gt; もし変数 <code>Count</code> の中身が <code>10</code> より小さければ <code>True</code></li>
+<li><code>&gt;=</code> (以上): <code>Price &gt;= 1000</code> -&gt; もし変数 <code>Price</code> の中身が <code>1000</code> 以上なら <code>True</code></li>
+<li><code>&lt;=</code> (以下): <code>Stock &lt;= 0</code> -&gt; もし変数 <code>Stock</code> の中身が <code>0</code> 以下なら <code>True</code></li>
+</ul></li>
+<li><strong>文字列連結演算子:</strong>
+
+<ul>
+<li><code>&amp;</code> (文字列をつなげる): <code>&quot;Hello&quot; &amp; &quot; &quot; &amp; &quot;World&quot;</code> -&gt; <code>&quot;Hello World&quot;</code></li>
+</ul></li>
+<li><strong>論理演算子（条件を組み合わせる用）:</strong>
+
+<ul>
+<li><code>And</code> (かつ): <code>Age &gt;= 20 And Gender = &quot;Male&quot;</code> -&gt; 年齢が20歳以上 <strong>かつ</strong> 性別が男性の場合 <code>True</code></li>
+<li><code>Or</code> (または): <code>IsHoliday = True Or DayOfWeek = &quot;Sunday&quot;</code> -&gt; 休日である <strong>または</strong> 日曜日である場合 <code>True</code></li>
+</ul></li>
+</ul>
+
+<p>これらの演算子を使いこなすことで、より複雑な処理を記述できるようになります。</p>
+
+<h3 id="コメント">コメント</h3>
+
+<p>プログラムのコードは、自分自身が後で見返したり、他の人が読んだりすることがあります。その際に、<strong>コードが何をしているのかを分かりやすくするための説明書き</strong>を残すことができます。これを「コメント」と呼びます。</p>
+
+<p>VB.NETでは、行の先頭に <code>'</code> (シングルクォーテーション) を付けると、その行のそれ以降の部分はコメントとして扱われ、プログラムの動作には影響しません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">&#39; これはコメントです。プログラムの実行には影響しません。
+
+&#39; 変数 TotalPrice を宣言し、初期値として 0 を代入する
+Dim TotalPrice As Integer = 0
+
+&#39; 商品価格（Price）と数量（Quantity）を掛け合わせて合計金額を計算
+TotalPrice = Price * Quantity  &#39; ここにもコメントを書けます
+
+&#39; 計算結果を表示
+MessageBox.Show(&#34;合計金額は &#34; &amp; TotalPrice &amp; &#34; 円です。&#34;)</code></pre></div>
+<p>コメントは、<strong>コードの意図を明確にし、読みやすくするための重要な習慣</strong>です。特に複雑な処理や、少し分かりにくい部分には、積極的にコメントを残すようにしましょう。未来の自分や、チームの仲間への親切なメモのようなものです。</p>
+
+<h2 id="制御構文">制御構文</h2>
+
+<p>プログラムは、単に上から下へ順番に指示を実行するだけではありません。時には、「もし○○だったら、こちらを実行する」「この作業を△回繰り返す」といったように、<strong>処理の流れをコントロール（制御）</strong>する必要があります。この章では、そのための基本的な構文である「条件分岐」と「繰り返し処理」について学びましょう。これらの仕組みを使うことで、プログラムは状況に応じた判断を下したり、退屈な繰り返し作業を自動化したりできるようになります。</p>
+
+<h3 id="条件分岐-if文">条件分岐（If文）</h3>
+
+<p>プログラムの中で、「ある条件が満たされているかどうか」を判断し、その結果によって実行する処理を変えたい場合があります。例えば、「もしテストの点数が80点以上だったら『合格』と表示し、そうでなければ『追試』と表示する」といった具合です。このような<strong>条件に応じた処理の分岐</strong>を実現するのが <code>If</code> 文です。</p>
+
+<p><strong>基本的な形 (<code>If...Then...Else...End If</code>)</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">Dim Score As Integer = 75 &#39; テストの点数 (例)
+Dim Result As String      &#39; 結果を格納する変数
+
+&#39; もし Score が 80 以上だったら
+If Score &gt;= 80 Then
+    &#39; 条件が真 (True) の場合の処理
+    Result = &#34;合格&#34;
+Else
+    &#39; 条件が偽 (False) の場合の処理
+    Result = &#34;追試&#34;
+End If &#39; If文の終わり
+
+MessageBox.Show(&#34;判定結果: &#34; &amp; Result) &#39; &#34;判定結果: 追試&#34; と表示される</code></pre></div>
+<p><strong>考え方:</strong></p>
+
+<ul>
+<li><code>If</code> の後に、判断したい<strong>条件式</strong>（結果が <code>True</code> または <code>False</code> になる式）を書きます。（例: <code>Score &gt;= 80</code>）</li>
+<li><code>Then</code> の後には、条件式が <code>True</code> （真）だった場合に実行したい処理を書きます。</li>
+<li><code>Else</code> の後には、条件式が <code>False</code> （偽）だった場合に実行したい処理を書きます。（<code>Else</code> 以下は不要な場合もあります）</li>
+<li>最後に <code>End If</code> を書いて、<code>If</code> 文の終わりを示します。</li>
+</ul>
+
+<p><strong>もう少し複雑な条件分岐 (<code>ElseIf</code>)</strong></p>
+
+<p>条件が複数ある場合、<code>ElseIf</code> を使ってさらに分岐を追加できます。例えば、「80点以上なら『優』、60点以上なら『良』、それ以外なら『可』」のように判断する場合です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">Dim Score As Integer = 65
+Dim Grade As String
+
+If Score &gt;= 80 Then
+    Grade = &#34;優&#34;
+ElseIf Score &gt;= 60 Then &#39; 80点未満で、かつ60点以上の場合
+    Grade = &#34;良&#34;
+Else
+    Grade = &#34;可&#34; &#39; それ以外 (60点未満) の場合
+End If
+
+MessageBox.Show(&#34;成績: &#34; &amp; Grade) &#39; &#34;成績: 良&#34; と表示される</code></pre></div>
+<p><code>If</code> 文は、プログラムに<strong>判断能力</strong>を与えるための重要な道具です。まるで、状況に応じて取るべき行動を選択する、賢い道案内人のような役割を果たします。</p>
+
+<h3 id="繰り返し処理-forループ-doループ">繰り返し処理（Forループ, Doループ）</h3>
+
+<p>プログラムでは、同じような処理を何度も繰り返したい場面がよくあります。例えば、「『こんにちは』と5回表示する」「リストにある全ての項目について同じ処理を行う」などです。このような<strong>繰り返し処理</strong>を実現するのが「ループ」構文です。VB.NETでは主に <code>For</code> ループと <code>Do</code> ループが使われます。</p>
+
+<p><strong>決まった回数繰り返す (<code>For...Next</code>)</strong></p>
+
+<p>繰り返す回数が<strong>あらかじめ決まっている</strong>場合に便利なのが <code>For...Next</code> ループです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">&#39; 1から5まで、カウンタ変数 i を増やしながら繰り返す
+For i As Integer = 1 To 5
+    &#39; 繰り返したい処理をここに書く
+    MessageBox.Show(i &amp; &#34;回目のこんにちは！&#34;)
+Next
+
+&#39; 実行結果:
+&#39; &#34;1回目のこんにちは！&#34;
+&#39; &#34;2回目のこんにちは！&#34;
+&#39; &#34;3回目のこんにちは！&#34;
+&#39; &#34;4回目のこんにちは！&#34;
+&#39; &#34;5回目のこんにちは！&#34;
+&#39; と、メッセージボックスが5回表示される</code></pre></div>
+<p><strong>考え方:</strong></p>
+
+<ul>
+<li><code>For</code> の後に、<strong>カウンター変数</strong>（何回目の繰り返し中か数えるための変数、ここでは <code>i</code>）の開始値 (<code>1</code>) と終了値 (<code>5</code>) を指定します。<code>To</code> で繋ぎます。</li>
+<li><code>For</code> と <code>Next</code> の間に、繰り返したい処理を書きます。</li>
+<li><code>Next</code> まで到達すると、カウンター変数の値が自動的に <code>1</code> 増え（デフォルトの場合）、終了値を超えるまで <code>For</code> からの処理を繰り返します。</li>
+</ul>
+
+<p><code>For</code> ループは、まるで「この作業を〇回お願いします」と指示を出すようなものです。回数が決まっている単純作業の自動化に役立ちます。</p>
+
+<p><strong>条件が満たされるまで（または満たされている間）繰り返す (<code>Do...Loop</code>)</strong></p>
+
+<p>繰り返す回数が事前に決まっておらず、<strong>ある条件が満たされるまで（または満たされている間）</strong>処理を続けたい場合に使うのが <code>Do...Loop</code> です。</p>
+
+<h3 id="条件が満たされるまで繰り返す-do-until-loop">条件が満たされるまで繰り返す（<code>Do Until ... Loop</code>）</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">Dim Count As Integer = 0
+
+&#39; Count が 5 になるまで繰り返す
+Do Until Count = 5
+    &#39; 繰り返したい処理
+    Count = Count + 1 &#39; Count に 1 を足す
+    MessageBox.Show(&#34;現在のカウント: &#34; &amp; Count)
+Loop
+
+&#39; 実行結果:
+&#39; &#34;現在のカウント: 1&#34;
+&#39; &#34;現在のカウント: 2&#34;
+&#39; &#34;現在のカウント: 3&#34;
+&#39; &#34;現在のカウント: 4&#34;
+&#39; &#34;現在のカウント: 5&#34;
+&#39; と、メッセージボックスが5回表示される</code></pre></div>
+<p><strong>例：条件が満たされている間繰り返す (<code>Do While ... Loop</code>)</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">Dim DiceValue As Integer = 0 &#39; サイコロの目
+Dim RollCount As Integer = 0 &#39; サイコロを振った回数
+
+&#39; サイコロの目が 6 でない間、繰り返す
+Do While DiceValue &lt;&gt; 6
+    &#39; 1から6までのランダムな数を生成 (擬似的なサイコロ)
+    DiceValue = CInt(Math.Floor((6 * Rnd()) + 1)) &#39; ちょっと難しいですが、おまじないと思ってください
+    RollCount = RollCount + 1
+    MessageBox.Show(RollCount &amp; &#34;回目: &#34; &amp; DiceValue)
+Loop
+
+MessageBox.Show(&#34;6が出ました！ (&#34; &amp; RollCount &amp; &#34;回)&#34;)
+&#39; 実行結果: 6が出るまでサイコロを振り続け、その結果が表示される</code></pre></div>
+<p><strong>考え方:</strong></p>
+
+<ul>
+<li><code>Do Until [条件式] Loop</code>: 条件式が <code>True</code> になるまで、<code>Do</code> と <code>Loop</code> の間の処理を繰り返します。</li>
+<li><code>Do While [条件式] Loop</code>: 条件式が <code>True</code> である間、<code>Do</code> と <code>Loop</code> の間の処理を繰り返します。</li>
+</ul>
+
+<p><code>Do...Loop</code> は、特定のゴール（条件）に到達するまで作業を続ける、粘り強い作業員のようなものです。いつ終わるか分からないが、条件を満たすまで続けたい処理に使います。</p>
+
+<p>承知いたしました。それでは、「第5章：処理をまとめる - プロシージャ」を作成します。プログラムが大きくなってくると、同じような処理を何度も書く場面が出てきます。プロシージャは、そのような処理を一つの「部品」としてまとめ、名前を付けて再利用しやすくするための仕組みです。これにより、プログラム全体が整理され、見通しが良くなります。</p>
+
+<hr />
+
+<h2 id="プロシージャ">プロシージャ</h2>
+
+<p>プログラムを作成していく中で、「この一連の処理、さっきも書いたな」「ここ、同じような計算を何度もしているな」と感じることがあります。同じコードを何度も書くのは手間がかかりますし、修正が必要になった場合に全ての箇所を直さなければならず、間違いの原因にもなりかねません。</p>
+
+<p>そこで役立つのが「プロシージャ」です。プロシージャとは、<strong>特定の目的を持つ一連の処理をひとまとめにし、名前を付けたもの</strong>です。まるで、料理のレシピに「下ごしらえ」「炒める」「盛り付け」といった名前をつけて手順を整理したり、よく使う道具を工具箱にまとめておくようなものです。</p>
+
+<p>VB.NETのプロシージャには、主に「Subプロシージャ」と「Functionプロシージャ」の2種類があります。</p>
+
+<h3 id="subプロシージャ">Subプロシージャ</h3>
+
+<p>Subプロシージャ（サブルーチンとも呼ばれます）は、<strong>一連の処理を実行するだけで、結果として特定の値を返さない</strong>タイプのプロシージャです。画面にメッセージを表示する、ファイルにデータを書き込む、といった「一連の作業」をまとめるのによく使われます。</p>
+
+<p><strong>定義方法 (<code>Sub...End Sub</code>)</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">&#39; メッセージを表示するという処理をまとめたSubプロシージャ
+Private Sub ShowWelcomeMessage()
+    MessageBox.Show(&#34;ようこそ！&#34;)
+    &#39; ここに他の処理（例：ログの記録など）を追加することもできる
+End Sub</code></pre></div>
+<ul>
+<li><code>Private Sub</code> で始まり、 <code>End Sub</code> で終わります。</li>
+<li><code>ShowWelcomeMessage</code> の部分が、このプロシージャの「名前」です。自由に（ただし分かりやすく）付けることができます。</li>
+<li><code>()</code> は、後述する「引数」を受け取るためのカッコです。引数がない場合もカッコは必要です。</li>
+</ul>
+
+<p><strong>呼び出し方</strong></p>
+
+<p>定義したSubプロシージャを実行するには、その名前をコード中に記述します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    &#39; ShowWelcomeMessageプロシージャを呼び出す
+    Call ShowWelcomeMessage()
+    &#39; または、Callを省略して名前だけでも呼び出せる
+    &#39; ShowWelcomeMessage()
+End Sub
+
+&#39; ↓ ここで定義したプロシージャが呼び出される
+Private Sub ShowWelcomeMessage()
+    MessageBox.Show(&#34;ようこそ！&#34;)
+End Sub</code></pre></div>
+<p>ボタンがクリックされるたびに、<code>ShowWelcomeMessage</code> プロシージャが呼び出され、「ようこそ！」というメッセージが表示されます。もしメッセージの内容を変えたくなったら、<code>ShowWelcomeMessage</code> の中身を1箇所修正するだけで済みます。これがプロシージャの利点です。</p>
+
+<h3 id="functionプロシージャ">Functionプロシージャ</h3>
+
+<p>Functionプロシージャ（関数とも呼ばれます）は、<strong>一連の処理を実行した後、その結果として特定の「値（戻り値）」を返す</strong>タイプのプロシージャです。計算を行ってその結果を得る、特定の条件に基づいて判定結果（True/False）を得る、といった処理に適しています。</p>
+
+<p><strong>例えるなら、材料（引数）を渡すと、何か特定の物（戻り値）を作って返してくれる便利な機械や道具のようなもの</strong>です。例えば、自動販売機にお金（引数）を入れると、ジュース（戻り値）が出てくるイメージです。</p>
+
+<p><strong>定義方法 (<code>Function...End Function</code>)</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">&#39; 二つの整数を受け取って、その合計値を返すFunctionプロシージャ
+Private Function CalculateSum(num1 As Integer, num2 As Integer) As Integer
+    Dim result As Integer
+    result = num1 + num2
+    Return result &#39; 計算結果 (result) を返す
+End Function</code></pre></div>
+<ul>
+<li><code>Private Function</code> で始まり、 <code>End Function</code> で終わります。</li>
+<li><code>CalculateSum</code> がFunctionプロシージャの名前です。</li>
+<li><code>()</code> の中には、このFunctionが受け取る情報（引数）を定義します（後述）。</li>
+<li><code>As Integer</code> の部分は、このFunctionが<strong>返す値のデータ型（戻り値の型）</strong>を指定します。この例では、整数の合計値を返すので <code>Integer</code> を指定しています。</li>
+<li><code>Return</code> キーワードを使って、呼び出し元に返す値を指定します。</li>
+</ul>
+
+<p><strong>呼び出し方と戻り値の利用</strong></p>
+
+<p>Functionプロシージャを呼び出し、その戻り値を受け取って利用します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+    Dim value1 As Integer = 10
+    Dim value2 As Integer = 20
+    Dim total As Integer
+
+    &#39; CalculateSum Function を呼び出し、戻り値を total 変数に代入する
+    total = CalculateSum(value1, value2)
+
+    MessageBox.Show(&#34;合計は &#34; &amp; total &amp; &#34; です。&#34;) &#39; &#34;合計は 30 です。&#34; と表示される
+End Sub
+
+&#39; ↓ ここで定義したFunctionプロシージャが呼び出される
+Private Function CalculateSum(num1 As Integer, num2 As Integer) As Integer
+    Dim result As Integer
+    result = num1 + num2
+    Return result
+End Function</code></pre></div>
+<p>Functionプロシージャを使うことで、複雑な計算処理などを部品化し、コードをスッキリさせることができます。</p>
+
+<h3 id="引数-ひきすう">引数（ひきすう）</h3>
+
+<p>プロシージャをより便利で柔軟にするために、「引数（ひきすう）」という仕組みがあります。引数を使うと、<strong>プロシージャを呼び出す際に、外部から必要な情報を渡す</strong>ことができます。</p>
+
+<p>先ほどの <code>CalculateSum</code> Functionの例では、 <code>num1 As Integer</code> と <code>num2 As Integer</code> が引数です。これは、「<code>CalculateSum</code> を呼び出すときには、整数型のデータを2つ渡してください。1つ目を <code>num1</code> という名前で、2つ目を <code>num2</code> という名前でプロシージャ内で使います」という意味になります。</p>
+
+<p>Subプロシージャでも引数を使うことができます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">&#39; 名前を受け取って、挨拶メッセージを表示するSubプロシージャ
+Private Sub GreetUser(userName As String)
+    MessageBox.Show(userName &amp; &#34;さん、こんにちは！&#34;)
+End Sub
+
+Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+    Dim name1 As String = &#34;鈴木&#34;
+    Dim name2 As String = &#34;佐藤&#34;
+
+    &#39; 引数として &#34;鈴木&#34; を渡して GreetUser を呼び出す
+    GreetUser(name1) &#39; &#34;鈴木さん、こんにちは！&#34; と表示される
+
+    &#39; 引数として &#34;佐藤&#34; を渡して GreetUser を呼び出す
+    GreetUser(name2) &#39; &#34;佐藤さん、こんにちは！&#34; と表示される
+End Sub</code></pre></div>
+<p>このように引数を使うことで、同じプロシージャでも渡す情報を変えるだけで、異なる動作をさせることが可能になります。まるで、レシピ（プロシージャ）は同じでも、使う材料（引数）を変えることで、出来上がる料理（結果）が変わるようなものです。これにより、プロシージャの再利用性が格段に向上します。</p>
+
+<p>承知いたしました。それでは、「第6章：ユーザーインターフェース入門 (Windows Forms)」を作成します。これまでの章では、プログラムの内部的な動きを中心に学んできましたが、この章ではユーザー（利用者）が直接触れる「画面」の部分、つまりユーザーインターフェース（UI）の作り方の基本を学びます。VB.NETが得意とする分野の一つです。</p>
+
+<hr />
+
+<h2 id="ユーザーインターフェース">ユーザーインターフェース</h2>
+
+<p>コンピュータープログラムの多くは、人間が操作するための「顔」を持っています。それが「ユーザーインターフェース（UI）」です。私たちが普段、マウスでボタンをクリックしたり、キーボードで文字を入力したりする画面は、すべてUIの一部です。</p>
+
+<p>VB.NETは、特にWindows上で動作するアプリケーションのUIを簡単に作成するための機能「Windows Forms」を備えています。この章では、Windows Formsを使って、ユーザーが操作できる画面を作成する基本的な方法を学びましょう。まるで、アプリケーションの「顔」や「操作パネル」をデザインしていくような作業です。</p>
+
+<p><strong>1. フォーム - アプリケーションの顔</strong></p>
+
+<p>Windows Formsアプリケーションの中心となるのが「フォーム」です。これは、<strong>アプリケーションのメインとなるウィンドウそのもの</strong>を指します。第1章でプロジェクトを作成した際、最初に表示された空の長方形のウィンドウが、まさにこのフォームです。</p>
+
+<p>フォームは、ボタンやテキストボックスといった、後述する様々な「コントロール」を配置するための土台（キャンバスや舞台のようなもの）となります。アプリケーションの見た目の基礎であり、ユーザーが最初に目にする部分です。</p>
+
+<p><strong>2. コントロール - 画面の部品</strong></p>
+
+<p>フォームという土台の上に、ユーザーが操作したり情報を得たりするための様々な「部品」を配置します。これらの部品を「コントロール」と呼びます。Visual Studioの「ツールボックス」には、あらかじめ用意された多種多様なコントロールが格納されています。</p>
+
+<ul>
+<li><strong>ツールボックスからの配置:</strong>
+
+<ul>
+<li>Visual Studioの左側にある「ツールボックス」ウィンドウ（表示されていなければ、メニューの「表示」&gt;「ツールボックス」）から、使いたいコントロール（例: <code>Button</code>）を選びます。</li>
+<li>選んだコントロールを、フォームの上にドラッグ＆ドロップします。</li>
+<li>これで、フォーム上にコントロールが配置されます。まるで、部屋に家具を配置したり、車のダッシュボードに計器を取り付けたりするような感覚です。</li>
+</ul></li>
+</ul>
+
+<p><strong>よく使う基本的なコントロール:</strong></p>
+
+<ul>
+<li><strong>Button (ボタン):</strong> ユーザーがクリックすることで、特定の処理を開始させるためのコントロールです。「実行」「キャンセル」「保存」など、操作のきっかけとして使われます。</li>
+<li><strong>Label (ラベル):</strong> 固定的なテキスト（説明文、項目名など）を表示するためのコントロールです。ユーザーは通常、このテキストを直接編集できません。案内表示や名札のような役割です。</li>
+<li><strong>TextBox (テキストボックス):</strong> ユーザーがキーボードから文字を入力したり、プログラムが表示する編集可能なテキストを表示したりするためのコントロールです。名前や住所の入力欄、メモ帳の入力エリアなどがこれにあたります。</li>
+</ul>
+
+<p>これら以外にも、チェックボックス、ラジオボタン、リストボックス、画像表示用コントロールなど、様々なコントロールが用意されており、これらを組み合わせることで、多機能な画面を作成することができます。</p>
+
+<p><strong>3. プロパティ - 部品の設定</strong></p>
+
+<p>フォームや、その上に配置したコントロール（ボタン、ラベル、テキストボックスなど）は、それぞれ<strong>見た目や動作に関する様々な「設定項目」</strong>を持っています。これを「プロパティ」と呼びます。</p>
+
+<p>例えば、ボタンに表示される文字、ラベルの文字色、テキストボックスのサイズなどを変更したい場合に、このプロパティを調整します。</p>
+
+<ul>
+<li><strong>プロパティウィンドウ:</strong>
+
+<ul>
+<li>Visual Studioの画面右下あたりにある「プロパティ」ウィンドウを使います。（表示されていなければ、メニューの「表示」&gt;「プロパティ ウィンドウ」）</li>
+<li>フォームやコントロールを選択した状態で、プロパティウィンドウを見ると、その選択されている要素が持つプロパティの一覧が表示されます。</li>
+<li>一覧から変更したいプロパティ（例: <code>Text</code>）を選び、右側の欄で値を変更します。</li>
+</ul></li>
+</ul>
+
+<p><strong>よく変更するプロパティの例:</strong></p>
+
+<ul>
+<li><strong><code>Text</code> プロパティ:</strong>
+
+<ul>
+<li>多くのコントロールで、表示されるテキストを設定します。ボタンの表示名 (<code>Button1</code> を <code>実行</code> に変えるなど)、ラベルの表示内容、フォームのウィンドウタイトルなどを変更できます。</li>
+</ul></li>
+<li><strong><code>Name</code> プロパティ:</strong>
+
+<ul>
+<li>コントロールをプログラムコードから識別するための「名前」です。デフォルトでは <code>Button1</code>, <code>TextBox1</code> のような名前が付きますが、<code>OkButton</code>, <code>UserNameTextBox</code> のように分かりやすい名前に変更することが推奨されます。（コードから操作する際に重要になります）</li>
+</ul></li>
+<li><strong><code>Size</code> プロパティ (または <code>Width</code>, <code>Height</code>):</strong>
+
+<ul>
+<li>コントロールの大きさを設定します。</li>
+</ul></li>
+<li><strong><code>Location</code> プロパティ (または <code>Top</code>, <code>Left</code>):</strong>
+
+<ul>
+<li>フォーム上のコントロールの位置を設定します。</li>
+</ul></li>
+<li><strong><code>ForeColor</code> プロパティ:</strong>
+
+<ul>
+<li>文字の色を設定します。（例: ラベルの文字を赤くするなど）</li>
+</ul></li>
+<li><strong><code>BackColor</code> プロパティ:</strong>
+
+<ul>
+<li>背景色を設定します。</li>
+</ul></li>
+</ul>
+
+<p>プロパティは、まるで電化製品の設定メニューのように、部品の細かい仕様を調整するためのものです。これを使いこなすことで、見た目を整えたり、使いやすいように動作をカスタマイズしたりできます。</p>
+
+<p><strong>4. イベント - 何かが起きたとき</strong></p>
+
+<p>ユーザーインターフェースを持つアプリケーションでは、<strong>ユーザーの操作（ボタンのクリック、キーボード入力など）やシステムの状態変化に応じて、特定の処理を実行する</strong>必要があります。このような「出来事」を「イベント」と呼びます。そして、そのイベントが発生したときに実行される処理のことを「イベントハンドラ」と呼びます。</p>
+
+<ul>
+<li><strong>例: ボタンのクリックイベント:</strong>
+
+<ul>
+<li>ユーザーがボタンをクリックする → <code>Click</code> イベントが発生する → 対応するイベントハンドラ（特定のSubプロシージャ）が実行される。</li>
+<li>第2章の「Hello, World!」で <code>Button1</code> をダブルクリックして作成した <code>Button1_Click</code> というSubプロシージャが、まさにこのイベントハンドラです。</li>
+</ul></li>
+</ul>
+
+<p><strong>イベントハンドラの作成方法:</strong></p>
+
+<p>最も簡単な方法は、フォームデザイナー上で<strong>イベントを発生させたいコントロール（例: Button）をダブルクリックする</strong>ことです。Visual Studioが自動的に、そのコントロールの最も代表的なイベント（ボタンなら <code>Click</code> イベント）に対応するイベントハンドラのひな形をコードエディタ上に作成してくれます。</p>
+
+<p><strong>簡単な例：テキストボックスの内容をラベルに表示する</strong></p>
+
+<ol>
+<li>フォームに <code>TextBox</code> を1つ (<code>TextBox1</code>)、<code>Button</code> を1つ (<code>Button1</code>)、<code>Label</code> を1つ (<code>Label1</code>) 配置します。</li>
+<li><code>Button1</code> の <code>Text</code> プロパティを「表示」に変更します。</li>
+<li><code>Label1</code> の <code>Text</code> プロパティを空にしておきます。</li>
+<li>フォームデザイナーで <code>Button1</code> をダブルクリックします。コードエディタに <code>Button1_Click</code> イベントハンドラが作成されます。</li>
+<li><code>Button1_Click</code> の中に、以下のコードを記述します。</li>
+</ol>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    &#39; TextBox1 に入力されたテキストを Label1 に表示する
+    Label1.Text = TextBox1.Text
+End Sub</code></pre></div>
+<ul>
+<li><strong>解説:</strong>
+
+<ul>
+<li><code>TextBox1.Text</code> : <code>TextBox1</code> という名前のテキストボックスが持つ <code>Text</code> プロパティ（現在入力されているテキスト）を取得します。</li>
+<li><code>Label1.Text = ...</code> : <code>Label1</code> という名前のラベルが持つ <code>Text</code> プロパティに、右辺の値（ここでは <code>TextBox1</code> から取得したテキスト）を設定（代入）します。</li>
+</ul></li>
+</ul>
+
+<p>これで、プログラムを実行し、テキストボックスに何か文字を入力してから「表示」ボタンをクリックすると、入力した文字がラベルに表示されるようになります。</p>
+
+<p>イベントは、ユーザーの操作とプログラムの処理を結びつけるための「合図」や「きっかけ」のようなものです。この仕組みを理解することが、対話的なアプリケーションを作成する上で非常に重要です。</p>
+
+<p>承知いたしました。それでは、「第7章：エラーへの対処 - 転ばぬ先の杖」を作成します。プログラムは常に思った通りに動くとは限りません。予期せぬ問題が発生することもあります。この章では、そのような「エラー」に備え、プログラムが突然停止してしまうのを防ぐための方法を学びます。</p>
+
+<h2 id="エラー処理">エラー処理</h2>
+
+<p>プログラムを作成し、実行していると、時には予期しない問題が発生することがあります。例えば、ユーザーが数字を入力すべきところに文字を入力してしまったり、存在しないファイルを開こうとしたり、計算中に0で割り算をしてしまったり… こういった予期せぬ状況によって、プログラムが処理を続けられなくなり、強制的に終了してしまうことがあります。これを一般的に「エラー」や「例外 (Exception)」と呼びます。</p>
+
+<p><strong>1. エラー（例外）とは？ - 予期せぬアクシデント</strong></p>
+
+<p>エラー（例外）は、<strong>プログラムの実行中に発生する、予期せぬ出来事や異常な状況</strong>のことです。まるで、平坦な道を歩いているときに、突然つまづいて転んでしまうようなものだと考えてください。転んだままだと先に進めませんよね？ プログラムも同じで、エラーが発生すると、通常はそこで処理を中断してしまいます。</p>
+
+<p><strong>なぜエラーに対処する必要があるの？</strong></p>
+
+<ul>
+<li><strong>プログラムの強制終了を防ぐ:</strong> エラーが発生しても、プログラムが突然落ちてしまうのを防ぎます。</li>
+<li><strong>ユーザーへの配慮:</strong> エラーが起きても、何が起こったのかをユーザーに分かりやすく伝えたり、代替の処理を行ったりすることで、ユーザーが困惑しないようにします。</li>
+<li><strong>データの保護:</strong> 処理の途中でエラーが発生した場合でも、それまでの作業内容が失われないように、安全な状態に保つための処理を行うことができます。</li>
+</ul>
+
+<p>エラーに備えておくことは、<strong>「転ばぬ先の杖」</strong>のようなものです。事前に準備しておくことで、万が一問題が発生しても、慌てず、適切に対処できるようになります。</p>
+
+<p><strong>2. Try&hellip;Catch構文 - エラーを捕まえる安全ネット</strong></p>
+
+<p>VB.NETでは、エラーが発生する可能性のある処理を安全に実行するための仕組みとして、「<code>Try...Catch</code>構文」が用意されています。これは、エラーという名の<strong>「落ちてくるボール」をしっかりと受け止める（Catchする）ための「安全ネット（Tryブロック）」</strong>のようなものです。</p>
+
+<p><strong>基本的な使い方:</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">Try
+    &#39; ■ エラーが発生する可能性のある処理をここに書く
+    &#39;   (例: ユーザー入力を数値に変換する、ファイルを開くなど)
+    Dim userInput As String = TextBox1.Text
+    Dim number As Integer = Integer.Parse(userInput) &#39; ← 文字列を数値に変換しようとする (エラーの可能性あり)
+
+    MessageBox.Show(&#34;入力された数値は &#34; &amp; number &amp; &#34; です。&#34;)
+
+Catch ex As Exception
+    &#39; ■ Tryブロック内でエラーが発生した場合に、実行される処理をここに書く
+    &#39;   (例: エラーメッセージを表示する、デフォルト値を設定するなど)
+    MessageBox.Show(&#34;エラーが発生しました！ 数字を入力してください。&#34;)
+    &#39; ex という変数には、発生したエラーの詳細情報が格納されています。
+    &#39; (例: MessageBox.Show(&#34;エラー内容: &#34; &amp; ex.Message))
+
+End Try
+&#39; Try...Catch ブロックの終わり</code></pre></div>
+<p><strong>考え方:</strong></p>
+
+<ol>
+<li><strong><code>Try</code> ブロック:</strong>
+
+<ul>
+<li>まず、エラーが発生するかもしれない処理を <code>Try</code> と <code>Catch</code> の間に記述します。VB.NETは、このブロック内の処理を「監視」します。</li>
+</ul></li>
+<li><strong><code>Catch ex As Exception</code> ブロック:</strong>
+
+<ul>
+<li>もし <code>Try</code> ブロック内でエラーが発生すると、プログラムは即座に <code>Catch</code> ブロックにジャンプします。エラーが発生しなかった場合は、<code>Catch</code> ブロックは無視され、<code>End Try</code> の次の行に進みます。</li>
+<li><code>Catch</code> ブロックの中には、エラーが発生したときに行いたい処理（エラーメッセージの表示、ログの記録、処理の中止など）を記述します。</li>
+<li><code>ex As Exception</code> の部分は、「発生したエラー（Exception）に関する情報を <code>ex</code> という名前の変数に入れてください」という意味です。<code>ex.Message</code> のようにすることで、具体的なエラー内容を取得できます。</li>
+</ul></li>
+<li><strong><code>End Try</code>:</strong>
+
+<ul>
+<li><code>Try...Catch</code> 構文の終わりを示します。</li>
+</ul></li>
+</ol>
+
+<p><strong>具体例：数値変換エラーへの対処</strong></p>
+
+<p>前の章の例で、テキストボックスに入力された内容をラベルに表示するものがありました。もし、テキストボックスの内容を数値として扱いたい場合、<code>Integer.Parse()</code> などを使って変換しますが、ユーザーが &ldquo;abc&rdquo; のような文字を入力していたらエラーになります。<code>Try...Catch</code> を使うと、これを安全に処理できます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">Private Sub ConvertButton_Click(sender As Object, e As EventArgs) Handles ConvertButton.Click
+    Dim result As Integer
+
+    Try
+        &#39; TextBox1 の内容を整数に変換しようと試みる
+        result = Integer.Parse(TextBox1.Text)
+        MessageBox.Show(&#34;変換成功！数値: &#34; &amp; result)
+
+    Catch ex As Exception
+        &#39; 変換に失敗した場合 (例: &#34;abc&#34; などが入力された)
+        MessageBox.Show(&#34;エラー: 数値を入力してください。&#34; &amp; vbCrLf &amp; &#34;詳細: &#34; &amp; ex.Message)
+        &#39; vbCrLf は改行を意味します
+        result = 0 &#39; エラーの場合はデフォルト値 0 を設定するなど
+
+    End Try
+
+    &#39; エラーがあってもなくても、その後の処理は続けられる
+    Label1.Text = &#34;最終的な値: &#34; &amp; result
+
+End Sub</code></pre></div>
+<p>このコードでは、もし <code>Integer.Parse()</code> でエラーが発生しても、<code>Catch</code> ブロックでエラーメッセージが表示され、プログラムは停止しません。そして、<code>result</code> にはデフォルト値の <code>0</code> が設定され、その後の処理（ラベルへの表示）も実行されます。</p>
+
+<p><strong>3. Finallyブロック - 後片付けは必ず行う</strong></p>
+
+<p><code>Try...Catch</code>構文には、オプションとして <code>Finally</code> ブロックを追加することもできます。<code>Finally</code> ブロックに書かれた処理は、<strong><code>Try</code> ブロックでエラーが発生したかどうかに関わらず、必ず最後に実行されます</strong>。</p>
+
+<p>これは、例えばファイルを開いたり、データベースに接続したりした場合に、処理が正常に終わっても、エラーが発生しても、<strong>必ず最後にファイルを閉じたり、接続を切断したりする</strong>といった「後片付け」を行いたい場合に非常に便利です。</p>
+
+<p><strong><code>Finally</code> を含めた構文:</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">Try
+    &#39; エラーが発生する可能性のある処理
+Catch ex As Exception
+    &#39; エラーが発生した場合の処理
+Finally
+    &#39; ■ エラーの有無に関わらず、必ず最後に実行したい処理 (後片付けなど)
+End Try</code></pre></div>
+<p><strong>エラー処理の心構え:</strong></p>
+
+<p>完璧なプログラムを書くことは非常に難しいものです。ユーザーが予期しない操作をしたり、外部の環境（ネットワークなど）が原因でエラーが発生したりすることもあります。重要なのは、「エラーは起こりうるもの」と想定し、<code>Try...Catch</code> などを活用して、<strong>プログラムが予期せぬ状況に陥っても、できるだけ安定して動作し続けるように、あるいは安全に終了できるように設計すること</strong>です。</p>
+
+<h2 id="付録">付録</h2>
+
+<h3 id="デバッグのヒント-プログラムの間違い探しと修正">デバッグのヒント - プログラムの間違い探しと修正</h3>
+
+<p>プログラムを書いていると、残念ながら、意図した通りに動かないことや、エラーが発生してしまうことがよくあります。これは経験豊富なプログラマーでも同じです。大切なのは、これらの「間違い（バグ）」を効率的に見つけ出し、修正する方法を知っておくことです。この作業を「デバッグ」と呼びます。デバッグは、まるで探偵が事件の真相を突き止めるように、あるいは機械の故障箇所を見つけて修理するように、原因を特定し解決していくプロセスです。</p>
+
+<p><strong>1. 簡単なエラーの見つけ方</strong></p>
+
+<p>エラーには大きく分けて二つの種類があります。</p>
+
+<ul>
+<li><strong>コンパイルエラー（文法エラー）:</strong>
+
+<ul>
+<li>プログラムを実行する<strong>前</strong>に、Visual Studioが見つけてくれるエラーです。これは、VB.NETの文法ルール（書き方の決まり）に従っていない場合に発生します。例えば、キーワードのスペルミス、必要なカッコの閉じ忘れなどです。</li>
+<li><strong>見つけ方:</strong> Visual Studioのコードエディタでは、文法的に間違っている箇所に<strong>赤い波線</strong>が表示されます。また、画面下部の「エラー一覧」ウィンドウにも、エラーの内容と発生箇所が表示されます。これは、文章を書いていて漢字や文法の間違いを指摘されるようなものです。これらの指摘に従って修正すれば、プログラムを実行できるようになります。</li>
+</ul></li>
+<li><strong>ランタイムエラー（実行時エラー）:</strong>
+
+<ul>
+<li>プログラムを実行している<strong>最中</strong>に発生するエラーです。文法は合っているけれど、実行時の状況（例：ユーザーが予期しない値を入力した、計算結果が不正になった、ファイルが見つからないなど）によって処理が続けられなくなる場合に発生します。第7章で学んだ <code>Try...Catch</code> は、主にこのランタイムエラーに対処するためのものです。</li>
+<li>また、エラーとしてプログラムが停止はしないものの、<strong>期待した結果と違う動きをする</strong>場合もあります。これも広い意味での「バグ」であり、デバッグが必要になります。（例：計算結果が合わない、ボタンを押しても何も起こらないなど）</li>
+</ul></li>
+</ul>
+
+<p><strong>2. 修正方法の基本</strong></p>
+
+<p>エラーを見つけたら、次は修正です。</p>
+
+<ul>
+<li><strong>エラーメッセージを読む:</strong> Visual Studioが表示するエラーメッセージは、問題解決の最大のヒントです。最初は難しく感じるかもしれませんが、「どのような種類のエラー」が「どこで」発生したのか、注意深く読んでみましょう。多くの場合、原因を特定する手がかりが書かれています。</li>
+<li><strong>コードを見直す:</strong> エラーが発生した箇所や、その周辺のコードを注意深く読み返し、処理の流れや変数の値が意図通りになっているかを確認します。特に、変数名の打ち間違い、計算式の誤り、<code>If</code>文の条件の勘違いなどがないかチェックしましょう。</li>
+<li><strong>少しずつ試す:</strong> 問題が複雑な場合は、関連するコードを少しずつ実行したり、一時的に簡単な処理に置き換えたりして、問題箇所を特定していきます。</li>
+</ul>
+
+<p><strong>3. Visual Studioのデバッグ機能（ブレークポイントなど）</strong></p>
+
+<p>Visual Studioには、ランタイムエラーや期待通りに動かない原因を探るための強力なデバッグ機能が備わっています。中でも「ブレークポイント」は非常に便利です。</p>
+
+<ul>
+<li><strong>ブレークポイント (Breakpoint):</strong>
+
+<ul>
+<li><strong>機能:</strong> プログラムの実行を、指定した行で<strong>一時停止</strong>させる機能です。料理のレシピの途中に付箋を貼っておき、その箇所で一度手を止めて確認するようなイメージです。</li>
+<li><strong>設定方法:</strong> コードエディタの左端の灰色の余白部分をクリックします。すると、赤い丸が表示され、その行にブレークポイントが設定されます。もう一度クリックすると解除できます。</li>
+<li><strong>使い方:</strong> ブレークポイントを設定した状態でプログラムを実行（F5キーまたは「開始」ボタン）すると、処理がその行に到達した時点で一時停止します。</li>
+</ul></li>
+<li><strong>ステップ実行 (Stepping):</strong>
+
+<ul>
+<li>プログラムがブレークポイントで一時停止している状態で、<strong>一行ずつ</strong>処理を進めることができます。これにより、処理の流れを詳細に追跡できます。</li>
+<li><strong>主なキー:</strong>
+
+<ul>
+<li><code>F10</code> (ステップ オーバー): 現在の行を実行し、次の行で停止します。もし現在の行がプロシージャ呼び出しの場合、そのプロシージャの中には入らずに、プロシージャ全体の実行が終わった後に停止します。</li>
+<li><code>F11</code> (ステップ イン): 現在の行を実行し、次の行で停止します。もし現在の行が自作のプロシージャ呼び出しの場合、その<strong>プロシージャの中に移動して</strong>一行目で停止します。</li>
+</ul></li>
+<li>料理のレシピを一行ずつ指差し確認しながら進めるような感覚です。</li>
+</ul></li>
+<li><strong>変数の中身を見る (Inspecting Variables):</strong>
+
+<ul>
+<li>プログラムが一時停止しているときに、<strong>変数が現在どのような値を持っているか</strong>を確認できます。</li>
+<li><strong>確認方法:</strong>
+
+<ul>
+<li>マウスカーソルをコード上の変数名に合わせる（ホバーする）と、現在の値がポップアップ表示されます。</li>
+<li>Visual Studioの下部にある「ローカル」ウィンドウや「ウォッチ」ウィンドウを使うと、その時点で有効な変数の一覧や、特定の変数の値を常に監視することができます。</li>
+</ul></li>
+<li>レシピの途中で、材料が正しく計量されているか、調理中の温度は適切かなどを確認する作業に似ています。</li>
+</ul></li>
+</ul>
+
+<p><strong>デバッグのヒント:</strong></p>
+
+<ul>
+<li><strong>焦らない:</strong> デバッグはプログラミングの一部です。エラーが出るのは当たり前と考え、落ち着いて原因を探しましょう。</li>
+<li><strong>原因を仮定して試す:</strong> 「もしかしたら、この変数の値がおかしいのでは？」のように原因を推測し、ブレークポイントや変数の確認で、その仮説が正しいか検証してみましょう。</li>
+<li><strong>コメントアウトを活用する:</strong> 原因と思われる箇所を一時的にコメントアウト（行頭に <code>'</code> を付ける）して実行し、エラーが出なくなるか、動作が変わるかを確認するのも有効な手段です。</li>
+</ul>
+
+<p>デバッグ作業は、地道ですが非常に重要なスキルです。Visual Studioのデバッグ機能を使いこなし、効率的に問題解決ができるようになりましょう。</p>
+
+<h2 id="用語集">用語集</h2>
+
+<p>このマニュアルで使用された主な専門用語について、簡単な解説を記載します。</p>
+
+<ul>
+<li><strong>Visual Basic .NET (VB.NET):</strong>
+マイクロソフト社が開発したプログラミング言語の一つ。特にWindowsアプリケーションの作成に適しており、比較的読み書きしやすい構文が特徴です。「VB」と略されることもあります。</li>
+<li><strong>.NET (ドットネット):</strong>
+マイクロソフトが提供する、ソフトウェア開発・実行のための大きな基盤（プラットフォーム）。様々な機能（クラスライブラリと呼ばれる部品集など）を提供し、VB.NETなどの言語はこの上で動作します。開発を助ける巨大な道具箱や作業場のようなイメージです。</li>
+<li><strong>Visual Studio (ヴィジュアル スタジオ):</strong>
+マイクロソフト社が提供する統合開発環境（IDE）。コードの記述、画面デザイン、デバッグ（間違い探し）など、プログラム開発に必要なツールが一つにまとまった高機能なソフトウェアです。プログラマーの万能作業台と言えます。</li>
+<li><strong>IDE (統合開発環境 - Integrated Development Environment):</strong>
+プログラム開発に必要なツール（エディタ、コンパイラ、デバッガなど）を一つにまとめて提供するソフトウェアのこと。Visual StudioはIDEの一種です。</li>
+<li><strong>プロジェクト (Project):</strong>
+Visual Studioで一つのアプリケーション（ソフトウェア）を作成するための、ファイル（設計図、コード、画面デザインなど）一式をまとめた管理単位です。</li>
+<li><strong>ソリューション エクスプローラー (Solution Explorer):</strong>
+Visual Studioのウィンドウの一つ。プロジェクトに含まれるファイルやフォルダを一覧表示し、管理するためのものです。プロジェクト全体の目次やファイル棚のような役割を果たします。</li>
+<li><strong>プロパティ ウィンドウ (Properties Window):</strong>
+Visual Studioのウィンドウの一つ。選択している要素（フォームやコントロールなど）の様々な設定項目（プロパティ）を一覧表示し、変更するためのものです。部品の設定パネルのようなイメージです。</li>
+<li><strong>コード エディター (Code Editor):</strong>
+Visual Studio内でプログラムのコード（指示書）を記述するためのテキストエディタ機能です。</li>
+<li><strong>ツールボックス (Toolbox):</strong>
+Visual Studioのウィンドウの一つ。フォーム上に配置できるボタンやテキストボックスなどの部品（コントロール）が格納されています。ここからドラッグ＆ドロップで部品を配置します。</li>
+<li><strong>Windows Forms (ウィンドウズ フォーム):</strong>
+VB.NETなどでWindowsアプリケーションの画面（ユーザーインターフェース）を作成するための技術の一つ。フォームやコントロールを使って画面をデザインします。</li>
+<li><strong>フォーム (Form):</strong>
+Windows Formsアプリケーションの基本となるウィンドウのこと。コントロールを配置する土台となります。</li>
+<li><strong>コントロール (Control):</strong>
+フォーム上に配置するボタン、ラベル、テキストボックスなどの部品のこと。ユーザーが操作したり、情報を表示したりするために使います。</li>
+<li><strong>プロパティ (Property):</strong>
+フォームやコントロールが持つ設定項目のこと。色、サイズ、表示テキスト、名前など、様々な要素をプロパティで設定・変更できます。</li>
+<li><strong>イベント (Event):</strong>
+プログラム実行中に発生する「出来事」のこと。ユーザー操作（ボタンのクリックなど）やシステムの状態変化などがイベントとして扱われます。</li>
+<li><strong>イベントハンドラ (Event Handler):</strong>
+特定のイベントが発生したときに実行されるように、あらかじめ用意しておく処理（Subプロシージャなど）のこと。イベントに対する「応答係」のようなものです。</li>
+<li><strong>プログラム (Program):</strong>
+コンピューターに対する一連の指示を記述したもの。ソフトウェアとも呼ばれます。</li>
+<li><strong>コード (Code):</strong>
+プログラミング言語（VB.NETなど）で記述された、プログラムの具体的な指示内容のこと。ソースコードとも呼ばれます。</li>
+<li><strong>変数 (Variable):</strong>
+データ（数値や文字など）を一時的に記憶しておくための、名前が付いた入れ物（メモリ領域）のこと。データを入れるための「名前付きの箱」と考えると分かりやすいです。</li>
+<li><strong>宣言 (Declaration):</strong>
+プログラム中で変数やプロシージャなどを使う前に、その名前やデータ型などをあらかじめ定義すること。VB.NETでは主に <code>Dim</code> を使って変数を宣言します。</li>
+<li><strong>代入 (Assignment):</strong>
+変数に具体的な値（データ）を入れる操作のこと。VB.NETでは <code>=</code> 記号を使います。</li>
+<li><strong>データ型 (Data Type):</strong>
+変数が扱うデータの種類（整数、文字列、小数など）のこと。<code>Integer</code>, <code>String</code>, <code>Double</code> などがあります。変数という「箱」の種類を指定するものです。</li>
+<li><strong>演算子 (Operator):</strong>
+計算（<code>+</code>, <code>-</code> など）や比較（<code>=</code>, <code>&gt;</code> など）、論理演算（<code>And</code>, <code>Or</code>）を行うための記号やキーワードのこと。</li>
+<li><strong>コメント (Comment):</strong>
+プログラムコードの中に記述する、人間向けの注釈や説明文のこと。コードの動作には影響しません。VB.NETでは <code>'</code> (シングルクォーテーション) の後に記述します。</li>
+<li><strong>条件分岐 (Conditional Branching):</strong>
+プログラムの実行中に、特定の条件が満たされているかどうかに応じて、実行する処理の流れを分けること。<code>If</code> 文を使います。</li>
+<li><strong>If文 (If Statement):</strong>
+条件分岐を行うための構文。<code>If...Then...Else...End If</code> の形で使われます。</li>
+<li><strong>繰り返し処理 (Looping):</strong>
+特定の処理を何度も繰り返し実行すること。ループとも言います。</li>
+<li><strong>Forループ (For Loop):</strong>
+主に、決まった回数だけ処理を繰り返すための構文。<code>For...Next</code> の形で使われます。</li>
+<li><strong>Doループ (Do Loop):</strong>
+主に、特定の条件が満たされるまで、または満たされている間、処理を繰り返すための構文。<code>Do Until...Loop</code> や <code>Do While...Loop</code> があります。</li>
+<li><strong>プロシージャ (Procedure):</strong>
+特定の目的を持つ一連の処理をひとまとめにし、名前を付けたもの。コードの再利用性を高め、整理するために使います。<code>Sub</code> と <code>Function</code> があります。</li>
+<li><strong>Subプロシージャ (Sub Procedure):</strong>
+一連の処理を実行するだけで、値を返さないタイプのプロシージャ。</li>
+<li><strong>Functionプロシージャ (Function Procedure):</strong>
+一連の処理を実行し、その結果として特定の値を返す（戻り値を持つ）タイプのプロシージャ。</li>
+<li><strong>戻り値 (Return Value):</strong>
+Functionプロシージャが処理を実行した結果として、呼び出し元に返す値のこと。</li>
+<li><strong>引数 (Argument / Parameter):</strong>
+プロシージャを呼び出す際に、外部からそのプロシージャに渡す情報（データ）のこと。プロシージャの動作をカスタマイズするために使います。</li>
+<li><strong>エラー (Error) / 例外 (Exception):</strong>
+プログラムの実行中に発生する予期せぬ問題や異常な状況のこと。これによりプログラムが停止することがあります。</li>
+<li><strong>Try&hellip;Catch構文:</strong>
+エラー（例外）が発生する可能性のある処理を安全に実行し、エラー発生時に特定の処理を行うための構文。プログラムの安定性を高めます。</li>
+<li><strong>デバッグ (Debug):</strong>
+プログラムに含まれる間違い（バグ）を見つけ出し、修正する作業のこと。</li>
+<li><strong>バグ (Bug):</strong>
+プログラムの中に潜んでいる間違いや欠陥のこと。</li>
+<li><strong>ブレークポイント (Breakpoint):</strong>
+デバッグ中に、プログラムの実行を指定した行で一時停止させるための目印。</li>
+</ul>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://learn.microsoft.com/ja-jp/dotnet/">.NET ドキュメント</a></li>
+<li><a href="https://learn.microsoft.com/ja-jp/dotnet/visual-basic/language-reference/">Visual Basic 言語リファレンス</a></li>
+<li><a href="https://learn.microsoft.com/ja-jp/dotnet/desktop/winforms/">Windows Forms ドキュメント</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
