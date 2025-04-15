@@ -4,28 +4,24 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Pythonやライブラリの非推奨あるいは非主流なコード - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta property="og:title" content="Pythonやライブラリの非推奨あるいは非主流なコード" />
-<meta property="og:description" content=" 概要 Pythonやそのライブラリを含む他の要素においても、バージョンアップが行われるたびに、これまでの書き方が非推奨とされるケースが相当あります。ただし、インターネット上には古いコードや非推奨の情報が存在しています。それが非推奨であるということを知らない場合には、新しい書き方があるにもかかわらず古い書き方を使用してしまうケースが考えられます。
+<meta property="og:description" content="概要 Pythonやそのライブラリを含む他の要素においても、バージョンアップが行われるたびに、これまでの書き方が非推奨とされるケースが相当あります。ただし、インターネット上には古いコードや非推奨の情報が存在しています。それが非推奨であるということを知らない場合には、新しい書き方があるにもかかわらず古い書き方を使用してしまうケースが考えられます。
 「この書き方は何だ？見たことないぞ」と思って調査してみると、現在では非推奨になった昔ながらの書き方だったりすることがあります。時間を費やして調査した結果、それが非推奨だったりすると困るわけです。ムダな時間を省くためにも、そのような「現在は使えない、または将来的に使えなくなる（非推奨）」の書き方についてメモします。
 とはいえ、気付いた時に追記する予定ですので、増えすぎることはないでしょう。
-Pythonや標準ライブラリ関連 書式化演算子%を使った文字列の書式設定 文字列のフォーマットを定義する際、format()やf文字列を使った記法が現在の主流です。ただ、C言語のprintf()に準拠したような演算子を使った記法で表現する方法もあります。
-&gt;&gt;&gt; num = 100 &gt;&gt;&gt; print(&#39;%sis %din decimal and 0x%xin hexadecimal.&#39; % (num, num, num)) 100 is 100 in decimal and 0x64 in hexadecimal. C言語のprintf()では、任意の文字列において「値を出力する位置にどんな型で出力するか」をパーセント付の識別子で表現します。%sだった場合、文字列を指定された箇所に出力する、といった具合です。この記法がPythonでも使えます。
-ただ、「せっかく動的型付け言語なのに、文字列編集をするときに型を気にしないといけないのは面倒だぜ！」と思ったのかはわかりませんが、前述のとおりformat()関数などを使った表現方法が今は主流だと思います。
- 書式化演算子%を使った文字列の書式設定(printf形式の書式化) Python♪「% 演算子」を使った古い文字列書式設定  ライブラリ関連 pandas pandasからNumPyの関数などを使うpd.np pandasをインポートすると、同時にNumPyもインポートされます。このとき、pd.npという書き方をすることで明示的にNumPyをインポートしていなくてもNumPyが持つ機能にアクセスできるようになります。import numpyを書かなくてもいいという、メリット？うーん、メリットかなぁこれ。
-import pandas as pd hoge = pd.np.arange(10) print(pd.np.pi) 上記のように、pandasしかインポートしてなくてもNumPyが使えるようになります。というか、なりました。ただ、NumPyの関数などを使うならちゃんとインポートした方がコードの保守性が高いと思われたのか、現在では非推奨です。そのうち、この機能が削除されると思います。
- pandasからNumPyの関数などを使う方法（pd.np） What’s new in 1.0.0 (January 29, 2020) - Deprecations Import both Pandas and Numpy?  " />
+書式化演算子%を使った文字列の書式設定 文字列のフォーマットを定義する際、format()やf文字列を使った記法が現在の主流です。ただ、C言語のprintf()に準拠したような演算子を使った記法で表現する方法もあります。
+古い方法: 書式化演算子 % name = &#34;山田&#34; age = 30 print(&#34;私の名前は%sで、%d歳です。&#34; % (name, age)) 現在の主流: f-strings (Python 3.6以降) name = &#34;山田&#34; age = 30 print(f&#34;私の名前は{name}で、{age}歳です。&#34;) こちらも現役: str.format() name = &#34;山田&#34; age = 30 print(&#34;私の名前は{}で、{}歳です。&#34;.format(name, age)) C言語のprintf()では、任意の文字列において「値を出力する位置にどんな型で出力するか」をパーセント付の識別子で表現します。%sだった場合、文字列を指定された箇所に出力する、といった具合です。この記法がPythonでも使えます。
+ただ、「せっかく動的型付け言語なのに、文字列編集をするときに型を気にしないといけないのは面倒だぜ！」と思ったのかはわかりませんが、前述のとおりf-stringsが主流だと思います。こっちは読みやすく、式の評価もサポートしているため、f&quot;結果: {2 * 3}&quot;のように直接計算結果を埋め込むことができます。format()関数も一応見かけますね、%ほどは廃れていない印象。
+ファイルの操作 古い方法: 明示的なクローズ f = open(&#34;example.txt&#34;, &#34;r&#34;) content = f.read() f.close() # 忘れると問題が発生する可能性あり 現在の主流: with文（コンテキストマネージャ） with open(&#34;example.txt&#34;, &#34;r&#34;) as f: content = f.read() # 自動的にクローズされる withはそのブロックを抜けるときに、closeメソッドを勝手に呼び出してクローズしてくれるので、クローズ忘れがなくなりますしコードも読みやすくなります。しかし、withには更なる利点があります。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ysko909.github.io/posts/deprecations-in-python-and-libs/" /><meta property="article:published_time" content="2023-06-28T19:45:51&#43;09:00"/>
 <meta property="article:modified_time" content="2023-06-28T19:45:51&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Pythonやライブラリの非推奨あるいは非主流なコード"/>
-<meta name="twitter:description" content=" 概要 Pythonやそのライブラリを含む他の要素においても、バージョンアップが行われるたびに、これまでの書き方が非推奨とされるケースが相当あります。ただし、インターネット上には古いコードや非推奨の情報が存在しています。それが非推奨であるということを知らない場合には、新しい書き方があるにもかかわらず古い書き方を使用してしまうケースが考えられます。
+<meta name="twitter:description" content="概要 Pythonやそのライブラリを含む他の要素においても、バージョンアップが行われるたびに、これまでの書き方が非推奨とされるケースが相当あります。ただし、インターネット上には古いコードや非推奨の情報が存在しています。それが非推奨であるということを知らない場合には、新しい書き方があるにもかかわらず古い書き方を使用してしまうケースが考えられます。
 「この書き方は何だ？見たことないぞ」と思って調査してみると、現在では非推奨になった昔ながらの書き方だったりすることがあります。時間を費やして調査した結果、それが非推奨だったりすると困るわけです。ムダな時間を省くためにも、そのような「現在は使えない、または将来的に使えなくなる（非推奨）」の書き方についてメモします。
 とはいえ、気付いた時に追記する予定ですので、増えすぎることはないでしょう。
-Pythonや標準ライブラリ関連 書式化演算子%を使った文字列の書式設定 文字列のフォーマットを定義する際、format()やf文字列を使った記法が現在の主流です。ただ、C言語のprintf()に準拠したような演算子を使った記法で表現する方法もあります。
-&gt;&gt;&gt; num = 100 &gt;&gt;&gt; print(&#39;%sis %din decimal and 0x%xin hexadecimal.&#39; % (num, num, num)) 100 is 100 in decimal and 0x64 in hexadecimal. C言語のprintf()では、任意の文字列において「値を出力する位置にどんな型で出力するか」をパーセント付の識別子で表現します。%sだった場合、文字列を指定された箇所に出力する、といった具合です。この記法がPythonでも使えます。
-ただ、「せっかく動的型付け言語なのに、文字列編集をするときに型を気にしないといけないのは面倒だぜ！」と思ったのかはわかりませんが、前述のとおりformat()関数などを使った表現方法が今は主流だと思います。
- 書式化演算子%を使った文字列の書式設定(printf形式の書式化) Python♪「% 演算子」を使った古い文字列書式設定  ライブラリ関連 pandas pandasからNumPyの関数などを使うpd.np pandasをインポートすると、同時にNumPyもインポートされます。このとき、pd.npという書き方をすることで明示的にNumPyをインポートしていなくてもNumPyが持つ機能にアクセスできるようになります。import numpyを書かなくてもいいという、メリット？うーん、メリットかなぁこれ。
-import pandas as pd hoge = pd.np.arange(10) print(pd.np.pi) 上記のように、pandasしかインポートしてなくてもNumPyが使えるようになります。というか、なりました。ただ、NumPyの関数などを使うならちゃんとインポートした方がコードの保守性が高いと思われたのか、現在では非推奨です。そのうち、この機能が削除されると思います。
- pandasからNumPyの関数などを使う方法（pd.np） What’s new in 1.0.0 (January 29, 2020) - Deprecations Import both Pandas and Numpy?  "/>
+書式化演算子%を使った文字列の書式設定 文字列のフォーマットを定義する際、format()やf文字列を使った記法が現在の主流です。ただ、C言語のprintf()に準拠したような演算子を使った記法で表現する方法もあります。
+古い方法: 書式化演算子 % name = &#34;山田&#34; age = 30 print(&#34;私の名前は%sで、%d歳です。&#34; % (name, age)) 現在の主流: f-strings (Python 3.6以降) name = &#34;山田&#34; age = 30 print(f&#34;私の名前は{name}で、{age}歳です。&#34;) こちらも現役: str.format() name = &#34;山田&#34; age = 30 print(&#34;私の名前は{}で、{}歳です。&#34;.format(name, age)) C言語のprintf()では、任意の文字列において「値を出力する位置にどんな型で出力するか」をパーセント付の識別子で表現します。%sだった場合、文字列を指定された箇所に出力する、といった具合です。この記法がPythonでも使えます。
+ただ、「せっかく動的型付け言語なのに、文字列編集をするときに型を気にしないといけないのは面倒だぜ！」と思ったのかはわかりませんが、前述のとおりf-stringsが主流だと思います。こっちは読みやすく、式の評価もサポートしているため、f&quot;結果: {2 * 3}&quot;のように直接計算結果を埋め込むことができます。format()関数も一応見かけますね、%ほどは廃れていない印象。
+ファイルの操作 古い方法: 明示的なクローズ f = open(&#34;example.txt&#34;, &#34;r&#34;) content = f.read() f.close() # 忘れると問題が発生する可能性あり 現在の主流: with文（コンテキストマネージャ） with open(&#34;example.txt&#34;, &#34;r&#34;) as f: content = f.read() # 自動的にクローズされる withはそのブロックを抜けるときに、closeメソッドを勝手に呼び出してクローズしてくれるので、クローズ忘れがなくなりますしコードも読みやすくなります。しかし、withには更なる利点があります。"/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
 
@@ -93,40 +89,122 @@ import pandas as pd hoge = pd.np.arange(10) print(pd.np.pi) 上記のように�
 
 <p>とはいえ、気付いた時に追記する予定ですので、増えすぎることはないでしょう。</p>
 
-<h2 id="pythonや標準ライブラリ関連">Pythonや標準ライブラリ関連</h2>
-
-<h3 id="書式化演算子-を使った文字列の書式設定">書式化演算子<code>%</code>を使った文字列の書式設定</h3>
+<h2 id="書式化演算子-を使った文字列の書式設定">書式化演算子<code>%</code>を使った文字列の書式設定</h2>
 
 <p>文字列のフォーマットを定義する際、<code>format()</code>や<code>f文字列</code>を使った記法が現在の主流です。ただ、C言語の<code>printf()</code>に準拠したような演算子を使った記法で表現する方法もあります。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">&gt;&gt;&gt; num = 100
-&gt;&gt;&gt; <span style="color:#00f">print</span>(<span style="color:#a31515">&#39;</span><span style="color:#a31515">%s</span><span style="color:#a31515"> is </span><span style="color:#a31515">%d</span><span style="color:#a31515"> in decimal and 0x</span><span style="color:#a31515">%x</span><span style="color:#a31515"> in hexadecimal.&#39;</span> % (num, num, num))
-100 <span style="color:#00f">is</span> 100 <span style="color:#00f">in</span> decimal <span style="color:#00f">and</span> 0x64 <span style="color:#00f">in</span> hexadecimal.</code></pre></div>
+
+<h3 id="古い方法-書式化演算子">古い方法: 書式化演算子 <code>%</code></h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">name = <span style="color:#a31515">&#34;山田&#34;</span>
+age = 30
+<span style="color:#00f">print</span>(<span style="color:#a31515">&#34;私の名前は</span><span style="color:#a31515">%s</span><span style="color:#a31515">で、</span><span style="color:#a31515">%d</span><span style="color:#a31515">歳です。&#34;</span> % (name, age))</code></pre></div>
+<h3 id="現在の主流-f-strings-python-3-6以降">現在の主流: f-strings (Python 3.6以降)</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">name = <span style="color:#a31515">&#34;山田&#34;</span>
+age = 30
+<span style="color:#00f">print</span>(f<span style="color:#a31515">&#34;私の名前は{name}で、{age}歳です。&#34;</span>)</code></pre></div>
+<h3 id="こちらも現役-str-format">こちらも現役: <code>str.format()</code></h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">name = <span style="color:#a31515">&#34;山田&#34;</span>
+age = 30
+<span style="color:#00f">print</span>(<span style="color:#a31515">&#34;私の名前は{}で、{}歳です。&#34;</span>.format(name, age))</code></pre></div>
 <p>C言語の<code>printf()</code>では、任意の文字列において「値を出力する位置にどんな型で出力するか」をパーセント付の識別子で表現します。<code>%s</code>だった場合、文字列を指定された箇所に出力する、といった具合です。この記法がPythonでも使えます。</p>
 
-<p>ただ、「せっかく動的型付け言語なのに、文字列編集をするときに型を気にしないといけないのは面倒だぜ！」と思ったのかはわかりませんが、前述のとおり<code>format()</code>関数などを使った表現方法が今は主流だと思います。</p>
+<p>ただ、「せっかく動的型付け言語なのに、文字列編集をするときに型を気にしないといけないのは面倒だぜ！」と思ったのかはわかりませんが、前述のとおりf-stringsが主流だと思います。こっちは読みやすく、式の評価もサポートしているため、<code>f&quot;結果: {2 * 3}&quot;</code>のように直接計算結果を埋め込むことができます。<code>format()</code>関数も一応見かけますね、<code>%</code>ほどは廃れていない印象。</p>
+
+<h2 id="ファイルの操作">ファイルの操作</h2>
+
+<h3 id="古い方法-明示的なクローズ">古い方法: 明示的なクローズ</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">f = open(<span style="color:#a31515">&#34;example.txt&#34;</span>, <span style="color:#a31515">&#34;r&#34;</span>)
+content = f.read()
+f.close()  <span style="color:#008000"># 忘れると問題が発生する可能性あり</span></code></pre></div>
+<h3 id="現在の主流-with文-コンテキストマネージャ">現在の主流: with文（コンテキストマネージャ）</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">with</span> open(<span style="color:#a31515">&#34;example.txt&#34;</span>, <span style="color:#a31515">&#34;r&#34;</span>) <span style="color:#00f">as</span> f:
+    content = f.read()
+<span style="color:#008000"># 自動的にクローズされる</span></code></pre></div>
+<p><code>with</code>はそのブロックを抜けるときに、<code>close</code>メソッドを勝手に呼び出してクローズしてくれるので、クローズ忘れがなくなりますしコードも読みやすくなります。しかし、<code>with</code>には更なる利点があります。</p>
+
+<blockquote>
+<p>ファイルオブジェクトを扱うときに with キーワードを使うのは良い習慣です。 その利点は、処理中に例外が発生しても必ず最後にファイルをちゃんと閉じることです。</p>
+</blockquote>
+
+<p><a href="https://docs.python.org/ja/3/tutorial/inputoutput.html#reading-and-writing-files">オフィシャルのドキュメントに書いてある</a>上記の点だけを鑑みても、<code>with</code>を利用するほうが良いと判断できます。</p>
+
+<h2 id="pandasからnumpyの関数などを使う-pd-np">pandasからNumPyの関数などを使う<code>pd.np</code></h2>
+
+<h3 id="古い方法-pd-np-経由でnumpy関数にアクセス">古い方法: <code>pd.np</code>経由でNumPy関数にアクセス</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> pandas <span style="color:#00f">as</span> pd
+result = pd.np.sqrt(4)  <span style="color:#008000"># 非推奨</span></code></pre></div>
+<h3 id="現在の主流-numpyを直接インポート">現在の主流: NumPyを直接インポート</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> pandas <span style="color:#00f">as</span> pd
+<span style="color:#00f">import</span> numpy <span style="color:#00f">as</span> np
+result = np.sqrt(4)  <span style="color:#008000"># 推奨</span></code></pre></div>
+<p>pandasをインポートすると、同時にNumPyもインポートされます。このとき、<code>pd.np</code>という書き方をすることで明示的にNumPyをインポートしていなくてもNumPyが持つ機能にアクセスできるようになります。<code>import numpy</code>を書かなくてもいいという、メリット？うーん、メリットかなぁこれ。</p>
+
+<p>ただ、NumPyの関数などを使うならちゃんとインポートした方がコードの保守性が高いと思われたのか、現在では非推奨です。そのうち、この機能が削除されると思います。</p>
+
+<h2 id="辞書のキーチェック">辞書のキーチェック</h2>
+
+<h3 id="古い方法-dict-has-key">古い方法: <code>dict.has_key()</code></h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">d = {<span style="color:#a31515">&#34;key&#34;</span>: <span style="color:#a31515">&#34;value&#34;</span>}
+<span style="color:#00f">if</span> d.has_key(<span style="color:#a31515">&#34;key&#34;</span>):  <span style="color:#008000"># Python 3では削除済み</span>
+    <span style="color:#00f">print</span>(<span style="color:#a31515">&#34;キーが存在します&#34;</span>)</code></pre></div>
+<h3 id="現在の主流-in-演算子">現在の主流: <code>in</code>演算子</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">d = {<span style="color:#a31515">&#34;key&#34;</span>: <span style="color:#a31515">&#34;value&#34;</span>}
+<span style="color:#00f">if</span> <span style="color:#a31515">&#34;key&#34;</span> <span style="color:#00f">in</span> d:
+    <span style="color:#00f">print</span>(<span style="color:#a31515">&#34;キーが存在します&#34;</span>)</code></pre></div>
+<p>さすがに古すぎる話題ですが、Python2には辞書に任意のキーが存在するかをチェックする<code>has_key()</code>が存在していました。Python3系ではこいつは削除されており、そもそもエラーになります。現在は<code>in</code>を利用します。</p>
+
+<h2 id="xrange-はもうないぞ"><code>xrange</code>はもうないぞ</h2>
+
+<h3 id="古い方法-range-と-xrange">古い方法: <code>range</code>と<code>xrange</code></h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># Python 2</span>
+<span style="color:#00f">for</span> i <span style="color:#00f">in</span> range(1000000):  <span style="color:#008000"># メモリを大量に消費</span>
+    <span style="color:#00f">pass</span>
+
+<span style="color:#00f">for</span> i <span style="color:#00f">in</span> xrange(1000000):  <span style="color:#008000"># メモリ効率が良い</span>
+    <span style="color:#00f">pass</span></code></pre></div>
+<h3 id="現在の主流-range-python-3">現在の主流: <code>range</code>（Python 3）</h3>
+
+<p>Python 3では、<code>range()</code>はイテレータになり、<code>xrange()</code>は削除されました。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># Python 3</span>
+<span style="color:#00f">for</span> i <span style="color:#00f">in</span> range(1000000):  <span style="color:#008000"># メモリ効率が良い</span>
+    <span style="color:#00f">pass</span></code></pre></div>
+<p>Python2では、<code>range()</code>はリストを生成し、<code>xrange()</code>はイテレータを生成していました。Python3では<code>xrange()</code>がなくなり、<code>range()</code>に統合されました。</p>
+
+<h2 id="データクラスの実装">データクラスの実装</h2>
+
+<h2 id="古い方法-手動での-init-repr-などの実装">古い方法: 手動での<code>__init__</code>、<code>__repr__</code>などの実装</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">class</span> <span style="color:#2b91af">Person</span>:
+    <span style="color:#00f">def</span> __init__(self, name, age):
+        self.name = name
+        self.age = age
+    
+    <span style="color:#00f">def</span> __repr__(self):
+        <span style="color:#00f">return</span> f<span style="color:#a31515">&#34;Person(name={self.name}, age={self.age})&#34;</span>
+    
+    <span style="color:#00f">def</span> __eq__(self, other):
+        <span style="color:#00f">if</span> <span style="color:#00f">not</span> isinstance(other, Person):
+            <span style="color:#00f">return</span> False
+        <span style="color:#00f">return</span> self.name == other.name <span style="color:#00f">and</span> self.age == other.age</code></pre></div>
+<h2 id="現代の方法-dataclass-デコレータの使用-python-3-7以降">現代の方法: <code>@dataclass</code>デコレータの使用 (Python 3.7以降)</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">from</span> dataclasses <span style="color:#00f">import</span> dataclass
+
+@dataclass
+<span style="color:#00f">class</span> <span style="color:#2b91af">Person</span>:
+    name: str
+    age: int
+    <span style="color:#008000"># __init__, __repr__, __eq__などが自動的に生成される</span></code></pre></div>
+<p>dataclassデコレータを使えば、<code>__init__()</code>で引数をわざわざインスタンス変数に代入したり、<code>__eq__()</code>を手で書く必要がなくなりました。Python3.7以降で利用できます。</p>
+
+<h2 id="参考">参考</h2>
 
 <ol>
 <li><a href="https://www.javadrive.jp/python/string/index23.html">書式化演算子%を使った文字列の書式設定(printf形式の書式化)</a></li>
 <li><a href="https://snowtree-injune.com/2019/03/13/sprintf-style-basic/">Python♪「% 演算子」を使った古い文字列書式設定</a></li>
-</ol>
-
-<h2 id="ライブラリ関連">ライブラリ関連</h2>
-
-<h3 id="pandas">pandas</h3>
-
-<h4 id="pandasからnumpyの関数などを使う-pd-np">pandasからNumPyの関数などを使う<code>pd.np</code></h4>
-
-<p>pandasをインポートすると、同時にNumPyもインポートされます。このとき、<code>pd.np</code>という書き方をすることで明示的にNumPyをインポートしていなくてもNumPyが持つ機能にアクセスできるようになります。<code>import numpy</code>を書かなくてもいいという、メリット？うーん、メリットかなぁこれ。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> pandas <span style="color:#00f">as</span> pd
-
-hoge = pd.np.arange(10)
-<span style="color:#00f">print</span>(pd.np.pi)</code></pre></div>
-<p>上記のように、pandasしかインポートしてなくてもNumPyが使えるようになります。というか、なりました。ただ、NumPyの関数などを使うならちゃんとインポートした方がコードの保守性が高いと思われたのか、現在では非推奨です。そのうち、この機能が削除されると思います。</p>
-
-<ol>
 <li><a href="https://note.nkmk.me/python-pandas-pd-np/">pandasからNumPyの関数などを使う方法（pd.np）</a></li>
 <li><a href="https://pandas.pydata.org/pandas-docs/stable/whatsnew/v1.0.0.html#deprecations">What’s new in 1.0.0 (January 29, 2020) - Deprecations</a></li>
 <li><a href="https://stackoverflow.com/questions/68567405/import-both-pandas-and-numpy">Import both Pandas and Numpy?</a></li>
+<li><a href="https://tonari-it.com/python-with-file-open-close/">Pythonで開いたファイルのクローズを忘れやすい人のためのwith文の使い方</a></li>
+<li><a href="https://www.python-izm.com/basic/range_xrange/">rangeとxrange</a></li>
+<li><a href="https://qiita.com/ttyszk/items/01934dc42cbd4f6665d2">Python3.7以上のデータ格納はdataclassを活用しよう</a></li>
 </ol>
 
 		</div><div id="disqus_thread"></div>
