@@ -194,6 +194,20 @@ result = np.sqrt(4)  <span style="color:#008000"># 推奨</span></code></pre></d
     <span style="color:#008000"># __init__, __repr__, __eq__などが自動的に生成される</span></code></pre></div>
 <p>dataclassデコレータを使えば、<code>__init__()</code>で引数をわざわざインスタンス変数に代入したり、<code>__eq__()</code>を手で書く必要がなくなりました。Python3.7以降で利用できます。</p>
 
+<h2 id="集約関数の-axis">集約関数の<code>axis</code></h2>
+
+<h3 id="古い方法-mean-などの関数に-axis-パラメータなしで使用">古い方法: <code>mean()</code>などの関数に<code>axis</code>パラメータなしで使用</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">mean_value = df.mean()  <span style="color:#008000"># 警告なしだが、axis=0を暗黙的に使用</span></code></pre></div>
+<p>厳密に「古い方法」かまでははっきりしなかったものの、こういう書き方は多くはないものの見かける。確かに省略できるけども、パッと見で「どっち？」ってなるんだよなぁ。</p>
+
+<h3 id="現代の方法-明示的に-axis-を指定">現代の方法: 明示的に<code>axis</code>を指定</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># 列ごとの平均</span>
+mean_value = df.mean(axis=0)
+
+<span style="color:#008000"># 行ごとの平均</span>
+mean_value = df.mean(axis=1)</code></pre></div>
+<p>単純にこっちの書き方が省略されるよりわかりやすいので、<code>axis</code>は省略できるとしても書いておいたほうがいいと思います。</p>
+
 <h2 id="参考">参考</h2>
 
 <ol>
@@ -205,6 +219,7 @@ result = np.sqrt(4)  <span style="color:#008000"># 推奨</span></code></pre></d
 <li><a href="https://tonari-it.com/python-with-file-open-close/">Pythonで開いたファイルのクローズを忘れやすい人のためのwith文の使い方</a></li>
 <li><a href="https://www.python-izm.com/basic/range_xrange/">rangeとxrange</a></li>
 <li><a href="https://qiita.com/ttyszk/items/01934dc42cbd4f6665d2">Python3.7以上のデータ格納はdataclassを活用しよう</a></li>
+<li><a href="https://qiita.com/udus122/items/65eb9416dab37a5562dc">pandasのaxisの方向の覚え方</a></li>
 </ol>
 
 		</div><div id="disqus_thread"></div>
