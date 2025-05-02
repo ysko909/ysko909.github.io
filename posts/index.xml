@@ -7,10 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Fri, 11 Apr 2025 16:24:08 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 02 May 2025 11:28:47 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>PowerShellを使ってISOファイルを作成する方法</title>
+      <link>https://ysko909.github.io/posts/create-iso-file-in-powershell/</link>
+      <pubDate>Fri, 02 May 2025 11:28:47 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/create-iso-file-in-powershell/</guid>
+      <description>概要 この記事では、Windows 10/11環境下において、フォルダの内容をISOファイルとしてアーカイブする際に、信頼性を懸念される第三者製ツールを用いることなく、標準搭載されたPowerShellの機能のみで実現する方法について解説します。
+従来、New-ISOFileコマンドレットがISOファイル作成の簡便な手段として存在しましたが、現在、標準的な提供はされていません。しかしながら、コミュニティによって開発された代替スクリプトを活用することで、PowerShell単体でフォルダからISOファイルを生成することが可能です。
+本稿では、その代替スクリプトを利用し、PowerShellのみでフォルダからISOファイルを生成する手順を解説します。
+PowerShellによるISOファイル作成の利点  セキュリティ: 不明な第三者製ソフトウェアの導入を回避し、セキュリティ上のリスクを低減できます。 簡便性: 基本的にWindowsにはPowerShellが既にインストールされているため、追加のソフトウェアは不要です。 自動化: スクリプトによる実行により、ISOファイル作成処理の自動化が可能です。  必要なスクリプトの取得 本稿で解説する方法では、以下の2つのPowerShell関数を使用します。
+ New-ISOFileFromFolder: 指定されたフォルダの内容に基づいてISOファイルを作成する主要な関数。 Write-IStreamToFile: ストリームデータをファイルに書き出すための補助関数。  これらの関数は、PowerShell Galleryにて公開されています。以下の手順に従い、これらの関数をお客様の環境で利用可能な状態にしてください。
+PowerShellの起動 まずPowerShellを起動します。スタートメニューから「powershell」を検索し実行してください。この際、管理者権限である必要はありません。
+スクリプトの定義 次に、以下の2コードをそれぞれPowerShellコンソールにコピー＆ペーストし、実行（改行キーを押下）します。これにより、New-ISOFileFromFolder関数とWrite-IStreamToFile関数が現在のPowerShellセッションで使用可能になります。
+まずWrite-IStreamToFile関数です。
+function Write-IStreamToFile([__ComObject] $istream, [string] $fileName) { # NOTE: We cannot use [System.Runtime.InteropServices.ComTypes.IStream], # since PowerShell apparently cannot convert an IStream COM object to this # Powershell type. (See http://stackoverflow.com/a/9037299/223837 for # details.) # It turns out that .NET/CLR _can_ do this conversion.</description>
+    </item>
     
     <item>
       <title>Visual Basic .NETの基本</title>

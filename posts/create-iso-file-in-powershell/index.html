@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>PowerShellを使ってISOファイルを作成する方法 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="PowerShellを使ってISOファイルを作成する方法" />
+<meta property="og:description" content="概要 この記事では、Windows 10/11環境下において、フォルダの内容をISOファイルとしてアーカイブする際に、信頼性を懸念される第三者製ツールを用いることなく、標準搭載されたPowerShellの機能のみで実現する方法について解説します。
+従来、New-ISOFileコマンドレットがISOファイル作成の簡便な手段として存在しましたが、現在、標準的な提供はされていません。しかしながら、コミュニティによって開発された代替スクリプトを活用することで、PowerShell単体でフォルダからISOファイルを生成することが可能です。
+本稿では、その代替スクリプトを利用し、PowerShellのみでフォルダからISOファイルを生成する手順を解説します。
+PowerShellによるISOファイル作成の利点  セキュリティ: 不明な第三者製ソフトウェアの導入を回避し、セキュリティ上のリスクを低減できます。 簡便性: 基本的にWindowsにはPowerShellが既にインストールされているため、追加のソフトウェアは不要です。 自動化: スクリプトによる実行により、ISOファイル作成処理の自動化が可能です。  必要なスクリプトの取得 本稿で解説する方法では、以下の2つのPowerShell関数を使用します。
+ New-ISOFileFromFolder: 指定されたフォルダの内容に基づいてISOファイルを作成する主要な関数。 Write-IStreamToFile: ストリームデータをファイルに書き出すための補助関数。  これらの関数は、PowerShell Galleryにて公開されています。以下の手順に従い、これらの関数をお客様の環境で利用可能な状態にしてください。
+PowerShellの起動 まずPowerShellを起動します。スタートメニューから「powershell」を検索し実行してください。この際、管理者権限である必要はありません。
+スクリプトの定義 次に、以下の2コードをそれぞれPowerShellコンソールにコピー＆ペーストし、実行（改行キーを押下）します。これにより、New-ISOFileFromFolder関数とWrite-IStreamToFile関数が現在のPowerShellセッションで使用可能になります。
+まずWrite-IStreamToFile関数です。
+function Write-IStreamToFile([__ComObject] $istream, [string] $fileName) { # NOTE: We cannot use [System.Runtime.InteropServices.ComTypes.IStream], # since PowerShell apparently cannot convert an IStream COM object to this # Powershell type. (See http://stackoverflow.com/a/9037299/223837 for # details.) # It turns out that .NET/CLR _can_ do this conversion." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/create-iso-file-in-powershell/" /><meta property="article:published_time" content="2025-05-02T11:28:47&#43;09:00"/>
+<meta property="article:modified_time" content="2025-05-02T11:28:47&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="PowerShellを使ってISOファイルを作成する方法"/>
+<meta name="twitter:description" content="概要 この記事では、Windows 10/11環境下において、フォルダの内容をISOファイルとしてアーカイブする際に、信頼性を懸念される第三者製ツールを用いることなく、標準搭載されたPowerShellの機能のみで実現する方法について解説します。
+従来、New-ISOFileコマンドレットがISOファイル作成の簡便な手段として存在しましたが、現在、標準的な提供はされていません。しかしながら、コミュニティによって開発された代替スクリプトを活用することで、PowerShell単体でフォルダからISOファイルを生成することが可能です。
+本稿では、その代替スクリプトを利用し、PowerShellのみでフォルダからISOファイルを生成する手順を解説します。
+PowerShellによるISOファイル作成の利点  セキュリティ: 不明な第三者製ソフトウェアの導入を回避し、セキュリティ上のリスクを低減できます。 簡便性: 基本的にWindowsにはPowerShellが既にインストールされているため、追加のソフトウェアは不要です。 自動化: スクリプトによる実行により、ISOファイル作成処理の自動化が可能です。  必要なスクリプトの取得 本稿で解説する方法では、以下の2つのPowerShell関数を使用します。
+ New-ISOFileFromFolder: 指定されたフォルダの内容に基づいてISOファイルを作成する主要な関数。 Write-IStreamToFile: ストリームデータをファイルに書き出すための補助関数。  これらの関数は、PowerShell Galleryにて公開されています。以下の手順に従い、これらの関数をお客様の環境で利用可能な状態にしてください。
+PowerShellの起動 まずPowerShellを起動します。スタートメニューから「powershell」を検索し実行してください。この際、管理者権限である必要はありません。
+スクリプトの定義 次に、以下の2コードをそれぞれPowerShellコンソールにコピー＆ペーストし、実行（改行キーを押下）します。これにより、New-ISOFileFromFolder関数とWrite-IStreamToFile関数が現在のPowerShellセッションで使用可能になります。
+まずWrite-IStreamToFile関数です。
+function Write-IStreamToFile([__ComObject] $istream, [string] $fileName) { # NOTE: We cannot use [System.Runtime.InteropServices.ComTypes.IStream], # since PowerShell apparently cannot convert an IStream COM object to this # Powershell type. (See http://stackoverflow.com/a/9037299/223837 for # details.) # It turns out that .NET/CLR _can_ do this conversion."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">PowerShellを使ってISOファイルを作成する方法</h1>
+			<div class="meta">Posted at &mdash; May 2, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>この記事では、Windows 10/11環境下において、フォルダの内容をISOファイルとしてアーカイブする際に、信頼性を懸念される第三者製ツールを用いることなく、標準搭載されたPowerShellの機能のみで実現する方法について解説します。</p>
+
+<p>従来、<code>New-ISOFile</code>コマンドレットがISOファイル作成の簡便な手段として存在しましたが、現在、標準的な提供はされていません。しかしながら、コミュニティによって開発された代替スクリプトを活用することで、PowerShell単体でフォルダからISOファイルを生成することが可能です。</p>
+
+<p>本稿では、その代替スクリプトを利用し、PowerShellのみでフォルダからISOファイルを生成する手順を解説します。</p>
+
+<h2 id="powershellによるisoファイル作成の利点">PowerShellによるISOファイル作成の利点</h2>
+
+<ul>
+<li><strong>セキュリティ</strong>: 不明な第三者製ソフトウェアの導入を回避し、セキュリティ上のリスクを低減できます。</li>
+<li><strong>簡便性</strong>: 基本的にWindowsにはPowerShellが既にインストールされているため、追加のソフトウェアは不要です。</li>
+<li><strong>自動化</strong>: スクリプトによる実行により、ISOファイル作成処理の自動化が可能です。</li>
+</ul>
+
+<h2 id="必要なスクリプトの取得">必要なスクリプトの取得</h2>
+
+<p>本稿で解説する方法では、以下の2つのPowerShell関数を使用します。</p>
+
+<ol>
+<li><strong><code>New-ISOFileFromFolder</code></strong>: 指定されたフォルダの内容に基づいてISOファイルを作成する主要な関数。</li>
+<li><strong><code>Write-IStreamToFile</code></strong>: ストリームデータをファイルに書き出すための補助関数。</li>
+</ol>
+
+<p>これらの関数は、<a href="https://www.powershellgallery.com/">PowerShell Gallery</a>にて公開されています。以下の手順に従い、これらの関数をお客様の環境で利用可能な状態にしてください。</p>
+
+<h3 id="powershellの起動">PowerShellの起動</h3>
+
+<p>まずPowerShellを起動します。スタートメニューから「powershell」を検索し実行してください。この際、管理者権限である必要はありません。</p>
+
+<h3 id="スクリプトの定義">スクリプトの定義</h3>
+
+<p>次に、以下の2コードをそれぞれPowerShellコンソールにコピー＆ペーストし、実行（改行キーを押下）します。これにより、<code>New-ISOFileFromFolder</code>関数と<code>Write-IStreamToFile</code>関数が現在のPowerShellセッションで使用可能になります。</p>
+
+<p>まず<code>Write-IStreamToFile</code>関数です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#00f">function</span> Write-IStreamToFile([__ComObject] $istream, [string] $fileName)
+{
+    <span style="color:#008000"># NOTE: We cannot use [System.Runtime.InteropServices.ComTypes.IStream],</span>
+    <span style="color:#008000"># since PowerShell apparently cannot convert an IStream COM object to this</span>
+    <span style="color:#008000"># Powershell type. (See http://stackoverflow.com/a/9037299/223837 for</span>
+    <span style="color:#008000"># details.)</span>
+    <span style="color:#008000"># It turns out that .NET/CLR _can_ do this conversion.</span>
+    <span style="color:#008000">#</span>
+    <span style="color:#008000"># That is the reason why method FileUtil.WriteIStreamToFile(), below,</span>
+    <span style="color:#008000"># takes an object, and casts it to an IStream, instead of directly</span>
+    <span style="color:#008000"># taking an IStream inputStream argument.</span>
+
+ 
+    $cp = New-Object CodeDom.Compiler.CompilerParameters             
+    $cp.CompilerOptions = <span style="color:#a31515">&#34;/unsafe&#34;</span>
+    $cp.WarningLevel = 4
+    $cp.TreatWarningsAsErrors = $true
+
+    Add-Type -CompilerParameters $cp -TypeDefinition <span style="color:#a31515">@&#34;
+</span><span style="color:#a31515">        using System;
+</span><span style="color:#a31515">        using System.IO;
+</span><span style="color:#a31515">        using System.Runtime.InteropServices.ComTypes;
+</span><span style="color:#a31515"> 
+</span><span style="color:#a31515">        namespace My
+</span><span style="color:#a31515">        {
+</span><span style="color:#a31515">            public static class FileUtil {
+</span><span style="color:#a31515">                public static void WriteIStreamToFile(object i, string fileName) {
+</span><span style="color:#a31515">                    IStream inputStream = i as IStream;
+</span><span style="color:#a31515">                    FileStream outputFileStream = File.OpenWrite(fileName);
+</span><span style="color:#a31515">                    int bytesRead = 0;
+</span><span style="color:#a31515">                    int offset = 0;
+</span><span style="color:#a31515">                    byte[] data;
+</span><span style="color:#a31515">                    do {
+</span><span style="color:#a31515">                        data = Read(inputStream, 2048, out bytesRead);
+</span><span style="color:#a31515">                        outputFileStream.Write(data, 0, bytesRead);
+</span><span style="color:#a31515">                        offset += bytesRead;
+</span><span style="color:#a31515">                    } while (bytesRead == 2048);
+</span><span style="color:#a31515">                    outputFileStream.Flush();
+</span><span style="color:#a31515">                    outputFileStream.Close();
+</span><span style="color:#a31515">                }
+</span><span style="color:#a31515"> 
+</span><span style="color:#a31515">                unsafe static private byte[] Read(IStream stream, int toRead, out int read) {
+</span><span style="color:#a31515">                    byte[] buffer = new byte[toRead];
+</span><span style="color:#a31515">                    int bytesRead = 0;
+</span><span style="color:#a31515">                    int* ptr = &amp;bytesRead;
+</span><span style="color:#a31515">                    stream.Read(buffer, toRead, (IntPtr)ptr);
+</span><span style="color:#a31515">                    read = bytesRead;
+</span><span style="color:#a31515">                    return buffer;
+</span><span style="color:#a31515">                }
+</span><span style="color:#a31515">            }
+</span><span style="color:#a31515"> 
+</span><span style="color:#a31515">        }
+</span><span style="color:#a31515">&#34;@</span>
+ 
+    [My.FileUtil]::WriteIStreamToFile($istream, $fileName)
+}</code></pre></div>
+<p>次に<code>New-ISOFileFromFolder</code>関数です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#00f">Function</span> New-ISOFileFromFolder{
+    <span style="color:#008000">&lt;#
+</span><span style="color:#008000">        </span><span style="color:#a31515">.SYNOPSIS</span><span style="color:#008000">
+</span><span style="color:#008000">        Creates an ISO file from a filepath
+</span><span style="color:#008000">    #&gt;</span>
+    <span style="color:#00f">param</span>(
+        [<span style="color:#00f">Parameter</span>(<span style="color:#00f">Mandatory</span>=$true)]
+        [String]$FilePath,
+        [<span style="color:#00f">Parameter</span>(<span style="color:#00f">Mandatory</span>=$true)]
+        [String]$Name,
+        [<span style="color:#00f">Parameter</span>(<span style="color:#00f">Mandatory</span>=$true)]
+        [String]$ResultFullFileName
+    )
+    write-host <span style="color:#a31515">&#34;Creating ISO $Name&#34;</span> -ForegroundColor Green  
+
+    $fsi = New-Object -ComObject IMAPI2FS.MsftFileSystemImage
+    $dftd = New-Object -ComObject IMAPI2.MsftDiscFormat2Data
+    $Recorder = New-Object -ComObject IMAPI2.MsftDiscRecorder2
+
+    $fsi.FileSystemsToCreate = 7
+    $fsi.VolumeName = $Name
+    $fsi.FreeMediaBlocks = 1000000  <span style="color:#008000">#default 332800</span>
+
+    
+    $fsi.Root.AddTreeWithNamedStreams($FilePath,$false)
+
+
+    
+    $resultimage = $fsi.CreateResultImage()
+    $resultStream = $resultimage.ImageStream
+
+
+    Write-IStreamToFile $resultStream $ResultFullFileName
+    
+    
+}</code></pre></div>
+<p>実行可能になったかどうかは、コマンドで確認できます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">Get-Command New-ISOFileFromFolder
+Get-Command Write-IStreamToFile</code></pre></div>
+<p>上記のコマンドを実行した際、それぞれの関数が実行可能になっていれば「Function」として出力されます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">&gt; Get-Command New-ISOFileFromFolder
+
+CommandType     Name                                               Version    Source
+-----------     ----                                               -------    ------
+<span style="color:#00f">Function</span>        New-ISOFileFromFolder
+
+&gt; Get-Command Write-IStreamToFile
+
+CommandType     Name                                               Version    Source
+-----------     ----                                               -------    ------
+<span style="color:#00f">Function</span>        Write-IStreamToFile</code></pre></div>
+<h3 id="isoファイルの作成">ISOファイルの作成</h3>
+
+<p>スクリプト定義後、以下のコマンドを実行してISOファイルを作成します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">New-ISOFileFromFolder <span style="color:#a31515">&#34;&lt;ターゲットフォルダのパス&gt;&#34;</span> <span style="color:#a31515">&#34;&lt;ISOのボリュームラベル&gt;&#34;</span> <span style="color:#a31515">&#34;&lt;作成するISOファイルのフルパス&gt;&#34;</span> </code></pre></div>
+<ul>
+<li><code>&lt;ターゲットフォルダのパス&gt;</code>: ISOファイルに含めるファイルやフォルダが格納されているパスを指定します。（例: <code>C:\Users\Public\Documents\Backup</code>)</li>
+<li><code>&lt;ISOのボリュームラベル&gt;</code>: 作成するISOファイルに付与する名前を指定します。（例: <code>Backup_20231027</code>)</li>
+<li><code>&lt;作成するISOファイルのフルパス&gt;</code>: 作成するISOファイルの保存場所とファイル名を指定します。ボリュームラベルと一致させる必要は必ずしもありませんが、<code>.iso</code>の拡張子は必須です（例: <code>D:\MyBackup.iso</code>)</li>
+</ul>
+
+<p><strong>実行例:</strong></p>
+
+<p><code>C:\MyData</code>フォルダの内容を、<code>D:\Archive.iso</code>というファイル名で、ボリュームラベルを<code>DataBackup</code>として作成する場合のコマンドは以下の通りです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">New-ISOFileFromFolder <span style="color:#a31515">&#34;C:\MyData&#34;</span> <span style="color:#a31515">&#34;DataBackup&#34;</span> <span style="color:#a31515">&#34;D:\Archive.iso&#34;</span></code></pre></div>
+<p>コマンド実行後、指定された場所にISOファイルが生成されます。</p>
+
+<h3 id="isoファイルのマウント">ISOファイルのマウント</h3>
+
+<p>作成したISOファイルを右クリックすると、メニュー中に「マウント」という選択肢があります。</p>
+
+<p><img src="./2025-05-02-00-00-00.png" alt="pic" /></p>
+
+<p>これをクリックすることで、ISOファイルをマウントできます。マウントしたあとは、物理メディアを読み込ませた場合と同じ感覚で利用できます。</p>
+
+<h3 id="留意点">留意点</h3>
+
+<ul>
+<li><strong>コマンドラインインタフェース</strong>: 普段からGUIでの操作に馴染んでいる場合、今回のようなコマンドラインの操作には多少慣れが必要かもしれません。</li>
+<li><strong>高度な機能の制約</strong>: ブータブルISOファイルの作成など、より専門的なオプションには対応していません。</li>
+</ul>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>PowerShellを活用することで、第三者製のソフトウェアに依存することなく簡単にフォルダからISOファイルを生成できます。セキュリティを重視する場合や、基本的なISOファイル作成だけで良い場合は有効な手段となり得ます。ただし、より高度な機能が要求される場合は、専用のオーサリングソフトウェアのご検討を推奨します。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://zapping.beccou.com/2022/06/07/create-an-iso-file-from-a-file-in-powershell-on-windows-10-and-11-new-a-substitute-for-the-isofile-module/">【Windows 10、11】PowerShell でフォルダからISO ファイルを作成する。New-ISOFile の代用。</a></li>
+<li><a href="https://www.powershellgallery.com/packages/Cloud.Ready.Software.Windows/1.0.0.2/Content/Write-IStreamToFile.ps1">Write-IStreamToFile.ps1</a></li>
+<li><a href="https://www.powershellgallery.com/packages/Cloud.Ready.Software.Windows/1.0.0.8/Content/New-ISOFileFromFolder.ps1">New-ISOFileFromFolder.ps1</a></li>
+<li><a href="https://www.powershellgallery.com/">PowerShell Gallery</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

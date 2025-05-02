@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Windows on 頑張らないために頑張る</title>
-    <link>https://ysko909.github.io/tags/windows/</link>
-    <description>Recent content in Windows on 頑張らないために頑張る</description>
+    <title>Powershell on 頑張らないために頑張る</title>
+    <link>https://ysko909.github.io/tags/powershell/</link>
+    <description>Recent content in Powershell on 頑張らないために頑張る</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
     <lastBuildDate>Fri, 02 May 2025 11:28:47 +0900</lastBuildDate>
     
-	<atom:link href="https://ysko909.github.io/tags/windows/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ysko909.github.io/tags/powershell/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -27,23 +27,6 @@ PowerShellの起動 まずPowerShellを起動します。スタートメニュ�
 スクリプトの定義 次に、以下の2コードをそれぞれPowerShellコンソールにコピー＆ペーストし、実行（改行キーを押下）します。これにより、New-ISOFileFromFolder関数とWrite-IStreamToFile関数が現在のPowerShellセッションで使用可能になります。
 まずWrite-IStreamToFile関数です。
 function Write-IStreamToFile([__ComObject] $istream, [string] $fileName) { # NOTE: We cannot use [System.Runtime.InteropServices.ComTypes.IStream], # since PowerShell apparently cannot convert an IStream COM object to this # Powershell type. (See http://stackoverflow.com/a/9037299/223837 for # details.) # It turns out that .NET/CLR _can_ do this conversion.</description>
-    </item>
-    
-    <item>
-      <title>Windowsでドット付ファイルを作成する</title>
-      <link>https://ysko909.github.io/posts/make-file-with-dot-on-windows/</link>
-      <pubDate>Mon, 22 Apr 2019 13:06:22 +0900</pubDate>
-      
-      <guid>https://ysko909.github.io/posts/make-file-with-dot-on-windows/</guid>
-      <description>結論 ファイル名の冒頭および語尾の両方にドットを付与！
-小ネタです .gitignoreとか.bashrcのように、何かの設定ファイルは冒頭に「.（ドット）」が付いて拡張子なしであるような名前だったりします。
-ところが、Windowsのexplorer上でドット付のファイルを作成しようとしたらエラーになりました。
-たとえば.hogeという名前のファイルを作成しようとします。
-こんな名前のファイルを作成しようとすると・・・
-エラー！
-対策 そういう場合は、下記のようにファイル名の冒頭および語尾の両方にドットを付与してやるとファイルを作成できます。
-.hoge. すると・・・
-「はい」を押せばドット付ファイルのできあがりです。</description>
     </item>
     
   </channel>

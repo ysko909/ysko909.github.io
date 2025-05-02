@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/create-iso-file-in-powershell/</loc>
+    <lastmod>2025-05-02T11:28:47+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/fundamentals-of-visual-basic-dot-net/</loc>
     <lastmod>2025-04-11T16:24:08+09:00</lastmod>
   </url>
@@ -941,13 +946,19 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2025-04-11T16:24:08+09:00</lastmod>
+    <lastmod>2025-05-02T11:28:47+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://ysko909.github.io/tags/powerpoint/</loc>
     <lastmod>2019-09-07T10:31:55+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ysko909.github.io/tags/powershell/</loc>
+    <lastmod>2025-05-02T11:28:47+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1115,7 +1126,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/windows/</loc>
-    <lastmod>2019-04-22T13:06:22+09:00</lastmod>
+    <lastmod>2025-05-02T11:28:47+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1139,7 +1150,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2025-04-11T16:24:08+09:00</lastmod>
+    <lastmod>2025-05-02T11:28:47+09:00</lastmod>
     <priority>0</priority>
   </url>
   
