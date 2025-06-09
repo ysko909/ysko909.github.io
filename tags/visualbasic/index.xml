@@ -7,10 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Fri, 16 May 2025 11:33:37 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 09 Jun 2025 10:33:54 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/visualbasic/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Accessフォームの調査が苦行なので分析用コードを作った</title>
+      <link>https://ysko909.github.io/posts/create-code-to-analyze-access-mdb-forms/</link>
+      <pubDate>Mon, 09 Jun 2025 10:33:54 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/create-code-to-analyze-access-mdb-forms/</guid>
+      <description>背景と目的 Microsoft Accessで開発されたアプリケーション、特に多くのフォームを持つものは、時間と共に内部のVBAコードが複雑化し、その全体像を把握することが難しくなる傾向があります。ドキュメントが古くなったり、存在しなかったりすると、システムのメンテナンス、改修、さらには将来的な移行計画において、大きな困難とリスクを伴います。
+つまり、大抵の場合はメチャクチャ大変ってことです＿(　_´ω`)_ﾍﾟｼｮ
+小規模なシステムならともかく、年月を経るに従って大抵は規模が大きくなります。そのため、手作業で各フォームのVBAコードを調査し、その内容を理解・整理するには膨大な時間と労力が必要です。
+そこで、現状のシステムに含まれるフォームについて、構文的・構造的な特徴を抽出する分析用コードを作成しました。このVBAスクリプトは、以下のニーズに応えることを目指しています。
+ 網羅的な現状把握の自動化: Accessデータベース内に存在する全てのフォームを対象とし、それぞれのVBAコードに含まれる構造や特徴を自動的に抽出します。 標準化されたドキュメント生成: 分析結果を、構造化され視覚的に理解しやすいMarkdown形式のレポートとして、フォームごとに出力します。これにより、手作業によるドキュメント作成の負担を軽減し、一貫性のある基礎資料を提供します。 移行・改修の意思決定支援: 各フォームのVBAコードの複雑さ、特定のAccess機能や外部連携の使用状況、イベント処理のパターンなどを明らかにすることで、移行や改修の優先順位付け、工数見積もり、リスク評価のための客観的な情報を提供します。 コード品質に関する洞察: GoToステートメントの使用頻度やエラー処理の実装状況など、コード品質に関連する情報を収集し、改善点を見つけるための手がかりを提供します。 開発・保守の効率化: 既存コードの理解を助け、開発者間の情報共有を促進することで、開発・保守作業の効率化に貢献します。  これにより、構造的な分析はコードに任せて、人間は意味的な分析に注力できます。あくまでも、このコードが分析できるのは構造的な部分ですので、その点はご承知おきください。
+ソースコード Option Compare Database Option Explicit &amp;#39; 統合MDB分析ツール (全フォームのVBAコード分析対応) &amp;#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援 Sub AnalyzeAllFormsVBACodeToMarkdown() &amp;#39; プロジェクト内の全フォームのVBAコードを分析し、個別のMarkdownレポートを生成する Dim frmObj As AccessObject Dim formName As String Dim strFilePath As String Dim intFileNum As Integer Dim vbProj As Object &amp;#39; As VBIDE.VBProject Dim vbCrntProj As Object &amp;#39; As Application.CurrentProject Dim vbComp As Object &amp;#39; As VBIDE.</description>
+    </item>
     
     <item>
       <title>パスワード保護されたAccessのVBAコードの保護を解除する方法</title>

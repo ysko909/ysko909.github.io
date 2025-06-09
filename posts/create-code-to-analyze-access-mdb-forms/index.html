@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Accessフォームの調査が苦行なので分析用コードを作った - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Accessフォームの調査が苦行なので分析用コードを作った" />
+<meta property="og:description" content="背景と目的 Microsoft Accessで開発されたアプリケーション、特に多くのフォームを持つものは、時間と共に内部のVBAコードが複雑化し、その全体像を把握することが難しくなる傾向があります。ドキュメントが古くなったり、存在しなかったりすると、システムのメンテナンス、改修、さらには将来的な移行計画において、大きな困難とリスクを伴います。
+つまり、大抵の場合はメチャクチャ大変ってことです＿(　_´ω`)_ﾍﾟｼｮ
+小規模なシステムならともかく、年月を経るに従って大抵は規模が大きくなります。そのため、手作業で各フォームのVBAコードを調査し、その内容を理解・整理するには膨大な時間と労力が必要です。
+そこで、現状のシステムに含まれるフォームについて、構文的・構造的な特徴を抽出する分析用コードを作成しました。このVBAスクリプトは、以下のニーズに応えることを目指しています。
+ 網羅的な現状把握の自動化: Accessデータベース内に存在する全てのフォームを対象とし、それぞれのVBAコードに含まれる構造や特徴を自動的に抽出します。 標準化されたドキュメント生成: 分析結果を、構造化され視覚的に理解しやすいMarkdown形式のレポートとして、フォームごとに出力します。これにより、手作業によるドキュメント作成の負担を軽減し、一貫性のある基礎資料を提供します。 移行・改修の意思決定支援: 各フォームのVBAコードの複雑さ、特定のAccess機能や外部連携の使用状況、イベント処理のパターンなどを明らかにすることで、移行や改修の優先順位付け、工数見積もり、リスク評価のための客観的な情報を提供します。 コード品質に関する洞察: GoToステートメントの使用頻度やエラー処理の実装状況など、コード品質に関連する情報を収集し、改善点を見つけるための手がかりを提供します。 開発・保守の効率化: 既存コードの理解を助け、開発者間の情報共有を促進することで、開発・保守作業の効率化に貢献します。  これにより、構造的な分析はコードに任せて、人間は意味的な分析に注力できます。あくまでも、このコードが分析できるのは構造的な部分ですので、その点はご承知おきください。
+ソースコード Option Compare Database Option Explicit &#39; 統合MDB分析ツール (全フォームのVBAコード分析対応) &#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援 Sub AnalyzeAllFormsVBACodeToMarkdown() &#39; プロジェクト内の全フォームのVBAコードを分析し、個別のMarkdownレポートを生成する Dim frmObj As AccessObject Dim formName As String Dim strFilePath As String Dim intFileNum As Integer Dim vbProj As Object &#39; As VBIDE.VBProject Dim vbCrntProj As Object &#39; As Application.CurrentProject Dim vbComp As Object &#39; As VBIDE." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/create-code-to-analyze-access-mdb-forms/" /><meta property="article:published_time" content="2025-06-09T10:33:54&#43;09:00"/>
+<meta property="article:modified_time" content="2025-06-09T10:33:54&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Accessフォームの調査が苦行なので分析用コードを作った"/>
+<meta name="twitter:description" content="背景と目的 Microsoft Accessで開発されたアプリケーション、特に多くのフォームを持つものは、時間と共に内部のVBAコードが複雑化し、その全体像を把握することが難しくなる傾向があります。ドキュメントが古くなったり、存在しなかったりすると、システムのメンテナンス、改修、さらには将来的な移行計画において、大きな困難とリスクを伴います。
+つまり、大抵の場合はメチャクチャ大変ってことです＿(　_´ω`)_ﾍﾟｼｮ
+小規模なシステムならともかく、年月を経るに従って大抵は規模が大きくなります。そのため、手作業で各フォームのVBAコードを調査し、その内容を理解・整理するには膨大な時間と労力が必要です。
+そこで、現状のシステムに含まれるフォームについて、構文的・構造的な特徴を抽出する分析用コードを作成しました。このVBAスクリプトは、以下のニーズに応えることを目指しています。
+ 網羅的な現状把握の自動化: Accessデータベース内に存在する全てのフォームを対象とし、それぞれのVBAコードに含まれる構造や特徴を自動的に抽出します。 標準化されたドキュメント生成: 分析結果を、構造化され視覚的に理解しやすいMarkdown形式のレポートとして、フォームごとに出力します。これにより、手作業によるドキュメント作成の負担を軽減し、一貫性のある基礎資料を提供します。 移行・改修の意思決定支援: 各フォームのVBAコードの複雑さ、特定のAccess機能や外部連携の使用状況、イベント処理のパターンなどを明らかにすることで、移行や改修の優先順位付け、工数見積もり、リスク評価のための客観的な情報を提供します。 コード品質に関する洞察: GoToステートメントの使用頻度やエラー処理の実装状況など、コード品質に関連する情報を収集し、改善点を見つけるための手がかりを提供します。 開発・保守の効率化: 既存コードの理解を助け、開発者間の情報共有を促進することで、開発・保守作業の効率化に貢献します。  これにより、構造的な分析はコードに任せて、人間は意味的な分析に注力できます。あくまでも、このコードが分析できるのは構造的な部分ですので、その点はご承知おきください。
+ソースコード Option Compare Database Option Explicit &#39; 統合MDB分析ツール (全フォームのVBAコード分析対応) &#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援 Sub AnalyzeAllFormsVBACodeToMarkdown() &#39; プロジェクト内の全フォームのVBAコードを分析し、個別のMarkdownレポートを生成する Dim frmObj As AccessObject Dim formName As String Dim strFilePath As String Dim intFileNum As Integer Dim vbProj As Object &#39; As VBIDE.VBProject Dim vbCrntProj As Object &#39; As Application.CurrentProject Dim vbComp As Object &#39; As VBIDE."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Accessフォームの調査が苦行なので分析用コードを作った</h1>
+			<div class="meta">Posted at &mdash; Jun 9, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="背景と目的">背景と目的</h2>
+
+<p><img src="./2025-06-08-00-00-00.jpeg" alt="pic" /></p>
+
+<p>Microsoft Accessで開発されたアプリケーション、特に多くのフォームを持つものは、時間と共に内部のVBAコードが複雑化し、その全体像を把握することが難しくなる傾向があります。ドキュメントが古くなったり、存在しなかったりすると、システムのメンテナンス、改修、さらには将来的な移行計画において、大きな困難とリスクを伴います。</p>
+
+<p>つまり、大抵の場合はメチャクチャ大変ってことです＿(　_´ω`)_ﾍﾟｼｮ</p>
+
+<p>小規模なシステムならともかく、年月を経るに従って大抵は規模が大きくなります。そのため、手作業で各フォームのVBAコードを調査し、その内容を理解・整理するには膨大な時間と労力が必要です。</p>
+
+<p>そこで、現状のシステムに含まれるフォームについて、<strong>構文的・構造的な特徴を抽出する</strong>分析用コードを作成しました。このVBAスクリプトは、以下のニーズに応えることを目指しています。</p>
+
+<ul>
+<li><strong>網羅的な現状把握の自動化</strong>: Accessデータベース内に存在する全てのフォームを対象とし、それぞれのVBAコードに含まれる構造や特徴を自動的に抽出します。</li>
+<li><strong>標準化されたドキュメント生成</strong>: 分析結果を、構造化され視覚的に理解しやすいMarkdown形式のレポートとして、フォームごとに出力します。これにより、手作業によるドキュメント作成の負担を軽減し、一貫性のある基礎資料を提供します。</li>
+<li><strong>移行・改修の意思決定支援</strong>: 各フォームのVBAコードの複雑さ、特定のAccess機能や外部連携の使用状況、イベント処理のパターンなどを明らかにすることで、移行や改修の優先順位付け、工数見積もり、リスク評価のための客観的な情報を提供します。</li>
+<li><strong>コード品質に関する洞察</strong>: <code>GoTo</code>ステートメントの使用頻度やエラー処理の実装状況など、コード品質に関連する情報を収集し、改善点を見つけるための手がかりを提供します。</li>
+<li><strong>開発・保守の効率化</strong>: 既存コードの理解を助け、開発者間の情報共有を促進することで、開発・保守作業の効率化に貢献します。</li>
+</ul>
+
+<p>これにより、構造的な分析はコードに任せて、<strong>人間は意味的な分析に注力できます</strong>。あくまでも、このコードが分析できるのは構造的な部分ですので、その点はご承知おきください。</p>
+
+<h2 id="ソースコード">ソースコード</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vba" data-lang="vba">Option Compare Database
+Option Explicit
+
+&#39; 統合MDB分析ツール (全フォームのVBAコード分析対応)
+&#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援
+
+Sub AnalyzeAllFormsVBACodeToMarkdown()
+    &#39; プロジェクト内の全フォームのVBAコードを分析し、個別のMarkdownレポートを生成する
+    Dim frmObj As AccessObject
+    Dim formName As String
+    Dim strFilePath As String
+    Dim intFileNum As Integer
+    Dim vbProj As Object &#39; As VBIDE.VBProject
+    Dim vbCrntProj As Object &#39; As Application.CurrentProject
+    Dim vbComp As Object &#39; As VBIDE.VBComponent
+    Dim codeMod As Object &#39; As VBIDE.CodeModule
+    Dim analysisCounter As Long: analysisCounter = 0
+    Dim errorCounter As Long: errorCounter = 0
+    Dim overallStatus As String: overallStatus = &#34;&#34;
+
+    On Error GoTo ErrorHandler_Overall
+
+    &#39; VBEプロジェクトの取得 (最初に一度だけ)
+    Set vbCrntProj = Application.CurrentProject
+    If vbCrntProj Is Nothing Then
+        MsgBox &#34;VBAプロジェクトにアクセスできませんでした。参照設定やAccessのオプションを確認してください。&#34;, vbCritical, &#34;初期化エラー&#34;
+        Exit Sub
+    End If
+
+    If vbCrntProj.AllForms.count = 0 Then
+        MsgBox &#34;分析対象のフォームが見つかりません。&#34;, vbInformation, &#34;情報&#34;
+        Exit Sub
+    End If
+
+    Set vbProj = VBE.ActiveVBProject
+
+    &#39; 全フォームをループ処理
+    For Each frmObj In vbCrntProj.AllForms
+        formName = frmObj.Name
+        strFilePath = vbCrntProj.Path &amp; &#34;\&#34; &amp; ReplaceValidFileNameChars(formName) &amp; &#34;_VBA_Analysis.md&#34;
+        
+        Debug.Print &#34;分析開始: &#34; &amp; formName
+
+        intFileNum = FreeFile
+        Open strFilePath For Output As #intFileNum
+
+        &#39; レポートヘッダー
+        Print #intFileNum, &#34;# フォームVBAコード分析レポート: `&#34; &amp; MDEscape(formName) &amp; &#34;`&#34;
+        Print #intFileNum, &#34;&#34;
+        Print #intFileNum, &#34;**データベース:** `&#34; &amp; MDEscape(CurrentProject.Name) &amp; &#34;`&#34;
+        Print #intFileNum, &#34;**分析日時:** &#34; &amp; Now()
+        Print #intFileNum, &#34;&#34;
+        Print #intFileNum, &#34;---&#34;
+        Print #intFileNum, &#34;&#34;
+
+        On Error GoTo ErrorHandler_FormLevel &#39; フォームごとのエラー処理
+
+        &#39; VBEコンポーネントとコードモジュールの取得
+        Dim componentName As String
+        componentName = &#34;Form_&#34; &amp; formName
+        
+        Set vbComp = Nothing &#39; ループごとに初期化
+        Set codeMod = Nothing
+
+        On Error Resume Next &#39; VBComponent取得時のエラーをハンドル
+        Set vbComp = vbProj.VBComponents.Item(componentName)
+        If vbComp Is Nothing Then
+            Set vbComp = vbProj.VBComponents.Item(formName) &#39; &#34;Form_&#34;プレフィックスなしも試す
+        End If
+        On Error GoTo ErrorHandler_FormLevel &#39; 通常のエラー処理に戻す
+
+        If vbComp Is Nothing Then
+            Print #intFileNum, &#34;## エラー&#34;
+            Print #intFileNum, &#34;&#34;
+            Print #intFileNum, &#34;- フォーム `&#34; &amp; MDEscape(formName) &amp; &#34;` のVBAコンポーネントが見つかりませんでした。&#34;
+            errorCounter = errorCounter + 1
+            overallStatus = overallStatus &amp; vbCrLf &amp; &#34;- &#34; &amp; formName &amp; &#34;: VBAコンポーネント取得エラー&#34;
+            GoTo NextFormIteration
+        End If
+
+        Set codeMod = vbComp.CodeModule
+        If codeMod Is Nothing Then
+            Print #intFileNum, &#34;## エラー&#34;
+            Print #intFileNum, &#34;&#34;
+            Print #intFileNum, &#34;- フォーム `&#34; &amp; MDEscape(formName) &amp; &#34;` のコードモジュールにアクセスできませんでした。&#34;
+            errorCounter = errorCounter + 1
+            overallStatus = overallStatus &amp; vbCrLf &amp; &#34;- &#34; &amp; formName &amp; &#34;: コードモジュールアクセスエラー&#34;
+            GoTo NextFormIteration
+        End If
+
+        &#39; --- 1. コードの総行数 ---
+        Print #intFileNum, &#34;## 1. コードの概要&#34;
+        Print #intFileNum, &#34;&#34;
+        Print #intFileNum, &#34;- **総行数:** &#34; &amp; codeMod.CountOfLines
+        Print #intFileNum, &#34;&#34;
+        Print #intFileNum, &#34;---&#34;
+        Print #intFileNum, &#34;&#34;
+
+        &#39; --- 2. 各プロシージャに関する情報 ---
+        AnalyzeProceduresMD intFileNum, codeMod, formName, vbProj
+        Print #intFileNum, &#34;---&#34;
+        Print #intFileNum, &#34;&#34;
+
+        &#39; --- 3. 特定のキーワードや構文の使用状況 ---
+        AnalyzeKeywordsAndSyntaxMD intFileNum, codeMod
+        Print #intFileNum, &#34;---&#34;
+        Print #intFileNum, &#34;&#34;
+        
+        analysisCounter = analysisCounter + 1
+        overallStatus = overallStatus &amp; vbCrLf &amp; &#34;- &#34; &amp; formName &amp; &#34;: 正常終了&#34;
+
+NextFormIteration:
+        If intFileNum &gt; 0 Then Close #intFileNum
+        intFileNum = 0 &#39; ファイルハンドルをリセット
+        Set vbComp = Nothing &#39; オブジェクト解放
+        Set codeMod = Nothing  &#39; オブジェクト解放
+        On Error GoTo ErrorHandler_Overall &#39; エラーハンドラを全体に戻す
+    Next frmObj
+
+    &#39; --- 全体処理の完了メッセージ ---
+    Dim summaryMsg As String
+    summaryMsg = &#34;全フォームのVBAコード分析が完了しました。&#34; &amp; vbCrLf &amp; vbCrLf &amp; _
+                 &#34;処理済みフォーム数: &#34; &amp; analysisCounter &amp; vbCrLf &amp; _
+                 &#34;エラー発生フォーム数: &#34; &amp; errorCounter &amp; vbCrLf &amp; vbCrLf &amp; _
+                 &#34;レポートは各フォーム名のファイルとして、データベースと同じフォルダに保存されました。&#34;
+    
+    If errorCounter &gt; 0 Then
+        summaryMsg = summaryMsg &amp; vbCrLf &amp; vbCrLf &amp; &#34;エラーが発生したフォームの詳細:&#34; &amp; overallStatus
+        MsgBox summaryMsg, vbExclamation, &#34;分析完了 (一部エラーあり)&#34;
+    Else
+        MsgBox summaryMsg, vbInformation, &#34;分析完了&#34;
+    End If
+
+Exit Sub
+
+ErrorHandler_FormLevel:
+    Print #intFileNum, &#34;## フォームレベルのエラー&#34;
+    Print #intFileNum, &#34;&#34;
+    Print #intFileNum, &#34;フォーム `&#34; &amp; MDEscape(formName) &amp; &#34;` の分析処理中に予期せぬエラーが発生しました。&#34;
+    Print #intFileNum, &#34;- **エラー番号:** &#34; &amp; Err.Number
+    Print #intFileNum, &#34;- **エラー内容:** `&#34; &amp; MDEscape(Err.Description) &amp; &#34;`&#34;
+    
+    Debug.Print &#34;フォーム `&#34; &amp; MDEscape(formName) &amp; &#34;` の分析処理中に予期せぬエラーが発生しました。&#34;
+    Debug.Print &#34;- **エラー内容:** `&#34; &amp; MDEscape(Err.Description) &amp; &#34;`&#34;
+    
+    errorCounter = errorCounter + 1
+    overallStatus = overallStatus &amp; vbCrLf &amp; &#34;- &#34; &amp; formName &amp; &#34;: 分析中エラー (&#34; &amp; Err.Number &amp; &#34;)&#34;
+    Resume NextFormIteration &#39; エラーが発生したら次のフォームの処理へ
+
+ErrorHandler_Overall:
+    MsgBox &#34;分析処理全体で予期せぬエラーが発生しました。&#34; &amp; vbCrLf &amp; _
+           &#34;エラー番号: &#34; &amp; Err.Number &amp; vbCrLf &amp; _
+           &#34;エラー内容: &#34; &amp; Err.Description, vbCritical, &#34;重大なエラー&#34;
+    If intFileNum &gt; 0 Then Close #intFileNum &#39; 開いている可能性のあるファイルを閉じる
+End Sub
+
+&#39; ファイル名として使用できない文字を置換するヘルパー関数
+Function ReplaceValidFileNameChars(originalName As String) As String
+    Dim invalidChars As String
+    Dim i As Long
+    Dim char As String
+    Dim resultName As String
+    
+    invalidChars = &#34;\/:*?&#34;&#34;&lt;&gt;|&#34;
+    resultName = originalName
+    
+    For i = 1 To Len(invalidChars)
+        char = Mid(invalidChars, i, 1)
+        resultName = Replace(resultName, char, &#34;_&#34;)
+    Next i
+    ReplaceValidFileNameChars = resultName
+End Function
+
+
+Sub AnalyzeProceduresMD(ByVal FileNum As Integer, ByVal codeMod As Object, ByVal currentFormName As String, ByVal vbProj As Object)
+    &#39; プロシージャ情報を分析しMarkdown形式で出力
+    &#39; 変更点: GetAllProceduresFromCodeModule を使用してプロシージャリストを最初に取得
+    
+    Dim allProcs As Collection
+    Dim procInfo As Variant &#39; 配列 (プロシージャ名, プロシージャ種類)
+    Dim procName As String
+    Dim procKind As Long &#39; vbext_ProcKind
+    Dim startLine As Long
+    Dim lineCount As Long
+    Dim i As Long
+    Dim lineText As String
+    Dim calledProcNamePart As String
+    Dim controlNames As Collection
+    
+    Set controlNames = GetFormControlNames(currentFormName)
+
+    Print #FileNum, &#34;## 2. プロシージャ分析&#34;
+    Print #FileNum, &#34;&#34;
+
+    If codeMod Is Nothing Or codeMod.CountOfLines &lt;= 1 Then &#39; 宣言行のみなどの場合
+        Print #FileNum, &#34;*分析可能なプロシージャはありません。*&#34; &amp; vbCrLf
+        Exit Sub
+    End If
+
+    &#39; モジュール内の全プロシージャ情報を最初に取得
+    Set allProcs = GetAllProceduresFromCodeModule(codeMod)
+
+    If allProcs.count = 0 Then
+        Print #FileNum, &#34;*分析可能なプロシージャは見つかりませんでした。*&#34; &amp; vbCrLf
+        Exit Sub
+    End If
+
+    &#39; 取得したプロシージャリストをループ処理
+    For Each procInfo In allProcs
+        procName = procInfo(0)
+        procKind = procInfo(1)
+        
+        &#39; 各プロシージャの詳細情報を取得
+        On Error Resume Next &#39; ProcStartLine や ProcCountLines でエラーになる可能性
+        startLine = codeMod.ProcStartLine(procName, procKind)
+        lineCount = codeMod.ProcCountLines(procName, procKind)
+        If Err.Number &lt;&gt; 0 Then
+            Debug.Print &#34;エラー: プロシージャ &#39;&#34; &amp; procName &amp; &#34;&#39; の詳細情報取得に失敗 - &#34; &amp; Err.Description
+            Err.Clear
+            GoTo Continue &#39; エラーが発生したらこのプロシージャの分析をスキップ
+        End If
+        On Error GoTo 0
+
+        Print #FileNum, &#34;### プロシージャ: `&#34; &amp; MDEscape(procName) &amp; &#34;`&#34;
+        Print #FileNum, &#34;&#34;
+        Print #FileNum, &#34;- **種類:** &#34; &amp; MDEscape(ProcKindToString(procKind))
+        Print #FileNum, &#34;- **行数:** &#34; &amp; lineCount
+        
+        Dim eventInfo As String
+        eventInfo = GetEventProcedureInfo(procName, controlNames)
+        If eventInfo &lt;&gt; &#34;&#34; Then
+            Print #FileNum, &#34;- **イベントプロシージャ:** &#34; &amp; MDEscape(eventInfo)
+        End If
+
+        Dim callStatements As New Collection
+        Dim callCount As Long: callCount = 0
+        
+        If lineCount &gt; 0 And startLine &gt; 0 Then &#39; 有効な行情報がある場合のみ
+            For i = startLine To startLine + lineCount - 1
+                lineText = codeMod.Lines(i, 1)
+                
+                Dim commentPos As Long
+                commentPos = InStr(1, lineText, &#34;&#39;&#34;)
+                Dim codeLineOnly As String
+                If commentPos &gt; 0 Then
+                    codeLineOnly = Trim(Left(lineText, commentPos - 1))
+                Else
+                    codeLineOnly = Trim(lineText)
+                End If
+
+                If LCase(Left(codeLineOnly, 5)) = &#34;call &#34; Then
+                    callCount = callCount + 1
+                    calledProcNamePart = Trim(Mid(codeLineOnly, 5))
+                    
+                    Dim isCustom As Boolean
+                    Dim actualCalledName As String
+                    actualCalledName = &#34;&#34;
+                    
+                    If InStr(calledProcNamePart, &#34;.&#34;) &gt; 0 And InStr(calledProcNamePart, &#34;(&#34;) &gt; InStr(calledProcNamePart, &#34;.&#34;) Or InStr(calledProcNamePart, &#34;.&#34;) &gt; 0 And InStr(calledProcNamePart, &#34;(&#34;) = 0 Then
+                        actualCalledName = Mid(calledProcNamePart, InStrRev(calledProcNamePart, &#34;.&#34;) + 1)
+                        If InStr(1, actualCalledName, &#34;(&#34;) &gt; 0 Then
+                            actualCalledName = Trim(Left(actualCalledName, InStr(1, actualCalledName, &#34;(&#34;) - 1))
+                        End If
+                    Else
+                        actualCalledName = calledProcNamePart
+                        If InStr(1, actualCalledName, &#34;(&#34;) &gt; 0 Then
+                            actualCalledName = Trim(Left(actualCalledName, InStr(1, actualCalledName, &#34;(&#34;) - 1))
+                        End If
+                    End If
+
+                    isCustom = IsUserDefinedProcedureName(actualCalledName) &#39; 修正されたIsUserDefinedProcedureNameを使用
+                    
+                    On Error Resume Next
+                    callStatements.Add &#34;`&#34; &amp; MDEscape(codeLineOnly) &amp; &#34;`&#34; &amp; IIf(isCustom, &#34; (自作プロシージャの可能性)&#34;, &#34; (組み込み/不明)&#34;)
+                    On Error GoTo 0
+                End If
+            Next i
+        End If
+
+        Print #FileNum, &#34;- **`Call` ステートメントの数:** &#34; &amp; callCount
+        If callStatements.count &gt; 0 Then
+            Print #FileNum, &#34;- **`Call` している行 (コメント除外):**&#34;
+            Dim stmt As Variant
+            For Each stmt In callStatements
+                Print #FileNum, &#34;  - &#34; &amp; stmt
+            Next stmt
+            For i = 1 To callStatements.count
+                callStatements.Remove (1)
+            Next
+
+        End If
+        
+        Print #FileNum, &#34;&#34;
+Continue:
+    Next procInfo
+End Sub
+
+Function GetAllProceduresFromCodeModule(ByVal codeMod As Object) As Collection
+    &#39; 指定されたコードモジュールから全てのプロシージャ名と種類を抽出し、コレクションで返す
+    &#39; コレクションの各アイテムは配列で、Item(0) = プロシージャ名, Item(1) = プロシージャ種類(vbext_ProcKind)
+    
+    Dim procs As New Collection
+    Dim procName As String
+    Dim procKind As Long &#39; vbext_ProcKind
+    Dim currentLine As Long
+    Dim lastProcName As String: lastProcName = &#34;###INITIAL_VALUE###&#34; &#39; 前回処理したプロシージャ名を記憶
+    Dim tempProcInfo(0 To 1) As Variant &#39; プロシージャ名と種類を格納する配列
+
+    If codeMod Is Nothing Or codeMod.CountOfLines = 0 Then
+        Set GetAllProceduresFromCodeModule = procs &#39; 空のコレクションを返す
+        Exit Function
+    End If
+
+    On Error GoTo ErrorHandler_GetAllProcs
+    
+    currentLine = 1
+    Do While currentLine &lt;= codeMod.CountOfLines
+        Dim procNameAtLine As String
+        Dim procKindAtLine As Long
+        
+        On Error Resume Next &#39; ProcOfLineでエラーになることがあるため
+        procNameAtLine = codeMod.ProcOfLine(currentLine, procKindAtLine)
+        If Err.Number &lt;&gt; 0 Then
+            procNameAtLine = &#34;&#34; &#39; エラー時はプロシージャ名なしとして次の行へ
+            Err.Clear
+        End If
+        On Error GoTo ErrorHandler_GetAllProcs &#39; 通常のエラー処理に戻す
+
+        If procNameAtLine &lt;&gt; &#34;&#34; Then
+            &#39; 新しいプロシージャが見つかった場合のみコレクションに追加
+            If procNameAtLine &lt;&gt; lastProcName Then
+                tempProcInfo(0) = procNameAtLine
+                tempProcInfo(1) = procKindAtLine
+                
+                On Error Resume Next &#39; 重複キーエラーを避ける (通常はlastProcNameで回避されるはず)
+                procs.Add Item:=tempProcInfo, Key:=procNameAtLine &#39; プロシージャ名をキーとして追加
+                If Err.Number &lt;&gt; 0 Then Err.Clear &#39; 追加エラーは無視して続行
+                On Error GoTo ErrorHandler_GetAllProcs
+                
+                lastProcName = procNameAtLine
+            End If
+            
+            &#39; 次のチェック開始位置を現在のプロシージャの末尾の次の行に設定
+            Dim procStart As Long, procLinesCount As Long
+            procStart = codeMod.ProcStartLine(procNameAtLine, procKindAtLine)
+            procLinesCount = codeMod.ProcCountLines(procNameAtLine, procKindAtLine)
+            currentLine = procStart + procLinesCount
+        Else
+            &#39; プロシージャ内でない行は次の行へ
+            currentLine = currentLine + 1
+        End If
+    Loop
+    
+    Set GetAllProceduresFromCodeModule = procs
+    Exit Function
+
+ErrorHandler_GetAllProcs:
+    Debug.Print &#34;GetAllProceduresFromCodeModule Error: &#34; &amp; Err.Number &amp; &#34; - &#34; &amp; Err.Description
+    &#39; エラーが発生した場合でも、それまでに追加されたプロシージャでコレクションを返す
+    Set GetAllProceduresFromCodeModule = procs
+End Function
+
+Function GetFormControlNames(formName As String) As Collection
+    &#39; フォーム上のコントロール名一覧を取得する
+    Dim ctl As Control
+    Dim col As New Collection
+    Dim frm As Form
+    Dim isOpen As Boolean
+    
+    On Error Resume Next &#39; フォームが開いていない場合のエラー対策
+    Set frm = Forms(formName)
+    If Err.Number &lt;&gt; 0 Then
+        isOpen = False
+        Err.Clear
+        DoCmd.OpenForm formName, acDesign, , , , acHidden
+        If Err.Number = 0 Then Set frm = Forms(formName)
+    Else
+        isOpen = True
+    End If
+    On Error GoTo 0
+
+    If Not frm Is Nothing Then
+        On Error Resume Next &#39; コントロールアクセスエラー対策
+        For Each ctl In frm.Controls
+            col.Add ctl.Name, ctl.Name &#39; キーも同じ名前で追加（重複回避のため）
+        Next ctl
+        On Error GoTo 0
+        
+        If Not isOpen And Err.Number = 0 Then
+            DoCmd.Close acForm, formName, acSaveNo
+        End If
+    End If
+    Set GetFormControlNames = col
+End Function
+
+Function GetEventProcedureInfo(procName As String, controlNames As Collection) As String
+    &#39; プロシージャ名からイベント情報を推測する
+    Dim parts() As String
+    Dim objectName As String
+    Dim eventName As String
+    Dim ctlName As Variant
+    
+    GetEventProcedureInfo = &#34;&#34;
+    If InStr(procName, &#34;_&#34;) = 0 Then Exit Function &#39; アンダースコアがなければイベントプロシージャではないと判断
+    
+    parts = Split(procName, &#34;_&#34;)
+    If UBound(parts) &lt; 1 Then Exit Function
+    
+    objectName = parts(0)
+    eventName = parts(1)
+    
+    &#39; フォーム/レポートレベルのイベント
+    If LCase(objectName) = &#34;form&#34; Or LCase(objectName) = &#34;report&#34; Then
+        GetEventProcedureInfo = MDEscape(objectName) &amp; &#34; の &#34; &amp; MDEscape(eventName) &amp; &#34; イベント&#34;
+        Exit Function
+    End If
+    
+    &#39; コントロールレベルのイベント
+    On Error Resume Next &#39; コレクション検索エラー対策
+    For Each ctlName In controlNames
+        If LCase(ctlName) = LCase(objectName) Then
+            GetEventProcedureInfo = &#34;コントロール `&#34; &amp; MDEscape(objectName) &amp; &#34;` の &#34; &amp; MDEscape(eventName) &amp; &#34; イベント&#34;
+            Exit Function
+        End If
+    Next ctlName
+    On Error GoTo 0
+    
+    &#39; 特定できなかった場合（例：クラスモジュールのイベントなど）
+    &#39; ここではフォームに特化しているので、上記で見つからなければ &#34;&#34; を返す
+End Function
+
+Function IsUserDefinedProcedureName(procNameToCheck As String) As Boolean
+    &#39; 指定されたプロシージャ名が、VBA組み込み関数やキーワードでない可能性が高い場合にTrueを返す
+    &#39; (プロジェクト内に実際に定義があるかまでは厳密にチェックしない簡易版)
+    
+    IsUserDefinedProcedureName = True &#39; デフォルトはユーザー定義とみなす
+    
+    If procNameToCheck = &#34;&#34; Then
+        IsUserDefinedProcedureName = False
+        Exit Function
+    End If
+    
+    &#39; 明らかにオブジェクトメソッドであるものを除外 (より多くのパターンが必要)
+    If Left(LCase(procNameToCheck), 4) = &#34;docmd.&#34; Or _
+       Left(LCase(procNameToCheck), 7) = &#34;screen.&#34; Or _
+       Left(LCase(procNameToCheck), 3) = &#34;me.&#34; Or _
+       Left(LCase(procNameToCheck), 6) = &#34;forms!&#34; Or _
+       Left(LCase(procNameToCheck), 8) = &#34;reports!&#34; Or _
+       LCase(procNameToCheck) = &#34;currentdb&#34; Or _
+       LCase(procNameToCheck) = &#34;currentproject&#34; Then
+        IsUserDefinedProcedureName = False
+        Exit Function
+    End If
+    
+    &#39; VBAの主要なキーワードや組み込み関数を除外
+    If IsVBAKeywordOrBuiltIn(procNameToCheck) Then
+        IsUserDefinedProcedureName = False
+        Exit Function
+    End If
+    
+    &#39; ピリオドを含む場合は、オブジェクトのメソッド/プロパティの可能性があるが、
+    &#39; この関数では単純に名前だけで判断するため、ここではTrueのまま。
+    &#39; (呼び出し元で Module.Procedure の形式は別途考慮される想定)
+
+End Function
+
+Function IsVBAKeywordOrBuiltIn(word As String) As Boolean
+    &#39; VBAの主要な予約語または頻出する組み込み関数かどうかを判定する簡易的な関数
+    &#39; これは完全なリストではない
+    Dim keywords As Variant
+    Dim i As Long
+    
+    &#39; 予約語リスト (IsVBAKeywordから流用・拡張)
+    keywords = Array(&#34;Sub&#34;, &#34;Function&#34;, &#34;Property&#34;, &#34;Get&#34;, &#34;Let&#34;, &#34;Set&#34;, &#34;End&#34;, &#34;If&#34;, &#34;Then&#34;, &#34;Else&#34;, &#34;ElseIf&#34;, _
+                     &#34;Select&#34;, &#34;Case&#34;, &#34;For&#34;, &#34;To&#34;, &#34;Next&#34;, &#34;Do&#34;, &#34;While&#34;, &#34;Loop&#34;, &#34;Until&#34;, &#34;Wend&#34;, &#34;Exit&#34;, _
+                     &#34;Call&#34;, &#34;Dim&#34;, &#34;ReDim&#34;, &#34;Const&#34;, &#34;Public&#34;, &#34;Private&#34;, &#34;Friend&#34;, &#34;Static&#34;, &#34;With&#34;, &#34;As&#34;, _
+                     &#34;New&#34;, &#34;Me&#34;, &#34;Nothing&#34;, &#34;Empty&#34;, &#34;Null&#34;, &#34;True&#34;, &#34;False&#34;, &#34;Not&#34;, &#34;And&#34;, &#34;Or&#34;, &#34;Xor&#34;, &#34;Eqv&#34;, &#34;Imp&#34;, &#34;Is&#34;, _
+                     &#34;Like&#34;, &#34;Option&#34;, &#34;Explicit&#34;, &#34;Compare&#34;, &#34;Database&#34;, &#34;Binary&#34;, &#34;Text&#34;, &#34;GoTo&#34;, &#34;On&#34;, &#34;Error&#34;, &#34;Resume&#34;, _
+                     &#34;Type&#34;, &#34;Enum&#34;, &#34;Event&#34;, &#34;RaiseEvent&#34;, &#34;Implements&#34;, &#34;Declare&#34;, &#34;Lib&#34;, &#34;Alias&#34;, &#34;AddressOf&#34;, &#34;ByVal&#34;, &#34;ByRef&#34;, &#34;Optional&#34;, &#34;ParamArray&#34;, _
+                     &#34;Array&#34;, &#34;MsgBox&#34;, &#34;InputBox&#34;, &#34;Chr&#34;, &#34;Asc&#34;, &#34;Str&#34;, &#34;Val&#34;, &#34;CStr&#34;, &#34;CBool&#34;, &#34;CByte&#34;, &#34;CCur&#34;, &#34;CDate&#34;, &#34;CDbl&#34;, &#34;CDec&#34;, &#34;CInt&#34;, &#34;CLng&#34;, &#34;CSng&#34;, &#34;CVar&#34;, _
+                     &#34;Format&#34;, &#34;Date&#34;, &#34;Time&#34;, &#34;Now&#34;, &#34;Timer&#34;, &#34;DateAdd&#34;, &#34;DateDiff&#34;, &#34;DatePart&#34;, &#34;DateSerial&#34;, &#34;DateValue&#34;, &#34;Day&#34;, &#34;Month&#34;, &#34;Year&#34;, &#34;Hour&#34;, &#34;Minute&#34;, &#34;Second&#34;, &#34;Weekday&#34;, _
+                     &#34;Left&#34;, &#34;Right&#34;, &#34;Mid&#34;, &#34;Len&#34;, &#34;InStr&#34;, &#34;InStrRev&#34;, &#34;Replace&#34;, &#34;Split&#34;, &#34;Join&#34;, &#34;LCase&#34;, &#34;UCase&#34;, &#34;Trim&#34;, &#34;LTrim&#34;, &#34;RTrim&#34;, &#34;Space&#34;, &#34;String&#34;, _
+                     &#34;Abs&#34;, &#34;Sgn&#34;, &#34;Sqr&#34;, &#34;Int&#34;, &#34;Fix&#34;, &#34;Round&#34;, &#34;Rnd&#34;, _
+                     &#34;RGB&#34;, &#34;QBColor&#34;, _
+                     &#34;TypeName&#34;, &#34;VarType&#34;, _
+                     &#34;IsEmpty&#34;, &#34;IsNull&#34;, &#34;IsDate&#34;, &#34;IsNumeric&#34;, &#34;IsObject&#34;, &#34;IsArray&#34;, &#34;IsError&#34;, _
+                     &#34;CreateObject&#34;, &#34;GetObject&#34;, _
+                     &#34;Err&#34;, &#34;Erl&#34;, _
+                     &#34;Nz&#34;, &#34;Choose&#34;, &#34;Switch&#34;, &#34;IIf&#34;, _
+                     &#34;Environ&#34;, &#34;Command&#34;, &#34;Shell&#34;, _
+                     &#34;Beep&#34;, &#34;SendKeys&#34;, &#34;AppActivate&#34;, _
+                     &#34;DoEvents&#34;, &#34;EOF&#34;, &#34;LOF&#34;, &#34;FileLen&#34;, &#34;GetAttr&#34;, &#34;SetAttr&#34;, &#34;Dir&#34;, &#34;FreeFile&#34;, &#34;Input&#34;, &#34;Print&#34;, &#34;Write&#34;, &#34;Open&#34;, &#34;Close&#34;, &#34;Seek&#34;, &#34;Lock&#34;, &#34;Unlock&#34;, &#34;Name&#34;, &#34;Kill&#34;, &#34;FileCopy&#34;, &#34;MkDir&#34;, &#34;RmDir&#34;, &#34;ChDir&#34;, &#34;ChDrive&#34; _
+                    ) &#39; 一般的な組み込み関数も追加
+    
+    IsVBAKeywordOrBuiltIn = False
+    Dim lowerWord As String
+    lowerWord = LCase(Trim(word))
+    
+    For i = LBound(keywords) To UBound(keywords)
+        If lowerWord = LCase(keywords(i)) Then
+            IsVBAKeywordOrBuiltIn = True
+            Exit Function
+        End If
+    Next i
+    
+    &#39; 数値に見えるものは除外 (例: Call 123 はエラーだが、誤判定防止)
+    If IsNumeric(word) Then
+        IsVBAKeywordOrBuiltIn = True
+        Exit Function
+    End If
+
+    &#39; 文字列リテラルの開始/終了に見えるものは除外
+    If (Left(word, 1) = &#34;&#34;&#34;&#34; And Right(word, 1) = &#34;&#34;&#34;&#34;) Or (Left(word, 1) = &#34;&#39;&#34; And Right(word, 1) = &#34;&#39;&#34;) Then
+         IsVBAKeywordOrBuiltIn = True
+         Exit Function
+    End If
+
+End Function
+
+Function IsVBAKeyword(word As String) As Boolean
+    &#39; VBAの主要な予約語かどうかを判定する簡易的な関数
+    &#39; これは完全なリストではない
+    Dim keywords As Variant
+    Dim i As Long
+    keywords = Array(&#34;Sub&#34;, &#34;Function&#34;, &#34;Property&#34;, &#34;Get&#34;, &#34;Let&#34;, &#34;Set&#34;, &#34;End&#34;, &#34;If&#34;, &#34;Then&#34;, &#34;Else&#34;, &#34;ElseIf&#34;, _
+                     &#34;Select&#34;, &#34;Case&#34;, &#34;For&#34;, &#34;To&#34;, &#34;Next&#34;, &#34;Do&#34;, &#34;While&#34;, &#34;Loop&#34;, &#34;Until&#34;, &#34;Wend&#34;, &#34;Exit&#34;, _
+                     &#34;Call&#34;, &#34;Dim&#34;, &#34;ReDim&#34;, &#34;Const&#34;, &#34;Public&#34;, &#34;Private&#34;, &#34;Friend&#34;, &#34;Static&#34;, &#34;With&#34;, &#34;As&#34;, _
+                     &#34;New&#34;, &#34;Me&#34;, &#34;Nothing&#34;, &#34;Empty&#34;, &#34;Null&#34;, &#34;True&#34;, &#34;False&#34;, &#34;Not&#34;, &#34;And&#34;, &#34;Or&#34;, &#34;Xor&#34;, &#34;Eqv&#34;, &#34;Imp&#34;, &#34;Is&#34;, _
+                     &#34;Like&#34;, &#34;Option&#34;, &#34;Explicit&#34;, &#34;Compare&#34;, &#34;Database&#34;, &#34;Binary&#34;, &#34;Text&#34;, &#34;GoTo&#34;, &#34;On&#34;, &#34;Error&#34;, &#34;Resume&#34;, _
+                     &#34;Type&#34;, &#34;Enum&#34;, &#34;Event&#34;, &#34;RaiseEvent&#34;, &#34;Implements&#34;, &#34;Declare&#34;, &#34;Lib&#34;, &#34;Alias&#34;, &#34;AddressOf&#34;, &#34;ByVal&#34;, &#34;ByRef&#34;, &#34;Optional&#34;, &#34;ParamArray&#34;)
+    
+    IsVBAKeyword = False
+    For i = LBound(keywords) To UBound(keywords)
+        If LCase(word) = LCase(keywords(i)) Then
+            IsVBAKeyword = True
+            Exit Function
+        End If
+    Next i
+End Function
+
+
+Sub AnalyzeKeywordsAndSyntaxMD(ByVal FileNum As Integer, ByVal codeMod As Object)
+    &#39; 特定のキーワードや構文の使用状況を分析しMarkdown形式で出力
+    Dim i As Long
+    Dim lineText As String
+    Dim evidences As Collection
+    
+    Print #FileNum, &#34;## 3. 特定のキーワード・構文の使用状況&#34;
+    Print #FileNum, &#34;&#34;
+
+    If codeMod.CountOfLines &lt;= 1 Then
+        Print #FileNum, &#34;*分析可能なコードがほとんどありません。*&#34; &amp; vbCrLf
+        Exit Sub
+    End If
+
+    &#39; --- キーワード定義 ---
+    Dim keywordSets(0 To 9) As Variant &#39; 配列のサイズを調整
+    Dim sectionTitles(0 To 9) As String
+    
+    &#39; 0: Accessオブジェクト/メソッド
+    keywordSets(0) = Array(&#34;DoCmd.&#34;, &#34;Forms!&#34;, &#34;Reports!&#34;, &#34;Me.&#34;, &#34;Screen.ActiveForm&#34;, &#34;Screen.ActiveControl&#34;, &#34;CurrentDb(&#34;, &#34;CurrentProject.&#34;)
+    sectionTitles(0) = &#34;Accessオブジェクト/メソッド&#34;
+    
+    &#39; 1: DAO/ADOオブジェクト
+    keywordSets(1) = Array(&#34;DAO.Database&#34;, &#34;DAO.Recordset&#34;, &#34;db.OpenRecordset&#34;, &#34;ADODB.Connection&#34;, &#34;ADODB.Command&#34;, &#34;ADODB.Recordset&#34;, &#34;cn.Execute&#34;, &#34;rs.Open&#34;)
+    sectionTitles(1) = &#34;DAO/ADOオブジェクト&#34;
+    
+    &#39; 2: エラー処理構文
+    keywordSets(2) = Array(&#34;On Error GoTo&#34;, &#34;On Error Resume Next&#34;, &#34;Resume Next&#34;, &#34;Resume&#34;, &#34;Err.Raise&#34;, &#34;Err.Clear&#34;) &#39; エラーハンドラ内のExitは除外
+    sectionTitles(2) = &#34;エラー処理構文&#34;
+    
+    &#39; 3: API関数
+    keywordSets(3) = Array(&#34;Declare Sub&#34;, &#34;Declare Function&#34;) &#39; 宣言の検出。呼び出しは別途処理が必要
+    sectionTitles(3) = &#34;API関数 (宣言)&#34;
+    
+    &#39; 4: ファイル操作
+    keywordSets(4) = Array(&#34;Open&#34;, &#34;Close #&#34;, &#34;Print #&#34;, &#34;Input #&#34;, &#34;Line Input #&#34;, &#34;FreeFile&#34;, &#34;Kill&#34;, &#34;FileCopy&#34;, &#34;MkDir&#34;, &#34;Scripting.FileSystemObject&#34;) &#39;末尾スペースで誤検出減
+    sectionTitles(4) = &#34;ファイル操作&#34;
+    
+    &#39; 5: ループ構文 (カウント用)
+    keywordSets(5) = Array(&#34;For &#34;, &#34;Next&#34;, &#34;Do &#34;, &#34;Loop&#34;, &#34;While &#34;, &#34;Wend&#34;, &#34;For Each&#34;)
+    sectionTitles(5) = &#34;ループ構文 (出現回数)&#34;
+    
+    &#39; 6: 条件分岐構文 (カウント用)
+    keywordSets(6) = Array(&#34;If&#34;, &#34;Then&#34;, &#34;ElseIf &#34;, &#34;Else&#34;, &#34;End If&#34;, &#34;Select Case&#34;, &#34;Case&#34;, &#34;End Select&#34;)
+    sectionTitles(6) = &#34;条件分岐構文 (出現回数)&#34;
+    
+    &#39; 7: CreateObject/GetObject
+    keywordSets(7) = Array(&#34;CreateObject(&#34;, &#34;GetObject(&#34;)
+    sectionTitles(7) = &#34;CreateObject/GetObject (外部オブジェクト連携)&#34;
+    
+    &#39; 8: GoToステートメント
+    keywordSets(8) = Array(&#34;GoTo &#34;)
+    sectionTitles(8) = &#34;GoToステートメント&#34;
+    
+    &#39; 9: SQL文字列埋め込み (簡易検出)
+    keywordSets(9) = Array(&#34;SELECT &#34;, &#34;INSERT INTO &#34;, &#34;UPDATE &#34;, &#34;DELETE FROM &#34;) &#39; より高度な正規表現が望ましい
+    sectionTitles(9) = &#34;SQL文字列埋め込みの可能性&#34;
+    
+    &#39; --- 分析実行 ---
+    Dim k As Long, kw As Variant
+    Dim counts() As Long
+    ReDim counts(LBound(keywordSets) To UBound(keywordSets))
+    
+    For k = LBound(keywordSets) To UBound(keywordSets)
+        Print #FileNum, &#34;### &#34; &amp; MDEscape(sectionTitles(k))
+        Print #FileNum, &#34;&#34;
+        Set evidences = New Collection
+        counts(k) = 0
+        
+        For i = 1 To codeMod.CountOfLines
+            lineText = codeMod.Lines(i, 1)
+            If Trim(lineText) = &#34;&#34; Or Left(Trim(lineText), 1) = &#34;&#39;&#34; Then GoTo NextLine &#39; 空行とコメント行はスキップ
+            
+            For Each kw In keywordSets(k)
+                If InStr(1, lineText, CStr(kw), vbTextCompare) &gt; 0 Then
+                    &#39; ループと条件分岐はカウントのみ、他はエビデンス収集
+                    If k = 5 Or k = 6 Then &#39; ループ構文 or 条件分岐構文
+                        counts(k) = counts(k) + 1
+                    Else
+                        On Error Resume Next &#39; 重複追加エラーを無視
+                        evidences.Add &#34;**行 &#34; &amp; i &amp; &#34;:** `&#34; &amp; MDEscape(Trim(lineText)) &amp; &#34;`&#34;
+                        On Error GoTo 0
+                        counts(k) = counts(k) + 1 &#39; エビデンス数としてもカウント
+                        Exit For &#39; その行で最初に見つかったキーワードでエビデンスとして十分
+                    End If
+                End If
+            Next kw
+NextLine:
+        Next i
+        
+        If k = 5 Or k = 6 Then &#39; ループ構文 or 条件分岐構文
+            Print #FileNum, &#34;- **総出現回数 (簡易カウント):** &#34; &amp; counts(k)
+        Else
+            If evidences.count &gt; 0 Then
+                Print #FileNum, &#34;- **検出された箇所 (&#34; &amp; evidences.count &amp; &#34;件):**&#34;
+                For Each kw In evidences &#39; kwはここではエビデンス文字列
+                    Print #FileNum, &#34;  - &#34; &amp; kw
+                Next kw
+            Else
+                Print #FileNum, &#34;*該当するキーワード・構文は見つかりませんでした。*&#34;
+            End If
+        End If
+        Print #FileNum, &#34;&#34;
+    Next k
+
+    &#39; API呼び出しの検出 (宣言されたAPI関数名で検索)
+    Dim declaredAPIs As New Collection
+    For i = 1 To codeMod.CountOfLines
+        lineText = codeMod.Lines(i, 1)
+        If InStr(1, lineText, &#34;Declare&#34;, vbTextCompare) &gt; 0 Then
+            Dim apiName As String
+            apiName = ExtractApiName(lineText)
+            If apiName &lt;&gt; &#34;&#34; Then
+                On Error Resume Next
+                declaredAPIs.Add apiName, apiName &#39; 重複回避のためキーも設定
+                On Error GoTo 0
+            End If
+        End If
+    Next i
+
+    If declaredAPIs.count &gt; 0 Then
+        Print #FileNum, &#34;### API関数 (呼び出し)&#34;
+        Print #FileNum, &#34;&#34;
+        Set evidences = New Collection
+        Dim apiCallFound As Boolean
+        apiCallFound = False
+        For Each kw In declaredAPIs &#39; kw はAPI関数名
+            For i = 1 To codeMod.CountOfLines
+                lineText = codeMod.Lines(i, 1)
+                If Trim(lineText) = &#34;&#34; Or Left(Trim(lineText), 1) = &#34;&#39;&#34; Then GoTo NextApiLine
+                If InStr(1, lineText, CStr(kw), vbTextCompare) &gt; 0 And InStr(1, lineText, &#34;Declare&#34;, vbTextCompare) = 0 Then &#39; 宣言行は除く
+                    On Error Resume Next
+                    evidences.Add &#34;**行 &#34; &amp; i &amp; &#34; (`&#34; &amp; MDEscape(CStr(kw)) &amp; &#34;`):** `&#34; &amp; MDEscape(Trim(lineText)) &amp; &#34;`&#34;
+                    apiCallFound = True
+                    On Error GoTo 0
+                End If
+NextApiLine:
+            Next i
+        Next kw
+        
+        If evidences.count &gt; 0 Then
+            Print #FileNum, &#34;- **呼び出しが検出された箇所 (&#34; &amp; evidences.count &amp; &#34;件):**&#34;
+            For Each kw In evidences
+                Print #FileNum, &#34;  - &#34; &amp; kw
+            Next kw
+        Else
+            Print #FileNum, &#34;*宣言されたAPI関数の呼び出しは見つかりませんでした。*&#34;
+        End If
+    Else
+        Print #FileNum, &#34;### API関数 (呼び出し)&#34;
+        Print #FileNum, &#34;&#34;
+        Print #FileNum, &#34;*呼び出しをチェックする宣言済みAPI関数が見つかりませんでした。*&#34;
+    End If
+    Print #FileNum, &#34;&#34;
+
+End Sub
+
+Function ExtractApiName(declarationLine As String) As String
+    &#39; DeclareステートメントからAPI関数名を抽出する簡易的な関数
+    Dim parts() As String
+    Dim i As Long
+    Dim namePart As String
+    
+    ExtractApiName = &#34;&#34;
+    If InStr(1, declarationLine, &#34;Function &#34;, vbTextCompare) &gt; 0 Then
+        namePart = Mid(declarationLine, InStr(1, declarationLine, &#34;Function &#34;, vbTextCompare) + Len(&#34;Function &#34;))
+    ElseIf InStr(1, declarationLine, &#34;Sub &#34;, vbTextCompare) &gt; 0 Then
+        namePart = Mid(declarationLine, InStr(1, declarationLine, &#34;Sub &#34;, vbTextCompare) + Len(&#34;Sub &#34;))
+    Else
+        Exit Function
+    End If
+    
+    If InStr(1, namePart, &#34;(&#34;) &gt; 0 Then
+        ExtractApiName = Trim(Left(namePart, InStr(1, namePart, &#34;(&#34;) - 1))
+    Else
+        &#39; 引数なしの場合 (通常APIではないが念のため)
+        ExtractApiName = Trim(namePart)
+    End If
+End Function
+
+Function ProcKindToString(Kind As Long) As String
+    Select Case Kind
+        Case 0: ProcKindToString = &#34;Sub/Function (vbext_pk_Proc)&#34;
+        Case 1: ProcKindToString = &#34;Property Let (vbext_pk_Let)&#34;
+        Case 2: ProcKindToString = &#34;Property Set (vbext_pk_Set)&#34;
+        Case 3: ProcKindToString = &#34;Property Get (vbext_pk_Get)&#34;
+        Case Else: ProcKindToString = &#34;不明な種類 (&#34; &amp; Kind &amp; &#34;)&#34;
+    End Select
+End Function
+
+Function MDEscape(TextToEscape As String) As String
+    Dim EscapedText As String
+    Dim parts() As String
+    Dim i As Long
+    Dim inBackticks As Boolean
+    
+    EscapedText = &#34;&#34;
+    If IsNull(TextToEscape) Then MDEscape = &#34;(Null)&#34;: Exit Function &#39; Nullガード
+
+    parts = Split(TextToEscape, &#34;`&#34;)
+    inBackticks = False
+    
+    For i = 0 To UBound(parts)
+        If inBackticks Then
+            EscapedText = EscapedText &amp; &#34;`&#34; &amp; parts(i)
+            If i &lt; UBound(parts) Then
+                 EscapedText = EscapedText &amp; &#34;`&#34;
+            ElseIf TextToEscape Like &#34;*`&#34; Then
+                 EscapedText = EscapedText &amp; &#34;`&#34;
+            End If
+        Else
+            Dim tempPart As String
+            tempPart = parts(i)
+            tempPart = Replace(tempPart, &#34;\&#34;, &#34;\\&#34;)
+            tempPart = Replace(tempPart, &#34;*&#34;, &#34;\*&#34;)
+            tempPart = Replace(tempPart, &#34;_&#34;, &#34;\_&#34;)
+            tempPart = Replace(tempPart, &#34;{&#34;, &#34;\{&#34;)
+            tempPart = Replace(tempPart, &#34;}&#34;, &#34;\}&#34;)
+            tempPart = Replace(tempPart, &#34;[&#34;, &#34;\[&#34;)
+            tempPart = Replace(tempPart, &#34;]&#34;, &#34;\]&#34;)
+            tempPart = Replace(tempPart, &#34;(&#34;, &#34;\(&#34;)
+            tempPart = Replace(tempPart, &#34;)&#34;, &#34;\)&#34;)
+            tempPart = Replace(tempPart, &#34;#&#34;, &#34;\#&#34;)
+            tempPart = Replace(tempPart, &#34;+&#34;, &#34;\+&#34;)
+            tempPart = Replace(tempPart, &#34;-&#34;, &#34;\-&#34;)
+            tempPart = Replace(tempPart, &#34;.&#34;, &#34;\.&#34;)
+            tempPart = Replace(tempPart, &#34;!&#34;, &#34;\!&#34;)
+            tempPart = Replace(tempPart, &#34;|&#34;, &#34;\|&#34;)
+            EscapedText = EscapedText &amp; tempPart
+        End If
+        inBackticks = Not inBackticks
+    Next i
+    MDEscape = EscapedText
+End Function</code></pre></div>
+<h2 id="概要">概要</h2>
+
+<p>このVBAスクリプトは、Microsoft Accessデータベース内に存在する<strong>すべてのフォーム</strong>を対象とし、それぞれのフォームに記述されたVBAコードを自動的に分析します。分析結果は、フォームごとに個別のMarkdownファイルとして、データベースファイルと同じフォルダに出力されます。</p>
+
+<p>主な分析項目は以下の通りです。</p>
+
+<ol>
+<li><strong>コードの概要</strong>: VBAコードの総行数。</li>
+<li><strong>プロシージャ分析</strong>:
+
+<ul>
+<li>定義されている全プロシージャ（Sub, Function, Property）の一覧と種類、行数。</li>
+<li>イベントプロシージャの特定（どのコントロールのどのイベントに対応するか）。</li>
+<li><code>Call</code>ステートメントによる他のプロシージャの呼び出し状況（呼び出し行、呼び出し回数、呼び出し先が自作プロシージャかの簡易判定）。</li>
+</ul></li>
+<li><strong>特定のキーワード・構文の使用状況</strong>:
+
+<ul>
+<li><code>DoCmd</code> や <code>Me</code> といったAccess特有のオブジェクト/メソッドの使用箇所とそのエビデンス（該当行）。</li>
+<li>DAOやADOによるデータベース操作関連のコードの存在箇所とそのエビデンス。</li>
+<li>エラー処理構文 (<code>On Error GoTo</code>, <code>On Error Resume Next</code> など) の使用箇所とそのエビデンス。</li>
+<li>Windows API関数の宣言および呼び出し箇所とそのエビデンス。</li>
+<li>ファイル操作関連の命令や <code>Scripting.FileSystemObject</code> の使用箇所とそのエビデンス。</li>
+<li>ループ構文 (<code>For</code>, <code>Do</code>, <code>While</code>) や条件分岐構文 (<code>If</code>, <code>Select Case</code>) の出現回数。</li>
+<li><code>CreateObject</code> や <code>GetObject</code> による外部オブジェクト連携の有無とそのエビデンス。</li>
+<li><code>GoTo</code> ステートメントの使用箇所とそのエビデンス。</li>
+<li>VBAコード内に埋め込まれたSQL文字列の可能性のある箇所とそのエビデンス。</li>
+</ul></li>
+</ol>
+
+<p>このツールは、VBE (Visual Basic Editor) オブジェクトモデルを利用してVBAコードにプログラム的にアクセスし、文字列操作やパターンマッチングによって上記の情報を抽出します。出力されるMarkdownレポートは、各フォームのVBAコードの特性を理解するため、また、システム改修や移行の際のドキュメントとして役立ちます。</p>
+
+<h2 id="各プロシージャ-関数の機能解説">各プロシージャ・関数の機能解説</h2>
+
+<h3 id="sub-analyzeallformsvbacodetomarkdown"><code>Sub AnalyzeAllFormsVBACodeToMarkdown()</code></h3>
+
+<ul>
+<li><strong>機能</strong>:
+
+<ul>
+<li>このスクリプト全体のメイン処理を実行するプロシージャです。</li>
+<li>現在のAccessプロジェクト内に存在するすべてのフォームオブジェクトを順番に処理します。</li>
+<li>各フォームについて、個別のMarkdownレポートファイル (<code>[フォーム名]_VBA_Analysis.md</code>) を作成し、そのファイルに分析結果を書き込みます。</li>
+<li>VBEプロジェクトオブジェクト (<code>VBE.ActiveVBProject</code>) への参照を取得し、各フォームのVBAコンポーネント (<code>VBComponent</code>) およびコードモジュール (<code>CodeModule</code>) にアクセスします。</li>
+<li><code>AnalyzeProceduresMD</code> と <code>AnalyzeKeywordsAndSyntaxMD</code> の2つの主要な分析サブプロシージャを呼び出し、詳細な分析を実行させます。</li>
+<li>フォームごとのエラー処理 (<code>ErrorHandler_FormLevel</code>) と、スクリプト全体の包括的なエラー処理 (<code>ErrorHandler_Overall</code>) を行います。</li>
+<li>全フォームの処理完了後、処理結果の概要（成功したフォーム数、エラーが発生したフォーム数など）をメッセージボックスで表示します。</li>
+</ul></li>
+<li><strong>解決できる課題</strong>:
+
+<ul>
+<li>プロジェクト内の全フォームのVBAコードを一括で分析し、個別の整形されたレポートを自動生成することで、手作業による分析の膨大な手間を削減します。</li>
+<li>各フォームのコード特性（行数、プロシージャ構成、イベント処理、特定キーワードの使用状況など）を網羅的に把握するための基礎資料を効率的に作成できます。</li>
+<li>システム全体のVBAコードの傾向や複雑さを把握するのに役立ちます。</li>
+</ul></li>
+</ul>
+
+<h3 id="sub-analyzeproceduresmd-byval-filenum-as-integer-byval-codemod-as-object-byval-currentformname-as-string-byval-vbproj-as-object"><code>Sub AnalyzeProceduresMD(ByVal FileNum As Integer, ByVal codeMod As Object, ByVal currentFormName As String, ByVal vbProj As Object)</code></h3>
+
+<ul>
+<li><strong>機能</strong>:
+
+<ul>
+<li>指定されたフォームのコードモジュール (<code>codeMod</code>) を解析し、プロシージャに関する情報を指定されたファイル番号 (<code>FileNum</code>) のMarkdownレポートに出力します。このプロシージャは、まず <code>GetAllProceduresFromCodeModule</code> 関数を呼び出して、対象モジュール内の全プロシージャのリストを一括で取得します。その後、取得したリストに基づいて各プロシージャを個別に分析します。</li>
+<li><strong>プロシージャ一覧と基本情報</strong>: 検出された全プロシージャについて、それぞれの名前、種類（Sub, Function, Property Get/Let/Set）、およびVBAコードの行数をリストアップします。</li>
+<li><strong>イベントプロシージャの特定</strong>: <code>GetEventProcedureInfo</code> ヘルパー関数を利用して、プロシージャ名がフォーム自身またはフォーム上の特定のコントロールのイベント（例: <code>Form_Load</code>, <code>Button1_Click</code>）に対応しているかを推測し、その結果を表示します。</li>
+<li><strong><code>Call</code> ステートメントの分析</strong>: 各プロシージャ内のコードを1行ずつスキャンし、<code>Call</code> キーワードで始まる行を検出します。
+
+<ul>
+<li>検出された <code>Call</code> ステートメントを含む行全体（行末のコメントは除去）をエビデンスとしてリストアップします。</li>
+<li><code>Call</code> ステートメントの総数をカウントして表示します。</li>
+<li><code>IsUserDefinedProcedureName</code> ヘルパー関数を用いて、<code>Call</code> されているプロシージャ名がVBAの組み込み関数やキーワードではなく、ユーザー定義のプロシージャである可能性が高いかどうかを簡易的に判定し、その旨を注記します。</li>
+</ul></li>
+</ul></li>
+<li><strong>解決できる課題</strong>:
+
+<ul>
+<li>フォーム内にどのような処理単位（プロシージャ）が存在し、それらがどのような種類（イベントハンドラ、汎用サブルーチンなど）であるかの概要を明確にします。</li>
+<li>各プロシージャの規模（行数）を把握できます。</li>
+<li>どのコントロールがどのようなイベントを処理しているかを特定する手がかりとなります。</li>
+<li><code>Call</code> ステートメントの使用状況を通じて、プロシージャ間の明示的な呼び出し関係や、外部プロシージャへの依存の可能性を把握できます。ただし、この依存関係解析は<code>Call</code>文に限定されており、完全なコールグラフを作成するものではありません。</li>
+</ul></li>
+</ul>
+
+<h3 id="sub-analyzekeywordsandsyntaxmd-byval-filenum-as-integer-byval-codemod-as-object"><code>Sub AnalyzeKeywordsAndSyntaxMD(ByVal FileNum As Integer, ByVal codeMod As Object)</code></h3>
+
+<ul>
+<li><strong>機能</strong>:
+
+<ul>
+<li>指定されたフォームのコードモジュール (<code>codeMod</code>) 内をスキャンし、事前に定義された特定のキーワードや構文パターンの使用状況を検出し、その結果（出現箇所のエビデンスや出現回数）を指定されたファイル番号 (<code>FileNum</code>) のMarkdownレポートに出力します。</li>
+<li><strong>キーワードセットとカテゴリ</strong>: 分析対象とするキーワードは、「Accessオブジェクト/メソッド」、「DAO/ADOオブジェクト」、「エラー処理構文」、「API関数(宣言)」、「ファイル操作」、「ループ構文」、「条件分岐構文」、「CreateObject/GetObject」、「GoToステートメント」、「SQL文字列埋め込みの可能性」といったカテゴリに分類されて定義されています。</li>
+<li><strong>エビデンスの出力</strong>: 多くのキーワードカテゴリ（ループと条件分岐を除く）については、キーワードが実際に使用されている行番号とその行のコード（コメント除去前）を「エビデンス」としてリストアップします。</li>
+<li><strong>出現回数のカウント</strong>: ループ構文と条件分岐構文については、キーワードの出現総回数をカウントして表示します。</li>
+<li><strong>API呼び出しの分析</strong>: まずコード全体から<code>Declare</code>ステートメントで宣言されているAPI関数名を抽出し、次に、それらのAPI関数名が実際にコード内で（宣言行以外で）呼び出されている箇所を検索し、エビデンスとして表示します。</li>
+</ul></li>
+<li><strong>解決できる課題</strong>:
+
+<ul>
+<li>フォームのVBAコードが、データベース操作、ファイルアクセス、エラーハンドリング、外部アプリケーション連携、OS機能呼び出し（API経由）といった、どのような種類の処理をどの程度行っているかの傾向を把握できます。</li>
+<li><code>GoTo</code>ステートメントのような特定の構文の使用頻度から、コードの構造的な特徴や潜在的な保守性の問題点に気づくきっかけを提供します。</li>
+<li>VBAコード内に埋め込まれたSQL文の存在箇所を特定し、データアクセス方法の確認や、セキュリティ（動的SQLの場合のSQLインジェクションリスクなど）の観点からのレビューポイントを提示します。</li>
+</ul></li>
+</ul>
+
+<h3 id="ユーティリティ関数群">ユーティリティ関数群</h3>
+
+<ul>
+<li><strong><code>ReplaceValidFileNameChars(originalName As String) As String</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: ファイル名として使用できない特殊文字（例: <code>\</code>, <code>/</code>, <code>:</code>, <code>*</code> など）をアンダースコア <code>_</code> に置換します。</li>
+<li><strong>解決できる課題</strong>: フォーム名など動的にファイル名を生成する際に、OSレベルで無効なファイル名が作成されるのを防ぎ、ファイルI/Oエラーを回避します。</li>
+</ul></li>
+<li><strong><code>GetAllProceduresFromCodeModule(ByVal codeMod As Object) As Collection</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: 指定されたコードモジュールオブジェクトから、定義されている全てのプロシージャの名前とその種類（Sub, Function, Property Get/Let/Set）を抽出し、重複なくコレクションとして返します。コレクションの各アイテムはプロシージャ名と種類を格納した配列です。</li>
+<li><strong>解決できる課題</strong>: コードモジュール内のプロシージャを効率的に一覧化し、<code>AnalyzeProceduresMD</code>関数が各プロシージャを個別に分析するための基礎データを提供します。モジュール全体を1行ずつスキャンするよりも効率的なプロシージャ特定方法です。</li>
+</ul></li>
+<li><strong><code>GetFormControlNames(formName As String) As Collection</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: 指定されたフォーム名に対応するフォームを（必要であれば非表示のデザインビューで一時的に）開き、そのフォーム上に配置されている全てのコントロールの名前を取得して、<code>Collection</code>オブジェクトとして返します。</li>
+<li><strong>解決できる課題</strong>: イベントプロシージャがどのコントロールに関連付けられているかを特定する際に、フォーム上のコントロール名を正確に把握するために使用されます。</li>
+</ul></li>
+<li><strong><code>GetEventProcedureInfo(procName As String, controlNames As Collection) As String</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: 与えられたプロシージャ名（例: <code>Text1_AfterUpdate</code>）とフォームのコントロール名リストを基に、そのプロシージャがどのオブジェクト（フォーム自身または特定のコントロール）のどのイベント（例: <code>AfterUpdate</code>）に対応するものかを推測し、説明的な文字列（例: &ldquo;コントロール <code>Text1</code> の <code>AfterUpdate</code> イベント&rdquo;）を返します。</li>
+<li><strong>解決できる課題</strong>: 標準的な命名規則に従ったイベントプロシージャの役割を自動的に識別し、レポートの可読性を高めます。</li>
+</ul></li>
+<li><strong><code>IsUserDefinedProcedureName(procNameToCheck As String) As Boolean</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: 指定されたプロシージャ名が、VBAの組み込み関数や主要なキーワードではない場合に <code>True</code> を返す簡易的な判定関数です。これにより、<code>Call</code> ステートメントの対象がユーザー定義のプロシージャである可能性が高いかどうかを推測します。この関数は、プロジェクト内で実際にプロシージャが定義されているかまでは検証しません。</li>
+<li><strong>解決できる課題</strong>: プロシージャ間の依存関係を分析する際に、<code>Call</code> の対象が解析すべき自作のルーチンなのか、それとも無視してよいVBA組み込みの命令なのかを大まかに区別するのに役立ちます。</li>
+</ul></li>
+<li><strong><code>IsVBAKeywordOrBuiltIn(word As String) As Boolean</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: 与えられた文字列が、VBAの主要な予約語（キーワード）または頻繁に使用される一般的な組み込み関数であるかどうかを、定義済みのリストと照合して判定します。数値や文字列リテラルもキーワードではないと判定します。</li>
+<li><strong>解決できる課題</strong>: <code>IsUserDefinedProcedureName</code> 関数の内部で使用され、プロシージャ名候補が予約語や組み込み関数である可能性を除外することで、ユーザー定義プロシージャ名の誤判定を減らします。このキーワードリストは完全ではないため、必要に応じて拡張が必要です。</li>
+</ul></li>
+<li><strong><code>ExtractApiName(declarationLine As String) As String</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: <code>Declare Sub</code> または <code>Declare Function</code> といったAPI宣言の行文字列から、宣言されているAPI関数の名前部分を抽出します。</li>
+<li><strong>解決できる課題</strong>: API関数の呼び出し状況を分析する前準備として、まず宣言されているAPI関数名を正確に特定するために使用されます。</li>
+</ul></li>
+<li><strong><code>ProcKindToString(Kind As Long) As String</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: VBEオブジェクトモデルが返すプロシージャの種類を示す内部的な数値コード (<code>vbext_ProcKind</code> 列挙型に対応）を、人間が読んで理解しやすい説明文字列（例: &ldquo;Sub/Function (vbext_pk_Proc)&ldquo;, &ldquo;Property Get (vbext_pk_Get)&ldquo;）に変換します。</li>
+<li><strong>解決できる課題</strong>: レポート出力時に、各プロシージャの種類を技術的なコードではなく、分かりやすい言葉で表示できるようにします。</li>
+</ul></li>
+
+<li><p><strong><code>MDEscape(TextToEscape As String) As String</code></strong>:</p>
+
+<ul>
+<li><strong>機能</strong>: Markdown形式でテキストを出力する際に、Markdownの書式制御に影響を与える可能性のある特殊文字（例: <code>*</code>, <code>_</code>, <code>#</code>, <code>[</code>, <code>]</code> など）を、バックスラッシュ <code>\</code> を使ってエスケープします。ただし、インラインコードを示すバッククォート <code>`</code> で囲まれた部分については、エスケープ処理の対象外とします。</li>
+<li><strong>解決できる課題</strong>: オブジェクト名、プロシージャ名、コード片などをMarkdownレポートに出力する際に、意図しない書式（例: アンダースコアがイタリック体として解釈される）が適用されるのを防ぎ、レポートの整形品質と正確性を維持します。</li>
+</ul></li>
+
+<li><p><strong>解決できる課題（ユーティリティ関数群全体として）</strong>: これらのヘルパー関数は、メインの分析プロシージャのロジックを整理し、特定の共通処理を再利用可能な形でカプセル化することで、コード全体の構造を明確にし、可読性、保守性、拡張性を向上させます。特に<code>MDEscape</code>関数は、Markdown形式での正確なレポート出力に不可欠です。</p></li>
+</ul>
+
+<h2 id="当ソースコードの利用手順">当ソースコードの利用手順</h2>
+
+<ol>
+<li><strong>Accessデータベースを開く</strong>: 分析したいAccessデータベースファイル（.mdb または .accdb）を開きます。</li>
+<li><strong>VBAエディタを開く</strong>: キーボードの <code>Alt</code> + <code>F11</code> キーを押すか、Accessのリボンメニューから「データベースツール」タブ → 「Visual Basic」を選択します。</li>
+<li><strong>標準モジュールを挿入</strong>: VBAエディタのメニューから「挿入」→「標準モジュール」を選択し、新しい標準モジュールを作成します。</li>
+<li><strong>ソースコードの貼り付け</strong>: 上記で提示されたVBAソースコード全体（<code>AnalyzeAllFormsVBACodeToMarkdown</code>プロシージャと、それに付随する全てのサブプロシージャおよび関数）を、作成した標準モジュールのコードウィンドウにコピー＆ペーストします。</li>
+
+<li><p><strong>参照設定の確認</strong>:</p>
+
+<ul>
+<li>VBAエディタのメニューから「ツール」→「参照設定」を開きます。</li>
+
+<li><p>以下のライブラリにチェックが入っていることを確認してください。もしチェックされていなければ、リストから探してチェックを入れます。</p>
+
+<ul>
+<li><strong><code>Microsoft Office XX.0 Access Object Library</code></strong> (名称はOfficeのバージョンによって変わります。)</li>
+<li><strong><code>Microsoft Visual Basic for Applications Extensibility 5.3</code></strong></li>
+</ul>
+
+<p><img src="./2025-06-08-00-00-01.png" alt="pic" /></p></li>
+
+<li><p>「OK」をクリックしてダイアログを閉じます。</p></li>
+</ul></li>
+
+<li><p><strong>VBAプロジェクトへのアクセス許可</strong>:</p>
+
+<ul>
+<li>Accessのメインウィンドウで、「ファイル」→「オプション」→「トラストセンター」→「トラストセンターの設定」ボタンをクリックします。</li>
+<li>「トラストセンター」ダイアログで、「マクロの設定」を選択し、「<strong>VBA プロジェクト オブジェクト モデルへのアクセスを信頼する</strong>」にチェックを入れます。</li>
+<li>「OK」を数回クリックして、すべてのダイアログを閉じます。</li>
+</ul></li>
+
+<li><p><strong>コードの実行</strong>:</p>
+
+<ul>
+<li>VBAエディタに戻り、<code>AnalyzeAllFormsVBACodeToMarkdown</code> プロシージャ内のどこかにカーソルを置きます。</li>
+<li>キーボードの <code>F5</code> キーを押すか、ツールバーの実行ボタン（緑色の右向き三角）をクリックしてマクロを実行します。</li>
+</ul></li>
+
+<li><p><strong>レポートファイルの確認</strong>:</p>
+
+<ul>
+<li>処理が完了すると、メッセージボックスで結果の概要が表示されます。</li>
+<li>Accessデータベースファイルが保存されているのと同じフォルダ内に、プロジェクト内の各フォームに対応する <code>[フォーム名]_VBA_Analysis.md</code> という名前のMarkdownファイルが複数作成されていることを確認します。</li>
+<li>これらのMarkdownファイルを、Markdown対応のテキストエディタやビューアで開いて内容を確認します。</li>
+</ul></li>
+</ol>
+
+<h2 id="当ソースコードを利用する際の注意点">当ソースコードを利用する際の注意点</h2>
+
+<ul>
+<li><strong>必須設定の確認</strong>: 上記「利用手順」のステップ5（参照設定）とステップ6（VBAプロジェクトへのアクセス許可）は、このスクリプトが正しく動作するための<strong>絶対的な前提条件</strong>です。これらが適切に設定されていない場合、エラーが発生したり、VBAコードへのアクセスができず分析が失敗したりします。</li>
+<li><strong>VBEプロジェクト参照</strong>: コード内で <code>Set vbProj = VBE.ActiveVBProject</code> としてVBEプロジェクトを取得しています。これは通常、現在開いているデータベースのVBAプロジェクトを指しますが、複数のAccessインスタンスや他のOfficeアプリケーションのVBAエディタが開いている場合など、稀に意図しないプロジェクトを参照する可能性があります。より確実なのは <code>Set vbProj = Application.CodeProject</code> を使用することです。</li>
+<li><strong>分析の精度と限界</strong>:
+
+<ul>
+<li>このスクリプトは、VBAコードの<strong>構文的・構造的な特徴</strong>を抽出するものであり、コードの<strong>意味やロジック、実行時の振る舞いを完全に解釈するものではありません</strong>。</li>
+<li>プロシージャ間の依存関係（<code>Call</code>ステートメントの分析）は、直接的な呼び出しのみを対象とし、間接的な呼び出しや複雑な制御フローは追跡できません。</li>
+<li>キーワード検索は、コメント内や文字列リテラル内の出現も検出する可能性があるため、結果の解釈には注意が必要です。</li>
+</ul></li>
+<li><strong>パフォーマンス</strong>: フォーム数が非常に多い、または個々のフォームのVBAコードが数千行に及ぶような大規模なデータベースの場合、分析処理全体にかなりの時間がかかることがあります。</li>
+<li><strong>エラーハンドリング</strong>: フォームごとのエラー処理とスクリプト全体のエラー処理が含まれていますが、データベースファイルの破損、特殊なVBAコンポーネントの保護設定、予期しないVBEオブジェクトの状態など、稀な状況ではエラーが発生し、一部のフォームの分析がスキップされたり、処理が中断したりする可能性があります。</li>
+<li><strong>フォームの一時オープンとクローズ</strong>: <code>GetFormControlNames</code>関数は、コントロール名を取得するためにフォームを非表示のデザインビューで一時的に開きます。この際、フォームの<code>Open</code>や<code>Load</code>イベントがトリガーされる可能性があります。通常、問題は発生しにくいですが、これらのイベントに重要な初期化処理や排他制御などが記述されている場合は、予期せぬ動作を引き起こす可能性がゼロではありません。処理後は保存せずに閉じています。</li>
+<li><strong><code>IsUserDefinedProcedureName</code> および <code>IsVBAKeywordOrBuiltIn</code> のリスト</strong>: これらの関数で使われているVBAキーワードや組み込み関数のリストは、一般的なものをカバーしていますが、網羅的ではありません。特定のライブラリ関数や古い構文などをユーザー定義プロシージャとして誤認識したり、逆にユーザー定義プロシージャを組み込み要素と誤判定したりする可能性が残ります。より高い精度が必要な場合は、これらのリストを適宜メンテナンスする必要があります。</li>
+<li><strong>Markdownパーサによる表示差異</strong>: <code>MDEscape</code>関数は主要なMarkdown特殊文字をエスケープしますが、最終的な表示は使用するMarkdownビューアやパーサの実装に依存します。稀に表示が崩れる可能性も考慮してください。</li>
+<li><strong>対象オブジェクトの限定</strong>: このスクリプトは<strong>フォームのVBAコード</strong>の分析に特化しています。標準モジュール、クラスモジュール、レポートのVBAコードは、このスクリプトでは直接的な分析対象外です。</li>
+<li><strong>ACCDE/MDEファイルの非対応</strong>: 設計情報が削除・保護されているコンパイル済みのACCDEファイルやMDEファイルでは、VBAコードへのアクセスができないため、このスクリプトは使用できません。分析対象は開発用のACCDBファイルまたはMDBファイルです。</li>
+<li><strong>デバッグ出力</strong>: コード内に <code>Debug.Print</code> ステートメントがいくつか残っています。これらはVBAエディタのイミディエイトウィンドウに進行状況やエラー情報を出力するためのもので、本番運用時にはコメントアウトまたは削除しても構いません。</li>
+</ul>
+
+<h2 id="todo">Todo</h2>
+
+<ul>
+<li><strong><code>VBE.ActiveVBProject</code> から <code>Application.CodeProject</code> への変更検討</strong>: VBAプロジェクト参照の堅牢性を高めるため。</li>
+<li><strong><code>IsVBAKeywordOrBuiltIn</code> のリスト拡充</strong>: より多くのVBA組み込み関数やオブジェクト、メソッド、プロパティをリストに追加し、ユーザー定義プロシージャの判定精度を向上させる。</li>
+<li><strong>プロシージャ依存関係解析の強化</strong>:
+
+<ul>
+<li><code>[モジュール名].[プロシージャ名]</code> 形式の呼び出しだけでなく、関数形式の呼び出し (<code>result = MyFunction(...)</code>) の検出精度を上げる（正規表現の利用など）。</li>
+<li>呼び出し先プロシージャのスコープ（Public/Private）を考慮し、実際に呼び出し可能かどうかの判定精度を上げる（ただし、Privateプロシージャでも同じモジュール内からは呼び出し可能）。</li>
+</ul></li>
+<li><strong>キーワード検出のコンテキスト判定</strong>: キーワードがコメント内か文字列リテラル内にあるかを判定し、分析対象から除外または区別するロジックの追加（複雑度が高い）。</li>
+<li><strong>ハードコードされた値の検出パターンの追加</strong>: ファイルパス、URL、IPアドレス、特定の数値（マジックナンバー）などを検出するためのパターンとロジックを<code>AnalyzeKeywordsAndSyntaxMD</code>に追加する。</li>
+<li><strong>モジュールレベル変数の分析</strong>: フォームモジュール内で宣言されているモジュールレベル変数（<code>Dim</code>, <code>Private</code>, <code>Public</code>）の一覧、型、スコープを抽出してレポートに出力する機能を追加する。</li>
+<li><strong>ユーザー設定オプションの導入</strong>:
+
+<ul>
+<li>分析対象とするキーワードセットをユーザーがカスタマイズできるようにする。</li>
+<li>特定のフォームのみを分析対象とするオプションを追加する（現状は全フォーム）。</li>
+<li>全フォームの分析結果を単一のMarkdownファイルに集約して出力するオプションを追加する。</li>
+</ul></li>
+<li><strong>レポートの目次生成</strong>: 出力されるMarkdownレポートの先頭に、各セクションへのリンクを含む目次を自動生成する機能を追加する。</li>
+<li><strong>標準モジュール・クラスモジュール分析機能の追加</strong>: 現在はフォームに特化しているが、同様の分析を標準モジュールやクラスモジュールにも適用できるように拡張する。</li>
+<li>全体的なコードの読みやすさ改善🤪</li>
+</ul>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://learn.microsoft.com/en-us/office/vba/api/overview/">Office VBA reference</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
