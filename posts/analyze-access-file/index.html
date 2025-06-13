@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>AccessMDBの調査が苦行なので分析用コードを作った - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="AccessMDBの調査が苦行なので分析用コードを作った" />
+<meta property="og:description" content="背景と目的 Accessデータベースは、その手軽さから広く利用されていますが、長期運用や複数人による改修、ドキュメントの不備などにより、内部構造が複雑化し、現状把握が困難になることがあります。このような状況は、メンテナンス性の低下やシステム移行時のリスク増大に繋がります。このVBAソースコードは、そんなMicrosoft Accessデータベース（.mdbまたは.accdbファイル）の包括的な分析を行い、その結果をMarkdown形式のレポートとして出力します。具体的には、データベースの構造を詳細に把握し、将来的なシステム移行や改修を検討する際に重要となる機能的な側面を特定するための情報を、Markdown形式で出力します。利用方法も簡単で、このソースコードを分析したいMDB内で実行するだけで良いので、あとは実行結果が出力されるまで待って分析作業に着手するだけです。
+このコードは、これらの課題に対応するため、以下のニーズに応えることを目指しています。
+ 視覚的に分かりやすいドキュメント作成：データベースの構成要素や主要なプロパティを、Markdown形式で見出し、リスト、コードブロックなどを用いて整理し、可読性の高いドキュメントを自動生成します。 効率的な現状把握：既存データベースの構造や機能概要を、整形されたレポートを通じて迅速に把握できるようにします。 移行計画・改修の初期情報収集：新システムへの移行や大規模な改修を検討する際、どの機能が重要で、どこに複雑なロジックが集中しているか、外部システムとの連携はどうか、といった初期分析情報を、より理解しやすい形式で提供します。 ブラックボックス化の軽減：詳細な仕様が不明なデータベースでも、その構造や機能の概要を、構造化されたレポートを通じて把握する手がかりを提供します。  実行環境 今回のソースコードは、以下の環境で動作を確認しています。
+ Office Professional 2021 Visual Basic for Applications 7.1  ソースコード Option Compare Database Option Explicit &#39; 統合MDB分析ツール &#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援 Sub GenerateMdbAnalysisReportMarkdown() &#39; メインプロシージャ: レポート生成の起点 &#39; レポート出力先を設定 Dim strFilePath As String strFilePath = CurrentProject.Path &amp; &#34;\MigrationAnalysisReport.md&#34; &#39; ファイルをオープン Dim intFileNum As Integer intFileNum = FreeFile Open strFilePath For Output As #intFileNum &#39; レポートヘッダー (Markdown形式) Print #intFileNum, &#34;# MDB総合分析レポート (構造把握 &amp; 移行検討)&#34; Print #intFileNum, &#34;&#34; Print #intFileNum, &#34;**データベース:**`&#34; &amp; CurrentProject." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/analyze-access-file/" /><meta property="article:published_time" content="2025-06-04T09:48:55&#43;09:00"/>
+<meta property="article:modified_time" content="2025-06-04T09:48:55&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="AccessMDBの調査が苦行なので分析用コードを作った"/>
+<meta name="twitter:description" content="背景と目的 Accessデータベースは、その手軽さから広く利用されていますが、長期運用や複数人による改修、ドキュメントの不備などにより、内部構造が複雑化し、現状把握が困難になることがあります。このような状況は、メンテナンス性の低下やシステム移行時のリスク増大に繋がります。このVBAソースコードは、そんなMicrosoft Accessデータベース（.mdbまたは.accdbファイル）の包括的な分析を行い、その結果をMarkdown形式のレポートとして出力します。具体的には、データベースの構造を詳細に把握し、将来的なシステム移行や改修を検討する際に重要となる機能的な側面を特定するための情報を、Markdown形式で出力します。利用方法も簡単で、このソースコードを分析したいMDB内で実行するだけで良いので、あとは実行結果が出力されるまで待って分析作業に着手するだけです。
+このコードは、これらの課題に対応するため、以下のニーズに応えることを目指しています。
+ 視覚的に分かりやすいドキュメント作成：データベースの構成要素や主要なプロパティを、Markdown形式で見出し、リスト、コードブロックなどを用いて整理し、可読性の高いドキュメントを自動生成します。 効率的な現状把握：既存データベースの構造や機能概要を、整形されたレポートを通じて迅速に把握できるようにします。 移行計画・改修の初期情報収集：新システムへの移行や大規模な改修を検討する際、どの機能が重要で、どこに複雑なロジックが集中しているか、外部システムとの連携はどうか、といった初期分析情報を、より理解しやすい形式で提供します。 ブラックボックス化の軽減：詳細な仕様が不明なデータベースでも、その構造や機能の概要を、構造化されたレポートを通じて把握する手がかりを提供します。  実行環境 今回のソースコードは、以下の環境で動作を確認しています。
+ Office Professional 2021 Visual Basic for Applications 7.1  ソースコード Option Compare Database Option Explicit &#39; 統合MDB分析ツール &#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援 Sub GenerateMdbAnalysisReportMarkdown() &#39; メインプロシージャ: レポート生成の起点 &#39; レポート出力先を設定 Dim strFilePath As String strFilePath = CurrentProject.Path &amp; &#34;\MigrationAnalysisReport.md&#34; &#39; ファイルをオープン Dim intFileNum As Integer intFileNum = FreeFile Open strFilePath For Output As #intFileNum &#39; レポートヘッダー (Markdown形式) Print #intFileNum, &#34;# MDB総合分析レポート (構造把握 &amp; 移行検討)&#34; Print #intFileNum, &#34;&#34; Print #intFileNum, &#34;**データベース:**`&#34; &amp; CurrentProject."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">AccessMDBの調査が苦行なので分析用コードを作った</h1>
+			<div class="meta">Posted at &mdash; Jun 4, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="背景と目的">背景と目的</h2>
+
+<p><img src="a_black_Shiba_Inu_looking_confused.jpeg" alt="pic" /></p>
+
+<p>Accessデータベースは、その手軽さから広く利用されていますが、長期運用や複数人による改修、ドキュメントの不備などにより、内部構造が複雑化し、現状把握が困難になることがあります。このような状況は、メンテナンス性の低下やシステム移行時のリスク増大に繋がります。このVBAソースコードは、そんなMicrosoft Accessデータベース（.mdbまたは.accdbファイル）の<strong>包括的な分析</strong>を行い、その結果を<strong>Markdown形式のレポート</strong>として出力します。具体的には、データベースの<strong>構造を詳細に把握</strong>し、将来的なシステム移行や改修を検討する際に<strong>重要となる機能的な側面を特定</strong>するための情報を、Markdown形式で出力します。利用方法も簡単で、このソースコードを分析したいMDB内で実行するだけで良いので、あとは実行結果が出力されるまで待って分析作業に着手するだけです。</p>
+
+<p>このコードは、これらの課題に対応するため、以下のニーズに応えることを目指しています。</p>
+
+<ul>
+<li><strong>視覚的に分かりやすいドキュメント作成</strong>：データベースの構成要素や主要なプロパティを、Markdown形式で見出し、リスト、コードブロックなどを用いて整理し、可読性の高いドキュメントを自動生成します。</li>
+<li><strong>効率的な現状把握</strong>：既存データベースの構造や機能概要を、整形されたレポートを通じて迅速に把握できるようにします。</li>
+<li><strong>移行計画・改修の初期情報収集</strong>：新システムへの移行や大規模な改修を検討する際、どの機能が重要で、どこに複雑なロジックが集中しているか、外部システムとの連携はどうか、といった初期分析情報を、より理解しやすい形式で提供します。</li>
+<li><strong>ブラックボックス化の軽減</strong>：詳細な仕様が不明なデータベースでも、その構造や機能の概要を、構造化されたレポートを通じて把握する手がかりを提供します。</li>
+</ul>
+
+<h2 id="実行環境">実行環境</h2>
+
+<p>今回のソースコードは、以下の環境で動作を確認しています。</p>
+
+<ul>
+<li>Office Professional 2021</li>
+<li>Visual Basic for Applications 7.1</li>
+</ul>
+
+<p><img src="image.png" alt="alt text" /></p>
+
+<h2 id="ソースコード">ソースコード</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vba" data-lang="vba">Option Compare Database
+Option Explicit
+
+&#39; 統合MDB分析ツール
+&#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援
+
+Sub GenerateMdbAnalysisReportMarkdown()
+    &#39; メインプロシージャ: レポート生成の起点
+    
+    &#39; レポート出力先を設定
+    Dim strFilePath As String
+    strFilePath = CurrentProject.Path &amp; &#34;\MigrationAnalysisReport.md&#34;
+    
+    &#39; ファイルをオープン
+    Dim intFileNum As Integer
+    intFileNum = FreeFile
+    Open strFilePath For Output As #intFileNum
+    
+    &#39; レポートヘッダー (Markdown形式)
+    Print #intFileNum, &#34;# MDB総合分析レポート (構造把握 &amp; 移行検討)&#34;
+    Print #intFileNum, &#34;&#34;
+    Print #intFileNum, &#34;**データベース:**`&#34; &amp; CurrentProject.Name &amp; &#34;`&#34;
+    Print #intFileNum, &#34;**分析日時:** &#34; &amp; Now()
+    Print #intFileNum, &#34;&#34;
+    Print #intFileNum, &#34;---&#34; &#39; 水平線
+    Print #intFileNum, &#34;&#34;
+    
+    &#39; 各分析プロシージャを呼び出し
+    IntegratedAnalyzeStartupSettingsMD intFileNum
+    IntegratedAnalyzeTablesMD intFileNum
+    IntegratedAnalyzeQueriesMD intFileNum
+    IntegratedAnalyzeFormsMD intFileNum
+    IntegratedAnalyzeReportsMD intFileNum
+    IntegratedAnalyzeModulesMD intFileNum
+    IntegratedAnalyzeMacrosMD intFileNum
+    IntegratedAnalyzeExternalConnectionsMD intFileNum
+    IntegratedAnalyzeSecurityModelMD intFileNum
+    IntegratedAnalyzeDependenciesMD intFileNum
+    
+    &#39; ファイルをクローズ
+    Close #intFileNum
+    
+    &#39; 完了メッセージ
+    MsgBox &#34;MDB総合分析レポート (Markdown形式) が完了しました。レポートは次の場所に保存されました：&#34; &amp; vbCrLf &amp; strFilePath, _
+           vbInformation, &#34;分析完了&#34;
+End Sub
+
+&#39; --- 1. スタートアップ設定分析 (Markdown) ---
+Sub IntegratedAnalyzeStartupSettingsMD(ByVal FileNum As Integer)
+    Print #FileNum, &#34;## 1. スタートアップ設定&#34;
+    Print #FileNum, &#34;&#34;
+    Print #FileNum, &#34;- **スタートアップフォーム:** &#34; &amp; MDEscape(GetStartupForm())
+    Print #FileNum, &#34;- **起動時の表示:** &#34; &amp; MDEscape(GetDisplayForm())
+    Print #FileNum, &#34;- **ナビゲーションウィンドウの表示:** &#34; &amp; MDEscape(GetNavPaneDisplay())
+    Print #FileNum, &#34;&#34;
+    Print #FileNum, &#34;---&#34;
+    Print #FileNum, &#34;&#34;
+End Sub
+
+&#39; --- 2. テーブル分析 (構造、重要度、リレーションシップ) (Markdown) ---
+Sub IntegratedAnalyzeTablesMD(ByVal FileNum As Integer)
+    Dim db As DAO.Database
+    Dim tdf As DAO.TableDef
+    Dim fld As DAO.Field
+    Dim idx As DAO.Index
+    Dim rel As DAO.Relation
+    Dim qdf As DAO.QueryDef
+    Dim i As Integer, usageCount As Integer
+    Dim obj As AccessObject
+    Dim usageObjects As Collection
+    
+    Set db = CurrentDb
+    
+    Print #FileNum, &#34;## 2. テーブル分析&#34;
+    Print #FileNum, &#34;&#34;
+    
+    Dim userTableCount As Long
+    userTableCount = 0
+    
+    For Each tdf In db.TableDefs
+        Set usageObjects = New Collection
+        
+        If Left(tdf.Name, 4) &lt;&gt; &#34;MSys&#34; And Left(tdf.Name, 1) &lt;&gt; &#34;~&#34; Then
+            userTableCount = userTableCount + 1
+            usageCount = 0
+            
+            &#39; クエリでの使用状況をカウント
+            For Each qdf In db.QueryDefs
+                If InStr(1, qdf.SQL, &#34;[&#34; &amp; tdf.Name &amp; &#34;]&#34;, vbTextCompare) &gt; 0 Or _
+                   InStr(1, qdf.SQL, &#34; &#34; &amp; tdf.Name &amp; &#34; &#34;, vbTextCompare) &gt; 0 Or _
+                   (InStr(1, qdf.SQL, tdf.Name, vbTextCompare) &gt; 0 And (Right(qdf.SQL, Len(tdf.Name)) = tdf.Name Or Left(qdf.SQL, Len(tdf.Name)) = tdf.Name)) Then
+                   usageObjects.Add (qdf.Name)
+                    usageCount = usageCount + 1
+                End If
+            Next qdf
+            
+            &#39; フォームでの使用状況をカウント
+            For Each obj In CurrentProject.AllForms
+                Dim isCountedInForm As Boolean &#39; フォーム内でカウント済みかどうかのフラグ
+                isCountedInForm = False
+                
+                On Error Resume Next
+                Dim tempForm As Form
+                DoCmd.OpenForm obj.Name, acDesign, , , , acHidden
+                If Err.Number = 0 Then
+                    Set tempForm = Forms(obj.Name)
+                    &#39; フォームのレコードソースでの使用状況をチェック
+                    If InStr(1, tempForm.RecordSource, tdf.Name, vbTextCompare) &gt; 0 Then
+                        usageObjects.Add (obj.Name)
+                        usageCount = usageCount + 1
+                        isCountedInForm = True &#39; レコードソースで使われているのでカウント済み
+                    End If
+                    
+                    &#39; Rem 変更/追加箇所: フォームのVBAコード内での使用状況チェックを追加
+                    If Not isCountedInForm And tempForm.hasModule Then
+                        Dim codeMod As Object &#39; VBIDE.CodeModule
+                        Dim lineNum As Long
+                        Set codeMod = Application.VBE.ActiveVBProject.VBComponents.Item(&#34;Form_&#34; + obj.Name).CodeModule
+                        If Not (codeMod Is Nothing) Then
+                            For lineNum = 1 To codeMod.CountOfLines
+                                &#39; SQL文やレコードセット操作でテーブル名が使われているかを簡易的にチェック
+                                If InStr(1, codeMod.Lines(lineNum, 1), &#34;&#34;&#34;&#34; &amp; tdf.Name &amp; &#34;&#34;&#34;&#34;, vbTextCompare) &gt; 0 Or _
+                                   InStr(1, codeMod.Lines(lineNum, 1), &#34; &#34; &amp; tdf.Name &amp; &#34; &#34;, vbTextCompare) &gt; 0 Then
+                                    &#39; 例: &#34;SELECT * FROM Products&#34;, CurrentDb.OpenRecordset(&#34;Products&#34;)
+                                    &#39; 注: このチェックは完全ではありませんが、多くのケースをカバーします。
+                                    usageObjects.Add (obj.Name)
+                                    usageCount = usageCount + 1
+                                    isCountedInForm = True &#39; VBAコード内で見つかったのでカウント済み
+                                    Exit For &#39; このフォームでは1回だけカウントするためループを抜ける
+                                End If
+                            Next lineNum
+                        
+                        End If
+                        Set codeMod = Nothing
+                    End If
+                    &#39; Rem 変更/追加箇所ここまで
+                    
+                    DoCmd.Close acForm, obj.Name, acSaveNo
+                    Set tempForm = Nothing
+                Else
+                    Err.Clear
+                End If
+                On Error GoTo 0
+            Next obj
+            
+            &#39; レポートのレコードソースでの使用状況をカウント
+            For Each obj In CurrentProject.AllReports
+                On Error Resume Next
+                Dim tempReport As Report
+                DoCmd.OpenReport obj.Name, acViewDesign, , , acHidden
+                If Err.Number = 0 Then
+                    Set tempReport = Reports(obj.Name)
+                    If InStr(1, tempReport.RecordSource, tdf.Name, vbTextCompare) &gt; 0 Then
+                        usageObjects.Add (obj.Name)
+                        usageCount = usageCount + 1
+                    End If
+                    DoCmd.Close acReport, obj.Name, acSaveNo
+                    Set tempReport = Nothing
+                Else
+                    Err.Clear
+                End If
+                On Error GoTo 0
+            Next obj
+
+            Print #FileNum, &#34;### テーブル: `&#34; &amp; MDEscape(tdf.Name) &amp; &#34;`&#34;
+            Print #FileNum, &#34;&#34;
+            Print #FileNum, &#34;- **フィールド数:** &#34; &amp; tdf.Fields.count
+            If Len(tdf.Connect) &gt; 0 Then
+                Print #FileNum, &#34;- **種類:** リンクテーブル (移行時に接続先とデータ取得方法の再検討が必要)&#34;
+                Print #FileNum, &#34;  - **接続先:** `&#34; &amp; MDEscape(tdf.Connect) &amp; &#34;`&#34;
+                Print #FileNum, &#34;  - **ソーステーブル:** `&#34; &amp; MDEscape(tdf.SourceTableName) &amp; &#34;`&#34;
+            Else
+                Print #FileNum, &#34;- **種類:** ローカルテーブル&#34;
+            End If
+            Print #FileNum, &#34;- **推定重要度 (簡易):** &#34; &amp; IIf(usageCount &gt; 3, &#34;**高**&#34;, IIf(usageCount &gt; 1, &#34;中&#34;, &#34;低&#34;))
+            Print #FileNum, &#34;- **使用参照数 (クエリ/フォーム/レポート):** &#34; &amp; usageCount
+            If usageCount &gt; 0 Then
+                Dim usageObjectsName As String
+                usageObjectsName = &#34;&#34;
+                
+                Dim usageObject
+                For Each usageObject In usageObjects
+                    usageObjectsName = usageObjectsName + usageObject + &#34;, &#34;
+                Next usageObject
+            
+                Print #FileNum, &#34;- **使用参照元:** &#34; &amp; usageObjectsName
+            End If
+            
+            
+            If tdf.Indexes.count &gt; 0 Then
+                Print #FileNum, &#34;- **インデックス (&#34; &amp; tdf.Indexes.count &amp; &#34;個):**&#34;
+                Dim pkFields As String: pkFields = &#34;&#34;
+                For Each idx In tdf.Indexes
+                    Dim strIdxFields As String: strIdxFields = &#34;&#34;
+                    If idx.Fields.count &gt; 0 Then
+                        For i = 0 To idx.Fields.count - 1
+                            strIdxFields = strIdxFields &amp; &#34;`&#34; &amp; MDEscape(idx.Fields(i).Name) &amp; &#34;`, &#34;
+                        Next i
+                        strIdxFields = Left(strIdxFields, Len(strIdxFields) - 2)
+                    Else
+                        strIdxFields = &#34;(フィールドなし)&#34;
+                    End If
+
+                    If idx.Primary Then
+                        Print #FileNum, &#34;  - **`&#34; &amp; MDEscape(idx.Name) &amp; &#34;`** (主キー: &#34; &amp; strIdxFields &amp; &#34;)&#34;
+                        pkFields = strIdxFields
+                    Else
+                        Print #FileNum, &#34;  - `&#34; &amp; MDEscape(idx.Name) &amp; &#34;` (&#34; &amp; IIf(idx.Unique, &#34;Unique, &#34;, &#34;&#34;) &amp; &#34;Fields: &#34; &amp; strIdxFields &amp; &#34;)&#34;
+                    End If
+                Next idx
+                If pkFields = &#34;&#34; Then Print #FileNum, &#34;  - (主キー未設定)&#34;
+            Else
+                Print #FileNum, &#34;- **インデックス:** (なし)&#34;
+                Print #FileNum, &#34;  - (主キー未設定)&#34;
+            End If
+            Print #FileNum, &#34;&#34;
+        End If
+    Next tdf
+    If userTableCount = 0 Then Print #FileNum, &#34;*ユーザー定義テーブルはありません。*&#34; &amp; vbCrLf
+    
+    Print #FileNum, &#34;### 主要なリレーションシップ&#34;
+    Print #FileNum, &#34;&#34;
+    If db.Relations.count &gt; 0 Then
+        For Each rel In db.Relations
+            Print #FileNum, &#34;- **関連名:** `&#34; &amp; MDEscape(rel.Name) &amp; &#34;`&#34;
+            Print #FileNum, &#34;  - **親テーブル (主キー側):** `&#34; &amp; MDEscape(rel.Table) &amp; &#34;`&#34;
+            Print #FileNum, &#34;  - **子テーブル (外部キー側):** `&#34; &amp; MDEscape(rel.ForeignTable) &amp; &#34;`&#34;
+            Dim strAttributes As String: strAttributes = &#34;&#34;
+            If (rel.Attributes And dbRelationUpdateCascade) Then strAttributes = strAttributes &amp; &#34;更新カスケード &#34;
+            If (rel.Attributes And dbRelationDeleteCascade) Then strAttributes = strAttributes &amp; &#34;削除カスケード &#34;
+            If (rel.Attributes And dbRelationDontEnforce) Then strAttributes = strAttributes &amp; &#34;整合性強制なし &#34;
+            If Trim(strAttributes) = &#34;&#34; Then strAttributes = &#34;参照整合性あり (カスケードなし、または制限)&#34;
+            Print #FileNum, &#34;  - **属性:** &#34; &amp; MDEscape(Trim(strAttributes))
+            Print #FileNum, &#34;&#34;
+        Next rel
+    Else
+        Print #FileNum, &#34;*リレーションシップは設定されていません。*&#34; &amp; vbCrLf
+    End If
+    Print #FileNum, &#34;---&#34;
+    Print #FileNum, &#34;&#34;
+End Sub
+
+&#39; --- 3. クエリ分析 (Markdown) ---
+Sub IntegratedAnalyzeQueriesMD(ByVal FileNum As Integer)
+    Dim db As DAO.Database
+    Dim qdf As DAO.QueryDef
+    Set db = CurrentDb
+    
+    Print #FileNum, &#34;## 3. クエリ分析&#34;
+    Print #FileNum, &#34;&#34;
+    
+    If db.QueryDefs.count &gt; 0 Then
+        For Each qdf In db.QueryDefs
+            If Left(qdf.Name, 4) &lt;&gt; &#34;~sq_&#34; And Left(qdf.Name, 1) &lt;&gt; &#34;~&#34; Then
+                Print #FileNum, &#34;### クエリ:`&#34; &amp; MDEscape(qdf.Name) &amp; &#34;`&#34;
+                Print #FileNum, &#34;&#34;
+                Print #FileNum, &#34;- **種類:** &#34; &amp; MDEscape(GetQueryType(qdf.Type))
+                
+                Dim queryNotes As String: queryNotes = &#34;&#34;
+                If qdf.Type &lt;&gt; dbQSelect And qdf.Type &lt;&gt; dbQCrosstab Then
+                    queryNotes = queryNotes &amp; &#34;データ操作/定義クエリ (**移行時ロジック確認必須**)。&#34;
+                End If
+                If InStr(1, qdf.SQL, &#34;SUM(&#34;, vbTextCompare) &gt; 0 Or _
+                   InStr(1, qdf.SQL, &#34;AVG(&#34;, vbTextCompare) &gt; 0 Or _
+                   InStr(1, qdf.SQL, &#34;COUNT(&#34;, vbTextCompare) &gt; 0 Or _
+                   InStr(1, qdf.SQL, &#34;GROUP BY&#34;, vbTextCompare) &gt; 0 Then
+                    queryNotes = queryNotes &amp; &#34;集計処理を含む可能性あり。&#34;
+                End If
+                If qdf.Type = dbQMakeTable Then
+                    queryNotes = queryNotes &amp; &#34;テーブル作成クエリ (作成先はSQL文中のINTO句参照)。&#34;
+                End If
+                
+                If queryNotes &lt;&gt; &#34;&#34; Then Print #FileNum, &#34;- **移行時の注意:** &#34; &amp; MDEscape(queryNotes)
+                
+                If Trim(qdf.SQL) &lt;&gt; &#34;&#34; Then
+                    Print #FileNum, &#34;- **SQL:**&#34;
+                    Print #FileNum, &#34;```sql&#34;
+                    Print #FileNum, Trim(qdf.SQL) &#39; SQL文をそのまま出力
+                    Print #FileNum, &#34;```&#34;
+                Else
+                    Print #FileNum, &#34;- **SQL:** (定義されていません)&#34;
+                End If
+                
+                If Len(qdf.Connect) &gt; 0 Then
+                    Print #FileNum, &#34;- **外部接続:**`&#34; &amp; MDEscape(qdf.Connect) &amp; &#34;`(パススルーまたは外部DBクエリ)&#34;
+                End If
+                Print #FileNum, &#34;&#34;
+            End If
+        Next qdf
+    Else
+        Print #FileNum, &#34;*クエリはありません。*&#34; &amp; vbCrLf
+    End If
+    Print #FileNum, &#34;---&#34;
+    Print #FileNum, &#34;&#34;
+End Sub
+
+&#39; --- 4. フォーム分析 (Markdown) ---
+Sub IntegratedAnalyzeFormsMD(ByVal FileNum As Integer)
+    Dim frmObj As AccessObject
+    Dim openedForm As Form
+    Dim FormName As String, sourceType As String
+    
+    Print #FileNum, &#34;## 4. フォーム分析&#34;
+    Print #FileNum, &#34;&#34;
+    
+    If CurrentProject.AllForms.count &gt; 0 Then
+        For Each frmObj In CurrentProject.AllForms
+            FormName = frmObj.Name
+            Print #FileNum, &#34;### フォーム:`&#34; &amp; MDEscape(FormName) &amp; &#34;`&#34;
+            Print #FileNum, &#34;&#34;
+            
+            Dim blnIsCurrentlyLoaded As Boolean
+            blnIsCurrentlyLoaded = IsFormLoaded(FormName)
+            
+            Dim strRecordSource As String: strRecordSource = &#34;(情報取得できず)&#34;
+            Dim blnHasVbaCode As Boolean: blnHasVbaCode = False
+            Dim controlsCount As Long: controlsCount = 0
+            Dim commandButtonCount As Long: commandButtonCount = 0
+            Dim subFormCount As Long: subFormCount = 0
+            sourceType = &#34;不明&#34;
+
+            On Error Resume Next
+            If Not blnIsCurrentlyLoaded Then
+                DoCmd.OpenForm FormName, acDesign, , , , acHidden
+                If Err.Number = 0 Then Set openedForm = Forms(FormName) Else Set openedForm = Nothing
+            Else
+                Set openedForm = Forms(FormName)
+                Print #FileNum, &#34;  - ※現在開かれています。情報は現在の状態に基づきます。&#34;
+            End If
+
+            If Not openedForm Is Nothing Then
+                strRecordSource = openedForm.RecordSource
+                blnHasVbaCode = HasCode(acForm, &#34;Form_&#34; + FormName)
+                controlsCount = openedForm.Controls.count
+                commandButtonCount = CountControls(openedForm, &#34;CommandButton&#34;)
+                subFormCount = CountControls(openedForm, &#34;SubForm&#34;)
+
+                If Trim(strRecordSource) &lt;&gt; &#34;&#34; Then sourceType = &#34;データフォーム&#34;
+                ElseIf subFormCount &gt; 0 Then sourceType = &#34;親子フォーム/コンテナフォーム&#34;
+                ElseIf commandButtonCount &gt; 5 Then sourceType = &#34;メニュー/操作パネルフォーム&#34;
+                Else: sourceType = &#34;その他/ダイアログフォーム&#34;
+                
+                If Not blnIsCurrentlyLoaded And Err.Number = 0 Then DoCmd.Close acForm, FormName, acSaveNo
+            End If
+            Err.Clear
+            On Error GoTo 0
+            Set openedForm = Nothing
+
+            Print #FileNum, &#34;- **レコードソース:**`&#34; &amp; MDEscape(IIf(Trim(strRecordSource) = &#34;&#34;, &#34;(未設定)&#34;, strRecordSource)) &amp; &#34;`&#34;
+            Print #FileNum, &#34;- **VBAコード:** &#34; &amp; IIf(blnHasVbaCode, &#34;**あり** (移行時にロジック確認が必要)&#34;, &#34;なし&#34;)
+            Print #FileNum, &#34;- **推定種類:** &#34; &amp; MDEscape(sourceType)
+            Print #FileNum, &#34;- **コントロール数:** &#34; &amp; controlsCount
+            Print #FileNum, &#34;- **コマンドボタン数:** &#34; &amp; commandButtonCount
+            Print #FileNum, &#34;- **サブフォーム数:** &#34; &amp; subFormCount
+            
+            Dim complexityScore As Integer
+            complexityScore = controlsCount + IIf(blnHasVbaCode, 10, 0) + subFormCount * 5
+            Print #FileNum, &#34;- **複雑度評価 (簡易):** &#34; &amp; IIf(complexityScore &gt; 30, &#34;**高**&#34;, IIf(complexityScore &gt; 15, &#34;中&#34;, &#34;低&#34;))
+            Print #FileNum, &#34;&#34;
+        Next frmObj
+    Else
+        Print #FileNum, &#34;*フォームはありません。*&#34; &amp; vbCrLf
+    End If
+    Print #FileNum, &#34;---&#34;
+    Print #FileNum, &#34;&#34;
+End Sub
+
+&#39; --- 5. レポート分析 (Markdown) ---
+Sub IntegratedAnalyzeReportsMD(ByVal FileNum As Integer)
+    Dim rptObj As AccessObject
+    Dim openedReport As Report
+    Dim ReportName As String
+    
+    Print #FileNum, &#34;## 5. レポート分析&#34;
+    Print #FileNum, &#34;&#34;
+
+    If CurrentProject.AllReports.count &gt; 0 Then
+        For Each rptObj In CurrentProject.AllReports
+            ReportName = rptObj.Name
+            Print #FileNum, &#34;### レポート:`&#34; &amp; MDEscape(ReportName) &amp; &#34;`&#34;
+            Print #FileNum, &#34;&#34;
+
+            Dim blnIsCurrentlyLoaded As Boolean
+            blnIsCurrentlyLoaded = IsReportLoaded(ReportName)
+
+            Dim strRecordSource As String: strRecordSource = &#34;(情報取得できず)&#34;
+            Dim blnHasVbaCode As Boolean: blnHasVbaCode = False
+            Dim groupLevelCountVal As Long: groupLevelCountVal = 0
+            Dim hasModule As Boolean: hasModule = False
+
+            On Error Resume Next
+            If Not blnIsCurrentlyLoaded Then
+                DoCmd.OpenReport ReportName, acViewDesign, , , acHidden
+                If Err.Number = 0 Then Set openedReport = Reports(ReportName) Else Set openedReport = Nothing
+            Else
+                Set openedReport = Reports(ReportName)
+                Print #FileNum, &#34;  - ※現在開かれています。情報は現在の状態に基づきます。&#34;
+            End If
+
+            If Not openedReport Is Nothing Then
+                strRecordSource = openedReport.RecordSource
+                blnHasVbaCode = HasCode(acReport, &#34;Report_&#34; + ReportName)
+                groupLevelCountVal = openedReport.GroupLevelCount
+                hasModule = openedReport.hasModule
+                
+                If Not blnIsCurrentlyLoaded And Err.Number = 0 Then DoCmd.Close acReport, ReportName, acSaveNo
+            End If
+            Err.Clear
+            On Error GoTo 0
+            Set openedReport = Nothing
+
+            Print #FileNum, &#34;- **レコードソース:**`&#34; &amp; MDEscape(IIf(Trim(strRecordSource) = &#34;&#34;, &#34;(未設定)&#34;, strRecordSource)) &amp; &#34;`&#34;
+            Print #FileNum, &#34;- **VBAコード:** &#34; &amp; IIf(blnHasVbaCode, &#34;**あり** (移行時にロジック確認が必要)&#34;, &#34;なし&#34;)
+            Print #FileNum, &#34;- **グループ化レベル数:** &#34; &amp; groupLevelCountVal
+            If hasModule And blnHasVbaCode Then
+                 Print #FileNum, &#34;- **注:** VBAモジュールが存在するため、複雑な書式設定や印刷ロジックが含まれる可能性があります。&#34;
+            End If
+            Print #FileNum, &#34;&#34;
+        Next rptObj
+    Else
+        Print #FileNum, &#34;*レポートはありません。*&#34; &amp; vbCrLf
+    End If
+    Print #FileNum, &#34;---&#34;
+    Print #FileNum, &#34;&#34;
+End Sub
+
+&#39; --- 6. モジュール分析 (Markdown) ---
+Sub IntegratedAnalyzeModulesMD(ByVal FileNum As Integer)
+    Dim mdlObj As AccessObject
+    
+    Print #FileNum, &#34;## 6. 標準モジュール・クラスモジュール分析&#34;
+    Print #FileNum, &#34;&#34;
+    
+    If CurrentProject.AllModules.count &gt; 0 Then
+        Dim moduleFound As Boolean
+        moduleFound = False
+        For Each mdlObj In CurrentProject.AllModules
+            If mdlObj.Type = acModule Or mdlObj.Type = acClassModule Then
+                moduleFound = True
+                Print #FileNum, &#34;### モジュール:`&#34; &amp; MDEscape(mdlObj.Name) &amp; &#34;`&#34;
+                Print #FileNum, &#34;&#34;
+                Print #FileNum, &#34;- **種類:** &#34; &amp; IIf(mdlObj.Type = acModule, &#34;標準モジュール&#34;, &#34;クラスモジュール&#34;)
+                
+                Dim roleSuggestion As String: roleSuggestion = &#34;&#34;
+                If InStr(1, mdlObj.Name, &#34;Util&#34;, vbTextCompare) &gt; 0 Or InStr(1, mdlObj.Name, &#34;Common&#34;, vbTextCompare) &gt; 0 Then roleSuggestion = roleSuggestion &amp; &#34;汎用処理, &#34;
+                If InStr(1, mdlObj.Name, &#34;Business&#34;, vbTextCompare) &gt; 0 Or InStr(1, mdlObj.Name, &#34;Logic&#34;, vbTextCompare) &gt; 0 Or InStr(1, mdlObj.Name, &#34;Process&#34;, vbTextCompare) &gt; 0 Then roleSuggestion = roleSuggestion &amp; &#34;ビジネスロジック, &#34;
+                If InStr(1, mdlObj.Name, &#34;Security&#34;, vbTextCompare) &gt; 0 Or InStr(1, mdlObj.Name, &#34;Auth&#34;, vbTextCompare) &gt; 0 Or InStr(1, mdlObj.Name, &#34;Login&#34;, vbTextCompare) &gt; 0 Or InStr(1, mdlObj.Name, &#34;User&#34;, vbTextCompare) &gt; 0 Then roleSuggestion = roleSuggestion &amp; &#34;セキュリティ/認証関連, &#34;
+                If InStr(1, mdlObj.Name, &#34;DB&#34;, vbTextCompare) &gt; 0 Or InStr(1, mdlObj.Name, &#34;Data&#34;, vbTextCompare) &gt; 0 Then roleSuggestion = roleSuggestion &amp; &#34;データベース操作, &#34;
+
+                If roleSuggestion &lt;&gt; &#34;&#34; Then
+                    roleSuggestion = Left(roleSuggestion, Len(roleSuggestion) - 2)
+                    Print #FileNum, &#34;- **推定される役割:** &#34; &amp; MDEscape(roleSuggestion) &amp; &#34; (**VBAコードの詳細分析が必要**)&#34;
+                Else
+                    Print #FileNum, &#34;- **注:** VBAコードを詳細に分析し、機能を特定してください。&#34;
+                End If
+                Print #FileNum, &#34;&#34;
+            End If
+        Next mdlObj
+        If Not moduleFound Then Print #FileNum, &#34;*対象となる標準モジュールおよびクラスモジュールはありません。*&#34; &amp; vbCrLf
+    Else
+        Print #FileNum, &#34;*標準モジュールおよびクラスモジュールはありません。*&#34; &amp; vbCrLf
+    End If
+    Print #FileNum, &#34;---&#34;
+    Print #FileNum, &#34;&#34;
+End Sub
+
+&#39; --- 7. マクロ分析 (Markdown) ---
+Sub IntegratedAnalyzeMacrosMD(ByVal FileNum As Integer)
+    Dim macObj As AccessObject
+    
+    Print #FileNum, &#34;## 7. マクロ分析&#34;
+    Print #FileNum, &#34;&#34;
+    
+    If CurrentProject.AllMacros.count &gt; 0 Then
+        For Each macObj In CurrentProject.AllMacros
+            Print #FileNum, &#34;- **マクロ名:**`&#34; &amp; MDEscape(macObj.Name) &amp; &#34;`&#34;
+            Print #FileNum, &#34;  - **注:** マクロの内容はAccess上で直接確認してください。複雑なロジックはVBAへの変換も検討。&#34;
+        Next macObj
+        Print #FileNum, &#34;&#34;
+    Else
+        Print #FileNum, &#34;*マクロはありません。*&#34; &amp; vbCrLf
+    End If
+    Print #FileNum, &#34;---&#34;
+    Print #FileNum, &#34;&#34;
+End Sub
+
+&#39; --- 8. 外部接続分析 (Markdown) ---
+Sub IntegratedAnalyzeExternalConnectionsMD(ByVal FileNum As Integer)
+    Dim db As DAO.Database
+    Dim tdf As DAO.TableDef
+    Dim qdf As DAO.QueryDef
+    Set db = CurrentDb
+    
+    Print #FileNum, &#34;## 8. 外部接続・連携分析&#34;
+    Print #FileNum, &#34;&#34;
+    
+    Print #FileNum, &#34;### リンクテーブル・外部接続クエリの再確認&#34;
+    Print #FileNum, &#34;&#34;
+    Dim foundExternal As Boolean: foundExternal = False
+    For Each tdf In db.TableDefs
+        If Len(tdf.Connect) &gt; 0 Then
+            Print #FileNum, &#34;- **リンクテーブル:**`&#34; &amp; MDEscape(tdf.Name) &amp; &#34;`(接続先:`&#34; &amp; MDEscape(Left(tdf.Connect, 70)) &amp; IIf(Len(tdf.Connect) &gt; 70, &#34;...&#34;, &#34;&#34;) &amp; &#34;`)&#34;
+            foundExternal = True
+        End If
+    Next tdf
+    For Each qdf In db.QueryDefs
+        If Len(qdf.Connect) &gt; 0 Then
+            Print #FileNum, &#34;- **外部接続クエリ:**`&#34; &amp; MDEscape(qdf.Name) &amp; &#34;`(接続先:`&#34; &amp; MDEscape(Left(qdf.Connect, 70)) &amp; IIf(Len(qdf.Connect) &gt; 70, &#34;...&#34;, &#34;&#34;) &amp; &#34;`)&#34;
+            foundExternal = True
+        End If
+    Next qdf
+    If Not foundExternal Then Print #FileNum, &#34;*明示的なリンクテーブルや外部接続クエリは見つかりませんでした。*&#34; &amp; vbCrLf
+    Print #FileNum, &#34;&#34;
+
+    Print #FileNum, &#34;### VBAコード内の外部接続・ファイル操作・連携の可能性&#34;
+    Print #FileNum, &#34;&#34;
+    Print #FileNum, &#34;**注:** VBAコード内で動的に外部データベース接続、ファイル入出力、API連携、メール送信などを行っている可能性があります。&#34;
+    Print #FileNum, &#34;以下のキーワードやオブジェクトを含むコードを詳細分析し、移行時の影響を確認してください:&#34;
+    Print #FileNum, &#34;&#34;
+    Print #FileNum, &#34;- **DAO (外部DB):**`OpenDatabase`,`DBEngine.Workspaces(0).OpenDatabase`&#34;
+    Print #FileNum, &#34;- **ADODB:**`CreateObject(&#34;&#34;; ADODB.Connection &#34;&#34;)`,`ADODB.Recordset`,`ADODB.Command`&#34;
+    Print #FileNum, &#34;- **ファイル操作:**`Open`,`Close`,`Print #`,`Input #`,`Line Input #`,`FreeFile`,`Name`,`Kill`,`Dir`,`CreateObject(&#34;&#34;; Scripting.FileSystemObject &#34;&#34;)`&#34;
+    Print #FileNum, &#34;- **データ転送:**`DoCmd.TransferSpreadsheet`,`DoCmd.TransferText`,`DoCmd.TransferDatabase`&#34;
+    Print #FileNum, &#34;- **エクスポート/メール:**`DoCmd.OutputTo`,`DoCmd.SendObject`&#34;
+    Print #FileNum, &#34;- **オートメーション:**`CreateObject`(例:`Excel.Application`,`Word.Application`,`Outlook.Application`)&#34;
+    Print #FileNum, &#34;- **API関数呼び出し:**`Declare Function/Sub`ステートメント (特にネットワーク、ファイル、レジストリ関連)&#34;
+    Print #FileNum, &#34;&#34;
+    Print #FileNum, &#34;---&#34;
+    Print #FileNum, &#34;&#34;
+End Sub
+
+&#39; --- 9. アプリケーションレベルのセキュリティモデル分析 (推測) (Markdown) ---
+Sub IntegratedAnalyzeSecurityModelMD(ByVal FileNum As Integer)
+    Dim db As DAO.Database
+    Dim tdf As DAO.TableDef
+    Dim fld As DAO.Field
+    Dim frmObj As AccessObject
+    Dim foundSomething As Boolean
+    Set db = CurrentDb
+    
+    Print #FileNum, &#34;## 9. アプリケーションレベルのセキュリティモデル分析 (推測)&#34;
+    Print #FileNum, &#34;&#34;
+    Print #FileNum, &#34;**注:** ここでの分析はオブジェクト名からの推測です。実際のセキュリティ実装はVBAコードやテーブル構造の詳細な確認が必要です。&#34;
+    Print #FileNum, &#34;Access標準のワークグループセキュリティ (`.mdw`) が使用されている場合は、別途確認してください。&#34;
+    Print #FileNum, &#34;&#34;
+
+    Print #FileNum, &#34;### ユーザー管理・権限管理に関連しそうなテーブル候補&#34;
+    Print #FileNum, &#34;&#34;
+    foundSomething = False
+    For Each tdf In db.TableDefs
+        If Left(tdf.Name, 4) &lt;&gt; &#34;MSys&#34; And Left(tdf.Name, 1) &lt;&gt; &#34;~&#34; Then
+            If InStr(1, tdf.Name, &#34;User&#34;, vbTextCompare) &gt; 0 Or _
+               InStr(1, tdf.Name, &#34;Login&#34;, vbTextCompare) &gt; 0 Or _
+               InStr(1, tdf.Name, &#34;Auth&#34;, vbTextCompare) &gt; 0 Or _
+               InStr(1, tdf.Name, &#34;Security&#34;, vbTextCompare) &gt; 0 Or _
+               InStr(1, tdf.Name, &#34;Member&#34;, vbTextCompare) &gt; 0 Or _
+               InStr(1, tdf.Name, &#34;Account&#34;, vbTextCompare) &gt; 0 Or _
+               InStr(1, tdf.Name, &#34;Password&#34;, vbTextCompare) &gt; 0 Or _
+               InStr(1, tdf.Name, &#34;Role&#34;, vbTextCompare) &gt; 0 Or _
+               InStr(1, tdf.Name, &#34;Privilege&#34;, vbTextCompare) &gt; 0 Or _
+               InStr(1, tdf.Name, &#34;Permission&#34;, vbTextCompare) &gt; 0 Then
+                foundSomething = True
+                Print #FileNum, &#34;- **候補テーブル:**`&#34; &amp; MDEscape(tdf.Name) &amp; &#34;`&#34;
+                Print #FileNum, &#34;  - **フィールド:**&#34;
+                For Each fld In tdf.Fields
+                    Print #FileNum, &#34;    -`&#34; &amp; MDEscape(fld.Name) &amp; &#34;`(&#34; &amp; MDEscape(GetFieldType(fld.Type)) &amp; &#34;)&#34;
+                Next fld
+                Print #FileNum, &#34;&#34;
+            End If
+        End If
+    Next tdf
+    If Not foundSomething Then Print #FileNum, &#34;*明確なユーザー/権限管理テーブル候補は見つかりませんでした。*&#34; &amp; vbCrLf
+    Print #FileNum, &#34;&#34;
+    
+    Print #FileNum, &#34;### ログイン処理に関連しそうなフォーム候補&#34;
+    Print #FileNum, &#34;&#34;
+    foundSomething = False
+    For Each frmObj In CurrentProject.AllForms
+        If InStr(1, frmObj.Name, &#34;Login&#34;, vbTextCompare) &gt; 0 Or _
+           InStr(1, frmObj.Name, &#34;Logon&#34;, vbTextCompare) &gt; 0 Or _
+           InStr(1, frmObj.Name, &#34;Auth&#34;, vbTextCompare) &gt; 0 Or _
+           InStr(1, frmObj.Name, &#34;Security&#34;, vbTextCompare) &gt; 0 Or _
+           InStr(1, frmObj.Name, &#34;Password&#34;, vbTextCompare) &gt; 0 Or _
+           InStr(1, frmObj.Name, &#34;SignIn&#34;, vbTextCompare) &gt; 0 Then
+            foundSomething = True
+            Print #FileNum, &#34;- **候補フォーム:**`&#34; &amp; MDEscape(frmObj.Name) &amp; &#34;`&#34;
+        End If
+    Next frmObj
+    If Not foundSomething Then Print #FileNum, &#34;*明確なログインフォーム候補は見つかりませんでした。*&#34; &amp; vbCrLf
+    Print #FileNum, &#34;&#34;
+    
+    Print #FileNum, &#34;モジュール分析 (セクション6) も参照し、セキュリティ関連の役割が推測されるモジュールを確認してください。&#34;
+    Print #FileNum, &#34;&#34;
+    Print #FileNum, &#34;---&#34;
+    Print #FileNum, &#34;&#34;
+End Sub
+
+&#39; --- 10. オブジェクト依存関係 (Access標準機能への誘導) (Markdown) ---
+Sub IntegratedAnalyzeDependenciesMD(ByVal FileNum As Integer)
+    Print #FileNum, &#34;## 10. オブジェクト依存関係の詳細分析&#34;
+    Print #FileNum, &#34;&#34;
+    Print #FileNum, &#34;Accessの標準機能を使用してオブジェクト間の依存関係を詳細に確認できます。&#34;
+    Print #FileNum, &#34;移行計画において、機能の関連性を把握するために非常に重要です。&#34;
+    Print #FileNum, &#34;以下のいずれかの機能を使用してください：&#34;
+    Print #FileNum, &#34;&#34;
+    Print #FileNum, &#34;1. **[データベースツール]** タブ → **[リレーションシップ]** グループ → **[オブジェクトの依存関係]**&#34;
+    Print #FileNum, &#34;2. **[データベースツール]** タブ → **[分析]** グループ → **[データベース構造の解析]** (データベースドキュメンター)&#34;
+    Print #FileNum, &#34;&#34;
+    Print #FileNum, &#34;これらのツールは、GUIを通じて視覚的に依存関係を把握するのに役立ちます。&#34;
+    Print #FileNum, &#34;&#34;
+    Print #FileNum, &#34;---&#34;
+    Print #FileNum, &#34;&#34;
+End Sub
+
+
+&#39; --- ユーティリティ関数群 (変更なし、MDEscape関数を追加) ---
+
+Function GetStartupForm() As String
+    Dim prop As DAO.Property
+    On Error Resume Next
+    GetStartupForm = CurrentDb.Properties(&#34;StartupForm&#34;).Value
+    If Err.Number &lt;&gt; 0 Then GetStartupForm = &#34;未設定&#34;: Err.Clear
+    On Error GoTo 0
+End Function
+
+Function GetDisplayForm() As String
+    Dim prop As DAO.Property
+    Dim propValue As Variant
+    On Error Resume Next
+    propValue = CurrentDb.Properties(&#34;StartupShowDBWindow&#34;).Value
+    If Err.Number &lt;&gt; 0 Then
+        GetDisplayForm = &#34;未設定 (デフォルトはデータベースウィンドウ)&#34;
+        Err.Clear
+    Else
+        If propValue = True Then
+            GetDisplayForm = &#34;データベースウィンドウ&#34;
+        Else
+            GetDisplayForm = &#34;スタートアップフォーム (設定されていれば)&#34;
+        End If
+    End If
+    On Error GoTo 0
+End Function
+
+Function GetNavPaneDisplay() As String
+    Dim prop As DAO.Property
+    Dim propValue As Variant
+    On Error Resume Next
+    propValue = CurrentDb.Properties(&#34;ShowNavigationPane&#34;).Value
+    If Err.Number &lt;&gt; 0 Then
+        GetNavPaneDisplay = &#34;デフォルトまたは未設定 (通常は表示)&#34;
+        Err.Clear
+    Else
+        If propValue = True Then
+            GetNavPaneDisplay = &#34;表示&#34;
+        Else
+            GetNavPaneDisplay = &#34;非表示&#34;
+        End If
+    End If
+    On Error GoTo 0
+End Function
+
+Function IsFormLoaded(FormName As String) As Boolean
+    Dim obj As Object
+    IsFormLoaded = False
+    For Each obj In Forms
+        If obj.Name = FormName Then IsFormLoaded = True: Exit Function
+    Next obj
+End Function
+
+Function IsReportLoaded(ReportName As String) As Boolean
+    Dim obj As Object
+    IsReportLoaded = False
+    For Each obj In Reports
+        If obj.Name = ReportName Then IsReportLoaded = True: Exit Function
+    Next obj
+End Function
+
+Function HasCode(ObjectType As AcObjectType, ObjectName As String) As Boolean
+    Dim vbComp As Object, vbProj As Object
+    On Error Resume Next
+    HasCode = False
+    &#39;Set vbProj = Application.CodeProject
+    Set vbProj = Application.VBE.ActiveVBProject
+    If vbProj Is Nothing Then Exit Function
+    Set vbComp = vbProj.VBComponents(ObjectName)
+    If Err.Number = 0 Then
+        If Not vbComp Is Nothing Then
+            If vbComp.CodeModule.CountOfLines &gt; 1 Then HasCode = True
+        End If
+    Else: Err.Clear
+    End If
+    Set vbComp = Nothing: Set vbProj = Nothing
+    On Error GoTo 0
+End Function
+
+Function CountControls(obj As Object, ControlTypeName As String) As Integer
+    Dim ctl As Control, count As Integer: count = 0
+    If obj Is Nothing Then Exit Function
+    On Error Resume Next
+    For Each ctl In obj.Controls
+        If TypeName(ctl) = ControlTypeName Then count = count + 1
+    Next ctl
+    On Error GoTo 0
+    CountControls = count
+End Function
+
+Function GetQueryType(TypeNum As Integer) As String
+    Select Case TypeNum
+        Case dbQSelect: GetQueryType = &#34;選択クエリ&#34;
+        Case dbQAction: GetQueryType = &#34;アクションクエリ (総称)&#34;
+        Case dbQCrosstab: GetQueryType = &#34;クロス集計クエリ&#34;
+        Case dbQDelete: GetQueryType = &#34;削除クエリ&#34;
+        Case dbQUpdate: GetQueryType = &#34;更新クエリ&#34;
+        Case dbQAppend: GetQueryType = &#34;追加クエリ&#34;
+        Case dbQMakeTable: GetQueryType = &#34;テーブル作成クエリ&#34;
+        Case dbQDDL: GetQueryType = &#34;データ定義クエリ (DDL)&#34;
+        Case dbQSQLPassThrough: GetQueryType = &#34;SQLパススルークエリ&#34;
+        Case Else: GetQueryType = &#34;不明なクエリタイプ (&#34; &amp; TypeNum &amp; &#34;)&#34;
+    End Select
+End Function
+
+Function GetFieldType(TypeNum As Integer) As String
+    Select Case TypeNum
+        Case dbBoolean: GetFieldType = &#34;はい/いいえ (Boolean)&#34;
+        Case dbByte: GetFieldType = &#34;バイト (Byte)&#34;
+        Case dbInteger: GetFieldType = &#34;整数 (Integer)&#34;
+        Case dbLong: GetFieldType = &#34;長整数 (Long)&#34;
+        Case dbCurrency: GetFieldType = &#34;通貨 (Currency)&#34;
+        Case dbSingle: GetFieldType = &#34;単精度浮動小数点 (Single)&#34;
+        Case dbDouble: GetFieldType = &#34;倍精度浮動小数点 (Double)&#34;
+        Case dbDate: GetFieldType = &#34;日付/時刻 (Date/Time)&#34;
+        Case dbBinary: GetFieldType = &#34;バイナリ (Binary)&#34;
+        Case dbText: GetFieldType = &#34;短いテキスト (Text)&#34;
+        Case dbLongBinary: GetFieldType = &#34;長いテキスト/OLE (LongText/OLE Object)&#34;
+        Case dbMemo: GetFieldType = &#34;長いテキスト (Memo)&#34;
+        Case dbGUID: GetFieldType = &#34;レプリケーション ID (GUID)&#34;
+        Case dbBigInt: GetFieldType = &#34;大きな数値 (BigInt)&#34;
+        Case dbVarBinary: GetFieldType = &#34;可変長バイナリ (VarBinary)&#34;
+        Case dbChar: GetFieldType = &#34;固定長テキスト (Char)&#34;
+        Case dbNumeric: GetFieldType = &#34;数値 (Numeric)&#34;
+        Case dbDecimal: GetFieldType = &#34;10進数 (Decimal)&#34;
+        Case dbFloat: GetFieldType = &#34;浮動小数点 (Float)&#34;
+        Case Else: GetFieldType = &#34;その他/不明 (&#34; &amp; TypeNum &amp; &#34;)&#34;
+    End Select
+End Function
+
+Function MDEscape(TextToEscape As String) As String
+    &#39; Markdownで特別な意味を持つ文字をエスケープする関数
+    &#39; バッククォート(`)で囲まれた部分はエスケープの対象外とする
+    
+    Dim EscapedText As String
+    Dim parts() As String
+    Dim i As Long
+    Dim inBackticks As Boolean
+    
+    EscapedText = &#34;&#34;
+    
+    &#39; エスケープ機能はいったん無効化
+    &#39; エスケープ機能を有効にしたい場合は下の1行を削除し、以降のコメントアウトを外す
+    MDEscape = TextToEscape
+
+&#39;    &#39; バッククォートで文字列を分割
+&#39;    parts = Split(TextToEscape, &#34;`&#34;)
+&#39;
+&#39;    &#39; 分割された各部分を処理
+&#39;    &#39; 最初の部分は常にバッククォートの外側（または文字列全体がバッククォートで始まらない場合）
+&#39;    inBackticks = False
+&#39;
+&#39;    For i = 0 To UBound(parts)
+&#39;        If inBackticks Then
+&#39;            &#39; バッククォートの内側の部分：そのまま追加し、区切り文字のバッククォートも復元
+&#39;            EscapedText = EscapedText &amp; &#34;`&#34; &amp; parts(i)
+&#39;            If i &lt; UBound(parts) Then &#39; 最後の部分でなければ、閉じるバッククォートも追加
+&#39;                 EscapedText = EscapedText &amp; &#34;`&#34;
+&#39;            ElseIf TextToEscape Like &#34;*`&#34; Then &#39; 元の文字列がバッククォートで終わっている場合
+&#39;                 EscapedText = EscapedText &amp; &#34;`&#34;
+&#39;            End If
+&#39;        Else
+&#39;            &#39; バッククォートの外側の部分：エスケープ処理を適用
+&#39;            Dim tempPart As String
+&#39;            tempPart = parts(i)
+&#39;
+&#39;            &#39; \ (バックスラッシュ) は他のエスケープ文字より先に処理
+&#39;            tempPart = Replace(tempPart, &#34;\&#34;, &#34;\\&#34;)
+&#39;
+&#39;            &#39; Markdown特殊文字のエスケープ (主要なもの)
+&#39;            &#39; バッククォート自体は、このロジックでは分割に使われるため、
+&#39;            &#39; 外側の部分で単独で出現するバッククォートはエスケープ不要（または別途考慮が必要だが、
+&#39;            &#39; 通常はバッククォートで囲む用途なので、外側で単独は稀）
+&#39;            &#39; ここでは、元のコードのエスケープ対象文字からバッククォートを除外する
+&#39;            &#39; tempPart = Replace(tempPart, &#34;`&#34;, &#34;\`&#34;) &#39; バッククォートのエスケープはしない
+&#39;
+&#39;            tempPart = Replace(tempPart, &#34;*&#34;, &#34;\*&#34;) &#39; アスタリスク
+&#39;            tempPart = Replace(tempPart, &#34;_&#34;, &#34;\_&#34;) &#39; アンダースコア
+&#39;            tempPart = Replace(tempPart, &#34;{&#34;, &#34;\{&#34;) &#39; 波括弧（左）
+&#39;            tempPart = Replace(tempPart, &#34;}&#34;, &#34;\}&#34;) &#39; 波括弧（右）
+&#39;            tempPart = Replace(tempPart, &#34;[&#34;, &#34;\[&#34;) &#39; 角括弧（左）
+&#39;            tempPart = Replace(tempPart, &#34;]&#34;, &#34;\]&#34;) &#39; 角括弧（右）
+&#39;            tempPart = Replace(tempPart, &#34;(&#34;, &#34;\(&#34;) &#39; 丸括弧（左）
+&#39;            tempPart = Replace(tempPart, &#34;)&#34;, &#34;\)&#34;) &#39; 丸括弧（右）
+&#39;            tempPart = Replace(tempPart, &#34;#&#34;, &#34;\#&#34;) &#39; ハッシュ
+&#39;            tempPart = Replace(tempPart, &#34;+&#34;, &#34;\+&#34;) &#39; プラス
+&#39;            tempPart = Replace(tempPart, &#34;-&#34;, &#34;\-&#34;) &#39; マイナス（ハイフン）
+&#39;            tempPart = Replace(tempPart, &#34;.&#34;, &#34;\.&#34;) &#39; ドット（ピリオド）
+&#39;            tempPart = Replace(tempPart, &#34;!&#34;, &#34;\!&#34;) &#39; 感嘆符
+&#39;            tempPart = Replace(tempPart, &#34;|&#34;, &#34;\|&#34;) &#39; パイプ (テーブル用)
+&#39;
+&#39;            EscapedText = EscapedText &amp; tempPart
+&#39;
+&#39;            &#39; 次の部分がバッククォートの内側であれば、開始のバッククォートを追加
+&#39;            If i &lt; UBound(parts) And Not inBackticks Then
+&#39;                &#39; この条件は、バッククォートが対になっている前提
+&#39;                &#39; ここでバッククォートを追加すると、inBackticks=Trueのブロックで二重に追加される可能性があるため、
+&#39;                &#39; バッククォートの復元は inBackticks=True のブロックに任せる。
+&#39;            End If
+&#39;        End If
+&#39;
+&#39;        &#39; バッククォートの内外を交互に切り替え
+&#39;        &#39; ただし、partsの要素が奇数個なら最後の要素はバッククォートの外、
+&#39;        &#39; 偶数個なら最後の要素はバッククォートの内（元の文字列がバッククォートで終わっていない場合）
+&#39;        &#39; この単純なトグルでは、ネストしたバッククォートやエスケープされたバッククォートには対応できない
+&#39;        &#39; ここでは、単純な「`text`」のペアを想定
+&#39;        inBackticks = Not inBackticks
+&#39;    Next i
+&#39;
+&#39;    MDEscape = EscapedText
+
+End Function</code></pre></div>
+<h2 id="概要">概要</h2>
+
+<p>このソースコードは、Access VBAで記述された一連のプロシージャと関数から成り立っています。メインプロシージャ<code>GenerateMdbAnalysisReportMarkdown</code>が全体の処理を統括し、データベースの様々な側面（スタートアップ設定、テーブル、クエリ、フォーム、レポート、モジュール、マクロ、外部接続、セキュリティモデルの推測、依存関係分析の推奨など）を分析するための専用サブプロシージャを呼び出します。</p>
+
+<p>各分析サブプロシージャは、収集した情報をMarkdownの書式ルールに従って整形し、指定されたファイルに出力します。これにより、オブジェクト名、SQL文、VBAコードの有無、各種設定値などが、見出し、リスト、太字、インラインコード、コードブロックといったMarkdown要素を駆使して表現され、構造的かつ視覚的に優れたレポートが生成されます。</p>
+
+<p>最終的に、データベースファイルと同じフォルダに<code>MigrationAnalysisReport.md</code>という名前のMarkdownファイルが出力されます。このレポートは、Markdownに対応したビューアやエディタで閲覧することで、その真価を発揮します。</p>
+
+<h2 id="各プロシージャ-関数の機能解説">各プロシージャ・関数の機能解説</h2>
+
+<h3 id="1-sub-generatemdbanalysisreportmarkdown">1.<code>Sub GenerateMdbAnalysisReportMarkdown()</code></h3>
+
+<ul>
+<li><strong>機能</strong>：このVBAスクリプト全体の実行を制御するメインプロシージャです。
+
+<ul>
+<li>分析結果を格納するMarkdown形式のレポートファイル (<code>MigrationAnalysisReport.md</code>) のパスを設定し、書き込み用にオープンします。</li>
+<li>レポートのヘッダー情報（H1見出し、データベース名、分析日時など）をMarkdown形式で出力します。</li>
+<li>データベースの各側面を分析し、Markdown形式で出力するための専用サブプロシージャ群（<code>IntegratedAnalyzeStartupSettingsMD</code>,<code>IntegratedAnalyzeTablesMD</code>など、末尾に<code>MD</code>が付く）を順次呼び出します。</li>
+<li>全ての分析が完了した後、レポートファイルをクローズし、ユーザーに完了メッセージを表示します。</li>
+</ul></li>
+<li><strong>解決できる課題</strong>：複数の分析処理を体系的に実行し、一元化され、かつMarkdown形式で整形された包括的な分析レポートを生成する起点となります。手動での情報収集と整形の手間を大幅に削減します。</li>
+</ul>
+
+<h3 id="2-sub-integratedanalyzestartupsettingsmd-byval-filenum-as-integer">2.<code>Sub IntegratedAnalyzeStartupSettingsMD(ByVal FileNum As Integer)</code></h3>
+
+<ul>
+<li><strong>機能</strong>：データベースの起動時の設定に関する情報を収集し、Markdown形式（H2見出し、リスト形式）で指定されたファイル番号のレポートに出力します。
+
+<ul>
+<li>スタートアップフォーム名、起動時の初期表示、ナビゲーションウィンドウの表示/非表示設定などをリスト項目として出力します。</li>
+</ul></li>
+<li><strong>解決できる課題</strong>：データベースの初期動作やインターフェース設定を、Markdown形式で整理して把握できます。</li>
+</ul>
+
+<h3 id="3-sub-integratedanalyzetablesmd-byval-filenum-as-integer">3.<code>Sub IntegratedAnalyzeTablesMD(ByVal FileNum As Integer)</code></h3>
+
+<ul>
+<li><strong>機能</strong>：データベース内の全ユーザー定義テーブルを詳細に分析し、構造情報と移行検討に役立つ情報をMarkdown形式（H2見出し、各テーブルはH3見出し、詳細はリストとインラインコード）でレポートに出力します。
+
+<ul>
+<li>テーブル名、フィールド数、種類（ローカル/リンク）、接続先、推定重要度、使用参照数などをリスト形式で出力。</li>
+<li>インデックス情報は、各インデックスをサブリストとし、主キーや構成フィールドを明記。</li>
+<li>リレーションシップ情報も、各関連をリスト項目として、親子テーブルや属性を記述。</li>
+</ul></li>
+<li><strong>解決できる課題</strong>：データベースのデータモデル（テーブル構造、キー、リレーション）を、Markdownの階層構造を活かして視覚的に分かりやすく理解できます。リンクテーブルや重要度の高いテーブルが強調され、移行時の注意点が明確になります。</li>
+</ul>
+
+<h3 id="4-sub-integratedanalyzequeriesmd-byval-filenum-as-integer">4.<code>Sub IntegratedAnalyzeQueriesMD(ByVal FileNum As Integer)</code></h3>
+
+<ul>
+<li><strong>機能</strong>：データベース内の全ユーザー定義クエリを分析し、その種類、SQL文、および移行時の注意点などをMarkdown形式（H2見出し、各クエリはH3見出し、SQLはコードブロック）でレポートに出力します。
+
+<ul>
+<li>クエリ名、種類、移行時の注意点をリスト形式で出力。</li>
+<li>SQL文は<code>sql</code>と言語指定されたコードブロック内に記述し、可読性を高めます。</li>
+<li>外部接続情報はインラインコードで表示。</li>
+</ul></li>
+<li><strong>解決できる課題</strong>：データ抽出・加工ロジック（SQL）を整形された形で確認でき、アクションクエリや複雑なクエリといった重要なビジネスロジックの特定が容易になります。</li>
+</ul>
+
+<h3 id="5-sub-integratedanalyzeformsmd-byval-filenum-as-integer">5.<code>Sub IntegratedAnalyzeFormsMD(ByVal FileNum As Integer)</code></h3>
+
+<ul>
+<li><strong>機能</strong>：データベース内の全フォームを分析し、その構造、機能、および複雑性に関する情報をMarkdown形式（H2見出し、各フォームはH3見出し、詳細はリスト）でレポートに出力します。
+
+<ul>
+<li>フォーム名、レコードソース、VBAコードの有無（太字で強調）、推定種類、各種コントロール数、複雑度評価などをリスト形式で出力。</li>
+</ul></li>
+<li><strong>解決できる課題</strong>：UIの主要構成要素であるフォームの情報を、Markdownリストで見やすく整理できます。VBAコードの有無や複雑度が高いフォームが明確になり、移行時の再設計や機能再現の優先順位付け、工数見積もりに役立ちます。</li>
+</ul>
+
+<h3 id="6-sub-integratedanalyzereportsmd-byval-filenum-as-integer">6.<code>Sub IntegratedAnalyzeReportsMD(ByVal FileNum As Integer)</code></h3>
+
+<ul>
+<li><strong>機能</strong>：データベース内の全レポートを分析し、その構造や機能に関する情報をMarkdown形式（H2見出し、各レポートはH3見出し、詳細はリスト）でレポートに出力します。
+
+<ul>
+<li>レポート名、レコードソース、VBAコードの有無（太字で強調）、グループ化レベル数などをリスト形式で出力。</li>
+<li>VBAモジュールが存在する場合の注記も記述。</li>
+</ul></li>
+<li><strong>解決できる課題</strong>：主要な出力帳票の仕様（データソース、構造、カスタムロジックの有無）を、整理されたMarkdown形式で把握できます。</li>
+</ul>
+
+<h3 id="7-sub-integratedanalyzemodulesmd-byval-filenum-as-integer">7.<code>Sub IntegratedAnalyzeModulesMD(ByVal FileNum As Integer)</code></h3>
+
+<ul>
+<li><strong>機能</strong>：データベース内の標準モジュールとクラスモジュールを分析し、その種類と推定される役割をMarkdown形式（H2見出し、各モジュールはH3見出し、詳細はリスト）でレポートに出力します。
+
+<ul>
+<li>モジュール名、種類をリスト項目として出力。</li>
+<li>モジュール名に含まれるキーワードから推定される役割を記述し、VBAコードの詳細分析が必要な点を強調。</li>
+</ul></li>
+<li><strong>解決できる課題</strong>：VBAで記述された共通処理やビジネスロジックがどのモジュールに集約されているかの手がかりを、Markdownリストで確認できます。役割が推測されるモジュールは、移行時の重要検討対象となります。</li>
+</ul>
+
+<h3 id="8-sub-integratedanalyzemacrosmd-byval-filenum-as-integer">8.<code>Sub IntegratedAnalyzeMacrosMD(ByVal FileNum As Integer)</code></h3>
+
+<ul>
+<li><strong>機能</strong>：データベース内の全マクロの名前をリストアップし、簡単な注意書きと共にMarkdown形式（H2見出し、リスト形式）でレポートに出力します。</li>
+<li><strong>解決できる課題</strong>：マクロとして実装されている機能の存在を、Markdownリストで簡潔に把握できます。</li>
+</ul>
+
+<h3 id="9-sub-integratedanalyzeexternalconnectionsmd-byval-filenum-as-integer">9.<code>Sub IntegratedAnalyzeExternalConnectionsMD(ByVal FileNum As Integer)</code></h3>
+
+<ul>
+<li><strong>機能</strong>：データベースが外部のデータソースやシステムと連携している可能性について、多角的に情報を収集しMarkdown形式（H2見出し、サブセクションはH3見出し、詳細はリスト）でレポートに出力します。
+
+<ul>
+<li>リンクテーブルや外部接続クエリの存在を再確認するリスト。</li>
+<li>VBAコード内で外部接続等に使われる可能性のある一般的なキーワードやオブジェクトをリストアップ。</li>
+</ul></li>
+<li><strong>解決できる課題</strong>：システムの外部依存関係を明確にし、移行計画におけるデータ連携の再設計や影響範囲の特定に役立つ情報を、Markdownで整理して提供します。</li>
+</ul>
+
+<h3 id="10-sub-integratedanalyzesecuritymodelmd-byval-filenum-as-integer">10.<code>Sub IntegratedAnalyzeSecurityModelMD(ByVal FileNum As Integer)</code></h3>
+
+<ul>
+<li><strong>機能</strong>：Accessデータベース内にアプリケーションレベルでの独自のセキュリティが実装されている可能性を推測し、関連しそうなオブジェクトをMarkdown形式（H2見出し、サブセクションはH3見出し、詳細はリスト）でレポートに出力します。
+
+<ul>
+<li>ユーザー管理等に関連しそうな名前を持つテーブルとそのフィールド構成、フォーム名をリストアップ。</li>
+</ul></li>
+<li><strong>解決できる課題</strong>：独自セキュリティ実装の有無の手がかりを、Markdownリストで整理して提供し、新システムでのセキュリティ設計の検討材料とします。</li>
+</ul>
+
+<h3 id="11-sub-integratedanalyzedependenciesmd-byval-filenum-as-integer">11.<code>Sub IntegratedAnalyzeDependenciesMD(ByVal FileNum As Integer)</code></h3>
+
+<ul>
+<li><strong>機能</strong>：オブジェクト間の詳細な依存関係分析のために、Access標準ツールの利用を推奨するメッセージをMarkdown形式（H2見出し、番号付きリスト）でレポートに出力します。</li>
+<li><strong>解決できる課題</strong>：VBAツールでは網羅しきれない詳細な依存関係分析の重要性を示し、適切なAccess標準機能へユーザーを誘導します。</li>
+</ul>
+
+<h3 id="12-ユーティリティ関数群">12. ユーティリティ関数群</h3>
+
+<ul>
+<li><strong><code>GetStartupForm()</code>,<code>GetDisplayForm()</code>,<code>GetNavPaneDisplay()</code></strong>：データベースのスタートアップ設定値を取得。</li>
+<li><strong><code>IsFormLoaded(FormName As String)</code>,<code>IsReportLoaded(ReportName As String)</code></strong>：指定フォーム/レポートが現在開かれているか判定。</li>
+<li><strong><code>HasCode(ObjectType As AcObjectType, ObjectName As String)</code></strong>：指定オブジェクトにVBAコードが含まれるか判定。</li>
+<li><strong><code>CountControls(obj As Object, ControlTypeName As String)</code></strong>：オブジェクト上の特定コントロール数をカウント。</li>
+<li><strong><code>GetQueryType(TypeNum As Integer)</code>,<code>GetFieldType(TypeNum As Integer)</code></strong>：DAOの内部数値を表示用文字列に変換。</li>
+<li><strong><code>MDEscape(TextToEscape As String)</code></strong>：文字列内のMarkdown特殊文字をエスケープし、意図しない書式変更を防ぐ。ただし、現状はコメントアウトして無効化している。</li>
+<li><strong>解決できる課題</strong>：これらの関数は、メインの分析プロシージャで共通して必要となる情報取得、判定、文字列操作などを部品化し、コードの可読性と保守性を高めます。<code>MDEscape</code>はMarkdown出力の品質向上に不可欠です。</li>
+</ul>
+
+<h2 id="当ソースコードの利用手順">当ソースコードの利用手順</h2>
+
+<ol>
+<li><strong>Accessデータベースを開く</strong>：分析対象のAccessファイル（.mdbまたは.accdb）を開きます。</li>
+<li><strong>VBAエディタを開く</strong>:<code>Alt</code>+<code>F11</code>キー、またはリボンの「データベースツール」→「Visual Basic」。</li>
+<li><strong>コードを追加</strong>：分析するためには対象のAccessにコードを追加します。追加方法は2パターンあります。
+
+<ul>
+<li><strong>ソースコードを貼り付け</strong>：VBAエディタの「挿入」→「標準モジュール」。オブジェクト名は任意ですが、「analyze_mdb」などわかりやすい名称を設定することを推奨します。新しい標準モジュールに、提供されたVBAソースコード全体を手でコピー＆ペーストし保存します。</li>
+<li><strong>ファイルをインポート</strong>：VBE上で標準モジュールを右クリックし、表示されたメニュー内の「ファイルをインポート」を選択します。インポート対象は当リポジトリの<code>Analyze_mdb_MDVer.bas</code>です。インポートすると新規で標準モジュールが作成されます。</li>
+</ul></li>
+<li><strong>参照設定の確認と設定</strong>：VBAエディタの「ツール」→「参照設定」で、以下がチェックされていることを確認します。
+
+<ul>
+<li>必須：<code>Microsoft Office XX.0 Access database engine Object Library</code></li>
+<li>任意：<code>Microsoft Visual Basic for Applications Extensibility 5.3</code></li>
+</ul></li>
+<li><strong>コードの実行</strong>：VBAエディタで<code>Sub GenerateMdbAnalysisReportMarkdown()</code>内の任意の行にカーソルを置き、<code>F5</code>キーを押すか実行ボタンをクリックします。</li>
+<li><strong>レポートファイルの確認</strong>：実行完了後、Accessデータベースファイルと同じフォルダに<code>MigrationAnalysisReport.md</code>が生成されます。このファイルをMarkdown対応のビューアやエディタで開いて内容を確認します。</li>
+</ol>
+
+<h2 id="当ソースコードを利用する際の注意点">当ソースコードを利用する際の注意点</h2>
+
+<ul>
+<li><strong>参照設定とVBAプロジェクトアクセス許可</strong>：コードの正常動作に不可欠です。</li>
+<li><strong><code>HasCode</code>関数の仕様</strong>:<code>HasCode</code>関数が<code>Application.CodeProject</code>ではなく<code>Application.VBE.ActiveVBProject</code>を参照し、コード行数の判定が<code>&gt; 0</code>ではなく<code>&gt; 1</code>で判定しています。
+
+<ul>
+<li><code>Application.VBE.ActiveVBProject</code>は、VBAエディタで現在アクティブになっているプロジェクトを参照します。通常はカレントデータベースのプロジェクトですが、複数のプロジェクトが開かれている場合やアドインの状況によっては意図しないプロジェクトを参照する可能性があります。ただし、「当ソースコードを実行するのは分析対象のMDBのみ立ち上がっているとき」という運用前提なので、現状ではこの仕様です。</li>
+<li><code>CountOfLines &gt; 1</code>の判定は、モジュールに<code>Option Compare Database</code>や<code>Option Explicit</code>のような宣言行しかない場合を「コードなし」とみなすためですが、本来であれば「コードあり/なし」の判定としては<code>&gt; 0</code>の方が適切です。この条件判定により、VBAコードが実質的に存在しないと判断される可能性があります。</li>
+</ul></li>
+<li><strong>分析の限界と推測の精度</strong>：このツールは初期分析を支援するものであり、出力される「重要度」「複雑度」「役割推測」などは簡易的なルールに基づくものです。最終的な判断は人間による詳細な調査が必要です。特にVBAコードやSQLの内容解析は行いません。</li>
+<li><strong>命名規則への依存</strong>：一部の推測（モジュールの役割、セキュリティ関連オブジェクト）はオブジェクト名に依存します。</li>
+<li><strong>実行時間</strong>：大規模データベースでは分析に時間がかかる場合があります。</li>
+<li><strong>エラーハンドリング</strong>：基本的なエラー処理はありますが、予期せぬ状況でエラーが発生する可能性は残ります。</li>
+<li><strong>フォーム/レポートの一時オープン</strong>：情報取得のためオブジェクトを非表示で開きますが、稀に<code>Open</code>/<code>Load</code>イベントが影響する可能性があります。とくに他システムに対しアクセスするようなMDBの場合、事前に物理的あるいは論理的にネットワークを遮断してから、スタンドアロンでAccessを実行するのが安全です。</li>
+<li><strong>ACCDE/MDE形式のデータベース</strong>：デザイン変更不可のため、一部情報が取得できない可能性があります。</li>
+<li><strong>Markdownレンダリング</strong>：<code>MDEscape</code>関数で主要な特殊文字はエスケープされますが、全てのMarkdown処理系で完璧な表示を保証するものではありません。特に複雑な文字列が含まれる場合、表示が崩れる可能性はゼロではありません。</li>
+<li><strong>ファイル書き込み権限</strong>：レポート出力先に書き込み権限が必要です。</li>
+<li><strong>出力ファイルのエンコード</strong>：出力されたレポートのMarkdownファイルは、S-JISでエンコードされています。UTF-8ではないため、エディタによっては文字化けする可能性があります。</li>
+</ul>
+
+<p>これらの点を理解した上で、本ツールをご活用ください。</p>
+
+<h2 id="todo">Todo</h2>
+
+<ul class="task-list">
+<li><label><input type="checkbox" disabled class="task-list-item"> リンク先が不明なリンクテーブルへの対応
+
+<ul>
+<li>リンク先にアクセスできないと、テーブル情報のいくつかが取得できない。</li>
+<li>実環境では動作しても開発環境の端末でアクセスできない先がまれにあるため。</li>
+</ul></label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> 依存関係をPlantUMLなどのERで出力する
+
+<ul>
+<li>全体像を出力するのは複雑であるため、「任意の1オブジェクトに着目して出力する」など、範囲を限定して出力するほうが望ましい。</li>
+</ul></label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> 例外エラー対応
+
+<ul>
+<li>そのうちに🤪</li>
+</ul></label></li>
+</ul>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://learn.microsoft.com/ja-jp/office/vba/api/overview/access">Access VBA リファレンス</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

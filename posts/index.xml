@@ -13,7 +13,7 @@
     
     
     <item>
-      <title>Accessフォームの調査が苦行なので分析用コードを作った</title>
+      <title>Accessフォームの調査も苦行なので分析用コードを作った</title>
       <link>https://ysko909.github.io/posts/create-code-to-analyze-access-mdb-forms/</link>
       <pubDate>Mon, 09 Jun 2025 10:33:54 +0900</pubDate>
       
@@ -23,7 +23,21 @@
 小規模なシステムならともかく、年月を経るに従って大抵は規模が大きくなります。そのため、手作業で各フォームのVBAコードを調査し、その内容を理解・整理するには膨大な時間と労力が必要です。
 そこで、現状のシステムに含まれるフォームについて、構文的・構造的な特徴を抽出する分析用コードを作成しました。このVBAスクリプトは、以下のニーズに応えることを目指しています。
  網羅的な現状把握の自動化: Accessデータベース内に存在する全てのフォームを対象とし、それぞれのVBAコードに含まれる構造や特徴を自動的に抽出します。 標準化されたドキュメント生成: 分析結果を、構造化され視覚的に理解しやすいMarkdown形式のレポートとして、フォームごとに出力します。これにより、手作業によるドキュメント作成の負担を軽減し、一貫性のある基礎資料を提供します。 移行・改修の意思決定支援: 各フォームのVBAコードの複雑さ、特定のAccess機能や外部連携の使用状況、イベント処理のパターンなどを明らかにすることで、移行や改修の優先順位付け、工数見積もり、リスク評価のための客観的な情報を提供します。 コード品質に関する洞察: GoToステートメントの使用頻度やエラー処理の実装状況など、コード品質に関連する情報を収集し、改善点を見つけるための手がかりを提供します。 開発・保守の効率化: 既存コードの理解を助け、開発者間の情報共有を促進することで、開発・保守作業の効率化に貢献します。  これにより、構造的な分析はコードに任せて、人間は意味的な分析に注力できます。あくまでも、このコードが分析できるのは構造的な部分ですので、その点はご承知おきください。
-ソースコード Option Compare Database Option Explicit &amp;#39; 統合MDB分析ツール (全フォームのVBAコード分析対応) &amp;#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援 Sub AnalyzeAllFormsVBACodeToMarkdown() &amp;#39; プロジェクト内の全フォームのVBAコードを分析し、個別のMarkdownレポートを生成する Dim frmObj As AccessObject Dim formName As String Dim strFilePath As String Dim intFileNum As Integer Dim vbProj As Object &amp;#39; As VBIDE.VBProject Dim vbCrntProj As Object &amp;#39; As Application.CurrentProject Dim vbComp As Object &amp;#39; As VBIDE.</description>
+なお、このコードの調査対象はフォームのみであり、Accessプロジェクトの包括的な調査は別の記事にて公開しています。良ければご参照ください。
+実行環境 今回のソースコードは、以下の環境で動作を確認しています。
+ Office Professional 2021 Visual Basic for Applications 7.1  ソースコード Option Compare Database Option Explicit &amp;#39; 統合MDB分析ツール (全フォームのVBAコード分析対応) &amp;#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援 Sub AnalyzeAllFormsVBACodeToMarkdown() &amp;#39; プロジェクト内の全フォームのVBAコードを分析し、個別のMarkdownレポートを生成する Dim frmObj As AccessObject Dim formName As String Dim strFilePath As String Dim intFileNum As Integer Dim vbProj As Object &amp;#39; As VBIDE.</description>
+    </item>
+    
+    <item>
+      <title>AccessMDBの調査が苦行なので分析用コードを作った</title>
+      <link>https://ysko909.github.io/posts/analyze-access-file/</link>
+      <pubDate>Wed, 04 Jun 2025 09:48:55 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/analyze-access-file/</guid>
+      <description>背景と目的 Accessデータベースは、その手軽さから広く利用されていますが、長期運用や複数人による改修、ドキュメントの不備などにより、内部構造が複雑化し、現状把握が困難になることがあります。このような状況は、メンテナンス性の低下やシステム移行時のリスク増大に繋がります。このVBAソースコードは、そんなMicrosoft Accessデータベース（.mdbまたは.accdbファイル）の包括的な分析を行い、その結果をMarkdown形式のレポートとして出力します。具体的には、データベースの構造を詳細に把握し、将来的なシステム移行や改修を検討する際に重要となる機能的な側面を特定するための情報を、Markdown形式で出力します。利用方法も簡単で、このソースコードを分析したいMDB内で実行するだけで良いので、あとは実行結果が出力されるまで待って分析作業に着手するだけです。
+このコードは、これらの課題に対応するため、以下のニーズに応えることを目指しています。
+ 視覚的に分かりやすいドキュメント作成：データベースの構成要素や主要なプロパティを、Markdown形式で見出し、リスト、コードブロックなどを用いて整理し、可読性の高いドキュメントを自動生成します。 効率的な現状把握：既存データベースの構造や機能概要を、整形されたレポートを通じて迅速に把握できるようにします。 移行計画・改修の初期情報収集：新システムへの移行や大規模な改修を検討する際、どの機能が重要で、どこに複雑なロジックが集中しているか、外部システムとの連携はどうか、といった初期分析情報を、より理解しやすい形式で提供します。 ブラックボックス化の軽減：詳細な仕様が不明なデータベースでも、その構造や機能の概要を、構造化されたレポートを通じて把握する手がかりを提供します。  実行環境 今回のソースコードは、以下の環境で動作を確認しています。
+ Office Professional 2021 Visual Basic for Applications 7.1  ソースコード Option Compare Database Option Explicit &amp;#39; 統合MDB分析ツール &amp;#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援 Sub GenerateMdbAnalysisReportMarkdown() &amp;#39; メインプロシージャ: レポート生成の起点 &amp;#39; レポート出力先を設定 Dim strFilePath As String strFilePath = CurrentProject.Path &amp;amp; &amp;#34;\MigrationAnalysisReport.md&amp;#34; &amp;#39; ファイルをオープン Dim intFileNum As Integer intFileNum = FreeFile Open strFilePath For Output As #intFileNum &amp;#39; レポートヘッダー (Markdown形式) Print #intFileNum, &amp;#34;# MDB総合分析レポート (構造把握 &amp;amp; 移行検討)&amp;#34; Print #intFileNum, &amp;#34;&amp;#34; Print #intFileNum, &amp;#34;**データベース:**`&amp;#34; &amp;amp; CurrentProject.</description>
     </item>
     
     <item>

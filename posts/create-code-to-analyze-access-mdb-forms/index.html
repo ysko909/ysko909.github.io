@@ -2,24 +2,28 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Accessフォームの調査が苦行なので分析用コードを作った - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta property="og:title" content="Accessフォームの調査が苦行なので分析用コードを作った" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Accessフォームの調査も苦行なので分析用コードを作った - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Accessフォームの調査も苦行なので分析用コードを作った" />
 <meta property="og:description" content="背景と目的 Microsoft Accessで開発されたアプリケーション、特に多くのフォームを持つものは、時間と共に内部のVBAコードが複雑化し、その全体像を把握することが難しくなる傾向があります。ドキュメントが古くなったり、存在しなかったりすると、システムのメンテナンス、改修、さらには将来的な移行計画において、大きな困難とリスクを伴います。
 つまり、大抵の場合はメチャクチャ大変ってことです＿(　_´ω`)_ﾍﾟｼｮ
 小規模なシステムならともかく、年月を経るに従って大抵は規模が大きくなります。そのため、手作業で各フォームのVBAコードを調査し、その内容を理解・整理するには膨大な時間と労力が必要です。
 そこで、現状のシステムに含まれるフォームについて、構文的・構造的な特徴を抽出する分析用コードを作成しました。このVBAスクリプトは、以下のニーズに応えることを目指しています。
  網羅的な現状把握の自動化: Accessデータベース内に存在する全てのフォームを対象とし、それぞれのVBAコードに含まれる構造や特徴を自動的に抽出します。 標準化されたドキュメント生成: 分析結果を、構造化され視覚的に理解しやすいMarkdown形式のレポートとして、フォームごとに出力します。これにより、手作業によるドキュメント作成の負担を軽減し、一貫性のある基礎資料を提供します。 移行・改修の意思決定支援: 各フォームのVBAコードの複雑さ、特定のAccess機能や外部連携の使用状況、イベント処理のパターンなどを明らかにすることで、移行や改修の優先順位付け、工数見積もり、リスク評価のための客観的な情報を提供します。 コード品質に関する洞察: GoToステートメントの使用頻度やエラー処理の実装状況など、コード品質に関連する情報を収集し、改善点を見つけるための手がかりを提供します。 開発・保守の効率化: 既存コードの理解を助け、開発者間の情報共有を促進することで、開発・保守作業の効率化に貢献します。  これにより、構造的な分析はコードに任せて、人間は意味的な分析に注力できます。あくまでも、このコードが分析できるのは構造的な部分ですので、その点はご承知おきください。
-ソースコード Option Compare Database Option Explicit &#39; 統合MDB分析ツール (全フォームのVBAコード分析対応) &#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援 Sub AnalyzeAllFormsVBACodeToMarkdown() &#39; プロジェクト内の全フォームのVBAコードを分析し、個別のMarkdownレポートを生成する Dim frmObj As AccessObject Dim formName As String Dim strFilePath As String Dim intFileNum As Integer Dim vbProj As Object &#39; As VBIDE.VBProject Dim vbCrntProj As Object &#39; As Application.CurrentProject Dim vbComp As Object &#39; As VBIDE." />
+なお、このコードの調査対象はフォームのみであり、Accessプロジェクトの包括的な調査は別の記事にて公開しています。良ければご参照ください。
+実行環境 今回のソースコードは、以下の環境で動作を確認しています。
+ Office Professional 2021 Visual Basic for Applications 7.1  ソースコード Option Compare Database Option Explicit &#39; 統合MDB分析ツール (全フォームのVBAコード分析対応) &#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援 Sub AnalyzeAllFormsVBACodeToMarkdown() &#39; プロジェクト内の全フォームのVBAコードを分析し、個別のMarkdownレポートを生成する Dim frmObj As AccessObject Dim formName As String Dim strFilePath As String Dim intFileNum As Integer Dim vbProj As Object &#39; As VBIDE." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ysko909.github.io/posts/create-code-to-analyze-access-mdb-forms/" /><meta property="article:published_time" content="2025-06-09T10:33:54&#43;09:00"/>
 <meta property="article:modified_time" content="2025-06-09T10:33:54&#43;09:00"/><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Accessフォームの調査が苦行なので分析用コードを作った"/>
+<meta name="twitter:title" content="Accessフォームの調査も苦行なので分析用コードを作った"/>
 <meta name="twitter:description" content="背景と目的 Microsoft Accessで開発されたアプリケーション、特に多くのフォームを持つものは、時間と共に内部のVBAコードが複雑化し、その全体像を把握することが難しくなる傾向があります。ドキュメントが古くなったり、存在しなかったりすると、システムのメンテナンス、改修、さらには将来的な移行計画において、大きな困難とリスクを伴います。
 つまり、大抵の場合はメチャクチャ大変ってことです＿(　_´ω`)_ﾍﾟｼｮ
 小規模なシステムならともかく、年月を経るに従って大抵は規模が大きくなります。そのため、手作業で各フォームのVBAコードを調査し、その内容を理解・整理するには膨大な時間と労力が必要です。
 そこで、現状のシステムに含まれるフォームについて、構文的・構造的な特徴を抽出する分析用コードを作成しました。このVBAスクリプトは、以下のニーズに応えることを目指しています。
  網羅的な現状把握の自動化: Accessデータベース内に存在する全てのフォームを対象とし、それぞれのVBAコードに含まれる構造や特徴を自動的に抽出します。 標準化されたドキュメント生成: 分析結果を、構造化され視覚的に理解しやすいMarkdown形式のレポートとして、フォームごとに出力します。これにより、手作業によるドキュメント作成の負担を軽減し、一貫性のある基礎資料を提供します。 移行・改修の意思決定支援: 各フォームのVBAコードの複雑さ、特定のAccess機能や外部連携の使用状況、イベント処理のパターンなどを明らかにすることで、移行や改修の優先順位付け、工数見積もり、リスク評価のための客観的な情報を提供します。 コード品質に関する洞察: GoToステートメントの使用頻度やエラー処理の実装状況など、コード品質に関連する情報を収集し、改善点を見つけるための手がかりを提供します。 開発・保守の効率化: 既存コードの理解を助け、開発者間の情報共有を促進することで、開発・保守作業の効率化に貢献します。  これにより、構造的な分析はコードに任せて、人間は意味的な分析に注力できます。あくまでも、このコードが分析できるのは構造的な部分ですので、その点はご承知おきください。
-ソースコード Option Compare Database Option Explicit &#39; 統合MDB分析ツール (全フォームのVBAコード分析対応) &#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援 Sub AnalyzeAllFormsVBACodeToMarkdown() &#39; プロジェクト内の全フォームのVBAコードを分析し、個別のMarkdownレポートを生成する Dim frmObj As AccessObject Dim formName As String Dim strFilePath As String Dim intFileNum As Integer Dim vbProj As Object &#39; As VBIDE.VBProject Dim vbCrntProj As Object &#39; As Application.CurrentProject Dim vbComp As Object &#39; As VBIDE."/>
+なお、このコードの調査対象はフォームのみであり、Accessプロジェクトの包括的な調査は別の記事にて公開しています。良ければご参照ください。
+実行環境 今回のソースコードは、以下の環境で動作を確認しています。
+ Office Professional 2021 Visual Basic for Applications 7.1  ソースコード Option Compare Database Option Explicit &#39; 統合MDB分析ツール (全フォームのVBAコード分析対応) &#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援 Sub AnalyzeAllFormsVBACodeToMarkdown() &#39; プロジェクト内の全フォームのVBAコードを分析し、個別のMarkdownレポートを生成する Dim frmObj As AccessObject Dim formName As String Dim strFilePath As String Dim intFileNum As Integer Dim vbProj As Object &#39; As VBIDE."/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
 
@@ -72,7 +76,7 @@
 
 
 		<div class="post-header">
-			<h1 class="title">Accessフォームの調査が苦行なので分析用コードを作った</h1>
+			<h1 class="title">Accessフォームの調査も苦行なので分析用コードを作った</h1>
 			<div class="meta">Posted at &mdash; Jun 9, 2025</div>
 		</div>
 
@@ -100,6 +104,19 @@
 </ul>
 
 <p>これにより、構造的な分析はコードに任せて、<strong>人間は意味的な分析に注力できます</strong>。あくまでも、このコードが分析できるのは構造的な部分ですので、その点はご承知おきください。</p>
+
+<p>なお、このコードの調査対象はフォームのみであり、Accessプロジェクトの包括的な調査は<a href="/posts/analyze-access-file/">別の記事</a>にて公開しています。良ければご参照ください。</p>
+
+<h2 id="実行環境">実行環境</h2>
+
+<p>今回のソースコードは、以下の環境で動作を確認しています。</p>
+
+<ul>
+<li>Office Professional 2021</li>
+<li>Visual Basic for Applications 7.1</li>
+</ul>
+
+<p><img src="image.png" alt="alt text" /></p>
 
 <h2 id="ソースコード">ソースコード</h2>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vba" data-lang="vba">Option Compare Database
