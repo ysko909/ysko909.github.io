@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Accessレポートの調査も相変わらず苦行なので分析用コードを作った - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Accessレポートの調査も相変わらず苦行なので分析用コードを作った" />
+<meta property="og:description" content="背景と目的 Microsoft Accessで長期間運用されているデータベースシステムでは、レポート機能が業務上重要な役割を担っていることが多くあります。とくに紙ベースで運用されてきた現場などでは顕著でしょう。しかし、システムの改修やWebアプリケーションへの移行などを検討する際、これらのレポートの正確な仕様を把握することは大きな課題となります。ドキュメントが古くなっていたり、そもそも存在しなかったりする場合、手作業で各レポートのデザインやVBAコードを調査するには膨大な時間と労力が必要です。
+つまり、これも大抵の場合はメチャクチャ大変ってことです＿(　_´ω`)_ﾍﾟｼｮ
+このVBAスクリプトは、このような背景から既存のAccessデータベース内に存在するすべてのレポートオブジェクトの技術的な仕様を自動的に調査・分析し、その結果をMarkdown形式のレポートとして出力することを目的としています。
+このコードは、これらの課題に対応するため、以下のニーズに応えることを目指しています。
+ レポート仕様の効率的な把握: プロジェクト内の全レポートについて、データソース、レイアウト、表示項目、VBAコードやマクロの利用状況、ページ設定といった技術仕様を自動的に抽出し、一覧化します。 標準化されたドキュメントの自動生成: 分析結果を、構造化され視覚的に理解しやすいMarkdown形式で、レポートごとに出力します。これにより、システム仕様書や移行ドキュメントの基礎資料を効率的に作成できます。 移行・改修計画の支援: Webアプリケーションなど新しいシステムへレポート機能を移行する際に、既存レポートの機能を正確に理解し、新システムでの要件定義や設計を行うための客観的な情報を提供します。 現状把握とブラックボックス化の軽減: 詳細な仕様が不明なレポートについても、その構造や設定の概要を可視化し、理解の一助とします。  実行環境 今回のソースコードは、以下の環境で動作を確認しています。
+ Office Professional 2021 Visual Basic for Applications 7.1  ソースコード Option Compare Database Option Explicit &#39; 統合MDB分析ツール (全フォームのVBAコード分析対応) &#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援 Sub AnalyzeAllReportSpecificationsToMarkdown() &#39; プロジェクト内の全レポートの仕様を調査し、個別のMarkdownレポートを生成する Dim rptObj As AccessObject Dim reportName As String Dim strFilePath As String Dim intFileNum As Integer Dim vbProj As Object &#39; As VBIDE.VBProject Dim vbCrntProj As Object &#39; As Application." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/create-code-to-analyze-access-mdb-reports/" /><meta property="article:published_time" content="2025-06-22T10:21:55&#43;09:00"/>
+<meta property="article:modified_time" content="2025-06-22T10:21:55&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Accessレポートの調査も相変わらず苦行なので分析用コードを作った"/>
+<meta name="twitter:description" content="背景と目的 Microsoft Accessで長期間運用されているデータベースシステムでは、レポート機能が業務上重要な役割を担っていることが多くあります。とくに紙ベースで運用されてきた現場などでは顕著でしょう。しかし、システムの改修やWebアプリケーションへの移行などを検討する際、これらのレポートの正確な仕様を把握することは大きな課題となります。ドキュメントが古くなっていたり、そもそも存在しなかったりする場合、手作業で各レポートのデザインやVBAコードを調査するには膨大な時間と労力が必要です。
+つまり、これも大抵の場合はメチャクチャ大変ってことです＿(　_´ω`)_ﾍﾟｼｮ
+このVBAスクリプトは、このような背景から既存のAccessデータベース内に存在するすべてのレポートオブジェクトの技術的な仕様を自動的に調査・分析し、その結果をMarkdown形式のレポートとして出力することを目的としています。
+このコードは、これらの課題に対応するため、以下のニーズに応えることを目指しています。
+ レポート仕様の効率的な把握: プロジェクト内の全レポートについて、データソース、レイアウト、表示項目、VBAコードやマクロの利用状況、ページ設定といった技術仕様を自動的に抽出し、一覧化します。 標準化されたドキュメントの自動生成: 分析結果を、構造化され視覚的に理解しやすいMarkdown形式で、レポートごとに出力します。これにより、システム仕様書や移行ドキュメントの基礎資料を効率的に作成できます。 移行・改修計画の支援: Webアプリケーションなど新しいシステムへレポート機能を移行する際に、既存レポートの機能を正確に理解し、新システムでの要件定義や設計を行うための客観的な情報を提供します。 現状把握とブラックボックス化の軽減: 詳細な仕様が不明なレポートについても、その構造や設定の概要を可視化し、理解の一助とします。  実行環境 今回のソースコードは、以下の環境で動作を確認しています。
+ Office Professional 2021 Visual Basic for Applications 7.1  ソースコード Option Compare Database Option Explicit &#39; 統合MDB分析ツール (全フォームのVBAコード分析対応) &#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援 Sub AnalyzeAllReportSpecificationsToMarkdown() &#39; プロジェクト内の全レポートの仕様を調査し、個別のMarkdownレポートを生成する Dim rptObj As AccessObject Dim reportName As String Dim strFilePath As String Dim intFileNum As Integer Dim vbProj As Object &#39; As VBIDE.VBProject Dim vbCrntProj As Object &#39; As Application."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Accessレポートの調査も相変わらず苦行なので分析用コードを作った</h1>
+			<div class="meta">Posted at &mdash; Jun 22, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="背景と目的">背景と目的</h2>
+
+<p><img src="./illustration_miniature_dachshund.jpeg" alt="pic" /></p>
+
+<p>Microsoft Accessで長期間運用されているデータベースシステムでは、レポート機能が業務上重要な役割を担っていることが多くあります。とくに紙ベースで運用されてきた現場などでは顕著でしょう。しかし、システムの改修やWebアプリケーションへの移行などを検討する際、これらのレポートの正確な仕様を把握することは大きな課題となります。ドキュメントが古くなっていたり、そもそも存在しなかったりする場合、手作業で各レポートのデザインやVBAコードを調査するには膨大な時間と労力が必要です。</p>
+
+<p>つまり、これも大抵の場合はメチャクチャ大変ってことです＿(　_´ω`)_ﾍﾟｼｮ</p>
+
+<p>このVBAスクリプトは、このような背景から既存のAccessデータベース内に存在する<strong>すべてのレポートオブジェクト</strong>の技術的な仕様を自動的に調査・分析し、その結果を<strong>Markdown形式のレポートとして出力する</strong>ことを目的としています。</p>
+
+<p>このコードは、これらの課題に対応するため、以下のニーズに応えることを目指しています。</p>
+
+<ul>
+<li><strong>レポート仕様の効率的な把握</strong>: プロジェクト内の全レポートについて、データソース、レイアウト、表示項目、VBAコードやマクロの利用状況、ページ設定といった技術仕様を自動的に抽出し、一覧化します。</li>
+<li><strong>標準化されたドキュメントの自動生成</strong>: 分析結果を、構造化され視覚的に理解しやすいMarkdown形式で、レポートごとに出力します。これにより、システム仕様書や移行ドキュメントの基礎資料を効率的に作成できます。</li>
+<li><strong>移行・改修計画の支援</strong>: Webアプリケーションなど新しいシステムへレポート機能を移行する際に、既存レポートの機能を正確に理解し、新システムでの要件定義や設計を行うための客観的な情報を提供します。</li>
+<li><strong>現状把握とブラックボックス化の軽減</strong>: 詳細な仕様が不明なレポートについても、その構造や設定の概要を可視化し、理解の一助とします。</li>
+</ul>
+
+<h2 id="実行環境">実行環境</h2>
+
+<p>今回のソースコードは、以下の環境で動作を確認しています。</p>
+
+<ul>
+<li>Office Professional 2021</li>
+<li>Visual Basic for Applications 7.1</li>
+</ul>
+
+<p><img src="image.png" alt="alt text" /></p>
+
+<h2 id="ソースコード">ソースコード</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vba" data-lang="vba">Option Compare Database
+Option Explicit
+
+&#39; 統合MDB分析ツール (全フォームのVBAコード分析対応)
+&#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援
+
+Sub AnalyzeAllReportSpecificationsToMarkdown()
+    &#39; プロジェクト内の全レポートの仕様を調査し、個別のMarkdownレポートを生成する
+    Dim rptObj As AccessObject
+    Dim reportName As String
+    Dim strFilePath As String
+    Dim intFileNum As Integer
+    Dim vbProj As Object &#39; As VBIDE.VBProject
+    Dim vbCrntProj As Object &#39; As Application.CurrentProject
+    Dim analysisCounter As Long: analysisCounter = 0
+    Dim errorCounter As Long: errorCounter = 0
+    Dim overallStatus As String: overallStatus = &#34;&#34;
+
+&#39;    On Error GoTo ErrorHandler_Overall &#39; デバッグ中はコメントアウト推奨
+
+    &#39; VBEプロジェクトの取得 (最初に一度だけ)
+    Set vbCrntProj = Application.CurrentProject
+    If vbCrntProj Is Nothing Then
+        MsgBox &#34;VBAプロジェクトにアクセスできませんでした。参照設定やAccessのオプションを確認してください。&#34;, vbCritical, &#34;初期化エラー&#34;
+        Exit Sub
+    End If
+
+    If vbCrntProj.AllReports.count = 0 Then
+        MsgBox &#34;分析対象のレポートが見つかりません。&#34;, vbInformation, &#34;情報&#34;
+        Exit Sub
+    End If
+
+    Set vbProj = Application.VBE.ActiveVBProject &#39; Application.CodeProject の方が堅牢な場合がある
+
+    &#39; 全レポートをループ処理
+    For Each rptObj In vbCrntProj.AllReports
+        reportName = rptObj.Name
+        strFilePath = vbCrntProj.Path &amp; &#34;\&#34; &amp; ReplaceValidFileNameChars(reportName) &amp; &#34;_ReportSpec_Analysis.md&#34;
+        
+        Debug.Print &#34;レポート仕様分析開始: &#34; &amp; reportName
+
+        intFileNum = FreeFile
+        Open strFilePath For Output As #intFileNum
+
+        &#39; レポートヘッダー
+        Print #intFileNum, &#34;# レポート仕様分析: `&#34; &amp; MDEscape(reportName) &amp; &#34;`&#34;
+        Print #intFileNum, &#34;&#34;
+        Print #intFileNum, &#34;**データベース:** `&#34; &amp; MDEscape(CurrentProject.Name) &amp; &#34;`&#34;
+        Print #intFileNum, &#34;**分析日時:** &#34; &amp; Now()
+        Print #intFileNum, &#34;&#34;
+        Print #intFileNum, &#34;---&#34;
+        Print #intFileNum, &#34;&#34;
+
+&#39;        On Error GoTo ErrorHandler_ReportLevel &#39; レポートごとのエラー処理 (デバッグ中はコメントアウト推奨)
+
+        Dim rpt As Report &#39; Reportオブジェクト用
+        Dim designViewOpened As Boolean: designViewOpened = False
+
+        &#39; レポートをデザインビューで開く (プロパティ取得のため)
+&#39;        On Error Resume Next &#39; 個別のエラー処理に任せる
+        DoCmd.OpenReport reportName, acViewDesign, , , acHidden
+        If Err.Number = 0 Then
+            Set rpt = Reports(reportName)
+            designViewOpened = True
+        Else
+            Print #intFileNum, &#34;## エラー&#34;
+            Print #intFileNum, &#34;&#34;
+            Print #intFileNum, &#34;- レポート `&#34; &amp; MDEscape(reportName) &amp; &#34;` をデザインビューで開けませんでした。エラー: &#34; &amp; MDEscape(Err.Description)
+            Err.Clear
+            errorCounter = errorCounter + 1
+            overallStatus = overallStatus &amp; vbCrLf &amp; &#34;- &#34; &amp; reportName &amp; &#34;: デザインビューオープンエラー&#34;
+            GoTo NextReportIteration
+        End If
+&#39;        On Error GoTo ErrorHandler_ReportLevel &#39; 必要に応じて戻す
+
+
+        &#39; --- 1. レポートの目的と利用者 (手動確認項目) ---
+        Print #intFileNum, &#34;## 1. レポートの目的と利用者 (手動確認推奨)&#34;
+        Print #intFileNum, &#34;&#34;
+        Print #intFileNum, &#34;- **そのレポートが何のために作成され、誰が、どのような目的で利用しているか？** (ヒアリング等で確認)&#34;
+        Print #intFileNum, &#34;- **レポートからどのような情報を得ようとしているか？** (ヒアリング等で確認)&#34;
+        Print #intFileNum, &#34;- **レポートの利用頻度**（毎日、毎週、毎月、特定のイベント時など）。 (ヒアリング等で確認)&#34;
+        Print #intFileNum, &#34;- **レポートを参照した後、利用者は次にどのようなアクションを取るか？** (ヒアリング等で確認)&#34;
+        Print #intFileNum, &#34;&#34;
+        Print #intFileNum, &#34;---&#34;
+        Print #intFileNum, &#34;&#34;
+
+        &#39; --- 2. データソースとデータ取得ロジック ---
+        AnalyzeReportDataSourceMD intFileNum, rpt, reportName, vbProj
+        Print #intFileNum, &#34;---&#34;
+        Print #intFileNum, &#34;&#34;
+
+        &#39; --- 3. レイアウトと表示項目 ---
+        AnalyzeReportLayoutMD intFileNum, rpt
+        Print #intFileNum, &#34;---&#34;
+        Print #intFileNum, &#34;&#34;
+
+        &#39; --- 4. VBAコードとマクロ ---
+        AnalyzeReportCodeAndMacroMD intFileNum, rpt, reportName, vbProj
+        Print #intFileNum, &#34;---&#34;
+        Print #intFileNum, &#34;&#34;
+        
+        &#39; --- 5. 出力形式と用途 ---
+        AnalyzeReportOutputFormatMD intFileNum, rpt
+        Print #intFileNum, &#34;---&#34;
+        Print #intFileNum, &#34;&#34;
+
+        &#39; --- 6. パフォーマンスとデータ量 (手動確認項目) ---
+        Print #intFileNum, &#34;## 6. パフォーマンスとデータ量 (手動確認推奨)&#34;
+        Print #intFileNum, &#34;&#34;
+        Print #intFileNum, &#34;- **レポートの表示や印刷にどの程度の時間がかかっているか？** (実測またはヒアリングで確認)&#34;
+        Print #intFileNum, &#34;- **対象となるデータ量はどの程度か？**（レコード数、期間など） (データソース調査と併せて確認)&#34;
+        Print #intFileNum, &#34;- **パフォーマンスに関するユーザーからの不満はあるか？** (ヒアリング等で確認)&#34;
+        Print #intFileNum, &#34;&#34;
+        Print #intFileNum, &#34;---&#34;
+        Print #intFileNum, &#34;&#34;
+
+        &#39; --- 7. セキュリティとアクセス制御 (手動確認項目) ---
+        Print #intFileNum, &#34;## 7. セキュリティとアクセス制御 (手動確認推奨)&#34;
+        Print #intFileNum, &#34;&#34;
+        Print #intFileNum, &#34;- **そのレポートを誰が閲覧できるべきか？**（特定の役職、部署、ユーザーなど） (ヒアリング等で確認)&#34;
+        Print #intFileNum, &#34;- **レポートの内容に、機密性の高い情報や個人情報は含まれているか？** (内容確認)&#34;
+        Print #intFileNum, &#34;- **Access側で、レポートへのアクセスに関して何らかの制御が行われているか？** (オブジェクトプロパティ、VBA、ユーザーレベルセキュリティ等の確認)&#34;
+        Print #intFileNum, &#34;&#34;
+        Print #intFileNum, &#34;---&#34;
+        Print #intFileNum, &#34;&#34;
+        
+        &#39; --- 8. 改善要望と将来の拡張性 (手動確認項目) ---
+        Print #intFileNum, &#34;## 8. 改善要望と将来の拡張性 (手動確認推奨)&#34;
+        Print #intFileNum, &#34;&#34;
+        Print #intFileNum, &#34;- **現在のレポートに関して、利用者からの改善要望や不満点はあるか？** (ヒアリング等で確認)&#34;
+        Print #intFileNum, &#34;- **将来的に、このレポートに関してどのような機能追加や変更が予想されるか？** (ヒアリング等で確認)&#34;
+        Print #intFileNum, &#34;&#34;
+
+
+        analysisCounter = analysisCounter + 1
+        overallStatus = overallStatus &amp; vbCrLf &amp; &#34;- &#34; &amp; reportName &amp; &#34;: 正常終了&#34;
+
+NextReportIteration:
+        If designViewOpened Then
+            On Error Resume Next &#39; 既に閉じている場合のエラーを無視
+            DoCmd.Close acReport, reportName, acSaveNo
+            On Error GoTo 0 &#39; エラーハンドラを全体に戻す前にリセット
+        End If
+        Set rpt = Nothing
+        If intFileNum &gt; 0 Then Close #intFileNum
+        intFileNum = 0 &#39; ファイルハンドルをリセット
+&#39;        On Error GoTo ErrorHandler_Overall &#39; エラーハンドラを全体に戻す (ループの最後に移動)
+    Next rptObj
+    
+    On Error GoTo 0 &#39; メッセージ表示前のエラーハンドラ解除
+
+    &#39; --- 全体処理の完了メッセージ ---
+    Dim summaryMsg As String
+    summaryMsg = &#34;全レポートの仕様分析が完了しました。&#34; &amp; vbCrLf &amp; vbCrLf &amp; _
+                 &#34;処理済みレポート数: &#34; &amp; analysisCounter &amp; vbCrLf &amp; _
+                 &#34;エラー発生レポート数: &#34; &amp; errorCounter &amp; vbCrLf &amp; vbCrLf &amp; _
+                 &#34;レポートは各レポート名のファイルとして、データベースと同じフォルダに保存されました。&#34;
+    
+    If errorCounter &gt; 0 Then
+        summaryMsg = summaryMsg &amp; vbCrLf &amp; vbCrLf &amp; &#34;エラーが発生したレポートの詳細:&#34; &amp; overallStatus
+        MsgBox summaryMsg, vbExclamation, &#34;分析完了 (一部エラーあり)&#34;
+    Else
+        MsgBox summaryMsg, vbInformation, &#34;分析完了&#34;
+    End If
+
+Exit Sub
+
+ErrorHandler_ReportLevel:
+    Print #intFileNum, &#34;## レポートレベルのエラー&#34;
+    Print #intFileNum, &#34;&#34;
+    Print #intFileNum, &#34;レポート `&#34; &amp; MDEscape(reportName) &amp; &#34;` の分析処理中に予期せぬエラーが発生しました。&#34;
+    Print #intFileNum, &#34;- **エラー番号:** &#34; &amp; Err.Number
+    Print #intFileNum, &#34;- **エラー内容:** `&#34; &amp; MDEscape(Err.Description) &amp; &#34;`&#34;
+    
+    Debug.Print &#34;レポート `&#34; &amp; MDEscape(reportName) &amp; &#34;` の分析処理中に予期せぬエラーが発生しました。&#34;
+    Debug.Print &#34;- **エラー内容:** `&#34; &amp; MDEscape(Err.Description) &amp; &#34;`&#34;
+    
+    errorCounter = errorCounter + 1
+    overallStatus = overallStatus &amp; vbCrLf &amp; &#34;- &#34; &amp; reportName &amp; &#34;: 分析中エラー (&#34; &amp; Err.Number &amp; &#34;)&#34;
+    Resume NextReportIteration &#39; エラーが発生したら次のレポートの処理へ
+
+ErrorHandler_Overall:
+    MsgBox &#34;分析処理全体で予期せぬエラーが発生しました。&#34; &amp; vbCrLf &amp; _
+           &#34;エラー番号: &#34; &amp; Err.Number &amp; vbCrLf &amp; _
+           &#34;エラー内容: &#34; &amp; Err.Description, vbCritical, &#34;重大なエラー&#34;
+    If intFileNum &gt; 0 Then Close #intFileNum &#39; 開いている可能性のあるファイルを閉じる
+End Sub
+
+&#39; ファイル名として使用できない文字を置換するヘルパー関数
+Function ReplaceValidFileNameChars(originalName As String) As String
+    Dim invalidChars As String
+    Dim i As Long
+    Dim char As String
+    Dim resultName As String
+    
+    invalidChars = &#34;\/:*?&#34;&#34;&lt;&gt;|&#34;
+    resultName = originalName
+    
+    For i = 1 To Len(invalidChars)
+        char = Mid(invalidChars, i, 1)
+        resultName = Replace(resultName, char, &#34;_&#34;)
+    Next i
+    ReplaceValidFileNameChars = resultName
+End Function
+
+
+Sub AnalyzeReportDataSourceMD(ByVal FileNum As Integer, ByVal rpt As Report, ByVal reportName As String, ByVal vbProj As Object)
+    &#39; レポートのデータソース関連情報を分析
+    Print #FileNum, &#34;## 2. データソースとデータ取得ロジック&#34;
+    Print #FileNum, &#34;&#34;
+    
+    If rpt Is Nothing Then
+        Print #FileNum, &#34;- レポートオブジェクトにアクセスできませんでした。&#34;
+        Exit Sub
+    End If
+
+    Print #FileNum, &#34;- **レコードソース:**&#34;
+    If Trim(rpt.RecordSource) = &#34;&#34; Then
+        Print #FileNum, &#34;  - `(設定なし)`&#34;
+    Else
+        Print #FileNum, &#34;  ```sql&#34;
+        Print #FileNum, Trim(rpt.RecordSource)
+        Print #FileNum, &#34;  ```&#34;
+        &#39; レコードソースがクエリ名の場合、そのSQLも表示しようと試みる
+        Dim qdf As DAO.QueryDef
+        On Error Resume Next
+        Set qdf = CurrentDb.QueryDefs(rpt.RecordSource)
+        If Err.Number = 0 And Not qdf Is Nothing Then
+            Print #FileNum, &#34;  - **上記レコードソースがクエリの場合のSQL定義:**&#34;
+            Print #FileNum, &#34;    ```sql&#34;
+            Print #FileNum, Trim(qdf.SQL)
+            Print #FileNum, &#34;    ```&#34;
+        Else
+            Print #FileNum, &#34;  - (レコードソースはテーブル名、または直接SQL文の可能性があります)&#34;
+        End If
+        Err.Clear
+        On Error GoTo 0 &#39; 通常のエラー処理に戻す
+        Set qdf = Nothing
+    End If
+    Print #FileNum, &#34;&#34;
+
+    &#39; パラメータ (レポートのFilterプロパティや、レコードソースのクエリがパラメータクエリかなど)
+    &#39; Filterプロパティ
+    If Trim(rpt.Filter) &lt;&gt; &#34;&#34; Then
+        Print #FileNum, &#34;- **フィルタ (プロパティ):** `&#34; &amp; MDEscape(rpt.Filter) &amp; &#34;`&#34;
+        Print #FileNum, &#34;- **フィルタ適用中 (FilterOnプロパティ):** &#34; &amp; IIf(rpt.FilterOn, &#34;はい&#34;, &#34;いいえ&#34;)
+    Else
+        Print #FileNum, &#34;- **フィルタ (プロパティ):** 設定なし&#34;
+    End If
+    &#39; パラメータクエリの検出は困難なので、レコードソースのSQLに [パラメータ名] が含まれるかなどで推測
+    If InStr(1, rpt.RecordSource, &#34;[&#34;) &gt; 0 And InStr(1, rpt.RecordSource, &#34;]&#34;) &gt; 0 Then
+        Print #FileNum, &#34;- **レコードソースにパラメータが含まれる可能性あり。** (例: `[パラメータ名]`) SQL文を確認してください。&#34;
+    End If
+    Print #FileNum, &#34;&#34;
+
+    &#39; VBAやマクロによる動的変更の可能性 (VBAコード分析は別セクション)
+    Print #FileNum, &#34;- **VBA/マクロによる動的変更:**&#34;
+    If rpt.hasModule Then &#39; 小文字のh
+        Dim compName As String, codeMod As Object
+        compName = &#34;Report_&#34; &amp; reportName
+        On Error Resume Next
+        Set codeMod = vbProj.VBComponents(compName).CodeModule &#39; Itemは不要な場合あり
+        If Err.Number = 0 And Not codeMod Is Nothing Then
+             If InStr(1, codeMod.Lines(1, codeMod.CountOfLines), &#34;.RecordSource&#34;, vbTextCompare) &gt; 0 Or _
+                InStr(1, codeMod.Lines(1, codeMod.CountOfLines), &#34;.Filter&#34;, vbTextCompare) &gt; 0 Or _
+                InStr(1, codeMod.Lines(1, codeMod.CountOfLines), &#34;.FilterOn&#34;, vbTextCompare) &gt; 0 Then
+                Print #FileNum, &#34;  - VBAコード内で RecordSource や Filter プロパティを操作している可能性があります。詳細はVBAコード分析セクションを参照。&#34;
+             Else
+                Print #FileNum, &#34;  - VBAコードは存在しますが、RecordSource/Filter操作は見つかりませんでした（簡易チェック）。&#34;
+             End If
+        Else
+            Print #FileNum, &#34;  - VBAモジュールはありますが、コードにアクセスできませんでした。エラー: &#34; &amp; Err.Description
+        End If
+        Err.Clear
+        On Error GoTo 0 &#39; 通常のエラー処理に戻す
+        Set codeMod = Nothing
+    Else
+        Print #FileNum, &#34;  - VBAモジュールなし。&#34;
+    End If
+    If Trim(rpt.OnOpen) &lt;&gt; &#34;&#34; Or Trim(rpt.OnNoData) &lt;&gt; &#34;&#34; Then
+         Print #FileNum, &#34;  - OnOpenまたはOnNoDataイベントに処理が設定されています（マクロまたはVBAの可能性）。&#34;
+    End If
+    Print #FileNum, &#34;&#34;
+    
+    &#39; リンクテーブルや外部データソースの参照は、レコードソースのSQLから推測
+    Print #FileNum, &#34;- **外部データソース参照の可能性:** レコードソースのSQL文を確認し、リンクテーブルや外部DB名が含まれていないか調査してください。&#34;
+    Print #FileNum, &#34;&#34;
+End Sub
+
+Sub AnalyzeReportLayoutMD(ByVal FileNum As Integer, ByVal rpt As Report)
+    &#39; レポートのレイアウトと表示項目を分析
+    &#39; グループ化に関するロジックは削除
+    Dim ctl As Control
+    Dim sec As Section
+
+    Print #FileNum, &#34;## 3. レイアウトと表示項目&#34;
+    Print #FileNum, &#34;&#34;
+    
+    If rpt Is Nothing Then
+        Print #FileNum, &#34;- レポートオブジェクトにアクセスできませんでした。&#34;
+        Exit Sub
+    End If
+
+    Print #FileNum, &#34;### 表示コントロール一覧 (主要プロパティ)&#34;
+    Print #FileNum, &#34;&#34;
+    If rpt.Controls.count &gt; 0 Then
+        For Each ctl In rpt.Controls
+            Print #FileNum, &#34;- **コントロール名:** `&#34; &amp; MDEscape(ctl.Name) &amp; &#34;`&#34;
+            Print #FileNum, &#34;  - **種類:** &#34; &amp; MDEscape(TypeName(ctl)) &amp; &#34; (ControlType: &#34; &amp; ctl.ControlType &amp; &#34;)&#34;
+            If ctl.ControlType = acLabel Then
+                 Print #FileNum, &#34;  - **キャプション:** `&#34; &amp; MDEscape(ctl.Caption) &amp; &#34;`&#34;
+            ElseIf ctl.ControlType = acTextBox Or ctl.ControlType = acComboBox Or ctl.ControlType = acListBox Then
+                If Trim(ctl.ControlSource) &lt;&gt; &#34;&#34; Then Print #FileNum, &#34;  - **コントロールソース:** `&#34; &amp; MDEscape(ctl.ControlSource) &amp; &#34;`&#34;
+                If Trim(ctl.Format) &lt;&gt; &#34;&#34; Then Print #FileNum, &#34;  - **書式:** `&#34; &amp; MDEscape(ctl.Format) &amp; &#34;`&#34;
+                If Trim(ctl.InputMask) &lt;&gt; &#34;&#34; Then Print #FileNum, &#34;  - **入力マスク:** `&#34; &amp; MDEscape(ctl.InputMask) &amp; &#34;`&#34;
+            ElseIf ctl.ControlType = acImage Then
+                If Trim(ctl.Picture) &lt;&gt; &#34;&#34; Then Print #FileNum, &#34;  - **ピクチャ:** `&#34; &amp; MDEscape(ctl.Picture) &amp; &#34;`&#34;
+            ElseIf ctl.ControlType = acSubform Or ctl.ControlType = acSubReport Then &#39; サブレポートも考慮
+                 Print #FileNum, &#34;  - **ソースオブジェクト:** `&#34; &amp; MDEscape(ctl.SourceObject) &amp; &#34;`&#34;
+            End If
+            If Trim(ctl.Tag) &lt;&gt; &#34;&#34; Then Print #FileNum, &#34;  - **タグ:** `&#34; &amp; MDEscape(ctl.Tag) &amp; &#34;`&#34;
+            Print #FileNum, &#34;  - **セクション:** &#34; &amp; SectionCodeToString(ctl.Section)
+            Print #FileNum, &#34;&#34;
+        Next ctl
+    Else
+        Print #FileNum, &#34;*表示コントロールはありません。*&#34; &amp; vbCrLf
+    End If
+
+    Print #FileNum, &#34;### グループ化と並べ替え&#34;
+    Print #FileNum, &#34;&#34;
+    
+    Print #FileNum, &#34;- **グループ化:** 手動でレポートデザインを確認してください。&#34; &#39; グループ化情報を手動確認するよう促す
+        
+    If Trim(rpt.OrderBy) &lt;&gt; &#34;&#34; Then
+        Print #FileNum, &#34;- **並べ替え (OrderByプロパティ):** `&#34; &amp; MDEscape(rpt.OrderBy) &amp; &#34;`&#34;
+        Print #FileNum, &#34;- **並べ替え適用中 (OrderByOnプロパティ):** &#34; &amp; IIf(rpt.OrderByOn, &#34;はい&#34;, &#34;いいえ&#34;)
+    Else
+        Print #FileNum, &#34;- **並べ替え (OrderByプロパティ):** 設定なし&#34;
+    End If
+    Print #FileNum, &#34;&#34;
+
+    Print #FileNum, &#34;### セクション情報&#34;
+    Print #FileNum, &#34;&#34;
+    On Error Resume Next &#39; Sectionコレクションへのアクセスエラー対策
+    Dim i As Integer
+    &#39; レポートセクションのインデックスは acDetail から始まる定数で直接指定する方が確実
+    Dim sectionTypes As Variant
+    sectionTypes = Array(acDetail, acHeader, acFooter, acPageHeader, acPageFooter, _
+                       acGroupLevel1Footer, acGroupLevel1Header, _
+                       acGroupLevel2Footer, acGroupLevel2Header) &#39; 他のグループも必要なら追加
+
+    For Each i In sectionTypes
+        On Error Resume Next &#39; 特定のセクションが存在しない場合のエラーをハンドル
+        Set sec = rpt.Section(i)
+        If Err.Number = 0 And Not sec Is Nothing Then
+            Print #FileNum, &#34;- **セクション:** &#34; &amp; MDEscape(sec.Name) &amp; &#34; (&#34; &amp; SectionCodeToString(sec.SectionType) &amp; &#34;)&#34;
+            Print #FileNum, &#34;  - **表示:** &#34; &amp; IIf(sec.Visible, &#34;はい&#34;, &#34;いいえ&#34;)
+            Print #FileNum, &#34;  - **高さ:** &#34; &amp; sec.Height
+            If sec.SectionType = acGroupLevel1Header Or sec.SectionType = acGroupLevel1Footer Or _
+               sec.SectionType = acGroupLevel2Header Or sec.SectionType = acGroupLevel2Footer Then
+                 If Trim(sec.Tag) &lt;&gt; &#34;&#34; Then Print #FileNum, &#34;  - **タグ:** `&#34; &amp; MDEscape(sec.Tag) &amp; &#34;`&#34;
+            End If
+        ElseIf Err.Number &lt;&gt; 0 And Err.Number &lt;&gt; 2459 Then &#39; 2459: セクションが存在しない
+            Print #FileNum, &#34;- (セクション &#34; &amp; SectionCodeToString(i) &amp; &#34; の情報取得エラー: &#34; &amp; Err.Description &amp; &#34;)&#34;
+        End If
+        Err.Clear
+        Set sec = Nothing
+        On Error GoTo 0 &#39; 通常のエラー処理に戻す
+    Next i
+    
+    If Err.Number &lt;&gt; 0 Then Print #FileNum, &#34;- (セクション情報の一部取得で予期せぬエラー発生)&#34;: Err.Clear
+    On Error GoTo 0
+    Print #FileNum, &#34;&#34;
+    
+    Print #FileNum, &#34;- **条件付き書式の有無:** 手動でレポートデザインを確認してください。&#34;
+    Print #FileNum, &#34;- **画像/OLEオブジェクト/グラフの有無:** 上記コントロール一覧とレポートデザインを手動で確認してください。&#34;
+    Print #FileNum, &#34;&#34;
+End Sub
+
+Sub AnalyzeReportCodeAndMacroMD(ByVal FileNum As Integer, ByVal rpt As Report, ByVal reportName As String, ByVal vbProj As Object)
+    &#39; レポートのVBAコードとマクロを分析
+    Print #FileNum, &#34;## 4. VBAコードとマクロ&#34;
+    Print #FileNum, &#34;&#34;
+    
+    If rpt Is Nothing Then
+        Print #FileNum, &#34;- レポートオブジェクトにアクセスできませんでした。&#34;
+        Exit Sub
+    End If
+
+    Print #FileNum, &#34;- **VBAモジュールの有無:** &#34; &amp; IIf(rpt.hasModule, &#34;**あり**&#34;, &#34;なし&#34;) &#39; 小文字のh
+    If rpt.hasModule Then
+        Dim vbComp As Object, codeMod As Object
+        Dim compName As String: compName = &#34;Report_&#34; &amp; reportName
+        On Error Resume Next
+        Set vbComp = vbProj.VBComponents(compName) &#39; Itemは不要な場合あり
+        If vbComp Is Nothing Then Set vbComp = vbProj.VBComponents(reportName) &#39; Itemなしも試す
+        
+        If Err.Number = 0 And Not vbComp Is Nothing Then
+            Set codeMod = vbComp.CodeModule
+            If Not (codeMod Is Nothing) And codeMod.CountOfLines &gt; 1 Then &#39; 宣言行のみは除く
+                Print #FileNum, &#34;  - **VBAコード総行数:** &#34; &amp; codeMod.CountOfLines
+                Print #FileNum, &#34;  - **注:** 詳細なVBAコード分析は、フォーム分析と同様のツール/手法で別途実施することを推奨します。&#34;
+                &#39; イベントプロシージャの存在チェック (簡易)
+                Dim eventProcList As String: eventProcList = &#34;&#34;
+                Dim procInfo As Variant &#39; 配列を想定
+                Dim allProcs As Collection
+                Set allProcs = GetAllProceduresFromCodeModule(codeMod) &#39; 既存関数を再利用
+                For Each procInfo In allProcs
+                     If Left(LCase(procInfo(0)), 7) = &#34;report_&#34; Or InStr(1, LCase(procInfo(0)), &#34;_format&#34;) &gt; 0 Or InStr(1, LCase(procInfo(0)), &#34;_print&#34;) &gt; 0 Or InStr(1, LCase(procInfo(0)), &#34;_retreat&#34;) &gt; 0 Or InStr(1, LCase(procInfo(0)), &#34;_nodata&#34;) &gt; 0 Then
+                        eventProcList = eventProcList &amp; &#34;`&#34; &amp; MDEscape(procInfo(0)) &amp; &#34;`, &#34;
+                     End If
+                Next procInfo
+                If eventProcList &lt;&gt; &#34;&#34; Then
+                    eventProcList = Left(eventProcList, Len(eventProcList) - 2)
+                    Print #FileNum, &#34;  - **主要イベントプロシージャ候補:** &#34; &amp; eventProcList
+                End If
+            Else
+                Print #FileNum, &#34;  - VBAモジュールはありますが、実質的なコードは少ないか、アクセスできませんでした。&#34;
+            End If
+        Else
+            Print #FileNum, &#34;  - VBAコンポーネントにアクセスできませんでした。エラー: &#34; &amp; Err.Description
+        End If
+        Err.Clear
+        On Error GoTo 0 &#39; 通常のエラー処理に戻す
+        Set codeMod = Nothing: Set vbComp = Nothing
+    End If
+    Print #FileNum, &#34;&#34;
+    
+    &#39; 主要イベントプロパティのマクロ設定確認
+    Dim eventProps As Variant
+    Dim prop As Variant
+    eventProps = Array(&#34;OnOpen&#34;, &#34;OnClose&#34;, &#34;OnActivate&#34;, &#34;OnDeactivate&#34;, &#34;OnError&#34;, &#34;OnNoData&#34;, &#34;OnPage&#34;)
+    Dim macroFound As Boolean: macroFound = False
+    For Each prop In eventProps
+        On Error Resume Next &#39; プロパティが存在しない場合もある
+        Dim propValue As String
+        propValue = rpt.Properties(prop).Value
+        If Err.Number = 0 And Trim(propValue) &lt;&gt; &#34;&#34; And Left(Trim(propValue), 1) &lt;&gt; &#34;[&#34; Then &#39; &#34;[&#34;で始まらないのはマクロ名
+            Print #FileNum, &#34;- **イベントプロパティ `&#34; &amp; MDEscape(CStr(prop)) &amp; &#34;` にマクロ設定あり:** `&#34; &amp; MDEscape(propValue) &amp; &#34;`&#34;
+            macroFound = True
+        End If
+        Err.Clear
+        On Error GoTo 0 &#39; 通常のエラー処理に戻す
+    Next prop
+    If Not macroFound Then
+        Print #FileNum, &#34;- **主要イベントプロパティにマクロ設定は見つかりませんでした（簡易チェック）。**&#34;
+    End If
+    Print #FileNum, &#34;&#34;
+End Sub
+
+Sub AnalyzeReportOutputFormatMD(ByVal FileNum As Integer, ByVal rpt As Report)
+    &#39; レポートの出力形式関連情報を分析
+    Print #FileNum, &#34;## 5. 出力形式と用途&#34;
+    Print #FileNum, &#34;&#34;
+    
+    If rpt Is Nothing Then
+        Print #FileNum, &#34;- レポートオブジェクトにアクセスできませんでした。&#34;
+        Exit Sub
+    End If
+
+    Print #FileNum, &#34;- **主に画面プレビューか印刷か、エクスポート利用か:** (ヒアリング等で確認)&#34;
+    Print #FileNum, &#34;&#34;
+    Print #FileNum, &#34;### ページ設定 (一部抜粋)&#34;
+    Print #FileNum, &#34;&#34;
+    On Error Resume Next &#39; Printerオブジェクトがない場合がある
+    If Not rpt.Printer Is Nothing Then
+        With rpt.Printer
+            Print #FileNum, &#34;- **用紙サイズ:** &#34; &amp; PaperSizeToString(.PaperSize) &amp; &#34; (&#34; &amp; .PaperSize &amp; &#34;)&#34;
+            Print #FileNum, &#34;- **向き:** &#34; &amp; IIf(.Orientation = acPRORLandscape, &#34;横&#34;, &#34;縦&#34;) &amp; &#34; (&#34; &amp; .Orientation &amp; &#34;)&#34;
+            Print #FileNum, &#34;- **左余白:** &#34; &amp; Format(.LeftMargin / 1440, &#34;0.00&#34;) &amp; &#34;インチ (&#34; &amp; .LeftMargin &amp; &#34; twips)&#34; &#39; 1 inch = 1440 twips
+            Print #FileNum, &#34;- **右余白:** &#34; &amp; Format(.RightMargin / 1440, &#34;0.00&#34;) &amp; &#34;インチ (&#34; &amp; .RightMargin &amp; &#34; twips)&#34;
+            Print #FileNum, &#34;- **上余白:** &#34; &amp; Format(.TopMargin / 1440, &#34;0.00&#34;) &amp; &#34;インチ (&#34; &amp; .TopMargin &amp; &#34; twips)&#34;
+            Print #FileNum, &#34;- **下余白:** &#34; &amp; Format(.BottomMargin / 1440, &#34;0.00&#34;) &amp; &#34;インチ (&#34; &amp; .BottomMargin &amp; &#34; twips)&#34;
+        End With
+    Else
+        Print #FileNum, &#34;- プリンタオブジェクトにアクセスできませんでした。ページ設定は手動で確認してください。&#34;
+    End If
+    If Err.Number &lt;&gt; 0 Then Print #FileNum, &#34;- ページ設定情報取得エラー: &#34; &amp; MDEscape(Err.Description): Err.Clear
+    On Error GoTo 0 &#39; 通常のエラー処理に戻す
+    Print #FileNum, &#34;&#34;
+    Print #FileNum, &#34;- **定期的な自動印刷/エクスポートの有無:** (バッチ処理やタスクスケジューラの確認)&#34;
+    Print #FileNum, &#34;&#34;
+End Sub
+
+
+&#39; --- ユーティリティ関数群 (一部新規・変更あり) ---
+
+Function ReplaceValidFileNameChars(originalName As String) As String
+    Dim invalidChars As String, i As Long, char As String, resultName As String
+    invalidChars = &#34;\/:*?&#34;&#34;&lt;&gt;|&#34;: resultName = originalName
+    For i = 1 To Len(invalidChars)
+        char = Mid(invalidChars, i, 1): resultName = Replace(resultName, char, &#34;_&#34;)
+    Next i
+    ReplaceValidFileNameChars = resultName
+End Function
+
+Function GetAllProceduresFromCodeModule(ByVal codeMod As Object) As Collection
+    Dim procs As New Collection, procName As String, procKind As Long, currentLine As Long
+    Dim lastProcName As String: lastProcName = &#34;###INITIAL_VALUE###&#34;
+    Dim tempProcInfo(0 To 1) As Variant
+    If codeMod Is Nothing Or codeMod.CountOfLines = 0 Then Set GetAllProceduresFromCodeModule = procs: Exit Function
+    On Error GoTo ErrorHandler_GetAllProcs
+    currentLine = 1
+    Do While currentLine &lt;= codeMod.CountOfLines
+        Dim procNameAtLine As String, procKindAtLine As Long
+        On Error Resume Next
+        procNameAtLine = codeMod.ProcOfLine(currentLine, procKindAtLine)
+        If Err.Number &lt;&gt; 0 Then procNameAtLine = &#34;&#34;: Err.Clear
+        On Error GoTo ErrorHandler_GetAllProcs
+        If procNameAtLine &lt;&gt; &#34;&#34; Then
+            If procNameAtLine &lt;&gt; lastProcName Then
+                tempProcInfo(0) = procNameAtLine: tempProcInfo(1) = procKindAtLine
+                On Error Resume Next
+                procs.Add Item:=tempProcInfo, Key:=CStr(procNameAtLine)
+                If Err.Number &lt;&gt; 0 Then Err.Clear
+                On Error GoTo ErrorHandler_GetAllProcs
+                lastProcName = procNameAtLine
+            End If
+            Dim procStart As Long, procLinesCount As Long
+            procStart = codeMod.ProcStartLine(procNameAtLine, procKindAtLine)
+            procLinesCount = codeMod.ProcCountLines(procNameAtLine, procKindAtLine)
+            If procLinesCount &gt; 0 Then currentLine = procStart + procLinesCount Else currentLine = currentLine + 1
+        Else
+            currentLine = currentLine + 1
+        End If
+    Loop
+    Set GetAllProceduresFromCodeModule = procs
+    Exit Function
+ErrorHandler_GetAllProcs:
+    Debug.Print &#34;GetAllProceduresFromCodeModule Error: &#34; &amp; Err.Number &amp; &#34; - &#34; &amp; Err.Description
+    Set GetAllProceduresFromCodeModule = procs
+End Function
+
+Function GetFormControlNames(objectName As String, Optional isReport As Boolean = True) As Collection
+    &#39; レポートまたはフォーム上のコントロール名一覧を取得する
+    Dim ctl As Control, col As New Collection, objOwner As Object, designViewOpened As Boolean
+    Dim objectType As AcObjectType
+    
+    Set col = New Collection &#39; 毎回新しいコレクションを生成
+    
+    If isReport Then objectType = acReport Else objectType = acForm
+    
+    On Error Resume Next
+    &#39; オブジェクトが既に開いているか、どのビューで開いているかを確認
+    Dim currentState As Long
+    currentState = SysCmd(acSysCmdGetObjectState, objectType, objectName)
+    
+    designViewOpened = False &#39; 初期化
+    
+    If currentState &lt;&gt; 0 Then &#39; 何らかの形で開いている
+        If isReport Then
+            Set objOwner = Reports(objectName)
+            If objOwner.CurrentView &lt;&gt; acViewDesign Then &#39; デザインビューでなければ開きなおす
+                DoCmd.Close objectType, objectName, acSaveNo &#39; 一旦閉じる
+                DoCmd.OpenReport objectName, acViewDesign, , , acHidden
+                Set objOwner = Reports(objectName)
+                designViewOpened = True &#39; 新しく開いたフラグ
+            End If
+        Else &#39; フォームの場合
+            Set objOwner = Forms(objectName)
+            If objOwner.CurrentView &lt;&gt; acDesign Then
+                DoCmd.Close objectType, objectName, acSaveNo
+                DoCmd.OpenForm objectName, acDesign, , , , acHidden
+                Set objOwner = Forms(objectName)
+                designViewOpened = True
+            End If
+        End If
+    Else &#39; 開いていない場合
+        If isReport Then
+            DoCmd.OpenReport objectName, acViewDesign, , , acHidden
+            Set objOwner = Reports(objectName)
+        Else
+            DoCmd.OpenForm objectName, acDesign, , , , acHidden
+            Set objOwner = Forms(objectName)
+        End If
+        designViewOpened = True
+    End If
+    
+    If Err.Number &lt;&gt; 0 Then
+        Debug.Print &#34;GetFormControlNames: オブジェクト &#39;&#34; &amp; objectName &amp; &#34;&#39; のオープン/参照エラー: &#34; &amp; Err.Description
+        Err.Clear
+        Set GetFormControlNames = col &#39; 空のコレクションを返す
+        Exit Function
+    End If
+    On Error GoTo 0
+
+    If Not objOwner Is Nothing Then
+        On Error Resume Next &#39; コントロールアクセスエラー対策
+        For Each ctl In objOwner.Controls
+            col.Add ctl.Name, ctl.Name &#39; キーも同じ名前で追加（重複回避のため）
+        Next ctl
+        If Err.Number &lt;&gt; 0 Then
+            Debug.Print &#34;GetFormControlNames: コントロール取得エラー in &#39;&#34; &amp; objectName &amp; &#34;&#39;: &#34; &amp; Err.Description
+            Err.Clear
+        End If
+        On Error GoTo 0
+        
+        If designViewOpened And Not objOwner Is Nothing Then &#39; 新しくデザインビューで開いた場合のみ閉じる
+            On Error Resume Next &#39; 閉じる際のエラーは無視
+            DoCmd.Close objectType, objectName, acSaveNo
+            On Error GoTo 0
+        End If
+    Else
+        Debug.Print &#34;GetFormControlNames: オブジェクト &#39;&#34; &amp; objectName &amp; &#34;&#39; にアクセスできませんでした。&#34;
+    End If
+    Set GetFormControlNames = col
+End Function
+
+Function GetEventProcedureInfo(procName As String, controlNames As Collection, Optional objectTypeName As String = &#34;Report&#34;) As String
+    &#39; プロシージャ名からイベント情報を推測する
+    Dim parts() As String, objectName As String, eventName As String, ctlName As Variant
+    GetEventProcedureInfo = &#34;&#34;
+    If InStr(procName, &#34;_&#34;) = 0 Then Exit Function
+    parts = Split(procName, &#34;_&#34;)
+    If UBound(parts) &lt; 1 Then Exit Function
+    objectName = parts(0): eventName = parts(1)
+    If LCase(objectName) = LCase(objectTypeName) Then
+        GetEventProcedureInfo = MDEscape(objectTypeName) &amp; &#34; の &#34; &amp; MDEscape(eventName) &amp; &#34; イベント&#34;
+        Exit Function
+    End If
+    On Error Resume Next
+    For Each ctlName In controlNames
+        If LCase(CStr(ctlName)) = LCase(objectName) Then
+            GetEventProcedureInfo = &#34;コントロール `&#34; &amp; MDEscape(objectName) &amp; &#34;` の &#34; &amp; MDEscape(eventName) &amp; &#34; イベント&#34;
+            Exit Function
+        End If
+    Next ctlName
+    On Error GoTo 0
+End Function
+
+Function ProcKindToString(Kind As Long) As String
+    Select Case Kind
+        Case 0: ProcKindToString = &#34;Sub/Function (vbext_pk_Proc)&#34;
+        Case 1: ProcKindToString = &#34;Property Let (vbext_pk_Let)&#34;
+        Case 2: ProcKindToString = &#34;Property Set (vbext_pk_Set)&#34;
+        Case 3: ProcKindToString = &#34;Property Get (vbext_pk_Get)&#34;
+        Case Else: ProcKindToString = &#34;不明な種類 (&#34; &amp; Kind &amp; &#34;)&#34;
+    End Select
+End Function
+
+Function MDEscape(TextToEscape As String) As String
+    Dim EscapedText As String, parts() As String, i As Long, inBackticks As Boolean
+    EscapedText = &#34;&#34;: If IsNull(TextToEscape) Then MDEscape = &#34;(Null)&#34;: Exit Function
+    parts = Split(TextToEscape, &#34;`&#34;): inBackticks = False
+    For i = 0 To UBound(parts)
+        If inBackticks Then
+            EscapedText = EscapedText &amp; &#34;`&#34; &amp; parts(i)
+            If i &lt; UBound(parts) Then EscapedText = EscapedText &amp; &#34;`&#34; ElseIf TextToEscape Like &#34;*`&#34; Then EscapedText = EscapedText &amp; &#34;`&#34;
+        Else
+            Dim tempPart As String: tempPart = parts(i)
+            tempPart = Replace(tempPart, &#34;\&#34;, &#34;\\&#34;): tempPart = Replace(tempPart, &#34;*&#34;, &#34;\*&#34;)
+            tempPart = Replace(tempPart, &#34;_&#34;, &#34;\_&#34;): tempPart = Replace(tempPart, &#34;{&#34;, &#34;\{&#34;)
+            tempPart = Replace(tempPart, &#34;}&#34;, &#34;\}&#34;): tempPart = Replace(tempPart, &#34;[&#34;, &#34;\[&#34;)
+            tempPart = Replace(tempPart, &#34;]&#34;, &#34;\]&#34;): tempPart = Replace(tempPart, &#34;(&#34;, &#34;\(&#34;)
+            tempPart = Replace(tempPart, &#34;)&#34;, &#34;\)&#34;): tempPart = Replace(tempPart, &#34;#&#34;, &#34;\#&#34;)
+            tempPart = Replace(tempPart, &#34;+&#34;, &#34;\+&#34;): tempPart = Replace(tempPart, &#34;-&#34;, &#34;\-&#34;)
+            tempPart = Replace(tempPart, &#34;.&#34;, &#34;\.&#34;): tempPart = Replace(tempPart, &#34;!&#34;, &#34;\!&#34;)
+            tempPart = Replace(tempPart, &#34;|&#34;, &#34;\|&#34;)
+            EscapedText = EscapedText &amp; tempPart
+        End If
+        inBackticks = Not inBackticks
+    Next i
+    MDEscape = EscapedText
+End Function
+
+Function SectionCodeToString(sectionCode As Integer) As String
+    &#39; セクションコードを文字列に変換
+    Select Case sectionCode
+        Case acDetail: SectionCodeToString = &#34;詳細 (acDetail)&#34;
+        Case acHeader: SectionCodeToString = &#34;レポートヘッダー (acHeader)&#34;
+        Case acFooter: SectionCodeToString = &#34;レポートフッター (acFooter)&#34;
+        Case acPageHeader: SectionCodeToString = &#34;ページヘッダー (acPageHeader)&#34;
+        Case acPageFooter: SectionCodeToString = &#34;ページフッター (acPageFooter)&#34;
+        Case acGroupLevel1Header: SectionCodeToString = &#34;グループヘッダー1 (acGroupLevel1Header)&#34;
+        Case acGroupLevel1Footer: SectionCodeToString = &#34;グループフッター1 (acGroupLevel1Footer)&#34;
+        Case acGroupLevel2Header: SectionCodeToString = &#34;グループヘッダー2 (acGroupLevel2Header)&#34;
+        Case acGroupLevel2Footer: SectionCodeToString = &#34;グループフッター2 (acGroupLevel2Footer)&#34;
+        &#39; 他のグループレベルも必要に応じて追加
+        Case Else: SectionCodeToString = &#34;不明なセクション (&#34; &amp; sectionCode &amp; &#34;)&#34;
+    End Select
+End Function
+
+Function PaperSizeToString(paperSizeCode As Integer) As String
+    &#39; 用紙サイズコードを文字列に変換 (主要なもののみ)
+    Select Case paperSizeCode
+        Case acPRPSLetter: PaperSizeToString = &#34;レター (Letter)&#34;
+        Case acPRPSLegal: PaperSizeToString = &#34;リーガル (Legal)&#34;
+        Case acPRPSExecutive: PaperSizeToString = &#34;エグゼクティブ (Executive)&#34;
+        Case acPRPSA3: PaperSizeToString = &#34;A3&#34;
+        Case acPRPSA4: PaperSizeToString = &#34;A4&#34;
+        Case acPRPSA5: PaperSizeToString = &#34;A5&#34;
+        Case acPRPSB4: PaperSizeToString = &#34;B4 (JIS)&#34;
+        Case acPRPSB5: PaperSizeToString = &#34;B5 (JIS)&#34;
+        &#39; 他の用紙サイズも必要に応じて追加 (詳細はAccessのヘルプ参照)
+        Case Else: PaperSizeToString = &#34;その他/ユーザー定義 (&#34; &amp; paperSizeCode &amp; &#34;)&#34;
+    End Select
+End Function
+
+Function IsUserDefinedProcedureName(procNameToCheck As String) As Boolean
+    IsUserDefinedProcedureName = True 
+    If procNameToCheck = &#34;&#34; Then IsUserDefinedProcedureName = False: Exit Function
+    If Left(LCase(procNameToCheck), 4) = &#34;docmd.&#34; Or _
+       Left(LCase(procNameToCheck), 7) = &#34;screen.&#34; Or _
+       Left(LCase(procNameToCheck), 3) = &#34;me.&#34; Or _
+       Left(LCase(procNameToCheck), 6) = &#34;forms!&#34; Or _
+       Left(LCase(procNameToCheck), 8) = &#34;reports!&#34; Or _
+       LCase(procNameToCheck) = &#34;currentdb&#34; Or _
+       LCase(procNameToCheck) = &#34;currentproject&#34; Then IsUserDefinedProcedureName = False: Exit Function
+    If IsVBAKeywordOrBuiltIn(procNameToCheck) Then IsUserDefinedProcedureName = False: Exit Function
+End Function
+
+Function IsVBAKeywordOrBuiltIn(word As String) As Boolean
+    Dim keywords As Variant, i As Long, lowerWord As String
+    keywords = Array(&#34;Sub&#34;, &#34;Function&#34;, &#34;Property&#34;, &#34;Get&#34;, &#34;Let&#34;, &#34;Set&#34;, &#34;End&#34;, &#34;If&#34;, &#34;Then&#34;, &#34;Else&#34;, &#34;ElseIf&#34;, _
+                     &#34;Select&#34;, &#34;Case&#34;, &#34;For&#34;, &#34;To&#34;, &#34;Next&#34;, &#34;Do&#34;, &#34;While&#34;, &#34;Loop&#34;, &#34;Until&#34;, &#34;Wend&#34;, &#34;Exit&#34;, _
+                     &#34;Call&#34;, &#34;Dim&#34;, &#34;ReDim&#34;, &#34;Const&#34;, &#34;Public&#34;, &#34;Private&#34;, &#34;Friend&#34;, &#34;Static&#34;, &#34;With&#34;, &#34;As&#34;, _
+                     &#34;New&#34;, &#34;Me&#34;, &#34;Nothing&#34;, &#34;Empty&#34;, &#34;Null&#34;, &#34;True&#34;, &#34;False&#34;, &#34;Not&#34;, &#34;And&#34;, &#34;Or&#34;, &#34;Xor&#34;, &#34;Eqv&#34;, &#34;Imp&#34;, &#34;Is&#34;, _
+                     &#34;Like&#34;, &#34;Option&#34;, &#34;Explicit&#34;, &#34;Compare&#34;, &#34;Database&#34;, &#34;Binary&#34;, &#34;Text&#34;, &#34;GoTo&#34;, &#34;On&#34;, &#34;Error&#34;, &#34;Resume&#34;, _
+                     &#34;Type&#34;, &#34;Enum&#34;, &#34;Event&#34;, &#34;RaiseEvent&#34;, &#34;Implements&#34;, &#34;Declare&#34;, &#34;Lib&#34;, &#34;Alias&#34;, &#34;AddressOf&#34;, &#34;ByVal&#34;, &#34;ByRef&#34;, &#34;Optional&#34;, &#34;ParamArray&#34;, _
+                     &#34;Array&#34;, &#34;MsgBox&#34;, &#34;InputBox&#34;, &#34;Chr&#34;, &#34;Asc&#34;, &#34;Str&#34;, &#34;Val&#34;, &#34;CStr&#34;, &#34;CBool&#34;, &#34;CByte&#34;, &#34;CCur&#34;, &#34;CDate&#34;, &#34;CDbl&#34;, &#34;CDec&#34;, &#34;CInt&#34;, &#34;CLng&#34;, &#34;CSng&#34;, &#34;CVar&#34;, _
+                     &#34;Format&#34;, &#34;Date&#34;, &#34;Time&#34;, &#34;Now&#34;, &#34;Timer&#34;, &#34;DateAdd&#34;, &#34;DateDiff&#34;, &#34;DatePart&#34;, &#34;DateSerial&#34;, &#34;DateValue&#34;, &#34;Day&#34;, &#34;Month&#34;, &#34;Year&#34;, &#34;Hour&#34;, &#34;Minute&#34;, &#34;Second&#34;, &#34;Weekday&#34;, _
+                     &#34;Left&#34;, &#34;Right&#34;, &#34;Mid&#34;, &#34;Len&#34;, &#34;InStr&#34;, &#34;InStrRev&#34;, &#34;Replace&#34;, &#34;Split&#34;, &#34;Join&#34;, &#34;LCase&#34;, &#34;UCase&#34;, &#34;Trim&#34;, &#34;LTrim&#34;, &#34;RTrim&#34;, &#34;Space&#34;, &#34;String&#34;, _
+                     &#34;Abs&#34;, &#34;Sgn&#34;, &#34;Sqr&#34;, &#34;Int&#34;, &#34;Fix&#34;, &#34;Round&#34;, &#34;Rnd&#34;, _
+                     &#34;RGB&#34;, &#34;QBColor&#34;, _
+                     &#34;TypeName&#34;, &#34;VarType&#34;, _
+                     &#34;IsEmpty&#34;, &#34;IsNull&#34;, &#34;IsDate&#34;, &#34;IsNumeric&#34;, &#34;IsObject&#34;, &#34;IsArray&#34;, &#34;IsError&#34;, _
+                     &#34;CreateObject&#34;, &#34;GetObject&#34;, _
+                     &#34;Err&#34;, &#34;Erl&#34;, _
+                     &#34;Nz&#34;, &#34;Choose&#34;, &#34;Switch&#34;, &#34;IIf&#34;, _
+                     &#34;Environ&#34;, &#34;Command&#34;, &#34;Shell&#34;, _
+                     &#34;Beep&#34;, &#34;SendKeys&#34;, &#34;AppActivate&#34;, _
+                     &#34;DoEvents&#34;, &#34;EOF&#34;, &#34;LOF&#34;, &#34;FileLen&#34;, &#34;GetAttr&#34;, &#34;SetAttr&#34;, &#34;Dir&#34;, &#34;FreeFile&#34;, &#34;Input&#34;, &#34;Print&#34;, &#34;Write&#34;, &#34;Open&#34;, &#34;Close&#34;, &#34;Seek&#34;, &#34;Lock&#34;, &#34;Unlock&#34;, &#34;Name&#34;, &#34;Kill&#34;, &#34;FileCopy&#34;, &#34;MkDir&#34;, &#34;RmDir&#34;, &#34;ChDir&#34;, &#34;ChDrive&#34;)
+    IsVBAKeywordOrBuiltIn = False: lowerWord = LCase(Trim(word))
+    For i = LBound(keywords) To UBound(keywords)
+        If lowerWord = LCase(keywords(i)) Then IsVBAKeywordOrBuiltIn = True: Exit Function
+    Next i
+    If IsNumeric(word) Then IsVBAKeywordOrBuiltIn = True: Exit Function
+    If (Left(word, 1) = &#34;&#34;&#34;&#34; And Right(word, 1) = &#34;&#34;&#34;&#34;) Or (Left(word, 1) = &#34;&#39;&#34; And Right(word, 1) = &#34;&#39;&#34;) Then IsVBAKeywordOrBuiltIn = True: Exit Function
+End Function
+
+Sub AnalyzeKeywordsAndSyntaxMD(ByVal FileNum As Integer, ByVal codeMod As Object)
+    Dim i As Long, lineText As String, evidences As Collection, k As Long, kw As Variant
+    Dim counts() As Long, keywordSets(0 To 9) As Variant, sectionTitles(0 To 9) As String
+    Print #FileNum, &#34;## 3. 特定のキーワード・構文の使用状況&#34;
+    Print #FileNum, &#34;&#34;
+    If codeMod.CountOfLines &lt;= 1 Then Print #FileNum, &#34;*分析可能なコードがほとんどありません。*&#34; &amp; vbCrLf: Exit Sub
+    keywordSets(0) = Array(&#34;DoCmd.&#34;, &#34;Forms!&#34;, &#34;Reports!&#34;, &#34;Me.&#34;, &#34;Screen.ActiveForm&#34;, &#34;Screen.ActiveControl&#34;, &#34;CurrentDb(&#34;, &#34;CurrentProject.&#34;): sectionTitles(0) = &#34;Accessオブジェクト/メソッド&#34;
+    keywordSets(1) = Array(&#34;DAO.Database&#34;, &#34;DAO.Recordset&#34;, &#34;db.OpenRecordset&#34;, &#34;ADODB.Connection&#34;, &#34;ADODB.Command&#34;, &#34;ADODB.Recordset&#34;, &#34;cn.Execute&#34;, &#34;rs.Open&#34;): sectionTitles(1) = &#34;DAO/ADOオブジェクト&#34;
+    keywordSets(2) = Array(&#34;On Error GoTo&#34;, &#34;On Error Resume Next&#34;, &#34;Resume Next&#34;, &#34;Resume&#34;, &#34;Err.Raise&#34;, &#34;Err.Clear&#34;): sectionTitles(2) = &#34;エラー処理構文&#34;
+    keywordSets(3) = Array(&#34;Declare Sub&#34;, &#34;Declare Function&#34;): sectionTitles(3) = &#34;API関数 (宣言)&#34;
+    keywordSets(4) = Array(&#34;Open &#34;, &#34;Close #&#34;, &#34;Print #&#34;, &#34;Input #&#34;, &#34;Line Input #&#34;, &#34;FreeFile&#34;, &#34;Kill &#34;, &#34;FileCopy &#34;, &#34;MkDir &#34;, &#34;Scripting.FileSystemObject&#34;): sectionTitles(4) = &#34;ファイル操作&#34;
+    keywordSets(5) = Array(&#34;For &#34;, &#34;Next&#34;, &#34;Do &#34;, &#34;Loop&#34;, &#34;While &#34;, &#34;Wend&#34;, &#34;For Each&#34;): sectionTitles(5) = &#34;ループ構文 (出現回数)&#34;
+    keywordSets(6) = Array(&#34;If &#34;, &#34;Then&#34;, &#34;ElseIf &#34;, &#34;Else&#34;, &#34;End If&#34;, &#34;Select Case&#34;, &#34;Case &#34;, &#34;End Select&#34;): sectionTitles(6) = &#34;条件分岐構文 (出現回数)&#34;
+    keywordSets(7) = Array(&#34;CreateObject(&#34;, &#34;GetObject(&#34;): sectionTitles(7) = &#34;CreateObject/GetObject (外部オブジェクト連携)&#34;
+    keywordSets(8) = Array(&#34;GoTo &#34;): sectionTitles(8) = &#34;GoToステートメント&#34;
+    keywordSets(9) = Array(&#34;SELECT &#34;&#34;&#34;, &#34;INSERT INTO &#34;&#34;&#34;, &#34;UPDATE &#34;&#34;&#34;, &#34;DELETE FROM &#34;&#34;&#34;): sectionTitles(9) = &#34;SQL文字列埋め込みの可能性&#34;
+    ReDim counts(LBound(keywordSets) To UBound(keywordSets))
+    For k = LBound(keywordSets) To UBound(keywordSets)
+        Print #FileNum, &#34;### &#34; &amp; MDEscape(sectionTitles(k)): Print #FileNum, &#34;&#34;
+        Set evidences = New Collection: counts(k) = 0
+        For i = 1 To codeMod.CountOfLines
+            lineText = codeMod.Lines(i, 1)
+            If Trim(lineText) = &#34;&#34; Or Left(Trim(lineText), 1) = &#34;&#39;&#34; Then GoTo NextLine_ReportSpec
+            For Each kw In keywordSets(k)
+                If InStr(1, lineText, CStr(kw), vbTextCompare) &gt; 0 Then
+                    If k = 5 Or k = 6 Then counts(k) = counts(k) + 1 Else On Error Resume Next: evidences.Add &#34;**行 &#34; &amp; i &amp; &#34;:** `&#34; &amp; MDEscape(Trim(lineText)) &amp; &#34;`&#34;: On Error GoTo 0: counts(k) = counts(k) + 1: Exit For
+                End If
+            Next kw
+NextLine_ReportSpec:
+        Next i
+        If k = 5 Or k = 6 Then Print #FileNum, &#34;- **総出現回数 (簡易カウント):** &#34; &amp; counts(k) Else If evidences.count &gt; 0 Then Print #FileNum, &#34;- **検出された箇所 (&#34; &amp; evidences.count &amp; &#34;件):**&#34;: For Each kw In evidences: Print #FileNum, &#34;  - &#34; &amp; kw: Next kw Else Print #FileNum, &#34;*該当するキーワード・構文は見つかりませんでした。*&#34;
+        Print #FileNum, &#34;&#34;
+    Next k
+    Dim declaredAPIs As New Collection, apiName As String, apiCallFound As Boolean
+    For i = 1 To codeMod.CountOfLines
+        lineText = codeMod.Lines(i, 1)
+        If InStr(1, lineText, &#34;Declare&#34;, vbTextCompare) &gt; 0 Then apiName = ExtractApiName(lineText): If apiName &lt;&gt; &#34;&#34; Then On Error Resume Next: declaredAPIs.Add apiName, apiName: On Error GoTo 0
+    Next i
+    Print #FileNum, &#34;### API関数 (呼び出し)&#34;: Print #FileNum, &#34;&#34;
+    If declaredAPIs.count &gt; 0 Then
+        Set evidences = New Collection: apiCallFound = False
+        For Each kw In declaredAPIs
+            For i = 1 To codeMod.CountOfLines
+                lineText = codeMod.Lines(i, 1)
+                If Trim(lineText) = &#34;&#34; Or Left(Trim(lineText), 1) = &#34;&#39;&#34; Then GoTo NextApiLine_ReportSpec
+                If InStr(1, lineText, CStr(kw), vbTextCompare) &gt; 0 And InStr(1, lineText, &#34;Declare&#34;, vbTextCompare) = 0 Then On Error Resume Next: evidences.Add &#34;**行 &#34; &amp; i &amp; &#34; (`&#34; &amp; MDEscape(CStr(kw)) &amp; &#34;`):** `&#34; &amp; MDEscape(Trim(lineText)) &amp; &#34;`&#34;: apiCallFound = True: On Error GoTo 0
+NextApiLine_ReportSpec:
+            Next i
+        Next kw
+        If evidences.count &gt; 0 Then Print #FileNum, &#34;- **呼び出しが検出された箇所 (&#34; &amp; evidences.count &amp; &#34;件):**&#34;: For Each kw In evidences: Print #FileNum, &#34;  - &#34; &amp; kw: Next kw Else Print #FileNum, &#34;*宣言されたAPI関数の呼び出しは見つかりませんでした。*&#34;
+    Else Print #FileNum, &#34;*呼び出しをチェックする宣言済みAPI関数が見つかりませんでした。*&#34;
+    Print #FileNum, &#34;&#34;
+End Sub
+
+Function ExtractApiName(declarationLine As String) As String
+    Dim namePart As String
+    ExtractApiName = &#34;&#34;
+    If InStr(1, declarationLine, &#34;Function &#34;, vbTextCompare) &gt; 0 Then namePart = Mid(declarationLine, InStr(1, declarationLine, &#34;Function &#34;, vbTextCompare) + Len(&#34;Function &#34;)) Else If InStr(1, declarationLine, &#34;Sub &#34;, vbTextCompare) &gt; 0 Then namePart = Mid(declarationLine, InStr(1, declarationLine, &#34;Sub &#34;, vbTextCompare) + Len(&#34;Sub &#34;)) Else Exit Function
+    If InStr(1, namePart, &#34;(&#34;) &gt; 0 Then ExtractApiName = Trim(Left(namePart, InStr(1, namePart, &#34;(&#34;) - 1)) Else ExtractApiName = Trim(namePart)
+End Function</code></pre></div>
+<h2 id="概要">概要</h2>
+
+<p>このVBAスクリプトは、Microsoft Accessデータベース内に存在する<strong>すべてのレポートオブジェクト</strong>を対象とし、それぞれの技術的な仕様（データソース、レイアウト、表示項目、VBAコードやマクロの利用状況、ページ設定など）を自動的に調査・分析します。分析結果は、レポートごとに個別のMarkdownファイルとして、データベースファイルと同じフォルダに出力されます。</p>
+
+<p>このツールの主な目的は、既存のAccessレポートの機能を新しいシステム（例: Webアプリケーション）へ移行する際や、大規模な改修を行う際に必要となる初期の仕様情報を効率的に収集し、ドキュメント化することです。レポートの「目的」や「利用者」といった意味的な情報は自動分析が困難なため、これらの項目については手動での確認を促すメッセージがレポートに含まれます。</p>
+
+<p>スクリプトは、VBE (Visual Basic Editor) オブジェクトモデルやDAO (Data Access Objects) を活用して、レポートのプロパティや関連するVBAコードの情報を取得し、Markdown形式で整形して出力します。これにより、開発者は各レポートの技術的な詳細を迅速に把握し、移行計画や改修作業の基礎資料として利用できます。</p>
+
+<h2 id="各プロシージャ-関数の機能解説">各プロシージャ・関数の機能解説</h2>
+
+<h3 id="sub-analyzeallreportspecificationstomarkdown"><code>Sub AnalyzeAllReportSpecificationsToMarkdown()</code></h3>
+
+<ul>
+<li><strong>機能</strong>:
+
+<ul>
+<li>このVBAスクリプト全体の実行を制御するメインプロシージャです。</li>
+<li>現在のAccessプロジェクトに含まれる全てのレポートを対象とします。</li>
+<li>各レポートについて、<code>[レポート名]_ReportSpec_Analysis.md</code> という名前で個別のMarkdownファイルを作成し、分析結果を書き込みます。</li>
+<li>分析対象のレポートを一時的に非表示のデザインビューで開くことで、そのプロパティやコントロール情報にアクセスします。</li>
+<li>レポートの仕様を多角的に分析するために、以下の専用サブプロシージャを呼び出します。
+
+<ul>
+<li><code>AnalyzeReportDataSourceMD</code>: データソースとデータ取得ロジックを分析。</li>
+<li><code>AnalyzeReportLayoutMD</code>: レイアウトと表示項目を分析。</li>
+<li><code>AnalyzeReportCodeAndMacroMD</code>: VBAコードとマクロの利用状況を分析。</li>
+<li><code>AnalyzeReportOutputFormatMD</code>: 出力形式とページ設定関連情報を分析。</li>
+</ul></li>
+<li>各レポートの分析処理中にエラーが発生した場合の処理（エラー情報をレポートに記録し、次のレポートへ処理を移す）と、スクリプト全体の実行時エラーを捕捉するエラーハンドリングを行います。</li>
+<li>全てのレポートの分析が完了した後、処理結果のサマリー（処理済みレポート数、エラー発生レポート数など）をメッセージボックスでユーザーに通知します。</li>
+</ul></li>
+<li><strong>解決できる課題</strong>:
+
+<ul>
+<li>プロジェクト内の多数のレポートの技術仕様を手作業で調査する膨大な時間と労力を削減します。</li>
+<li>各レポートのデータソース、レイアウト、コーディング状況などを網羅的かつ一貫した形式でドキュメント化し、現状把握を容易にします。</li>
+<li>システム移行や改修プロジェクトにおいて、既存レポートの機能を正確に理解し、新しいシステムでの要件定義や設計を行うための客観的で詳細な情報を提供します。</li>
+</ul></li>
+</ul>
+
+<h3 id="sub-analyzereportdatasourcemd-byval-filenum-as-integer-byval-rpt-as-report-byval-reportname-as-string-byval-vbproj-as-object"><code>Sub AnalyzeReportDataSourceMD(ByVal FileNum As Integer, ByVal rpt As Report, ByVal reportName As String, ByVal vbProj As Object)</code></h3>
+
+<ul>
+<li><strong>機能</strong>:
+
+<ul>
+<li>指定されたレポートオブジェクト (<code>rpt</code>) のデータソースとデータ取得ロジックに関連する情報を分析し、指定されたファイル番号 (<code>FileNum</code>) のMarkdownレポートに出力します。</li>
+<li><strong>レコードソースの特定</strong>: レポートの <code>RecordSource</code> プロパティの値（テーブル名、クエリ名、またはSQL文そのもの）を出力します。レコードソースがクエリ名の場合は、DAOを使用してそのクエリのSQL定義も取得し、併記します。</li>
+<li><strong>パラメータ使用の示唆</strong>: レポートの <code>Filter</code> プロパティと <code>FilterOn</code> プロパティの値を出力します。また、レコードソース文字列に <code>[</code> と <code>]</code> が含まれている場合、パラメータクエリである可能性を示唆します。</li>
+<li><strong>VBA/マクロによる動的変更の可能性の示唆</strong>: レポートにVBAモジュールがあり、そのコード内に <code>.RecordSource</code> や <code>.Filter</code> といったプロパティへのアクセスが見られる場合、VBAによってデータソースが動的に操作されている可能性を指摘します。同様に、レポートの <code>OnOpen</code> や <code>OnNoData</code> イベントに何らかの設定があれば、マクロやVBAによる処理の存在を示唆します。</li>
+<li><strong>外部データソース参照の確認促進</strong>: レコードソースのSQL文を手動で確認し、リンクテーブルや外部データベース名が含まれていないかを調査するよう促します。</li>
+</ul></li>
+<li><strong>解決できる課題</strong>:
+
+<ul>
+<li>レポートが表示しているデータの源泉と、そのデータを取得・絞り込むための基本的なロジックを明らかにします。</li>
+<li>VBAやマクロによって実行時にデータソースが変更されるような、より複雑なデータ取得パターンに気づくきっかけを提供します。</li>
+<li>レポートが外部のデータに依存している場合、その依存関係を把握し、システム移行時のデータ連携戦略を検討するための重要な情報となります。</li>
+</ul></li>
+</ul>
+
+<h3 id="sub-analyzereportlayoutmd-byval-filenum-as-integer-byval-rpt-as-report"><code>Sub AnalyzeReportLayoutMD(ByVal FileNum As Integer, ByVal rpt As Report)</code></h3>
+
+<ul>
+<li><strong>機能</strong>:
+
+<ul>
+<li>指定されたレポートオブジェクト (<code>rpt</code>) のレイアウト構成と表示されている項目に関する情報を分析し、Markdownレポートに出力します。</li>
+<li><strong>表示コントロールの一覧化</strong>: レポート上に配置されている全てのコントロール（テキストボックス、ラベル、イメージ、サブレポートなど）を検出し、それぞれの名前、種類（<code>TypeName</code>と<code>ControlType</code>）、および主要なプロパティ（コントロールソース、書式、キャプション、ピクチャパス、ソースオブジェクト、タグなど）、配置されているセクション名を出力します。</li>
+<li><strong>グループ化情報の確認促進</strong>: レポートのグループ化設定については、自動分析が複雑なため、手動でレポートデザインを確認するよう促すメッセージを出力します。</li>
+<li><strong>並べ替え設定の出力</strong>: レポートの <code>OrderBy</code> プロパティ（並べ替え条件）と <code>OrderByOn</code> プロパティ（並べ替えの有効/無効）の値を出力します。</li>
+<li><strong>セクション情報の出力</strong>: レポート内の各セクション（レポートヘッダー、ページヘッダー、詳細、グループヘッダー/フッターなど）の名前、表示/非表示の状態、高さを出力します。グループヘッダー/フッターの場合はタグプロパティも確認します。</li>
+<li><strong>手動確認項目の明示</strong>: 条件付き書式や、画像/OLEオブジェクト/グラフの詳細な内容については、VBAからの自動抽出が困難なため、レポートデザインを手動で確認するよう促します。</li>
+</ul></li>
+<li><strong>解決できる課題</strong>:
+
+<ul>
+<li>レポートがどのような情報を、どのような構造（セクション、コントロール）と書式で表示しているかの詳細を把握できます。これは、Webアプリケーションで同様の表示レイアウトやデータ表現を実現するための画面設計やコンポーネント選定の基礎情報となります。</li>
+<li>データの並べ替えロジックを理解し、新しいシステムで同等の機能を実装するための要件を明確にします。</li>
+<li>各コントロールのプロパティ情報は、新しいシステムでのデータバインディングや表示フォーマットの再現に役立ちます。</li>
+</ul></li>
+</ul>
+
+<h3 id="sub-analyzereportcodeandmacromd-byval-filenum-as-integer-byval-rpt-as-report-byval-reportname-as-string-byval-vbproj-as-object"><code>Sub AnalyzeReportCodeAndMacroMD(ByVal FileNum As Integer, ByVal rpt As Report, ByVal reportName As String, ByVal vbProj As Object)</code></h3>
+
+<ul>
+<li><strong>機能</strong>:
+
+<ul>
+<li>指定されたレポートオブジェクト (<code>rpt</code>) に関連付けられているVBAコードとマクロの設定状況を分析し、Markdownレポートに出力します。</li>
+<li><strong>VBAモジュールの有無と概要</strong>: レポートにVBAモジュール (<code>HasModule</code> プロパティ) が存在するかどうか、存在する場合はVBAコードの総行数 (<code>CodeModule.CountOfLines</code>) を出力します。さらに、<code>GetAllProceduresFromCodeModule</code> 関数を利用して、モジュール内に定義されているプロシージャの中から、レポートの主要なイベント（例: <code>Report_Open</code>, <code>Detail_Format</code>, <code>GroupHeader0_Print</code>など）に関連する可能性のあるプロシージャ名を候補として簡易的にリストアップします。</li>
+<li><strong>マクロ設定の確認</strong>: レポートの主要なイベントプロパティ（<code>OnOpen</code>, <code>OnClose</code>, <code>OnActivate</code>, <code>OnDeactivate</code>, <code>OnError</code>, <code>OnNoData</code>, <code>OnPage</code>）にマクロ名が直接設定されているかどうかを調べ、設定されていればそのマクロ名を出力します。（<code>[イベント プロシージャ]</code> となっている場合はVBAが使われていることを示します）。</li>
+</ul></li>
+<li><strong>解決できる課題</strong>:
+
+<ul>
+<li>レポートの表示内容や動作に影響を与える可能性のある、VBAコードやマクロによるカスタムロジックの存在を明らかにします。</li>
+<li>これらのカスタムロジックは、Webアプリケーションへの移行時に、バックエンドまたはフロントエンドの処理として再実装する必要があるため、早期にその存在と概要を把握することが重要です。</li>
+<li>特にレポートのセクションの <code>Format</code> イベントや <code>Print</code> イベントに記述されたVBAコードは、複雑な動的表示制御を行っている可能性があり、詳細な分析対象となります。</li>
+</ul></li>
+</ul>
+
+<h3 id="sub-analyzereportoutputformatmd-byval-filenum-as-integer-byval-rpt-as-report"><code>Sub AnalyzeReportOutputFormatMD(ByVal FileNum As Integer, ByVal rpt As Report)</code></h3>
+
+<ul>
+<li><strong>機能</strong>:
+
+<ul>
+<li>指定されたレポートオブジェクト (<code>rpt</code>) の出力形式やページ設定に関連する一部の情報を分析し、Markdownレポートに出力します。</li>
+<li><strong>利用形態の確認促進</strong>: レポートが主に画面プレビュー、印刷、特定形式へのエクスポートのいずれで利用されているかについては、実際の利用者へのヒアリングなどで確認するよう促します。</li>
+<li><strong>ページ設定情報の取得</strong>: レポートの <code>Printer</code> オブジェクトを通じて、用紙サイズ、印刷の向き、上下左右の余白といったページ設定情報を取得し、インチ単位とtwips単位で出力します。この情報は、プリンタドライバが正しく設定され、<code>Printer</code> オブジェクトが利用可能な場合に取得できます。</li>
+<li><strong>自動処理の確認促進</strong>: レポートが定期的に自動印刷されたり、バッチ処理でエクスポートされたりしていないかについては、Accessの外部（例: Windowsのタスクスケジューラ）を確認するよう促します。</li>
+</ul></li>
+<li><strong>解決できる課題</strong>:
+
+<ul>
+<li>レポートが最終的にどのような形で利用者に提供され、消費されているかの手がかりを得て、Webアプリケーションでの適切なレポート機能の提供方法（画面上でのインタラクティブな表示、PDFダウンロード機能、CSV/Excelエクスポート機能など）を検討するのに役立ちます。</li>
+<li>印刷レイアウトの厳密な再現性が求められる場合に、元々のページ設定（用紙サイズ、余白など）を把握しておくことは、新しいシステムでのレポート設計において重要な参照情報となります。</li>
+</ul></li>
+</ul>
+
+<h3 id="ユーティリティ関数群">ユーティリティ関数群</h3>
+
+<ul>
+<li><strong><code>ReplaceValidFileNameChars(originalName As String) As String</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: 文字列内の、ファイル名として使用できない特殊文字（例: <code>\</code>, <code>/</code>, <code>:</code>, <code>*</code>, <code>?</code>, <code>&quot;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>|</code>）をアンダースコア <code>_</code> に一括で置換します。</li>
+<li><strong>解決できる課題</strong>: レポート名などのオブジェクト名から動的にファイル名を生成する際に、OSがファイル名として受け付けない文字が含まれていることによるエラーを未然に防ぎます。</li>
+</ul></li>
+<li><strong><code>GetAllProceduresFromCodeModule(ByVal codeMod As Object) As Collection</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: 指定されたVBAのコードモジュールオブジェクト (<code>CodeModule</code>) から、定義されている全てのプロシージャの名前とその種類（Sub, Function, Property Get/Let/Set）を抽出し、重複なく<code>Collection</code>オブジェクトとして返します。コレクションの各アイテムは、プロシージャ名と種類コードを格納した2要素の配列です。</li>
+<li><strong>解決できる課題</strong>: <code>AnalyzeReportCodeAndMacroMD</code>関数内で、レポートのVBAモジュールに含まれるイベントプロシージャの候補を効率的にリストアップするために使用されます。コードモジュール全体を1行ずつスキャンしてプロシージャの境界を探すよりも効率的な方法です。</li>
+</ul></li>
+<li><strong><code>GetFormControlNames(objectName As String, Optional isReport As Boolean = True) As Collection</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: 指定された名前のレポートまたはフォーム（<code>isReport</code>引数で指定）を、必要であれば非表示のデザインビューで一時的に開き、そのオブジェクト上に配置されている全てのコントロールの名前を取得して、<code>Collection</code>オブジェクトとして返します。</li>
+<li><strong>解決できる課題</strong>: <code>GetEventProcedureInfo</code>関数が、イベントプロシージャがどのコントロールに関連付けられているかを特定するために必要な、オブジェクト上のコントロール名の一覧を提供します。</li>
+</ul></li>
+<li><strong><code>GetEventProcedureInfo(procName As String, controlNames As Collection, Optional objectTypeName As String = &quot;Report&quot;) As String</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: 与えられたプロシージャ名（例: <code>Detail_Format</code>）と、対象オブジェクトの種類名（デフォルトは &ldquo;Report&rdquo;）、およびそのオブジェクト上のコントロール名リストを基に、そのプロシージャがどのオブジェクト（レポート自身、特定のセクション、または特定のコントロール）のどのイベントに対応するものかを推測し、説明的な文字列（例: &ldquo;セクション <code>Detail</code> の <code>Format</code> イベント&rdquo;、&rdquo;コントロール <code>Text1</code> の <code>Click</code> イベント&rdquo;）を返します。</li>
+<li><strong>解決できる課題</strong>: 標準的な命名規則に従ったイベントプロシージャの役割を自動的に識別し、レポートの可読性を高めます。</li>
+</ul></li>
+<li><strong><code>IsUserDefinedProcedureName(procNameToCheck As String) As Boolean</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: 指定されたプロシージャ名が、VBAの組み込み関数や主要なキーワードではない場合に <code>True</code> を返す簡易的な判定関数です。これは、<code>Call</code> ステートメントの対象がユーザー定義のプロシージャである可能性が高いかどうかを大まかに推測するために使用されます。この関数は、プロジェクト内で実際にその名前のプロシージャが定義されているかまでは検証しません。</li>
+<li><strong>解決できる課題</strong>: フォームのVBAコード分析など、他のプロシージャ（このレポート分析スクリプト内では直接は多用されていない）で、呼び出し先が解析対象とすべき自作ルーチンか、無視すべきVBA組み込み命令かを大まかに区別するのに役立ちます。</li>
+</ul></li>
+<li><strong><code>IsVBAKeywordOrBuiltIn(word As String) As Boolean</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: 与えられた文字列が、VBAの主要な予約語（キーワード）または頻繁に使用される一般的な組み込み関数であるかどうかを、事前に定義されたリストと照合して判定します。数値や文字列リテラルもキーワードではない（つまり、除外すべき対象である）と判定します。</li>
+<li><strong>解決できる課題</strong>: <code>IsUserDefinedProcedureName</code> 関数の内部で使用され、プロシージャ名候補が予約語や組み込み関数である可能性を除外することで、ユーザー定義プロシージャ名の誤判定を減らすことを目的としています。このキーワードリストは完全ではないため、必要に応じて拡張が推奨されます。</li>
+</ul></li>
+<li><strong><code>ExtractApiName(declarationLine As String) As String</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: <code>Declare Sub</code> または <code>Declare Function</code> といったAPI宣言の行文字列から、宣言されているAPI関数の名前部分を抽出します。</li>
+<li><strong>解決できる課題</strong>: API関数の呼び出し状況を分析する前準備として、まず宣言されているAPI関数名を正確に特定するために使用されます。（このレポート分析スクリプトでは、API呼び出しの直接的な分析は主眼ではありませんが、フォーム分析など他のツールと共通のユーティリティとして含まれています。）</li>
+</ul></li>
+<li><strong><code>ProcKindToString(Kind As Long) As String</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: VBEオブジェクトモデルが返すプロシージャの種類を示す内部的な数値コード (<code>vbext_ProcKind</code> 列挙型に対応）を、人間が読んで理解しやすい説明文字列（例: &ldquo;Sub/Function (vbext_pk_Proc)&ldquo;, &ldquo;Property Get (vbext_pk_Get)&ldquo;）に変換します。</li>
+<li><strong>解決できる課題</strong>: レポートのVBAコード分析時にプロシージャの種類を分かりやすく表示します。</li>
+</ul></li>
+<li><strong><code>MDEscape(TextToEscape As String) As String</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: Markdown形式でテキストを出力する際に、Markdownの書式制御に影響を与える可能性のある特殊文字（例: <code>*</code>, <code>_</code>, <code>#</code>, <code>[</code>, <code>]</code> など）を、バックスラッシュ <code>\</code> を使ってエスケープします。ただし、インラインコードを示すバッククォート <code>`</code> で囲まれた部分については、エスケープ処理の対象外とします。</li>
+<li><strong>解決できる課題</strong>: オブジェクト名、プロパティ値、コード片などをMarkdownレポートに出力する際に、意図しない書式（例: アンダースコアがイタリック体として解釈される）が適用されるのを防ぎ、レポートの整形品質と正確性を維持します。</li>
+</ul></li>
+<li><strong><code>SectionCodeToString(sectionCode As Integer) As String</code></strong>:
+
+<ul>
+<li><strong>機能</strong>: Accessレポートのセクションを示す内部コード（例: <code>acDetail</code>, <code>acPageHeader</code>）を、人間が読んで理解しやすい説明文字列（例: &ldquo;詳細 (acDetail)&rdquo;, &ldquo;ページヘッダー (acPageHeader)&ldquo;）に変換します。</li>
+<li><strong>解決できる課題</strong>: レポートのコントロールがどのセクションに配置されているか、また各セクションの情報を分かりやすく表示します。</li>
+</ul></li>
+
+<li><p><strong><code>PaperSizeToString(paperSizeCode As Integer) As String</code></strong>:</p>
+
+<ul>
+<li><strong>機能</strong>: プリンタ設定の用紙サイズを示す内部コード（例: <code>acPRPSA4</code>）を、人間が読んで理解しやすい説明文字列（例: &ldquo;A4&rdquo;）に変換します（主要な用紙サイズのみ対応）。</li>
+<li><strong>解決できる課題</strong>: レポートのページ設定における用紙サイズ情報を、技術的なコードではなく分かりやすい言葉で表示します。</li>
+</ul></li>
+
+<li><p><strong>解決できる課題（ユーティリティ関数群全体として）</strong>: これらのヘルパー関数は、メインの分析プロシージャのロジックを整理し、特定の共通処理を再利用可能な形でカプセル化することで、コード全体の構造を明確にし、可読性、保守性、拡張性を向上させます。特に<code>MDEscape</code>関数は、Markdown形式での正確なレポート出力に不可欠です。</p></li>
+</ul>
+
+<h2 id="当ソースコードの利用手順">当ソースコードの利用手順</h2>
+
+<ol>
+<li><strong>Accessデータベースを開く</strong>: 分析したいAccessデータベースファイル（.mdb または .accdb）を開きます。</li>
+<li><strong>VBAエディタを開く</strong>: キーボードの <code>Alt</code> + <code>F11</code> キーを押すか、Accessのリボンメニューから「データベースツール」タブ → 「Visual Basic」を選択します。</li>
+<li><strong>標準モジュールを挿入</strong>: VBAエディタのメニューから「挿入」→「標準モジュール」を選択し、新しい標準モジュールを作成します。</li>
+<li><strong>ソースコードの貼り付け</strong>: 上記で提示されたVBAソースコード全体（<code>AnalyzeAllReportSpecificationsToMarkdown</code>プロシージャと、それに付随する全てのサブプロシージャおよびユーティリティ関数）を、作成した標準モジュールのコードウィンドウにコピー＆ペーストします。</li>
+<li><strong>参照設定の確認</strong>:
+
+<ul>
+<li>VBAエディタのメニューから「ツール」→「参照設定」を開きます。</li>
+<li>以下のライブラリにチェックが入っていることを確認してください。もしチェックされていなければ、リストから探してチェックを入れます。
+
+<ul>
+<li><strong><code>Microsoft Office XX.0 Access database engine Object Library</code></strong> (XX.0はOfficeのバージョンによって変わります。)</li>
+<li><strong><code>Microsoft Visual Basic for Applications Extensibility 5.3</code></strong></li>
+</ul></li>
+<li>「OK」をクリックしてダイアログを閉じます。</li>
+</ul></li>
+<li><strong>VBAプロジェクトへのアクセス許可</strong>:
+
+<ul>
+<li>Accessのメインウィンドウで、「ファイル」→「オプション」→「トラストセンター」→「トラストセンターの設定」ボタンをクリックします。</li>
+<li>「トラストセンター」ダイアログで、「マクロの設定」を選択し、「<strong>VBA プロジェクト オブジェクト モデルへのアクセスを信頼する</strong>」にチェックを入れます。</li>
+<li>「OK」を数回クリックして、すべてのダイアログを閉じます。</li>
+</ul></li>
+<li><strong>コードの実行</strong>:
+
+<ul>
+<li>VBAエディタに戻り、<code>AnalyzeAllReportSpecificationsToMarkdown</code> プロシージャ内のどこかにカーソルを置きます。</li>
+<li>キーボードの <code>F5</code> キーを押すか、ツールバーの実行ボタン（緑色の右向き三角）をクリックしてマクロを実行します。</li>
+</ul></li>
+<li><strong>レポートファイルの確認</strong>:
+
+<ul>
+<li>処理が完了すると、メッセージボックスで結果の概要が表示されます。</li>
+<li>Accessデータベースファイルが保存されているのと同じフォルダ内に、プロジェクト内の各レポートに対応する <code>[レポート名]_ReportSpec_Analysis.md</code> という名前のMarkdownファイルが複数作成されていることを確認します。</li>
+<li>これらのMarkdownファイルを、Markdown対応のテキストエディタやビューア（例: Visual Studio Code, Typora, 各種オンラインMarkdownエディタなど）で開いて内容を確認します。</li>
+</ul></li>
+</ol>
+
+<h2 id="当ソースコードを利用する際の注意点">当ソースコードを利用する際の注意点</h2>
+
+<ul>
+<li><strong>必須設定の遵守</strong>: 上記「利用手順」のステップ5（参照設定）とステップ6（VBAプロジェクトへのアクセス許可）は、このスクリプトが正しく機能するための<strong>絶対的な前提条件</strong>です。これらが適切に設定されていない場合、エラーが発生したり、VBAコードやレポートオブジェクトへのアクセスができず分析が正常に完了しなかったりします。</li>
+<li><strong><code>VBE.ActiveVBProject</code> の使用</strong>: コード内でVBEプロジェクトを取得する際に <code>Set vbProj = VBE.ActiveVBProject</code> と記述されています。これはVBAエディタで現在アクティブになっているプロジェクトを参照しますが、複数のデータベースファイルやアドインが同時に開かれている状況などでは、意図しないプロジェクトを参照してしまう可能性があります。より堅牢にカレントデータベースのVBAプロジェクトを参照するには <code>Set vbProj = Application.CodeProject</code> を使用することを推奨します。</li>
+<li><strong>分析の限界と手動確認の重要性</strong>:
+
+<ul>
+<li>このスクリプトは、レポートオブジェクトからプログラム的に取得可能な<strong>技術的・構造的な情報</strong>の抽出に主眼を置いています。レポートの「目的」「利用者」「利用頻度」「次のアクション」といった<strong>意味的な情報</strong>や、「パフォーマンス」「セキュリティ」「改善要望」といった定性的な情報は自動分析できません。これらについては、レポート内で手動確認を促す記述がなされており、別途ヒアリングや実機確認が必要です。</li>
+<li>VBAコードやマクロの分析も、その存在や概要（行数、主要イベントプロシージャ候補など）の特定に留まり、複雑なロジックの完全な解読は行いません。</li>
+</ul></li>
+<li><strong>レポートのデザインビューでの一時オープン</strong>: レポートのプロパティやコントロール情報を正確に取得するため、対象レポートを一時的に非表示のデザインビューで開きます。この際、レポートの <code>Open</code> イベントなどがトリガーされる可能性があります。通常は大きな問題を引き起こしませんが、これらのイベントに排他制御や重要な初期化処理などが記述されている場合は、予期せぬ動作の可能性も考慮に入れる必要があります。処理後は保存せずに閉じています。</li>
+<li><strong>パフォーマンス</strong>: プロジェクト内のレポート数が多い場合や、個々のレポートが非常に多くのコントロールや複雑なVBAコードを含んでいる場合、分析処理全体に時間がかかることがあります。</li>
+<li><strong>エラーハンドリング</strong>: レポートごとのエラー処理とスクリプト全体のエラー処理が実装されていますが、データベースファイルの破損、特殊なオブジェクトの状態、予期しないVBEオブジェクトの挙動など、稀な状況ではエラーが発生し、一部のレポートの分析がスキップされたり、処理が途中で中断したりする可能性があります。エラーが発生した場合は、メッセージボックスやイミディエイトウィンドウ（<code>Debug.Print</code>出力）のエラー情報を確認してください。</li>
+<li><strong>プリンタオブジェクトへの依存性</strong>: ページ設定情報（用紙サイズ、余白など）の取得は、レポートの <code>Printer</code> オブジェクトに依存します。実行環境に適切なプリンタドライバがインストールされていない、またはデフォルトプリンタが正しく設定されていない場合、これらの情報が正確に取得できないか、エラーが発生する可能性があります。</li>
+<li><strong>ACCDE/MDEファイルの非対応</strong>: 設計情報が削除・保護されているコンパイル済みのACCDEファイルやMDEファイルでは、レポートのデザイン情報やVBAコードへのアクセスが制限されるため、このスクリプトは正常に動作しません。分析対象は開発用のACCDBファイルまたはMDBファイルです。</li>
+<li><strong>Markdownパーサによる表示差異</strong>: <code>MDEscape</code>関数によって主要なMarkdown特殊文字はエスケープ処理されますが、最終的なレポートの表示は使用するMarkdownビューアやパーサの実装に依存します。特定のビューアでは意図した通りに表示されない可能性もゼロではありません。</li>
+</ul>
+
+<h2 id="todo">Todo</h2>
+
+<ul class="task-list">
+<li><label><input type="checkbox" disabled class="task-list-item"> <strong><code>Application.CodeProject</code> への変更</strong>: <code>VBE.ActiveVBProject</code> の代わりに <code>Application.CodeProject</code> を使用するように変更し、VBAプロジェクト参照の堅牢性を向上させる。</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> <strong>レコードソースクエリのネスト解析強化</strong>: レコードソースがクエリの場合、そのクエリがさらに別のクエリを参照している（ネストしている）場合に、再帰的にSQLを追跡・展開して表示する機能の検討（複雑度が高い）。</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> <strong>レポートVBAコードの詳細分析オプション</strong>: レポートのVBAコード（特に<code>Format</code>イベントや<code>Print</code>イベントなど）に対して、フォームVBAコード分析ツールと同様の詳細なキーワード検索やプロシージャ分析（<code>Call</code>ステートメント分析など）を実行するオプションを追加する。</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> <strong>計算コントロールの式解析</strong>: レポート上の計算コントロール（例: <code>=Sum([金額])</code>）のコントロールソースに設定された式を解析し、参照しているフィールドや使用している関数をリストアップする機能の検討。</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> <strong>条件付き書式の情報取得の試み</strong>: VBAからレポートの条件付き書式の詳細情報を取得するのは困難ですが、少なくとも設定されているコントロールがあるかどうか、あるいは簡易的な設定内容だけでも取得できないか調査・検討する。</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> <strong>マクロの詳細分析</strong>: レポートのイベントプロパティに設定されているマクロについて、可能であればそのマクロに含まれるアクションの種類やパラメータを解析し、レポートに出力する機能の検討（非常に高度）。</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> <strong>画像・OLEオブジェクト・グラフの詳細情報取得</strong>: これらのオブジェクトの種類、ソース（リンクファイルパスや埋め込みデータなど）、サイズといった、より詳細な情報を取得・表示する。</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> <strong>ユーザーインターフェースの導入</strong>: 分析対象レポートを選択したり、出力オプション（例: 全レポートを単一ファイルに出力する、特定の分析項目のみ実行するなど）を設定したりするための簡単なユーザーインターフェース（Accessフォーム）を作成する。</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> <strong>レポートの目次自動生成</strong>: 出力されるMarkdownレポートの先頭に、レポート内の各セクション（データソース、レイアウトなど）へのページ内リンクを含む目次を自動的に生成する機能を追加する。</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> <strong>エラーログの強化</strong>: エラー発生時に、より詳細な情報（エラー発生箇所、その時の変数状態など）を専用のログファイルに出力する機能を追加する。</label></li>
+</ul>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://learn.microsoft.com/ja-jp/office/vba/api/overview/access">Access VBA リファレンス</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

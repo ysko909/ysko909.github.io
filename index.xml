@@ -7,10 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Mon, 09 Jun 2025 10:33:54 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 22 Jun 2025 10:21:55 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Accessレポートの調査も相変わらず苦行なので分析用コードを作った</title>
+      <link>https://ysko909.github.io/posts/create-code-to-analyze-access-mdb-reports/</link>
+      <pubDate>Sun, 22 Jun 2025 10:21:55 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/create-code-to-analyze-access-mdb-reports/</guid>
+      <description>背景と目的 Microsoft Accessで長期間運用されているデータベースシステムでは、レポート機能が業務上重要な役割を担っていることが多くあります。とくに紙ベースで運用されてきた現場などでは顕著でしょう。しかし、システムの改修やWebアプリケーションへの移行などを検討する際、これらのレポートの正確な仕様を把握することは大きな課題となります。ドキュメントが古くなっていたり、そもそも存在しなかったりする場合、手作業で各レポートのデザインやVBAコードを調査するには膨大な時間と労力が必要です。
+つまり、これも大抵の場合はメチャクチャ大変ってことです＿(　_´ω`)_ﾍﾟｼｮ
+このVBAスクリプトは、このような背景から既存のAccessデータベース内に存在するすべてのレポートオブジェクトの技術的な仕様を自動的に調査・分析し、その結果をMarkdown形式のレポートとして出力することを目的としています。
+このコードは、これらの課題に対応するため、以下のニーズに応えることを目指しています。
+ レポート仕様の効率的な把握: プロジェクト内の全レポートについて、データソース、レイアウト、表示項目、VBAコードやマクロの利用状況、ページ設定といった技術仕様を自動的に抽出し、一覧化します。 標準化されたドキュメントの自動生成: 分析結果を、構造化され視覚的に理解しやすいMarkdown形式で、レポートごとに出力します。これにより、システム仕様書や移行ドキュメントの基礎資料を効率的に作成できます。 移行・改修計画の支援: Webアプリケーションなど新しいシステムへレポート機能を移行する際に、既存レポートの機能を正確に理解し、新システムでの要件定義や設計を行うための客観的な情報を提供します。 現状把握とブラックボックス化の軽減: 詳細な仕様が不明なレポートについても、その構造や設定の概要を可視化し、理解の一助とします。  実行環境 今回のソースコードは、以下の環境で動作を確認しています。
+ Office Professional 2021 Visual Basic for Applications 7.1  ソースコード Option Compare Database Option Explicit &amp;#39; 統合MDB分析ツール (全フォームのVBAコード分析対応) &amp;#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援 Sub AnalyzeAllReportSpecificationsToMarkdown() &amp;#39; プロジェクト内の全レポートの仕様を調査し、個別のMarkdownレポートを生成する Dim rptObj As AccessObject Dim reportName As String Dim strFilePath As String Dim intFileNum As Integer Dim vbProj As Object &amp;#39; As VBIDE.VBProject Dim vbCrntProj As Object &amp;#39; As Application.</description>
+    </item>
     
     <item>
       <title>Accessフォームの調査も苦行なので分析用コードを作った</title>
@@ -34,9 +48,11 @@
       <pubDate>Wed, 04 Jun 2025 09:48:55 +0900</pubDate>
       
       <guid>https://ysko909.github.io/posts/analyze-access-file/</guid>
-      <description>背景と目的 Accessデータベースは、その手軽さから広く利用されていますが、長期運用や複数人による改修、ドキュメントの不備などにより、内部構造が複雑化し、現状把握が困難になることがあります。このような状況は、メンテナンス性の低下やシステム移行時のリスク増大に繋がります。このVBAソースコードは、そんなMicrosoft Accessデータベース（.mdbまたは.accdbファイル）の包括的な分析を行い、その結果をMarkdown形式のレポートとして出力します。具体的には、データベースの構造を詳細に把握し、将来的なシステム移行や改修を検討する際に重要となる機能的な側面を特定するための情報を、Markdown形式で出力します。利用方法も簡単で、このソースコードを分析したいMDB内で実行するだけで良いので、あとは実行結果が出力されるまで待って分析作業に着手するだけです。
+      <description>背景と目的 Accessデータベースは、その手軽さから広く利用されていますが、長期運用や複数人による改修、ドキュメントの不備などにより、内部構造が複雑化し、現状把握が困難になることがあります。よくあります。このような状況は、メンテナンス性の低下やシステム移行時のリスク増大に繋がります。このVBAソースコードは、そんなMicrosoft Accessデータベース（.mdbまたは.accdbファイル）の包括的な分析を行い、その結果をMarkdown形式のレポートとして出力します。
+具体的には、データベースの構造を詳細に把握し、将来的なシステム移行や改修を検討する際に重要となる機能的な側面を特定するための情報を、Markdown形式で出力します。利用方法も簡単で、このソースコードを分析したいMDB内にコピぺして実行するだけで良いので、あとは実行結果が出力されるまで待って分析作業に着手するだけです。
 このコードは、これらの課題に対応するため、以下のニーズに応えることを目指しています。
- 視覚的に分かりやすいドキュメント作成：データベースの構成要素や主要なプロパティを、Markdown形式で見出し、リスト、コードブロックなどを用いて整理し、可読性の高いドキュメントを自動生成します。 効率的な現状把握：既存データベースの構造や機能概要を、整形されたレポートを通じて迅速に把握できるようにします。 移行計画・改修の初期情報収集：新システムへの移行や大規模な改修を検討する際、どの機能が重要で、どこに複雑なロジックが集中しているか、外部システムとの連携はどうか、といった初期分析情報を、より理解しやすい形式で提供します。 ブラックボックス化の軽減：詳細な仕様が不明なデータベースでも、その構造や機能の概要を、構造化されたレポートを通じて把握する手がかりを提供します。  実行環境 今回のソースコードは、以下の環境で動作を確認しています。
+ 視覚的に分かりやすいドキュメント作成：データベースの構成要素や主要なプロパティを、Markdown形式で見出し、リスト、コードブロックなどを用いて整理し、可読性の高いドキュメントを自動生成します。 効率的な現状把握：既存データベースの構造や機能概要を、整形されたレポートを通じて迅速に把握できるようにします。 移行計画・改修の初期情報収集：新システムへの移行や大規模な改修を検討する際、どの機能が重要で、どこに複雑なロジックが集中しているか、外部システムとの連携はどうか、といった初期分析情報を、より理解しやすい形式で提供します。 ブラックボックス化の軽減：詳細な仕様が不明なデータベースでも、その構造や機能の概要を、構造化されたレポートを通じて把握する手がかりを提供します。  なお、実行時間はAccessプロジェクト内オブジェクトの数やサイズに依存します。そのため、大規模なものほど処理に時間がかかりますので、処理中はコーヒーブレイクでも取ることをお勧めします(/・ω・)/
+実行環境 今回のソースコードは、以下の環境で動作を確認しています。
  Office Professional 2021 Visual Basic for Applications 7.1  ソースコード Option Compare Database Option Explicit &amp;#39; 統合MDB分析ツール &amp;#39; データベース構造の包括的な把握と、新システム移行のための機能分析を支援 Sub GenerateMdbAnalysisReportMarkdown() &amp;#39; メインプロシージャ: レポート生成の起点 &amp;#39; レポート出力先を設定 Dim strFilePath As String strFilePath = CurrentProject.Path &amp;amp; &amp;#34;\MigrationAnalysisReport.md&amp;#34; &amp;#39; ファイルをオープン Dim intFileNum As Integer intFileNum = FreeFile Open strFilePath For Output As #intFileNum &amp;#39; レポートヘッダー (Markdown形式) Print #intFileNum, &amp;#34;# MDB総合分析レポート (構造把握 &amp;amp; 移行検討)&amp;#34; Print #intFileNum, &amp;#34;&amp;#34; Print #intFileNum, &amp;#34;**データベース:**`&amp;#34; &amp;amp; CurrentProject.</description>
     </item>
     
