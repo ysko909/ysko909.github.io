@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Blazorアプリ作成時の各設定項目 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Blazorアプリ作成時の各設定項目" />
+<meta property="og:description" content="概要 BlazorアプリをVisual Studio 2022（以下、VS2022）を使って開発する際、そのアプリの仕様について設定する必要があります。
+この記事では、これらの項目をどのように設定すればいいか、作成したいアプリケーションとともに考えます。
+入力項目 フレームワーク (Framework) アプリが動作する基盤となる.NETのバージョンを選択します。
+ .NET 8.0 (長期的なサポート - LTS): Long-Term Supportの略で、長期間にわたってセキュリティパッチやバグ修正が提供される安定バージョンです。商用プロジェクトや長期間運用するシステムでは、こちらを選択するのが一般的です。 その他のバージョン (例: .NET 9.0): Standard-Term Support (STS) やプレビュー版が含まれます。最新の機能を試したい場合や、短いライフサイクルのプロジェクトに適していますが、サポート期間はLTSより短くなります。  なお、現状ではサポート期間は以下の通り設定されています。
+   バージョン 開始日 終了日     .NET 9 2024年11月12日 2026年5月12日   .NET 8 (LTS) 2023年11月14日 2026年11月10日    基本的に.NETのLTSは偶数バージョンに設定されており、奇数バージョンはSTSです。そのため、直近の偶数バージョンを選択することで自動的にLTSを選択できます。
+認証の種類 (Authentication type) ユーザー認証の方式を選択します。
+ なし (None): 認証機能を組み込みません。 個別のアカウント (Individual Accounts): ASP.NET Core Identityを使用し、ユーザー名とパスワードによる独自のユーザー管理システムをアプリ内に構築します。  この項目は、ユーザー認証を実装する必要があるとき以外は基本的に「None」を設定すればいいでしょう。
+HTTPS 用の構成 (Configure for HTTPS) チェックを入れると、開発用の自己署名証明書が設定され、HTTPSでのアクセスが有効になります。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/blazor-web-app-configration/" /><meta property="article:published_time" content="2025-07-14T12:23:15&#43;09:00"/>
+<meta property="article:modified_time" content="2025-07-14T12:23:15&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Blazorアプリ作成時の各設定項目"/>
+<meta name="twitter:description" content="概要 BlazorアプリをVisual Studio 2022（以下、VS2022）を使って開発する際、そのアプリの仕様について設定する必要があります。
+この記事では、これらの項目をどのように設定すればいいか、作成したいアプリケーションとともに考えます。
+入力項目 フレームワーク (Framework) アプリが動作する基盤となる.NETのバージョンを選択します。
+ .NET 8.0 (長期的なサポート - LTS): Long-Term Supportの略で、長期間にわたってセキュリティパッチやバグ修正が提供される安定バージョンです。商用プロジェクトや長期間運用するシステムでは、こちらを選択するのが一般的です。 その他のバージョン (例: .NET 9.0): Standard-Term Support (STS) やプレビュー版が含まれます。最新の機能を試したい場合や、短いライフサイクルのプロジェクトに適していますが、サポート期間はLTSより短くなります。  なお、現状ではサポート期間は以下の通り設定されています。
+   バージョン 開始日 終了日     .NET 9 2024年11月12日 2026年5月12日   .NET 8 (LTS) 2023年11月14日 2026年11月10日    基本的に.NETのLTSは偶数バージョンに設定されており、奇数バージョンはSTSです。そのため、直近の偶数バージョンを選択することで自動的にLTSを選択できます。
+認証の種類 (Authentication type) ユーザー認証の方式を選択します。
+ なし (None): 認証機能を組み込みません。 個別のアカウント (Individual Accounts): ASP.NET Core Identityを使用し、ユーザー名とパスワードによる独自のユーザー管理システムをアプリ内に構築します。  この項目は、ユーザー認証を実装する必要があるとき以外は基本的に「None」を設定すればいいでしょう。
+HTTPS 用の構成 (Configure for HTTPS) チェックを入れると、開発用の自己署名証明書が設定され、HTTPSでのアクセスが有効になります。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Blazorアプリ作成時の各設定項目</h1>
+			<div class="meta">Posted at &mdash; Jul 14, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>BlazorアプリをVisual Studio 2022（以下、VS2022）を使って開発する際、そのアプリの仕様について設定する必要があります。</p>
+
+<p><img src="image.png" alt="pic" /></p>
+
+<p>この記事では、これらの項目をどのように設定すればいいか、作成したいアプリケーションとともに考えます。</p>
+
+<h2 id="入力項目">入力項目</h2>
+
+<h3 id="フレームワーク-framework">フレームワーク (Framework)</h3>
+
+<p>アプリが動作する基盤となる.NETのバージョンを選択します。</p>
+
+<ul>
+<li>.NET 8.0 (長期的なサポート - LTS): Long-Term Supportの略で、長期間にわたってセキュリティパッチやバグ修正が提供される安定バージョンです。商用プロジェクトや長期間運用するシステムでは、こちらを選択するのが一般的です。</li>
+<li>その他のバージョン (例: .NET 9.0): Standard-Term Support (STS) やプレビュー版が含まれます。最新の機能を試したい場合や、短いライフサイクルのプロジェクトに適していますが、サポート期間はLTSより短くなります。</li>
+</ul>
+
+<p>なお、現状ではサポート期間は以下の通り設定されています。</p>
+
+<table>
+<thead>
+<tr>
+<th>バージョン</th>
+<th>開始日</th>
+<th>終了日</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>.NET 9</td>
+<td>2024年11月12日</td>
+<td>2026年5月12日</td>
+</tr>
+
+<tr>
+<td>.NET 8 (LTS)</td>
+<td>2023年11月14日</td>
+<td>2026年11月10日</td>
+</tr>
+</tbody>
+</table>
+
+<p>基本的に.NETのLTSは偶数バージョンに設定されており、奇数バージョンはSTSです。そのため、直近の偶数バージョンを選択することで自動的にLTSを選択できます。</p>
+
+<h3 id="認証の種類-authentication-type">認証の種類 (Authentication type)</h3>
+
+<p>ユーザー認証の方式を選択します。</p>
+
+<ul>
+<li>なし (None): 認証機能を組み込みません。</li>
+<li>個別のアカウント (Individual Accounts): ASP.NET Core Identityを使用し、ユーザー名とパスワードによる独自のユーザー管理システムをアプリ内に構築します。</li>
+</ul>
+
+<p>この項目は、ユーザー認証を実装する必要があるとき以外は基本的に「None」を設定すればいいでしょう。</p>
+
+<h3 id="https-用の構成-configure-for-https">HTTPS 用の構成 (Configure for HTTPS)</h3>
+
+<p>チェックを入れると、開発用の自己署名証明書が設定され、HTTPSでのアクセスが有効になります。</p>
+
+<h3 id="インタラクティビティの種類-interactivity-type-render-mode">インタラクティビティの種類 (Interactivity Type / Render Mode)</h3>
+
+<p>コンポーネントをどのようにインタラクティブ（対話的）にするか、その既定の方式（レンダリングモード）を定義します。この項目と次の項目が、Blazorアプリを構築するうえで重要なオプションです。なぜなら、実装したいアプリのタイプによって、選択肢が変わってくるためです。</p>
+
+<ul>
+<li>なし (None): 既定では全てのページが静的サーバーサイドレンダリング (Static SSR) となります。サーバー上でHTMLを生成してクライアントに返すだけで、JavaScriptによる対話的な動作は行いません。高速な表示とSEOに優れています。</li>
+<li>サーバー (Server): Blazor Server モデルを既定にします。UIの更新はサーバー上で行われ、差分がSignalRという技術を使ってリアルタイムにクライアントに送信されます。サーバーとの常時接続が必要ですが、クライアント側の負荷が低く、.NETの全機能を利用できます。</li>
+<li>WebAssembly: Blazor WebAssembly モデルを既定にします。初回アクセス時に.NETランタイムとアプリ全体がブラウザにダウンロードされ、以降はクライアントサイド（ブラウザ内）で完結して動作します。オフライン動作やPWA（プログレッシブウェブアプリ）化が可能です。</li>
+<li>自動 (Auto): 初回アクセス時はサーバーモードで高速に表示し、バックグラウンドでWebAssembly用のデータをダウンロードします。ダウンロード完了後の次回以降のアクセスではWebAssemblyモードで動作します。両者の「良いとこ取り」をしたモードです。</li>
+</ul>
+
+<h3 id="インタラクティビティの場所-interactivity-location">インタラクティビティの場所 (Interactivity Location)</h3>
+
+<p>上記の「インタラクティビティの種類」をどこに適用するかを決定します。</p>
+
+<ul>
+<li>ページ/コンポーネントごと (Per page/component): アプリ全体で特定のインタラクティビティモードを強制せず、ページやコンポーネント単位で <code>@rendermode</code> ディレクティブを使って個別に指定します。非常に柔軟性が高く、ほとんどのケースでこの設定が推奨されます。</li>
+<li>グローバル (Global): アプリケーション全体に、上で選択した「インタラクティビティの種類」を一律で適用します。</li>
+</ul>
+
+<h3 id="サンプルページを含める-include-sample-pages">サンプルページを含める (Include sample pages)</h3>
+
+<p>カウンターや天気予報などのサンプルコードを含むプロジェクトを作成します。Blazorの基本的な使い方を学ぶのに役立ちます。</p>
+
+<h3 id="最上位レベルのステートメントを使用しない-do-not-use-top-level-statements">最上位レベルのステートメントを使用しない (Do not use top-level statements)</h3>
+
+<p><code>Program.cs</code> ファイルを、従来の <code>Main</code> メソッドを持つクラシックなC#の形式で生成します。チェックを外すと、より簡潔な記法（トップレベルステートメント）になります。</p>
+
+<h3 id="net-aspire-オーケストレーションへの参加-net-aspire-orchestration">.NET Aspire オーケストレーションへの参加 (.NET Aspire orchestration)</h3>
+
+<p><a href="https://learn.microsoft.com/ja-jp/dotnet/aspire/get-started/aspire-overview">.NET Aspire</a> という、クラウドネイティブな分散アプリケーションの構築を簡素化するための新しいスタックにプロジェクトを追加します。マイクロサービス開発などで利用します。</p>
+
+<h2 id="開発したいアプリ別のおすすめ設定">開発したいアプリ別のおすすめ設定</h2>
+
+<p>開発したいアプリケーションの要件に応じて、最適な設定は異なります。以下に代表的なシナリオごとのおすすめ設定を提案します。</p>
+
+<h3 id="シナリオ1-ダッシュボード-リアルタイム更新">シナリオ1: ダッシュボード（リアルタイム更新）</h3>
+
+<p>一定時間ごと、あるいはイベント発生時に画面を自動で更新し続ける必要があるダッシュボードを開発する場合の設定です。</p>
+
+<ul>
+<li>インタラクティビティの種類: サーバー (Server)</li>
+<li>インタラクティビティの場所: ページ/コンポーネントごと (Per page/component)</li>
+</ul>
+
+<p>サーバーモードは、SignalRによるリアルタイム通信が特徴です。これにより、サーバー側のデータ変更を即座にUIへ反映させることができ、ダッシュボードの実装に非常に適しています。場所をページ/コンポーネントごとに設定し、ダッシュボードのコンポーネントにのみ <code>@rendermode InteractiveServer</code> を指定することで、アプリの他の静的なページ（例：「設定画面」や「ヘルプ」）は高速な静的SSRのままとし、リソースを効率的に利用できます。</p>
+
+<h3 id="シナリオ2-ブログや製品紹介サイト-静的コンテンツ中心">シナリオ2: ブログや製品紹介サイト（静的コンテンツ中心）</h3>
+
+<p>コンテンツの大部分が静的で、高速な表示と検索エンジン最適化（SEO）を最優先したいブログのようなサイトを開発する場合の設定です。</p>
+
+<ul>
+<li>インタラクティビティの種類: なし (None)</li>
+<li>インタラクティビティの場所: ページ/コンポーネントごと (Per page/component)</li>
+</ul>
+
+<p>既定をなしにすることで、全てのページが高速な静的SSRになります。これにより、ユーザーは素早くコンテンツを閲覧でき、検索エンジンのクローラーも内容を効率的にインデックスできます。インタラクティビティの場所をページ/コンポーネントごとにしておくことで、将来的に「コメント投稿フォーム」のような対話的な機能を追加したくなった場合でも、そのコンポーネントにだけ <code>@rendermode InteractiveServer</code> などを追加して柔軟に対応できます。</p>
+
+<h3 id="シナリオ3-オフライン対応の業務アプリ-pwa">シナリオ3: オフライン対応の業務アプリ (PWA)</h3>
+
+<p>一度読み込めばオフラインでも動作し、PCやスマートフォンのホーム画面にインストールできるような高機能な業務アプリケーション（PWA）を開発する場合の設定です。</p>
+
+<ul>
+<li>インタラクティビティの種類: WebAssembly または 自動 (Auto)</li>
+<li>インタラクティビティの場所: グローバル (Global)</li>
+</ul>
+
+<p>WebAssemblyモードは、アプリ全体がブラウザ上で動作するため、オフライン機能の実現に必須です。アプリ全体がリッチな対話性を持つことが多いため、場所はグローバルで一括適用するのが効率的です。自動 (Auto) モードを選択すれば、初回起動の高速化も図れるため、ユーザー体験が向上します。</p>
+
+<h3 id="シナリオ4-複雑な入力フォームを持つ基幹システム">シナリオ4: 複雑な入力フォームを持つ基幹システム</h3>
+
+<p>イントラネットで利用するような、複雑なデータ検証やデータベースとの連携が頻繁に発生する基幹業務システムを開発する場合の設定です。</p>
+
+<ul>
+<li>インタラクティビティの種類: サーバー (Server)</li>
+<li>インタラクティビティの場所: グローバル (Global)</li>
+</ul>
+
+<p>サーバーモードでは、ビジネスロジックやデータアクセスを全てサーバーサイドに集約できます。クライアントにロジックをダウンロードする必要がないため、初期表示が速く、セキュリティ面でも有利です。複雑なフォームの入力状態や検証ロジックをサーバー側で一元管理できるため、開発と保守が容易になります。このようなアプリは全体がインタラクティブであることが一般的なため、場所はグローバルで問題ないでしょう。</p>
+
+<h2 id="選択時の考慮事項">選択時の考慮事項</h2>
+
+<h3 id="パフォーマンス">パフォーマンス</h3>
+
+<ul>
+<li>Server: 初期読み込み高速、継続的な通信が必要</li>
+<li>WebAssembly: 初期読み込み時間長、その後は高速</li>
+<li>Auto: 最適なバランス</li>
+</ul>
+
+<h3 id="seo対応">SEO対応</h3>
+
+<ul>
+<li>静的SSR: 最適</li>
+<li>Server: 良好</li>
+<li>WebAssembly: 追加設定が必要</li>
+</ul>
+
+<h3 id="スケーラビリティ">スケーラビリティ</h3>
+
+<ul>
+<li>WebAssembly: クライアント処理でサーバー負荷軽減</li>
+<li>Server: サーバーリソースが必要</li>
+</ul>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://learn.microsoft.com/ja-jp/aspnet/core/blazor/components/render-modes?view=aspnetcore-8.0">ASP.NET Core Blazor のレンダー モード</a></li>
+<li><a href="https://blogs.jp.infragistics.com/entry/Blazor-Server-vs-Blazor-WebAssembly-Just-the-Facts">Blazor Server と Blazor WebAssembly: 特徴をまとめてみました</a></li>
+<li><a href="https://learn.microsoft.com/ja-jp/lifecycle/products/microsoft-net-and-net-core">Microsoft .NET および .NET Core</a></li>
+<li><a href="https://zenn.dev/microsoft/articles/blazor-dotnet8-comp-state">.NET 8 の Blazor で静的 SSR と InteractveServer/WASM 間の状態渡し</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
