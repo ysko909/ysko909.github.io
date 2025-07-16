@@ -4,26 +4,24 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Blazorアプリ作成時の各設定項目 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta property="og:title" content="Blazorアプリ作成時の各設定項目" />
-<meta property="og:description" content="概要 BlazorアプリをVisual Studio 2022（以下、VS2022）を使って開発する際、そのアプリの仕様について設定する必要があります。
-この記事では、これらの項目をどのように設定すればいいか、作成したいアプリケーションとともに考えます。
+<meta property="og:description" content="概要 自分はメインのエディタをVisual Studio Codeを使ってたせいで、Blazorアプリを新規作成するときは大抵dotnet new blazorwasm -o MyBlazorAppのようにコマンドラインで実行しちゃってます。が、BlazorアプリをVisual Studio 2022（以下、VS2022）を使って開発する際はこの方法じゃなくて、ウィザードを利用する方法が主流です。その際は、開発するアプリの仕様についてウィザードに設定する必要があります。
+この記事では、これらの項目をどのように設定すればいいか、作成したいアプリケーションとともに考えます。かなり自分目線の備忘録的意味合いが強いので、その点ご了承ください。
 入力項目 フレームワーク (Framework) アプリが動作する基盤となる.NETのバージョンを選択します。
  .NET 8.0 (長期的なサポート - LTS): Long-Term Supportの略で、長期間にわたってセキュリティパッチやバグ修正が提供される安定バージョンです。商用プロジェクトや長期間運用するシステムでは、こちらを選択するのが一般的です。 その他のバージョン (例: .NET 9.0): Standard-Term Support (STS) やプレビュー版が含まれます。最新の機能を試したい場合や、短いライフサイクルのプロジェクトに適していますが、サポート期間はLTSより短くなります。  なお、現状ではサポート期間は以下の通り設定されています。
-   バージョン 開始日 終了日     .NET 9 2024年11月12日 2026年5月12日   .NET 8 (LTS) 2023年11月14日 2026年11月10日    基本的に.NETのLTSは偶数バージョンに設定されており、奇数バージョンはSTSです。そのため、直近の偶数バージョンを選択することで自動的にLTSを選択できます。
+   バージョン 開始日 終了日     .NET 9 2024年11月12日 2026年5月12日   .NET 8 (LTS) 2023年11月14日 2026年11月10日    基本的に.NETのLTSは偶数バージョンに設定されており、奇数バージョンはSTSです。そのため、直近の偶数バージョンを選択することで自動的にLTSを選択できます。これについては、直近偶数バージョンの指定で決め打ちして問題ないと思います。
 認証の種類 (Authentication type) ユーザー認証の方式を選択します。
- なし (None): 認証機能を組み込みません。 個別のアカウント (Individual Accounts): ASP.NET Core Identityを使用し、ユーザー名とパスワードによる独自のユーザー管理システムをアプリ内に構築します。  この項目は、ユーザー認証を実装する必要があるとき以外は基本的に「None」を設定すればいいでしょう。
-HTTPS 用の構成 (Configure for HTTPS) チェックを入れると、開発用の自己署名証明書が設定され、HTTPSでのアクセスが有効になります。" />
+ なし (None): 認証機能を組み込みません。 個別のアカウント (Individual Accounts): ASP." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ysko909.github.io/posts/blazor-web-app-configration/" /><meta property="article:published_time" content="2025-07-14T12:23:15&#43;09:00"/>
 <meta property="article:modified_time" content="2025-07-14T12:23:15&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Blazorアプリ作成時の各設定項目"/>
-<meta name="twitter:description" content="概要 BlazorアプリをVisual Studio 2022（以下、VS2022）を使って開発する際、そのアプリの仕様について設定する必要があります。
-この記事では、これらの項目をどのように設定すればいいか、作成したいアプリケーションとともに考えます。
+<meta name="twitter:description" content="概要 自分はメインのエディタをVisual Studio Codeを使ってたせいで、Blazorアプリを新規作成するときは大抵dotnet new blazorwasm -o MyBlazorAppのようにコマンドラインで実行しちゃってます。が、BlazorアプリをVisual Studio 2022（以下、VS2022）を使って開発する際はこの方法じゃなくて、ウィザードを利用する方法が主流です。その際は、開発するアプリの仕様についてウィザードに設定する必要があります。
+この記事では、これらの項目をどのように設定すればいいか、作成したいアプリケーションとともに考えます。かなり自分目線の備忘録的意味合いが強いので、その点ご了承ください。
 入力項目 フレームワーク (Framework) アプリが動作する基盤となる.NETのバージョンを選択します。
  .NET 8.0 (長期的なサポート - LTS): Long-Term Supportの略で、長期間にわたってセキュリティパッチやバグ修正が提供される安定バージョンです。商用プロジェクトや長期間運用するシステムでは、こちらを選択するのが一般的です。 その他のバージョン (例: .NET 9.0): Standard-Term Support (STS) やプレビュー版が含まれます。最新の機能を試したい場合や、短いライフサイクルのプロジェクトに適していますが、サポート期間はLTSより短くなります。  なお、現状ではサポート期間は以下の通り設定されています。
-   バージョン 開始日 終了日     .NET 9 2024年11月12日 2026年5月12日   .NET 8 (LTS) 2023年11月14日 2026年11月10日    基本的に.NETのLTSは偶数バージョンに設定されており、奇数バージョンはSTSです。そのため、直近の偶数バージョンを選択することで自動的にLTSを選択できます。
+   バージョン 開始日 終了日     .NET 9 2024年11月12日 2026年5月12日   .NET 8 (LTS) 2023年11月14日 2026年11月10日    基本的に.NETのLTSは偶数バージョンに設定されており、奇数バージョンはSTSです。そのため、直近の偶数バージョンを選択することで自動的にLTSを選択できます。これについては、直近偶数バージョンの指定で決め打ちして問題ないと思います。
 認証の種類 (Authentication type) ユーザー認証の方式を選択します。
- なし (None): 認証機能を組み込みません。 個別のアカウント (Individual Accounts): ASP.NET Core Identityを使用し、ユーザー名とパスワードによる独自のユーザー管理システムをアプリ内に構築します。  この項目は、ユーザー認証を実装する必要があるとき以外は基本的に「None」を設定すればいいでしょう。
-HTTPS 用の構成 (Configure for HTTPS) チェックを入れると、開発用の自己署名証明書が設定され、HTTPSでのアクセスが有効になります。"/>
+ なし (None): 認証機能を組み込みません。 個別のアカウント (Individual Accounts): ASP."/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
 
@@ -85,11 +83,11 @@ HTTPS 用の構成 (Configure for HTTPS) チェックを入れると、開発用
 
 <h2 id="概要">概要</h2>
 
-<p>BlazorアプリをVisual Studio 2022（以下、VS2022）を使って開発する際、そのアプリの仕様について設定する必要があります。</p>
+<p>自分はメインのエディタをVisual Studio Codeを使ってたせいで、Blazorアプリを新規作成するときは大抵<code>dotnet new blazorwasm -o MyBlazorApp</code>のようにコマンドラインで実行しちゃってます。が、BlazorアプリをVisual Studio 2022（以下、VS2022）を使って開発する際はこの方法じゃなくて、ウィザードを利用する方法が主流です。その際は、開発するアプリの仕様についてウィザードに設定する必要があります。</p>
 
 <p><img src="image.png" alt="pic" /></p>
 
-<p>この記事では、これらの項目をどのように設定すればいいか、作成したいアプリケーションとともに考えます。</p>
+<p>この記事では、これらの項目をどのように設定すればいいか、作成したいアプリケーションとともに考えます。かなり自分目線の備忘録的意味合いが強いので、その点ご了承ください。</p>
 
 <h2 id="入力項目">入力項目</h2>
 
@@ -128,7 +126,7 @@ HTTPS 用の構成 (Configure for HTTPS) チェックを入れると、開発用
 </tbody>
 </table>
 
-<p>基本的に.NETのLTSは偶数バージョンに設定されており、奇数バージョンはSTSです。そのため、直近の偶数バージョンを選択することで自動的にLTSを選択できます。</p>
+<p>基本的に.NETのLTSは偶数バージョンに設定されており、奇数バージョンはSTSです。そのため、直近の偶数バージョンを選択することで自動的にLTSを選択できます。これについては、直近偶数バージョンの指定で決め打ちして問題ないと思います。</p>
 
 <h3 id="認証の種類-authentication-type">認証の種類 (Authentication type)</h3>
 
