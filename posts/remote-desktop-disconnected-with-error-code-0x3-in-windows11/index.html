@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Windows11でリモートデスクトップ接続がエラーコード0x3で切断される - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Windows11でリモートデスクトップ接続がエラーコード0x3で切断される" />
+<meta property="og:description" content="概要 2025年6月ごろ？あたりから、Windows 11のPC環境へのリモートデスクトップ接続時に、「エラーコード 0x3」エラーメッセージと共にセッションが突然終了する事象が発生するようになりました。この切断ですが、リモートデスクトップ接続を開始してから短い場合だと30秒くらいでエラーを吐きつつ切断されてしまうため、かなりストレスです。いつまで経ってもエラーが出ず、正常に接続が継続されるケースもあるので、余計鬱陶しさに拍車がかかります。
+というわけで、このエラーをどうにかすべく調査した備忘録です。結果的に自分の環境では接続状況が改善しましたが、他の環境で改善することを保証するものではないので、その点ご了承ください。
+エラー内容 表示されるエラーは、下記のようなメッセージです。
+[Window Title] リモート デスクトップ接続 [Content] リモート デスクトップ サービス セッションが終了しました。次のいずれかが原因と考えられます: 管理者がこのセッションを終了させました。 接続の確立中にエラーが発生しました。 ネットワークに問題が発生しました。 この問題を解決するためのヘルプ情報については、ヘルプとサポートで、リモート デスクトップに関するセクションを参照してください。 [^] 詳細の非表示(D) [OK] [Expanded Information] エラー コード: 0x3 拡張エラー コード: 0x11 タイムスタンプ (UTC): mm/dd/yy hh:mm:ss xx 上記はアクセスしている側のPC、つまりアクセス元に表示されるエラーですが、アクセス先のPCにも内容は異なるもののエラーがイベントに記録されていました。
+「Microsoft Remote Display Adapter」・・・？知らんぞ、そんなもの。調べてみると、デバイスマネージャーのディスプレイアダプター内に存在するデバイスでした。
+コイツか・・・どうしてくれようか。
+原因を探る この場合では、グラフィックスドライバーの不具合と判断しました。上記のエラーメッセージにも「ユーザーモードドライバーのクラッシュのため」というメッセージが存在し、「デバイスに一時的にアクセスできない」という状況から、この「Microsoft Remote Display Adapter」というデバイスについて何らかの異常が発生している、と考えます。
+リモートデスクトップは、アクセス先PCのグラフィックスドライバー（特にWDDM: Windows Display Driver Model）を利用して画面をレンダリングします。このドライバーに何らかの問題や不具合があると、セッションが不安定になり切断の原因となります。
+解決策 ドライバーが原因なら、基本的な対処はドライバーを更新するか修復するかです。つまり、アクセス先PCのグラフィックスドライバーが古い、または破損している可能性を考慮し、グラフィックスカードの製造元から最新のドライバーをダウンロードしてインストールを実行することで、エラーを解消するわけです。なお、今回ドライバーインストールを実施する対象は、リモートデスクトップ接続のアクセス先PCです。
+ 製造元の公式サイトにアクセスし、最新のドライバーをダウンロードします。 インストーラーの指示に従い、インストールを実行します。 インストール後、PCを再起動します。  ここで、既存のドライバーがインストールしようとしているドライバーと同じバージョンだったとしても、既存のドライバーが破損している可能性を考慮して必要なドライバーはすべてインストールすることをオススメします。
+また、インストーラーによっては「クリーンインストール」か「カスタムインストール」を選択できる場合があるかもしれませんが、この場合はクリーンインストールのほうがいいかもしれません。というのも、グラフィックスドライバーに含まれるもののうち何が原因でこのエラーが出ているかがはっきりしないため、特定のドライバーのみをピックアップしてインストールする「カスタムインストール」とは相性が悪いためです。
+上記の方法に従いドライバーを再インストールしたところ、リモートデスクトップ接続が安定するようになりました。よかった。
+備考 このエラーについてネットの記事を探すと、「Microsoft Remote Display Adapterを無効にする」という処置を「この問題の解決方法」として書いている記事があります。
+ところが、「Microsoft Remote Display Adapter」を無効にした場合、そもそもリモートデスクトップ接続ができなくなります。正確には、「リモートデスクトップ接続自体は成立するものの、画面が表示されず操作不可になる」です。リモートデスクトップ接続において、画面を共有するためのデバイスを無効にするんだから、さもありなんという感じではあります。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/remote-desktop-disconnected-with-error-code-0x3-in-windows11/" /><meta property="article:published_time" content="2025-07-22T10:57:43&#43;09:00"/>
+<meta property="article:modified_time" content="2025-07-22T10:57:43&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Windows11でリモートデスクトップ接続がエラーコード0x3で切断される"/>
+<meta name="twitter:description" content="概要 2025年6月ごろ？あたりから、Windows 11のPC環境へのリモートデスクトップ接続時に、「エラーコード 0x3」エラーメッセージと共にセッションが突然終了する事象が発生するようになりました。この切断ですが、リモートデスクトップ接続を開始してから短い場合だと30秒くらいでエラーを吐きつつ切断されてしまうため、かなりストレスです。いつまで経ってもエラーが出ず、正常に接続が継続されるケースもあるので、余計鬱陶しさに拍車がかかります。
+というわけで、このエラーをどうにかすべく調査した備忘録です。結果的に自分の環境では接続状況が改善しましたが、他の環境で改善することを保証するものではないので、その点ご了承ください。
+エラー内容 表示されるエラーは、下記のようなメッセージです。
+[Window Title] リモート デスクトップ接続 [Content] リモート デスクトップ サービス セッションが終了しました。次のいずれかが原因と考えられます: 管理者がこのセッションを終了させました。 接続の確立中にエラーが発生しました。 ネットワークに問題が発生しました。 この問題を解決するためのヘルプ情報については、ヘルプとサポートで、リモート デスクトップに関するセクションを参照してください。 [^] 詳細の非表示(D) [OK] [Expanded Information] エラー コード: 0x3 拡張エラー コード: 0x11 タイムスタンプ (UTC): mm/dd/yy hh:mm:ss xx 上記はアクセスしている側のPC、つまりアクセス元に表示されるエラーですが、アクセス先のPCにも内容は異なるもののエラーがイベントに記録されていました。
+「Microsoft Remote Display Adapter」・・・？知らんぞ、そんなもの。調べてみると、デバイスマネージャーのディスプレイアダプター内に存在するデバイスでした。
+コイツか・・・どうしてくれようか。
+原因を探る この場合では、グラフィックスドライバーの不具合と判断しました。上記のエラーメッセージにも「ユーザーモードドライバーのクラッシュのため」というメッセージが存在し、「デバイスに一時的にアクセスできない」という状況から、この「Microsoft Remote Display Adapter」というデバイスについて何らかの異常が発生している、と考えます。
+リモートデスクトップは、アクセス先PCのグラフィックスドライバー（特にWDDM: Windows Display Driver Model）を利用して画面をレンダリングします。このドライバーに何らかの問題や不具合があると、セッションが不安定になり切断の原因となります。
+解決策 ドライバーが原因なら、基本的な対処はドライバーを更新するか修復するかです。つまり、アクセス先PCのグラフィックスドライバーが古い、または破損している可能性を考慮し、グラフィックスカードの製造元から最新のドライバーをダウンロードしてインストールを実行することで、エラーを解消するわけです。なお、今回ドライバーインストールを実施する対象は、リモートデスクトップ接続のアクセス先PCです。
+ 製造元の公式サイトにアクセスし、最新のドライバーをダウンロードします。 インストーラーの指示に従い、インストールを実行します。 インストール後、PCを再起動します。  ここで、既存のドライバーがインストールしようとしているドライバーと同じバージョンだったとしても、既存のドライバーが破損している可能性を考慮して必要なドライバーはすべてインストールすることをオススメします。
+また、インストーラーによっては「クリーンインストール」か「カスタムインストール」を選択できる場合があるかもしれませんが、この場合はクリーンインストールのほうがいいかもしれません。というのも、グラフィックスドライバーに含まれるもののうち何が原因でこのエラーが出ているかがはっきりしないため、特定のドライバーのみをピックアップしてインストールする「カスタムインストール」とは相性が悪いためです。
+上記の方法に従いドライバーを再インストールしたところ、リモートデスクトップ接続が安定するようになりました。よかった。
+備考 このエラーについてネットの記事を探すと、「Microsoft Remote Display Adapterを無効にする」という処置を「この問題の解決方法」として書いている記事があります。
+ところが、「Microsoft Remote Display Adapter」を無効にした場合、そもそもリモートデスクトップ接続ができなくなります。正確には、「リモートデスクトップ接続自体は成立するものの、画面が表示されず操作不可になる」です。リモートデスクトップ接続において、画面を共有するためのデバイスを無効にするんだから、さもありなんという感じではあります。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Windows11でリモートデスクトップ接続がエラーコード0x3で切断される</h1>
+			<div class="meta">Posted at &mdash; Jul 22, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>2025年6月ごろ？あたりから、Windows 11のPC環境へのリモートデスクトップ接続時に、「エラーコード 0x3」エラーメッセージと共にセッションが突然終了する事象が発生するようになりました。この切断ですが、リモートデスクトップ接続を開始してから短い場合だと30秒くらいでエラーを吐きつつ切断されてしまうため、かなりストレスです。いつまで経ってもエラーが出ず、正常に接続が継続されるケースもあるので、余計鬱陶しさに拍車がかかります。</p>
+
+<p>というわけで、このエラーをどうにかすべく調査した備忘録です。結果的に自分の環境では接続状況が改善しましたが、他の環境で改善することを保証するものではないので、その点ご了承ください。</p>
+
+<h2 id="エラー内容">エラー内容</h2>
+
+<p>表示されるエラーは、下記のようなメッセージです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">[Window Title]
+リモート デスクトップ接続
+
+[Content]
+リモート デスクトップ サービス セッションが終了しました。次のいずれかが原因と考えられます:
+
+管理者がこのセッションを終了させました。
+接続の確立中にエラーが発生しました。
+ネットワークに問題が発生しました。
+
+この問題を解決するためのヘルプ情報については、ヘルプとサポートで、リモート デスクトップに関するセクションを参照してください。
+
+[^] 詳細の非表示(D)  [OK]
+
+[Expanded Information]
+エラー コード: 0x3
+拡張エラー コード: 0x11
+タイムスタンプ (UTC): mm/dd/yy hh:mm:ss xx</code></pre></div>
+<p>上記はアクセスしている側のPC、つまりアクセス元に表示されるエラーですが、アクセス先のPCにも内容は異なるもののエラーがイベントに記録されていました。</p>
+
+<p><img src="image01.png" alt="alt text" /></p>
+
+<p><img src="image02.png" alt="alt text" /></p>
+
+<p>「Microsoft Remote Display Adapter」・・・？知らんぞ、そんなもの。調べてみると、デバイスマネージャーのディスプレイアダプター内に存在するデバイスでした。</p>
+
+<p><img src="image03.png" alt="alt text" /></p>
+
+<p>コイツか・・・どうしてくれようか。</p>
+
+<h2 id="原因を探る">原因を探る</h2>
+
+<p>この場合では、グラフィックスドライバーの不具合と判断しました。上記のエラーメッセージにも「ユーザーモードドライバーのクラッシュのため」というメッセージが存在し、「デバイスに一時的にアクセスできない」という状況から、この「Microsoft Remote Display Adapter」というデバイスについて何らかの異常が発生している、と考えます。</p>
+
+<p>リモートデスクトップは、アクセス先PCのグラフィックスドライバー（特にWDDM: Windows Display Driver Model）を利用して画面をレンダリングします。このドライバーに何らかの問題や不具合があると、セッションが不安定になり切断の原因となります。</p>
+
+<h2 id="解決策">解決策</h2>
+
+<p>ドライバーが原因なら、基本的な対処はドライバーを更新するか修復するかです。つまり、アクセス先PCのグラフィックスドライバーが古い、または破損している可能性を考慮し、グラフィックスカードの製造元から最新のドライバーをダウンロードしてインストールを実行することで、エラーを解消するわけです。なお、今回ドライバーインストールを実施する対象は、リモートデスクトップ接続の<strong>アクセス先</strong>PCです。</p>
+
+<ol>
+<li>製造元の公式サイトにアクセスし、最新のドライバーをダウンロードします。</li>
+<li>インストーラーの指示に従い、インストールを実行します。</li>
+<li>インストール後、PCを再起動します。</li>
+</ol>
+
+<p>ここで、既存のドライバーがインストールしようとしているドライバーと同じバージョンだったとしても、既存のドライバーが破損している可能性を考慮して必要なドライバーはすべてインストールすることをオススメします。</p>
+
+<p>また、インストーラーによっては「クリーンインストール」か「カスタムインストール」を選択できる場合があるかもしれませんが、この場合はクリーンインストールのほうがいいかもしれません。というのも、グラフィックスドライバーに含まれるもののうち何が原因でこのエラーが出ているかがはっきりしないため、特定のドライバーのみをピックアップしてインストールする「カスタムインストール」とは相性が悪いためです。</p>
+
+<p>上記の方法に従いドライバーを再インストールしたところ、リモートデスクトップ接続が安定するようになりました。よかった。</p>
+
+<h2 id="備考">備考</h2>
+
+<p>このエラーについてネットの記事を探すと、「Microsoft Remote Display Adapterを無効にする」という処置を「この問題の解決方法」として書いている記事があります。</p>
+
+<p>ところが、「Microsoft Remote Display Adapter」を無効にした場合、そもそも<strong>リモートデスクトップ接続ができなくなります</strong>。正確には、「リモートデスクトップ接続自体は成立するものの、画面が表示されず操作不可になる」です。リモートデスクトップ接続において、画面を共有するためのデバイスを無効にするんだから、さもありなんという感じではあります。</p>
+
+<p>そのため、アクセス先のPCが手元にあり直接触って修復操作ができるなら問題ありませんが、そうではない場合はこの「無効にする」という処理はオススメしません。<a href="https://learn.microsoft.com/ja-jp/answers/questions/4234436/remote-display-adapter">この記事</a>のように、面倒ごとが増えるだけでした（1敗）。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://learn.microsoft.com/en-us/answers/questions/3878702/rdp-stops-with-error-code-0x3-(0x11)">RDP stops with error code 0x3 (0x11)</a></li>
+<li><a href="https://learn.microsoft.com/ja-jp/answers/questions/2156681/rdp-15-10110-10111-windows-11">RDP接続が毎時15分前後で強制切断されてしまう（重大エラー、「10110、10111」エラーコード、ユーザーモード、ドライバーの問題、Windows 11、リモートデスクトップ）</a></li>
+<li><a href="https://learn.microsoft.com/ja-jp/answers/questions/4234436/remote-display-adapter">remote display adapterのエラーについて</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
