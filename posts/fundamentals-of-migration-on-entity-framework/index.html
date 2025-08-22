@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Entity Framework マイグレーションの基本 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Entity Framework マイグレーションの基本" />
+<meta property="og:description" content="概要 マイグレーションとは何か マイグレーション（Migration）とは、データベースの構造変更を安全かつ自動的に行うためのEntity Frameworkの機能です。
+C#のモデルクラス（設計図）の変更を検出し、それに合わせてデータベースの実際のテーブル構造を更新するプロセスを指します。「移行」という意味の通り、データベースを現在の状態から新しい状態へと段階的に移行させる仕組みです。この機能を利用することで、データベースに対する操作やSQLの作成と実行と言った、従来だと当たり前のように行っていた作業を簡素化することが可能です。
+最近はBlazor絡みのシステムに携わることが多いのですが、データベースをいじるときはEntity Framework（以下、EF）を使っています。今回はこのEFを利用する際に必要になるマイグレーションに関して、基本的な知識や実行方法についてまとめてみました。
+EF＆マイグレーションのメリット  SQL不要：C#だけで完結 エラー減少：自動生成でヒューマンエラー防止 開発スピードUP：数分でDB更新  事前準備：プロジェクトにEF Coreを導入する マイグレーションを始める前に、まずはBlazorプロジェクトにEntity Framework Core (EF Core) を導入し、データベースと通信できるように設定しましょう。ここが全ての土台となります。
+ステップ1：必要なパッケージのインストール Visual Studioの「パッケージマネージャーコンソール」で以下のコマンドを実行し、EF Coreに必要なツールをインストールします。
+# データベースプロバイダー (ここではSQL Server) Install-Package Microsoft.EntityFrameworkCore.SqlServer # EF Coreのコマンドラインツール Install-Package Microsoft.EntityFrameworkCore.Tools ステップ2：接続文字列の設定 データベースの場所や認証情報を定義します。プロジェクトルートにあるappsettings.jsonファイルに、以下のようにConnectionStringsを追加します。
+{ &#34;ConnectionStrings&#34;: { &#34;DefaultConnection&#34;: &#34;Server=(localdb)\\mssqllocaldb;Database=MyBlazorAppDb;Trusted_Connection=True;&#34; }, &#34;Logging&#34;: { // ... }, &#34;AllowedHosts&#34;: &#34;*&#34; }  Server=(localdb)\\mssqllocaldb: Visual Studioと一緒にインストールされる開発用のSQL Serverです。 Database=MyBlazorAppDb: これから作成するデータベース名です。  ステップ3：DbContextの登録 アプリケーション全体でデータベース接続を使い回せるように、Program.csにDbContextを「サービス」として登録します。これは「依存性の注入（DI）」と呼ばれる仕組みで、「必要な時に自動でDbContextを準備してください」と.NETにお願いするおまじないのようなものだと思ってください。
+Program.csファイルを開き、builder.Build()の前に以下のコードを追加してください。
+// using Microsoft.EntityFrameworkCore; をファイルの先頭に追加  var connectionString = builder." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-migration-on-entity-framework/" /><meta property="article:published_time" content="2025-08-22T14:41:09&#43;09:00"/>
+<meta property="article:modified_time" content="2025-08-22T14:41:09&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Entity Framework マイグレーションの基本"/>
+<meta name="twitter:description" content="概要 マイグレーションとは何か マイグレーション（Migration）とは、データベースの構造変更を安全かつ自動的に行うためのEntity Frameworkの機能です。
+C#のモデルクラス（設計図）の変更を検出し、それに合わせてデータベースの実際のテーブル構造を更新するプロセスを指します。「移行」という意味の通り、データベースを現在の状態から新しい状態へと段階的に移行させる仕組みです。この機能を利用することで、データベースに対する操作やSQLの作成と実行と言った、従来だと当たり前のように行っていた作業を簡素化することが可能です。
+最近はBlazor絡みのシステムに携わることが多いのですが、データベースをいじるときはEntity Framework（以下、EF）を使っています。今回はこのEFを利用する際に必要になるマイグレーションに関して、基本的な知識や実行方法についてまとめてみました。
+EF＆マイグレーションのメリット  SQL不要：C#だけで完結 エラー減少：自動生成でヒューマンエラー防止 開発スピードUP：数分でDB更新  事前準備：プロジェクトにEF Coreを導入する マイグレーションを始める前に、まずはBlazorプロジェクトにEntity Framework Core (EF Core) を導入し、データベースと通信できるように設定しましょう。ここが全ての土台となります。
+ステップ1：必要なパッケージのインストール Visual Studioの「パッケージマネージャーコンソール」で以下のコマンドを実行し、EF Coreに必要なツールをインストールします。
+# データベースプロバイダー (ここではSQL Server) Install-Package Microsoft.EntityFrameworkCore.SqlServer # EF Coreのコマンドラインツール Install-Package Microsoft.EntityFrameworkCore.Tools ステップ2：接続文字列の設定 データベースの場所や認証情報を定義します。プロジェクトルートにあるappsettings.jsonファイルに、以下のようにConnectionStringsを追加します。
+{ &#34;ConnectionStrings&#34;: { &#34;DefaultConnection&#34;: &#34;Server=(localdb)\\mssqllocaldb;Database=MyBlazorAppDb;Trusted_Connection=True;&#34; }, &#34;Logging&#34;: { // ... }, &#34;AllowedHosts&#34;: &#34;*&#34; }  Server=(localdb)\\mssqllocaldb: Visual Studioと一緒にインストールされる開発用のSQL Serverです。 Database=MyBlazorAppDb: これから作成するデータベース名です。  ステップ3：DbContextの登録 アプリケーション全体でデータベース接続を使い回せるように、Program.csにDbContextを「サービス」として登録します。これは「依存性の注入（DI）」と呼ばれる仕組みで、「必要な時に自動でDbContextを準備してください」と.NETにお願いするおまじないのようなものだと思ってください。
+Program.csファイルを開き、builder.Build()の前に以下のコードを追加してください。
+// using Microsoft.EntityFrameworkCore; をファイルの先頭に追加  var connectionString = builder."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Entity Framework マイグレーションの基本</h1>
+			<div class="meta">Posted at &mdash; Aug 22, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<h3 id="マイグレーションとは何か">マイグレーションとは何か</h3>
+
+<p>マイグレーション（Migration）とは、<strong>データベースの構造変更を安全かつ自動的に行うためのEntity Frameworkの機能</strong>です。</p>
+
+<p>C#のモデルクラス（設計図）の変更を検出し、それに合わせてデータベースの実際のテーブル構造を更新するプロセスを指します。「移行」という意味の通り、データベースを現在の状態から新しい状態へと段階的に<strong>移行</strong>させる仕組みです。この機能を利用することで、データベースに対する操作やSQLの作成と実行と言った、従来だと当たり前のように行っていた作業を簡素化することが可能です。</p>
+
+<p>最近はBlazor絡みのシステムに携わることが多いのですが、データベースをいじるときはEntity Framework（以下、EF）を使っています。今回はこのEFを利用する際に必要になるマイグレーションに関して、基本的な知識や実行方法についてまとめてみました。</p>
+
+<h3 id="ef-マイグレーションのメリット">EF＆マイグレーションのメリット</h3>
+
+<ul>
+<li><strong>SQL不要</strong>：C#だけで完結</li>
+<li><strong>エラー減少</strong>：自動生成でヒューマンエラー防止</li>
+<li><strong>開発スピードUP</strong>：数分でDB更新</li>
+</ul>
+
+<h2 id="事前準備-プロジェクトにef-coreを導入する">事前準備：プロジェクトにEF Coreを導入する</h2>
+
+<p>マイグレーションを始める前に、まずはBlazorプロジェクトにEntity Framework Core (EF Core) を導入し、データベースと通信できるように設定しましょう。ここが全ての土台となります。</p>
+
+<h3 id="ステップ1-必要なパッケージのインストール">ステップ1：必要なパッケージのインストール</h3>
+
+<p>Visual Studioの「パッケージマネージャーコンソール」で以下のコマンドを実行し、EF Coreに必要なツールをインストールします。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#008000"># データベースプロバイダー (ここではSQL Server)</span>
+Install-Package Microsoft.EntityFrameworkCore.SqlServer
+
+<span style="color:#008000"># EF Coreのコマンドラインツール</span>
+Install-Package Microsoft.EntityFrameworkCore.Tools</code></pre></div>
+<h3 id="ステップ2-接続文字列の設定">ステップ2：接続文字列の設定</h3>
+
+<p>データベースの場所や認証情報を定義します。プロジェクトルートにある<code>appsettings.json</code>ファイルに、以下のように<code>ConnectionStrings</code>を追加します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  &#34;ConnectionStrings&#34;: {
+    &#34;DefaultConnection&#34;: <span style="color:#a31515">&#34;Server=(localdb)\\mssqllocaldb;Database=MyBlazorAppDb;Trusted_Connection=True;&#34;</span>
+  },
+  &#34;Logging&#34;: {
+    <span style="">//</span> <span style="">...</span>
+  },
+  &#34;AllowedHosts&#34;: <span style="color:#a31515">&#34;*&#34;</span>
+}</code></pre></div>
+<ul>
+<li><strong><code>Server=(localdb)\\mssqllocaldb</code></strong>: Visual Studioと一緒にインストールされる開発用のSQL Serverです。</li>
+<li><strong><code>Database=MyBlazorAppDb</code></strong>: これから作成するデータベース名です。</li>
+</ul>
+
+<h3 id="ステップ3-dbcontextの登録">ステップ3：DbContextの登録</h3>
+
+<p>アプリケーション全体でデータベース接続を使い回せるように、<code>Program.cs</code>に<code>DbContext</code>を「サービス」として登録します。これは「依存性の注入（DI）」と呼ばれる仕組みで、「必要な時に自動で<code>DbContext</code>を準備してください」と.NETにお願いするおまじないのようなものだと思ってください。</p>
+
+<p><code>Program.cs</code>ファイルを開き、<code>builder.Build()</code>の前に以下のコードを追加してください。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#008000">// using Microsoft.EntityFrameworkCore; をファイルの先頭に追加
+</span><span style="color:#008000"></span>
+<span style="color:#2b91af">var</span> connectionString = builder.Configuration.GetConnectionString(<span style="color:#a31515">&#34;DefaultConnection&#34;</span>);
+builder.Services.AddDbContext&lt;ApplicationDbContext&gt;(options =&gt;
+    options.UseSqlServer(connectionString));
+
+<span style="color:#2b91af">var</span> app = builder.Build();</code></pre></div>
+<p>これで、マイグレーションを実行する準備が整いました。</p>
+
+<h2 id="マイグレーションの必要性を例で理解する">マイグレーションの必要性を例で理解する</h2>
+
+<p>アプリケーションを開発する際、多くの場合でデータベースを使用してデータの保存や取得を行います。ここでは、Blazorでwebアプリケーション「商品管理システム」の構築を例に、Entity Framework（以下EF）とマイグレーションの有無による開発手順の違いを比較してみます。</p>
+
+<h3 id="想定シナリオ-商品管理システムの構築">想定シナリオ：商品管理システムの構築</h3>
+
+<p>以下の要件を満たすwebアプリケーションを作成するとします。</p>
+
+<ol>
+<li>商品データベースとテーブルを新規作成</li>
+<li>商品情報（ID、商品名、価格）を管理</li>
+<li>商品の登録、検索機能を実装</li>
+</ol>
+
+<h3 id="方法1-entity-frameworkとマイグレーションを使用した場合">方法1：Entity Frameworkとマイグレーションを使用した場合</h3>
+
+<p><strong>手順の流れ</strong>：</p>
+
+<p><strong>1. モデルクラスの作成</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#00f">public</span> <span style="color:#00f">class</span> <span style="color:#2b91af">Product</span>
+{
+    <span style="color:#00f">public</span> <span style="color:#2b91af">int</span> Id { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; }
+    <span style="color:#00f">public</span> <span style="color:#2b91af">string</span> Name { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; }
+    <span style="color:#00f">public</span> <span style="color:#2b91af">decimal</span> Price { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; }
+}</code></pre></div>
+<p><strong>2. DbContextクラスの作成</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#00f">public</span> <span style="color:#00f">class</span> <span style="color:#2b91af">ShopDbContext</span> : DbContext
+{
+    <span style="color:#00f">public</span> ShopDbContext(DbContextOptions&lt;ShopDbContext&gt; options) : <span style="color:#00f">base</span>(options) { }
+    
+    <span style="color:#00f">public</span> DbSet&lt;Product&gt; Products { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; }
+}</code></pre></div>
+<p><strong>3. データベース作成とテーブル生成</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># コマンドライン
+</span><span style="color:#008000"></span>dotnet ef migrations add CreateProductTable
+dotnet ef database update</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#008000"># Visual Studio パッケージマネージャーコンソール</span>
+Add-Migration CreateProductTable
+Update-Database</code></pre></div>
+<p><strong>4. データ操作の実装</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#008000">// 商品登録
+</span><span style="color:#008000"></span><span style="color:#2b91af">var</span> product = <span style="color:#00f">new</span> Product { Name = <span style="color:#a31515">&#34;ノートパソコン&#34;</span>, Price = 98000 };
+context.Products.Add(product);
+<span style="color:#00f">await</span> context.SaveChangesAsync();
+
+<span style="color:#008000">// 商品検索
+</span><span style="color:#008000"></span><span style="color:#2b91af">var</span> products = <span style="color:#00f">await</span> context.Products
+    .Where(p =&gt; p.Price &lt; 100000)
+    .ToListAsync();</code></pre></div>
+<p><strong>所要時間</strong>: 約20分</p>
+
+<h3 id="方法2-entity-frameworkとマイグレーションを使用しない場合">方法2：Entity Frameworkとマイグレーションを使用しない場合</h3>
+
+<p><strong>手順の流れ</strong>：</p>
+
+<p><strong>1. データベース管理システムでの手動作業</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#008000">-- SQL Server Management Studio等で手動実行
+</span><span style="color:#008000"></span><span style="color:#00f">CREATE</span> <span style="color:#00f">DATABASE</span> ShopDatabase;
+USE ShopDatabase;
+
+<span style="color:#00f">CREATE</span> <span style="color:#00f">TABLE</span> Products (
+    Id int <span style="color:#00f">IDENTITY</span>(1,1) <span style="color:#00f">PRIMARY</span> <span style="color:#00f">KEY</span>,
+    Name nvarchar(255) <span style="color:#00f">NOT</span> <span style="color:#00f">NULL</span>,
+    Price decimal(18,2) <span style="color:#00f">NOT</span> <span style="color:#00f">NULL</span>
+);</code></pre></div>
+<p><strong>2. 接続文字列の設定</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#008000">// 手動でConnectionStringを設定
+</span><span style="color:#008000"></span><span style="color:#2b91af">string</span> connectionString = <span style="color:#a31515">&#34;Server=.;Database=ShopDatabase;Trusted_Connection=true;&#34;</span>;</code></pre></div>
+<p><strong>3. データアクセス層の手動実装</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#00f">public</span> <span style="color:#00f">class</span> <span style="color:#2b91af">ProductRepository</span>
+{
+    <span style="color:#00f">private</span> <span style="color:#00f">readonly</span> <span style="color:#2b91af">string</span> _connectionString;
+    
+    <span style="color:#00f">public</span> ProductRepository(<span style="color:#2b91af">string</span> connectionString)
+    {
+        _connectionString = connectionString;
+    }
+    
+    <span style="color:#008000">// 商品登録
+</span><span style="color:#008000"></span>    <span style="color:#00f">public</span> <span style="color:#00f">async</span> Task AddProductAsync(Product product)
+    {
+        <span style="color:#00f">using</span> var connection = <span style="color:#00f">new</span> SqlConnection(_connectionString);
+        <span style="color:#00f">await</span> connection.OpenAsync();
+        
+        <span style="color:#2b91af">var</span> command = <span style="color:#00f">new</span> SqlCommand(
+            <span style="color:#a31515">&#34;INSERT INTO Products (Name, Price) VALUES (@name, @price)&#34;</span>, 
+            connection);
+        command.Parameters.AddWithValue(<span style="color:#a31515">&#34;@name&#34;</span>, product.Name);
+        command.Parameters.AddWithValue(<span style="color:#a31515">&#34;@price&#34;</span>, product.Price);
+        
+        <span style="color:#00f">await</span> command.ExecuteNonQueryAsync();
+    }
+    
+    <span style="color:#008000">// 商品検索
+</span><span style="color:#008000"></span>    <span style="color:#00f">public</span> <span style="color:#00f">async</span> Task&lt;List&lt;Product&gt;&gt; GetProductsAsync(<span style="color:#2b91af">decimal</span> maxPrice)
+    {
+        <span style="color:#2b91af">var</span> products = <span style="color:#00f">new</span> List&lt;Product&gt;();
+        
+        <span style="color:#00f">using</span> var connection = <span style="color:#00f">new</span> SqlConnection(_connectionString);
+        <span style="color:#00f">await</span> connection.OpenAsync();
+        
+        <span style="color:#2b91af">var</span> command = <span style="color:#00f">new</span> SqlCommand(
+            <span style="color:#a31515">&#34;SELECT Id, Name, Price FROM Products WHERE Price &lt; @maxPrice&#34;</span>, 
+            connection);
+        command.Parameters.AddWithValue(<span style="color:#a31515">&#34;@maxPrice&#34;</span>, maxPrice);
+        
+        <span style="color:#00f">using</span> var reader = <span style="color:#00f">await</span> command.ExecuteReaderAsync();
+        <span style="color:#00f">while</span> (<span style="color:#00f">await</span> reader.ReadAsync())
+        {
+            products.Add(<span style="color:#00f">new</span> Product
+            {
+                Id = reader.GetInt32(<span style="color:#a31515">&#34;Id&#34;</span>),
+                Name = reader.GetString(<span style="color:#a31515">&#34;Name&#34;</span>),
+                Price = reader.GetDecimal(<span style="color:#a31515">&#34;Price&#34;</span>)
+            });
+        }
+        
+        <span style="color:#00f">return</span> products;
+    }
+}</code></pre></div>
+<p><strong>4. 依存関係注入の設定</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#008000">// Program.cs
+</span><span style="color:#008000"></span>builder.Services.AddScoped&lt;ProductRepository&gt;(provider =&gt; 
+    <span style="color:#00f">new</span> ProductRepository(builder.Configuration.GetConnectionString(<span style="color:#a31515">&#34;DefaultConnection&#34;</span>)));</code></pre></div>
+<p><strong>所要時間</strong>: 約2-3時間</p>
+
+<h3 id="比較結果-マイグレーション使用のメリット">比較結果：マイグレーション使用のメリット</h3>
+
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>マイグレーション使用</th>
+<th>マイグレーション未使用</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><strong>開発時間</strong></td>
+<td>20分</td>
+<td>2-3時間</td>
+</tr>
+
+<tr>
+<td><strong>コード量</strong></td>
+<td>最小限</td>
+<td>大量のボイラープレート</td>
+</tr>
+
+<tr>
+<td><strong>エラー発生率</strong></td>
+<td>低い（自動生成）</td>
+<td>高い（手動実装）</td>
+</tr>
+
+<tr>
+<td><strong>保守性</strong></td>
+<td>高い</td>
+<td>低い</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="具体的な開発上のメリット">具体的な開発上のメリット</h3>
+
+<p><strong>1. 圧倒的な時間短縮</strong>
+- データベース作成からデータ操作まで20分で完了
+- SQLの手動記述やデータアクセス層の実装が不要</p>
+
+<p><strong>2. エラーの大幅な削減</strong>
+- タイピングミスによるSQL文法エラーの回避
+- パラメータ設定ミスの防止
+- 型安全性の確保</p>
+
+<p><strong>3. 保守性の向上</strong>
+- モデルクラスの変更だけでデータベース構造を更新可能
+- 複雑なSQL文の管理が不要
+- チーム開発時の一貫性確保</p>
+
+<p><strong>4. 学習コストの削減</strong>
+- SQL文の詳細な知識が不要
+- C#の知識だけで完結
+- LINQ による直感的なデータ操作</p>
+
+<p>従来のシステム開発では、データベースの作成と操作に多くの時間と労力を要していましたが、Entity Frameworkのマイグレーション機能を使用することで、この作業を劇的に簡素化し、本来の業務ロジックの実装に集中できるようになります。</p>
+
+<h2 id="マイグレーションの仕組み">マイグレーションの仕組み</h2>
+
+<h3 id="1-モデルクラスの変更検出">1. モデルクラスの変更検出</h3>
+
+<p>EFは、現在のモデルクラス（C#のクラス）と前回のスナップショットを比較し、何が変更されたかを自動的に検出します。</p>
+
+<h3 id="2-マイグレーションファイルの生成">2. マイグレーションファイルの生成</h3>
+
+<p>変更内容に基づいて、データベースを更新するためのC#コードが自動生成されます。このファイルには以下の情報が含まれます：</p>
+
+<ul>
+<li><strong>Up メソッド</strong>: 変更を適用する処理</li>
+<li><strong>Down メソッド</strong>: 変更を取り消す処理（ロールバック）</li>
+</ul>
+
+<h3 id="3-データベースへの適用">3. データベースへの適用</h3>
+
+<p>生成されたマイグレーションファイルを実行することで、実際のデータベースが更新されます。</p>
+
+<h2 id="実際の開発での活用例">実際の開発での活用例</h2>
+
+<h3 id="シナリオ-新規データベースの作成">シナリオ：新規データベースの作成</h3>
+
+<h4 id="状況">状況</h4>
+
+<p>Blazorプロジェクトを新規作成し、Entity Frameworkを使ってデータベースを初めて構築したい</p>
+
+<h4 id="手順">手順</h4>
+
+<p><strong>1. モデルクラスを作成</strong></p>
+
+<p><code>Customer.cs</code>というファイルを作成します。これがデータベースのテーブル設計図になります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#00f">public</span> <span style="color:#00f">class</span> <span style="color:#2b91af">Customer</span>
+{
+    <span style="color:#00f">public</span> <span style="color:#2b91af">int</span> Id { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; }
+    <span style="color:#00f">public</span> <span style="color:#2b91af">string</span> Name { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; }
+    <span style="color:#00f">public</span> <span style="color:#2b91af">string</span> Email { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; }
+}</code></pre></div>
+<p><strong>2. DbContextクラスを作成</strong>
+<code>ApplicationDbContext.cs</code>というファイルを作成します。これは<strong>データベース全体との通信を担う窓口</strong>のような役割を果たします。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#00f">using</span> Microsoft.EntityFrameworkCore;
+
+<span style="color:#00f">public</span> <span style="color:#00f">class</span> <span style="color:#2b91af">ApplicationDbContext</span> : DbContext
+{
+    <span style="color:#00f">public</span> ApplicationDbContext(DbContextOptions&lt;ApplicationDbContext&gt; options)
+        : <span style="color:#00f">base</span>(options)
+    {
+    }
+
+    <span style="color:#008000">// Customerテーブルを操作するための道具
+</span><span style="color:#008000"></span>    <span style="color:#00f">public</span> DbSet&lt;Customer&gt; Customers { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; }
+}</code></pre></div>
+<p><strong>3. マイグレーションコマンドの実行</strong>
+準備ができたので、パッケージマネージャーコンソールでコマンドを実行します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#008000"># 設計図(モデル)からデータベースの変更点(マイグレーション)を作成</span>
+Add-Migration InitialCreate
+
+<span style="color:#008000"># 変更点を実際のデータベースに適用</span>
+Update-Database</code></pre></div>
+<p><strong>重要なポイント</strong>:
+- 初回マイグレーション名は慣例的に「InitialCreate」とすることが多いです。
+- <code>Update-Database</code>を実行した時点で、<code>appsettings.json</code>で指定した名前のデータベースが物理的に作成されます。</p>
+
+<h3 id="シナリオ-新しい項目の追加">シナリオ：新しい項目の追加</h3>
+
+<h4 id="状況-1">状況</h4>
+
+<p>顧客管理システムに「生年月日」フィールドを追加したい。</p>
+
+<h4 id="手順-1">手順</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#008000">// 1. モデルクラスを更新
+</span><span style="color:#008000"></span><span style="color:#00f">public</span> <span style="color:#00f">class</span> <span style="color:#2b91af">Customer</span>
+{
+    <span style="color:#00f">public</span> <span style="color:#2b91af">int</span> Id { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; }
+    <span style="color:#00f">public</span> <span style="color:#2b91af">string</span> Name { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; }
+    <span style="color:#00f">public</span> <span style="color:#2b91af">string</span> Email { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; }
+    <span style="color:#00f">public</span> DateTime? BirthDate { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; } <span style="color:#008000">// 新規追加
+</span><span style="color:#008000"></span>}</code></pre></div>
+<p><strong>コマンドライン（bash/PowerShell）の場合</strong>:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># 2. マイグレーションを生成
+</span><span style="color:#008000"></span>dotnet ef migrations add AddBirthDateToCustomer
+
+<span style="color:#008000"># 3. データベースに適用
+</span><span style="color:#008000"></span>dotnet ef database update</code></pre></div>
+<p><strong>Visual Studio 2022のパッケージマネージャーコンソールの場合</strong>:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#008000"># 2. マイグレーションを生成</span>
+Add-Migration AddBirthDateToCustomer
+
+<span style="color:#008000"># 3. データベースに適用</span>
+Update-Database</code></pre></div>
+<h3 id="シナリオ-項目名の変更">シナリオ：項目名の変更</h3>
+
+<h4 id="状況-2">状況</h4>
+
+<p>「Email」を「EmailAddress」に変更したい。しかし、既存のデータを失いたくない。</p>
+
+<p>EFはデフォルトでこれを「<code>Email</code>列の削除」と「<code>EmailAddress</code>列の追加」として認識するため、<strong>そのまま適用するとデータが失われてしまいます。</strong> これを防ぐため、生成されたマイグレーションファイルを手動で修正します。</p>
+
+<h4 id="手順-2">手順</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#008000">// 1. モデルクラスのプロパティ名を変更
+</span><span style="color:#008000"></span><span style="color:#00f">public</span> <span style="color:#00f">class</span> <span style="color:#2b91af">Customer</span>
+{
+    <span style="color:#00f">public</span> <span style="color:#2b91af">int</span> Id { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; }
+    <span style="color:#00f">public</span> <span style="color:#2b91af">string</span> Name { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; }
+    <span style="color:#00f">public</span> <span style="color:#2b91af">string</span> EmailAddress { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; } <span style="color:#008000">// Email -&gt; EmailAddress に変更
+</span><span style="color:#008000"></span>    <span style="color:#00f">public</span> DateTime? BirthDate { <span style="color:#00f">get</span>; <span style="color:#00f">set</span>; }
+}</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#008000"># 2. マイグレーションを生成（パッケージマネージャーコンソール）</span>
+Add-Migration RenameEmailToEmailAddress</code></pre></div>
+<p><strong>3. 生成されたマイグレーションファイルを修正</strong></p>
+
+<p><code>Migrations</code>フォルダに生成された<code>xxxxx_RenameEmailToEmailAddress.cs</code>ファイルを開きます。
+初期状態では、<code>DropColumn</code>（列の削除）と<code>AddColumn</code>（列の追加）になっています。</p>
+
+<p><strong>修正前のコード（データが失われる！）</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#00f">protected</span> <span style="color:#00f">override</span> <span style="color:#00f">void</span> Up(MigrationBuilder migrationBuilder)
+{
+    <span style="color:#008000">// EFは列の削除と追加として認識する
+</span><span style="color:#008000"></span>    migrationBuilder.DropColumn(
+        name: <span style="color:#a31515">&#34;Email&#34;</span>,
+        table: <span style="color:#a31515">&#34;Customers&#34;</span>);
+
+    migrationBuilder.AddColumn&lt;<span style="color:#2b91af">string</span>&gt;(
+        name: <span style="color:#a31515">&#34;EmailAddress&#34;</span>,
+        table: <span style="color:#a31515">&#34;Customers&#34;</span>,
+        type: <span style="color:#a31515">&#34;nvarchar(max)&#34;</span>,
+        nullable: <span style="color:#00f">false</span>,
+        defaultValue: <span style="color:#a31515">&#34;&#34;</span>);
+}
+
+<span style="color:#00f">protected</span> <span style="color:#00f">override</span> <span style="color:#00f">void</span> Down(MigrationBuilder migrationBuilder)
+{
+    migrationBuilder.DropColumn(
+        name: <span style="color:#a31515">&#34;EmailAddress&#34;</span>,
+        table: <span style="color:#a31515">&#34;Customers&#34;</span>);
+
+    migrationBuilder.AddColumn&lt;<span style="color:#2b91af">string</span>&gt;(
+        name: <span style="color:#a31515">&#34;Email&#34;</span>,
+        table: <span style="color:#a31515">&#34;Customers&#34;</span>,
+        type: <span style="color:#a31515">&#34;nvarchar(max)&#34;</span>,
+        nullable: <span style="color:#00f">false</span>,
+        defaultValue: <span style="color:#a31515">&#34;&#34;</span>);
+}</code></pre></div>
+<p>これを<code>RenameColumn</code>（列名の変更）に手動で修正します。<code>Down</code>メソッドも忘れずに修正しましょう。</p>
+
+<p><strong>修正後のコード（安全）</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#00f">protected</span> <span style="color:#00f">override</span> <span style="color:#00f">void</span> Up(MigrationBuilder migrationBuilder)
+{
+    <span style="color:#008000">// DropColumnとAddColumnをRenameColumnに書き換える
+</span><span style="color:#008000"></span>    migrationBuilder.RenameColumn(
+        name: <span style="color:#a31515">&#34;Email&#34;</span>,
+        table: <span style="color:#a31515">&#34;Customers&#34;</span>,
+        newName: <span style="color:#a31515">&#34;EmailAddress&#34;</span>);
+}
+
+<span style="color:#00f">protected</span> <span style="color:#00f">override</span> <span style="color:#00f">void</span> Down(MigrationBuilder migrationBuilder)
+{
+    <span style="color:#008000">// ロールバック処理もRenameColumnにする
+</span><span style="color:#008000"></span>    migrationBuilder.RenameColumn(
+        name: <span style="color:#a31515">&#34;EmailAddress&#34;</span>,
+        table: <span style="color:#a31515">&#34;Customers&#34;</span>,
+        newName: <span style="color:#a31515">&#34;Email&#34;</span>);
+}</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#008000"># 4. 修正したマイグレーションをデータベースに適用</span>
+Update-Database</code></pre></div>
+<p>この手順により、既存のデータを保持したまま、安全に列名を変更できます。</p>
+
+<h3 id="シナリオ-複数環境への展開">シナリオ：複数環境への展開</h3>
+
+<p>開発環境(Development)で作成・テストしたマイグレーションを、本番環境(Production)へ適用するケースです。環境ごとに異なるデータベース接続情報を使用します。</p>
+
+<h4 id="手順-3">手順</h4>
+
+<p><strong>1. 環境ごとの設定ファイルを作成</strong>
+<code>appsettings.json</code>に加えて、<code>appsettings.Production.json</code>を作成し、本番用の接続文字列を記述します。</p>
+
+<p><strong>appsettings.json (開発用)</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  &#34;ConnectionStrings&#34;: {
+    &#34;DefaultConnection&#34;: <span style="color:#a31515">&#34;Server=(localdb)\\mssqllocaldb;Database=MyBlazorApp_Dev;Trusted_Connection=True;&#34;</span>
+  },
+  <span style="">//</span> <span style="">...</span>
+}</code></pre></div>
+<p><strong>appsettings.Production.json (本番用)</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  &#34;ConnectionStrings&#34;: {
+    &#34;DefaultConnection&#34;: <span style="color:#a31515">&#34;Server=your_production_server;Database=MyBlazorApp_Prod;User Id=your_user;Password=your_password;&#34;</span>
+  }
+}</code></pre></div>
+<p><strong>2. .NET CLIで環境を指定してマイグレーションを適用</strong>
+アプリケーションのデプロイ時やCI/CDパイプラインでは、.NET CLIを使い、<code>--environment</code>オプションで適用先の環境を指定します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># ターミナルで本番環境を指定してデータベースを更新
+</span><span style="color:#008000"></span>dotnet ef database update --environment Production</code></pre></div>
+<p>このコマンドを実行すると、Entity Frameworkは<code>appsettings.Production.json</code>の設定を読み込み、本番データベースに対してマイグレーションを適用します。</p>
+
+<p><strong>3. (参考) アプリケーション起動時に自動適用する方法</strong>
+<code>Program.cs</code>にコードを追加することで、アプリケーション起動時に未適用のマイグレーションを自動で実行させることも可能です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#008000">// Program.cs
+</span><span style="color:#008000"></span><span style="color:#2b91af">var</span> app = builder.Build();
+
+<span style="color:#008000">// スコープを作成してDbContextを取得
+</span><span style="color:#008000"></span><span style="color:#00f">using</span> (<span style="color:#2b91af">var</span> scope = app.Services.CreateScope())
+{
+    <span style="color:#2b91af">var</span> services = scope.ServiceProvider;
+    <span style="color:#2b91af">var</span> context = services.GetRequiredService&lt;ApplicationDbContext&gt;();
+    <span style="color:#008000">// 保留中のマイグレーションを適用
+</span><span style="color:#008000"></span>    context.Database.Migrate();
+}
+
+<span style="color:#008000">// ... 以降のコード
+</span><span style="color:#008000"></span>app.Run();</code></pre></div>
+<p><strong>注意点</strong>: この方法は手軽ですが、複数のサーバーで同時にアプリが起動した場合などに問題が発生する可能性があります。本番環境では、デプロイスクリプトの一部として、前述の<code>.NET CLI</code>コマンドを明示的に実行する方法がより安全で推奨されます。</p>
+
+<h2 id="注意すべきポイント">注意すべきポイント</h2>
+
+<ol>
+<li>本番環境での慎重な適用：本番環境では事前にバックアップを取り、メンテナンス時間を設けて実行することが重要です。</li>
+<li>データ損失のリスク：列の削除やデータ型の変更時は、既存データが失われる可能性があります。事前に十分な検証を行いましょう。</li>
+<li>パフォーマンスへの影響：大量のデータを持つテーブルの変更は時間がかかる場合があります。</li>
+</ol>
+
+<h3 id="visual-studio-2022での実践">Visual Studio 2022での実践</h3>
+
+<h3 id="パッケージマネージャーコンソールの活用">パッケージマネージャーコンソールの活用</h3>
+
+<p>Visual Studio 2022では、パッケージマネージャーコンソールから以下のコマンドが使用できます：</p>
+
+<p><strong>基本的なマイグレーション操作</strong>:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#008000"># マイグレーションの追加</span>
+Add-Migration MigrationName
+
+<span style="color:#008000"># データベースの更新</span>
+Update-Database
+
+<span style="color:#008000"># 特定のマイグレーションまで戻す</span>
+Update-Database -Migration PreviousMigrationName
+
+<span style="color:#008000"># マイグレーション一覧の表示</span>
+Get-Migration
+
+<span style="color:#008000"># マイグレーションの削除（最新のもののみ）</span>
+Remove-Migration</code></pre></div>
+<h3 id="コマンドライン-net-cli-での実行">コマンドライン（.NET CLI）での実行</h3>
+
+<p>プロジェクトフォルダで以下のコマンドが使用できます：</p>
+
+<p><strong>基本的なマイグレーション操作</strong>:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># マイグレーションの追加
+</span><span style="color:#008000"></span>dotnet ef migrations add MigrationName
+
+<span style="color:#008000"># データベースの更新
+</span><span style="color:#008000"></span>dotnet ef database update
+
+<span style="color:#008000"># 特定のマイグレーションまで戻す
+</span><span style="color:#008000"></span>dotnet ef database update PreviousMigrationName
+
+<span style="color:#008000"># マイグレーション一覧の表示
+</span><span style="color:#008000"></span>dotnet ef migrations list
+
+<span style="color:#008000"># マイグレーションの削除（最新のもののみ）
+</span><span style="color:#008000"></span>dotnet ef migrations remove</code></pre></div>
+<h3 id="どちらを使用すべきか">どちらを使用すべきか？</h3>
+
+<ul>
+<li><strong>パッケージマネージャーコンソール</strong>: Visual Studio内での開発作業中に便利</li>
+<li><strong>.NET CLI</strong>: CI/CDパイプラインや自動化スクリプトに適している</li>
+</ul>
+
+<h3 id="ソリューションエクスプローラーでの確認">ソリューションエクスプローラーでの確認</h3>
+
+<p>生成されたマイグレーションファイルは「Migrations」フォルダに格納され、内容を直接確認・編集できます。</p>
+
+<h2 id="発展-blazorコンポーネントでデータを表示する">発展：Blazorコンポーネントでデータを表示する</h2>
+
+<p>マイグレーションで作成したデータベースを、実際にBlazorの画面で使ってみます。<code>Customer</code>テーブルのデータを一覧表示する簡単なページを作成します。</p>
+
+<p><strong>1. Customer一覧ページを作成</strong>
+<code>Pages</code>フォルダに<code>CustomerList.razor</code>というファイルを作成します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-razor" data-lang="razor">@page &#34;/customers&#34;
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext DbContext
+
+&lt;h3&gt;顧客一覧&lt;/h3&gt;
+
+@if (customers == null)
+{
+    &lt;p&gt;&lt;em&gt;読み込み中...&lt;/em&gt;&lt;/p&gt;
+}
+else
+{
+    &lt;table class=&#34;table&#34;&gt;
+        &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;ID&lt;/th&gt;
+                &lt;th&gt;名前&lt;/th&gt;
+                &lt;th&gt;Email&lt;/th&gt;
+            &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+            @foreach (var customer in customers)
+            {
+                &lt;tr&gt;
+                    &lt;td&gt;@customer.Id&lt;/td&gt;
+                    &lt;td&gt;@customer.Name&lt;/td&gt;
+                    &lt;td&gt;@customer.Email&lt;/td&gt;
+                &lt;/tr&gt;
+            }
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+}
+
+@code {
+    private List&lt;Customer&gt; customers;
+
+    // ページが初期化されるときに自動で実行されるメソッド
+    protected override async Task OnInitializedAsync()
+    {
+        // DbContextを使ってデータベースから全顧客データを取得
+        customers = await DbContext.Customers.ToListAsync();
+    }
+}</code></pre></div>
+<p><strong>コードのポイント</strong>:
+*   <strong><code>@inject ApplicationDbContext DbContext</code></strong>: <code>Program.cs</code>で登録した<code>DbContext</code>を、このページで使えるようにします。
+*   <strong><code>OnInitializedAsync</code></strong>: ページが表示される前に、<code>DbContext</code>を通じてデータベースにアクセスし、顧客データを取得しています。
+*   <strong><code>@foreach</code></strong>: 取得した顧客リストをループ処理でテーブルに表示しています。</p>
+
+<p>これで、アプリケーションを実行して<code>/customers</code>にアクセスすると、データベースに登録されている顧客情報が表示されます。
+このように、マイグレーションはデータベースの準備を自動化し、開発者が<strong>本来集中すべき画面や機能の実装に専念できる</strong>ようにしてくれる強力なツールなのです。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>Entity Frameworkのマイグレーション機能は、Blazorアプリケーション開発において欠かせない重要な機能です。適切に活用することで、データベース変更に伴うリスクを大幅に減らし、開発効率を向上させることができます。</p>
+
+<p>自分のような初学者の方は、まずテンプレートに対する小さな変更から始めて、マイグレーションの動作を理解することをお勧めします。慣れてきたら、より複雑な変更にも挑戦してみてください。</p>
+
+<p>現代のwebアプリケーション開発において、データベースの進化は避けられません。マイグレーション機能を習得することで、変化に柔軟に対応できる堅牢なシステムを構築できるようになるでしょう。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://learn.microsoft.com/ja-jp/ef/">Entity Framework</a></li>
+<li><a href="https://learn.microsoft.com/ja-jp/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli">移行の概要</a></li>
+<li><a href="https://learn.microsoft.com/ja-jp/ef/core/get-started/overview/first-app?tabs=netcore-cli">EF Core の使い方入門</a></li>
+<li><a href="https://zenn.dev/kmd_htsh0226/articles/2f49f0978a12cc2d1d5a">EF Core のマイグレーションがすごい便利だった</a></li>
+<li><a href="https://qiita.com/yutotakakura/items/31ab539321502deacd88">Entity Framework のマイグレーションを基礎から理解する</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

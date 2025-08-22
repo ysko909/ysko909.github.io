@@ -7,10 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Tue, 22 Jul 2025 10:57:43 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 22 Aug 2025 14:41:09 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Entity Framework マイグレーションの基本</title>
+      <link>https://ysko909.github.io/posts/fundamentals-of-migration-on-entity-framework/</link>
+      <pubDate>Fri, 22 Aug 2025 14:41:09 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/fundamentals-of-migration-on-entity-framework/</guid>
+      <description>概要 マイグレーションとは何か マイグレーション（Migration）とは、データベースの構造変更を安全かつ自動的に行うためのEntity Frameworkの機能です。
+C#のモデルクラス（設計図）の変更を検出し、それに合わせてデータベースの実際のテーブル構造を更新するプロセスを指します。「移行」という意味の通り、データベースを現在の状態から新しい状態へと段階的に移行させる仕組みです。この機能を利用することで、データベースに対する操作やSQLの作成と実行と言った、従来だと当たり前のように行っていた作業を簡素化することが可能です。
+最近はBlazor絡みのシステムに携わることが多いのですが、データベースをいじるときはEntity Framework（以下、EF）を使っています。今回はこのEFを利用する際に必要になるマイグレーションに関して、基本的な知識や実行方法についてまとめてみました。
+EF＆マイグレーションのメリット  SQL不要：C#だけで完結 エラー減少：自動生成でヒューマンエラー防止 開発スピードUP：数分でDB更新  事前準備：プロジェクトにEF Coreを導入する マイグレーションを始める前に、まずはBlazorプロジェクトにEntity Framework Core (EF Core) を導入し、データベースと通信できるように設定しましょう。ここが全ての土台となります。
+ステップ1：必要なパッケージのインストール Visual Studioの「パッケージマネージャーコンソール」で以下のコマンドを実行し、EF Coreに必要なツールをインストールします。
+# データベースプロバイダー (ここではSQL Server) Install-Package Microsoft.EntityFrameworkCore.SqlServer # EF Coreのコマンドラインツール Install-Package Microsoft.EntityFrameworkCore.Tools ステップ2：接続文字列の設定 データベースの場所や認証情報を定義します。プロジェクトルートにあるappsettings.jsonファイルに、以下のようにConnectionStringsを追加します。
+{ &amp;#34;ConnectionStrings&amp;#34;: { &amp;#34;DefaultConnection&amp;#34;: &amp;#34;Server=(localdb)\\mssqllocaldb;Database=MyBlazorAppDb;Trusted_Connection=True;&amp;#34; }, &amp;#34;Logging&amp;#34;: { // ... }, &amp;#34;AllowedHosts&amp;#34;: &amp;#34;*&amp;#34; }  Server=(localdb)\\mssqllocaldb: Visual Studioと一緒にインストールされる開発用のSQL Serverです。 Database=MyBlazorAppDb: これから作成するデータベース名です。  ステップ3：DbContextの登録 アプリケーション全体でデータベース接続を使い回せるように、Program.csにDbContextを「サービス」として登録します。これは「依存性の注入（DI）」と呼ばれる仕組みで、「必要な時に自動でDbContextを準備してください」と.NETにお願いするおまじないのようなものだと思ってください。
+Program.csファイルを開き、builder.Build()の前に以下のコードを追加してください。
+// using Microsoft.EntityFrameworkCore; をファイルの先頭に追加  var connectionString = builder.</description>
+    </item>
     
     <item>
       <title>Windows11でリモートデスクトップ接続がエラーコード0x3で切断される</title>
