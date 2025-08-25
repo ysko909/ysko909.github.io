@@ -7,10 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Fri, 22 Aug 2025 14:41:09 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 25 Aug 2025 13:36:03 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Git stashの基本</title>
+      <link>https://ysko909.github.io/posts/fundamentals-of-git-stash/</link>
+      <pubDate>Mon, 25 Aug 2025 13:36:03 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/fundamentals-of-git-stash/</guid>
+      <description>「機能開発の途中だけど、急ぎで別のバグ修正を頼まれた」「まだコミットしたくないけど、他のブランチの様子をちょっと見たい」などなど、開発現場ではこんなふうに作業を中断せざるを得ない場面が頻繁に訪れます。そんな時、あなたはどうしていますか？ 中途半端な状態で無理やりコミットしたり、変更内容をどこかに手動でコピーしたりしていませんか？
+そんな悩みを一発で解決してくれる魔法のような機能が、Gitの git stash（スタッシュ） です。この記事を読めば、git stashの概念から応用までを完全にマスターし、あなたの開発効率を劇的に向上させることができます。
+git stashとは git stashとは、まだコミットしていない作業内容（変更）を、一時的に別の場所に退避させておく ための機能です。
+たとえば、あなたは今、机の上でプラモデルを作っています。パーツを切り出し、接着剤でくっつけ始めたところです（＝コーディング中）。そこへ急な来客があり、机をすぐに片付けなければならなくなりました（＝緊急の修正依頼）。この時、作りかけのプラモデルを箱にしまって、机の上を一旦まっさらにしますよね。来客対応が終わったら、また箱から取り出して作業を再開できます。
+この「一時的に箱にしまう」という行為が、まさにgit stashです。git stashを使うと、作業ディレクトリを最後にコミットしたきれいな状態に戻せるので、安心して別の作業に取り掛かることができます。
+git stashの基本的な使い方 git stashの操作は非常にシンプルです。基本的な流れは以下の3ステップです。
+ 退避 確認 復元  作業を退避する (git stash / git stash push) 現在のブランチで行った変更を一時退避させます。最も基本的なコマンドは git stash ですが、これは git stash push の省略形です。
+どの作業を退避させたか後で分かるように、メッセージを付けておくことを推奨します。メッセージを付けるには push サブコマンドと -m ( --message ) オプションを使います。メッセージを付与しておかないと、後で見返したときに「これなんの履歴だっけ？」となること請け合いです。とくに、git stash popせずstashリストに残りっぱなしだとこうなりがち。
+# メッセージを付けてstashに退避 $ git stash push -m &amp;#34;WIP: ログイン画面のUI調整中&amp;#34; Saved working directory and index state On feature/new-login: WIP: ログイン画面のUI調整中 もちろん、メッセージ無しで退避することも可能です。</description>
+    </item>
     
     <item>
       <title>Entity Framework マイグレーションの基本</title>

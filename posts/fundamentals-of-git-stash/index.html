@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Git stashの基本 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Git stashの基本" />
+<meta property="og:description" content="「機能開発の途中だけど、急ぎで別のバグ修正を頼まれた」「まだコミットしたくないけど、他のブランチの様子をちょっと見たい」などなど、開発現場ではこんなふうに作業を中断せざるを得ない場面が頻繁に訪れます。そんな時、あなたはどうしていますか？ 中途半端な状態で無理やりコミットしたり、変更内容をどこかに手動でコピーしたりしていませんか？
+そんな悩みを一発で解決してくれる魔法のような機能が、Gitの git stash（スタッシュ） です。この記事を読めば、git stashの概念から応用までを完全にマスターし、あなたの開発効率を劇的に向上させることができます。
+git stashとは git stashとは、まだコミットしていない作業内容（変更）を、一時的に別の場所に退避させておく ための機能です。
+たとえば、あなたは今、机の上でプラモデルを作っています。パーツを切り出し、接着剤でくっつけ始めたところです（＝コーディング中）。そこへ急な来客があり、机をすぐに片付けなければならなくなりました（＝緊急の修正依頼）。この時、作りかけのプラモデルを箱にしまって、机の上を一旦まっさらにしますよね。来客対応が終わったら、また箱から取り出して作業を再開できます。
+この「一時的に箱にしまう」という行為が、まさにgit stashです。git stashを使うと、作業ディレクトリを最後にコミットしたきれいな状態に戻せるので、安心して別の作業に取り掛かることができます。
+git stashの基本的な使い方 git stashの操作は非常にシンプルです。基本的な流れは以下の3ステップです。
+ 退避 確認 復元  作業を退避する (git stash / git stash push) 現在のブランチで行った変更を一時退避させます。最も基本的なコマンドは git stash ですが、これは git stash push の省略形です。
+どの作業を退避させたか後で分かるように、メッセージを付けておくことを推奨します。メッセージを付けるには push サブコマンドと -m ( --message ) オプションを使います。メッセージを付与しておかないと、後で見返したときに「これなんの履歴だっけ？」となること請け合いです。とくに、git stash popせずstashリストに残りっぱなしだとこうなりがち。
+# メッセージを付けてstashに退避 $ git stash push -m &#34;WIP: ログイン画面のUI調整中&#34; Saved working directory and index state On feature/new-login: WIP: ログイン画面のUI調整中 もちろん、メッセージ無しで退避することも可能です。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-git-stash/" /><meta property="article:published_time" content="2025-08-25T13:36:03&#43;09:00"/>
+<meta property="article:modified_time" content="2025-08-25T13:36:03&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Git stashの基本"/>
+<meta name="twitter:description" content="「機能開発の途中だけど、急ぎで別のバグ修正を頼まれた」「まだコミットしたくないけど、他のブランチの様子をちょっと見たい」などなど、開発現場ではこんなふうに作業を中断せざるを得ない場面が頻繁に訪れます。そんな時、あなたはどうしていますか？ 中途半端な状態で無理やりコミットしたり、変更内容をどこかに手動でコピーしたりしていませんか？
+そんな悩みを一発で解決してくれる魔法のような機能が、Gitの git stash（スタッシュ） です。この記事を読めば、git stashの概念から応用までを完全にマスターし、あなたの開発効率を劇的に向上させることができます。
+git stashとは git stashとは、まだコミットしていない作業内容（変更）を、一時的に別の場所に退避させておく ための機能です。
+たとえば、あなたは今、机の上でプラモデルを作っています。パーツを切り出し、接着剤でくっつけ始めたところです（＝コーディング中）。そこへ急な来客があり、机をすぐに片付けなければならなくなりました（＝緊急の修正依頼）。この時、作りかけのプラモデルを箱にしまって、机の上を一旦まっさらにしますよね。来客対応が終わったら、また箱から取り出して作業を再開できます。
+この「一時的に箱にしまう」という行為が、まさにgit stashです。git stashを使うと、作業ディレクトリを最後にコミットしたきれいな状態に戻せるので、安心して別の作業に取り掛かることができます。
+git stashの基本的な使い方 git stashの操作は非常にシンプルです。基本的な流れは以下の3ステップです。
+ 退避 確認 復元  作業を退避する (git stash / git stash push) 現在のブランチで行った変更を一時退避させます。最も基本的なコマンドは git stash ですが、これは git stash push の省略形です。
+どの作業を退避させたか後で分かるように、メッセージを付けておくことを推奨します。メッセージを付けるには push サブコマンドと -m ( --message ) オプションを使います。メッセージを付与しておかないと、後で見返したときに「これなんの履歴だっけ？」となること請け合いです。とくに、git stash popせずstashリストに残りっぱなしだとこうなりがち。
+# メッセージを付けてstashに退避 $ git stash push -m &#34;WIP: ログイン画面のUI調整中&#34; Saved working directory and index state On feature/new-login: WIP: ログイン画面のUI調整中 もちろん、メッセージ無しで退避することも可能です。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Git stashの基本</h1>
+			<div class="meta">Posted at &mdash; Aug 25, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<p>「機能開発の途中だけど、急ぎで別のバグ修正を頼まれた」「まだコミットしたくないけど、他のブランチの様子をちょっと見たい」などなど、開発現場ではこんなふうに作業を中断せざるを得ない場面が頻繁に訪れます。そんな時、あなたはどうしていますか？ 中途半端な状態で無理やりコミットしたり、変更内容をどこかに手動でコピーしたりしていませんか？</p>
+
+<p>そんな悩みを一発で解決してくれる魔法のような機能が、Gitの <strong><code>git stash</code>（スタッシュ）</strong> です。この記事を読めば、<code>git stash</code>の概念から応用までを完全にマスターし、あなたの開発効率を劇的に向上させることができます。</p>
+
+<h2 id="git-stash-とは"><code>git stash</code>とは</h2>
+
+<p><code>git stash</code>とは、まだコミットしていない作業内容（変更）を、<strong>一時的に別の場所に退避させておく</strong> ための機能です。</p>
+
+<p>たとえば、あなたは今、机の上でプラモデルを作っています。パーツを切り出し、接着剤でくっつけ始めたところです（＝コーディング中）。そこへ急な来客があり、机をすぐに片付けなければならなくなりました（＝緊急の修正依頼）。この時、作りかけのプラモデルを箱にしまって、机の上を一旦まっさらにしますよね。来客対応が終わったら、また箱から取り出して作業を再開できます。</p>
+
+<p>この「一時的に箱にしまう」という行為が、まさに<code>git stash</code>です。<code>git stash</code>を使うと、作業ディレクトリを最後にコミットしたきれいな状態に戻せるので、安心して別の作業に取り掛かることができます。</p>
+
+<h2 id="git-stash-の基本的な使い方"><code>git stash</code>の基本的な使い方</h2>
+
+<p><code>git stash</code>の操作は非常にシンプルです。基本的な流れは以下の3ステップです。</p>
+
+<ol>
+<li>退避</li>
+<li>確認</li>
+<li>復元</li>
+</ol>
+
+<h3 id="作業を退避する-git-stash-git-stash-push">作業を退避する (<code>git stash</code> / <code>git stash push</code>)</h3>
+
+<p>現在のブランチで行った変更を一時退避させます。最も基本的なコマンドは <code>git stash</code> ですが、これは <code>git stash push</code> の省略形です。</p>
+
+<p>どの作業を退避させたか後で分かるように、<strong>メッセージを付けておくこと</strong>を推奨します。メッセージを付けるには <code>push</code> サブコマンドと <code>-m</code> ( <code>--message</code> ) オプションを使います。メッセージを付与しておかないと、後で見返したときに「これなんの履歴だっけ？」となること請け合いです。とくに、<code>git stash pop</code>せずstashリストに残りっぱなしだとこうなりがち。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># メッセージを付けてstashに退避
+</span><span style="color:#008000"></span>$ git stash push -m <span style="color:#a31515">&#34;WIP: ログイン画面のUI調整中&#34;</span>
+Saved working directory and index state On feature/new-login: WIP: ログイン画面のUI調整中</code></pre></div>
+<p>もちろん、メッセージ無しで退避することも可能です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># メッセージ無しでstashに退避
+</span><span style="color:#008000"></span>$ git stash
+<span style="color:#008000"># or
+</span><span style="color:#008000"></span>$ git stash push</code></pre></div>
+<p>すぐ<code>git stash pop</code>するなら、このような方法でも問題ないと思います。</p>
+
+<h4 id="save-と-push-の違い"><code>save</code> と <code>push</code> の違い</h4>
+
+<p>以前は <code>git stash save &quot;メッセージ&quot;</code> というコマンドが使われていましたが、現在は<strong>非推奨</strong>（deprecated）とされています。機能は <code>git stash push -m &quot;メッセージ&quot;</code> と同じですが、今後は <code>push</code> を使うようにしましょう。</p>
+
+<h3 id="退避した作業一覧を見る-git-stash-list">退避した作業一覧を見る (<code>git stash list</code>)</h3>
+
+<p>退避させた作業は、<code>git stash</code>のリストに積み重なっていきます。<code>list</code>コマンドで確認できます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ git stash list
+stash@{0}: On feature/new-login: WIP: ログイン画面のUI調整中
+stash@{1}: On feature/old-feature: WIP on feature/old-feature: ...</code></pre></div>
+<p><code>stash@{0}</code>が一番新しく退避した作業です。古いものほど数字が大きくなります。</p>
+
+<h3 id="退避した作業を復元する-git-stash-apply-git-stash-pop">退避した作業を復元する (<code>git stash apply</code> / <code>git stash pop</code>)</h3>
+
+<p>退避した作業を元に戻して、作業を再開します。復元には2つのコマンドがあります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># 最新のstashを復元（stashはリストに残る）
+</span><span style="color:#008000"></span>$ git stash apply
+
+<span style="color:#008000"># 最新のstashを復元（stashはリストから削除される）
+</span><span style="color:#008000"></span>$ git stash pop</code></pre></div>
+<p>デフォルトでは最新の<code>stash@{0}</code>が復元されます。どちらのコマンドを使うべきかについては、次のセクションで詳しく解説します。</p>
+
+<h4 id="pop-vs-apply-どちらを使うべき"><code>pop</code> vs <code>apply</code>：どちらを使うべき？</h4>
+
+<p><code>git stash</code>を復元する2つのコマンド、<code>pop</code>と<code>apply</code>には明確な違いがあります。</p>
+
+<ul>
+<li><strong><code>git stash pop</code></strong>: 復元 + <strong>stashリストから削除</strong>
+
+<ul>
+<li>「魔法の引き出しから作業物を取り出して、引き出しの中は空にする」イメージです。</li>
+<li>一度きりの復元で良い場合に使う、<strong>最も一般的な方法</strong>です。</li>
+</ul></li>
+<li><strong><code>git stash apply</code></strong>: 復元のみ。<strong>stashリストには残る</strong>
+
+<ul>
+<li>「引き出しの中身をコピーして机に広げる」イメージです。</li>
+<li>同じ作業内容を、<strong>複数のブランチに適用したい</strong>場合などに便利です。</li>
+</ul></li>
+</ul>
+
+<p><strong>使い分けのポイント</strong></p>
+
+<table>
+<thead>
+<tr>
+<th align="left">コマンド</th>
+<th align="left">動作</th>
+<th align="left">おすすめのシーン</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left"><code>git stash pop</code></td>
+<td align="left">復元して、リストから削除する</td>
+<td align="left">基本はこれ。退避した作業を元に戻して作業を再開するとき</td>
+</tr>
+
+<tr>
+<td align="left"><code>git stash apply</code></td>
+<td align="left">復元するが、リストには残したまま</td>
+<td align="left">同じ変更を複数のブランチに適用したいとき</td>
+</tr>
+</tbody>
+</table>
+
+<p>特別な理由がなければ、まずは<code>pop</code>を使えばいいと覚えておけば、とりあえず問題ないと思います。</p>
+
+<h2 id="知っておくと便利な-git-stash-応用テクニック">知っておくと便利な<code>git stash</code>応用テクニック</h2>
+
+<p>基本操作を覚えたら、さらに便利な応用テクニックもマスターしましょう。</p>
+
+<h3 id="特定のstashを操作する">特定のstashを操作する</h3>
+
+<p><code>stash@{n}</code>のように番号を指定することで、最新ではないstashを操作できます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># 2番目(stash@{1})のstashの変更内容を確認
+</span><span style="color:#008000"></span>$ git stash show stash@{1}
+
+<span style="color:#008000"># 3番目(stash@{2})のstashを復元（リストには残る）
+</span><span style="color:#008000"></span>$ git stash apply stash@{2}
+
+<span style="color:#008000"># 2番目(stash@{1})のstashを削除
+</span><span style="color:#008000"></span>$ git stash drop stash@{1}</code></pre></div>
+<h3 id="untrackedファイルも一緒に退避する-u">Untrackedファイルも一緒に退避する (<code>-u</code>)</h3>
+
+<p><code>git add</code>していない新規作成ファイル（Untracked files）は、デフォルトでは<code>git stash</code>の対象になりません。これらも一緒に退避させたい場合は<code>-u</code>オプションを付けます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># 未追跡ファイルも含めてstash
+</span><span style="color:#008000"></span>$ git stash -u
+<span style="color:#008000"># or
+</span><span style="color:#008000"></span>$ git stash --include-untracked</code></pre></div>
+<p>ケースバイケースではあるものの、個人的には比較的よく利用するオプションです。というのも、しっかりこまめに<code>git add</code>してないからです＿(　_´ω`)_ﾍﾟｼｮ</p>
+
+<h3 id="gitignoreのファイルも-ほぼ-すべて退避する-a">.gitignoreのファイルも（ほぼ）すべて退避する (<code>-a</code>)</h3>
+
+<p><code>.gitignore</code>で意図的に無視しているファイルも含め、すべての変更を退避させたい場合は<code>-a</code>オプションを使います。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># 無視ファイル、未追跡ファイルも含めて全てstash
+</span><span style="color:#008000"></span>$ git stash -a
+<span style="color:#008000"># or
+</span><span style="color:#008000"></span>$ git stash --all</code></pre></div>
+<p>たとえば、「デバッグ中に急遽別のバグ対応をしなければならない」という場合が、このオプションを利用するケースでしょう。大抵、デバッグ用のコードなどは<code>.gitignore</code>で意図的に無視している場合が多いため、「デバッグ途中の状態を保持しておきたい」となると、<code>.gitignore</code>で意図的に無視しているファイルも退避する対象に含める必要があるからです。逆に言えば、そのようなケースでない場合は、あまり利用しないオプションだと思います。</p>
+
+<h3 id="ステージングした変更だけを退避する-s-staged">ステージングした変更だけを退避する (<code>-S</code> / <code>--staged</code> )</h3>
+
+<p><strong><code>git add</code>した変更（ステージングエリアにある変更）のみ</strong>を<code>git stash</code>したい場合において、非常に便利なオプションです。</p>
+
+<p><code>git add</code>したものの、コミットメッセージを考えたり、関連する変更をもう少し加えたりしたい。でも、ステージングしていない変更（デバッグ用のコードなど）は<code>git stash</code>に含めたくない…そんな場面で役立ちます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># 1. 変更Aと変更Bを行う
+</span><span style="color:#008000"># (file.txt に A を追記, debug.log に B を追記)
+</span><span style="color:#008000"></span>
+<span style="color:#008000"># 2. コミットしたい変更Aだけをステージング
+</span><span style="color:#008000"></span>$ git add file.txt
+
+<span style="color:#008000"># 3. ステージングした変更だけをstash
+</span><span style="color:#008000"></span>$ git stash --staged
+Saved working directory and index state WIP on main: ...
+
+<span style="color:#008000"># この時点で、file.txtの変更は退避され、
+</span><span style="color:#008000"></span># debug.logの変更は作業ディレクトリに残ったままになる</code></pre></div>
+<h3 id="apply-と-pop-でステージング状態も復元する-index"><code>apply</code>と<code>pop</code>でステージング状態も復元する (<code>--index</code>)</h3>
+
+<p><code>git stash</code>する際にステージングされていた変更は、<code>apply</code>や<code>pop</code>で復元する際にもその状態を維持したいですよね。そんな時に使うのが<code>--index</code>オプションです。</p>
+
+<p>通常、<code>git stash pop</code>を実行すると、退避した変更はすべて「ステージングされていない状態」で作業ディレクトリに戻ります。</p>
+
+<p>しかし、<code>--index</code>オプションを付けて復元すると、<strong><code>git stash</code>した時点でのステージング状態が再現されます。</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># 1. file_A.txt と file_B.txt を変更
+</span><span style="color:#008000"># 2. file_A.txt のみステージング
+</span><span style="color:#008000"></span>$ git add file_A.txt
+
+<span style="color:#008000"># 3. stashに退避
+</span><span style="color:#008000"></span>$ git stash
+
+<span style="color:#008000"># ... (別の作業) ...
+</span><span style="color:#008000"></span>
+<span style="color:#008000"># 4. --index を付けて復元
+</span><span style="color:#008000"></span>$ git stash pop --index
+
+<span style="color:#008000"># この時点で `git status` を確認すると...
+</span><span style="color:#008000"># Changes to be committed:
+</span><span style="color:#008000">#   (use &#34;git restore --staged &lt;file&gt;...&#34; to unstage)
+</span><span style="color:#008000">#         modified:   file_A.txt  &lt;- ステージング状態が復元されている。
+</span><span style="color:#008000">#
+</span><span style="color:#008000"># Changes not staged for commit:
+</span><span style="color:#008000">#   (use &#34;git add &lt;file&gt;...&#34; to update what will be committed)
+</span><span style="color:#008000">#   (use &#34;git restore &lt;file&gt;...&#34; to discard changes in working directory)
+</span><span style="color:#008000"></span>#         modified:   file_B.txt</code></pre></div>
+<p>このオプションを使えば、「この変更はコミットする予定だった」という状態まで正確に復元できるため、作業の再開がよりスムーズになります。</p>
+
+<h3 id="stashを完全に消去する-git-stash-clear">stashを完全に消去する (<code>git stash clear</code>)</h3>
+
+<p>溜まったstashをすべて一括で削除します。<strong>一度削除すると元に戻せない</strong>ので注意して利用してください。というか、あまりこのコマンドは個人的には使ったことがありません。<code>git stash pop</code>して残さないからかもしれません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># 全てのstashを削除
+</span><span style="color:#008000"></span>$ git stash clear</code></pre></div>
+<h2 id="こんな時に-git-stash">こんな時に<code>git stash</code></h2>
+
+<p>具体的なシナリオで<code>git stash</code>の使い方を見てみましょう。</p>
+
+<h3 id="緊急のバグ修正">緊急のバグ修正</h3>
+
+<p>あなたは<code>feature/new-design</code>ブランチで新デザインの実装中です。しかし、上司から「公開中のサイトで緊急のバグが見つかったから、すぐに修正して。」と頼まれました。このとき、現在対応している修正をいったん横において、バグ対応する必要があります。このようなときに<code>git stash</code>を利用します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># 1. 現在の作業をstashに退避
+</span><span style="color:#008000"></span>$ git stash push -m <span style="color:#a31515">&#34;WIP: 新デザインのヘッダー実装中&#34;</span>
+
+<span style="color:#008000"># 2. メインブランチに移動し、最新の状態にする
+</span><span style="color:#008000"></span>$ git switch main
+$ git pull origin main
+
+<span style="color:#008000"># 3. バグ修正用のブランチを作成して修正作業
+</span><span style="color:#008000"></span>$ git switch -c hotfix/critical-bug
+<span style="color:#008000"># ... (バグを修正してコミット)
+</span><span style="color:#008000"></span>$ git commit -am <span style="color:#a31515">&#34;Fix: 致命的なバグを修正&#34;</span>
+
+<span style="color:#008000"># 4. mainブランチにマージしてプッシュ
+</span><span style="color:#008000"></span>$ git switch main
+$ git merge hotfix/critical-bug
+$ git push origin main
+
+<span style="color:#008000"># 5. 元の作業ブランチに戻る
+</span><span style="color:#008000"></span>$ git switch feature/new-design
+
+<span style="color:#008000"># 6. 退避しておいた作業を復元して再開。
+</span><span style="color:#008000"></span>$ git stash pop</code></pre></div>
+<p>これで、コミットを汚すことなく、スマートに緊急対応ができました。</p>
+
+<h3 id="まだコミットしたくないが-別のブランチを確認したい">まだコミットしたくないが、別のブランチを確認したい</h3>
+
+<p>上手く行かないデバッグの気分転換に、別のブランチの進捗状況を確認したいとします。その際は、中途半端になっている現在のブランチをどうにかしないといけません。そのようなときに<code>git stash</code>を利用します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># 1. 中途半端な作業を一時退避
+</span><span style="color:#008000"></span>$ git stash push -m <span style="color:#a31515">&#34;WIP: feature/A のロジック実装途中&#34;</span>
+
+<span style="color:#008000"># 2. 確認したいブランチに移動
+</span><span style="color:#008000"></span>$ git switch feature/B
+<span style="color:#008000"># ... (コードの確認や議論) ...
+</span><span style="color:#008000"></span>
+<span style="color:#008000"># 3. 元の作業ブランチに戻り、作業を再開
+</span><span style="color:#008000"></span>$ git switch feature/A
+$ git stash pop</code></pre></div>
+<h2 id="まとめ">まとめ</h2>
+
+<p><code>git stash</code>は、日々の開発業務で発生する「作業の中断」にスマートに対応するための必須ツールです。</p>
+
+<ul>
+<li>作業を中断するときは <code>git stash</code></li>
+<li>作業を再開するときは <code>git stash pop</code></li>
+<li><code>pop</code>と<code>apply</code>の違いを理解して使い分ける</li>
+<li>ステージング状態も復元したいときは <code>pop --index</code></li>
+<li>特定の変更だけを退避させたいときは <code>add</code> してから <code>stash --staged</code></li>
+</ul>
+
+<p>これらのポイントを押さえるだけで、あなたのGitライフはより快適で効率的なものになります。もう作業の中断を恐れる必要はありません。<code>git stash</code>を使いこなし、ワンランク上の開発者を目指しましょう。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://git-scm.com/docs/git-stash">Git stash</a></li>
+<li><a href="https://qiita.com/chihiro/items/f373873d5c2dfbd03250">【git stash】コミットはせずに変更を退避したいとき</a></li>
+<li><a href="https://note.com/yukikkoaimanabi/n/n574b900a2e72">Git Stash 完全ガイド &amp; チートシート#新人エンジニア向け</a></li>
+<li><a href="https://www.atlassian.com/git/tutorials/saving-changes/git-stash">Git Stash</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
