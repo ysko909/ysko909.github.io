@@ -7,10 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Mon, 25 Aug 2025 13:36:03 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 26 Aug 2025 18:19:34 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>「Interactivity render mode」と「Interactivity location」とは何か</title>
+      <link>https://ysko909.github.io/posts/basics-of-blazor-web-app-settings-about-interactivity/</link>
+      <pubDate>Tue, 26 Aug 2025 18:19:34 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/basics-of-blazor-web-app-settings-about-interactivity/</guid>
+      <description>概要 .NET 8 からの Blazor Web App テンプレートには、作成ウィザードで Interactivity render mode（どの相互運用モードを有効にするか）と Interactivity location（どこにそのモードを適用するか）という2つの重要な設定があります。
+上記のスクショはその作成ウィザードです。日本語化されているためなんだか妙な感じですが、「インタラクティビティ型」が「Interactivity render mode」に、「インタラクティビティ場所」が「Interactivity location」に相当します。単純に直訳しただけじゃん・・・。
+この記事では、その概要と仕組み、選択肢ごとの動作や注意点・実装例をまとめます。
+Blazor の「レンダーモード」とは Blazor Web App（.NET 8 以降）では、各 Razor コンポーネントが「レンダーモード」を持ちます。これにより「どこで（サーバー／クライアント）」「どの方式で（静的／対話）」描画・イベント処理するかを柔軟に切り替えられます。
+   モード 説明 レンダー場所 インタラクティブ     Static Server 静的 SSR（HTML をサーバーで描画して返すのみ） サーバー いいえ   Interactive Server Blazor Server による対話的 SSR サーバー はい   Interactive WebAssembly Blazor WebAssembly によるクライアント側描画（CSR） クライアント はい   Interactive Auto 初回は Server、以降は WASM（バンドル取得後に CSR） サーバー→クライアント はい    なお、対話コンポーネントでは 既定でプレレンダリング（prerendering）有効です。必要ならオフにもできます（一部の例外やWASMのみの構成など、手動調整が必要な場合もあります）。</description>
+    </item>
     
     <item>
       <title>Git stashの基本</title>
