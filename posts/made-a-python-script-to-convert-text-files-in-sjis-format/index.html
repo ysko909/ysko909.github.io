@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Windowsのエンコードで悩みたくないからPythonスクリプトを作った - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Windowsのエンコードで悩みたくないからPythonスクリプトを作った" />
+<meta property="og:description" content="はじめに WindowsとMac、あるいはLinuxとの間でテキストファイルをやり取りしたとき、文字化けに遭遇して「うわっ・・・」ってなった経験ありますか？自分はあります、しこたまあります。
+原因の多くは、Windowsが標準で使うShift_JIS (SJIS)と、MacやLinuxで標準のUTF-8という文字コードの違いです。メモ帳で書いた文章が、別の環境だと謎の記号の羅列になってしまう、あの現象です。
+毎回テキストエディタで開き直して、エンコーディングを指定して保存し直すのも面倒くさい・・・。特にそういうファイルが大量にあるときは、もう考えただけでうっとりうんざりします。
+そこで、この面倒な作業をコマンド一発で解決するために、シンプルなPythonスクリプトをざっと作ってみました。今日はその紹介です。
+作成したスクリプトの概要 今回作ったのは、テキストファイルのエンコーディングをSJISとUTF-8で相互変換できるCUIツールです。
+主な機能はこんな感じです。
+ SJIS ⇔ UTF-8の双方向変換: デフォルトはSJISからUTF-8へ、オプション指定で逆もOK。 ファイル・フォルダ対応: 単一のファイルはもちろん、フォルダを指定すれば中の.txtファイルや.mdファイルをまとめて一括変換します。 上書き・新規作成モード: 元ファイルを直接上書きするか、変換後のファイルを別名で新規作成するかを選べます。（デフォルトは安全な新規作成） エンコーディング自動検出: 変換元のファイルのエンコーディングを自動で判別しようと試みます。 追加ライブラリ不要: Python 3.6以降の標準ライブラリだけで動くので、環境構築も楽ちんです。  「ちょっとこのフォルダのテキスト、全部UTF-8にしておきたいな」なんて時に、サッと使えるツールを目指しました。
+Pythonスクリプトのコード 作成したスクリプトのコードは以下の通りです。
+import os import sys import glob import argparse from pathlib import Path def detect_encoding(file_path): &#34;&#34;&#34;ファイルのエンコーディングを検出する&#34;&#34;&#34; encodings = [&#39;utf-8&#39;, &#39;shift_jis&#39;, &#39;cp932&#39;, &#39;euc-jp&#39;, &#39;iso-2022-jp&#39;] for encoding in encodings: try: with open(file_path, &#39;r&#39;, encoding=encoding) as f: f.read() return encoding except UnicodeDecodeError: continue except Exception: continue return None def convert_file_encoding(input_file, from_encoding, to_encoding, overwrite=False, quiet=False): &#34;&#34;&#34;ファイルのエンコーディングを変換する&#34;&#34;&#34; try: # ファイルを読み込み with open(input_file, &#39;r&#39;, encoding=from_encoding) as f: content = f." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/made-a-python-script-to-convert-text-files-in-sjis-format/" /><meta property="article:published_time" content="2025-08-27T15:01:23&#43;09:00"/>
+<meta property="article:modified_time" content="2025-08-27T15:01:23&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Windowsのエンコードで悩みたくないからPythonスクリプトを作った"/>
+<meta name="twitter:description" content="はじめに WindowsとMac、あるいはLinuxとの間でテキストファイルをやり取りしたとき、文字化けに遭遇して「うわっ・・・」ってなった経験ありますか？自分はあります、しこたまあります。
+原因の多くは、Windowsが標準で使うShift_JIS (SJIS)と、MacやLinuxで標準のUTF-8という文字コードの違いです。メモ帳で書いた文章が、別の環境だと謎の記号の羅列になってしまう、あの現象です。
+毎回テキストエディタで開き直して、エンコーディングを指定して保存し直すのも面倒くさい・・・。特にそういうファイルが大量にあるときは、もう考えただけでうっとりうんざりします。
+そこで、この面倒な作業をコマンド一発で解決するために、シンプルなPythonスクリプトをざっと作ってみました。今日はその紹介です。
+作成したスクリプトの概要 今回作ったのは、テキストファイルのエンコーディングをSJISとUTF-8で相互変換できるCUIツールです。
+主な機能はこんな感じです。
+ SJIS ⇔ UTF-8の双方向変換: デフォルトはSJISからUTF-8へ、オプション指定で逆もOK。 ファイル・フォルダ対応: 単一のファイルはもちろん、フォルダを指定すれば中の.txtファイルや.mdファイルをまとめて一括変換します。 上書き・新規作成モード: 元ファイルを直接上書きするか、変換後のファイルを別名で新規作成するかを選べます。（デフォルトは安全な新規作成） エンコーディング自動検出: 変換元のファイルのエンコーディングを自動で判別しようと試みます。 追加ライブラリ不要: Python 3.6以降の標準ライブラリだけで動くので、環境構築も楽ちんです。  「ちょっとこのフォルダのテキスト、全部UTF-8にしておきたいな」なんて時に、サッと使えるツールを目指しました。
+Pythonスクリプトのコード 作成したスクリプトのコードは以下の通りです。
+import os import sys import glob import argparse from pathlib import Path def detect_encoding(file_path): &#34;&#34;&#34;ファイルのエンコーディングを検出する&#34;&#34;&#34; encodings = [&#39;utf-8&#39;, &#39;shift_jis&#39;, &#39;cp932&#39;, &#39;euc-jp&#39;, &#39;iso-2022-jp&#39;] for encoding in encodings: try: with open(file_path, &#39;r&#39;, encoding=encoding) as f: f.read() return encoding except UnicodeDecodeError: continue except Exception: continue return None def convert_file_encoding(input_file, from_encoding, to_encoding, overwrite=False, quiet=False): &#34;&#34;&#34;ファイルのエンコーディングを変換する&#34;&#34;&#34; try: # ファイルを読み込み with open(input_file, &#39;r&#39;, encoding=from_encoding) as f: content = f."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Windowsのエンコードで悩みたくないからPythonスクリプトを作った</h1>
+			<div class="meta">Posted at &mdash; Aug 27, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>WindowsとMac、あるいはLinuxとの間でテキストファイルをやり取りしたとき、文字化けに遭遇して「うわっ・・・」ってなった経験ありますか？自分はあります、<strong>しこたまあります</strong>。</p>
+
+<p>原因の多くは、Windowsが標準で使うShift_JIS (SJIS)と、MacやLinuxで標準のUTF-8という文字コードの違いです。メモ帳で書いた文章が、別の環境だと謎の記号の羅列になってしまう、あの現象です。</p>
+
+<p>毎回テキストエディタで開き直して、エンコーディングを指定して保存し直すのも面倒くさい・・・。特にそういうファイルが大量にあるときは、もう考えただけで<del>うっとり</del>うんざりします。</p>
+
+<p>そこで、この面倒な作業をコマンド一発で解決するために、シンプルなPythonスクリプトをざっと作ってみました。今日はその紹介です。</p>
+
+<h2 id="作成したスクリプトの概要">作成したスクリプトの概要</h2>
+
+<p>今回作ったのは、テキストファイルのエンコーディングをSJISとUTF-8で相互変換できるCUIツールです。</p>
+
+<p>主な機能はこんな感じです。</p>
+
+<ul>
+<li>SJIS ⇔ UTF-8の双方向変換: デフォルトはSJISからUTF-8へ、オプション指定で逆もOK。</li>
+<li>ファイル・フォルダ対応: 単一のファイルはもちろん、フォルダを指定すれば中の<code>.txt</code>ファイルや<code>.md</code>ファイルをまとめて一括変換します。</li>
+<li>上書き・新規作成モード: 元ファイルを直接上書きするか、変換後のファイルを別名で新規作成するかを選べます。（デフォルトは安全な新規作成）</li>
+<li>エンコーディング自動検出: 変換元のファイルのエンコーディングを自動で判別しようと試みます。</li>
+<li>追加ライブラリ不要: Python 3.6以降の標準ライブラリだけで動くので、環境構築も楽ちんです。</li>
+</ul>
+
+<p>「ちょっとこのフォルダのテキスト、全部UTF-8にしておきたいな」なんて時に、サッと使えるツールを目指しました。</p>
+
+<h2 id="pythonスクリプトのコード">Pythonスクリプトのコード</h2>
+
+<p>作成したスクリプトのコードは以下の通りです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> os
+<span style="color:#00f">import</span> sys
+<span style="color:#00f">import</span> glob
+<span style="color:#00f">import</span> argparse
+<span style="color:#00f">from</span> pathlib <span style="color:#00f">import</span> Path
+
+
+<span style="color:#00f">def</span> detect_encoding(file_path):
+    <span style="color:#a31515">&#34;&#34;&#34;ファイルのエンコーディングを検出する&#34;&#34;&#34;</span>
+    encodings = [<span style="color:#a31515">&#39;utf-8&#39;</span>, <span style="color:#a31515">&#39;shift_jis&#39;</span>, <span style="color:#a31515">&#39;cp932&#39;</span>, <span style="color:#a31515">&#39;euc-jp&#39;</span>, <span style="color:#a31515">&#39;iso-2022-jp&#39;</span>]
+    
+    <span style="color:#00f">for</span> encoding <span style="color:#00f">in</span> encodings:
+        <span style="color:#00f">try</span>:
+            <span style="color:#00f">with</span> open(file_path, <span style="color:#a31515">&#39;r&#39;</span>, encoding=encoding) <span style="color:#00f">as</span> f:
+                f.read()
+            <span style="color:#00f">return</span> encoding
+        <span style="color:#00f">except</span> UnicodeDecodeError:
+            <span style="color:#00f">continue</span>
+        <span style="color:#00f">except</span> Exception:
+            <span style="color:#00f">continue</span>
+    
+    <span style="color:#00f">return</span> None
+
+
+<span style="color:#00f">def</span> convert_file_encoding(input_file, from_encoding, to_encoding, overwrite=False, quiet=False):
+    <span style="color:#a31515">&#34;&#34;&#34;ファイルのエンコーディングを変換する&#34;&#34;&#34;</span>
+    <span style="color:#00f">try</span>:
+        <span style="color:#008000"># ファイルを読み込み</span>
+        <span style="color:#00f">with</span> open(input_file, <span style="color:#a31515">&#39;r&#39;</span>, encoding=from_encoding) <span style="color:#00f">as</span> f:
+            content = f.read()
+        
+        <span style="color:#00f">if</span> overwrite:
+            <span style="color:#008000"># 元ファイルを上書き</span>
+            output_file = input_file
+        <span style="color:#00f">else</span>:
+            <span style="color:#008000"># 新規ファイルを作成</span>
+            input_path = Path(input_file)
+            <span style="color:#00f">if</span> to_encoding.lower() == <span style="color:#a31515">&#39;utf-8&#39;</span>:
+                suffix = <span style="color:#a31515">&#39;_utf-8&#39;</span>
+            <span style="color:#00f">elif</span> to_encoding.lower() <span style="color:#00f">in</span> [<span style="color:#a31515">&#39;shift_jis&#39;</span>, <span style="color:#a31515">&#39;sjis&#39;</span>, <span style="color:#a31515">&#39;cp932&#39;</span>]:
+                suffix = <span style="color:#a31515">&#39;_sjis&#39;</span>
+            <span style="color:#00f">else</span>:
+                suffix = f<span style="color:#a31515">&#39;_{to_encoding.lower()}&#39;</span>
+            
+            output_file = input_path.parent / f<span style="color:#a31515">&#34;{input_path.stem}{suffix}{input_path.suffix}&#34;</span>
+        
+        <span style="color:#008000"># ファイルを書き込み</span>
+        <span style="color:#00f">with</span> open(output_file, <span style="color:#a31515">&#39;w&#39;</span>, encoding=to_encoding) <span style="color:#00f">as</span> f:
+            f.write(content)
+        
+        <span style="color:#00f">if</span> <span style="color:#00f">not</span> quiet:
+            <span style="color:#00f">print</span>(f<span style="color:#a31515">&#34;変換完了: {input_file} -&gt; {output_file}&#34;</span>)
+            <span style="color:#00f">print</span>(f<span style="color:#a31515">&#34;  {from_encoding} -&gt; {to_encoding}&#34;</span>)
+        <span style="color:#00f">return</span> True
+        
+    <span style="color:#00f">except</span> Exception <span style="color:#00f">as</span> e:
+        <span style="color:#00f">if</span> <span style="color:#00f">not</span> quiet:
+            <span style="color:#00f">print</span>(f<span style="color:#a31515">&#34;エラー: {input_file} の変換に失敗しました - {str(e)}&#34;</span>)
+        <span style="color:#00f">return</span> False
+
+
+<span style="color:#00f">def</span> get_target_files(path, quiet=False):
+    <span style="color:#a31515">&#34;&#34;&#34;指定されたパスからtxtファイルとmdファイルのリストを取得する&#34;&#34;&#34;</span>
+    target_files = []
+    non_target_files = []
+    valid_exts = [<span style="color:#a31515">&#39;.txt&#39;</span>, <span style="color:#a31515">&#39;.md&#39;</span>]
+    
+    <span style="color:#00f">if</span> os.path.isfile(path):
+        <span style="color:#008000"># ファイルが指定された場合</span>
+        <span style="color:#00f">if</span> Path(path).suffix.lower() <span style="color:#00f">in</span> valid_exts:
+            target_files.append(path)
+        <span style="color:#00f">else</span>:
+            non_target_files.append(path)
+            <span style="color:#00f">if</span> <span style="color:#00f">not</span> quiet:
+                <span style="color:#00f">print</span>(f<span style="color:#a31515">&#34;警告: {path} は.txtまたは.mdファイルではありません。スキップします。&#34;</span>)
+    <span style="color:#00f">elif</span> os.path.isdir(path):
+        <span style="color:#008000"># フォルダが指定された場合</span>
+        all_files = glob.glob(os.path.join(path, <span style="color:#a31515">&#39;*&#39;</span>))
+        <span style="color:#00f">for</span> file <span style="color:#00f">in</span> all_files:
+            <span style="color:#00f">if</span> os.path.isfile(file):
+                <span style="color:#00f">if</span> Path(file).suffix.lower() <span style="color:#00f">in</span> valid_exts:
+                    target_files.append(file)
+                <span style="color:#00f">else</span>:
+                    non_target_files.append(file)
+        
+        <span style="color:#008000"># 非対象ファイルの警告（quietモードでない場合のみ）</span>
+        <span style="color:#00f">if</span> <span style="color:#00f">not</span> quiet <span style="color:#00f">and</span> non_target_files:
+            <span style="color:#00f">print</span>(f<span style="color:#a31515">&#34;警告: {len(non_target_files)}個の非.txt/.mdファイルをスキップしました。&#34;</span>)
+            <span style="color:#008000"># ファイル数が多い場合は個別表示を制限</span>
+            <span style="color:#00f">if</span> len(non_target_files) &lt;= 5:
+                <span style="color:#00f">for</span> file <span style="color:#00f">in</span> non_target_files:
+                    <span style="color:#00f">print</span>(f<span style="color:#a31515">&#34;  スキップ: {file}&#34;</span>)
+            <span style="color:#00f">else</span>:
+                <span style="color:#00f">for</span> file <span style="color:#00f">in</span> non_target_files[:3]:
+                    <span style="color:#00f">print</span>(f<span style="color:#a31515">&#34;  スキップ: {file}&#34;</span>)
+                <span style="color:#00f">print</span>(f<span style="color:#a31515">&#34;  ... その他 {len(non_target_files) - 3} ファイル&#34;</span>)
+        
+        <span style="color:#00f">if</span> <span style="color:#00f">not</span> target_files:
+            <span style="color:#00f">if</span> <span style="color:#00f">not</span> quiet:
+                <span style="color:#00f">print</span>(f<span style="color:#a31515">&#34;警告: {path} に.txtまたは.mdファイルが見つかりませんでした。&#34;</span>)
+    <span style="color:#00f">else</span>:
+        <span style="color:#00f">if</span> <span style="color:#00f">not</span> quiet:
+            <span style="color:#00f">print</span>(f<span style="color:#a31515">&#34;エラー: {path} は存在しないパスです。&#34;</span>)
+    
+    <span style="color:#00f">return</span> target_files
+
+
+<span style="color:#00f">def</span> main():
+    <span style="color:#008000"># コマンドライン引数の設定</span>
+    parser = argparse.ArgumentParser(
+        description=<span style="color:#a31515">&#39;テキストファイルのエンコード変換スクリプト&#39;</span>,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=<span style="color:#a31515">&#34;&#34;&#34;
+</span><span style="color:#a31515">使用例:
+</span><span style="color:#a31515">  python convert_encoding.py sample.txt                 # SJIS→UTF-8、新規ファイル作成
+</span><span style="color:#a31515">  python convert_encoding.py ./text_files/              # フォルダ内の全txtファイルとmdファイルを変換
+</span><span style="color:#a31515">  python convert_encoding.py sample.txt -r              # UTF-8→SJIS変換
+</span><span style="color:#a31515">  python convert_encoding.py sample.txt -o              # 元ファイルを上書き
+</span><span style="color:#a31515">  python convert_encoding.py sample.txt -r -o           # UTF-8→SJIS、上書き
+</span><span style="color:#a31515">  python convert_encoding.py ./mixed_files/ -q          # 静寂モード（エラーメッセージ非表示）
+</span><span style="color:#a31515">        &#34;&#34;&#34;</span>
+    )
+    
+    parser.add_argument(
+        <span style="color:#a31515">&#39;path&#39;</span>,
+        help=<span style="color:#a31515">&#39;変換対象のファイルまたはフォルダパス&#39;</span>
+    )
+    
+    parser.add_argument(
+        <span style="color:#a31515">&#39;-r&#39;</span>, <span style="color:#a31515">&#39;--reverse&#39;</span>,
+        action=<span style="color:#a31515">&#39;store_true&#39;</span>,
+        help=<span style="color:#a31515">&#39;UTF-8→SJIS変換（省略時はSJIS→UTF-8）&#39;</span>
+    )
+    
+    parser.add_argument(
+        <span style="color:#a31515">&#39;-o&#39;</span>, <span style="color:#a31515">&#39;--overwrite&#39;</span>,
+        action=<span style="color:#a31515">&#39;store_true&#39;</span>,
+        help=<span style="color:#a31515">&#39;元ファイルを上書き（省略時は新規ファイル作成）&#39;</span>
+    )
+    
+    parser.add_argument(
+        <span style="color:#a31515">&#39;-q&#39;</span>, <span style="color:#a31515">&#39;--quiet&#39;</span>,
+        action=<span style="color:#a31515">&#39;store_true&#39;</span>,
+        help=<span style="color:#a31515">&#39;エラーメッセージと警告メッセージを非表示にする&#39;</span>
+    )
+    
+    <span style="color:#008000"># 引数の解析</span>
+    args = parser.parse_args()
+    
+    target_path = args.path
+    reverse_mode = args.reverse
+    overwrite_mode = args.overwrite
+    quiet_mode = args.quiet
+    
+    <span style="color:#008000"># エンコーディングの設定</span>
+    <span style="color:#00f">if</span> reverse_mode:
+        from_encoding = <span style="color:#a31515">&#39;utf-8&#39;</span>
+        to_encoding = <span style="color:#a31515">&#39;shift_jis&#39;</span>
+        <span style="color:#00f">if</span> <span style="color:#00f">not</span> quiet_mode:
+            <span style="color:#00f">print</span>(<span style="color:#a31515">&#34;変換モード: UTF-8 → SJIS&#34;</span>)
+    <span style="color:#00f">else</span>:
+        from_encoding = <span style="color:#a31515">&#39;shift_jis&#39;</span>
+        to_encoding = <span style="color:#a31515">&#39;utf-8&#39;</span>
+        <span style="color:#00f">if</span> <span style="color:#00f">not</span> quiet_mode:
+            <span style="color:#00f">print</span>(<span style="color:#a31515">&#34;変換モード: SJIS → UTF-8&#34;</span>)
+    
+    <span style="color:#008000"># ファイル処理モードの表示</span>
+    <span style="color:#00f">if</span> <span style="color:#00f">not</span> quiet_mode:
+        <span style="color:#00f">if</span> overwrite_mode:
+            <span style="color:#00f">print</span>(<span style="color:#a31515">&#34;ファイル処理: 元ファイルを上書き&#34;</span>)
+        <span style="color:#00f">else</span>:
+            <span style="color:#00f">print</span>(<span style="color:#a31515">&#34;ファイル処理: 新規ファイルを作成&#34;</span>)
+        
+        <span style="color:#00f">if</span> quiet_mode:
+            <span style="color:#00f">print</span>(<span style="color:#a31515">&#34;出力モード: 静寂モード（エラーメッセージ非表示）&#34;</span>)
+        
+        <span style="color:#00f">print</span>(<span style="color:#a31515">&#34;-&#34;</span> * 50)
+    
+    <span style="color:#008000"># 対象ファイルの取得</span>
+    target_files = get_target_files(target_path, quiet_mode)
+    <span style="color:#00f">if</span> <span style="color:#00f">not</span> target_files:
+        <span style="color:#00f">if</span> <span style="color:#00f">not</span> quiet_mode:
+            <span style="color:#00f">print</span>(<span style="color:#a31515">&#34;変換対象のファイルがありません。&#34;</span>)
+        sys.exit(1)
+    
+    <span style="color:#008000"># ファイルの変換処理</span>
+    success_count = 0
+    error_count = 0
+    
+    <span style="color:#00f">for</span> target_file <span style="color:#00f">in</span> target_files:
+        <span style="color:#00f">if</span> <span style="color:#00f">not</span> quiet_mode:
+            <span style="color:#00f">print</span>(f<span style="color:#a31515">&#34;</span><span style="color:#a31515">\n</span><span style="color:#a31515">処理中: {target_file}&#34;</span>)
+        
+        <span style="color:#008000"># エンコーディング自動検出（参考情報として表示）</span>
+        <span style="color:#00f">if</span> <span style="color:#00f">not</span> quiet_mode:
+            detected_encoding = detect_encoding(target_file)
+            <span style="color:#00f">if</span> detected_encoding:
+                <span style="color:#00f">print</span>(f<span style="color:#a31515">&#34;  検出されたエンコーディング: {detected_encoding}&#34;</span>)
+                
+                <span style="color:#008000"># 検出されたエンコーディングが変換元と異なる場合は警告</span>
+                <span style="color:#00f">if</span> detected_encoding.lower() <span style="color:#00f">not</span> <span style="color:#00f">in</span> [from_encoding.lower(), <span style="color:#a31515">&#39;cp932&#39;</span>] <span style="color:#00f">and</span> from_encoding.lower() == <span style="color:#a31515">&#39;shift_jis&#39;</span>:
+                    <span style="color:#00f">print</span>(f<span style="color:#a31515">&#34;  警告: 検出されたエンコーディング({detected_encoding})が想定と異なります&#34;</span>)
+                <span style="color:#00f">elif</span> detected_encoding.lower() != from_encoding.lower() <span style="color:#00f">and</span> from_encoding.lower() == <span style="color:#a31515">&#39;utf-8&#39;</span>:
+                    <span style="color:#00f">print</span>(f<span style="color:#a31515">&#34;  警告: 検出されたエンコーディング({detected_encoding})が想定と異なります&#34;</span>)
+        
+        <span style="color:#008000"># ファイル変換の実行</span>
+        <span style="color:#00f">if</span> convert_file_encoding(target_file, from_encoding, to_encoding, overwrite_mode, quiet_mode):
+            success_count += 1
+        <span style="color:#00f">else</span>:
+            error_count += 1
+    
+    <span style="color:#008000"># 結果の表示</span>
+    <span style="color:#00f">if</span> <span style="color:#00f">not</span> quiet_mode:
+        <span style="color:#00f">print</span>(<span style="color:#a31515">&#34;</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span> + <span style="color:#a31515">&#34;=&#34;</span> * 50)
+        <span style="color:#00f">print</span>(f<span style="color:#a31515">&#34;変換結果: 成功 {success_count}件, エラー {error_count}件&#34;</span>)
+        <span style="color:#00f">print</span>(<span style="color:#a31515">&#34;処理が完了しました。&#34;</span>)
+
+
+<span style="color:#00f">if</span> __name__ == <span style="color:#a31515">&#34;__main__&#34;</span>:
+    main()
+  </code></pre></div>
+<h2 id="インストールと使い方">インストールと使い方</h2>
+
+<h3 id="準備">準備</h3>
+
+<p>準備は簡単。以下の2ステップだけです。</p>
+
+<ol>
+<li>上記のスクリプトをファイルに保存します。この記事では<code>convert_encoding.py</code>という名前で保存したとします。なお、ファイル名自体は任意ですが、拡張子は <code>.py</code> にしてください。</li>
+<li>ターミナル（コマンドプロンプトやPowerShell）で、上記のPythonスクリプトをファイルとして保存したフォルダに移動します。</li>
+</ol>
+
+<p>これだけで準備完了です。</p>
+
+<h3 id="基本的な使い方">基本的な使い方</h3>
+
+<p>使い方は非常にシンプルです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">python convert_encoding.py 変換したいファイル or フォルダのパス オプション</code></pre></div>
+<p>上記のように、<code>python</code>コマンドの後にスクリプトのファイル名と変換したいファイルやフォルダのパスを指定します。必要に応じてオプションを追加します。簡単！</p>
+
+<h4 id="例1-単一ファイルをsjisからutf-8へ変換">例1: 単一ファイルをSJISからUTF-8へ変換</h4>
+
+<p><code>sample.txt</code> というSJISのファイルをUTF-8に変換してみます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">python convert_encoding.py sample.txt</code></pre></div>
+<p>これを実行すると、デフォルトでは元のファイルはそのまま残り、<code>sample_utf-8.txt</code> という名前で新しいファイルが作成されます。</p>
+
+<h4 id="例2-フォルダ内のファイルを一括変換">例2: フォルダ内のファイルを一括変換</h4>
+
+<p><code>documents</code> というフォルダの中にある <code>.txt</code> と <code>.md</code> ファイルをすべて変換したい場合は、フォルダのパスを指定します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">python convert_encoding.py ./documents/</code></pre></div>
+<p>フォルダ内の対象ファイルがそれぞれ <code>〜_utf-8.txt</code> のような名前で保存されます。元ファイルはそのまま残ります。</p>
+
+<h4 id="例3-utf-8からsjisへ逆変換">例3: UTF-8からSJISへ逆変換</h4>
+
+<p>逆方向の変換、つまりUTF-8からSJISへの変換をしたい場合は <code>-r</code> (<code>--reverse</code>) オプションを付けます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">python convert_encoding.py note.md -r</code></pre></div>
+<p>これで <code>note_sjis.md</code> というSJISのファイルが生成されます。</p>
+
+<h2 id="オプション機能">オプション機能</h2>
+
+<p>もう少し細かい制御ができるように、いくつかのオプションを用意しました。</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">オプション</th>
+<th align="left">短縮形</th>
+<th align="left">説明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left"><code>--reverse</code></td>
+<td align="left"><code>-r</code></td>
+<td align="left">UTF-8 → SJISに変換します。（デフォルトはSJIS → UTF-8）</td>
+</tr>
+
+<tr>
+<td align="left"><code>--overwrite</code></td>
+<td align="left"><code>-o</code></td>
+<td align="left">元のファイルを直接上書きします。（バックアップ推奨！）</td>
+</tr>
+
+<tr>
+<td align="left"><code>--quiet</code></td>
+<td align="left"><code>-q</code></td>
+<td align="left">処理メッセージを非表示にします。（自動化スクリプトに組み込む際に便利）</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="上書きモード-o">上書きモード (<code>-o</code>)</h3>
+
+<p>新しいファイルを作らずに、元のファイルを直接変更したい場合は <code>-o</code> オプションを使います。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># sample.txtを直接UTF-8に変換して上書き
+</span><span style="color:#008000"></span>python convert_encoding.py sample.txt -o
+
+<span style="color:#008000"># UTF-8からSJISへの変換と上書きを組み合わせる
+</span><span style="color:#008000"></span>python convert_encoding.py report.txt -r -o</code></pre></div>
+<p>このオプションを使うと元ファイルが完全に置き換えられてしまうので、<strong>大事なファイルの場合は事前にバックアップを取ること</strong>を強くお勧めします。</p>
+
+<h3 id="静寂モード-q">静寂モード (<code>-q</code>)</h3>
+
+<p>フォルダ内に <code>.txt</code> や <code>.md</code> 以外のファイルがたくさんあると、「〜をスキップしました」という警告がたくさん出てきます。そういったメッセージを非表示にしたい場合は <code>-q</code> オプションを指定します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># メッセージを何も表示せず、静かに処理を実行
+</span><span style="color:#008000"></span>python convert_encoding.py ./mixed_folder/ -q</code></pre></div>
+<p>これで一切のメッセージが表示されなくなります。そのため、エラーが起きても気づかない可能性があるので注意してください。どちらかというと、自動化スクリプトの中で使う場合に便利なオプションですね。</p>
+
+<h2 id="動作の裏側-少しだけ技術的な話">動作の裏側（少しだけ技術的な話）</h2>
+
+<p>このスクリプトがどう動いているか、少しだけ解説します。</p>
+
+<h3 id="エンコーディングの自動検出">エンコーディングの自動検出</h3>
+
+<p>ファイルの中身を読んで、どのエンコーディングで書かれているかを判別するのは、実は結構<del>ﾒﾝﾄﾞｸｻｲ</del>悩ましい問題です。このスクリプトでは、以下の順番でデコードを試みて、成功したものをそのファイルのエンコーディングと判断しています。</p>
+
+<ol>
+<li>UTF-8</li>
+<li>Shift-JIS (shift_jis)</li>
+<li>CP932 (Windowsで使われるShift_JISの亜種)</li>
+<li>EUC-JP</li>
+<li>ISO-2022-JP</li>
+</ol>
+
+<p>短い文章だと誤認識することもありますが、一般的なテキストファイルなら、だいたいはこれでうまく判別してくれます。</p>
+
+<h3 id="対象ファイルのフィルタリング">対象ファイルのフィルタリング</h3>
+
+<p>フォルダを指定した場合、中にあるすべてのファイルを変換するわけではありません。誤って画像ファイルなどを壊してしまわないように、拡張子が <code>.txt</code> と <code>.md</code> のファイルのみを処理対象としています。それ以外のファイルは自動でスキップされるので安心です。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>ということで、今回は文字コードの変換を楽にするための自作Pythonスクリプトを紹介しました。</p>
+
+<p>WindowsとMac/Linuxの間でファイルをやり取りする機会が多い方や、古いシステムのテキストデータを扱う必要がある方にとって、少しでも役に立てば幸いです。</p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

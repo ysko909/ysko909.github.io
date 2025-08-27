@@ -7,10 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Tue, 26 Aug 2025 18:19:34 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 27 Aug 2025 15:01:23 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Windowsのエンコードで悩みたくないからPythonスクリプトを作った</title>
+      <link>https://ysko909.github.io/posts/made-a-python-script-to-convert-text-files-in-sjis-format/</link>
+      <pubDate>Wed, 27 Aug 2025 15:01:23 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/made-a-python-script-to-convert-text-files-in-sjis-format/</guid>
+      <description>はじめに WindowsとMac、あるいはLinuxとの間でテキストファイルをやり取りしたとき、文字化けに遭遇して「うわっ・・・」ってなった経験ありますか？自分はあります、しこたまあります。
+原因の多くは、Windowsが標準で使うShift_JIS (SJIS)と、MacやLinuxで標準のUTF-8という文字コードの違いです。メモ帳で書いた文章が、別の環境だと謎の記号の羅列になってしまう、あの現象です。
+毎回テキストエディタで開き直して、エンコーディングを指定して保存し直すのも面倒くさい・・・。特にそういうファイルが大量にあるときは、もう考えただけでうっとりうんざりします。
+そこで、この面倒な作業をコマンド一発で解決するために、シンプルなPythonスクリプトをざっと作ってみました。今日はその紹介です。
+作成したスクリプトの概要 今回作ったのは、テキストファイルのエンコーディングをSJISとUTF-8で相互変換できるCUIツールです。
+主な機能はこんな感じです。
+ SJIS ⇔ UTF-8の双方向変換: デフォルトはSJISからUTF-8へ、オプション指定で逆もOK。 ファイル・フォルダ対応: 単一のファイルはもちろん、フォルダを指定すれば中の.txtファイルや.mdファイルをまとめて一括変換します。 上書き・新規作成モード: 元ファイルを直接上書きするか、変換後のファイルを別名で新規作成するかを選べます。（デフォルトは安全な新規作成） エンコーディング自動検出: 変換元のファイルのエンコーディングを自動で判別しようと試みます。 追加ライブラリ不要: Python 3.6以降の標準ライブラリだけで動くので、環境構築も楽ちんです。  「ちょっとこのフォルダのテキスト、全部UTF-8にしておきたいな」なんて時に、サッと使えるツールを目指しました。
+Pythonスクリプトのコード 作成したスクリプトのコードは以下の通りです。
+import os import sys import glob import argparse from pathlib import Path def detect_encoding(file_path): &amp;#34;&amp;#34;&amp;#34;ファイルのエンコーディングを検出する&amp;#34;&amp;#34;&amp;#34; encodings = [&amp;#39;utf-8&amp;#39;, &amp;#39;shift_jis&amp;#39;, &amp;#39;cp932&amp;#39;, &amp;#39;euc-jp&amp;#39;, &amp;#39;iso-2022-jp&amp;#39;] for encoding in encodings: try: with open(file_path, &amp;#39;r&amp;#39;, encoding=encoding) as f: f.read() return encoding except UnicodeDecodeError: continue except Exception: continue return None def convert_file_encoding(input_file, from_encoding, to_encoding, overwrite=False, quiet=False): &amp;#34;&amp;#34;&amp;#34;ファイルのエンコーディングを変換する&amp;#34;&amp;#34;&amp;#34; try: # ファイルを読み込み with open(input_file, &amp;#39;r&amp;#39;, encoding=from_encoding) as f: content = f.</description>
+    </item>
     
     <item>
       <title>「Interactivity render mode」と「Interactivity location」とは何か</title>
