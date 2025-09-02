@@ -7,10 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Fri, 22 Nov 2019 09:50:35 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 02 Sep 2025 17:08:56 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/excel/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Excelのセルに数式が含まれるか確認する方法</title>
+      <link>https://ysko909.github.io/posts/how-to-check-whether-an-excel-cell-contains-a-formula/</link>
+      <pubDate>Tue, 02 Sep 2025 17:08:56 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/how-to-check-whether-an-excel-cell-contains-a-formula/</guid>
+      <description>概要 Excelのセルには数値や文字列のデータだけではなく、=SUM(A1:C1)のような合計や平均を算出するような数式を格納できます。このとき、セルには数式が格納されていても表面上は計算結果が表示されるため、パッと見だとそのセルに格納されているのは「データなのか数式なのか」が判断できません。
+あまり頻繁にあるケースではありませんが、「そのセルに含まれるものはデータか数式か？」を判断しなければならない場合に利用できる方法があります。今回はそんな方法についてメモしておきます。
+まぁこういう記事を書いてるってことは、そういうレアなケースに遭遇したってことです・・・＿(　_´ω`)_ﾍﾟｼｮ
+ISFORMULA関数（Excel 2013以降） 最も直接的な方法で、セルに数式が入っているかどうかを判定し、真偽値（TRUEまたはFALSE）で結果を返します。
+基本構文 =ISFORMULA(セル参照) 使用例 =ISFORMULA(A1)  TRUE: A1セルに数式が入っている FALSE: A1セルに数式が入っていない（値や文字列）  実践例    A列 B列（判定結果） 説明     100 =ISFORMULA(A1) → FALSE 数値のため   =SUM(C1:C5) =ISFORMULA(A2) → TRUE 数式のため   Hello =ISFORMULA(A3) → FALSE 文字列のため   =AVERAGE(D1:D10) =ISFORMULA(A4) → TRUE 数式のため    複合的な判定方法 数式かどうかを判定したうえで、結果に応じてメッセージを表示する方法です。
+パターン1：シンプルな判定 =IF(ISFORMULA(A1),&amp;#34;数式&amp;#34;,&amp;#34;値&amp;#34;) パターン2：詳細な判定 =IF(ISFORMULA(A1), &amp;#34;数式: &amp;#34; &amp;amp; FORMULATEXT(A1), IF(ISNUMBER(A1),&amp;#34;数値: &amp;#34; &amp;amp; A1, IF(ISTEXT(A1),&amp;#34;文字列: &amp;#34; &amp;amp; A1,&amp;#34;その他&amp;#34;))) FORMULATEXT関数との組み合わせ 数式かどうかを判定したうえで、数式であればどんな式が格納されているかをメッセージで表示する方法です。</description>
+    </item>
     
     <item>
       <title>PythonでExcelファイルのキーワードを参照して自動的にGoogle検索し結果を保存する</title>

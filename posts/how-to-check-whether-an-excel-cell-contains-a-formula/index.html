@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Excelのセルに数式が含まれるか確認する方法 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Excelのセルに数式が含まれるか確認する方法" />
+<meta property="og:description" content="概要 Excelのセルには数値や文字列のデータだけではなく、=SUM(A1:C1)のような合計や平均を算出するような数式を格納できます。このとき、セルには数式が格納されていても表面上は計算結果が表示されるため、パッと見だとそのセルに格納されているのは「データなのか数式なのか」が判断できません。
+あまり頻繁にあるケースではありませんが、「そのセルに含まれるものはデータか数式か？」を判断しなければならない場合に利用できる方法があります。今回はそんな方法についてメモしておきます。
+まぁこういう記事を書いてるってことは、そういうレアなケースに遭遇したってことです・・・＿(　_´ω`)_ﾍﾟｼｮ
+ISFORMULA関数（Excel 2013以降） 最も直接的な方法で、セルに数式が入っているかどうかを判定し、真偽値（TRUEまたはFALSE）で結果を返します。
+基本構文 =ISFORMULA(セル参照) 使用例 =ISFORMULA(A1)  TRUE: A1セルに数式が入っている FALSE: A1セルに数式が入っていない（値や文字列）  実践例    A列 B列（判定結果） 説明     100 =ISFORMULA(A1) → FALSE 数値のため   =SUM(C1:C5) =ISFORMULA(A2) → TRUE 数式のため   Hello =ISFORMULA(A3) → FALSE 文字列のため   =AVERAGE(D1:D10) =ISFORMULA(A4) → TRUE 数式のため    複合的な判定方法 数式かどうかを判定したうえで、結果に応じてメッセージを表示する方法です。
+パターン1：シンプルな判定 =IF(ISFORMULA(A1),&#34;数式&#34;,&#34;値&#34;) パターン2：詳細な判定 =IF(ISFORMULA(A1), &#34;数式: &#34; &amp; FORMULATEXT(A1), IF(ISNUMBER(A1),&#34;数値: &#34; &amp; A1, IF(ISTEXT(A1),&#34;文字列: &#34; &amp; A1,&#34;その他&#34;))) FORMULATEXT関数との組み合わせ 数式かどうかを判定したうえで、数式であればどんな式が格納されているかをメッセージで表示する方法です。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/how-to-check-whether-an-excel-cell-contains-a-formula/" /><meta property="article:published_time" content="2025-09-02T17:08:56&#43;09:00"/>
+<meta property="article:modified_time" content="2025-09-02T17:08:56&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Excelのセルに数式が含まれるか確認する方法"/>
+<meta name="twitter:description" content="概要 Excelのセルには数値や文字列のデータだけではなく、=SUM(A1:C1)のような合計や平均を算出するような数式を格納できます。このとき、セルには数式が格納されていても表面上は計算結果が表示されるため、パッと見だとそのセルに格納されているのは「データなのか数式なのか」が判断できません。
+あまり頻繁にあるケースではありませんが、「そのセルに含まれるものはデータか数式か？」を判断しなければならない場合に利用できる方法があります。今回はそんな方法についてメモしておきます。
+まぁこういう記事を書いてるってことは、そういうレアなケースに遭遇したってことです・・・＿(　_´ω`)_ﾍﾟｼｮ
+ISFORMULA関数（Excel 2013以降） 最も直接的な方法で、セルに数式が入っているかどうかを判定し、真偽値（TRUEまたはFALSE）で結果を返します。
+基本構文 =ISFORMULA(セル参照) 使用例 =ISFORMULA(A1)  TRUE: A1セルに数式が入っている FALSE: A1セルに数式が入っていない（値や文字列）  実践例    A列 B列（判定結果） 説明     100 =ISFORMULA(A1) → FALSE 数値のため   =SUM(C1:C5) =ISFORMULA(A2) → TRUE 数式のため   Hello =ISFORMULA(A3) → FALSE 文字列のため   =AVERAGE(D1:D10) =ISFORMULA(A4) → TRUE 数式のため    複合的な判定方法 数式かどうかを判定したうえで、結果に応じてメッセージを表示する方法です。
+パターン1：シンプルな判定 =IF(ISFORMULA(A1),&#34;数式&#34;,&#34;値&#34;) パターン2：詳細な判定 =IF(ISFORMULA(A1), &#34;数式: &#34; &amp; FORMULATEXT(A1), IF(ISNUMBER(A1),&#34;数値: &#34; &amp; A1, IF(ISTEXT(A1),&#34;文字列: &#34; &amp; A1,&#34;その他&#34;))) FORMULATEXT関数との組み合わせ 数式かどうかを判定したうえで、数式であればどんな式が格納されているかをメッセージで表示する方法です。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Excelのセルに数式が含まれるか確認する方法</h1>
+			<div class="meta">Posted at &mdash; Sep 2, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>Excelのセルには数値や文字列のデータだけではなく、<code>=SUM(A1:C1)</code>のような合計や平均を算出するような数式を格納できます。このとき、セルには数式が格納されていても表面上は計算結果が表示されるため、パッと見だとそのセルに格納されているのは「データなのか数式なのか」が判断できません。</p>
+
+<p>あまり頻繁にあるケースではありませんが、「そのセルに含まれるものはデータか数式か？」を判断しなければならない場合に利用できる方法があります。今回はそんな方法についてメモしておきます。</p>
+
+<p>まぁこういう記事を書いてるってことは、そういうレアなケースに遭遇したってことです・・・＿(　_´ω`)_ﾍﾟｼｮ</p>
+
+<h2 id="isformula関数-excel-2013以降">ISFORMULA関数（Excel 2013以降）</h2>
+
+<p>最も直接的な方法で、セルに数式が入っているかどうかを判定し、真偽値（<code>TRUE</code>または<code>FALSE</code>）で結果を返します。</p>
+
+<h3 id="基本構文">基本構文</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-excel" data-lang="excel">=ISFORMULA(セル参照)</code></pre></div>
+<h3 id="使用例">使用例</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-excel" data-lang="excel">=ISFORMULA(A1)</code></pre></div>
+<ul>
+<li><strong>TRUE</strong>: A1セルに数式が入っている</li>
+<li><strong>FALSE</strong>: A1セルに数式が入っていない（値や文字列）</li>
+</ul>
+
+<h3 id="実践例">実践例</h3>
+
+<table>
+<thead>
+<tr>
+<th>A列</th>
+<th>B列（判定結果）</th>
+<th>説明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>100</td>
+<td><code>=ISFORMULA(A1)</code> → FALSE</td>
+<td>数値のため</td>
+</tr>
+
+<tr>
+<td>=SUM(C1:C5)</td>
+<td><code>=ISFORMULA(A2)</code> → TRUE</td>
+<td>数式のため</td>
+</tr>
+
+<tr>
+<td>Hello</td>
+<td><code>=ISFORMULA(A3)</code> → FALSE</td>
+<td>文字列のため</td>
+</tr>
+
+<tr>
+<td>=AVERAGE(D1:D10)</td>
+<td><code>=ISFORMULA(A4)</code> → TRUE</td>
+<td>数式のため</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="複合的な判定方法">複合的な判定方法</h2>
+
+<p>数式かどうかを判定したうえで、結果に応じてメッセージを表示する方法です。</p>
+
+<h3 id="パターン1-シンプルな判定">パターン1：シンプルな判定</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-excel" data-lang="excel">=IF(ISFORMULA(A1),&#34;数式&#34;,&#34;値&#34;)</code></pre></div>
+<h3 id="パターン2-詳細な判定">パターン2：詳細な判定</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-excel" data-lang="excel">=IF(ISFORMULA(A1),
+   &#34;数式: &#34; &amp; FORMULATEXT(A1),
+   IF(ISNUMBER(A1),&#34;数値: &#34; &amp; A1,
+   IF(ISTEXT(A1),&#34;文字列: &#34; &amp; A1,&#34;その他&#34;)))</code></pre></div>
+<h2 id="formulatext関数との組み合わせ">FORMULATEXT関数との組み合わせ</h2>
+
+<p>数式かどうかを判定したうえで、数式であればどんな式が格納されているかをメッセージで表示する方法です。</p>
+
+<h3 id="基本構文-1">基本構文</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-excel" data-lang="excel">=IF(ISFORMULA(A1),FORMULATEXT(A1),&#34;数式ではありません&#34;)</code></pre></div>
+<h3 id="使用例-1">使用例</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-excel" data-lang="excel">=IF(ISFORMULA(B1),
+   &#34;数式: &#34; &amp; FORMULATEXT(B1),
+   &#34;値: &#34; &amp; B1)</code></pre></div>
+<h2 id="配列数式での一括判定">配列数式での一括判定</h2>
+
+<p>複数のセルを一度に判定する方法です。</p>
+
+<h3 id="範囲内の数式セル数をカウント">範囲内の数式セル数をカウント</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-excel" data-lang="excel">=SUMPRODUCT(--(ISFORMULA(A1:A10)))</code></pre></div>
+<h3 id="範囲内に数式があるかチェック">範囲内に数式があるかチェック</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-excel" data-lang="excel">=IF(SUMPRODUCT(--(ISFORMULA(A1:A10)))&gt;0,&#34;数式あり&#34;,&#34;数式なし&#34;)</code></pre></div>
+<h2 id="実用的な応用例">実用的な応用例</h2>
+
+<h3 id="数式チェッカー関数">数式チェッカー関数</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-excel" data-lang="excel">=IF(ISFORMULA(A1),
+   &#34;✓ 数式: &#34; &amp; LEFT(FORMULATEXT(A1),50) &amp; 
+   IF(LEN(FORMULATEXT(A1))&gt;50,&#34;...&#34;,&#34;&#34;),
+   &#34;× 数式ではありません&#34;)</code></pre></div>
+<h3 id="エラーハンドリング付き">エラーハンドリング付き</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-excel" data-lang="excel">=IFERROR(
+   IF(ISFORMULA(A1),
+      &#34;数式: &#34; &amp; FORMULATEXT(A1),
+      &#34;値: &#34; &amp; A1),
+   &#34;エラーまたは空白&#34;)</code></pre></div>
+<h2 id="vbaでの判定方法">VBAでの判定方法</h2>
+
+<p>Officeが古く<code>ISFORMULA</code>関数が利用できない場合、VBAを使用して判断することが一応できます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vba" data-lang="vba">Function IsFormulaCell(rng As Range) As Boolean
+    IsFormulaCell = rng.HasFormula
+End Function
+
+Function GetFormulaInfo(rng As Range) As String
+    If rng.HasFormula Then
+        GetFormulaInfo = &#34;数式: &#34; &amp; rng.Formula
+    Else
+        GetFormulaInfo = &#34;値: &#34; &amp; rng.Value
+    End If
+End Function</code></pre></div>
+<h2 id="注意事項">注意事項</h2>
+
+<p><code>ISFORMULA</code>関数や<code>FORMULATEXT</code>関数は、Excel 2013以降でのみ使用可能です。古いバージョンのofficeでは、VBAを使用するしかなさそう。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>最も簡単で確実な方法は<strong>ISFORMULA関数</strong>を使用することです。より詳細な情報が必要な場合は、FORMULATEXT関数と組み合わせて使用しましょう。</p>
+
+<p>レアケースではありますが、知っておくと役立つ場面があるかもしれません＿(　_´ω`)_ﾍﾟｼｮ</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://support.microsoft.com/en-us/office/isformula-function-e4d1355f-7121-4ef2-801e-3839bfd6b1e5">ISFORMULA function</a></li>
+<li><a href="https://exceljet.net/functions/isformula-function">ISFORMULA function</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
