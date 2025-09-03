@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>非NULL、非空データ件数を一括集計するSQLをVBAで生成する - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="非NULL、非空データ件数を一括集計するSQLをVBAで生成する" />
+<meta property="og:description" content="概要 データの整合性や品質は、開発するシステムの生命線です。特に、大規模なデータ移行や外部システムとの連携プロジェクトでは、「このテーブルのこの列、どれくらいデータが埋まっているんだっけ？」といった確認作業が頻繁に発生します。このような場合、SQLのSELECT COUNT(*)を使って非NULL・非空データの件数を調べたりします。しかし、テーブル内には何十、何百と列が存在し、これらに対して調査のために一つひとつSELECT COUNT(*) を実行するのは、正直なところ骨が折れる作業です。というか、手作業でSQLを書くのはミスの元ですし、時間もかかります。なんなら、そもそもやりたくない＿(　_´ω`)_ﾍﾟｼｮ
+そこで今回は、そんな地道なデータ品質チェックを効率化するための、Access MDBで指定されたテーブルの全列に対して非NULL・非空データの件数を集計するSQLを動的に生成・実行するVBAスクリプトを作成しました。
+背景 このスクリプトが生まれた背景には、あるデータクレンジングプロジェクトでの切実な課題がありました。基幹システムから連携された数十のテーブルには、残念ながら多くの「データの抜け漏れ」や「不正確なデータ」が存在していました。
+プロジェクトの初期段階でこの課題に気づいていたため、「どのテーブルの、どの列に、どれくらいの有効データが存在するのか」という現状を網羅的に把握することとしました。この「有効データ」の定義は、列のデータ型によって異なります。
+ テキスト型なら、NULLだけでなく空文字やスペースのみのデータも「無効」としたい。 数値型の場合、NULLは無効だが、0は有効なデータとして扱いたいケースもあれば、0も「未入力」と見なしたいケースもある。 日付型やブール型は、シンプルにNULLでないことを確認したい。  これらの要件を満たすSQLを各列に対して手作業で記述するのは、時間がかかるだけでなく、ヒューマンエラーの温床にもなります。この定型的かつ重要な作業を自動化し、誰でも迅速かつ正確にデータ品質の概況を把握できるようにする。それが、このスクリプトを開発した最大の目的です。とはいえ、背景としてはまぁまぁヘビーな話ですが、コード自体は簡単に使えるようシンプルで汎用性の高いコードを心がけました。
+コード 実際に使用するVBAコードは以下の通りです。
+Option Compare Database &#39;このVBAスクリプトは、Access MDBで指定されたテーブルの全列に対して非NULL・非空データの件数を集計するSQLを動的に生成・実行します。 Sub GenerateAndExecuteColumnCountQuery(tableName As String) Dim db As DAO.Database Dim tdf As DAO.TableDef Dim fld As DAO.Field Dim sql As String Dim selectClause As String Dim rs As DAO.Recordset Set db = CurrentDb() Set tdf = db.TableDefs(tableName) &#39; SELECT句を動的に構築 selectClause = &#34;SELECT &#34; &amp; vbCrLf For Each fld In tdf." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/generate-sql-in-vba-to-count-non-null-records/" /><meta property="article:published_time" content="2025-09-03T08:29:15&#43;09:00"/>
+<meta property="article:modified_time" content="2025-09-03T08:29:15&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="非NULL、非空データ件数を一括集計するSQLをVBAで生成する"/>
+<meta name="twitter:description" content="概要 データの整合性や品質は、開発するシステムの生命線です。特に、大規模なデータ移行や外部システムとの連携プロジェクトでは、「このテーブルのこの列、どれくらいデータが埋まっているんだっけ？」といった確認作業が頻繁に発生します。このような場合、SQLのSELECT COUNT(*)を使って非NULL・非空データの件数を調べたりします。しかし、テーブル内には何十、何百と列が存在し、これらに対して調査のために一つひとつSELECT COUNT(*) を実行するのは、正直なところ骨が折れる作業です。というか、手作業でSQLを書くのはミスの元ですし、時間もかかります。なんなら、そもそもやりたくない＿(　_´ω`)_ﾍﾟｼｮ
+そこで今回は、そんな地道なデータ品質チェックを効率化するための、Access MDBで指定されたテーブルの全列に対して非NULL・非空データの件数を集計するSQLを動的に生成・実行するVBAスクリプトを作成しました。
+背景 このスクリプトが生まれた背景には、あるデータクレンジングプロジェクトでの切実な課題がありました。基幹システムから連携された数十のテーブルには、残念ながら多くの「データの抜け漏れ」や「不正確なデータ」が存在していました。
+プロジェクトの初期段階でこの課題に気づいていたため、「どのテーブルの、どの列に、どれくらいの有効データが存在するのか」という現状を網羅的に把握することとしました。この「有効データ」の定義は、列のデータ型によって異なります。
+ テキスト型なら、NULLだけでなく空文字やスペースのみのデータも「無効」としたい。 数値型の場合、NULLは無効だが、0は有効なデータとして扱いたいケースもあれば、0も「未入力」と見なしたいケースもある。 日付型やブール型は、シンプルにNULLでないことを確認したい。  これらの要件を満たすSQLを各列に対して手作業で記述するのは、時間がかかるだけでなく、ヒューマンエラーの温床にもなります。この定型的かつ重要な作業を自動化し、誰でも迅速かつ正確にデータ品質の概況を把握できるようにする。それが、このスクリプトを開発した最大の目的です。とはいえ、背景としてはまぁまぁヘビーな話ですが、コード自体は簡単に使えるようシンプルで汎用性の高いコードを心がけました。
+コード 実際に使用するVBAコードは以下の通りです。
+Option Compare Database &#39;このVBAスクリプトは、Access MDBで指定されたテーブルの全列に対して非NULL・非空データの件数を集計するSQLを動的に生成・実行します。 Sub GenerateAndExecuteColumnCountQuery(tableName As String) Dim db As DAO.Database Dim tdf As DAO.TableDef Dim fld As DAO.Field Dim sql As String Dim selectClause As String Dim rs As DAO.Recordset Set db = CurrentDb() Set tdf = db.TableDefs(tableName) &#39; SELECT句を動的に構築 selectClause = &#34;SELECT &#34; &amp; vbCrLf For Each fld In tdf."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">非NULL、非空データ件数を一括集計するSQLをVBAで生成する</h1>
+			<div class="meta">Posted at &mdash; Sep 3, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>データの整合性や品質は、開発するシステムの生命線です。特に、大規模なデータ移行や外部システムとの連携プロジェクトでは、「このテーブルのこの列、どれくらいデータが埋まっているんだっけ？」といった確認作業が頻繁に発生します。このような場合、SQLの<code>SELECT COUNT(*)</code>を使って非NULL・非空データの件数を調べたりします。しかし、テーブル内には何十、何百と列が存在し、これらに対して調査のために一つひとつ<code>SELECT COUNT(*)</code> を実行するのは、正直なところ骨が折れる作業です。というか、手作業でSQLを書くのはミスの元ですし、時間もかかります。なんなら、そもそもやりたくない＿(　_´ω`)_ﾍﾟｼｮ</p>
+
+<p>そこで今回は、そんな地道なデータ品質チェックを効率化するための、Access MDBで指定されたテーブルの全列に対して非NULL・非空データの件数を集計するSQLを動的に生成・実行するVBAスクリプトを作成しました。</p>
+
+<h2 id="背景">背景</h2>
+
+<p>このスクリプトが生まれた背景には、あるデータクレンジングプロジェクトでの切実な課題がありました。基幹システムから連携された数十のテーブルには、残念ながら多くの「データの抜け漏れ」や「不正確なデータ」が存在していました。</p>
+
+<p>プロジェクトの初期段階でこの課題に気づいていたため、「どのテーブルの、どの列に、どれくらいの有効データが存在するのか」という現状を網羅的に把握することとしました。この「有効データ」の定義は、列のデータ型によって異なります。</p>
+
+<ul>
+<li><strong>テキスト型</strong>なら、<code>NULL</code>だけでなく空文字やスペースのみのデータも「無効」としたい。</li>
+<li><strong>数値型</strong>の場合、<code>NULL</code>は無効だが、<code>0</code>は有効なデータとして扱いたいケースもあれば、<code>0</code>も「未入力」と見なしたいケースもある。</li>
+<li><strong>日付型</strong>や<strong>ブール型</strong>は、シンプルに<code>NULL</code>でないことを確認したい。</li>
+</ul>
+
+<p>これらの要件を満たすSQLを各列に対して手作業で記述するのは、時間がかかるだけでなく、ヒューマンエラーの温床にもなります。この定型的かつ重要な作業を自動化し、誰でも迅速かつ正確にデータ品質の概況を把握できるようにする。それが、このスクリプトを開発した最大の目的です。とはいえ、背景としてはまぁまぁヘビーな話ですが、コード自体は簡単に使えるようシンプルで汎用性の高いコードを心がけました。</p>
+
+<h2 id="コード">コード</h2>
+
+<p>実際に使用するVBAコードは以下の通りです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vba" data-lang="vba">Option Compare Database
+
+&#39;このVBAスクリプトは、Access MDBで指定されたテーブルの全列に対して非NULL・非空データの件数を集計するSQLを動的に生成・実行します。
+
+Sub GenerateAndExecuteColumnCountQuery(tableName As String)
+    Dim db As DAO.Database
+    Dim tdf As DAO.TableDef
+    Dim fld As DAO.Field
+    Dim sql As String
+    Dim selectClause As String
+    Dim rs As DAO.Recordset
+    
+    Set db = CurrentDb()
+    Set tdf = db.TableDefs(tableName)
+    
+    &#39; SELECT句を動的に構築
+    selectClause = &#34;SELECT &#34; &amp; vbCrLf
+    
+    For Each fld In tdf.Fields
+        If selectClause &lt;&gt; &#34;SELECT &#34; &amp; vbCrLf Then
+            selectClause = selectClause &amp; &#34;,&#34; &amp; vbCrLf
+        End If
+        
+        &#39; データ型に応じて条件を分岐
+        Select Case fld.Type
+            Case dbText, dbMemo
+                &#39; テキスト型：NULL、空文字、スペースのみを除外
+                selectClause = selectClause &amp; &#34;    SUM(IIf([&#34; &amp; fld.Name &amp; &#34;] IS NOT NULL AND Trim([&#34; &amp; fld.Name &amp; &#34;]) &lt;&gt; &#39;&#39;, 1, 0)) AS [&#34; &amp; fld.Name &amp; &#34;_Count]&#34;
+&#39;            Case dbByte, dbInteger, dbLong, dbSingle, dbDouble, dbCurrency, dbDecimal
+&#39;                &#39; 数値型：NULLのみ除外（0は集計対象）
+&#39;                selectClause = selectClause &amp; &#34;    SUM(IIf([&#34; &amp; fld.Name &amp; &#34;] IS NOT NULL, 1, 0)) AS [&#34; &amp; fld.Name &amp; &#34;_Count]&#34;
+            Case dbByte, dbInteger, dbLong, dbSingle, dbDouble, dbCurrency, dbDecimal
+                 &#39; 数値型：NULL、0を除外
+                 selectClause = selectClause &amp; &#34;    SUM(IIf([&#34; &amp; fld.Name &amp; &#34;] IS NOT NULL AND [&#34; &amp; fld.Name &amp; &#34;] &lt;&gt; 0, 1, 0)) AS [&#34; &amp; fld.Name &amp; &#34;_Count]&#34;
+            Case dbDate
+                &#39; 日付型：NULLのみ除外
+                selectClause = selectClause &amp; &#34;    SUM(IIf([&#34; &amp; fld.Name &amp; &#34;] IS NOT NULL, 1, 0)) AS [&#34; &amp; fld.Name &amp; &#34;_Count]&#34;
+            Case dbBoolean
+                &#39; ブール型：NULLのみ除外
+                selectClause = selectClause &amp; &#34;    SUM(IIf([&#34; &amp; fld.Name &amp; &#34;] IS NOT NULL, 1, 0)) AS [&#34; &amp; fld.Name &amp; &#34;_Count]&#34;
+            Case Else
+                &#39; その他の型：NULLのみ除外
+                selectClause = selectClause &amp; &#34;    SUM(IIf([&#34; &amp; fld.Name &amp; &#34;] IS NOT NULL, 1, 0)) AS [&#34; &amp; fld.Name &amp; &#34;_Count]&#34;
+        End Select
+    Next fld
+    
+    &#39; 完全なSQL文を構築
+    sql = selectClause &amp; vbCrLf &amp; &#34;FROM [&#34; &amp; tableName &amp; &#34;]&#34;
+    
+    &#39; SQLをイミディエイトウィンドウに出力
+    Debug.Print &#34;=== 生成されたSQL ===&#34;
+    Debug.Print sql
+    Debug.Print &#34;===================&#34;
+    
+    &#39; SQLを実行して結果を表示
+    Set rs = db.OpenRecordset(sql)
+    
+    If Not rs.EOF Then
+        Debug.Print &#34;=== 実行結果 ===&#34;
+        For i = 0 To rs.Fields.count - 1
+            Debug.Print rs.Fields(i).Name &amp; &#34;: &#34; &amp; rs.Fields(i).Value
+        Next i
+        Debug.Print &#34;===============&#34;
+    End If
+    
+    &#39; リソースを解放
+    rs.Close
+    Set rs = Nothing
+    Set tdf = Nothing
+    Set db = Nothing
+    
+    MsgBox &#34;処理が完了しました。イミディエイトウィンドウ（Ctrl+G）で結果を確認してください。&#34;
+End Sub
+
+&#39; 生成されたSQLのみを取得する関数
+Function GetColumnCountSQL(tableName As String) As String
+    Dim db As DAO.Database
+    Dim tdf As DAO.TableDef
+    Dim fld As DAO.Field
+    Dim selectClause As String
+    
+    Set db = CurrentDb()
+    Set tdf = db.TableDefs(tableName)
+    
+    selectClause = &#34;SELECT &#34; &amp; vbCrLf
+    
+    For Each fld In tdf.Fields
+        If selectClause &lt;&gt; &#34;SELECT &#34; &amp; vbCrLf Then
+            selectClause = selectClause &amp; &#34;,&#34; &amp; vbCrLf
+        End If
+        
+        Select Case fld.Type
+            Case dbText, dbMemo
+                selectClause = selectClause &amp; &#34;    SUM(IIf([&#34; &amp; fld.Name &amp; &#34;] IS NOT NULL AND Trim([&#34; &amp; fld.Name &amp; &#34;]) &lt;&gt; &#39;&#39;, 1, 0)) AS [&#34; &amp; fld.Name &amp; &#34;_Count]&#34;
+            Case dbByte, dbInteger, dbLong, dbSingle, dbDouble, dbCurrency, dbDecimal
+                selectClause = selectClause &amp; &#34;    SUM(IIf([&#34; &amp; fld.Name &amp; &#34;] IS NOT NULL, 1, 0)) AS [&#34; &amp; fld.Name &amp; &#34;_Count]&#34;
+            Case dbDate
+                selectClause = selectClause &amp; &#34;    SUM(IIf([&#34; &amp; fld.Name &amp; &#34;] IS NOT NULL, 1, 0)) AS [&#34; &amp; fld.Name &amp; &#34;_Count]&#34;
+            Case dbBoolean
+                selectClause = selectClause &amp; &#34;    SUM(IIf([&#34; &amp; fld.Name &amp; &#34;] IS NOT NULL, 1, 0)) AS [&#34; &amp; fld.Name &amp; &#34;_Count]&#34;
+            Case Else
+                selectClause = selectClause &amp; &#34;    SUM(IIf([&#34; &amp; fld.Name &amp; &#34;] IS NOT NULL, 1, 0)) AS [&#34; &amp; fld.Name &amp; &#34;_Count]&#34;
+        End Select
+    Next fld
+    
+    GetColumnCountSQL = selectClause &amp; vbCrLf &amp; &#34;FROM [&#34; &amp; tableName &amp; &#34;]&#34;
+    
+    Set tdf = Nothing
+    Set db = Nothing
+End Function</code></pre></div>
+<h2 id="コード解説">コード解説</h2>
+
+<p>このVBAスクリプトは、大きく分けて2つのコンポーネントで構成されています。</p>
+
+<ol>
+<li><code>GenerateAndExecuteColumnCountQuery</code>: SQLの生成と実行を両方行うメインのサブルーチン。</li>
+<li><code>GetColumnCountSQL</code>: SQLの生成のみを行う関数（他の処理への組み込みを想定）。</li>
+</ol>
+
+<h3 id="テーブル定義の動的取得">テーブル定義の動的取得</h3>
+
+<p>このスクリプトは、<code>DAO (Data Access Objects)</code> を使ってテーブルの定義情報にアクセスしています。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vba" data-lang="vba">Set db = CurrentDb()
+Set tdf = db.TableDefs(tableName)
+
+For Each fld In tdf.Fields
+    &#39; ... フィールド（列）ごとの処理 ...
+Next fld</code></pre></div>
+<p>このループにより、テーブルの全列情報を一つずつ取得し、動的にSQLを組み立てていきます。これにより、テーブルの仕様変更にも強く、汎用性の高い処理が実現できています。</p>
+
+<h3 id="データ型に応じた最適なカウント処理">データ型に応じた最適なカウント処理</h3>
+
+<p>このスクリプトの最も重要な部分は、<code>Select Case</code> を使ってフィールドのデータ型 (<code>fld.Type</code>) ごとに最適な集計ロジックを適用している点です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vba" data-lang="vba">Select Case fld.Type
+    Case dbText, dbMemo
+        &#39; テキスト型：NULL、空文字、スペースのみを除外
+        selectClause = selectClause &amp; &#34;   SUM(IIf([&#34; &amp; fld.Name &amp; &#34;] IS NOT NULL AND Trim([&#34; &amp; fld.Name &amp; &#34;]) &lt;&gt; &#39;&#39;, 1, 0)) AS [&#34; &amp; fld.Name &amp; &#34;_Count]&#34;
+    Case dbByte, dbInteger, dbLong, dbSingle, dbDouble, dbCurrency, dbDecimal
+        &#39; 数値型：NULL、0を除外
+        selectClause = selectClause &amp; &#34;   SUM(IIf([&#34; &amp; fld.Name &amp; &#34;] IS NOT NULL AND [&#34; &amp; fld.Name &amp; &#34;] &lt;&gt; 0, 1, 0)) AS [&#34; &amp; fld.Name &amp; &#34;_Count]&#34;
+    Case Else
+        &#39; その他の型：NULLのみ除外
+        selectClause = selectClause &amp; &#34;   SUM(IIf([&#34; &amp; fld.Name &amp; &#34;] IS NOT NULL, 1, 0)) AS [&#34; &amp; fld.Name &amp; &#34;_Count]&#34;
+End Select</code></pre></div>
+<ul>
+<li><strong>テキスト型 (<code>dbText</code>, <code>dbMemo</code>)</strong>: <code>IS NOT NULL</code> に加え、<code>Trim()</code> 関数で前後のスペースを削除した結果が空文字 (<code>''</code>) でないこともチェックしています。これにより、スペースだけの無意味なデータを除外できます。</li>
+<li><strong>数値型 (各種)</strong>: <code>NULL</code> だけでなく <code>0</code> もカウントから除外しています。これは、システムによっては未入力時のデフォルト値として <code>0</code> が設定されるケースを想定したものです。もし <code>0</code> を有効なデータとしてカウントしたい場合は、<code>AND [&quot; &amp; fld.Name &amp; &quot;] &lt;&gt; 0</code> の部分を削除すれば容易にカスタマイズ可能です。</li>
+<li><strong>その他の型</strong>: 基本的に <code>NULL</code> でないことを確認します。</li>
+</ul>
+
+<p>この <code>SUM(IIf(条件, 1, 0))</code> という書き方は、Access SQLにおける条件付き集計の常套手段です。条件に合致すれば <code>1</code> を、そうでなければ <code>0</code> を返し、その合計を <code>SUM</code> で求めることで、実質的な <code>COUNT</code> を実現しています。</p>
+
+<h2 id="スクリプトの使用方法">スクリプトの使用方法</h2>
+
+<p>使い方は非常に簡単です。</p>
+
+<ol>
+<li><p>AccessのVBAエディタ（<code>Alt + F11</code>）を開き、標準モジュールに上記のコードを貼り付けます。このとき、標準モジュールはわかりやすい名前（例：<code>Module_ColumnCount</code>など）で作成し保存することをオススメします。</p></li>
+
+<li><p>イミディエイトウィンドウ（<code>Ctrl + G</code>）を開きます。</p></li>
+
+<li><p>イミディエイトウィンドウに以下のように入力し、Enterキーを押します。（<code>&quot;hoge_table&quot;</code> の部分を実際のテーブル名に置き換えてください）</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">GenerateAndExecuteColumnCountQuery &#34;hoge_table&#34;</code></pre></div></li>
+
+<li><p>処理が完了するとメッセージボックスが表示されます。イミディエイトウィンドウに、生成されたSQL文と、その実行結果（各列の非NULL/非空データ件数）が出力されます。</p></li>
+</ol>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">=== 生成されたSQL ===
+SELECT 
+    SUM(IIf([ID] IS NOT NULL AND [ID] &lt;&gt; 0, 1, 0)) AS [ID_Count],
+    SUM(IIf([ProductName] IS NOT NULL AND Trim([ProductName]) &lt;&gt; &#39;&#39;, 1, 0)) AS [ProductName_Count],
+    SUM(IIf([UnitPrice] IS NOT NULL AND [UnitPrice] &lt;&gt; 0, 1, 0)) AS [UnitPrice_Count],
+    SUM(IIf([OrderDate] IS NOT NULL, 1, 0)) AS [OrderDate_Count]
+FROM [商品リスト]
+===================
+=== 実行結果 ===
+ID_Count: 150
+ProductName_Count: 148
+UnitPrice_Count: 135
+OrderDate_Count: 150
+===============</code></pre></div>
+<p>この結果を見れば、「ID_Count列が150件なのに対して同じ結果でない列が存在している（ProductName列に2件、UnitPrice列に15件のデータ抜け漏れがある）」といったことがわかります。</p>
+
+<h2 id="今後の展望">今後の展望</h2>
+
+<p>このスクリプトは、データ品質管理の第一歩としてシンプルな実装にしてありますが、さらに発展させることでより高度なデータ分析をしたり、運用に役立てたりすることが可能です。以下はその一例です。</p>
+
+<ul>
+<li><strong>結果のテーブル/CSV出力</strong>: イミディエイトウィンドウへの出力だけでなく、集計結果を日時と共にログテーブルに保存したり、CSVファイルに出力したりすることで、データ品質の定点観測が可能になります。</li>
+<li><strong>GUIの導入</strong>: Accessフォームを作成し、データベース内のテーブルをリストボックスで選択できるようにすれば、VBAに不慣れなメンバーでも簡単に利用できます。</li>
+<li><strong>品質レポートの自動生成</strong>: NULL/空データの「割合」を算出し、閾値（例：95%以上データが存在すること）を設定。閾値を下回る列をハイライトしたレポートを自動生成する機能を追加すれば、より実践的なツールになります。</li>
+<li><strong>異常値の検出</strong>: 件数だけでなく、数値データの最大値・最小値・平均値や、テキストデータの最大長・最小長なども同時に集計するロジックを追加することで、外れ値や異常フォーマットのデータを早期に発見する手がかりを得られます。</li>
+</ul>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>今回ご紹介したVBAスクリプトは、日々の開発業務で発生する「データ確認」という地道な作業を自動化し、データ品質の初期評価を迅速に行うための実践的なソリューションです。</p>
+
+<p>このようなスクリプトを活用することで、我々開発者は単純作業から解放され、より本質的な課題解決や創造的な作業に集中することができます。ぜひ、このコードをベースにご自身のプロジェクトに合わせてカスタマイズし、データ管理業務の効率化に役立ててください。</p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

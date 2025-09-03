@@ -7,10 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Sun, 22 Jun 2025 10:21:55 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 03 Sep 2025 08:29:15 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/access/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>非NULL、非空データ件数を一括集計するSQLをVBAで生成する</title>
+      <link>https://ysko909.github.io/posts/generate-sql-in-vba-to-count-non-null-records/</link>
+      <pubDate>Wed, 03 Sep 2025 08:29:15 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/generate-sql-in-vba-to-count-non-null-records/</guid>
+      <description>概要 データの整合性や品質は、開発するシステムの生命線です。特に、大規模なデータ移行や外部システムとの連携プロジェクトでは、「このテーブルのこの列、どれくらいデータが埋まっているんだっけ？」といった確認作業が頻繁に発生します。このような場合、SQLのSELECT COUNT(*)を使って非NULL・非空データの件数を調べたりします。しかし、テーブル内には何十、何百と列が存在し、これらに対して調査のために一つひとつSELECT COUNT(*) を実行するのは、正直なところ骨が折れる作業です。というか、手作業でSQLを書くのはミスの元ですし、時間もかかります。なんなら、そもそもやりたくない＿(　_´ω`)_ﾍﾟｼｮ
+そこで今回は、そんな地道なデータ品質チェックを効率化するための、Access MDBで指定されたテーブルの全列に対して非NULL・非空データの件数を集計するSQLを動的に生成・実行するVBAスクリプトを作成しました。
+背景 このスクリプトが生まれた背景には、あるデータクレンジングプロジェクトでの切実な課題がありました。基幹システムから連携された数十のテーブルには、残念ながら多くの「データの抜け漏れ」や「不正確なデータ」が存在していました。
+プロジェクトの初期段階でこの課題に気づいていたため、「どのテーブルの、どの列に、どれくらいの有効データが存在するのか」という現状を網羅的に把握することとしました。この「有効データ」の定義は、列のデータ型によって異なります。
+ テキスト型なら、NULLだけでなく空文字やスペースのみのデータも「無効」としたい。 数値型の場合、NULLは無効だが、0は有効なデータとして扱いたいケースもあれば、0も「未入力」と見なしたいケースもある。 日付型やブール型は、シンプルにNULLでないことを確認したい。  これらの要件を満たすSQLを各列に対して手作業で記述するのは、時間がかかるだけでなく、ヒューマンエラーの温床にもなります。この定型的かつ重要な作業を自動化し、誰でも迅速かつ正確にデータ品質の概況を把握できるようにする。それが、このスクリプトを開発した最大の目的です。とはいえ、背景としてはまぁまぁヘビーな話ですが、コード自体は簡単に使えるようシンプルで汎用性の高いコードを心がけました。
+コード 実際に使用するVBAコードは以下の通りです。
+Option Compare Database &amp;#39;このVBAスクリプトは、Access MDBで指定されたテーブルの全列に対して非NULL・非空データの件数を集計するSQLを動的に生成・実行します。 Sub GenerateAndExecuteColumnCountQuery(tableName As String) Dim db As DAO.Database Dim tdf As DAO.TableDef Dim fld As DAO.Field Dim sql As String Dim selectClause As String Dim rs As DAO.Recordset Set db = CurrentDb() Set tdf = db.TableDefs(tableName) &amp;#39; SELECT句を動的に構築 selectClause = &amp;#34;SELECT &amp;#34; &amp;amp; vbCrLf For Each fld In tdf.</description>
+    </item>
     
     <item>
       <title>Accessレポートの調査も相変わらず苦行なので分析用コードを作った</title>

@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/generate-sql-in-vba-to-count-non-null-records/</loc>
+    <lastmod>2025-09-03T08:29:15+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/how-to-check-whether-an-excel-cell-contains-a-formula/</loc>
     <lastmod>2025-09-02T17:08:56+09:00</lastmod>
   </url>
@@ -635,7 +640,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/access/</loc>
-    <lastmod>2025-06-22T10:21:55+09:00</lastmod>
+    <lastmod>2025-09-03T08:29:15+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1013,7 +1018,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2025-09-02T17:08:56+09:00</lastmod>
+    <lastmod>2025-09-03T08:29:15+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1229,7 +1234,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2025-09-02T17:08:56+09:00</lastmod>
+    <lastmod>2025-09-03T08:29:15+09:00</lastmod>
     <priority>0</priority>
   </url>
   
