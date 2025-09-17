@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>VSCodeで検索・置換するときの正規表現チートシート - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="VSCodeで検索・置換するときの正規表現チートシート" />
+<meta property="og:description" content="コードを書いていると、こんな作業にぶち当たることがあります。
+ 特定のフォーマットの文字列を、すべて別のフォーマットに書き換えたい… 大量のログから、特定のエラーコードを含む行だけ抜き出したい… 単純な単語検索では見つけられない、複雑なパターンの文字列を探したい…  そんな面倒なテキスト操作を解決してくれるのが「正規表現」です。Visual Studio Code (以下、VSCode) の検索・置換機能で正規表現を使えば効率は劇的に向上します。
+この記事では、基本的な使い方から一歩進んだテクニックまで、実用的な例を交えながら分かりやすく解説します。
+準備：正規表現モードをONに まずはVSCodeで正規表現を使うための準備です。
+ Ctrl&#43;F (Windows/Linux) または Cmd&#43;F (Mac) で検索ウィンドウを開きます。 ウィンドウの右側にある .* というアイコンをクリックして、青く点灯させます。  これで準備は完了です。入力したテキストが正規表現として解釈されるようになります。
+基本的な表現 ここでは、頻繁に使う基本的な正規表現の記号（メタ文字）についてです。
+   記号 意味 使用例     . 任意の1文字（改行を除く） a.c は abc, aec, a3c などにマッチします。   * 直前の文字の0回以上の繰り返し ab*c は ac, abc, abbbc などにマッチします。   &#43; 直前の文字の1回以上の繰り返し ab&#43;c は abc, abbbc にはマッチしますが、 ac にはマッチしません。   ?" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/regex-when-search-and-replace-in-vscode/" /><meta property="article:published_time" content="2025-09-17T11:58:41&#43;09:00"/>
+<meta property="article:modified_time" content="2025-09-17T11:58:41&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="VSCodeで検索・置換するときの正規表現チートシート"/>
+<meta name="twitter:description" content="コードを書いていると、こんな作業にぶち当たることがあります。
+ 特定のフォーマットの文字列を、すべて別のフォーマットに書き換えたい… 大量のログから、特定のエラーコードを含む行だけ抜き出したい… 単純な単語検索では見つけられない、複雑なパターンの文字列を探したい…  そんな面倒なテキスト操作を解決してくれるのが「正規表現」です。Visual Studio Code (以下、VSCode) の検索・置換機能で正規表現を使えば効率は劇的に向上します。
+この記事では、基本的な使い方から一歩進んだテクニックまで、実用的な例を交えながら分かりやすく解説します。
+準備：正規表現モードをONに まずはVSCodeで正規表現を使うための準備です。
+ Ctrl&#43;F (Windows/Linux) または Cmd&#43;F (Mac) で検索ウィンドウを開きます。 ウィンドウの右側にある .* というアイコンをクリックして、青く点灯させます。  これで準備は完了です。入力したテキストが正規表現として解釈されるようになります。
+基本的な表現 ここでは、頻繁に使う基本的な正規表現の記号（メタ文字）についてです。
+   記号 意味 使用例     . 任意の1文字（改行を除く） a.c は abc, aec, a3c などにマッチします。   * 直前の文字の0回以上の繰り返し ab*c は ac, abc, abbbc などにマッチします。   &#43; 直前の文字の1回以上の繰り返し ab&#43;c は abc, abbbc にはマッチしますが、 ac にはマッチしません。   ?"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">VSCodeで検索・置換するときの正規表現チートシート</h1>
+			<div class="meta">Posted at &mdash; Sep 17, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<p>コードを書いていると、こんな作業にぶち当たることがあります。</p>
+
+<ul>
+<li>特定のフォーマットの文字列を、すべて別のフォーマットに書き換えたい…</li>
+<li>大量のログから、特定のエラーコードを含む行だけ抜き出したい…</li>
+<li>単純な単語検索では見つけられない、複雑なパターンの文字列を探したい…</li>
+</ul>
+
+<p>そんな面倒なテキスト操作を解決してくれるのが「<strong>正規表現</strong>」です。Visual Studio Code (以下、VSCode) の検索・置換機能で正規表現を使えば効率は劇的に向上します。</p>
+
+<p>この記事では、基本的な使い方から一歩進んだテクニックまで、実用的な例を交えながら分かりやすく解説します。</p>
+
+<h2 id="準備-正規表現モードをonに">準備：正規表現モードをONに</h2>
+
+<p>まずはVSCodeで正規表現を使うための準備です。</p>
+
+<ol>
+<li><code>Ctrl+F</code> (Windows/Linux) または <code>Cmd+F</code> (Mac) で検索ウィンドウを開きます。</li>
+<li>ウィンドウの右側にある <code>.*</code> というアイコンをクリックして、青く点灯させます。</li>
+</ol>
+
+<p><img src="image.png" alt="alt text" /></p>
+
+<p>これで準備は完了です。入力したテキストが正規表現として解釈されるようになります。</p>
+
+<h2 id="基本的な表現">基本的な表現</h2>
+
+<p>ここでは、頻繁に使う基本的な正規表現の記号（メタ文字）についてです。</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">記号</th>
+<th align="left">意味</th>
+<th align="left">使用例</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left"><code>.</code></td>
+<td align="left">任意の1文字（改行を除く）</td>
+<td align="left"><code>a.c</code> は <code>abc</code>, <code>aec</code>, <code>a3c</code> などにマッチします。</td>
+</tr>
+
+<tr>
+<td align="left"><code>*</code></td>
+<td align="left">直前の文字の0回以上の繰り返し</td>
+<td align="left"><code>ab*c</code> は <code>ac</code>, <code>abc</code>, <code>abbbc</code> などにマッチします。</td>
+</tr>
+
+<tr>
+<td align="left"><code>+</code></td>
+<td align="left">直前の文字の1回以上の繰り返し</td>
+<td align="left"><code>ab+c</code> は <code>abc</code>, <code>abbbc</code> にはマッチしますが、 <code>ac</code> にはマッチしません。</td>
+</tr>
+
+<tr>
+<td align="left"><code>?</code></td>
+<td align="left">直前の文字の0回または1回</td>
+<td align="left"><code>ab?c</code> は <code>ac</code>, <code>abc</code> にはマッチしますが、 <code>abbc</code> にはマッチしません。</td>
+</tr>
+
+<tr>
+<td align="left"><code>\</code></td>
+<td align="left">メタ文字のエスケープ</td>
+<td align="left"><code>\.</code> は <code>.</code> という文字そのものにマッチします。<code>*</code> や <code>+</code> も同様です。</td>
+</tr>
+
+<tr>
+<td align="left"><code>[ ]</code></td>
+<td align="left">文字クラス（角括弧内のいずれか1文字）</td>
+<td align="left"><code>[abc]</code> は <code>a</code>, <code>b</code>, <code>c</code> のいずれか1文字にマッチします。<code>[a-z]</code> のように範囲指定も可能です。</td>
+</tr>
+
+<tr>
+<td align="left"><code>[^ ]</code></td>
+<td align="left">否定文字クラス（角括弧内の文字以外）</td>
+<td align="left"><code>[^abc]</code> は <code>a</code>, <code>b</code>, <code>c</code> 以外の任意の1文字にマッチします。</td>
+</tr>
+
+<tr>
+<td align="left"><code>^</code></td>
+<td align="left">行の先頭</td>
+<td align="left"><code>^hoge</code> は行の先頭にある <code>hoge</code> にのみマッチします。</td>
+</tr>
+
+<tr>
+<td align="left"><code>$</code></td>
+<td align="left">行の末尾</td>
+<td align="left"><code>hoge$</code> は行の末尾にある <code>hoge</code> にのみマッチします。</td>
+</tr>
+
+<tr>
+<td align="left">`</td>
+<td align="left">`</td>
+<td align="left">OR条件</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="ショートカット">ショートカット</h3>
+
+<p>毎回 <code>[0-9]</code> や <code>[a-zA-Z0-9_]</code> と書くのは面倒です。そんな時に使える、便利なショートカットがあります。</p>
+
+<ul>
+<li><code>\d</code>: 任意の数字 (<code>[0-9]</code> と同じ)</li>
+<li><code>\w</code>: 英数字とアンダースコア (<code>[a-zA-Z0-9_]</code> と同じ)</li>
+<li><code>\s</code>: スペース、タブなどの空白文字</li>
+<li><code>\n</code>: 改行文字</li>
+</ul>
+
+<h2 id="グループ化と繰り返し">グループ化と繰り返し</h2>
+
+<p>正規表現の真価は、パターンを組み合わせて使えるところにあります。</p>
+
+<h3 id="グループ化">グループ化 <code>()</code></h3>
+
+<p>丸括弧 <code>()</code> で囲むと、複数の文字を一つのまとまりとして扱えます。</p>
+
+<ul>
+<li><strong>検索パターン:</strong> <code>(hoge)+</code></li>
+<li><strong>意味:</strong> <code>hoge</code> という文字列が1回以上繰り返される場合にマッチします。</li>
+<li><strong>マッチする例:</strong> <code>hoge</code>, <code>hogehoge</code></li>
+</ul>
+
+<h3 id="繰り返しの回数指定">繰り返しの回数指定 <code>{}</code></h3>
+
+<p>波括弧 <code>{}</code> を使うと、直前の文字やグループが繰り返される回数を細かく指定できます。</p>
+
+<ul>
+<li><strong><code>(hoge){2}</code></strong>: <code>hoge</code> がちょうど2回繰り返す (<code>hogehoge</code>)</li>
+<li><strong><code>(hoge){2,}</code></strong>: <code>hoge</code> が2回以上繰り返す (<code>hogehoge</code>, <code>hogehogehoge</code>&hellip;)</li>
+<li><strong><code>(hoge){2,3}</code></strong>: <code>hoge</code> が2回か3回繰り返す (<code>hogehoge</code>, <code>hogehogehoge</code>)</li>
+</ul>
+
+<h3 id="最長マッチ-greedy-vs-最短マッチ-lazy">最長マッチ (Greedy) vs 最短マッチ (Lazy)</h3>
+
+<p><code>*</code> や <code>+</code> は、デフォルトでは条件に合う<strong>最も長い</strong>文字列にマッチします。この方法を<strong>欲張り(Greedy)マッチ</strong>と言います。「最も多く（長く）」だから欲張りなんですね。<strong>しらんけど</strong>＿(　_´ω`)_ﾍﾟｼｮ</p>
+
+<ul>
+<li><strong>対象テキスト:</strong> <code>&lt;div&gt;hoge&lt;/div&gt;&lt;div&gt;fuga&lt;/div&gt;</code></li>
+<li><strong>検索パターン:</strong> <code>&lt;div&gt;.*&lt;/div&gt;</code></li>
+<li><strong>マッチ結果:</strong> <code>&lt;div&gt;hoge&lt;/div&gt;&lt;div&gt;fuga&lt;/div&gt;</code> （全体にマッチしてしまう）</li>
+</ul>
+
+<p>全体マッチをを避けたい場合、<code>*</code> や <code>+</code> の後ろに <code>?</code> をつけます。すると、条件に合う<strong>最も短い</strong>文字列にマッチするようになります。この方法を<strong>怠惰(Lazy)マッチ</strong>と言います。「長いものがあろうと最短しか取らない」から怠惰なんですね。<strong>しらんけど</strong>＿(　_´ω`)_ﾍﾟｼｮ</p>
+
+<ul>
+<li><strong>対象テキスト:</strong> <code>&lt;div&gt;hoge&lt;/div&gt;&lt;div&gt;fuga&lt;/div&gt;</code></li>
+<li><strong>検索パターン:</strong> <code>&lt;div&gt;.*?&lt;/div&gt;</code></li>
+<li><strong>マッチ結果1:</strong> <code>&lt;div&gt;hoge&lt;/div&gt;</code></li>
+<li><strong>マッチ結果2:</strong> <code>&lt;div&gt;fuga&lt;/div&gt;</code></li>
+</ul>
+
+<h2 id="置換で使えるキャプチャ機能">置換で使えるキャプチャ機能</h2>
+
+<p>正規表現が最も輝くのは「置換」機能と組み合わせたときです。先ほど解説した<code>()</code> によるグループ化は、マッチした部分を後で再利用するために「キャプチャ」する役割も持っています。</p>
+
+<h3 id="置換文字列での再利用-1-2">置換文字列での再利用 <code>$1</code>, <code>$2</code></h3>
+
+<p>検索パターン内で <code>()</code> を使ってキャプチャした部分は、置換文字列の中で <code>$1</code>, <code>$2</code>&hellip; のようにして呼び出せます（1番目の括弧が <code>$1</code>、2番目が <code>$2</code>）。</p>
+
+<h4 id="例1-名前の順番を入れ替える">例1: 名前の順番を入れ替える</h4>
+
+<ul>
+<li><strong>検索:</strong> <code>(Taro) (Yamada)</code></li>
+<li><strong>置換:</strong> <code>$2, $1</code></li>
+<li><strong>結果:</strong> <code>Yamada, Taro</code></li>
+</ul>
+
+<h4 id="例2-markdownのリンクをhtmlタグに変換する">例2: MarkdownのリンクをHTMLタグに変換する</h4>
+
+<ul>
+<li><strong>検索:</strong> <code>\[(.*?)\]\((.*?)\)</code>
+
+<ul>
+<li><code>\[</code> と <code>\]</code>、 <code>\(</code> と <code>\)</code> はエスケープしています。</li>
+<li><code>(.*?)</code> でリンクテキストとURLをそれぞれキャプチャします。</li>
+</ul></li>
+<li><strong>置換:</strong> <code>&lt;a href=&quot;$2&quot;&gt;$1&lt;/a&gt;</code></li>
+<li><strong>変換前:</strong> <code>[Google](https://www.google.com)</code></li>
+<li><strong>変換後:</strong> <code>&lt;a href=&quot;https://www.google.com&quot;&gt;Google&lt;/a&gt;</code></li>
+</ul>
+
+<h3 id="検索パターン内での再利用-1-2">検索パターン内での再利用 <code>\1</code>, <code>\2</code></h3>
+
+<p><code>()</code> でキャプチャした内容は、同じ検索パターンの中で <code>\1</code>, <code>\2</code> を使って参照することもできます（<strong>後方参照</strong>）。</p>
+
+<ul>
+<li><strong>検索パターン:</strong> <code>(hoge)\1</code></li>
+<li><strong>意味:</strong> <code>hoge</code> という文字列が2回連続している場合にマッチします。<code>hogehoge</code> と書くのと同じ意味です。</li>
+<li><strong>マッチする例:</strong> <code>hogehoge</code></li>
+<li><strong>マッチしない例:</strong> <code>hoge</code>, <code>hogefuga</code></li>
+</ul>
+
+<h2 id="part-4-実践ユースケース集">Part 4: 実践ユースケース集 💡</h2>
+
+<p>最後に、日常的なコーディングで役立つ実践的な例をいくつか紹介します。</p>
+
+<h3 id="1-末尾の不要な空白を削除する">1. 末尾の不要な空白を削除する</h3>
+
+<ul>
+<li><strong>検索:</strong> <code>\s+$</code></li>
+<li><strong>置換:</strong> (何も入力しない)</li>
+<li><strong>解説:</strong> 各行の末尾(<code>$</code>)にある1つ以上の空白文字(<code>\s+</code>)を検索し、空の文字列に置換することで削除します。</li>
+</ul>
+
+<h3 id="2-javascriptの-console-log-をすべて削除する">2. JavaScriptの <code>console.log()</code> をすべて削除する</h3>
+
+<ul>
+<li><strong>検索:</strong> <code>^(\s*)console\.log\(.*\);?(\n|$)</code></li>
+<li><strong>置換:</strong> (何も入力しない)</li>
+<li><strong>解説:</strong> 行頭のインデントを含めて <code>console.log(...)</code> の行全体を検索し、削除します。</li>
+</ul>
+
+<h3 id="3-日本語の文字を検索する">3. 日本語の文字を検索する</h3>
+
+<p>日本語の文字（ひらがな、カタカナ、漢字）を含むテキストを検索したい場合に便利です。</p>
+
+<ul>
+<li><strong>ひらがなのみ:</strong> <code>[ぁ-ん]</code></li>
+<li><strong>カタカナのみ:</strong> <code>[ァ-ヶー]</code></li>
+<li><strong>漢字のみ:</strong> <code>[一-龯]</code></li>
+<li><strong>すべて:</strong> <code>[ぁ-んァ-ヶー一-龯]</code></li>
+</ul>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>正規表現は、慣れるまで少し時間がかかるかもしれませんが、一度身につければあなたの強力な武器になります。最初は簡単なパターンから試していき、少しずつ複雑なパターンに挑戦してみてください。</p>
+
+<p>また、「<a href="https://regex101.com/">Regex101</a>」のようなサイトを使えば、正規表現の動作をリアルタイムで確認しながら学習できます。</p>
+
+<h3 id="参考資料">参考資料</h3>
+
+<ul>
+<li><a href="https://docs.microsoft.com/ja-jp/visualstudio/ide/using-regular-expressions-in-visual-studio?view=vs-2022">Visual Studio での正規表現の使用 - Microsoft Docs</a></li>
+<li><a href="https://qiita.com/kageryosan/items/38bf43f55d294da72361">日本語(ひらがな、カタカナ、漢字）にヒットする正規表現 - Qiita</a></li>
+</ul>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
