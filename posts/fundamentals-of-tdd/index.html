@@ -11,9 +11,8 @@ TDDとは システム開発では、「品質の高いコードを、いかに�
 「レッド・グリーン・リファクタリング」のサイクル TDDは、プログラムの実装コードを書く前に、そのコードが満たすべき仕様をテストコードとして先に記述する開発手法です。このアプローチの核心は、以下の3つのステップを短いサイクルで繰り返すことにあります。
  レッド (Red): まず、失敗するテストを書きます。これから実装したい機能に対するテストコードを記述しますが、まだ機能自体は存在しないため、このテストは必ず失敗します。テストフレームワークが赤色でエラーを示すことから「レッド」と呼ばれます。これは「何を達成すべきか」を明確に定義するステップです。 グリーン (Green): 次に、レッドフェーズで書いたテストが成功する（パスする）ための最小限の実装コードを書きます。ここではコードの綺麗さや効率は一旦無視し、とにかくテストをパスさせることだけを目指します。テストが成功すると緑色で示されることから「グリーン」と呼ばれます。 リファクタリング (Refactoring): テストが成功しているという安心感を「セーフティネット」として、コードの構造を改善します。重複したコードをまとめたり、変数名を分かりやすくしたりと、設計をより良くするためのリファクタリングを行います。リファクタリング後も、テストが成功し続けることを随時確認します。  この「レッド → グリーン → リファクタリング」という小さなサイクルを繰り返すことで、一つひとつの機能を確実に、かつクリーンな設計で実装していくのがTDDの基本的な流れです。
 他開発手法との比較 TDDは他の開発手法とどう違うのでしょうか。代表的なものと比較してみましょう。
-| 開発手法 | 特徴 | TDDとの関係性 | |&ndash;||| | ウォーターフォール | 「要件定義→設計→実装→テスト」という工程を順番に進める。後戻りは原則しない。 | 対照的。 TDDでは実装とテストが非常に短いサイクルで行われるのに対し、ウォーターフォールではテストは実装がすべて完了した後の独立した工程として扱われます。 | | アジャイル開発 | 小さな機能単位で「計画→設計→実装→テスト」のサイクルを繰り返す。TDDはこのアジャイルの文脈で採用されることが多い。 | 補完的。 TDDはアジャイル開発の各イテレーション（反復）の中で、個々の機能の実装品質を高めるための具体的なプラクティス（実践方法）と言えます。アジャイル開発でも、必ずしもTDDが採用されるわけではありません（実装後にテストを書く場合もあります）。 | | BDD (ビヘイビア駆動開発) | TDDから派生した手法。テストを「システムの振る舞い（Behavior）」という観点から、より自然言語に近い形で記述する。「顧客やPMも読める仕様書」としての側面が強い。 | 発展的。 TDDが「開発者の視点」で関数の入出力などをテストするのに対し、BDDは「ユーザーやビジネスの視点」でシステムの振る舞いを記述します。使うツールもGherkin（Given-When-Then形式）などが有名です。 |
-この中で、TDDとアジャイルは比較的近い位置にいるため、TDDがアジャイルで採用されることもあります。しかし、これらは厳密に言うと目的が異なる別軸の手法です。
-| 観点 | アジャイル開発 | TDD | |||| | 目的 | 短いイテレーションで価値提供を最大化 | コードの品質・設計の健全性を担保 | | 中心 | ユーザーストーリー／バックログ | テスト（仕様の明文化） | | 適用範囲 | プロセス・チーム運営 | 実装の手法・設計の育て方 | | 主な効果 | 変更への柔軟性、早いフィードバック | バグの早期発見、リファクタの安全網 | | 課題 | テスト戦略が薄いと品質リスク | 初期コスト、学習曲線、過剰テストのリスク |" />
+   開発手法 特徴 TDDとの関係性     ウォーターフォール 「要件定義→設計→実装→テスト」という工程を順番に進める。後戻りは原則しない。 対照的。 TDDでは実装とテストが非常に短いサイクルで行われるのに対し、ウォーターフォールではテストは実装がすべて完了した後の独立した工程として扱われます。   アジャイル開発 小さな機能単位で「計画→設計→実装→テスト」のサイクルを繰り返す。TDDはこのアジャイルの文脈で採用されることが多い。 補完的。 TDDはアジャイル開発の各イテレーション（反復）の中で、個々の機能の実装品質を高めるための具体的なプラクティス（実践方法）と言えます。アジャイル開発でも、必ずしもTDDが採用されるわけではありません（実装後にテストを書く場合もあります）。   BDD (ビヘイビア駆動開発) TDDから派生した手法。テストを「システムの振る舞い（Behavior）」という観点から、より自然言語に近い形で記述する。「顧客やPMも読める仕様書」としての側面が強い。 発展的。 TDDが「開発者の視点」で関数の入出力などをテストするのに対し、BDDは「ユーザーやビジネスの視点」でシステムの振る舞いを記述します。使うツールもGherkin（Given-When-Then形式）などが有名です。    この中で、TDDとアジャイルは比較的近い位置にいるため、TDDがアジャイルで採用されることもあります。しかし、これらは厳密に言うと目的が異なる別軸の手法です。
+   観点 アジャイル開発 TDD     目的 短いイテレーションで価値提供を最大化 コードの品質・設計の健全性を担保   中心 ユーザーストーリー／バックログ テスト（仕様の明文化）   適用範囲 プロセス・チーム運営 実装の手法・設計の育て方   主な効果 変更への柔軟性、早いフィードバック バグの早期発見、リファクタの安全網   課題 テスト戦略が薄いと品質リスク 初期コスト、学習曲線、過剰テストのリスク    そのため、アジャイル（プロセス）とTDD（実装プラクティス）は併用が理想的と言えます。そうすれば、プロセスで速く回しつつ、TDDで設計品質を底上げすることが可能です。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-tdd/" /><meta property="article:published_time" content="2025-10-17T15:40:48&#43;09:00"/>
 <meta property="article:modified_time" content="2025-10-17T15:40:48&#43;09:00"/><meta name="twitter:card" content="summary"/>
@@ -25,9 +24,8 @@ TDDとは システム開発では、「品質の高いコードを、いかに�
 「レッド・グリーン・リファクタリング」のサイクル TDDは、プログラムの実装コードを書く前に、そのコードが満たすべき仕様をテストコードとして先に記述する開発手法です。このアプローチの核心は、以下の3つのステップを短いサイクルで繰り返すことにあります。
  レッド (Red): まず、失敗するテストを書きます。これから実装したい機能に対するテストコードを記述しますが、まだ機能自体は存在しないため、このテストは必ず失敗します。テストフレームワークが赤色でエラーを示すことから「レッド」と呼ばれます。これは「何を達成すべきか」を明確に定義するステップです。 グリーン (Green): 次に、レッドフェーズで書いたテストが成功する（パスする）ための最小限の実装コードを書きます。ここではコードの綺麗さや効率は一旦無視し、とにかくテストをパスさせることだけを目指します。テストが成功すると緑色で示されることから「グリーン」と呼ばれます。 リファクタリング (Refactoring): テストが成功しているという安心感を「セーフティネット」として、コードの構造を改善します。重複したコードをまとめたり、変数名を分かりやすくしたりと、設計をより良くするためのリファクタリングを行います。リファクタリング後も、テストが成功し続けることを随時確認します。  この「レッド → グリーン → リファクタリング」という小さなサイクルを繰り返すことで、一つひとつの機能を確実に、かつクリーンな設計で実装していくのがTDDの基本的な流れです。
 他開発手法との比較 TDDは他の開発手法とどう違うのでしょうか。代表的なものと比較してみましょう。
-| 開発手法 | 特徴 | TDDとの関係性 | |&ndash;||| | ウォーターフォール | 「要件定義→設計→実装→テスト」という工程を順番に進める。後戻りは原則しない。 | 対照的。 TDDでは実装とテストが非常に短いサイクルで行われるのに対し、ウォーターフォールではテストは実装がすべて完了した後の独立した工程として扱われます。 | | アジャイル開発 | 小さな機能単位で「計画→設計→実装→テスト」のサイクルを繰り返す。TDDはこのアジャイルの文脈で採用されることが多い。 | 補完的。 TDDはアジャイル開発の各イテレーション（反復）の中で、個々の機能の実装品質を高めるための具体的なプラクティス（実践方法）と言えます。アジャイル開発でも、必ずしもTDDが採用されるわけではありません（実装後にテストを書く場合もあります）。 | | BDD (ビヘイビア駆動開発) | TDDから派生した手法。テストを「システムの振る舞い（Behavior）」という観点から、より自然言語に近い形で記述する。「顧客やPMも読める仕様書」としての側面が強い。 | 発展的。 TDDが「開発者の視点」で関数の入出力などをテストするのに対し、BDDは「ユーザーやビジネスの視点」でシステムの振る舞いを記述します。使うツールもGherkin（Given-When-Then形式）などが有名です。 |
-この中で、TDDとアジャイルは比較的近い位置にいるため、TDDがアジャイルで採用されることもあります。しかし、これらは厳密に言うと目的が異なる別軸の手法です。
-| 観点 | アジャイル開発 | TDD | |||| | 目的 | 短いイテレーションで価値提供を最大化 | コードの品質・設計の健全性を担保 | | 中心 | ユーザーストーリー／バックログ | テスト（仕様の明文化） | | 適用範囲 | プロセス・チーム運営 | 実装の手法・設計の育て方 | | 主な効果 | 変更への柔軟性、早いフィードバック | バグの早期発見、リファクタの安全網 | | 課題 | テスト戦略が薄いと品質リスク | 初期コスト、学習曲線、過剰テストのリスク |"/>
+   開発手法 特徴 TDDとの関係性     ウォーターフォール 「要件定義→設計→実装→テスト」という工程を順番に進める。後戻りは原則しない。 対照的。 TDDでは実装とテストが非常に短いサイクルで行われるのに対し、ウォーターフォールではテストは実装がすべて完了した後の独立した工程として扱われます。   アジャイル開発 小さな機能単位で「計画→設計→実装→テスト」のサイクルを繰り返す。TDDはこのアジャイルの文脈で採用されることが多い。 補完的。 TDDはアジャイル開発の各イテレーション（反復）の中で、個々の機能の実装品質を高めるための具体的なプラクティス（実践方法）と言えます。アジャイル開発でも、必ずしもTDDが採用されるわけではありません（実装後にテストを書く場合もあります）。   BDD (ビヘイビア駆動開発) TDDから派生した手法。テストを「システムの振る舞い（Behavior）」という観点から、より自然言語に近い形で記述する。「顧客やPMも読める仕様書」としての側面が強い。 発展的。 TDDが「開発者の視点」で関数の入出力などをテストするのに対し、BDDは「ユーザーやビジネスの視点」でシステムの振る舞いを記述します。使うツールもGherkin（Given-When-Then形式）などが有名です。    この中で、TDDとアジャイルは比較的近い位置にいるため、TDDがアジャイルで採用されることもあります。しかし、これらは厳密に言うと目的が異なる別軸の手法です。
+   観点 アジャイル開発 TDD     目的 短いイテレーションで価値提供を最大化 コードの品質・設計の健全性を担保   中心 ユーザーストーリー／バックログ テスト（仕様の明文化）   適用範囲 プロセス・チーム運営 実装の手法・設計の育て方   主な効果 変更への柔軟性、早いフィードバック バグの早期発見、リファクタの安全網   課題 テスト戦略が薄いと品質リスク 初期コスト、学習曲線、過剰テストのリスク    そのため、アジャイル（プロセス）とTDD（実装プラクティス）は併用が理想的と言えます。そうすれば、プロセスで速く回しつつ、TDDで設計品質を底上げすることが可能です。"/>
 <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
 		rel="stylesheet">
 
@@ -115,21 +113,79 @@ TDDとは システム開発では、「品質の高いコードを、いかに�
 
 <p>TDDは他の開発手法とどう違うのでしょうか。代表的なものと比較してみましょう。</p>
 
-<p>| 開発手法                 | 特徴                                                                                                                                                          | TDDとの関係性                                                                                                                                                                                                                                     |
-|&ndash;|||
-| ウォーターフォール       | 「要件定義→設計→実装→テスト」という工程を順番に進める。後戻りは原則しない。                                                                                   | 対照的。 TDDでは実装とテストが非常に短いサイクルで行われるのに対し、ウォーターフォールではテストは実装がすべて完了した後の独立した工程として扱われます。                                                                                          |
-| アジャイル開発           | 小さな機能単位で「計画→設計→実装→テスト」のサイクルを繰り返す。TDDはこのアジャイルの文脈で採用されることが多い。                                              | 補完的。 TDDはアジャイル開発の各イテレーション（反復）の中で、個々の機能の実装品質を高めるための具体的なプラクティス（実践方法）と言えます。アジャイル開発でも、必ずしもTDDが採用されるわけではありません（実装後にテストを書く場合もあります）。 |
-| BDD (ビヘイビア駆動開発) | TDDから派生した手法。テストを「システムの振る舞い（Behavior）」という観点から、より自然言語に近い形で記述する。「顧客やPMも読める仕様書」としての側面が強い。 | 発展的。 TDDが「開発者の視点」で関数の入出力などをテストするのに対し、BDDは「ユーザーやビジネスの視点」でシステムの振る舞いを記述します。使うツールもGherkin（Given-When-Then形式）などが有名です。                                               |</p>
+<table>
+<thead>
+<tr>
+<th>開発手法</th>
+<th>特徴</th>
+<th>TDDとの関係性</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>ウォーターフォール</td>
+<td>「要件定義→設計→実装→テスト」という工程を順番に進める。後戻りは原則しない。</td>
+<td>対照的。 TDDでは実装とテストが非常に短いサイクルで行われるのに対し、ウォーターフォールではテストは実装がすべて完了した後の独立した工程として扱われます。</td>
+</tr>
+
+<tr>
+<td>アジャイル開発</td>
+<td>小さな機能単位で「計画→設計→実装→テスト」のサイクルを繰り返す。TDDはこのアジャイルの文脈で採用されることが多い。</td>
+<td>補完的。 TDDはアジャイル開発の各イテレーション（反復）の中で、個々の機能の実装品質を高めるための具体的なプラクティス（実践方法）と言えます。アジャイル開発でも、必ずしもTDDが採用されるわけではありません（実装後にテストを書く場合もあります）。</td>
+</tr>
+
+<tr>
+<td>BDD (ビヘイビア駆動開発)</td>
+<td>TDDから派生した手法。テストを「システムの振る舞い（Behavior）」という観点から、より自然言語に近い形で記述する。「顧客やPMも読める仕様書」としての側面が強い。</td>
+<td>発展的。 TDDが「開発者の視点」で関数の入出力などをテストするのに対し、BDDは「ユーザーやビジネスの視点」でシステムの振る舞いを記述します。使うツールもGherkin（Given-When-Then形式）などが有名です。</td>
+</tr>
+</tbody>
+</table>
 
 <p>この中で、TDDとアジャイルは比較的近い位置にいるため、TDDがアジャイルで採用されることもあります。しかし、これらは厳密に言うと目的が異なる別軸の手法です。</p>
 
-<p>| 観点 | アジャイル開発 | TDD |
-||||
-| <strong>目的</strong> | 短いイテレーションで<strong>価値提供</strong>を最大化 | コードの<strong>品質・設計の健全性</strong>を担保 |
-| <strong>中心</strong> | ユーザーストーリー／バックログ | テスト（仕様の明文化） |
-| <strong>適用範囲</strong> | プロセス・チーム運営 | 実装の手法・設計の育て方 |
-| <strong>主な効果</strong> | 変更への柔軟性、早いフィードバック | バグの早期発見、リファクタの安全網 |
-| <strong>課題</strong> | テスト戦略が薄いと品質リスク | 初期コスト、学習曲線、過剰テストのリスク |</p>
+<table>
+<thead>
+<tr>
+<th>観点</th>
+<th>アジャイル開発</th>
+<th>TDD</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><strong>目的</strong></td>
+<td>短いイテレーションで<strong>価値提供</strong>を最大化</td>
+<td>コードの<strong>品質・設計の健全性</strong>を担保</td>
+</tr>
+
+<tr>
+<td><strong>中心</strong></td>
+<td>ユーザーストーリー／バックログ</td>
+<td>テスト（仕様の明文化）</td>
+</tr>
+
+<tr>
+<td><strong>適用範囲</strong></td>
+<td>プロセス・チーム運営</td>
+<td>実装の手法・設計の育て方</td>
+</tr>
+
+<tr>
+<td><strong>主な効果</strong></td>
+<td>変更への柔軟性、早いフィードバック</td>
+<td>バグの早期発見、リファクタの安全網</td>
+</tr>
+
+<tr>
+<td><strong>課題</strong></td>
+<td>テスト戦略が薄いと品質リスク</td>
+<td>初期コスト、学習曲線、過剰テストのリスク</td>
+</tr>
+</tbody>
+</table>
 
 <p>そのため、アジャイル（プロセス）とTDD（実装プラクティス）は<strong>併用</strong>が理想的と言えます。そうすれば、プロセスで速く回しつつ、TDDで設計品質を底上げすることが可能です。</p>
 
@@ -619,578 +675,6 @@ async <span style="color:#00f">def</span> test_worker_gives_up_after_max_retries
 
 <p><strong>対策：</strong> 目的は「重要な仕様が壊れていないか」の確認です。カバレッジは参考指標に過ぎず、数字よりも品質を優先します。</p>
 
-<h2 id="まとめ">まとめ</h2>
-
-<ul>
-<li>TDDは「<strong>テスト先行</strong>→<strong>最小Green</strong>→<strong>安全リファクタ</strong>」。<strong>品質・設計の健全性・変更耐性</strong>を同時に高める。</li>
-<li>実務の複雑性（外部API、DB、非同期、I/O、レガシー）にも、<strong>テストダブル＋ポート＆アダプタ</strong>で対応可能。</li>
-<li><strong>契約テスト</strong>で差し替え容易に、<strong>キャラクタライゼーション</strong>でレガシーを守ってから改善。</li>
-</ul>
-
-<p><strong>次のステップ案</strong>
-1. FastAPI／Flask のエンドポイントを Outside-In でTDD（ルーティング→サービス→ゲートウェイ）<br />
-2. SQLAlchemy でリポジトリを抽象化し、インメモリ／本番の差し替えを契約テストで保証<br />
-3. 非同期処理に<strong>指数バックオフ</strong>・<strong>タイムアウト</strong>を追加し、<code>AsyncMock</code>で検証<br />
-4. プロパティベーステスト（Hypothesis）で境界値探索を導入</p>
-
-<h1 id="tdd-テスト駆動開発-の基本">TDD（テスト駆動開発）の基本</h1>
-
-<h2 id="tl-dr-1">TL;DR</h2>
-
-<p>テスト駆動開発（以下、TDD）は「<strong>テストを先に書く→最小のコードで通す→安全にリファクタ</strong>」の短いサイクルで、<strong>品質・設計の健全性・変更耐性</strong>を高めます。アジャイルの一部で使われることが多いですが、<strong>目的が異なる独立のプラクティス</strong>です。</p>
-
-<p>システム開発では、「品質の高いコードを、いかに効率よく書くか」という課題に日々向き合っています。その解決策の一つとして、<strong>テスト駆動開発（TDD: Test-Driven Development）</strong>という手法があります。本記事では、TDDの基本的な考え方から、他の開発手法との比較、そしてPythonとpytestを使った具体的な実践例までを解説します。</p>
-
-<h2 id="tddとは-レッド-グリーン-リファクタリング-のサイクル">TDDとは？「レッド・グリーン・リファクタリング」のサイクル</h2>
-
-<p>TDDは、プログラムの実装コードを書く前に、そのコードが満たすべき仕様をテストコードとして先に記述する開発手法です。このアプローチの核心は、以下の3つのステップを短いサイクルで繰り返すことにあります。</p>
-
-<ul>
-<li>レッド (Red): まず、失敗するテストを書きます。これから実装したい機能に対するテストコードを記述しますが、まだ機能自体は存在しないため、このテストは必ず失敗します。テストフレームワークが赤色でエラーを示すことから「レッド」と呼ばれます。これは「何を達成すべきか」を明確に定義するステップです。</li>
-<li>グリーン (Green): 次に、レッドフェーズで書いたテストが成功する（パスする）ための最小限の実装コードを書きます。ここではコードの綺麗さや効率は一旦無視し、とにかくテストをパスさせることだけを目指します。テストが成功すると緑色で示されることから「グリーン」と呼ばれます。</li>
-<li>リファクタリング (Refactoring): テストが成功しているという安心感を「セーフティネット」として、コードの構造を改善します。重複したコードをまとめたり、変数名を分かりやすくしたりと、設計をより良くするためのリファクタリングを行います。リファクタリング後も、テストが成功し続けることを随時確認します。</li>
-</ul>
-
-<p>この「レッド → グリーン → リファクタリング」という小さなサイクルを繰り返すことで、一つひとつの機能を確実に、かつクリーンな設計で実装していくのがTDDの基本的な流れです。</p>
-
-<h2 id="他開発手法との比較-1">他開発手法との比較</h2>
-
-<p>TDDは他の開発手法とどう違うのでしょうか。代表的なものと比較してみましょう。</p>
-
-<p>| 開発手法                 | 特徴                                                                                                                                                          | TDDとの関係性                                                                                                                                                                                                                                     |
-|&ndash;|||
-| ウォーターフォール       | 「要件定義→設計→実装→テスト」という工程を順番に進める。後戻りは原則しない。                                                                                   | 対照的。 TDDでは実装とテストが非常に短いサイクルで行われるのに対し、ウォーターフォールではテストは実装がすべて完了した後の独立した工程として扱われます。                                                                                          |
-| アジャイル開発           | 小さな機能単位で「計画→設計→実装→テスト」のサイクルを繰り返す。TDDはこのアジャイルの文脈で採用されることが多い。                                              | 補完的。 TDDはアジャイル開発の各イテレーション（反復）の中で、個々の機能の実装品質を高めるための具体的なプラクティス（実践方法）と言えます。アジャイル開発でも、必ずしもTDDが採用されるわけではありません（実装後にテストを書く場合もあります）。 |
-| BDD (ビヘイビア駆動開発) | TDDから派生した手法。テストを「システムの振る舞い（Behavior）」という観点から、より自然言語に近い形で記述する。「顧客やPMも読める仕様書」としての側面が強い。 | 発展的。 TDDが「開発者の視点」で関数の入出力などをテストするのに対し、BDDは「ユーザーやビジネスの視点」でシステムの振る舞いを記述します。使うツールもGherkin（Given-When-Then形式）などが有名です。                                               |</p>
-
-<p>この中で、TDDとアジャイルは比較的近い位置にいるため、TDDがアジャイルで採用されることもあります。しかし、これらは厳密に言うと目的が異なる別軸の手法です。</p>
-
-<p>| 観点 | アジャイル開発 | TDD |
-||||
-| <strong>目的</strong> | 短いイテレーションで<strong>価値提供</strong>を最大化 | コードの<strong>品質・設計の健全性</strong>を担保 |
-| <strong>中心</strong> | ユーザーストーリー／バックログ | テスト（仕様の明文化） |
-| <strong>適用範囲</strong> | プロセス・チーム運営 | 実装の手法・設計の育て方 |
-| <strong>主な効果</strong> | 変更への柔軟性、早いフィードバック | バグの早期発見、リファクタの安全網 |
-| <strong>課題</strong> | テスト戦略が薄いと品質リスク | 初期コスト、学習曲線、過剰テストのリスク |</p>
-
-<p>そのため、アジャイル（プロセス）とTDD（実装プラクティス）は<strong>併用</strong>が理想的と言えます。そうすれば、プロセスで速く回しつつ、TDDで設計品質を底上げすることが可能です。</p>
-
-<h2 id="メリット-デメリット-1">メリット・デメリット</h2>
-
-<h3 id="メリット-1">メリット</h3>
-
-<ul>
-<li><strong>品質向上</strong>：バグを（実装前後で）早期に捕捉</li>
-<li><strong>設計改善</strong>：テスト可能な構造＝疎結合・明確な依存関係</li>
-<li><strong>安全なリファクタ</strong>：テストが変更の安全網</li>
-<li><strong>仕様の明文化</strong>：テストが「期待する振る舞い」のドキュメントに</li>
-</ul>
-
-<h3 id="デメリット-1">デメリット</h3>
-
-<ul>
-<li><strong>初期コスト</strong>：テストを書く時間・慣れが必要</li>
-<li><strong>学習曲線</strong>：最小Greenの見極め・モック戦略に経験が要る</li>
-<li><strong>過剰テスト</strong>：実装詳細に依存した脆いテストは保守コスト増</li>
-</ul>
-
-<h2 id="基本的な開発手順-1">基本的な開発手順</h2>
-
-<h3 id="実践-pythonとpytestによるtdd開発フロー-1">【実践】PythonとpytestによるTDD開発フロー</h3>
-
-<p>それでは、具体的なサンプルとして「商品の税抜価格を受け取り、消費税10%を加えた税込価格を返す関数」をTDDで開発してみましょう。</p>
-
-<h4 id="準備-1">準備</h4>
-
-<p>まず、テストフレームワークである<code>pytest</code>をインストールします。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">pip install pytest</code></pre></div>
-<p>プロジェクトの構成は以下のようにします。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">my_project/
-├── main.py
-└── test_main.py</pre></div>
-<p>ここでは<code>test_main.py</code>がテストコード、<code>main.py</code>がテスト対象のコードに該当します。</p>
-
-<h4 id="ステップ1-レッド-失敗するテストを書く-1">ステップ1: レッド（失敗するテストを書く）</h4>
-
-<p>まず、<code>test_main.py</code>にテストコードを記述します。まだ<code>calculate_price_with_tax</code>という関数は存在しないので、このテストは当然失敗します。</p>
-
-<p><code>test_main.py</code></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> pytest
-<span style="color:#00f">from</span> main <span style="color:#00f">import</span> calculate_price_with_tax
-
-<span style="color:#00f">def</span> test_calculate_price_with_tax():
-    <span style="color:#a31515">&#34;&#34;&#34;
-</span><span style="color:#a31515">    1000円の商品に10%の消費税を加えると1100円になることをテストする
-</span><span style="color:#a31515">    &#34;&#34;&#34;</span>
-    <span style="color:#00f">assert</span> calculate_price_with_tax(1000) == 1100</code></pre></div>
-<p>この状態でターミナルで<code>pytest</code>を実行してみましょう。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ pytest
-================================================= test session starts ==================================================
-platform linux -- Python 3.8.10, pytest-8.3.5, pluggy-1.5.0
-rootdir: /home/hogehoge/project/tdd_work
-collected 0 items / 1 error
-
-======================================================== ERRORS ========================================================
-____________________________________________ ERROR collecting test_main.py _____________________________________________
-ImportError <span style="color:#00f">while</span> importing test module <span style="color:#a31515">&#39;/home/hogehoge/project/tdd_work/test_main.py&#39;</span>.
-Hint: make sure your test modules/packages have valid Python names.
-Traceback:
-/usr/lib/python3.8/importlib/__init__.py:127: in import_module
-    <span style="color:#00f">return</span> _bootstrap._gcd_import(name[level:], package, level)
-test_main.py:2: in &lt;module&gt;
-    from main import calculate_price_with_tax
-E   ImportError: cannot import name <span style="color:#a31515">&#39;calculate_price_with_tax&#39;</span> from <span style="color:#a31515">&#39;main&#39;</span> (/home/hogehoge/project/tdd_work/main.py)
-=============================================== short test summary info ================================================
-ERROR test_main.py
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-=================================================== 1 error in 0.08s ===================================================</code></pre></div>
-<p><img src="./image1.png" alt="alt text" /></p>
-
-<p><code>ImportError</code>でテストが失敗しました。これが<strong>レッド</strong>の状態です。</p>
-
-<h4 id="ステップ2-グリーン-テストをパスさせる-1">ステップ2: グリーン（テストをパスさせる）</h4>
-
-<p>次に、このテストをパスさせるための最小限のコードを<code>main.py</code>に書きます。</p>
-
-<p><code>main.py</code></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> calculate_price_with_tax(price_without_tax):
-    tax_rate = 1.1
-    <span style="color:#00f">return</span> price_without_tax * tax_rate</code></pre></div>
-<p>もう一度<code>pytest</code>を実行します。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ pytest
-================================================= test session starts ==================================================
-platform linux -- Python 3.8.10, pytest-8.3.5, pluggy-1.5.0
-rootdir: /home/hogehoge/project/tdd_work
-collected 1 item
-
-test_main.py .                                                                                                   [100%]
-
-================================================== 1 passed in 0.00s ===================================================</code></pre></div>
-<p><img src="./image2.png" alt="alt text" /></p>
-
-<p>テストが正常終了しました。これが<strong>グリーン</strong>の状態です。</p>
-
-<h4 id="ステップ3-リファクタリング-コードを改善する-1">ステップ3: リファクタリング（コードを改善する）</h4>
-
-<p>テストが通ったので、安心してコードを改善できます。今回は非常にシンプルな関数ですが、例えば以下のような改善が考えられます。</p>
-
-<ul>
-<li>税率が<code>1.1</code>というマジックナンバーになっているので、定数として意味のある名前を付ける。</li>
-<li>将来的に税率が変更される可能性を考慮し、引数で受け取れるようにする（これは仕様変更なので、新しいテストを追加するフェーズに戻るのがベター）。</li>
-<li>計算結果が浮動小数点数になるため、整数に丸める仕様を追加する。</li>
-</ul>
-
-<p>今回は、「計算結果を整数で返す」という仕様を追加してみましょう。まず、この変更によって失敗するテスト（レッド）を追加します。</p>
-
-<p><code>test_main.py</code> （追記）</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># ... 既存のテスト ...</span>
-
-<span style="color:#00f">def</span> test_calculate_price_with_tax_with_fraction():
-    <span style="color:#a31515">&#34;&#34;&#34;
-</span><span style="color:#a31515">    計算結果が小数になる場合、整数に丸められることをテストする
-</span><span style="color:#a31515">    999円 * 1.1 = 1098.9 -&gt; 1099円
-</span><span style="color:#a31515">    &#34;&#34;&#34;</span>
-    <span style="color:#00f">assert</span> calculate_price_with_tax(999) == 1099</code></pre></div>
-<p><code>pytest</code>を実行すると、新しいテストが失敗します（レッド）。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ pytest
-================================================= test session starts ==================================================
-platform linux -- Python 3.8.10, pytest-8.3.5, pluggy-1.5.0
-rootdir: /home/hogehoge/project/tdd_work
-collected 2 items
-
-test_main.py .F                                                                                                  [100%]
-
-======================================================= FAILURES =======================================================
-_____________________________________ test_calculate_price_with_tax_with_fraction ______________________________________
-
-    def test_calculate_price_with_tax_with_fraction():
-        <span style="color:#a31515">&#34;&#34;&#34;
-</span><span style="color:#a31515">        計算結果が小数になる場合、整数に丸められることをテストする
-</span><span style="color:#a31515">        999円 * 1.1 = 1098.9 -&gt; 1099円
-</span><span style="color:#a31515">        &#34;&#34;&#34;</span>
-&gt;       assert calculate_price_with_tax(999) == 1099
-E       assert 1098.9 == 1099
-E        +  where 1098.9 = calculate_price_with_tax(999)
-
-test_main.py:17: AssertionError
-=============================================== short test summary info ================================================
-FAILED test_main.py::test_calculate_price_with_tax_with_fraction - assert 1098.9 == 1099
-============================================= 1 failed, 1 passed in 0.02s ==============================================</code></pre></div>
-<p><img src="./image3.png" alt="alt text" /></p>
-
-<p>次に、このテストをパスさせるために<code>main.py</code>を修正します（グリーン）。</p>
-
-<p><code>main.py</code></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> calculate_price_with_tax(price_without_tax):
-    tax_rate = 1.1
-    <span style="color:#008000"># round()を使って四捨五入する</span>
-    <span style="color:#00f">return</span> round(price_without_tax * tax_rate)</code></pre></div>
-<p>再度<code>pytest</code>を実行し、全てのテストがパスすることを確認します。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ pytest
-================================================= test session starts ==================================================
-platform linux -- Python 3.8.10, pytest-8.3.5, pluggy-1.5.0
-rootdir: /home/hogehoge/project/tdd_work
-collected 2 items
-
-test_main.py ..                                                                                                  [100%]
-
-================================================== 2 passed in 0.02s ===================================================</code></pre></div>
-<p><img src="./image4.png" alt="alt text" /></p>
-
-<p>これがリファクタリングのサイクルです。 このように、TDDでは「テストの追加→実装→リファクタリング」というサイクルを回しながら、安全かつ確実に機能開発を進めていきます。</p>
-
-<h2 id="実務向けバリエーション-1">実務向けバリエーション</h2>
-
-<p>ここからは<strong>実務で直面しやすい複雑性</strong>に対し、TDDの型（Outside-In／Inside-Out、テストダブル、非同期、I/O、契約テスト、レガシー改善）を示します。すべて「Python＋pytest」の環境を前提とします。</p>
-
-<h3 id="外部api-サービス-outside-in-為替レート取得と課税計算-1">外部API＋サービス（Outside-In）：為替レート取得と課税計算</h3>
-
-<p><strong>Red（テスト先行）</strong>：サービスは抽象ゲートウェイに依存。テストでは<strong>Stub</strong>で外部APIを隔離。</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># tests/test_services_api.py</span>
-<span style="color:#00f">from</span> app.services <span style="color:#00f">import</span> CurrencyService
-
-<span style="color:#00f">class</span> <span style="color:#2b91af">StubRateGateway</span>:
-    <span style="color:#00f">def</span> get_rate(self, base: str, quote: str) -&gt; float:
-        <span style="color:#00f">assert</span> base == <span style="color:#a31515">&#34;JPY&#34;</span> <span style="color:#00f">and</span> quote == <span style="color:#a31515">&#34;USD&#34;</span>
-        <span style="color:#00f">return</span> 0.0067
-
-<span style="color:#00f">def</span> test_convert_with_tax_rounding():
-    svc = CurrencyService(rate_gateway=StubRateGateway(), tax_rate=0.1)
-    result = svc.convert_with_tax(amount_jpy=10000, base=<span style="color:#a31515">&#34;JPY&#34;</span>, quote=<span style="color:#a31515">&#34;USD&#34;</span>)
-    <span style="color:#00f">assert</span> result == 73.70
-
-<span style="color:#00f">def</span> test_invalid_currency_pair():
-    <span style="color:#00f">class</span> <span style="color:#2b91af">BadStub</span>:  <span style="color:#008000"># 想定外ペアで例外</span>
-        <span style="color:#00f">def</span> get_rate(self, base, quote):
-            <span style="color:#00f">raise</span> ValueError(<span style="color:#a31515">&#34;Unsupported pair&#34;</span>)
-    svc = CurrencyService(rate_gateway=BadStub(), tax_rate=0.1)
-    <span style="color:#00f">try</span>:
-        svc.convert_with_tax(10000, <span style="color:#a31515">&#34;EUR&#34;</span>, <span style="color:#a31515">&#34;JPY&#34;</span>)
-        <span style="color:#00f">assert</span> False
-    <span style="color:#00f">except</span> ValueError <span style="color:#00f">as</span> e:
-        <span style="color:#00f">assert</span> <span style="color:#a31515">&#34;Unsupported&#34;</span> <span style="color:#00f">in</span> str(e)</code></pre></div>
-<p><strong>Green（最小実装）</strong></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># src/app/services.py</span>
-<span style="color:#00f">from</span> dataclasses <span style="color:#00f">import</span> dataclass
-
-@dataclass
-<span style="color:#00f">class</span> <span style="color:#2b91af">CurrencyService</span>:
-    rate_gateway: object
-    tax_rate: float
-
-    <span style="color:#00f">def</span> convert_with_tax(self, amount_jpy: float, base: str, quote: str) -&gt; float:
-        rate = self.rate_gateway.get_rate(base, quote)
-        converted = amount_jpy * rate
-        taxed = converted * (1 + self.tax_rate)
-        <span style="color:#00f">return</span> round(taxed, 2)</code></pre></div>
-<p><strong>Refactor（エラー語彙の整理）</strong></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># src/app/services.py</span>
-<span style="color:#00f">class</span> <span style="color:#2b91af">RateError</span>(Exception):
-    <span style="color:#00f">pass</span>
-
-<span style="color:#008000"># ...CurrencyService は try/except で RateError にラップする等</span></code></pre></div>
-<p><strong>ポイント</strong>：外界をテストダブルで<strong>隔離</strong>、サービスの<strong>ドメインロジック</strong>を先に固定。</p>
-
-<h3 id="sqliteリポジトリ-inside-out-注文登録-検索-トランザクション-1">SQLiteリポジトリ（Inside-Out）：注文登録・検索・トランザクション</h3>
-
-<p><strong>Red</strong></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># tests/test_repositories_sqlite.py</span>
-<span style="color:#00f">import</span> sqlite3
-<span style="color:#00f">from</span> app.repositories <span style="color:#00f">import</span> OrderRepository, Order
-
-<span style="color:#00f">def</span> test_insert_and_find_by_id(tmp_path):
-    conn = sqlite3.connect(tmp_path / <span style="color:#a31515">&#34;test.db&#34;</span>)
-    repo = OrderRepository(conn); repo.init_schema()
-    order_id = repo.insert(Order(customer=<span style="color:#a31515">&#34;Alice&#34;</span>, total=1200))
-    found = repo.find_by_id(order_id)
-    <span style="color:#00f">assert</span> found.customer == <span style="color:#a31515">&#34;Alice&#34;</span>
-    <span style="color:#00f">assert</span> found.total == 1200
-
-<span style="color:#00f">def</span> test_transaction_rollback_on_error(tmp_path):
-    conn = sqlite3.connect(tmp_path / <span style="color:#a31515">&#34;tx.db&#34;</span>)
-    repo = OrderRepository(conn); repo.init_schema()
-    <span style="color:#00f">try</span>:
-        repo.bulk_insert([
-            Order(customer=<span style="color:#a31515">&#34;A&#34;</span>, total=100),
-            Order(customer=None, total=200),  <span style="color:#008000"># NOT NULL違反</span>
-            Order(customer=<span style="color:#a31515">&#34;C&#34;</span>, total=300),
-        ])
-        <span style="color:#00f">assert</span> False
-    <span style="color:#00f">except</span> Exception:
-        <span style="color:#00f">pass</span>
-    <span style="color:#00f">assert</span> repo.count() == 0</code></pre></div>
-<p><strong>Green</strong></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># src/app/models.py</span>
-<span style="color:#00f">from</span> dataclasses <span style="color:#00f">import</span> dataclass
-@dataclass
-<span style="color:#00f">class</span> <span style="color:#2b91af">Order</span>:
-    customer: str
-    total: int
-
-<span style="color:#008000"># src/app/repositories.py</span>
-<span style="color:#00f">from</span> .models <span style="color:#00f">import</span> Order
-<span style="color:#00f">class</span> <span style="color:#2b91af">OrderRepository</span>:
-    <span style="color:#00f">def</span> __init__(self, conn): self.conn = conn
-    <span style="color:#00f">def</span> init_schema(self):
-        cur = self.conn.cursor()
-        cur.execute(<span style="color:#a31515">&#34;&#34;&#34;CREATE TABLE IF NOT EXISTS orders (
-</span><span style="color:#a31515">            id INTEGER PRIMARY KEY AUTOINCREMENT,
-</span><span style="color:#a31515">            customer TEXT NOT NULL,
-</span><span style="color:#a31515">            total INTEGER NOT NULL)&#34;&#34;&#34;</span>)
-        self.conn.commit()
-
-    <span style="color:#00f">def</span> insert(self, order: Order) -&gt; int:
-        cur = self.conn.cursor()
-        cur.execute(<span style="color:#a31515">&#34;INSERT INTO orders(customer, total) VALUES(?, ?)&#34;</span>,
-                    (order.customer, order.total))
-        self.conn.commit()
-        <span style="color:#00f">return</span> cur.lastrowid
-
-    <span style="color:#00f">def</span> find_by_id(self, order_id: int):
-        cur = self.conn.cursor()
-        cur.execute(<span style="color:#a31515">&#34;SELECT customer, total FROM orders WHERE id=?&#34;</span>, (order_id,))
-        row = cur.fetchone()
-        <span style="color:#00f">return</span> None <span style="color:#00f">if</span> <span style="color:#00f">not</span> row <span style="color:#00f">else</span> Order(customer=row[0], total=row[1])
-
-    <span style="color:#00f">def</span> bulk_insert(self, orders: list[Order]):
-        <span style="color:#00f">try</span>:
-            cur = self.conn.cursor(); cur.execute(<span style="color:#a31515">&#34;BEGIN&#34;</span>)
-            <span style="color:#00f">for</span> o <span style="color:#00f">in</span> orders:
-                cur.execute(<span style="color:#a31515">&#34;INSERT INTO orders(customer, total) VALUES(?, ?)&#34;</span>,
-                            (o.customer, o.total))
-            self.conn.commit()
-        <span style="color:#00f">except</span> Exception:
-            self.conn.rollback(); <span style="color:#00f">raise</span>
-
-    <span style="color:#00f">def</span> count(self) -&gt; int:
-        cur = self.conn.cursor()
-        cur.execute(<span style="color:#a31515">&#34;SELECT COUNT(*) FROM orders&#34;</span>)
-        <span style="color:#00f">return</span> cur.fetchone()[0]</code></pre></div>
-<p><strong>ポイント</strong>：<strong>ほぼ本物DB</strong>で検証しつつ、スピード・独立性を担保。トランザクションの<strong>失敗時の全体ロールバック</strong>をテストで固定。</p>
-
-<h3 id="非同期ワーカー-asyncio-失敗時の再試行-1">非同期ワーカー（asyncio）：失敗時の再試行</h3>
-
-<p><strong>Red</strong></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># tests/test_async_worker.py</span>
-<span style="color:#00f">import</span> pytest
-<span style="color:#00f">from</span> unittest.mock <span style="color:#00f">import</span> AsyncMock
-<span style="color:#00f">from</span> app.services <span style="color:#00f">import</span> AsyncWorker
-
-@pytest.mark.asyncio
-async <span style="color:#00f">def</span> test_worker_retries_on_failure():
-    fetch = AsyncMock(side_effect=[Exception(<span style="color:#a31515">&#34;fail&#34;</span>), <span style="color:#a31515">&#34;OK&#34;</span>])
-    worker = AsyncWorker(fetch_task=fetch, max_retries=2, delay_sec=0)
-    result = await worker.run_once()
-    <span style="color:#00f">assert</span> result == <span style="color:#a31515">&#34;OK&#34;</span>
-    <span style="color:#00f">assert</span> fetch.await_count == 2
-
-@pytest.mark.asyncio
-async <span style="color:#00f">def</span> test_worker_gives_up_after_max_retries():
-    fetch = AsyncMock(side_effect=[Exception(<span style="color:#a31515">&#34;fail1&#34;</span>), Exception(<span style="color:#a31515">&#34;fail2&#34;</span>)])
-    worker = AsyncWorker(fetch_task=fetch, max_retries=2, delay_sec=0)
-    <span style="color:#00f">with</span> pytest.raises(Exception):
-        await worker.run_once()
-    <span style="color:#00f">assert</span> fetch.await_count == 2</code></pre></div>
-<p><strong>Green</strong></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># src/app/services.py（追記）</span>
-<span style="color:#00f">import</span> asyncio
-<span style="color:#00f">from</span> typing <span style="color:#00f">import</span> Callable, Awaitable
-
-<span style="color:#00f">class</span> <span style="color:#2b91af">AsyncWorker</span>:
-    <span style="color:#00f">def</span> __init__(self, fetch_task: Callable[[], Awaitable], max_retries: int, delay_sec: float):
-        self.fetch_task = fetch_task; self.max_retries = max_retries; self.delay_sec = delay_sec
-
-    async <span style="color:#00f">def</span> run_once(self):
-        last_exc = None
-        <span style="color:#00f">for</span> _ <span style="color:#00f">in</span> range(self.max_retries):
-            <span style="color:#00f">try</span>:
-                <span style="color:#00f">return</span> await self.fetch_task()
-            <span style="color:#00f">except</span> Exception <span style="color:#00f">as</span> e:
-                last_exc = e
-                <span style="color:#00f">if</span> self.delay_sec:
-                    await asyncio.sleep(self.delay_sec)
-        <span style="color:#00f">raise</span> last_exc</code></pre></div>
-<p><strong>ポイント</strong>：<code>AsyncMock</code> で<strong>await回数・シーケンス</strong>を検証。非同期固有の挙動（再試行・遅延）をテストで固定。</p>
-
-<h3 id="cli-csv-json-ファイルi-o-1">CLI：CSV→JSON（ファイルI/O）</h3>
-
-<p><strong>Red</strong></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># tests/test_cli_csv_to_json.py</span>
-<span style="color:#00f">import</span> json
-<span style="color:#00f">from</span> app.services <span style="color:#00f">import</span> CsvToJson
-
-<span style="color:#00f">def</span> test_csv_to_json(tmp_path):
-    src = tmp_path / <span style="color:#a31515">&#34;in.csv&#34;</span>; dst = tmp_path / <span style="color:#a31515">&#34;out.json&#34;</span>
-    src.write_text(<span style="color:#a31515">&#34;user,amount</span><span style="color:#a31515">\n</span><span style="color:#a31515">alice,10</span><span style="color:#a31515">\n</span><span style="color:#a31515">bob,20</span><span style="color:#a31515">\n</span><span style="color:#a31515">alice,5</span><span style="color:#a31515">\n</span><span style="color:#a31515">&#34;</span>, encoding=<span style="color:#a31515">&#34;utf-8&#34;</span>)
-
-    CsvToJson().convert(src, dst)
-
-    out = json.loads(dst.read_text(encoding=<span style="color:#a31515">&#34;utf-8&#34;</span>))
-    <span style="color:#00f">assert</span> out[<span style="color:#a31515">&#34;users&#34;</span>] == [<span style="color:#a31515">&#34;alice&#34;</span>, <span style="color:#a31515">&#34;bob&#34;</span>]
-    <span style="color:#00f">assert</span> out[<span style="color:#a31515">&#34;total&#34;</span>] == 35
-    <span style="color:#00f">assert</span> out[<span style="color:#a31515">&#34;by_user&#34;</span>] == {<span style="color:#a31515">&#34;alice&#34;</span>: 15, <span style="color:#a31515">&#34;bob&#34;</span>: 20}</code></pre></div>
-<p><strong>Green</strong></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># src/app/services.py（追記）</span>
-<span style="color:#00f">import</span> csv, json
-<span style="color:#00f">from</span> pathlib <span style="color:#00f">import</span> Path
-<span style="color:#00f">from</span> collections <span style="color:#00f">import</span> defaultdict
-
-<span style="color:#00f">class</span> <span style="color:#2b91af">CsvToJson</span>:
-    <span style="color:#00f">def</span> convert(self, src: Path, dst: Path):
-        users, total, by_user = [], 0, defaultdict(int)
-        <span style="color:#00f">with</span> src.open(newline=<span style="color:#a31515">&#34;&#34;</span>, encoding=<span style="color:#a31515">&#34;utf-8&#34;</span>) <span style="color:#00f">as</span> f:
-            <span style="color:#00f">for</span> row <span style="color:#00f">in</span> csv.DictReader(f):
-                user = row[<span style="color:#a31515">&#34;user&#34;</span>]; amt = int(row[<span style="color:#a31515">&#34;amount&#34;</span>])
-                total += amt
-                <span style="color:#00f">if</span> user <span style="color:#00f">not</span> <span style="color:#00f">in</span> users: users.append(user)
-                by_user[user] += amt
-        payload = {<span style="color:#a31515">&#34;users&#34;</span>: users, <span style="color:#a31515">&#34;total&#34;</span>: total, <span style="color:#a31515">&#34;by_user&#34;</span>: dict(by_user)}
-        dst.write_text(json.dumps(payload, ensure_ascii=False), encoding=<span style="color:#a31515">&#34;utf-8&#34;</span>)</code></pre></div>
-<p><strong>ポイント</strong>：<code>tmp_path</code> で<strong>本物に近いファイル操作</strong>を安全にテスト。</p>
-
-<h3 id="契約テスト-contract-test-同じインターフェイスを満たすことの保証-1">契約テスト（Contract Test）：同じインターフェイスを満たすことの保証</h3>
-
-<p><strong>Red（契約の明文化）</strong></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># tests/test_contract_gateways.py</span>
-<span style="color:#00f">import</span> pytest
-
-<span style="color:#00f">class</span> <span style="color:#2b91af">RateGatewayContractMixin</span>:
-    <span style="color:#00f">def</span> contract(self, gw):
-        rate = gw.get_rate(<span style="color:#a31515">&#34;JPY&#34;</span>, <span style="color:#a31515">&#34;USD&#34;</span>)
-        <span style="color:#00f">assert</span> isinstance(rate, float)
-        <span style="color:#00f">assert</span> rate &gt; 0
-
-<span style="color:#00f">class</span> <span style="color:#2b91af">StubGateway</span>:
-    <span style="color:#00f">def</span> get_rate(self, base, quote) -&gt; float:
-        <span style="color:#00f">return</span> 0.01
-
-<span style="color:#00f">class</span> <span style="color:#2b91af">FileGateway</span>:
-    <span style="color:#00f">def</span> __init__(self, mapping: dict[tuple[str, str], float]): self.mapping = mapping
-    <span style="color:#00f">def</span> get_rate(self, base, quote): <span style="color:#00f">return</span> self.mapping[(base, quote)]
-
-@pytest.mark.parametrize(<span style="color:#a31515">&#34;gw&#34;</span>, [
-    StubGateway(),
-    FileGateway({(<span style="color:#a31515">&#34;JPY&#34;</span>, <span style="color:#a31515">&#34;USD&#34;</span>): 0.0067}),
-])
-<span style="color:#00f">def</span> test_rate_gateway_contract(gw):
-    RateGatewayContractMixin().contract(gw)</code></pre></div>
-<p><strong>ポイント</strong>：異なる実装（HTTP／ファイル／スタブ）が<strong>同一仕様</strong>を満たすことをテストで保証。差し替え容易性が大幅に上がる。</p>
-
-<h3 id="レガシー改善-キャラクタライゼーションテスト-1">レガシー改善（キャラクタライゼーションテスト）</h3>
-
-<p><strong>現状コード</strong></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># src/app/legacy.py</span>
-<span style="color:#00f">def</span> weird_discount(amount, level):
-    <span style="color:#00f">if</span> level == <span style="color:#a31515">&#34;vip&#34;</span>:
-        <span style="color:#00f">return</span> int(amount * 0.8)  <span style="color:#008000"># 切り捨て</span>
-    <span style="color:#00f">if</span> amount &gt; 1000:
-        <span style="color:#00f">return</span> amount - 100
-    <span style="color:#00f">return</span> amount</code></pre></div>
-<p><strong>Red→Green（現行挙動を固定）</strong></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># tests/test_characterization_legacy.py</span>
-<span style="color:#00f">from</span> app.legacy <span style="color:#00f">import</span> weird_discount
-
-<span style="color:#00f">def</span> test_weird_discount_current_behavior():
-    <span style="color:#00f">assert</span> weird_discount(1000, <span style="color:#a31515">&#34;vip&#34;</span>) == 800
-    <span style="color:#00f">assert</span> weird_discount(1200, <span style="color:#a31515">&#34;std&#34;</span>) == 1100
-    <span style="color:#00f">assert</span> weird_discount(800, <span style="color:#a31515">&#34;std&#34;</span>) == 800</code></pre></div>
-<p><strong>Refactor（読みやすさ改善）</strong></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># src/app/legacy.py</span>
-<span style="color:#00f">def</span> weird_discount(amount, level):
-    <span style="color:#00f">if</span> level == <span style="color:#a31515">&#34;vip&#34;</span>:
-        <span style="color:#00f">return</span> int(amount * 0.8)  <span style="color:#008000"># 仕様化されていないが現行挙動を維持</span>
-    <span style="color:#00f">if</span> amount &gt; 1000:
-        <span style="color:#00f">return</span> amount - 100
-    <span style="color:#00f">return</span> amount</code></pre></div>
-<p><strong>ポイント</strong>：まず<strong>現行挙動を守るテスト</strong>を作り、テストを安全網にして内部改善。</p>
-
-<h2 id="pytestのテクニック-fixture-parametrize-monkeypatch-mock-1">pytestのテクニック（fixture・parametrize・monkeypatch・mock）</h2>
-
-<p><strong>共通前処理（fixture）</strong></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># tests/conftest.py</span>
-<span style="color:#00f">import</span> sqlite3, pytest
-@pytest.fixture
-<span style="color:#00f">def</span> conn(tmp_path):
-    <span style="color:#00f">return</span> sqlite3.connect(tmp_path / <span style="color:#a31515">&#34;db.sqlite&#34;</span>)</code></pre></div>
-<p><strong>パラメタライズ</strong></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">import</span> pytest
-<span style="color:#00f">from</span> app.main <span style="color:#00f">import</span> filter_even
-
-@pytest.mark.parametrize(<span style="color:#a31515">&#34;inp, expected&#34;</span>, [
-    ([0,1,2], [0,2]),
-    ([], []),
-    ([1,3,5], []),
-])
-<span style="color:#00f">def</span> test_filter_even_cases(inp, expected):
-    <span style="color:#00f">assert</span> filter_even(inp) == expected</code></pre></div>
-<p><strong>monkeypatch（時間を固定）</strong></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> test_time_dependent(monkeypatch):
-    <span style="color:#00f">import</span> time
-    monkeypatch.setattr(time, <span style="color:#a31515">&#34;time&#34;</span>, <span style="color:#00f">lambda</span>: 0)
-    <span style="color:#00f">assert</span> time.time() == 0</code></pre></div>
-<p><strong>Mock（呼び出し検証）</strong></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">from</span> unittest.mock <span style="color:#00f">import</span> Mock
-<span style="color:#00f">def</span> test_mail_send():
-    sender = Mock()
-    sender.send.return_value = True
-    <span style="color:#00f">assert</span> sender.send(<span style="color:#a31515">&#34;to@example.com&#34;</span>, <span style="color:#a31515">&#34;hello&#34;</span>) <span style="color:#00f">is</span> True
-    sender.send.assert_called_once_with(<span style="color:#a31515">&#34;to@example.com&#34;</span>, <span style="color:#a31515">&#34;hello&#34;</span>)</code></pre></div>
-<h2 id="設計指針-outside-in-inside-out-hexagonal-1">設計指針：Outside-In／Inside-Out／Hexagonal</h2>
-
-<ul>
-<li><strong>Outside-In</strong>：UI/APIなど外縁から振る舞いを固定 → 境界（HTTP/DB/時刻）を<strong>テストダブル</strong>で隔離<br /></li>
-<li><strong>Inside-Out</strong>：コアドメイン（モデル・アルゴリズム）から堅牢に育て、周辺を後で接続<br /></li>
-<li><strong>Hexagonal（ポート＆アダプタ）</strong>：サービスは<strong>抽象ポート</strong>に依存し、外界は<strong>アダプタ</strong>で接続<br />
-
-<ul>
-<li>例：<code>CurrencyService</code> は <code>RateGateway</code>（ポート）に依存、HTTPクライアント・ファイル読み出しはアダプタで差し替え</li>
-</ul></li>
-</ul>
-
-<p>この分離により、<strong>テスト容易性</strong>・<strong>差し替え容易性</strong>・<strong>変更耐性</strong>が向上します。</p>
-
-<h2 id="よくある落とし穴と対策-1">よくある落とし穴と対策</h2>
-
-<h3 id="実装詳細に依存するテスト-脆い-1">実装詳細に依存するテスト（脆い）</h3>
-
-<p>テストが「どう実装されているか」を細かくチェックしすぎると、実装を直したときにテストが壊れやすくなります。</p>
-
-<p><strong>例：</strong>
-- ダメなケース：「Aクラスの<code>privateメソッド</code>がちゃんと呼ばれてるか」をテストする
-- 改善案：「入力Xを与えたら出力Yが返ってくるか」という結果だけをテストする</p>
-
-<p><strong>対策：</strong> 外部から見える「振る舞い」（インターフェース）にフォーカスします。内部の実装は変わってもテストが壊れないようにします。</p>
-
-<h3 id="モックのしすぎ-現実から離れる-1">モックのしすぎ（現実から離れる）</h3>
-
-<p>テストで全部をモック（偽物）にすると、実際に動かしたときの問題が見つかりません。</p>
-
-<p><strong>例：</strong>
-- ダメなケース：データベース、時刻、APIまで全部モックにして「テストは成功」でも、実際には動かない
-- 改善案：本物のデータベースは使い、ただし外部APIは時間がかかるのでモック</p>
-
-<p><strong>対策：</strong> 外部システムとの「境界」（API呼び出し、ファイルI/O、時刻、乱数）だけをモックにして、コアの部分（ビジネスに関するロジック）は実物で動かします。</p>
-
-<h3 id="巨大テスト-遅く壊れやすい-1">巨大テスト（遅く壊れやすい）</h3>
-
-<p>1つのテストであれもこれも検証しようとすると、テストが遅くなり、1箇所の失敗で全体が壊れます。</p>
-
-<p><strong>例：</strong>
-- ダメなケース：「ユーザー登録→ログイン→商品購入→支払い」全部を1つのテストで検証
-- 改善案：「ユーザー登録」「ログイン」「商品購入」を小分けにしたテストを作る</p>
-
-<p><strong>対策：</strong> 小さなユースケース単位に分割し、Red-Green-Refactorサイクル（テスト→実装→整理）を何度も回しながら育てていきます。</p>
-
-<h3 id="過剰カバレッジ至上主義-1">過剰カバレッジ至上主義</h3>
-
-<p>「カバレッジ100%を目指す！」と数字に執着すると、本当に大事なテストが漏れることがあります。</p>
-
-<p><strong>例：</strong>
-- ダメなケース：どうでもいいgetter/setterの細部まで100%カバーして、ビジネスロジックのテストは不足
-- 改善案：重要な仕様（注文の合計金額の計算など）が正しく守られているかを確認</p>
-
-<p><strong>対策：</strong> 目的は「重要な仕様が壊れていないか」の確認です。カバレッジは参考指標に過ぎず、数字よりも品質を優先します。</p>
-
 <h3 id="tddが苦手なケース">TDDが苦手なケース</h3>
 
 <p>TDD（テスト駆動開発）は、ロジックが明確なビジネスルールやアルゴリズムには非常に強力ですが、<strong>「期待される正解」をテストコードとして事前に定義しにくい分野</strong>を苦手とします。以下に、TDDが苦手とされる代表的なケースをいくつか列挙します。</p>
@@ -1225,7 +709,7 @@ async <span style="color:#00f">def</span> test_worker_gives_up_after_max_retries
 
 <p>物理演算エンジンのような「計算ロジック」の部分はTDDが有効ですが、最終的なアウトプットの品質（アートやサウンド）は、人間の感性による判断が必要となるため、TDDの適用範囲外となります。</p>
 
-<h2 id="まとめ-1">まとめ</h2>
+<h2 id="まとめ">まとめ</h2>
 
 <ul>
 <li>TDDは「<strong>テスト先行</strong>→<strong>最小Green</strong>→<strong>安全リファクタ</strong>」。<strong>品質・設計の健全性・変更耐性</strong>を同時に高める。</li>
