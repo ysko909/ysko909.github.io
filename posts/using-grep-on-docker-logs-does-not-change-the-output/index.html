@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>`docker logs`に`grep`を使っても出力が変わらない？ - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="`docker logs`に`grep`を使っても出力が変わらない？" />
+<meta property="og:description" content="概要 Dockerでコンテナを立ち上げて、いざ動作確認をば・・・あれ、何か動かない。そんなとき、とりあえず「ログを見る」ためにdocker logsを叩くのは、エンジニアの条件反射みたいなもの。
+でも、出力されるログが多すぎる！「grepでエラーログだけ絞りゃええやろ」と思ってコマンドを打ち込みます。
+docker logs my_container | grep error ところがどっこい。
+grepをつけたはずなのに、全量出力されてしまう。あるいは、エラーが出ているはずなのに何も表示されない。パイプ（|）が仕事をしていない？
+これ、実はDockerあるあるの一つなんです。今日はこの現象の原因と、解決する方法について書きたいと思います。
+なぜgrepが効かないのか 結論から言うと、多くの場合、その原因は「標準エラー出力（STDERR）」にあります。
+ docker logsの仕組み：docker logsコマンドは、コンテナが「標準出力（STDOUT）」に出力した内容と、「標準エラー出力（STDERR）」に出力した内容の両方を表示してくれます。 アプリケーションの習性：コンテナ内で動いているアプリケーションは、多くの場合、通常のログ（「処理Aを開始しました」など）はSTDOUTに、エラーログ（「致命的なエラーが発生しました！」など）はSTDERRに、律儀に分けて出力するように作られています。 パイプ（|）の落とし穴：普段何気なく使っているパイプ（|）は、デフォルトではSTDOUT（標準出力）だけを次のコマンドに渡す、という性質を持っています。  つまり。
+ 探したい「error」という文字列は、STDERR（標準エラー出力）に出力されている。 でも、パイプ（|）はSTDOUT（標準出力）しかgrepに渡してくれない。 結果、grep君は「STDOUTからはerrorなんて来なかったよ？」と判断し、何も表示しない（あるいは、STDERRの内容はそのままスルーされてターミナルに表示され続ける）・・・という事態が発生するわけです。  grepがサボっていたわけではなく、そもそもフィルタリングすべきデータが渡っていなかったんですね。
+解決策 原因がわかれば対処は簡単です。要するに、STDERRの内容もgrepに渡してあげれば良いのです。
+対処法1：STDERRをSTDOUTにまとめる（王道） これが一番メジャーな解決策です。シェルの機能を使って、「標準エラー出力（STDERR）も標準出力（STDOUT）に合流させてから」パイプに流します。
+bashやzshを使っている場合 (簡単な記法)：
+docker logs my_container |&amp; grep error |&amp; という記法が、「STDOUTとSTDERRの両方を次のコマンドに渡す」という意味になります。なので、この記法が使えるシェルであれば、この方法が一番早いです。
+sh（標準的なシェル）でも動く記法：
+docker logs my_container 2&gt;&amp;1 | grep error 2&gt;&amp;1 というのは、前述の簡単な書き方ができないシェルでも有効な記法です。これは「2番（STDERR）を 1番（STDOUT）と同じ場所（&amp;）に向けてね」という意味になります。これをパイプの手前に書くことで、STDOUTとSTDERRが合流した状態でgrepに渡されます。
+どちらを使っても、今度こそgrepが意図した通りに「error」を含む行だけをフィルタリングしてくれるはずです。
+対処法2：docker logsのオプションを活用する そもそもログが多すぎるという問題に対して、grepを使うのではなくdocker logs自体のオプションで絞り込むという方法です。
+ 直近のログだけ見る:
+docker logs --tail 100 my_container （直近100行を表示。grepと併用ももちろんOK）
+ 時間で絞り込む:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/using-grep-on-docker-logs-does-not-change-the-output/" /><meta property="article:published_time" content="2025-11-07T09:51:11&#43;09:00"/>
+<meta property="article:modified_time" content="2025-11-07T09:51:11&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="`docker logs`に`grep`を使っても出力が変わらない？"/>
+<meta name="twitter:description" content="概要 Dockerでコンテナを立ち上げて、いざ動作確認をば・・・あれ、何か動かない。そんなとき、とりあえず「ログを見る」ためにdocker logsを叩くのは、エンジニアの条件反射みたいなもの。
+でも、出力されるログが多すぎる！「grepでエラーログだけ絞りゃええやろ」と思ってコマンドを打ち込みます。
+docker logs my_container | grep error ところがどっこい。
+grepをつけたはずなのに、全量出力されてしまう。あるいは、エラーが出ているはずなのに何も表示されない。パイプ（|）が仕事をしていない？
+これ、実はDockerあるあるの一つなんです。今日はこの現象の原因と、解決する方法について書きたいと思います。
+なぜgrepが効かないのか 結論から言うと、多くの場合、その原因は「標準エラー出力（STDERR）」にあります。
+ docker logsの仕組み：docker logsコマンドは、コンテナが「標準出力（STDOUT）」に出力した内容と、「標準エラー出力（STDERR）」に出力した内容の両方を表示してくれます。 アプリケーションの習性：コンテナ内で動いているアプリケーションは、多くの場合、通常のログ（「処理Aを開始しました」など）はSTDOUTに、エラーログ（「致命的なエラーが発生しました！」など）はSTDERRに、律儀に分けて出力するように作られています。 パイプ（|）の落とし穴：普段何気なく使っているパイプ（|）は、デフォルトではSTDOUT（標準出力）だけを次のコマンドに渡す、という性質を持っています。  つまり。
+ 探したい「error」という文字列は、STDERR（標準エラー出力）に出力されている。 でも、パイプ（|）はSTDOUT（標準出力）しかgrepに渡してくれない。 結果、grep君は「STDOUTからはerrorなんて来なかったよ？」と判断し、何も表示しない（あるいは、STDERRの内容はそのままスルーされてターミナルに表示され続ける）・・・という事態が発生するわけです。  grepがサボっていたわけではなく、そもそもフィルタリングすべきデータが渡っていなかったんですね。
+解決策 原因がわかれば対処は簡単です。要するに、STDERRの内容もgrepに渡してあげれば良いのです。
+対処法1：STDERRをSTDOUTにまとめる（王道） これが一番メジャーな解決策です。シェルの機能を使って、「標準エラー出力（STDERR）も標準出力（STDOUT）に合流させてから」パイプに流します。
+bashやzshを使っている場合 (簡単な記法)：
+docker logs my_container |&amp; grep error |&amp; という記法が、「STDOUTとSTDERRの両方を次のコマンドに渡す」という意味になります。なので、この記法が使えるシェルであれば、この方法が一番早いです。
+sh（標準的なシェル）でも動く記法：
+docker logs my_container 2&gt;&amp;1 | grep error 2&gt;&amp;1 というのは、前述の簡単な書き方ができないシェルでも有効な記法です。これは「2番（STDERR）を 1番（STDOUT）と同じ場所（&amp;）に向けてね」という意味になります。これをパイプの手前に書くことで、STDOUTとSTDERRが合流した状態でgrepに渡されます。
+どちらを使っても、今度こそgrepが意図した通りに「error」を含む行だけをフィルタリングしてくれるはずです。
+対処法2：docker logsのオプションを活用する そもそもログが多すぎるという問題に対して、grepを使うのではなくdocker logs自体のオプションで絞り込むという方法です。
+ 直近のログだけ見る:
+docker logs --tail 100 my_container （直近100行を表示。grepと併用ももちろんOK）
+ 時間で絞り込む:"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">`docker logs`に`grep`を使っても出力が変わらない？</h1>
+			<div class="meta">Posted at &mdash; Nov 7, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>Dockerでコンテナを立ち上げて、いざ動作確認をば・・・あれ、何か動かない。そんなとき、とりあえず「ログを見る」ために<code>docker logs</code>を叩くのは、エンジニアの条件反射みたいなもの。</p>
+
+<p>でも、出力されるログが多すぎる！「<code>grep</code>でエラーログだけ絞りゃええやろ」と思ってコマンドを打ち込みます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker logs my_container | grep error</code></pre></div>
+<p>ところがどっこい。</p>
+
+<p><code>grep</code>をつけたはずなのに、全量出力されてしまう。あるいは、エラーが出ているはずなのに何も表示されない。パイプ（<code>|</code>）が仕事をしていない？</p>
+
+<p>これ、実はDockerあるあるの一つなんです。今日はこの現象の原因と、解決する方法について書きたいと思います。</p>
+
+<h2 id="なぜgrepが効かないのか">なぜgrepが効かないのか</h2>
+
+<p>結論から言うと、多くの場合、その原因は「標準エラー出力（STDERR）」にあります。</p>
+
+<ol>
+<li><code>docker logs</code>の仕組み：<code>docker logs</code>コマンドは、コンテナが「標準出力（STDOUT）」に出力した内容と、「標準エラー出力（STDERR）」に出力した内容の両方を表示してくれます。</li>
+<li>アプリケーションの習性：コンテナ内で動いているアプリケーションは、多くの場合、通常のログ（「処理Aを開始しました」など）はSTDOUTに、エラーログ（「致命的なエラーが発生しました！」など）はSTDERRに、律儀に分けて出力するように作られています。</li>
+<li>パイプ（<code>|</code>）の落とし穴：普段何気なく使っているパイプ（<code>|</code>）は、デフォルトではSTDOUT（標準出力）だけを次のコマンドに渡す、という性質を持っています。</li>
+</ol>
+
+<p>つまり。</p>
+
+<ul>
+<li>探したい「error」という文字列は、STDERR（標準エラー出力）に出力されている。</li>
+<li>でも、パイプ（<code>|</code>）はSTDOUT（標準出力）しか<code>grep</code>に渡してくれない。</li>
+<li>結果、<code>grep</code>君は「STDOUTからはerrorなんて来なかったよ？」と判断し、何も表示しない（あるいは、STDERRの内容はそのままスルーされてターミナルに表示され続ける）・・・という事態が発生するわけです。</li>
+</ul>
+
+<p><code>grep</code>がサボっていたわけではなく、そもそもフィルタリングすべきデータが渡っていなかったんですね。</p>
+
+<h2 id="解決策">解決策</h2>
+
+<p>原因がわかれば対処は簡単です。要するに、STDERRの内容も<code>grep</code>に渡してあげれば良いのです。</p>
+
+<h3 id="対処法1-stderrをstdoutにまとめる-王道">対処法1：STDERRをSTDOUTにまとめる（王道）</h3>
+
+<p>これが一番メジャーな解決策です。シェルの機能を使って、「標準エラー出力（STDERR）も標準出力（STDOUT）に合流させてから」パイプに流します。</p>
+
+<p>bashやzshを使っている場合 (簡単な記法)：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker logs my_container |&amp; grep error</code></pre></div>
+<p><code>|&amp;</code> という記法が、「STDOUTとSTDERRの両方を次のコマンドに渡す」という意味になります。なので、この記法が使えるシェルであれば、この方法が一番早いです。</p>
+
+<p>sh（標準的なシェル）でも動く記法：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker logs my_container 2&gt;&amp;1 | grep error</code></pre></div>
+<p><code>2&gt;&amp;1</code> というのは、前述の簡単な書き方ができないシェルでも有効な記法です。これは「<code>2</code>番（STDERR）を <code>1</code>番（STDOUT）と同じ場所（<code>&amp;</code>）に向けてね」という意味になります。これをパイプの手前に書くことで、STDOUTとSTDERRが合流した状態で<code>grep</code>に渡されます。</p>
+
+<p>どちらを使っても、今度こそ<code>grep</code>が意図した通りに「error」を含む行だけをフィルタリングしてくれるはずです。</p>
+
+<h3 id="対処法2-docker-logs-のオプションを活用する">対処法2：<code>docker logs</code>のオプションを活用する</h3>
+
+<p>そもそもログが多すぎるという問題に対して、<code>grep</code>を使うのではなく<code>docker logs</code>自体のオプションで絞り込むという方法です。</p>
+
+<ul>
+<li><p>直近のログだけ見る:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker logs --tail 100 my_container</code></pre></div>
+<p>（直近100行を表示。<code>grep</code>と併用ももちろんOK）</p></li>
+
+<li><p>時間で絞り込む:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker logs --since <span style="color:#a31515">&#39;10m&#39;</span> my_container</code></pre></div>
+<p>（過去10分間のログを表示）</p>
+
+<ul>
+<li>ログを追跡する (tail -f と同じ):</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker logs -f my_container 2&gt;&amp;1 | grep error</code></pre></div>
+<p>（<code>-f</code>オプションでログをリアルタイム表示しつつ、<code>2&gt;&amp;1</code>と<code>grep</code>でフィルタリング）</p></li>
+</ul>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p><code>docker logs | grep</code>が効かない！と思ったら、まずは「STDERR（標準エラー出力）」を疑いましょう。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># これで解決！
+</span><span style="color:#008000"></span>docker logs my_container 2&gt;&amp;1 | grep error</code></pre></div>
+<p>（または <code>|&amp;</code> を使う）</p>
+
+<p>シェルのリダイレクトは少し取っつきにくいかもしれませんが、一度覚えてしまえばDockerに限らず、さまざまな場面で役立つ知識です。</p>
+
+<h2 id="参照">参照</h2>
+
+<ol>
+<li><a href="https://docs.docker.com/reference/cli/docker/container/logs/">docker container logs</a></li>
+<li><a href="https://signoz.io/guides/docker-logs-grep/">How to Grep Docker Logs - A Quick Guide</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

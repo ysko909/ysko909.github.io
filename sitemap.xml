@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/using-grep-on-docker-logs-does-not-change-the-output/</loc>
+    <lastmod>2025-11-07T09:51:11+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/fundamentals-of-tdd/</loc>
     <lastmod>2025-10-17T15:40:48+09:00</lastmod>
   </url>
@@ -746,7 +751,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/docker/</loc>
-    <lastmod>2024-03-06T16:25:46+09:00</lastmod>
+    <lastmod>2025-11-07T09:51:11+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1028,7 +1033,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2025-10-17T15:40:48+09:00</lastmod>
+    <lastmod>2025-11-07T09:51:11+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1250,7 +1255,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2025-10-17T15:40:48+09:00</lastmod>
+    <lastmod>2025-11-07T09:51:11+09:00</lastmod>
     <priority>0</priority>
   </url>
   

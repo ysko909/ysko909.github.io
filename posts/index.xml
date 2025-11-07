@@ -7,10 +7,37 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Fri, 17 Oct 2025 15:40:48 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 07 Nov 2025 09:51:11 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>`docker logs`に`grep`を使っても出力が変わらない？</title>
+      <link>https://ysko909.github.io/posts/using-grep-on-docker-logs-does-not-change-the-output/</link>
+      <pubDate>Fri, 07 Nov 2025 09:51:11 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/using-grep-on-docker-logs-does-not-change-the-output/</guid>
+      <description>概要 Dockerでコンテナを立ち上げて、いざ動作確認をば・・・あれ、何か動かない。そんなとき、とりあえず「ログを見る」ためにdocker logsを叩くのは、エンジニアの条件反射みたいなもの。
+でも、出力されるログが多すぎる！「grepでエラーログだけ絞りゃええやろ」と思ってコマンドを打ち込みます。
+docker logs my_container | grep error ところがどっこい。
+grepをつけたはずなのに、全量出力されてしまう。あるいは、エラーが出ているはずなのに何も表示されない。パイプ（|）が仕事をしていない？
+これ、実はDockerあるあるの一つなんです。今日はこの現象の原因と、解決する方法について書きたいと思います。
+なぜgrepが効かないのか 結論から言うと、多くの場合、その原因は「標準エラー出力（STDERR）」にあります。
+ docker logsの仕組み：docker logsコマンドは、コンテナが「標準出力（STDOUT）」に出力した内容と、「標準エラー出力（STDERR）」に出力した内容の両方を表示してくれます。 アプリケーションの習性：コンテナ内で動いているアプリケーションは、多くの場合、通常のログ（「処理Aを開始しました」など）はSTDOUTに、エラーログ（「致命的なエラーが発生しました！」など）はSTDERRに、律儀に分けて出力するように作られています。 パイプ（|）の落とし穴：普段何気なく使っているパイプ（|）は、デフォルトではSTDOUT（標準出力）だけを次のコマンドに渡す、という性質を持っています。  つまり。
+ 探したい「error」という文字列は、STDERR（標準エラー出力）に出力されている。 でも、パイプ（|）はSTDOUT（標準出力）しかgrepに渡してくれない。 結果、grep君は「STDOUTからはerrorなんて来なかったよ？」と判断し、何も表示しない（あるいは、STDERRの内容はそのままスルーされてターミナルに表示され続ける）・・・という事態が発生するわけです。  grepがサボっていたわけではなく、そもそもフィルタリングすべきデータが渡っていなかったんですね。
+解決策 原因がわかれば対処は簡単です。要するに、STDERRの内容もgrepに渡してあげれば良いのです。
+対処法1：STDERRをSTDOUTにまとめる（王道） これが一番メジャーな解決策です。シェルの機能を使って、「標準エラー出力（STDERR）も標準出力（STDOUT）に合流させてから」パイプに流します。
+bashやzshを使っている場合 (簡単な記法)：
+docker logs my_container |&amp;amp; grep error |&amp;amp; という記法が、「STDOUTとSTDERRの両方を次のコマンドに渡す」という意味になります。なので、この記法が使えるシェルであれば、この方法が一番早いです。
+sh（標準的なシェル）でも動く記法：
+docker logs my_container 2&amp;gt;&amp;amp;1 | grep error 2&amp;gt;&amp;amp;1 というのは、前述の簡単な書き方ができないシェルでも有効な記法です。これは「2番（STDERR）を 1番（STDOUT）と同じ場所（&amp;amp;）に向けてね」という意味になります。これをパイプの手前に書くことで、STDOUTとSTDERRが合流した状態でgrepに渡されます。
+どちらを使っても、今度こそgrepが意図した通りに「error」を含む行だけをフィルタリングしてくれるはずです。
+対処法2：docker logsのオプションを活用する そもそもログが多すぎるという問題に対して、grepを使うのではなくdocker logs自体のオプションで絞り込むという方法です。
+ 直近のログだけ見る:
+docker logs --tail 100 my_container （直近100行を表示。grepと併用ももちろんOK）
+ 時間で絞り込む:</description>
+    </item>
     
     <item>
       <title>TDD（テスト駆動開発）の基本</title>
