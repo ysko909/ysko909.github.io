@@ -7,10 +7,30 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Wed, 17 Sep 2025 11:58:41 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 14 Nov 2025 14:36:17 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/vscode/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>GitHubからcloneしたリポジトリがVSCodeで動かない？launch.jsonが原因かも</title>
+      <link>https://ysko909.github.io/posts/can-not-run-without-creating-launchi-json-file/</link>
+      <pubDate>Fri, 14 Nov 2025 14:36:17 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/can-not-run-without-creating-launchi-json-file/</guid>
+      <description>概要 GitHubから面白そうなプロジェクトを見つけてcloneし、Visual Studio Code（以下、VSCode）で開いて実行しようとした瞬間、エラーがでてきたことがあります。
+上記のメッセージはMarkdownをデバッグしようとしています（何しようとしてるのよ）が、PythonやC#でも似たようなエラーメッセージが出たことがあります。これについては、言語に対応する拡張機能をインストールしていたとしても同様に、エラーメッセージが出現してきます。許さん。
+結論から言うと、「実行に必要なファイルlaunch.jsonが存在しないから実行できないぜ！」なのです。
+なぜ launch.json が無いの？ GitHubなどで公開されているリポジトリには、通常 launch.json ファイルが含まれていません。launch.json というのは、VSCodeが「このプロジェクトをどうやって実行・デバッグすればいいか」を理解するための設定ファイルです。実行のためのガイドのようなものです。例えば、「Pythonのこのファイル（main.py）を実行してね」とか、「C#のこのプロジェクトをビルドしてデバッグしてね」といった具体的な指示が書かれています。
+このファイルは、開発者個人の環境（ローカルPCのどこにファイルがあるか、など）に依存する設定を含むことが多いため、リポジトリに含めない（.gitignore で除外する）のが一般的です。つまり、cloneしてきたばかりの状態は、VSCodeから見れば「ファイルはたくさんあるけど、ガイドがないからどれをどう実行すればいいか分からんよ！」という状態なんです。
+launch.json を作成しよう 解決策は至ってシンプル。「どう実行すればいいか」をVSCodeに教えてあげるために、launch.json を作成すればOKです。つまり、「ないなら作ればいいじゃない」です。
+作成方法には、VSCodeの機能を活用する方法と、手動で作る方法があります。
+VSCodeの機能で自動生成する (推奨) 一番簡単でオススメな方法です。
+ VSCodeの左側にあるアクティビティバーから、「実行とデバッグ」のアイコン（虫のマーク）をクリックします。   「実行とデバッグ」ビューが開きます。もし launch.json がまだ存在しない場合、「launch.jsonファイルを作成します（create a launch.json file.）」という青いリンクやテキストが表示されているはずです。    これをクリックすると、VSCodeがプロジェクトの中身をスキャンして「これはPythonプロジェクトっぽいですね？」とか「Node.jsですか？」といった感じで、デバッグ環境の候補（デバッガ）をいくつか提示してくれます。   自分のプロジェクトに合った環境（例えば Python File や .NET Core Launch など）を選択します。  たったこれだけで、VSCodeがプロジェクトのルートディレクトリに .vscode というフォルダを自動で作成し、その中に基本的な設定が書き込まれた launch.json ファイルを生成してくれます。
+手作業で作成する もちろん、手作業でファイルを作成することも可能です。
+ プロジェクトのルートディレクトリ（.git フォルダがある場所）に、.vscode という名前のフォルダを作成します。もし既にあれば、この作業はスキップできます。 作成した .vscode フォルダの中に、launch.json という名前のファイルを新規作成します。 launch.json ファイルを開き、JSON形式で設定を記述します。  例えば、最低限の構成はこんな感じです（内容はダミーです）：
+{ &amp;#34;version&amp;#34;: &amp;#34;0.</description>
+    </item>
     
     <item>
       <title>VSCodeで検索・置換するときの正規表現チートシート</title>

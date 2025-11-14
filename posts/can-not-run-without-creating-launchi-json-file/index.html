@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>GitHubからcloneしたリポジトリがVSCodeで動かない？launch.jsonが原因かも - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="GitHubからcloneしたリポジトリがVSCodeで動かない？launch.jsonが原因かも" />
+<meta property="og:description" content="概要 GitHubから面白そうなプロジェクトを見つけてcloneし、Visual Studio Code（以下、VSCode）で開いて実行しようとした瞬間、エラーがでてきたことがあります。
+上記のメッセージはMarkdownをデバッグしようとしています（何しようとしてるのよ）が、PythonやC#でも似たようなエラーメッセージが出たことがあります。これについては、言語に対応する拡張機能をインストールしていたとしても同様に、エラーメッセージが出現してきます。許さん。
+結論から言うと、「実行に必要なファイルlaunch.jsonが存在しないから実行できないぜ！」なのです。
+なぜ launch.json が無いの？ GitHubなどで公開されているリポジトリには、通常 launch.json ファイルが含まれていません。launch.json というのは、VSCodeが「このプロジェクトをどうやって実行・デバッグすればいいか」を理解するための設定ファイルです。実行のためのガイドのようなものです。例えば、「Pythonのこのファイル（main.py）を実行してね」とか、「C#のこのプロジェクトをビルドしてデバッグしてね」といった具体的な指示が書かれています。
+このファイルは、開発者個人の環境（ローカルPCのどこにファイルがあるか、など）に依存する設定を含むことが多いため、リポジトリに含めない（.gitignore で除外する）のが一般的です。つまり、cloneしてきたばかりの状態は、VSCodeから見れば「ファイルはたくさんあるけど、ガイドがないからどれをどう実行すればいいか分からんよ！」という状態なんです。
+launch.json を作成しよう 解決策は至ってシンプル。「どう実行すればいいか」をVSCodeに教えてあげるために、launch.json を作成すればOKです。つまり、「ないなら作ればいいじゃない」です。
+作成方法には、VSCodeの機能を活用する方法と、手動で作る方法があります。
+VSCodeの機能で自動生成する (推奨) 一番簡単でオススメな方法です。
+ VSCodeの左側にあるアクティビティバーから、「実行とデバッグ」のアイコン（虫のマーク）をクリックします。   「実行とデバッグ」ビューが開きます。もし launch.json がまだ存在しない場合、「launch.jsonファイルを作成します（create a launch.json file.）」という青いリンクやテキストが表示されているはずです。    これをクリックすると、VSCodeがプロジェクトの中身をスキャンして「これはPythonプロジェクトっぽいですね？」とか「Node.jsですか？」といった感じで、デバッグ環境の候補（デバッガ）をいくつか提示してくれます。   自分のプロジェクトに合った環境（例えば Python File や .NET Core Launch など）を選択します。  たったこれだけで、VSCodeがプロジェクトのルートディレクトリに .vscode というフォルダを自動で作成し、その中に基本的な設定が書き込まれた launch.json ファイルを生成してくれます。
+手作業で作成する もちろん、手作業でファイルを作成することも可能です。
+ プロジェクトのルートディレクトリ（.git フォルダがある場所）に、.vscode という名前のフォルダを作成します。もし既にあれば、この作業はスキップできます。 作成した .vscode フォルダの中に、launch.json という名前のファイルを新規作成します。 launch.json ファイルを開き、JSON形式で設定を記述します。  例えば、最低限の構成はこんな感じです（内容はダミーです）：
+{ &#34;version&#34;: &#34;0." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/can-not-run-without-creating-launchi-json-file/" /><meta property="article:published_time" content="2025-11-14T14:36:17&#43;09:00"/>
+<meta property="article:modified_time" content="2025-11-14T14:36:17&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GitHubからcloneしたリポジトリがVSCodeで動かない？launch.jsonが原因かも"/>
+<meta name="twitter:description" content="概要 GitHubから面白そうなプロジェクトを見つけてcloneし、Visual Studio Code（以下、VSCode）で開いて実行しようとした瞬間、エラーがでてきたことがあります。
+上記のメッセージはMarkdownをデバッグしようとしています（何しようとしてるのよ）が、PythonやC#でも似たようなエラーメッセージが出たことがあります。これについては、言語に対応する拡張機能をインストールしていたとしても同様に、エラーメッセージが出現してきます。許さん。
+結論から言うと、「実行に必要なファイルlaunch.jsonが存在しないから実行できないぜ！」なのです。
+なぜ launch.json が無いの？ GitHubなどで公開されているリポジトリには、通常 launch.json ファイルが含まれていません。launch.json というのは、VSCodeが「このプロジェクトをどうやって実行・デバッグすればいいか」を理解するための設定ファイルです。実行のためのガイドのようなものです。例えば、「Pythonのこのファイル（main.py）を実行してね」とか、「C#のこのプロジェクトをビルドしてデバッグしてね」といった具体的な指示が書かれています。
+このファイルは、開発者個人の環境（ローカルPCのどこにファイルがあるか、など）に依存する設定を含むことが多いため、リポジトリに含めない（.gitignore で除外する）のが一般的です。つまり、cloneしてきたばかりの状態は、VSCodeから見れば「ファイルはたくさんあるけど、ガイドがないからどれをどう実行すればいいか分からんよ！」という状態なんです。
+launch.json を作成しよう 解決策は至ってシンプル。「どう実行すればいいか」をVSCodeに教えてあげるために、launch.json を作成すればOKです。つまり、「ないなら作ればいいじゃない」です。
+作成方法には、VSCodeの機能を活用する方法と、手動で作る方法があります。
+VSCodeの機能で自動生成する (推奨) 一番簡単でオススメな方法です。
+ VSCodeの左側にあるアクティビティバーから、「実行とデバッグ」のアイコン（虫のマーク）をクリックします。   「実行とデバッグ」ビューが開きます。もし launch.json がまだ存在しない場合、「launch.jsonファイルを作成します（create a launch.json file.）」という青いリンクやテキストが表示されているはずです。    これをクリックすると、VSCodeがプロジェクトの中身をスキャンして「これはPythonプロジェクトっぽいですね？」とか「Node.jsですか？」といった感じで、デバッグ環境の候補（デバッガ）をいくつか提示してくれます。   自分のプロジェクトに合った環境（例えば Python File や .NET Core Launch など）を選択します。  たったこれだけで、VSCodeがプロジェクトのルートディレクトリに .vscode というフォルダを自動で作成し、その中に基本的な設定が書き込まれた launch.json ファイルを生成してくれます。
+手作業で作成する もちろん、手作業でファイルを作成することも可能です。
+ プロジェクトのルートディレクトリ（.git フォルダがある場所）に、.vscode という名前のフォルダを作成します。もし既にあれば、この作業はスキップできます。 作成した .vscode フォルダの中に、launch.json という名前のファイルを新規作成します。 launch.json ファイルを開き、JSON形式で設定を記述します。  例えば、最低限の構成はこんな感じです（内容はダミーです）：
+{ &#34;version&#34;: &#34;0."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">GitHubからcloneしたリポジトリがVSCodeで動かない？launch.jsonが原因かも</h1>
+			<div class="meta">Posted at &mdash; Nov 14, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>GitHubから面白そうなプロジェクトを見つけてcloneし、Visual Studio Code（以下、VSCode）で開いて実行しようとした瞬間、エラーがでてきたことがあります。</p>
+
+<p><img src="image1.png" alt="alt text" /></p>
+
+<p>上記のメッセージはMarkdownをデバッグしようとしています（何しようとしてるのよ）が、PythonやC#でも似たようなエラーメッセージが出たことがあります。これについては、言語に対応する拡張機能をインストールしていたとしても同様に、エラーメッセージが出現してきます。許さん。</p>
+
+<p>結論から言うと、「実行に必要なファイル<code>launch.json</code>が存在しないから実行できないぜ！」なのです。</p>
+
+<h2 id="なぜ-launch-json-が無いの">なぜ <code>launch.json</code> が無いの？</h2>
+
+<p>GitHubなどで公開されているリポジトリには、通常 <code>launch.json</code> ファイルが含まれていません。<code>launch.json</code> というのは、VSCodeが「このプロジェクトをどうやって実行・デバッグすればいいか」を理解するための設定ファイルです。実行のためのガイドのようなものです。例えば、「Pythonのこのファイル（<code>main.py</code>）を実行してね」とか、「C#のこのプロジェクトをビルドしてデバッグしてね」といった具体的な指示が書かれています。</p>
+
+<p>このファイルは、開発者個人の環境（ローカルPCのどこにファイルがあるか、など）に依存する設定を含むことが多いため、リポジトリに含めない（<code>.gitignore</code> で除外する）のが一般的です。つまり、cloneしてきたばかりの状態は、VSCodeから見れば「ファイルはたくさんあるけど、ガイドがないからどれをどう実行すればいいか分からんよ！」という状態なんです。</p>
+
+<h2 id="launch-json-を作成しよう"><code>launch.json</code> を作成しよう</h2>
+
+<p>解決策は至ってシンプル。「どう実行すればいいか」をVSCodeに教えてあげるために、<code>launch.json</code> を作成すればOKです。つまり、「ないなら<strong>作ればいいじゃない</strong>」です。</p>
+
+<p>作成方法には、VSCodeの機能を活用する方法と、手動で作る方法があります。</p>
+
+<h3 id="vscodeの機能で自動生成する-推奨">VSCodeの機能で自動生成する (推奨)</h3>
+
+<p>一番簡単でオススメな方法です。</p>
+
+<ol>
+<li>VSCodeの左側にあるアクティビティバーから、「実行とデバッグ」のアイコン（虫のマーク）をクリックします。</li>
+</ol>
+
+<p><img src="image2.png" alt="alt text" /></p>
+
+<ol>
+<li>「実行とデバッグ」ビューが開きます。もし <code>launch.json</code> がまだ存在しない場合、「launch.jsonファイルを作成します（create a launch.json file.）」という青いリンクやテキストが表示されているはずです。
+<br /></li>
+</ol>
+
+<p><img src="image3.png" alt="alt text" /></p>
+
+<ol>
+<li>これをクリックすると、VSCodeがプロジェクトの中身をスキャンして「これはPythonプロジェクトっぽいですね？」とか「Node.jsですか？」といった感じで、デバッグ環境の候補（デバッガ）をいくつか提示してくれます。</li>
+</ol>
+
+<p><img src="image4.png" alt="alt text" /></p>
+
+<ol>
+<li>自分のプロジェクトに合った環境（例えば <code>Python File</code> や <code>.NET Core Launch</code> など）を選択します。</li>
+</ol>
+
+<p>たったこれだけで、VSCodeがプロジェクトのルートディレクトリに <code>.vscode</code> というフォルダを自動で作成し、その中に基本的な設定が書き込まれた <code>launch.json</code> ファイルを生成してくれます。</p>
+
+<h3 id="手作業で作成する">手作業で作成する</h3>
+
+<p>もちろん、手作業でファイルを作成することも可能です。</p>
+
+<ol>
+<li>プロジェクトのルートディレクトリ（<code>.git</code> フォルダがある場所）に、<code>.vscode</code> という名前のフォルダを作成します。もし既にあれば、この作業はスキップできます。</li>
+<li>作成した <code>.vscode</code> フォルダの中に、<code>launch.json</code> という名前のファイルを新規作成します。</li>
+<li><code>launch.json</code> ファイルを開き、JSON形式で設定を記述します。</li>
+</ol>
+
+<p>例えば、最低限の構成はこんな感じです（内容はダミーです）：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  &#34;version&#34;: <span style="color:#a31515">&#34;0.2.0&#34;</span>,
+  &#34;configurations&#34;: [
+    {
+      &#34;name&#34;: <span style="color:#a31515">&#34;（ここに実行構成の名前）&#34;</span>, <span style="">//</span> <span style="">例:</span> &#34;Run Python File&#34;
+      <span style="color:#a31515">&#34;type&#34;</span>: <span style="color:#a31515">&#34;（ここにデバッガの種類）&#34;</span>, <span style="">//</span> <span style="">例:</span> &#34;python&#34;, &#34;coreclr&#34;
+      <span style="color:#a31515">&#34;request&#34;</span>: <span style="color:#a31515">&#34;launch&#34;</span>,
+      &#34;program&#34;: <span style="color:#a31515">&#34;（ここに実行したいファイルへのパス）&#34;</span> <span style="">//</span> <span style="">例</span>: <span style="color:#a31515">&#34;${workspaceFolder}/src/main.py&#34;</span>
+    }
+  ]
+}</code></pre></div>
+<p>ただし、<code>type</code> や <code>program</code> に何を書くべきかは、プロジェクトの言語や構成によって全く異なります。手作業で作る場合も、まずはVSCodeの自動生成機能（上記1）を使ってテンプレートを作ってもらい、それを編集していくのが現実的でしょう。</p>
+
+<h2 id="生成された-launch-json-は-編集-が必要">生成された <code>launch.json</code> は「編集」が必要！</h2>
+
+<p>VSCodeが <code>launch.json</code> を自動生成してくれた・・・けど、まだまだデバッグはできません。なぜなら、VSCodeが生成するのは、あくまで「一般的なテンプレート」です。あなたのプロジェクトの構造に合わせて、中身を正しく編集してあげる必要があります。</p>
+
+<p>一番よくある編集箇所は、<code>configurations</code> の中にある <code>program</code> という項目です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="">//</span> <span style="">...</span> <span style="">(前略)</span> <span style="">...</span>
+<span style="color:#a31515">&#34;configurations&#34;</span><span style="">:</span> [
+  {
+    &#34;name&#34;: <span style="color:#a31515">&#34;Python: Current File&#34;</span>,
+    &#34;type&#34;: <span style="color:#a31515">&#34;python&#34;</span>,
+    &#34;request&#34;: <span style="color:#a31515">&#34;launch&#34;</span>,
+    &#34;program&#34;: <span style="color:#a31515">&#34;${file}&#34;</span>, <span style="">//</span> <span style="">←</span> <span style="">これだと現在開いているファイルを実行しようとする</span>
+    &#34;console&#34;: <span style="color:#a31515">&#34;integratedTerminal&#34;</span>
+  }
+]</code></pre></div>
+<p>例えば、Pythonのテンプレートだと <code>program</code> が <code>&quot;${file}&quot;</code> （現在アクティブなファイル）になっていることが多いです。でも、あなたが実行したいのは、プロジェクトの特定のエントリーポイント（例えば <code>src/app.py</code>）かもしれません。その場合は、ここを以下のように書き換える必要があります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="">//</span> <span style="">...</span> <span style="">(前略)</span> <span style="">...</span>
+    <span style="color:#a31515">&#34;program&#34;</span><span style="">:</span> <span style="color:#a31515">&#34;${workspaceFolder}/src/app.py&#34;</span><span style="">,</span> <span style="">//</span> <span style="">←</span> <span style="">実行したいファイルを明示</span>
+<span style="">//</span> <span style="">...</span> <span style="">(後略)</span> <span style="">...</span></code></pre></div>
+<p>なお、<code>${workspaceFolder}</code> は、VSCodeで開いているプロジェクトのルートディレクトリを指す便利な変数です。</p>
+
+<p>C# (.NET Core) なら <code>program</code> にビルドされたDLLのパスを指定したり、Node.jsなら <code>program</code> に <code>index.js</code> を指定したり、といった具合です。ここが一番大事なところかもしれません。VSCodeが生成した <code>launch.json</code> を開き、自分のプロジェクトの構造と照らし合わせて、実行したいファイルやプロジェクトのパスが正しく指定されているかを必ず確認、修正してください。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>GitHubからcloneしたプロジェクトがVSCodeで動かない時、まずは <code>launch.json</code> を疑ってみましょう。</p>
+
+<blockquote>
+<ol>
+<li>VSCodeの「実行とデバッグ」ビューから <code>launch.json</code> を自動生成する。</li>
+<li>生成された <code>launch.json</code> を開き、<code>program</code> などの設定が自分のプロジェクト構成（実行したいファイルのパスなど）と合っているか確認・修正する。</li>
+</ol>
+</blockquote>
+
+<p><code>launch.json</code> は、VSCodeという高機能なツールに「どう動けばいいか」を教えるためのガイドです。一度設定してしまえば、次からはF5キー（または「実行とデバッグ」の開始ボタン）を押すだけで、デバッグが実行できるようになります。</p>
+
+<p>これで、GitHubで見つけた素敵なプロジェクトも、すぐにローカルで動かせるようになるはずです。ぜひ試してみてくださいね。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://www.mykolaaleksandrov.dev/posts/2025/08/vscode-launch-and-tasks-ultimate/">VS Code launch.json &amp; tasks.json — the ultimate practical guide (from my experience)</a></li>
+<li><a href="https://www.silicloud.com/ja/blog/vscode%E3%81%8Claunch%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%81%97%E3%81%AA%E3%81%84%E5%A0%B4%E5%90%88%E3%80%81%E3%81%A9%E3%81%86%E5%AF%BE%E5%87%A6/">vscodeがlaunchファイルを自動生成しない場合、どう対処すればいいでしょうか？</a></li>
+<li><a href="https://blog.janjan.net/2025/11/08/vsc-doesnt-work-create-launch-json-file-link/">VSCodeの［launch.json ファイルを作成します］リンクが反応しない場合の対処法</a></li>
+<li><a href="https://zenn.dev/laiso/articles/193852ab57fb61">.NET Core+F# プロジェクトの VS Code デバッグ設定</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
