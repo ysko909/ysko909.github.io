@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>OnInitializedAsync()が2回実行されるのはBlazorの「仕様」 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="OnInitializedAsync()が2回実行されるのはBlazorの「仕様」" />
+<meta property="og:description" content="概要 Blazorを用いてコンポーネントを書き始めると、「あれ？」と思う現象があります。それが、OnInitializedAsyncメソッドが2回実行されるという現象です。これのせいで、「データを2回も取得してる」「ログが二重に記録されてる」という事象が発生します。
+これはバグではなく、Blazorの「プリレンダリング (Prerendering)」という機能による意図的な動作です。この記事では、なぜこの現象が起きるのか、そしてそれにどうスマートに対処すればよいのかを、Microsoftのドキュメントを基に解説します。
+TL;DR  OnInitializedAsync は2回実行される挙動は、Blazorのプリレンダリング（Prerendering）という機能によって引き起こされます。つまり仕様です。 ランダムな値の生成やデータベースへの問い合わせなどを単純に書くと、1回目と2回目で異なる結果になったり処理が2重に走ったりして、「画面が一瞬ちらつく」「表示される値が変わる」という現象が起きます。 この現象を抑制するには PersistentComponentState （永続コンポーネント状態）サービスを利用します。  そもそも「プリレンダリング」とは？ Blazor (特にBlazor ServerやBlazor Web App) には、ユーザー体験を向上させるための「プリレンダリング」という仕組みがデフォルトで備わっています。
+これは、ユーザーがページにアクセスした際、まずサーバー側でコンポーネントを実行し、その結果を静的なHTMLとして先にブラウザに送信する技術です。
+プリレンダリングのメリット  初期表示が高速: JavaScriptの読み込みやSignalR接続が完了する前に、ユーザーはページのコンテンツを見ることができます。 SEOに有利: クローラーが静的なHTMLを読み取れるため、検索エンジン最適化（SEO）に役立ちます。  OnInitializedAsyncが2回実行されるメカニズム このプリレンダリングの仕組みこそが、OnInitializedAsyncが2回呼ばれる原因です。
+ 1回目（静的プリレンダリング）: ユーザーがページにアクセスした瞬間、サーバー側でページのHTMLを高速に生成し、ブラウザに返します。これにより、ユーザーは待機時間なく画面を見ることができます（SEO対策にもなります）。この時、最初のOnInitializedAsyncが走ります。 2回目（対話的接続の確立）: HTMLが表示された直後、ブラウザはサーバーとのWebSocket接続（SignalR）を確立（またはWASMをロード）し、改めて「動的なアプリケーション」としてコンポーネントを再構築します。ここで2回目のOnInitializedAsyncが走ります。  1回目の実行: サーバーでのプリレンダリング時  目的：できるだけ早く静的 HTML を返す（SEO/初期表示の体感向上） 特徴：OnAfterRender{Async} は呼ばれない（JS Interop 不可） いつ？：ユーザーがページをリクエストした直後、サーバーサイドで。 何が起こる？：Blazorはコンポーネントをインスタンス化し、OnInitializedAsync を実行します。ここでAPIからデータを取得するコードがあれば、それが実行されます。 結果：取得したデータを含む静的なHTMLが生成され、ブラウザに送信されます。 状態：この時点では、ボタンをクリックしても何も起こりません。まだインタラクティブ（操作可能）ではありません。  2回目の実行: クライアントでのインタラクティブ化（ハイドレーション）時  目的：イベント ハンドラ有効化／実動状態へ昇格（Server は SignalR、WASM はランタイムでの起動） 特徴：OnInitialized{Async} が再度実行、この後に OnAfterRender{Async}(firstRender=true) が初めて呼ばれる いつ？：ブラウザが静的HTMLを受け取った後、必要なJavaScriptファイル（Blazor ServerならSignalR接続、Blazor WebAssemblyならWASMランタイム）の読み込みと実行が完了した時、クライアントサイドで。 何が起こる？：Blazorは再度コンポーネントをインスタンス化し、OnInitializedAsync をもう一度実行します。 結果：プリレンダリングされたDOM（HTML）と、クライアント側で実行されたコンポーネントの状態が関連付けられ（これをハイドレーションと呼びます）、ページが完全にインタラクティブになります。 状態：これ以降、ボタンのクリックなどに反応するようになります。   要するに:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/why-is-the-oninitializedasync-executed-twice/" /><meta property="article:published_time" content="2025-11-19T14:13:03&#43;09:00"/>
+<meta property="article:modified_time" content="2025-11-19T14:13:03&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="OnInitializedAsync()が2回実行されるのはBlazorの「仕様」"/>
+<meta name="twitter:description" content="概要 Blazorを用いてコンポーネントを書き始めると、「あれ？」と思う現象があります。それが、OnInitializedAsyncメソッドが2回実行されるという現象です。これのせいで、「データを2回も取得してる」「ログが二重に記録されてる」という事象が発生します。
+これはバグではなく、Blazorの「プリレンダリング (Prerendering)」という機能による意図的な動作です。この記事では、なぜこの現象が起きるのか、そしてそれにどうスマートに対処すればよいのかを、Microsoftのドキュメントを基に解説します。
+TL;DR  OnInitializedAsync は2回実行される挙動は、Blazorのプリレンダリング（Prerendering）という機能によって引き起こされます。つまり仕様です。 ランダムな値の生成やデータベースへの問い合わせなどを単純に書くと、1回目と2回目で異なる結果になったり処理が2重に走ったりして、「画面が一瞬ちらつく」「表示される値が変わる」という現象が起きます。 この現象を抑制するには PersistentComponentState （永続コンポーネント状態）サービスを利用します。  そもそも「プリレンダリング」とは？ Blazor (特にBlazor ServerやBlazor Web App) には、ユーザー体験を向上させるための「プリレンダリング」という仕組みがデフォルトで備わっています。
+これは、ユーザーがページにアクセスした際、まずサーバー側でコンポーネントを実行し、その結果を静的なHTMLとして先にブラウザに送信する技術です。
+プリレンダリングのメリット  初期表示が高速: JavaScriptの読み込みやSignalR接続が完了する前に、ユーザーはページのコンテンツを見ることができます。 SEOに有利: クローラーが静的なHTMLを読み取れるため、検索エンジン最適化（SEO）に役立ちます。  OnInitializedAsyncが2回実行されるメカニズム このプリレンダリングの仕組みこそが、OnInitializedAsyncが2回呼ばれる原因です。
+ 1回目（静的プリレンダリング）: ユーザーがページにアクセスした瞬間、サーバー側でページのHTMLを高速に生成し、ブラウザに返します。これにより、ユーザーは待機時間なく画面を見ることができます（SEO対策にもなります）。この時、最初のOnInitializedAsyncが走ります。 2回目（対話的接続の確立）: HTMLが表示された直後、ブラウザはサーバーとのWebSocket接続（SignalR）を確立（またはWASMをロード）し、改めて「動的なアプリケーション」としてコンポーネントを再構築します。ここで2回目のOnInitializedAsyncが走ります。  1回目の実行: サーバーでのプリレンダリング時  目的：できるだけ早く静的 HTML を返す（SEO/初期表示の体感向上） 特徴：OnAfterRender{Async} は呼ばれない（JS Interop 不可） いつ？：ユーザーがページをリクエストした直後、サーバーサイドで。 何が起こる？：Blazorはコンポーネントをインスタンス化し、OnInitializedAsync を実行します。ここでAPIからデータを取得するコードがあれば、それが実行されます。 結果：取得したデータを含む静的なHTMLが生成され、ブラウザに送信されます。 状態：この時点では、ボタンをクリックしても何も起こりません。まだインタラクティブ（操作可能）ではありません。  2回目の実行: クライアントでのインタラクティブ化（ハイドレーション）時  目的：イベント ハンドラ有効化／実動状態へ昇格（Server は SignalR、WASM はランタイムでの起動） 特徴：OnInitialized{Async} が再度実行、この後に OnAfterRender{Async}(firstRender=true) が初めて呼ばれる いつ？：ブラウザが静的HTMLを受け取った後、必要なJavaScriptファイル（Blazor ServerならSignalR接続、Blazor WebAssemblyならWASMランタイム）の読み込みと実行が完了した時、クライアントサイドで。 何が起こる？：Blazorは再度コンポーネントをインスタンス化し、OnInitializedAsync をもう一度実行します。 結果：プリレンダリングされたDOM（HTML）と、クライアント側で実行されたコンポーネントの状態が関連付けられ（これをハイドレーションと呼びます）、ページが完全にインタラクティブになります。 状態：これ以降、ボタンのクリックなどに反応するようになります。   要するに:"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">OnInitializedAsync()が2回実行されるのはBlazorの「仕様」</h1>
+			<div class="meta">Posted at &mdash; Nov 19, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>Blazorを用いてコンポーネントを書き始めると、「あれ？」と思う現象があります。それが、<code>OnInitializedAsync</code>メソッドが2回実行されるという現象です。これのせいで、「データを2回も取得してる」「ログが二重に記録されてる」という事象が発生します。</p>
+
+<p>これはバグではなく、Blazorの「プリレンダリング (Prerendering)」という機能による意図的な動作です。この記事では、なぜこの現象が起きるのか、そしてそれにどうスマートに対処すればよいのかを、<a href="https://learn.microsoft.com/ja-jp/aspnet/core/blazor/components/lifecycle?view=aspnetcore-9.0">Microsoftのドキュメント</a>を基に解説します。</p>
+
+<h2 id="tl-dr">TL;DR</h2>
+
+<ul>
+<li><code>OnInitializedAsync</code> は2回実行される挙動は、Blazorのプリレンダリング（Prerendering）という機能によって引き起こされます。つまり仕様です。</li>
+<li>ランダムな値の生成やデータベースへの問い合わせなどを単純に書くと、1回目と2回目で異なる結果になったり処理が2重に走ったりして、「画面が一瞬ちらつく」「表示される値が変わる」という現象が起きます。</li>
+<li>この現象を抑制するには <code>PersistentComponentState</code> （永続コンポーネント状態）サービスを利用します。</li>
+</ul>
+
+<h2 id="そもそも-プリレンダリング-とは">そもそも「プリレンダリング」とは？</h2>
+
+<p>Blazor (特にBlazor ServerやBlazor Web App) には、ユーザー体験を向上させるための「プリレンダリング」という仕組みがデフォルトで備わっています。</p>
+
+<p>これは、ユーザーがページにアクセスした際、まずサーバー側でコンポーネントを実行し、その結果を静的なHTMLとして先にブラウザに送信する技術です。</p>
+
+<h3 id="プリレンダリングのメリット">プリレンダリングのメリット</h3>
+
+<ul>
+<li>初期表示が高速: JavaScriptの読み込みやSignalR接続が完了する前に、ユーザーはページのコンテンツを見ることができます。</li>
+<li>SEOに有利: クローラーが静的なHTMLを読み取れるため、検索エンジン最適化（SEO）に役立ちます。</li>
+</ul>
+
+<h2 id="oninitializedasync-が2回実行されるメカニズム"><code>OnInitializedAsync</code>が2回実行されるメカニズム</h2>
+
+<p>このプリレンダリングの仕組みこそが、<code>OnInitializedAsync</code>が2回呼ばれる原因です。</p>
+
+<ul>
+<li>1回目（静的プリレンダリング）: ユーザーがページにアクセスした瞬間、サーバー側でページのHTMLを高速に生成し、ブラウザに返します。これにより、ユーザーは待機時間なく画面を見ることができます（SEO対策にもなります）。この時、最初の<code>OnInitializedAsync</code>が走ります。</li>
+<li>2回目（対話的接続の確立）: HTMLが表示された直後、ブラウザはサーバーとのWebSocket接続（SignalR）を確立（またはWASMをロード）し、改めて「動的なアプリケーション」としてコンポーネントを再構築します。ここで2回目の<code>OnInitializedAsync</code>が走ります。</li>
+</ul>
+
+<h3 id="1回目の実行-サーバーでのプリレンダリング時">1回目の実行: サーバーでのプリレンダリング時</h3>
+
+<ul>
+<li>目的：できるだけ早く静的 HTML を返す（SEO/初期表示の体感向上）</li>
+<li>特徴：<code>OnAfterRender{Async}</code> は呼ばれない（JS Interop 不可）</li>
+<li>いつ？：ユーザーがページをリクエストした直後、サーバーサイドで。</li>
+<li>何が起こる？：Blazorはコンポーネントをインスタンス化し、<code>OnInitializedAsync</code> を実行します。ここでAPIからデータを取得するコードがあれば、それが実行されます。</li>
+<li>結果：取得したデータを含む静的なHTMLが生成され、ブラウザに送信されます。</li>
+<li>状態：この時点では、ボタンをクリックしても何も起こりません。まだインタラクティブ（操作可能）ではありません。</li>
+</ul>
+
+<p><img src="mermaid-diagram-1763529606347.png" alt="alt text" /></p>
+
+<h3 id="2回目の実行-クライアントでのインタラクティブ化-ハイドレーション-時">2回目の実行: クライアントでのインタラクティブ化（ハイドレーション）時</h3>
+
+<ul>
+<li>目的：イベント ハンドラ有効化／実動状態へ昇格（Server は SignalR、WASM はランタイムでの起動）</li>
+<li>特徴：<code>OnInitialized{Async}</code> が再度実行、この後に <code>OnAfterRender{Async}(firstRender=true)</code> が初めて呼ばれる</li>
+<li>いつ？：ブラウザが静的HTMLを受け取った後、必要なJavaScriptファイル（Blazor ServerならSignalR接続、Blazor WebAssemblyならWASMランタイム）の読み込みと実行が完了した時、クライアントサイドで。</li>
+<li>何が起こる？：Blazorは再度コンポーネントをインスタンス化し、<code>OnInitializedAsync</code> をもう一度実行します。</li>
+<li>結果：プリレンダリングされたDOM（HTML）と、クライアント側で実行されたコンポーネントの状態が関連付けられ（これをハイドレーションと呼びます）、ページが完全にインタラクティブになります。</li>
+<li>状態：これ以降、ボタンのクリックなどに反応するようになります。</li>
+</ul>
+
+<p><img src="mermaid-diagram-1763529664915.png" alt="alt text" /></p>
+
+<blockquote>
+<p>要するに:</p>
+
+<ol>
+<li>1回目（サーバー）: 「見た目」のHTMLを素早く作るために実行。</li>
+<li>2回目（クライアント）: 「動き」を追加して操作可能にするために実行。</li>
+</ol>
+</blockquote>
+
+<h2 id="2回実行されると何が問題">2回実行されると何が問題？</h2>
+
+<p>この仕様を知らずに<code>OnInitializedAsync</code>に重い処理を書くと、問題が発生します。</p>
+
+<ul>
+<li>データの二重取得: APIやデータベースへの問い合わせが2回実行されます。これはサーバーリソースの無駄遣いであり、APIの呼び出し制限にも影響する可能性があります。</li>
+<li>データの不整合: 1回目と2回目で取得したデータが異なると、画面が一瞬ちらつく（1回目の静的HTMLと2回目の描画結果が変わる）ことがあります。</li>
+<li>意図しない副作用: データベースへの書き込み処理などを記述していると、同じデータが2回登録されてしまう危険性があります。</li>
+</ul>
+
+<h2 id="備考-じゃあ重い処理はどこに書く">備考：じゃあ重い処理はどこに書く？</h2>
+
+<p>重い初期化や JS Interop は <code>OnAfterRenderAsync(firstRender)</code> へ書くと良いでしょう。プリレンダリング中は JS 呼び出しができないため、初回のインタラクティブ描画完了後に実行します。プリレンダリング中は <code>OnAfterRender{Async}</code> が呼ばれず、JS Interop も禁止。初回インタラクティブ化後の<code>OnAfterRender{Async}(firstRender == true)</code>にまとめるのが安全です。</p>
+
+<h2 id="解決策-persistentcomponentstate-で状態を引き継ぐ">解決策: <code>PersistentComponentState</code> で状態を引き継ぐ</h2>
+
+<p>では、どうすればAPI呼び出しのような「1回だけ実行したい処理」を正しく扱えるのでしょうか？答えは、「1回目（サーバー）の実行結果を、2回目（クライアント）に引き継ぐ」ことです。</p>
+
+<p>Blazorには、そのための仕組みとして <code>PersistentComponentState</code> （永続コンポーネント状態）サービスが用意されています。これは、プリレンダリング時（サーバー）に取得したデータを、HTML内にシリアライズして埋め込み、クライアント側での再実行時にそれを復元する仕組みです。</p>
+
+<h3 id="サンプルコード">サンプルコード</h3>
+
+<p>この現象を再現するコードを用意しました。</p>
+
+<h4 id="generatenumberbad-razor"><code>GenerateNumberBad.razor</code></h4>
+
+<p>対策を行わず、値が2回生成されてしまう（画面上の数値が変わってしまう可能性がある）コードです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-razor" data-lang="razor">@page &#34;/generate-bad&#34;
+@* 対策なしの悪い例 *@
+
+&lt;h3&gt;Generate Number (Bad Pattern)&lt;/h3&gt;
+
+&lt;p&gt;生成された数値: &lt;strong&gt;@randomNumber&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;
+    このコンポーネントでは、プリレンダリング時と接続確立時の2回、
+    ランダム値の生成が実行されます。&lt;br /&gt;
+    そのため、画面が一瞬ちらついて数値が変わる可能性があります。
+&lt;/p&gt;
+
+@code {
+    private string? randomNumber;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // 意図的に少し待機させて、挙動をわかりやすくします（非同期処理のシミュレーション）
+        await Task.Delay(500);
+
+        // 1回目と2回目で異なる値が生成される
+        randomNumber = Guid.NewGuid().ToString();
+    }
+}</code></pre></div>
+<p>実行してみると、表示される値がちらついて見えます。これは1回目に生成されたランダム値と、2回目に生成されたランダム値をそれぞれ両方とも表示しているためです。</p>
+
+<h4 id="generatenumbergood-razor"><code>GenerateNumberGood.razor</code></h4>
+
+<p><code>PersistentComponentState</code> を使用して、1回目に生成した値を2回目に引き継ぐ（再実行を防ぐ）コードです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-razor" data-lang="razor">@page &#34;/generate-good&#34;
+@implements IDisposable
+@inject PersistentComponentState ApplicationState
+
+@* 対策済みの良い例 *@
+
+&lt;h3&gt;Generate Number (Good Pattern)&lt;/h3&gt;
+
+&lt;p&gt;生成された数値: &lt;strong&gt;@randomNumber&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;
+    このコンポーネントでは、プリレンダリング時に生成した値を保存し、
+    2回目の実行時にはその値を再利用しています。&lt;br /&gt;
+    そのため、数値は変わりません。
+&lt;/p&gt;
+
+@code {
+    private string? randomNumber;
+    private PersistingComponentStateSubscription persistingSubscription;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // ▼ ここが重要: 保存された状態があるか確認する
+        // &#34;randomNumberKey&#34; というキーで以前の値が保存されていれば、それを採用する
+        persistingSubscription = ApplicationState.RegisterOnPersisting(PersistData);
+
+        if (!ApplicationState.TryTakeFromJson&lt;string&gt;(&#34;randomNumberKey&#34;, out var restoredValue))
+        {
+            // 保存された値がない場合のみ（つまり1回目のプリレンダリング時）、生成処理を行う
+            await Task.Delay(500); // 重い処理のシミュレーション
+            randomNumber = Guid.NewGuid().ToString();
+        }
+        else
+        {
+            // 保存された値があった場合（2回目の実行時）、それをそのまま使う
+            randomNumber = restoredValue;
+        }
+    }
+
+    // プリレンダリング完了時に呼ばれるメソッド。現在の状態を保存する。
+    private Task PersistData()
+    {
+        ApplicationState.PersistAsJson(&#34;randomNumberKey&#34;, randomNumber);
+        return Task.CompletedTask;
+    }
+
+    // コンポーネント破棄時に購読を解除する
+    public void Dispose()
+    {
+        persistingSubscription.Dispose();
+    }
+}</code></pre></div>
+<p>上記のコードでは、表示のちらつきは見られません。これは、１回目に生成された値をそのまま表示しているためです。</p>
+
+<h3 id="なぜ-good-のコードは1回しか実行されないように見えるのか">なぜ「Good」のコードは1回しか実行されないように見えるのか</h3>
+
+<p>理解すべきポイントは、「ライフサイクル自体は2回走っているが、重い処理や値の変更をスキップしている」という点です。</p>
+
+<table>
+<thead>
+<tr>
+<th>特徴</th>
+<th>Bad Pattern (対策なし)</th>
+<th>Good Pattern (PersistentComponentState)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1回目の実行 (サーバー側)</td>
+<td>ランダム値 A を生成。 HTMLに「A」と書いてブラウザへ送る。</td>
+<td>ランダム値 A を生成。 HTMLに「A」と書き、さらに<strong>「隠しデータとしてA」を埋め込んで</strong>ブラウザへ送る。</td>
+</tr>
+
+<tr>
+<td>ブラウザの表示</td>
+<td>ユーザーは「A」を見る。</td>
+<td>ユーザーは「A」を見る。</td>
+</tr>
+
+<tr>
+<td>2回目の実行 (接続確立後)</td>
+<td>ランダム値 B を生成。 画面を「B」に書き換える。 → ユーザーはAからBに変わるのを目撃する。</td>
+<td>埋め込まれた「隠しデータ(A)」を探す。 見つかったので生成処理をスキップし、A を採用する。 → ユーザーには変化がないように見える。</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="注意点">注意点</h2>
+
+<ul>
+<li>内部ナビゲーションでは 2 回にならない：ルーティングでページ遷移した場合はプリレンダリングされないため、<code>OnInitializedAsync</code> が 2 回実行されないケースがあります。</li>
+<li>キャッシュの活用：Server 側の二重取得回避に短時間キャッシュ（IMemoryCache など）を使う方法も有効です。状態永続化の代替として検討してください。</li>
+<li>イベントやパラメータ更新に伴う再実行：<code>OnParametersSet{Async}</code> は親の再レンダリングや非プリミティブ型パラメータの変更検知仕様により、期待より多く呼ばれることがあります。必要なら自前で差分判定することになります。</li>
+<li>Auto モードの挙動：<code>InteractiveAuto</code> は初回は <code>Server</code>、2 回目以降は <code>WASM</code> を選ぶなど直感と異なる動きをする場合があります。既存のインタラクティブ コンポーネントがあるページでは 既存モードを優先することに注意しましょう。</li>
+</ul>
+
+<h2 id="まとめ">まとめ</h2>
+
+<ul>
+<li>Blazorで<code>OnInitializedAsync</code>が2回呼ばれるのは、初期表示を高速化するプリレンダリング機能が原因。
+
+<ul>
+<li>1回目はサーバーで静的HTMLを作るため、2回目はクライアントでインタラクティブにするため。</li>
+</ul></li>
+<li>API呼び出しなどの二重実行を防ぐには、<code>PersistentComponentState</code> を使うのがベストプラクティス。
+
+<ul>
+<li>1回目（サーバー）で取得したデータを <code>PersistAsJson</code> で登録し、2回目（クライアント）で <code>TryTakeFromJson</code> を使って復元する。</li>
+</ul></li>
+<li>やってはいけない：
+
+<ul>
+<li><code>OnInitializedAsync</code> で JS Interop や重い I/O を直に実行（プリレンダリング中に失敗・二重取得）。</li>
+</ul></li>
+<li>やるべき：
+
+<ul>
+<li><code>PersistentComponentState</code> で 1 回目の結果を 2 回目へ引き継ぐ。</li>
+<li><code>OnAfterRenderAsync(firstRender)</code> に重い処理を集約。</li>
+</ul></li>
+</ul>
+
+<p>この仕組みを理解すれば、Blazorのライフサイクルをより深く使いこなし、パフォーマンスとユーザー体験に優れたWebアプリケーションを構築できるはずです。Blazorの他のライフサイクルメソッド（<code>OnParametersSet</code> や <code>OnAfterRenderAsync</code> など）についても、それぞれの役割を理解すると、さらに開発がスムーズになると思います。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://learn.microsoft.com/ja-jp/aspnet/core/blazor/components/lifecycle?view=aspnetcore-9.0">ASP.NET Core Razor コンポーネントのライフサイクル</a></li>
+<li><a href="https://learn.microsoft.com/ja-jp/aspnet/core/blazor/components/prerender?view=aspnetcore-9.0">ASP.NET Core Razor コンポーネントのプリレンダリング</a></li>
+<li><a href="https://blazor-master.com/component-lifecycle/">【Blazor】Razorコンポーネントのライフサイクルを解説する</a></li>
+<li><a href="https://zenn.dev/microsoft/articles/blazor-dotnet8-comp-state">.NET 8 の Blazor で静的 SSR と InteractveServer/WASM 間の状態渡し</a></li>
+<li><a href="https://qiita.com/satoshi3128/items/68138de5a62eec8f457f">BlazorのプレレンダリングでAPIが2回呼ばれる理由と正しい対処法</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

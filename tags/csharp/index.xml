@@ -7,10 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Tue, 26 Aug 2025 18:19:34 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 19 Nov 2025 14:13:03 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/csharp/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>OnInitializedAsync()が2回実行されるのはBlazorの「仕様」</title>
+      <link>https://ysko909.github.io/posts/why-is-the-oninitializedasync-executed-twice/</link>
+      <pubDate>Wed, 19 Nov 2025 14:13:03 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/why-is-the-oninitializedasync-executed-twice/</guid>
+      <description>概要 Blazorを用いてコンポーネントを書き始めると、「あれ？」と思う現象があります。それが、OnInitializedAsyncメソッドが2回実行されるという現象です。これのせいで、「データを2回も取得してる」「ログが二重に記録されてる」という事象が発生します。
+これはバグではなく、Blazorの「プリレンダリング (Prerendering)」という機能による意図的な動作です。この記事では、なぜこの現象が起きるのか、そしてそれにどうスマートに対処すればよいのかを、Microsoftのドキュメントを基に解説します。
+TL;DR  OnInitializedAsync は2回実行される挙動は、Blazorのプリレンダリング（Prerendering）という機能によって引き起こされます。つまり仕様です。 ランダムな値の生成やデータベースへの問い合わせなどを単純に書くと、1回目と2回目で異なる結果になったり処理が2重に走ったりして、「画面が一瞬ちらつく」「表示される値が変わる」という現象が起きます。 この現象を抑制するには PersistentComponentState （永続コンポーネント状態）サービスを利用します。  そもそも「プリレンダリング」とは？ Blazor (特にBlazor ServerやBlazor Web App) には、ユーザー体験を向上させるための「プリレンダリング」という仕組みがデフォルトで備わっています。
+これは、ユーザーがページにアクセスした際、まずサーバー側でコンポーネントを実行し、その結果を静的なHTMLとして先にブラウザに送信する技術です。
+プリレンダリングのメリット  初期表示が高速: JavaScriptの読み込みやSignalR接続が完了する前に、ユーザーはページのコンテンツを見ることができます。 SEOに有利: クローラーが静的なHTMLを読み取れるため、検索エンジン最適化（SEO）に役立ちます。  OnInitializedAsyncが2回実行されるメカニズム このプリレンダリングの仕組みこそが、OnInitializedAsyncが2回呼ばれる原因です。
+ 1回目（静的プリレンダリング）: ユーザーがページにアクセスした瞬間、サーバー側でページのHTMLを高速に生成し、ブラウザに返します。これにより、ユーザーは待機時間なく画面を見ることができます（SEO対策にもなります）。この時、最初のOnInitializedAsyncが走ります。 2回目（対話的接続の確立）: HTMLが表示された直後、ブラウザはサーバーとのWebSocket接続（SignalR）を確立（またはWASMをロード）し、改めて「動的なアプリケーション」としてコンポーネントを再構築します。ここで2回目のOnInitializedAsyncが走ります。  1回目の実行: サーバーでのプリレンダリング時  目的：できるだけ早く静的 HTML を返す（SEO/初期表示の体感向上） 特徴：OnAfterRender{Async} は呼ばれない（JS Interop 不可） いつ？：ユーザーがページをリクエストした直後、サーバーサイドで。 何が起こる？：Blazorはコンポーネントをインスタンス化し、OnInitializedAsync を実行します。ここでAPIからデータを取得するコードがあれば、それが実行されます。 結果：取得したデータを含む静的なHTMLが生成され、ブラウザに送信されます。 状態：この時点では、ボタンをクリックしても何も起こりません。まだインタラクティブ（操作可能）ではありません。  2回目の実行: クライアントでのインタラクティブ化（ハイドレーション）時  目的：イベント ハンドラ有効化／実動状態へ昇格（Server は SignalR、WASM はランタイムでの起動） 特徴：OnInitialized{Async} が再度実行、この後に OnAfterRender{Async}(firstRender=true) が初めて呼ばれる いつ？：ブラウザが静的HTMLを受け取った後、必要なJavaScriptファイル（Blazor ServerならSignalR接続、Blazor WebAssemblyならWASMランタイム）の読み込みと実行が完了した時、クライアントサイドで。 何が起こる？：Blazorは再度コンポーネントをインスタンス化し、OnInitializedAsync をもう一度実行します。 結果：プリレンダリングされたDOM（HTML）と、クライアント側で実行されたコンポーネントの状態が関連付けられ（これをハイドレーションと呼びます）、ページが完全にインタラクティブになります。 状態：これ以降、ボタンのクリックなどに反応するようになります。   要するに:</description>
+    </item>
     
     <item>
       <title>「Interactivity render mode」と「Interactivity location」とは何か</title>

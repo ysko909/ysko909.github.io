@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/why-is-the-oninitializedasync-executed-twice/</loc>
+    <lastmod>2025-11-19T14:13:03+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/can-not-run-without-creating-launchi-json-file/</loc>
     <lastmod>2025-11-14T14:36:17+09:00</lastmod>
   </url>
@@ -702,7 +707,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/blazor/</loc>
-    <lastmod>2025-07-14T12:23:15+09:00</lastmod>
+    <lastmod>2025-11-19T14:13:03+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -738,7 +743,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/csharp/</loc>
-    <lastmod>2025-08-26T18:19:34+09:00</lastmod>
+    <lastmod>2025-11-19T14:13:03+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1038,7 +1043,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2025-11-14T14:36:17+09:00</lastmod>
+    <lastmod>2025-11-19T14:13:03+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1260,7 +1265,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2025-11-14T14:36:17+09:00</lastmod>
+    <lastmod>2025-11-19T14:13:03+09:00</lastmod>
     <priority>0</priority>
   </url>
   
