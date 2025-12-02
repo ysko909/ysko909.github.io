@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>プログラミングにおける命名の基本的な考え方とパターン集 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="プログラミングにおける命名の基本的な考え方とパターン集" />
+<meta property="og:description" content="はじめに プログラミングにおいて、変数やメソッド、クラスの命名は「コードを書く」行為の中でも特に重要な要素です。適切な命名はコードの可読性を高め、保守性を向上させ、チーム開発を円滑にします。
+本記事では、プログラミング言語に依存しない普遍的な命名の指針を、オブジェクトごとに整理して解説します。
+命名における基本原則 1. 意図を明確に伝える なぜこのルールが必要か コードは書く時間よりも読まれる時間の方が圧倒的に長いものです。命名は「将来の自分や他の開発者へのメッセージ」であり、その意図が明確でなければ、コードの理解に余計な時間がかかります。
+メリット  コメントなしでもコードの意図が伝わる バグの発見が容易になる リファクタリングの際に影響範囲を把握しやすい  悪い例 d = 86400 calc(a, b) data = getData() 良い例 secondsPerDay = 86400 calculateTotalPrice(unitPrice, quantity) userProfile = fetchUserProfile() 2. 省略語は慎重に使う なぜこのルールが必要か 過度な省略は可読性を損ないます。一方で、業界で広く認識されている省略語は積極的に使うべきです。
+メリット  初見の開発者でも理解しやすい ドメイン知識の共有が促進される  一般的に許容される省略語  id (identifier) num (number) max / min (maximum / minimum) src / dst (source / destination) btn (button) - UI関連 msg (message) tmp (temporary) ctx (context) config / cfg (configuration)  避けるべき省略 usrMgr → userManager getPrdLst → getProductList 3." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-naming-objects/" /><meta property="article:published_time" content="2025-12-02T11:51:16&#43;09:00"/>
+<meta property="article:modified_time" content="2025-12-02T11:51:16&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="プログラミングにおける命名の基本的な考え方とパターン集"/>
+<meta name="twitter:description" content="はじめに プログラミングにおいて、変数やメソッド、クラスの命名は「コードを書く」行為の中でも特に重要な要素です。適切な命名はコードの可読性を高め、保守性を向上させ、チーム開発を円滑にします。
+本記事では、プログラミング言語に依存しない普遍的な命名の指針を、オブジェクトごとに整理して解説します。
+命名における基本原則 1. 意図を明確に伝える なぜこのルールが必要か コードは書く時間よりも読まれる時間の方が圧倒的に長いものです。命名は「将来の自分や他の開発者へのメッセージ」であり、その意図が明確でなければ、コードの理解に余計な時間がかかります。
+メリット  コメントなしでもコードの意図が伝わる バグの発見が容易になる リファクタリングの際に影響範囲を把握しやすい  悪い例 d = 86400 calc(a, b) data = getData() 良い例 secondsPerDay = 86400 calculateTotalPrice(unitPrice, quantity) userProfile = fetchUserProfile() 2. 省略語は慎重に使う なぜこのルールが必要か 過度な省略は可読性を損ないます。一方で、業界で広く認識されている省略語は積極的に使うべきです。
+メリット  初見の開発者でも理解しやすい ドメイン知識の共有が促進される  一般的に許容される省略語  id (identifier) num (number) max / min (maximum / minimum) src / dst (source / destination) btn (button) - UI関連 msg (message) tmp (temporary) ctx (context) config / cfg (configuration)  避けるべき省略 usrMgr → userManager getPrdLst → getProductList 3."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">プログラミングにおける命名の基本的な考え方とパターン集</h1>
+			<div class="meta">Posted at &mdash; Dec 2, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>プログラミングにおいて、変数やメソッド、クラスの命名は「コードを書く」行為の中でも特に重要な要素です。適切な命名はコードの可読性を高め、保守性を向上させ、チーム開発を円滑にします。</p>
+
+<p>本記事では、プログラミング言語に依存しない普遍的な命名の指針を、オブジェクトごとに整理して解説します。</p>
+
+<h2 id="命名における基本原則">命名における基本原則</h2>
+
+<h3 id="1-意図を明確に伝える">1. 意図を明確に伝える</h3>
+
+<h4 id="なぜこのルールが必要か">なぜこのルールが必要か</h4>
+
+<p>コードは書く時間よりも読まれる時間の方が圧倒的に長いものです。命名は「将来の自分や他の開発者へのメッセージ」であり、その意図が明確でなければ、コードの理解に余計な時間がかかります。</p>
+
+<h4 id="メリット">メリット</h4>
+
+<ul>
+<li>コメントなしでもコードの意図が伝わる</li>
+<li>バグの発見が容易になる</li>
+<li>リファクタリングの際に影響範囲を把握しやすい</li>
+</ul>
+
+<h4 id="悪い例">悪い例</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">d = 86400
+calc(a, b)
+data = getData()</pre></div>
+<h4 id="良い例">良い例</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">secondsPerDay = 86400
+calculateTotalPrice(unitPrice, quantity)
+userProfile = fetchUserProfile()</pre></div>
+<h3 id="2-省略語は慎重に使う">2. 省略語は慎重に使う</h3>
+
+<h4 id="なぜこのルールが必要か-1">なぜこのルールが必要か</h4>
+
+<p>過度な省略は可読性を損ないます。一方で、業界で広く認識されている省略語は積極的に使うべきです。</p>
+
+<h4 id="メリット-1">メリット</h4>
+
+<ul>
+<li>初見の開発者でも理解しやすい</li>
+<li>ドメイン知識の共有が促進される</li>
+</ul>
+
+<h4 id="一般的に許容される省略語">一般的に許容される省略語</h4>
+
+<ul>
+<li><code>id</code> (identifier)</li>
+<li><code>num</code> (number)</li>
+<li><code>max</code> / <code>min</code> (maximum / minimum)</li>
+<li><code>src</code> / <code>dst</code> (source / destination)</li>
+<li><code>btn</code> (button) - UI関連</li>
+<li><code>msg</code> (message)</li>
+<li><code>tmp</code> (temporary)</li>
+<li><code>ctx</code> (context)</li>
+<li><code>config</code> / <code>cfg</code> (configuration)</li>
+</ul>
+
+<h4 id="避けるべき省略">避けるべき省略</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">usrMgr → userManager
+getPrdLst → getProductList</pre></div>
+<h3 id="3-一貫性を保つ">3. 一貫性を保つ</h3>
+
+<h4 id="なぜこのルールが必要か-2">なぜこのルールが必要か</h4>
+
+<p>同じ概念に対して異なる名前を使うと、混乱を招きます。プロジェクト全体で統一された命名規則は、コードベースの品質を高めます。</p>
+
+<h4 id="メリット-2">メリット</h4>
+
+<ul>
+<li>検索性が向上する</li>
+<li>パターン認識が容易になる</li>
+<li>チーム全体の生産性が向上する</li>
+</ul>
+
+<h4 id="悪い例-1">悪い例</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">getUserData()
+fetchUserInfo()
+retrieveUserDetails()</pre></div>
+<h4 id="良い例-統一されたプレフィックス">良い例(統一されたプレフィックス)</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">fetchUserProfile()
+fetchProductList()
+fetchOrderHistory()</pre></div>
+<h2 id="クラスの命名">クラスの命名</h2>
+
+<h3 id="基本的な考え方">基本的な考え方</h3>
+
+<p>クラスは「もの」や「概念」を表現します。そのため、名詞または名詞句を使用するのが原則です。</p>
+
+<h3 id="命名パターン">命名パターン</h3>
+
+<h4 id="1-エンティティクラス">1. エンティティクラス</h4>
+
+<h5 id="考え方">考え方</h5>
+
+<p>ビジネスドメインの概念をそのまま表現します。単数形を使用するのが一般的です。</p>
+
+<h5 id="例">例</h5>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">User
+Product
+Order
+Invoice
+Customer
+ShoppingCart
+PaymentMethod</pre></div>
+<h4 id="2-サービス-マネージャークラス">2. サービス・マネージャークラス</h4>
+
+<h5 id="考え方-1">考え方</h5>
+
+<p>特定の責務や機能をまとめたクラスには、その役割を明示する接尾辞を付けます。</p>
+
+<h5 id="一般的な接尾辞">一般的な接尾辞</h5>
+
+<ul>
+<li><code>Service</code> - ビジネスロジックを提供</li>
+<li><code>Manager</code> - リソースやライフサイクルを管理</li>
+<li><code>Handler</code> - イベントや要求を処理</li>
+<li><code>Controller</code> - フローを制御</li>
+<li><code>Builder</code> - オブジェクトの構築を担当</li>
+<li><code>Factory</code> - オブジェクトの生成を担当</li>
+<li><code>Repository</code> - データアクセスを抽象化</li>
+<li><code>Provider</code> - 依存性や設定を提供</li>
+<li><code>Validator</code> - 検証ロジックを担当</li>
+</ul>
+
+<h5 id="例-1">例</h5>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">UserService
+EmailNotificationService
+DatabaseConnectionManager
+FileUploadHandler
+PaymentController
+ReportBuilder
+UserFactory
+ProductRepository
+ConfigurationProvider
+EmailValidator</pre></div>
+<h4 id="3-ユーティリティクラス">3. ユーティリティクラス</h4>
+
+<h5 id="考え方-2">考え方</h5>
+
+<p>汎用的な補助機能を提供するクラスには、複数形や <code>Utils</code>、<code>Helper</code> などの接尾辞を使用します。</p>
+
+<h5 id="例-2">例</h5>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">StringUtils
+DateTimeHelper
+MathUtils
+FileHelper</pre></div>
+<h3 id="なぜこれらの接尾辞を使うのか">なぜこれらの接尾辞を使うのか</h3>
+
+<p>これらの命名パターンは、デザインパターンやアーキテクチャパターン(MVC、DDD、Clean Architectureなど)から派生しており、業界標準として広く認識されています。適切な接尾辞を使うことで、クラスの責務が一目で理解できます。</p>
+
+<h2 id="メソッドの命名">メソッドの命名</h2>
+
+<h3 id="基本的な考え方-1">基本的な考え方</h3>
+
+<p>メソッドは「行動」や「処理」を表現します。そのため、動詞または動詞句を使用するのが原則です。</p>
+
+<h3 id="命名パターン-1">命名パターン</h3>
+
+<h4 id="1-データ取得系メソッド">1. データ取得系メソッド</h4>
+
+<h5 id="考え方-3">考え方</h5>
+
+<p>データを取得する処理には、その取得方法や特性を表すプレフィックスを使います。</p>
+
+<h5 id="一般的なプレフィックス">一般的なプレフィックス</h5>
+
+<p><strong><code>get</code></strong> - シンプルなアクセサ、計算コストが低い</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">getUsername()
+getAge()
+getTotalCount()</pre></div>
+<p><strong><code>fetch</code></strong> - 外部リソースからの取得、非同期処理の可能性</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">fetchUserFromDatabase()
+fetchDataFromAPI()
+fetchRemoteConfig()</pre></div>
+<p><strong><code>find</code></strong> - 検索や探索を伴う取得</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">findUserById(id)
+findProductsByCategory(category)
+findFirstMatch(condition)</pre></div>
+<p><strong><code>search</code></strong> - より複雑な検索ロジック</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">searchProductsByKeyword(keyword)
+searchUsersWithFilters(filters)</pre></div>
+<p><strong><code>load</code></strong> - リソースの読み込み</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">loadConfiguration()
+loadImageFromFile(path)
+loadPlugins()</pre></div>
+<p><strong><code>retrieve</code></strong> - より形式的な取得(ビジネスロジックを含む)</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">retrieveArchivedOrders()
+retrieveEncryptedData()</pre></div>
+<h4 id="2-データ設定-変更系メソッド">2. データ設定・変更系メソッド</h4>
+
+<p><strong><code>set</code></strong> - 単純な値の設定</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">setUsername(name)
+setPassword(password)
+setConfiguration(config)</pre></div>
+<p><strong><code>update</code></strong> - 既存データの更新</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">updateUserProfile(profile)
+updateInventory(productId, quantity)</pre></div>
+<p><strong><code>change</code></strong> - 状態の変更</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">changeOrderStatus(newStatus)
+changeUserRole(role)</pre></div>
+<p><strong><code>modify</code></strong> - 部分的な変更</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">modifySettings(key, value)
+modifyPermissions(permissions)</pre></div>
+<h4 id="3-作成-削除系メソッド">3. 作成・削除系メソッド</h4>
+
+<p><strong><code>create</code></strong> - 新しいオブジェクトやリソースの作成</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">createUser(userData)
+createOrder(orderData)
+createTemporaryFile()</pre></div>
+<p><strong><code>add</code></strong> - コレクションへの追加</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">addItem(item)
+addListener(listener)
+addToCart(product)</pre></div>
+<p><strong><code>insert</code></strong> - 特定位置への挿入</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">insertAt(index, element)
+insertBefore(referenceNode, newNode)</pre></div>
+<p><strong><code>delete</code> / <code>remove</code></strong> - 削除</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">deleteUser(userId)
+removeFromCart(itemId)
+removeEventListener(listener)</pre></div>
+<p><strong><code>destroy</code></strong> - リソースの破棄</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">destroySession()
+destroyConnection()</pre></div>
+<h4 id="4-判定-検証系メソッド">4. 判定・検証系メソッド</h4>
+
+<h5 id="考え方-4">考え方</h5>
+
+<p>真偽値を返すメソッドには、疑問文を連想させる命名を行います。</p>
+
+<p><strong><code>is</code></strong> - 状態の判定</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">isValid()
+isEmpty()
+isAuthenticated()
+isActive()</pre></div>
+<p><strong><code>has</code></strong> - 所有や存在の判定</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">hasPermission(permission)
+hasChildren()
+hasError()</pre></div>
+<p><strong><code>can</code></strong> - 能力や可能性の判定</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">canExecute()
+canAccess(resource)
+canUndo()</pre></div>
+<p><strong><code>should</code></strong> - 推奨や必要性の判定</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">shouldUpdate()
+shouldRetry()
+shouldNotify()</pre></div>
+<p><strong><code>exists</code></strong> - 存在確認</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">existsInDatabase(id)
+fileExists(path)</pre></div>
+<h4 id="5-計算-処理系メソッド">5. 計算・処理系メソッド</h4>
+
+<p><strong><code>calculate</code></strong> - 計算処理</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">calculateTotal(items)
+calculateDiscount(price, rate)
+calculateDistance(point1, point2)</pre></div>
+<p><strong><code>compute</code></strong> - より複雑な計算</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">computeStatistics(data)
+computeChecksum(data)</pre></div>
+<p><strong><code>process</code></strong> - データ処理</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">processPayment(paymentInfo)
+processImage(image)
+processQueue()</pre></div>
+<p><strong><code>convert</code> / <code>transform</code></strong> - 変換処理</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">convertToJson(object)
+transformData(data, rules)
+convertCurrency(amount, from, to)</pre></div>
+<p><strong><code>parse</code></strong> - パース処理</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">parseDate(dateString)
+parseXml(xmlString)</pre></div>
+<p><strong><code>format</code></strong> - フォーマット処理</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">formatCurrency(amount)
+formatDate(date, pattern)</pre></div>
+<p><strong><code>validate</code></strong> - 検証処理</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">validateEmail(email)
+validateInput(data)
+validateForm()</pre></div>
+<h4 id="6-イベント処理系メソッド">6. イベント処理系メソッド</h4>
+
+<h5 id="考え方-5">考え方</h5>
+
+<p>イベントハンドラは <code>on</code> または <code>handle</code> で始めます。</p>
+
+<p><strong><code>on</code> + イベント名</strong> - イベントハンドラ</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">onClick()
+onSubmit()
+onUserLogin()
+onDataReceived()</pre></div>
+<p><strong><code>handle</code> + イベント名</strong> - イベント処理</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">handleError(error)
+handleClick(event)
+handleDataUpdate(newData)</pre></div>
+<h3 id="メソッド命名のメリット">メソッド命名のメリット</h3>
+
+<p>明確なプレフィックスを使うことで、以下のメリットが得られます:</p>
+
+<ul>
+<li>メソッドの副作用の有無が予測できる</li>
+<li>処理の重さ(同期/非同期、計算コスト)が推測できる</li>
+<li>コードレビューでの指摘が的確になる</li>
+<li>IDEの補完機能を効率的に活用できる</li>
+</ul>
+
+<h2 id="変数の命名">変数の命名</h2>
+
+<h3 id="基本的な考え方-2">基本的な考え方</h3>
+
+<p>変数は「格納するデータの意味」を明確に表現します。型情報よりも、そのデータが表す概念や用途を優先します。</p>
+
+<h3 id="命名パターン-2">命名パターン</h3>
+
+<h4 id="1-基本的な変数">1. 基本的な変数</h4>
+
+<h5 id="考え方-6">考え方</h5>
+
+<p>変数名は「何を格納しているか」を明確にします。</p>
+
+<h4 id="悪い例-2">悪い例</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">data
+temp
+value
+x
+str</pre></div>
+<h4 id="良い例-1">良い例</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">userName
+totalPrice
+itemCount
+userEmail
+productList</pre></div>
+<h4 id="2-ブール型変数">2. ブール型変数</h4>
+
+<h5 id="考え方-7">考え方</h5>
+
+<p>真偽値を格納する変数は、その名前だけで条件文が自然に読めるようにします。</p>
+
+<p><strong>一般的なパターン:</strong></p>
+
+<p><strong><code>is</code> + 形容詞/過去分詞</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">isValid
+isActive
+isAuthenticated
+isLoading
+isVisible
+isEnabled
+isCompleted</pre></div>
+<p><strong><code>has</code> + 名詞</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">hasError
+hasPermission
+hasChildren
+hasData</pre></div>
+<p><strong><code>can</code> + 動詞</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">canEdit
+canDelete
+canAccess</pre></div>
+<p><strong><code>should</code> + 動詞</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">shouldUpdate
+shouldNotify
+shouldRetry</pre></div>
+<h5 id="使用例">使用例</h5>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">if (isAuthenticated &amp;&amp; hasPermission) {
+    // 処理
+}
+
+if (canEdit &amp;&amp; !isReadOnly) {
+    // 編集処理
+}</pre></div>
+<h4 id="3-コレクション-配列-リスト">3. コレクション(配列・リスト)</h4>
+
+<h5 id="考え方-8">考え方</h5>
+
+<p>複数の要素を持つことを示すため、複数形を使用します。</p>
+
+<h5 id="例-3">例</h5>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">users
+products
+orderItems
+errorMessages
+selectedIds
+activeConnections</pre></div>
+<h5 id="配列の要素を扱う場合">配列の要素を扱う場合</h5>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">for (user of users) {
+    // 単数形の user で各要素を扱う
+}
+
+products.forEach(product =&gt; {
+    // 単数形の product で各要素を扱う
+})</pre></div>
+<h4 id="4-数値-カウンタ">4. 数値・カウンタ</h4>
+
+<h5 id="考え方-9">考え方</h5>
+
+<p>数を数える変数には、その意味を明確にします。</p>
+
+<h5 id="例-4">例</h5>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">userCount
+totalAmount
+maxRetries
+currentIndex
+pageNumber
+attemptCount</pre></div>
+<p><strong>ループカウンタ:</strong></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">// 単純なループには慣習的に i, j, k を使用可能
+for (i = 0; i &lt; length; i++) {
+    // 処理
+}
+
+// 意味のあるループには明確な名前を
+for (userIndex = 0; userIndex &lt; users.length; userIndex++) {
+    // 処理
+}</pre></div>
+<h4 id="5-定数">5. 定数</h4>
+
+<h5 id="考え方-10">考え方</h5>
+
+<p>定数は変更されない値であること、そしてその意味を明確にします。Pythonでは大文字とアンダースコアで表現しますが、言語によってはこの限りではないため、仕様する言語の規約や習慣を確認することをオススメします。</p>
+
+<h5 id="例-5">例</h5>
+
+<p>Pythonでは定数を「大文字＋アンダースコア」で表現します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">MAX_LOGIN_ATTEMPTS = 3
+DEFAULT_TIMEOUT_SECONDS = 30
+API_BASE_URL = &#34;https://api.example.com&#34;
+TAX_RATE = 0.10
+SECONDS_PER_DAY = 86400</pre></div>
+<h4 id="6-プライベート変数">6. プライベート変数</h4>
+
+<h5 id="考え方-11">考え方</h5>
+
+<p>言語によっては、プライベートメンバーを示す記法があります。プライベートを示すために、プレフィックスとして名称の冒頭に<code>_</code>を付与したり、<code>private</code>など言語の機能を利用し名称自体では表現しない言語があります。利用している言語においてどのように表現するか、事前に確認することをオススメします。</p>
+
+<h5 id="例-6">例</h5>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">// アンダースコアプレフィックス(JavaScript/Python等)
+_internalState
+_privateCache
+
+// 言語の機能を使う場合(TypeScript等)
+private userId
+protected configuration</pre></div>
+<h4 id="7-一時変数">7. 一時変数</h4>
+
+<h5 id="考え方-12">考え方</h5>
+
+<p>一時的な値でも、その用途を明確にします。</p>
+
+<h4 id="悪い例-3">悪い例</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">temp
+tmp
+data
+x</pre></div>
+<h4 id="良い例-2">良い例</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">previousValue
+newTotal
+intermediateResult
+swapBuffer</pre></div>
+<h3 id="変数のスコープと命名">変数のスコープと命名</h3>
+
+<h5 id="考え方-13">考え方</h5>
+
+<p>スコープが狭い変数は短い名前でも許容されますが、スコープが広い変数はより詳細な名前を付けます。</p>
+
+<h5 id="例-7">例</h5>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">// 狭いスコープ - 短い名前でも理解可能
+function sum(numbers) {
+    total = 0
+    for (n of numbers) {
+        total += n
+    }
+    return total
+}
+
+// 広いスコープ - 詳細な名前が必要
+class UserManager {
+    activeUserSessions = {}
+    failedLoginAttemptsByIp = {}
+    
+    // ...
+}</pre></div>
+<h2 id="言語横断的な命名の知恵">言語横断的な命名の知恵</h2>
+
+<h3 id="1-ドメイン用語を優先する">1. ドメイン用語を優先する</h3>
+
+<h4 id="なぜこのルールが必要か-3">なぜこのルールが必要か</h4>
+
+<p>ビジネスロジックとコードの対応を明確にすることで、ドメインエキスパートとの会話が円滑になります。</p>
+
+<h5 id="例-8">例</h5>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">// 金融システムの場合
+transaction
+ledger
+portfolio
+settlement
+
+// ECサイトの場合
+cart
+checkout
+inventory
+fulfillment</pre></div>
+<h3 id="2-否定形を避ける">2. 否定形を避ける</h3>
+
+<h4 id="なぜこのルールが必要か-4">なぜこのルールが必要か</h4>
+
+<p>二重否定は読み手を混乱させます。</p>
+
+<h4 id="悪い例-4">悪い例</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">isNotDisabled
+isNotInvalid</pre></div>
+<h4 id="良い例-3">良い例</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">isEnabled
+isValid</pre></div>
+<h3 id="3-名詞と動詞を明確に区別する">3. 名詞と動詞を明確に区別する</h3>
+
+<h4 id="なぜこのルールが必要か-5">なぜこのルールが必要か</h4>
+
+<p>同じ単語を名詞と動詞の両方で使うと混乱を招きます。</p>
+
+<h5 id="例-9">例</h5>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">// 名詞としてのfilter
+userFilter = createFilter()
+
+// 動詞としてのfilter
+filterUsers(users, criteria)
+
+// より明確に区別する場合
+userFilterCriteria = createFilterCriteria()
+applyFilterToUsers(users, filterCriteria)</pre></div>
+<h3 id="4-マジックナンバーを避ける">4. マジックナンバーを避ける</h3>
+
+<h4 id="なぜこのルールが必要か-6">なぜこのルールが必要か</h4>
+
+<p>数値リテラルだけでは意味が伝わりません。</p>
+
+<h4 id="悪い例-5">悪い例</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">if (status == 200) {
+    // 処理
+}
+
+setTimeout(callback, 3000)</pre></div>
+<h4 id="良い例-4">良い例</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">HTTP_OK = 200
+if (status == HTTP_OK) {
+    // 処理
+}
+
+DEBOUNCE_DELAY_MS = 3000
+setTimeout(callback, DEBOUNCE_DELAY_MS)</pre></div>
+<h2 id="命名のチェックリスト">命名のチェックリスト</h2>
+
+<p>コードレビューや自己チェックの際に使える、命名の品質チェックリストです。</p>
+
+<h3 id="クラス名のチェックリスト">クラス名のチェックリスト</h3>
+
+<ul class="task-list">
+<li><label><input type="checkbox" disabled class="task-list-item"> 名詞または名詞句になっているか</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> その責務が明確に表現されているか</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> 適切な接尾辞(Service, Manager等)が使われているか</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> 単一責任の原則に従っているか(名前が複雑すぎないか)</label></li>
+</ul>
+
+<h3 id="メソッド名のチェックリスト">メソッド名のチェックリスト</h3>
+
+<ul class="task-list">
+<li><label><input type="checkbox" disabled class="task-list-item"> 動詞または動詞句から始まっているか</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> 副作用の有無が名前から推測できるか</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> 真偽値を返す場合、is/has/can/shouldなどで始まっているか</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> 似た機能のメソッドで一貫したプレフィックスを使用しているか</label></li>
+</ul>
+
+<h3 id="変数名のチェックリスト">変数名のチェックリスト</h3>
+
+<ul class="task-list">
+<li><label><input type="checkbox" disabled class="task-list-item"> 何を格納しているか明確か</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> ブール型の場合、is/has/can/shouldなどで始まっているか</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> コレクションの場合、複数形になっているか</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> スコープの広さに応じた詳細度か</label></li>
+<li><label><input type="checkbox" disabled class="task-list-item"> マジックナンバーを避け、定数化しているか</label></li>
+</ul>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>命名は芸術ではなく、技術です。本記事で紹介した指針に従うことで、以下のメリットが得られます:</p>
+
+<ol>
+<li><strong>可読性の向上</strong> - コードが自己文書化され、コメントへの依存が減る</li>
+<li><strong>保守性の向上</strong> - 意図が明確なため、変更の影響範囲を把握しやすい</li>
+<li><strong>バグの減少</strong> - 誤解による実装ミスが減る</li>
+<li><strong>生産性の向上</strong> - コードレビューやデバッグが効率的になる</li>
+<li><strong>チーム協調の促進</strong> - 共通言語ができ、コミュニケーションが円滑になる</li>
+</ol>
+
+<p>最初は慣れないかもしれませんが、意識的に実践することで、自然と適切な命名ができるようになります。命名に迷った時は、「6ヶ月後の自分が読んでも理解できるか」を自問してみてください。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://qiita.com/Sakai_path/items/b11badaa8daff2984f8d">エンジニアが覚えておきたい英単語 - AIコード読解時代の必須語彙</a></li>
+<li><a href="https://blog.77jp.net/guidelines-for-variables-and-method-names-summary">メソッド名、迷った時に参考にできる単語一覧</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

@@ -7,10 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Wed, 19 Nov 2025 14:13:03 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 02 Dec 2025 11:51:16 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>プログラミングにおける命名の基本的な考え方とパターン集</title>
+      <link>https://ysko909.github.io/posts/fundamentals-of-naming-objects/</link>
+      <pubDate>Tue, 02 Dec 2025 11:51:16 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/fundamentals-of-naming-objects/</guid>
+      <description>はじめに プログラミングにおいて、変数やメソッド、クラスの命名は「コードを書く」行為の中でも特に重要な要素です。適切な命名はコードの可読性を高め、保守性を向上させ、チーム開発を円滑にします。
+本記事では、プログラミング言語に依存しない普遍的な命名の指針を、オブジェクトごとに整理して解説します。
+命名における基本原則 1. 意図を明確に伝える なぜこのルールが必要か コードは書く時間よりも読まれる時間の方が圧倒的に長いものです。命名は「将来の自分や他の開発者へのメッセージ」であり、その意図が明確でなければ、コードの理解に余計な時間がかかります。
+メリット  コメントなしでもコードの意図が伝わる バグの発見が容易になる リファクタリングの際に影響範囲を把握しやすい  悪い例 d = 86400 calc(a, b) data = getData() 良い例 secondsPerDay = 86400 calculateTotalPrice(unitPrice, quantity) userProfile = fetchUserProfile() 2. 省略語は慎重に使う なぜこのルールが必要か 過度な省略は可読性を損ないます。一方で、業界で広く認識されている省略語は積極的に使うべきです。
+メリット  初見の開発者でも理解しやすい ドメイン知識の共有が促進される  一般的に許容される省略語  id (identifier) num (number) max / min (maximum / minimum) src / dst (source / destination) btn (button) - UI関連 msg (message) tmp (temporary) ctx (context) config / cfg (configuration)  避けるべき省略 usrMgr → userManager getPrdLst → getProductList 3.</description>
+    </item>
     
     <item>
       <title>OnInitializedAsync()が2回実行されるのはBlazorの「仕様」</title>

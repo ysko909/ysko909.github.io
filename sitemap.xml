@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/fundamentals-of-naming-objects/</loc>
+    <lastmod>2025-12-02T11:51:16+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/why-is-the-oninitializedasync-executed-twice/</loc>
     <lastmod>2025-11-19T14:13:03+09:00</lastmod>
   </url>
@@ -1043,7 +1048,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2025-11-19T14:13:03+09:00</lastmod>
+    <lastmod>2025-12-02T11:51:16+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1056,6 +1061,12 @@
   <url>
     <loc>https://ysko909.github.io/tags/powershell/</loc>
     <lastmod>2025-05-02T11:28:47+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ysko909.github.io/tags/programming/</loc>
+    <lastmod>2025-12-02T11:51:16+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1265,7 +1276,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2025-11-19T14:13:03+09:00</lastmod>
+    <lastmod>2025-12-02T11:51:16+09:00</lastmod>
     <priority>0</priority>
   </url>
   
