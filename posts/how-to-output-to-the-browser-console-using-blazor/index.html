@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Blazor Serverでデータをブラウザコンソールに出力する方法 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Blazor Serverでデータをブラウザコンソールに出力する方法" />
+<meta property="og:description" content="概要 Blazor Serverアプリケーションを開発していると、デバッグのためにブラウザのコンソールにデータを出力したくなることよくがあります。まぁ「デバッガー使えばいいじゃん」はたしかにそうなのですが、単純に「ここの処理通過してるか見ておきたいなー」程度の確認のとき、パッと「********hoge処理通過********」とか適当な文字列をコンソールに出したりします。
+しかし、ことBlazorでの開発の場合、コンソールに出力するSystem.Diagnostics.Debug.WriteLine()やConsole.WriteLine()を使っても、ブラウザのコンソールには表示されません。今回はこの点について書きたいと思います。
+なぜ表示されないのか 結論から言えば、Blazor Serverの仕組みに起因しています。
+Blazor Serverでは、C#のコードはサーバー側で実行されます。
+ System.Diagnostics.Debug.WriteLine() → （サーバー側である）Visual Studioのデバッグコンソールに出力 Console.WriteLine() → サーバーのコンソール(ターミナル)に出力  上記のようにそれぞれ「サーバー側」で実行され出力されます。しかし、ブラウザはクライアント側で動作しているため、サーバー側のコンソール出力は見えないのです。考えれば当たり前体操なのですが、つい忘れがち。
+解決方法: JSInteropを使う 出力されているところはわかったのですが、「確認したいんだよぉ、ブラウザのコンソールでよぉ！」を実現するにはまあまあ面倒です。というのも、ブラウザのコンソールに出力するにはJavaScript Interop (JSInterop) を使って、JavaScriptのconsole.log()を呼び出す必要があります。
+方法1: IJSRuntimeを直接使用する 最もシンプルな方法は、IJSRuntimeを使ってJavaScriptのconsole.logを直接呼び出すことです。
+@page &#34;/console-example&#34; @inject IJSRuntime JS &lt;h3&gt;ブラウザコンソール出力のデモ&lt;/h3&gt; &lt;button @onclick=&#34;LogToConsole&#34;&gt;ブラウザコンソールに出力&lt;/button&gt; @code { private async Task LogToConsole() { await JS.InvokeVoidAsync(&#34;console.log&#34;, &#34;Hello from Blazor Server!&#34;); } } この方法には以下のようなメリットがあります。
+ InvokeVoidAsync() を使用(戻り値が不要な場合) 第一引数に&quot;console.log&quot;を指定 第二引数以降に出力したいデータを指定  方法2: 複数の値やオブジェクトを出力する @code { private async Task LogMultipleValues() { var user = new { Name = &#34;田中太郎&#34;, Age = 30 }; await JS." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/how-to-output-to-the-browser-console-using-blazor/" /><meta property="article:published_time" content="2025-12-10T10:20:05&#43;09:00"/>
+<meta property="article:modified_time" content="2025-12-10T10:20:05&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Blazor Serverでデータをブラウザコンソールに出力する方法"/>
+<meta name="twitter:description" content="概要 Blazor Serverアプリケーションを開発していると、デバッグのためにブラウザのコンソールにデータを出力したくなることよくがあります。まぁ「デバッガー使えばいいじゃん」はたしかにそうなのですが、単純に「ここの処理通過してるか見ておきたいなー」程度の確認のとき、パッと「********hoge処理通過********」とか適当な文字列をコンソールに出したりします。
+しかし、ことBlazorでの開発の場合、コンソールに出力するSystem.Diagnostics.Debug.WriteLine()やConsole.WriteLine()を使っても、ブラウザのコンソールには表示されません。今回はこの点について書きたいと思います。
+なぜ表示されないのか 結論から言えば、Blazor Serverの仕組みに起因しています。
+Blazor Serverでは、C#のコードはサーバー側で実行されます。
+ System.Diagnostics.Debug.WriteLine() → （サーバー側である）Visual Studioのデバッグコンソールに出力 Console.WriteLine() → サーバーのコンソール(ターミナル)に出力  上記のようにそれぞれ「サーバー側」で実行され出力されます。しかし、ブラウザはクライアント側で動作しているため、サーバー側のコンソール出力は見えないのです。考えれば当たり前体操なのですが、つい忘れがち。
+解決方法: JSInteropを使う 出力されているところはわかったのですが、「確認したいんだよぉ、ブラウザのコンソールでよぉ！」を実現するにはまあまあ面倒です。というのも、ブラウザのコンソールに出力するにはJavaScript Interop (JSInterop) を使って、JavaScriptのconsole.log()を呼び出す必要があります。
+方法1: IJSRuntimeを直接使用する 最もシンプルな方法は、IJSRuntimeを使ってJavaScriptのconsole.logを直接呼び出すことです。
+@page &#34;/console-example&#34; @inject IJSRuntime JS &lt;h3&gt;ブラウザコンソール出力のデモ&lt;/h3&gt; &lt;button @onclick=&#34;LogToConsole&#34;&gt;ブラウザコンソールに出力&lt;/button&gt; @code { private async Task LogToConsole() { await JS.InvokeVoidAsync(&#34;console.log&#34;, &#34;Hello from Blazor Server!&#34;); } } この方法には以下のようなメリットがあります。
+ InvokeVoidAsync() を使用(戻り値が不要な場合) 第一引数に&quot;console.log&quot;を指定 第二引数以降に出力したいデータを指定  方法2: 複数の値やオブジェクトを出力する @code { private async Task LogMultipleValues() { var user = new { Name = &#34;田中太郎&#34;, Age = 30 }; await JS."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Blazor Serverでデータをブラウザコンソールに出力する方法</h1>
+			<div class="meta">Posted at &mdash; Dec 10, 2025</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要">概要</h2>
+
+<p>Blazor Serverアプリケーションを開発していると、デバッグのためにブラウザのコンソールにデータを出力したくなることよくがあります。まぁ「デバッガー使えばいいじゃん」はたしかにそうなのですが、単純に「ここの処理通過してるか見ておきたいなー」程度の確認のとき、パッと「********hoge処理通過********」とか適当な文字列をコンソールに出したりします。</p>
+
+<p>しかし、ことBlazorでの開発の場合、コンソールに出力する<code>System.Diagnostics.Debug.WriteLine()</code>や<code>Console.WriteLine()</code>を使っても、ブラウザのコンソールには表示されません。今回はこの点について書きたいと思います。</p>
+
+<h2 id="なぜ表示されないのか">なぜ表示されないのか</h2>
+
+<p>結論から言えば、Blazor Serverの仕組みに起因しています。</p>
+
+<p>Blazor Serverでは、C#のコードは<strong>サーバー側</strong>で実行されます。</p>
+
+<ul>
+<li><code>System.Diagnostics.Debug.WriteLine()</code> → （サーバー側である）Visual Studioのデバッグコンソールに出力</li>
+<li><code>Console.WriteLine()</code> → サーバーのコンソール(ターミナル)に出力</li>
+</ul>
+
+<p>上記のようにそれぞれ「サーバー側」で実行され出力されます。しかし、ブラウザはクライアント側で動作しているため、サーバー側のコンソール出力は見えないのです。考えれば当たり前体操なのですが、つい忘れがち。</p>
+
+<h2 id="解決方法-jsinteropを使う">解決方法: JSInteropを使う</h2>
+
+<p>出力されているところはわかったのですが、「確認したいんだよぉ、ブラウザのコンソールでよぉ！」を実現するにはまあまあ面倒です。というのも、ブラウザのコンソールに出力するには<strong>JavaScript Interop (JSInterop)</strong> を使って、JavaScriptの<code>console.log()</code>を呼び出す必要があります。</p>
+
+<h3 id="方法1-ijsruntimeを直接使用する">方法1: IJSRuntimeを直接使用する</h3>
+
+<p>最もシンプルな方法は、<code>IJSRuntime</code>を使ってJavaScriptの<code>console.log</code>を直接呼び出すことです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp">@page <span style="color:#a31515">&#34;/console-example&#34;</span>
+@inject IJSRuntime JS
+
+&lt;h3&gt;<span style="">ブラウザコンソール出力のデモ</span>&lt;/h3&gt;
+
+&lt;button @onclick=<span style="color:#a31515">&#34;LogToConsole&#34;</span>&gt;<span style="">ブラウザコンソールに出力</span>&lt;/button&gt;
+
+@code {
+    <span style="color:#00f">private</span> <span style="color:#00f">async</span> Task LogToConsole()
+    {
+        <span style="color:#00f">await</span> JS.InvokeVoidAsync(<span style="color:#a31515">&#34;console.log&#34;</span>, <span style="color:#a31515">&#34;Hello from Blazor Server!&#34;</span>);
+    }
+}</code></pre></div>
+<p>この方法には以下のようなメリットがあります。</p>
+
+<ul>
+<li><code>InvokeVoidAsync()</code> を使用(戻り値が不要な場合)</li>
+<li>第一引数に<code>&quot;console.log&quot;</code>を指定</li>
+<li>第二引数以降に出力したいデータを指定</li>
+</ul>
+
+<h3 id="方法2-複数の値やオブジェクトを出力する">方法2: 複数の値やオブジェクトを出力する</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp">@code {
+    <span style="color:#00f">private</span> <span style="color:#00f">async</span> Task LogMultipleValues()
+    {
+        <span style="color:#2b91af">var</span> user = <span style="color:#00f">new</span> { Name = <span style="color:#a31515">&#34;田中太郎&#34;</span>, Age = 30 };
+        <span style="color:#00f">await</span> JS.InvokeVoidAsync(<span style="color:#a31515">&#34;console.log&#34;</span>, <span style="color:#a31515">&#34;ユーザー情報:&#34;</span>, user);
+    }
+}</code></pre></div>
+<h3 id="方法3-ヘルパーメソッドを作成する">方法3: ヘルパーメソッドを作成する</h3>
+
+<p>頻繁に使用する場合は、ヘルパークラスを作成すると便利です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#008000">// Services/ConsoleLogger.cs
+</span><span style="color:#008000"></span><span style="color:#00f">public</span> <span style="color:#00f">class</span> <span style="color:#2b91af">ConsoleLogger</span>
+{
+    <span style="color:#00f">private</span> <span style="color:#00f">readonly</span> IJSRuntime _js;
+
+    <span style="color:#00f">public</span> ConsoleLogger(IJSRuntime js)
+    {
+        _js = js;
+    }
+
+    <span style="color:#00f">public</span> <span style="color:#00f">async</span> Task Log(<span style="color:#00f">params</span> <span style="color:#2b91af">object</span>[] args)
+    {
+        <span style="color:#00f">await</span> _js.InvokeVoidAsync(<span style="color:#a31515">&#34;console.log&#34;</span>, args);
+    }
+
+    <span style="color:#00f">public</span> <span style="color:#00f">async</span> Task Warn(<span style="color:#00f">params</span> <span style="color:#2b91af">object</span>[] args)
+    {
+        <span style="color:#00f">await</span> _js.InvokeVoidAsync(<span style="color:#a31515">&#34;console.warn&#34;</span>, args);
+    }
+
+    <span style="color:#00f">public</span> <span style="color:#00f">async</span> Task Error(<span style="color:#00f">params</span> <span style="color:#2b91af">object</span>[] args)
+    {
+        <span style="color:#00f">await</span> _js.InvokeVoidAsync(<span style="color:#a31515">&#34;console.error&#34;</span>, args);
+    }
+}</code></pre></div>
+<h4 id="program-csに登録">Program.csに登録</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp">builder.Services.AddScoped&lt;ConsoleLogger&gt;();</code></pre></div>
+<h4 id="使用例">使用例</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp">@page <span style="color:#a31515">&#34;/logger-example&#34;</span>
+@inject ConsoleLogger Logger
+
+&lt;button @onclick=<span style="color:#a31515">&#34;TestLogger&#34;</span>&gt;<span style="">各種ログ出力</span>&lt;/button&gt;
+
+@code {
+    <span style="color:#00f">private</span> <span style="color:#00f">async</span> Task TestLogger()
+    {
+        <span style="color:#00f">await</span> Logger.Log(<span style="color:#a31515">&#34;通常のログ&#34;</span>);
+        <span style="color:#00f">await</span> Logger.Warn(<span style="color:#a31515">&#34;警告メッセージ&#34;</span>);
+        <span style="color:#00f">await</span> Logger.Error(<span style="color:#a31515">&#34;エラーメッセージ&#34;</span>);
+    }
+}</code></pre></div>
+<h3 id="方法4-カスタムjavascript関数を作成する">方法4: カスタムJavaScript関数を作成する</h3>
+
+<p>より高度な出力を行いたい場合は、カスタムJavaScript関数を作成できます。でも今回の「ちょっと確認したい」みたいな場合には重すぎるんですよねぇ・・・。</p>
+
+<h4 id="wwwroot-js-consolehelper-js">wwwroot/js/consoleHelper.js</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">window.consoleHelper = {
+    logWithTimestamp: <span style="color:#00f">function</span>(message) {
+        <span style="color:#00f">const</span> timestamp = <span style="color:#00f">new</span> Date().toLocaleTimeString();
+        console.log(<span style="color:#a31515">`[</span><span style="color:#a31515">${</span>timestamp<span style="color:#a31515">}</span><span style="color:#a31515">] </span><span style="color:#a31515">${</span>message<span style="color:#a31515">}</span><span style="color:#a31515">`</span>);
+    },
+    logObject: <span style="color:#00f">function</span>(obj) {
+        console.log(JSON.stringify(obj, <span style="color:#00f">null</span>, 2));
+    }
+};
+</code></pre></div>
+<h4 id="pages-host-cshtmlまたはapp-razorで読み込み">Pages/_Host.cshtmlまたはApp.razorで読み込み</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;script src=<span style="color:#a31515">&#34;js/consoleHelper.js&#34;</span>&gt;&lt;/script&gt;</code></pre></div>
+<h4 id="使用例-1">使用例</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp">@code {
+    <span style="color:#00f">private</span> <span style="color:#00f">async</span> Task LogWithCustomFunction()
+    {
+        <span style="color:#00f">await</span> JS.InvokeVoidAsync(<span style="color:#a31515">&#34;consoleHelper.logWithTimestamp&#34;</span>, 
+            <span style="color:#a31515">&#34;カスタム関数からの出力&#34;</span>);
+    }
+}</code></pre></div>
+<h2 id="注意点">注意点</h2>
+
+<h3 id="非同期処理が必要">非同期処理が必要</h3>
+
+<p>JSInteropは非同期処理なので、<code>await</code>と<code>async</code>を使用する必要があります。</p>
+
+<h3 id="レンダリング前に呼び出せない">レンダリング前に呼び出せない</h3>
+
+<p>コンポーネントの初期化中(<code>OnInitialized</code>など)で呼び出す場合は、<code>OnAfterRenderAsync</code>を使用してください。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#00f">protected</span> <span style="color:#00f">override</span> <span style="color:#00f">async</span> Task OnAfterRenderAsync(<span style="color:#2b91af">bool</span> firstRender)
+{
+    <span style="color:#00f">if</span> (firstRender)
+    {
+        <span style="color:#00f">await</span> JS.InvokeVoidAsync(<span style="color:#a31515">&#34;console.log&#34;</span>, <span style="color:#a31515">&#34;コンポーネントがレンダリングされました&#34;</span>);
+    }
+}</code></pre></div>
+<h3 id="プリレンダリングに注意">プリレンダリングに注意</h3>
+
+<p>Blazor Serverではデフォルトでプリレンダリングが有効になっており、サーバー側で最初のレンダリングが行われます。ただ、この時点ではJSInteropは使用できません。</p>
+
+<p>プリレンダリングを無効にする場合は、<code>_Host.cshtml</code>で以下のように設定します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;component type=<span style="color:#a31515">&#34;typeof(App)&#34;</span> render-mode=<span style="color:#a31515">&#34;Server&#34;</span> /&gt;</code></pre></div>
+<h2 id="まとめ">まとめ</h2>
+
+<p>Blazor Serverでブラウザコンソールに出力するには、以下のようなわりと面倒な手順をどれかしら採用する必要があります。</p>
+
+<ol>
+<li><strong>IJSRuntime</strong>を使用して<code>console.log</code>を呼び出す</li>
+<li>ヘルパークラスを作成して再利用性を高める</li>
+<li>カスタムJavaScript関数で拡張機能を実装する</li>
+</ol>
+
+<p>BlazorだとReactやVue.jsとは感覚が異なるので、割と沼だと思ってます。</p>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li><a href="https://learn.microsoft.com/ja-jp/aspnet/core/blazor/javascript-interoperability/call-javascript-from-dotnet">Microsoft公式ドキュメント - ASP.NET CoreのBlazorでJavaScript関数を呼び出す</a></li>
+<li><a href="https://learn.microsoft.com/ja-jp/aspnet/core/blazor/hosting-models#blazor-server">Blazor Server概要</a></li>
+<li><a href="https://mag.autumn.org/Content.modf?id=20191102171002">Blazor ServerではConsole.WriteLine&reg;;でデバッグコンソールに出力されない</a></li>
+<li><a href="https://stackoverflow.com/questions/60992581/how-can-i-write-into-the-browser%C2%B4s-console-via-blazor-webassembly">How can I write into the browser´s console via Blazor WebAssembly?</a></li>
+</ul>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

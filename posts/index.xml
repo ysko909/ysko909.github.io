@@ -7,10 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Tue, 02 Dec 2025 11:51:16 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 10 Dec 2025 10:20:05 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Blazor Serverでデータをブラウザコンソールに出力する方法</title>
+      <link>https://ysko909.github.io/posts/how-to-output-to-the-browser-console-using-blazor/</link>
+      <pubDate>Wed, 10 Dec 2025 10:20:05 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/how-to-output-to-the-browser-console-using-blazor/</guid>
+      <description>概要 Blazor Serverアプリケーションを開発していると、デバッグのためにブラウザのコンソールにデータを出力したくなることよくがあります。まぁ「デバッガー使えばいいじゃん」はたしかにそうなのですが、単純に「ここの処理通過してるか見ておきたいなー」程度の確認のとき、パッと「********hoge処理通過********」とか適当な文字列をコンソールに出したりします。
+しかし、ことBlazorでの開発の場合、コンソールに出力するSystem.Diagnostics.Debug.WriteLine()やConsole.WriteLine()を使っても、ブラウザのコンソールには表示されません。今回はこの点について書きたいと思います。
+なぜ表示されないのか 結論から言えば、Blazor Serverの仕組みに起因しています。
+Blazor Serverでは、C#のコードはサーバー側で実行されます。
+ System.Diagnostics.Debug.WriteLine() → （サーバー側である）Visual Studioのデバッグコンソールに出力 Console.WriteLine() → サーバーのコンソール(ターミナル)に出力  上記のようにそれぞれ「サーバー側」で実行され出力されます。しかし、ブラウザはクライアント側で動作しているため、サーバー側のコンソール出力は見えないのです。考えれば当たり前体操なのですが、つい忘れがち。
+解決方法: JSInteropを使う 出力されているところはわかったのですが、「確認したいんだよぉ、ブラウザのコンソールでよぉ！」を実現するにはまあまあ面倒です。というのも、ブラウザのコンソールに出力するにはJavaScript Interop (JSInterop) を使って、JavaScriptのconsole.log()を呼び出す必要があります。
+方法1: IJSRuntimeを直接使用する 最もシンプルな方法は、IJSRuntimeを使ってJavaScriptのconsole.logを直接呼び出すことです。
+@page &amp;#34;/console-example&amp;#34; @inject IJSRuntime JS &amp;lt;h3&amp;gt;ブラウザコンソール出力のデモ&amp;lt;/h3&amp;gt; &amp;lt;button @onclick=&amp;#34;LogToConsole&amp;#34;&amp;gt;ブラウザコンソールに出力&amp;lt;/button&amp;gt; @code { private async Task LogToConsole() { await JS.InvokeVoidAsync(&amp;#34;console.log&amp;#34;, &amp;#34;Hello from Blazor Server!&amp;#34;); } } この方法には以下のようなメリットがあります。
+ InvokeVoidAsync() を使用(戻り値が不要な場合) 第一引数に&amp;quot;console.log&amp;quot;を指定 第二引数以降に出力したいデータを指定  方法2: 複数の値やオブジェクトを出力する @code { private async Task LogMultipleValues() { var user = new { Name = &amp;#34;田中太郎&amp;#34;, Age = 30 }; await JS.</description>
+    </item>
     
     <item>
       <title>プログラミングにおける命名の基本的な考え方とパターン集</title>
