@@ -7,10 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Wed, 10 Dec 2025 10:20:05 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 13 Jan 2026 18:49:05 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>複数の変更から「特定の1ファイルだけ」をピックアップしてコミットする方法</title>
+      <link>https://ysko909.github.io/posts/how-to-commit-only-a-specific-file-from-multiple-changes/</link>
+      <pubDate>Tue, 13 Jan 2026 18:49:05 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/how-to-commit-only-a-specific-file-from-multiple-changes/</guid>
+      <description>複数のファイルを並行して編集しているとき、いま確定できる1ファイルだけをコミットしたい場面はよくあります。この記事では、安全に1ファイルだけをコミットする方法をまとめます。いつもはなるべく細かくコミットするようにしてるので、たまにこういうシチュエーションになると「どうやるんだっけ・・・」ってなるので、個人的にメモしておくっていう話でもあります＿(　_´ω`)_ﾍﾟｼｮ
+シチュエーション 次の3ファイルに変更があるものの、まずは config.js の変更だけをコミットしたい・・・こんなケースを想定してみます。
+ config.js（設定の修正：コミットしたい） app.js（機能開発中：まだコミットしたくない） style.css（デザイン調整中：まだコミットしたくない）  基本手順（最短・安全ルート） 1) 変更状況の確認 git status 出力例
+On branch main Changes not staged for commit: modified: config.js modified: app.js modified: style.css no changes added to commit 2) 対象ファイルだけをステージング git add config.js 3) ステージングの確認 git status 出力例
+On branch main Changes to be committed: modified: config.js Changes not staged for commit: modified: app.js modified: style.css 4) コミット git commit -m &amp;#34;config.</description>
+    </item>
     
     <item>
       <title>Blazor Serverでデータをブラウザコンソールに出力する方法</title>

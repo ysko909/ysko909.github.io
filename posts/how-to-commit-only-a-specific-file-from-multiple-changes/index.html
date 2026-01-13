@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>複数の変更から「特定の1ファイルだけ」をピックアップしてコミットする方法 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="複数の変更から「特定の1ファイルだけ」をピックアップしてコミットする方法" />
+<meta property="og:description" content="複数のファイルを並行して編集しているとき、いま確定できる1ファイルだけをコミットしたい場面はよくあります。この記事では、安全に1ファイルだけをコミットする方法をまとめます。いつもはなるべく細かくコミットするようにしてるので、たまにこういうシチュエーションになると「どうやるんだっけ・・・」ってなるので、個人的にメモしておくっていう話でもあります＿(　_´ω`)_ﾍﾟｼｮ
+シチュエーション 次の3ファイルに変更があるものの、まずは config.js の変更だけをコミットしたい・・・こんなケースを想定してみます。
+ config.js（設定の修正：コミットしたい） app.js（機能開発中：まだコミットしたくない） style.css（デザイン調整中：まだコミットしたくない）  基本手順（最短・安全ルート） 1) 変更状況の確認 git status 出力例
+On branch main Changes not staged for commit: modified: config.js modified: app.js modified: style.css no changes added to commit 2) 対象ファイルだけをステージング git add config.js 3) ステージングの確認 git status 出力例
+On branch main Changes to be committed: modified: config.js Changes not staged for commit: modified: app.js modified: style.css 4) コミット git commit -m &#34;config." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/how-to-commit-only-a-specific-file-from-multiple-changes/" /><meta property="article:published_time" content="2026-01-13T18:49:05&#43;09:00"/>
+<meta property="article:modified_time" content="2026-01-13T18:49:05&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="複数の変更から「特定の1ファイルだけ」をピックアップしてコミットする方法"/>
+<meta name="twitter:description" content="複数のファイルを並行して編集しているとき、いま確定できる1ファイルだけをコミットしたい場面はよくあります。この記事では、安全に1ファイルだけをコミットする方法をまとめます。いつもはなるべく細かくコミットするようにしてるので、たまにこういうシチュエーションになると「どうやるんだっけ・・・」ってなるので、個人的にメモしておくっていう話でもあります＿(　_´ω`)_ﾍﾟｼｮ
+シチュエーション 次の3ファイルに変更があるものの、まずは config.js の変更だけをコミットしたい・・・こんなケースを想定してみます。
+ config.js（設定の修正：コミットしたい） app.js（機能開発中：まだコミットしたくない） style.css（デザイン調整中：まだコミットしたくない）  基本手順（最短・安全ルート） 1) 変更状況の確認 git status 出力例
+On branch main Changes not staged for commit: modified: config.js modified: app.js modified: style.css no changes added to commit 2) 対象ファイルだけをステージング git add config.js 3) ステージングの確認 git status 出力例
+On branch main Changes to be committed: modified: config.js Changes not staged for commit: modified: app.js modified: style.css 4) コミット git commit -m &#34;config."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">複数の変更から「特定の1ファイルだけ」をピックアップしてコミットする方法</h1>
+			<div class="meta">Posted at &mdash; Jan 13, 2026</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<p>複数のファイルを並行して編集しているとき、いま確定できる1ファイルだけをコミットしたい場面はよくあります。この記事では、安全に1ファイルだけをコミットする方法をまとめます。いつもはなるべく細かくコミットするようにしてるので、たまにこういうシチュエーションになると「どうやるんだっけ・・・」ってなるので、個人的にメモしておくっていう話でもあります＿(　_´ω`)_ﾍﾟｼｮ</p>
+
+<h2 id="シチュエーション">シチュエーション</h2>
+
+<p>次の3ファイルに変更があるものの、まずは <code>config.js</code> の変更だけをコミットしたい・・・こんなケースを想定してみます。</p>
+
+<ul>
+<li><code>config.js</code>（設定の修正：コミットしたい）</li>
+<li><code>app.js</code>（機能開発中：まだコミットしたくない）</li>
+<li><code>style.css</code>（デザイン調整中：まだコミットしたくない）</li>
+</ul>
+
+<h2 id="基本手順-最短-安全ルート">基本手順（最短・安全ルート）</h2>
+
+<h3 id="1-変更状況の確認">1) 変更状況の確認</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git status</code></pre></div>
+<p>出力例</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">On branch main
+Changes not staged for commit:
+  modified:   config.js
+  modified:   app.js
+  modified:   style.css
+
+no changes added to commit</code></pre></div>
+<h3 id="2-対象ファイルだけをステージング">2) 対象ファイルだけをステージング</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git add config.js</code></pre></div>
+<h3 id="3-ステージングの確認">3) ステージングの確認</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git status</code></pre></div>
+<p>出力例</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">On branch main
+Changes to be committed:
+  modified:   config.js
+
+Changes not staged for commit:
+  modified:   app.js
+  modified:   style.css</code></pre></div>
+<h3 id="4-コミット">4) コミット</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git commit -m <span style="color:#a31515">&#34;config.jsの設定を更新&#34;</span></code></pre></div>
+<h3 id="5-残りの変更を再確認">5) 残りの変更を再確認</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git status</code></pre></div>
+<p>出力例</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">On branch main
+Changes not staged for commit:
+  modified:   app.js
+  modified:   style.css
+
+no changes added to commit</code></pre></div>
+<p>上記ではステージされた <code>config.js</code> だけがコミットされ、他のファイルの進行中の変更はそのまま残ります。</p>
+
+<h2 id="応用-よく使うパターン">応用：よく使うパターン</h2>
+
+<h3 id="パターン1-複数ファイルだけをまとめてコミット">パターン1：複数ファイルだけをまとめてコミット</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git add config.js utils.js
+git commit -m <span style="color:#a31515">&#34;設定ファイルとユーティリティを更新&#34;</span></code></pre></div>
+<h3 id="パターン2-ファイルの一部だけをコミット-パッチモード">パターン2：ファイルの一部だけをコミット（パッチモード）</h3>
+
+<p>同じファイルの変更をハンク単位で選びたいときはパッチモードが便利です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git add -p config.js</code></pre></div>
+<p>対話例</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">diff --git a/config.js b/config.js
+@@ -10,7 +10,7 @@
+ const config = {
+-  apiUrl: &#39;http://localhost:3000&#39;,
++  apiUrl: &#39;https://api.example.com&#39;,
+   timeout: 5000
+ }
+
+Stage this hunk [y,n,q,a,d,s,e,?]?</code></pre></div>
+<p>主な選択肢</p>
+
+<ul>
+<li><code>y</code>：このハンクをステージ</li>
+<li><code>n</code>：このハンクをスキップ</li>
+<li><code>q</code>：終了</li>
+<li><code>a</code>：このファイルの残りのハンクをすべてステージ</li>
+<li><code>d</code>：このファイルの残りのハンクをすべてスキップ</li>
+<li><code>s</code>：ハンクをさらに分割</li>
+<li><code>e</code>：ハンク内容を手動編集してステージ</li>
+<li><code>?</code>：ヘルプ表示</li>
+</ul>
+
+<blockquote>
+<p>補足：<code>git commit -p</code> でもコミット直前にハンク選択ができます。</p>
+</blockquote>
+
+<h3 id="パターン3-うっかりステージしたものを取り消したい">パターン3：うっかりステージしたものを取り消したい</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git restore --staged config.js
+
+<span style="color:#008000"># すべてのステージを取り消す
+</span><span style="color:#008000"></span>git restore --staged .</code></pre></div>
+<p>従来は<code>git reset</code>を使っていましたが、現状では<code>git restore --staged</code>を使います。</p>
+
+<p>なお、作業ツリーの変更自体を捨てたい場合は、<code>git restore config.js</code>（ステージではなくファイル内容を巻き戻す）を使います。オプション<code>--staged</code>がないと変更自体がなくなってしまうので注意。</p>
+
+<h3 id="パターン4-ディレクトリ単位で追加">パターン4：ディレクトリ単位で追加</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git add src/
+git commit -m <span style="color:#a31515">&#34;srcディレクトリの変更を反映&#34;</span></code></pre></div>
+<h2 id="実践-段階的にコミットして履歴を綺麗に保つ">実践：段階的にコミットして履歴を綺麗に保つ</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># 1) 変更の確認
+</span><span style="color:#008000"></span>git status
+<span style="color:#008000"># 例: config.js, app.js, style.css, README.md が変更
+</span><span style="color:#008000"></span>
+<span style="color:#008000"># 2) 設定関連だけをコミット
+</span><span style="color:#008000"></span>git add config.js
+git commit -m <span style="color:#a31515">&#34;feat: API URLを本番環境に変更&#34;</span>
+
+<span style="color:#008000"># 3) ドキュメント更新をコミット
+</span><span style="color:#008000"></span>git add README.md
+git commit -m <span style="color:#a31515">&#34;docs: インストール手順を更新&#34;</span>
+
+<span style="color:#008000"># 4) 残りの変更を確認（まだコミットしない）
+</span><span style="color:#008000"></span>git status
+# 出力: app.js, style.css が変更</code></pre></div>
+<p>メッセージの <code>feat:</code> / <code>docs:</code> は <a href="https://www.conventionalcommits.org/ja/v1.0.0/">Conventional Commits</a> の形式。チーム開発で可読性が上がります。</p>
+
+<h2 id="コミット前の-見える化-コマンド">コミット前の「見える化」コマンド</h2>
+
+<h3 id="差分の確認">差分の確認</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># ステージ前（作業ツリー↔インデックス）
+</span><span style="color:#008000"></span>git diff config.js
+
+<span style="color:#008000"># ステージ済み（インデックス↔HEAD）
+</span><span style="color:#008000"></span>git diff --staged config.js    <span style="color:#008000"># --cached と同義
+</span><span style="color:#008000"></span>
+<span style="color:#008000"># 作業ツリーの全変更（ステージ・未ステージをまとめて）
+</span><span style="color:#008000"></span>git diff HEAD config.js</code></pre></div>
+<h3 id="最終チェック">最終チェック</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># ステージ済みファイルの一覧
+</span><span style="color:#008000"></span>git diff --staged --name-only
+
+<span style="color:#008000"># ステージ済みの詳細差分
+</span><span style="color:#008000"></span>git diff --staged
+
+<span style="color:#008000"># コンパクトな状況表示
+</span><span style="color:#008000"></span>git status -s   <span style="color:#008000"># --short と同義
+</span><span style="color:#008000"></span>git status -v   # ステージ済みの差分行も表示</code></pre></div>
+<h2 id="さらに一歩-知っておくと便利なテク">さらに一歩：知っておくと便利なテク</h2>
+
+<h3 id="インタラクティブ-インデックス">インタラクティブ・インデックス</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git add -i</code></pre></div>
+<p>ファイル選択やパッチ選択を対話式でまとめて処理できます。</p>
+
+<h3 id="一時退避-stash-を活用">一時退避（stash）を活用</h3>
+
+<p>他ファイルの未ステージ変更を一時退避して、対象ファイルだけをコミットしたいとき。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># 未ステージの変更だけを退避（インデックスは保持）
+</span><span style="color:#008000"></span>git stash --keep-index
+
+<span style="color:#008000"># 退避した変更を戻す
+</span><span style="color:#008000"></span>git stash pop</code></pre></div>
+<h3 id="除外して追加-する高度なパス指定-pathspec">「除外して追加」する高度なパス指定（pathspec）</h3>
+
+<p>「ほぼ全部をステージしたいが、この2ファイルだけ除外したい」場合は、除外マジックを使えます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#008000"># 例: カレント配下のほぼ全てを追加しつつ、2ファイルを除外
+</span><span style="color:#008000"></span>git add . <span style="color:#a31515">&#39;:(exclude)app.js&#39;</span> <span style="color:#a31515">&#39;:(exclude)style.css&#39;</span></code></pre></div>
+<blockquote>
+<p>うっかり追加を防ぐため、慣れるまでは 明示的にファイル名を列挙 する方が安全です。</p>
+</blockquote>
+
+<h2 id="よくある誤解と注意点">よくある誤解と注意点</h2>
+
+<ol>
+<li><p><code>git add .</code> は原則使わない<br />
+変更多数の場面では、意図しないファイルまでステージされがち。<br />
+→ 必要なファイルだけを列挙するか、パッチモードで選びましょう。</p></li>
+
+<li><p>コミットメッセージは具体的に<br />
+「何を、なぜ」変更したか（背景や影響範囲）を残す。<br />
+Conventional Commits（<code>feat:</code>, <code>fix:</code>, <code>docs:</code>…）も有効。</p></li>
+
+<li><p>関連する変更はまとめる<br />
+1コミット＝1論理単位。レビューと履歴追跡が楽になります。</p></li>
+
+<li><p>こまめに差分を確認<br />
+<code>git status</code> / <code>git diff</code> / <code>git diff --staged</code> をループさせて、意図通りのステージになっているかをチェック。</p></li>
+
+<li><p>ステージ取り消しは <code>git restore --staged</code> が推奨<br />
+旧コマンドの <code>git reset &lt;path&gt;</code> でも同じ効果ですが、最新Gitの意図（作業ツリーとインデックス操作の分離）に沿うのは <code>restore</code> 系です。</p></li>
+</ol>
+
+<h2 id="まとめ">まとめ</h2>
+
+<ul>
+<li>やることは「対象だけをステージしてコミット」。</li>
+<li>部分コミットは <code>git add -p</code> / <code>git commit -p</code> が強力。</li>
+<li>取り消しは <code>git restore --staged</code> がわかりやすく安全。</li>
+<li>差分の見える化を習慣化して、履歴を論理的な塊で綺麗に保ちましょう。</li>
+</ul>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://git-scm.com/docs/git-add">git add</a></li>
+<li><a href="https://www.conventionalcommits.org/ja/v1.0.0/">Conventional Commits</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
