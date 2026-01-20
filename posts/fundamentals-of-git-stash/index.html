@@ -195,6 +195,14 @@ stash@{1}: On feature/old-feature: WIP on feature/old-feature: ...</code></pre><
 
 <p>基本操作を覚えたら、さらに便利な応用テクニックもマスターしましょう。</p>
 
+<h3 id="特定のファイルのみ-git-stash">特定のファイルのみ<code>git stash</code></h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console"># 特定のファイルをstashする
+git stash push -m &#34;WIP: updating hoge.py&#34; src/hoge.py
+
+# 複数ファイルをstashする
+git stash push -m &#34;WIP: updating fuga.py and piyo.md&#34; -- src/fuga.py doc/piyo.md</code></pre></div>
+<p>特定のファイルを<code>git stash</code>したい場合は、単純に対象のファイルを記述します。複数のファイルを対象にしたい場合は、スペースで区切って列挙するだけでOKです。なお、どのファイルが退避されているかメッセージに書いておくとわかりやすくていいと思います。</p>
+
 <h3 id="特定のstashを操作する">特定のstashを操作する</h3>
 
 <p><code>stash@{n}</code>のように番号を指定することで、最新ではないstashを操作できます。</p>
@@ -341,6 +349,7 @@ $ git stash pop</code></pre></div>
 <li><a href="https://qiita.com/chihiro/items/f373873d5c2dfbd03250">【git stash】コミットはせずに変更を退避したいとき</a></li>
 <li><a href="https://note.com/yukikkoaimanabi/n/n574b900a2e72">Git Stash 完全ガイド &amp; チートシート#新人エンジニア向け</a></li>
 <li><a href="https://www.atlassian.com/git/tutorials/saving-changes/git-stash">Git Stash</a></li>
+<li><a href="https://school.learning-next.app/blog/git/git-stash-file">【Git】git stashで特定ファイルだけを一時保存する方法</a></li>
 </ol>
 
 		</div><div id="disqus_thread"></div>
