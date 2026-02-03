@@ -4,11 +4,11 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>PowerShellを使ってISOファイルを作成する方法 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta property="og:title" content="PowerShellを使ってISOファイルを作成する方法" />
-<meta property="og:description" content="概要 この記事では、Windows 10/11環境下において、フォルダの内容をISOファイルとしてアーカイブする際に、信頼性を懸念される第三者製ツールを用いることなく、標準搭載されたPowerShellの機能のみで実現する方法について解説します。
-従来、New-ISOFileコマンドレットがISOファイル作成の簡便な手段として存在しましたが、現在、標準的な提供はされていません。しかしながら、コミュニティによって開発された代替スクリプトを活用することで、PowerShell単体でフォルダからISOファイルを生成することが可能です。
-本稿では、その代替スクリプトを利用し、PowerShellのみでフォルダからISOファイルを生成する手順を解説します。
-PowerShellによるISOファイル作成の利点  セキュリティ: 不明な第三者製ソフトウェアの導入を回避し、セキュリティ上のリスクを低減できます。 簡便性: 基本的にWindowsにはPowerShellが既にインストールされているため、追加のソフトウェアは不要です。 自動化: スクリプトによる実行により、ISOファイル作成処理の自動化が可能です。  必要なスクリプトの取得 本稿で解説する方法では、以下の2つのPowerShell関数を使用します。
- New-ISOFileFromFolder: 指定されたフォルダの内容に基づいてISOファイルを作成する主要な関数。 Write-IStreamToFile: ストリームデータをファイルに書き出すための補助関数。  これらの関数は、PowerShell Galleryにて公開されています。以下の手順に従い、これらの関数をお客様の環境で利用可能な状態にしてください。
+<meta property="og:description" content="概要 この記事では、Windows 10/11環境下において、標準搭載されたPowerShellの機能のみでフォルダの内容をISOファイルとして退避しアーカイブする方法についてメモします。
+従来、New-ISOFileコマンドレットがISOファイル作成の簡便な手段として存在しました。が、現在では標準的な提供はされていません。しかしながら、コミュニティによって開発された代替スクリプトを活用することで、PowerShell単体でフォルダからISOファイルを生成することが今でも可能だったりします。ブータブルISOファイルの作成などの高度な機能には対応していませんが、単純にフォルダの内容をISOファイルとして保存したい場合には十分実用的です。
+今回はその代替スクリプトを利用し、PowerShellのみでフォルダからISOファイルを生成する手順を解説します。
+PowerShellによるISOファイル作成の利点  セキュリティ: どんなアブない機能が搭載されているかわからない第三者製ソフトウェアを回避可能なので、セキュリティ上のリスクを低減できます。 簡便性: 基本的にWindowsにはPowerShellが既にインストールされているため、追加のソフトウェアは不要です。 自動化: スクリプトによる実行により、ISOファイル作成処理自体は勝手にパソコンがやってくれます。  必要なスクリプトの取得 今回解説する方法では、以下の2つのPowerShell関数を使用します。
+ New-ISOFileFromFolder: 指定されたフォルダの内容に基づいてISOファイルを作成する主要な関数。 Write-IStreamToFile: ストリームデータをファイルに書き出すための補助関数。  これらの関数は、PowerShell Galleryにて公開されています。以下の手順に従い、これらの関数を利用可能な状態にしてください。
 PowerShellの起動 まずPowerShellを起動します。スタートメニューから「powershell」を検索し実行してください。この際、管理者権限である必要はありません。
 スクリプトの定義 次に、以下の2コードをそれぞれPowerShellコンソールにコピー＆ペーストし、実行（改行キーを押下）します。これにより、New-ISOFileFromFolder関数とWrite-IStreamToFile関数が現在のPowerShellセッションで使用可能になります。
 まずWrite-IStreamToFile関数です。
@@ -17,11 +17,11 @@ function Write-IStreamToFile([__ComObject] $istream, [string] $fileName) { # NOT
 <meta property="og:url" content="https://ysko909.github.io/posts/create-iso-file-in-powershell/" /><meta property="article:published_time" content="2025-05-02T11:28:47&#43;09:00"/>
 <meta property="article:modified_time" content="2025-05-02T11:28:47&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="PowerShellを使ってISOファイルを作成する方法"/>
-<meta name="twitter:description" content="概要 この記事では、Windows 10/11環境下において、フォルダの内容をISOファイルとしてアーカイブする際に、信頼性を懸念される第三者製ツールを用いることなく、標準搭載されたPowerShellの機能のみで実現する方法について解説します。
-従来、New-ISOFileコマンドレットがISOファイル作成の簡便な手段として存在しましたが、現在、標準的な提供はされていません。しかしながら、コミュニティによって開発された代替スクリプトを活用することで、PowerShell単体でフォルダからISOファイルを生成することが可能です。
-本稿では、その代替スクリプトを利用し、PowerShellのみでフォルダからISOファイルを生成する手順を解説します。
-PowerShellによるISOファイル作成の利点  セキュリティ: 不明な第三者製ソフトウェアの導入を回避し、セキュリティ上のリスクを低減できます。 簡便性: 基本的にWindowsにはPowerShellが既にインストールされているため、追加のソフトウェアは不要です。 自動化: スクリプトによる実行により、ISOファイル作成処理の自動化が可能です。  必要なスクリプトの取得 本稿で解説する方法では、以下の2つのPowerShell関数を使用します。
- New-ISOFileFromFolder: 指定されたフォルダの内容に基づいてISOファイルを作成する主要な関数。 Write-IStreamToFile: ストリームデータをファイルに書き出すための補助関数。  これらの関数は、PowerShell Galleryにて公開されています。以下の手順に従い、これらの関数をお客様の環境で利用可能な状態にしてください。
+<meta name="twitter:description" content="概要 この記事では、Windows 10/11環境下において、標準搭載されたPowerShellの機能のみでフォルダの内容をISOファイルとして退避しアーカイブする方法についてメモします。
+従来、New-ISOFileコマンドレットがISOファイル作成の簡便な手段として存在しました。が、現在では標準的な提供はされていません。しかしながら、コミュニティによって開発された代替スクリプトを活用することで、PowerShell単体でフォルダからISOファイルを生成することが今でも可能だったりします。ブータブルISOファイルの作成などの高度な機能には対応していませんが、単純にフォルダの内容をISOファイルとして保存したい場合には十分実用的です。
+今回はその代替スクリプトを利用し、PowerShellのみでフォルダからISOファイルを生成する手順を解説します。
+PowerShellによるISOファイル作成の利点  セキュリティ: どんなアブない機能が搭載されているかわからない第三者製ソフトウェアを回避可能なので、セキュリティ上のリスクを低減できます。 簡便性: 基本的にWindowsにはPowerShellが既にインストールされているため、追加のソフトウェアは不要です。 自動化: スクリプトによる実行により、ISOファイル作成処理自体は勝手にパソコンがやってくれます。  必要なスクリプトの取得 今回解説する方法では、以下の2つのPowerShell関数を使用します。
+ New-ISOFileFromFolder: 指定されたフォルダの内容に基づいてISOファイルを作成する主要な関数。 Write-IStreamToFile: ストリームデータをファイルに書き出すための補助関数。  これらの関数は、PowerShell Galleryにて公開されています。以下の手順に従い、これらの関数を利用可能な状態にしてください。
 PowerShellの起動 まずPowerShellを起動します。スタートメニューから「powershell」を検索し実行してください。この際、管理者権限である必要はありません。
 スクリプトの定義 次に、以下の2コードをそれぞれPowerShellコンソールにコピー＆ペーストし、実行（改行キーを押下）します。これにより、New-ISOFileFromFolder関数とWrite-IStreamToFile関数が現在のPowerShellセッションで使用可能になります。
 まずWrite-IStreamToFile関数です。
@@ -87,30 +87,30 @@ function Write-IStreamToFile([__ComObject] $istream, [string] $fileName) { # NOT
 
 <h2 id="概要">概要</h2>
 
-<p>この記事では、Windows 10/11環境下において、フォルダの内容をISOファイルとしてアーカイブする際に、信頼性を懸念される第三者製ツールを用いることなく、標準搭載されたPowerShellの機能のみで実現する方法について解説します。</p>
+<p>この記事では、Windows 10/11環境下において、<strong>標準搭載されたPowerShellの機能のみ</strong>でフォルダの内容をISOファイルとして退避しアーカイブする方法についてメモします。</p>
 
-<p>従来、<code>New-ISOFile</code>コマンドレットがISOファイル作成の簡便な手段として存在しましたが、現在、標準的な提供はされていません。しかしながら、コミュニティによって開発された代替スクリプトを活用することで、PowerShell単体でフォルダからISOファイルを生成することが可能です。</p>
+<p>従来、<code>New-ISOFile</code>コマンドレットがISOファイル作成の簡便な手段として存在しました。が、現在では標準的な提供はされていません。しかしながら、コミュニティによって開発された代替スクリプトを活用することで、PowerShell単体でフォルダからISOファイルを生成することが今でも可能だったりします。ブータブルISOファイルの作成などの高度な機能には対応していませんが、単純にフォルダの内容をISOファイルとして保存したい場合には十分実用的です。</p>
 
-<p>本稿では、その代替スクリプトを利用し、PowerShellのみでフォルダからISOファイルを生成する手順を解説します。</p>
+<p>今回はその代替スクリプトを利用し、PowerShellのみでフォルダからISOファイルを生成する手順を解説します。</p>
 
 <h2 id="powershellによるisoファイル作成の利点">PowerShellによるISOファイル作成の利点</h2>
 
 <ul>
-<li><strong>セキュリティ</strong>: 不明な第三者製ソフトウェアの導入を回避し、セキュリティ上のリスクを低減できます。</li>
+<li><strong>セキュリティ</strong>: どんなアブない機能が搭載されているかわからない第三者製ソフトウェアを回避可能なので、セキュリティ上のリスクを低減できます。</li>
 <li><strong>簡便性</strong>: 基本的にWindowsにはPowerShellが既にインストールされているため、追加のソフトウェアは不要です。</li>
-<li><strong>自動化</strong>: スクリプトによる実行により、ISOファイル作成処理の自動化が可能です。</li>
+<li><strong>自動化</strong>: スクリプトによる実行により、ISOファイル作成処理自体は勝手にパソコンがやってくれます。</li>
 </ul>
 
 <h2 id="必要なスクリプトの取得">必要なスクリプトの取得</h2>
 
-<p>本稿で解説する方法では、以下の2つのPowerShell関数を使用します。</p>
+<p>今回解説する方法では、以下の2つのPowerShell関数を使用します。</p>
 
 <ol>
 <li><strong><code>New-ISOFileFromFolder</code></strong>: 指定されたフォルダの内容に基づいてISOファイルを作成する主要な関数。</li>
 <li><strong><code>Write-IStreamToFile</code></strong>: ストリームデータをファイルに書き出すための補助関数。</li>
 </ol>
 
-<p>これらの関数は、<a href="https://www.powershellgallery.com/">PowerShell Gallery</a>にて公開されています。以下の手順に従い、これらの関数をお客様の環境で利用可能な状態にしてください。</p>
+<p>これらの関数は、<a href="https://www.powershellgallery.com/">PowerShell Gallery</a>にて公開されています。以下の手順に従い、これらの関数を利用可能な状態にしてください。</p>
 
 <h3 id="powershellの起動">PowerShellの起動</h3>
 
@@ -235,7 +235,7 @@ CommandType     Name                                               Version    So
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">New-ISOFileFromFolder <span style="color:#a31515">&#34;&lt;ターゲットフォルダのパス&gt;&#34;</span> <span style="color:#a31515">&#34;&lt;ISOのボリュームラベル&gt;&#34;</span> <span style="color:#a31515">&#34;&lt;作成するISOファイルのフルパス&gt;&#34;</span> </code></pre></div>
 <ul>
 <li><code>&lt;ターゲットフォルダのパス&gt;</code>: ISOファイルに含めるファイルやフォルダが格納されているパスを指定します。（例: <code>C:\Users\Public\Documents\Backup</code>)</li>
-<li><code>&lt;ISOのボリュームラベル&gt;</code>: 作成するISOファイルに付与する名前を指定します。（例: <code>Backup_20231027</code>)</li>
+<li><code>&lt;ISOのボリュームラベル&gt;</code>: 作成するISOファイルに付与する名前を指定します。（例: <code>Backup_20251027</code>)</li>
 <li><code>&lt;作成するISOファイルのフルパス&gt;</code>: 作成するISOファイルの保存場所とファイル名を指定します。ボリュームラベルと一致させる必要は必ずしもありませんが、<code>.iso</code>の拡張子は必須です（例: <code>D:\MyBackup.iso</code>)</li>
 </ul>
 
@@ -243,9 +243,9 @@ CommandType     Name                                               Version    So
 
 <p><code>C:\MyData</code>フォルダの内容を、<code>D:\Archive.iso</code>というファイル名で、ボリュームラベルを<code>DataBackup</code>として作成する場合のコマンドは以下の通りです。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell">New-ISOFileFromFolder <span style="color:#a31515">&#34;C:\MyData&#34;</span> <span style="color:#a31515">&#34;DataBackup&#34;</span> <span style="color:#a31515">&#34;D:\Archive.iso&#34;</span></code></pre></div>
-<p>コマンド実行後、指定された場所にISOファイルが生成されます。</p>
+<p>コマンド実行後、指定された場所にISOファイルが生成されます。処理時間はフォルダの内容量によって異なりますが、放っておけばいつの間にか完了しています＿(　_´ω`)_ﾍﾟｼｮ</p>
 
-<h3 id="isoファイルのマウント">ISOファイルのマウント</h3>
+<h3 id="isoファイルを使うときはマウントする">ISOファイルを使うときはマウントする</h3>
 
 <p>作成したISOファイルを右クリックすると、メニュー中に「マウント」という選択肢があります。</p>
 
@@ -256,8 +256,8 @@ CommandType     Name                                               Version    So
 <h3 id="留意点">留意点</h3>
 
 <ul>
-<li><strong>コマンドラインインタフェース</strong>: 普段からGUIでの操作に馴染んでいる場合、今回のようなコマンドラインの操作には多少慣れが必要かもしれません。</li>
-<li><strong>高度な機能の制約</strong>: ブータブルISOファイルの作成など、より専門的なオプションには対応していません。</li>
+<li><strong>コマンドラインインタフェース</strong>: 徹頭徹尾、CUI上で実行することになります。そのため、普段からGUIでの操作に馴染んでいる場合、今回のようなコマンドラインの操作には多少慣れが必要かもしれません。</li>
+<li><strong>高度な機能の制約</strong>: ブータブルISOファイルの作成など、より専門的なオプションには対応していません。単純にバックアップ用途などでISOファイルを作成する用途、と割り切りが必要です。</li>
 </ul>
 
 <h2 id="まとめ">まとめ</h2>
