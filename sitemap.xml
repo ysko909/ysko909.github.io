@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/windows-ftp-does-not-support-passive-mode/</loc>
+    <lastmod>2026-03-04T12:01:25+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/how-to-commit-only-a-specific-file-from-multiple-changes/</loc>
     <lastmod>2026-01-13T18:49:05+09:00</lastmod>
   </url>
@@ -1058,7 +1063,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2026-01-13T18:49:05+09:00</lastmod>
+    <lastmod>2026-03-04T12:01:25+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1070,7 +1075,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/powershell/</loc>
-    <lastmod>2025-05-02T11:28:47+09:00</lastmod>
+    <lastmod>2026-03-04T12:01:25+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1262,7 +1267,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/windows/</loc>
-    <lastmod>2025-07-22T10:57:43+09:00</lastmod>
+    <lastmod>2026-03-04T12:01:25+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1286,7 +1291,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2026-01-13T18:49:05+09:00</lastmod>
+    <lastmod>2026-03-04T12:01:25+09:00</lastmod>
     <priority>0</priority>
   </url>
   

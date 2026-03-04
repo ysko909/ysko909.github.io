@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Windows標準のftp.exeはパッシブモード非対応。だからこそWinSCPやcurlでFTPを使う - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Windows標準のftp.exeはパッシブモード非対応。だからこそWinSCPやcurlでFTPを使う" />
+<meta property="og:description" content="TL;DR  Windowsのコマンドプロンプトで使う標準FTPクライアントftp.exeは パッシブモード（PASV/EPSV）に対応していません。quote pasvを送れてもクライアント側はアクティブのままです。 パッシブ必須のサーバーに接続したいなら、Windowsでは WinSCP / FFFTP などのGUIクライアントか、curlを使いましょう。 curlはデフォルトでパッシブ。必要なら--ftp-pasv（明示）、--disable-epsv、--ftp-skip-pasv-ipなどで挙動を調整できます。  なぜftp.exeではダメなのか FTPは 制御用（通常21/tcp） と データ転送用 の2本のTCPコネクションを使うプロトコルです。データ側コネクションを「誰が張るか」でアクティブとパッシブに分かれます。
+ アクティブ：クライアントがPORTを通知し、サーバー→クライアント にデータ接続を張ってくる。クライアント側FW/NATで止まりがち。 パッシブ：クライアントがPASV/EPSVを送り、クライアント→サーバー にデータ接続を張る。FW/NAT下でも通りやすく、現在の主流。  Windows標準のftp.exeはパッシブモード非対応であるため、quote pasvでサーバー側をPASV状態にしてもクライアントは結局PORTを投げることになります。そのため、FW/NAT越しの一般的なサーバーでは、ディレクトリ一覧や転送が失敗しやすいという実害につながります。
+代替手段の選択肢  WinSCP / FFFTP（GUI）：標準でパッシブ。WinSCPはスクリプト/CLIもあり、-passive=onで明示可能。一番早い解決法。 curl：Windows 10/11には標準搭載 されており（PowerShellのcurlは別名エイリアスなのでcurl.exeとして呼ぶのが確実）、デフォルトがパッシブ。 File Explorer（エクスプローラー）：既定でパッシブ（必要に応じてインターネットオプションの「パッシブFTP」設定）。   補足（SFTP/FTPSの話） FTPは平文プロトコルです。機微情報には FTPS または SFTP を推奨します。なお、Windows同梱のcurlはSFTPが無効化されているビルドなので、SFTPが必要なら公式ビルドやWinSCPを検討してください。
+ curlでやるFTP Windowsにおいては、WinSCPやFFFTPなどのソフトウェアをインストールしてFTPを利用するのが簡単かつ便利です。が、「とりあえずFTPの接続確認だけできればいい」という場合は、わざわざインストールしなくてもcurlを使うことで実行できます。
+以降の例はパッシブモードで動きます。curlにおいて、ユーザー名/パスワードは--userで指定します。
+0) 事前チェック（Windowsでの呼び出しとバージョン） REM PowerShellなら &#39;curl&#39; はInvoke-WebRequestのエイリアス。 REM 紛らわしい場合は常に &#39;curl.exe&#39; を使う。 curl.exe --version 1) ディレクトリ一覧を取得（LIST） curl.exe -u USER:PASSWORD ftp://ftp.example.com/  URLがディレクトリの場合、標準出力に一覧が流れます。バッチ処理なら&gt; listing.txtで保存。  $ curl -u myuser:mypassword ftp://localhost/ -rw------- 1 ftp ftp 15 Feb 25 05:58 foo." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/windows-ftp-does-not-support-passive-mode/" /><meta property="article:published_time" content="2026-03-04T12:01:25&#43;09:00"/>
+<meta property="article:modified_time" content="2026-03-04T12:01:25&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Windows標準のftp.exeはパッシブモード非対応。だからこそWinSCPやcurlでFTPを使う"/>
+<meta name="twitter:description" content="TL;DR  Windowsのコマンドプロンプトで使う標準FTPクライアントftp.exeは パッシブモード（PASV/EPSV）に対応していません。quote pasvを送れてもクライアント側はアクティブのままです。 パッシブ必須のサーバーに接続したいなら、Windowsでは WinSCP / FFFTP などのGUIクライアントか、curlを使いましょう。 curlはデフォルトでパッシブ。必要なら--ftp-pasv（明示）、--disable-epsv、--ftp-skip-pasv-ipなどで挙動を調整できます。  なぜftp.exeではダメなのか FTPは 制御用（通常21/tcp） と データ転送用 の2本のTCPコネクションを使うプロトコルです。データ側コネクションを「誰が張るか」でアクティブとパッシブに分かれます。
+ アクティブ：クライアントがPORTを通知し、サーバー→クライアント にデータ接続を張ってくる。クライアント側FW/NATで止まりがち。 パッシブ：クライアントがPASV/EPSVを送り、クライアント→サーバー にデータ接続を張る。FW/NAT下でも通りやすく、現在の主流。  Windows標準のftp.exeはパッシブモード非対応であるため、quote pasvでサーバー側をPASV状態にしてもクライアントは結局PORTを投げることになります。そのため、FW/NAT越しの一般的なサーバーでは、ディレクトリ一覧や転送が失敗しやすいという実害につながります。
+代替手段の選択肢  WinSCP / FFFTP（GUI）：標準でパッシブ。WinSCPはスクリプト/CLIもあり、-passive=onで明示可能。一番早い解決法。 curl：Windows 10/11には標準搭載 されており（PowerShellのcurlは別名エイリアスなのでcurl.exeとして呼ぶのが確実）、デフォルトがパッシブ。 File Explorer（エクスプローラー）：既定でパッシブ（必要に応じてインターネットオプションの「パッシブFTP」設定）。   補足（SFTP/FTPSの話） FTPは平文プロトコルです。機微情報には FTPS または SFTP を推奨します。なお、Windows同梱のcurlはSFTPが無効化されているビルドなので、SFTPが必要なら公式ビルドやWinSCPを検討してください。
+ curlでやるFTP Windowsにおいては、WinSCPやFFFTPなどのソフトウェアをインストールしてFTPを利用するのが簡単かつ便利です。が、「とりあえずFTPの接続確認だけできればいい」という場合は、わざわざインストールしなくてもcurlを使うことで実行できます。
+以降の例はパッシブモードで動きます。curlにおいて、ユーザー名/パスワードは--userで指定します。
+0) 事前チェック（Windowsでの呼び出しとバージョン） REM PowerShellなら &#39;curl&#39; はInvoke-WebRequestのエイリアス。 REM 紛らわしい場合は常に &#39;curl.exe&#39; を使う。 curl.exe --version 1) ディレクトリ一覧を取得（LIST） curl.exe -u USER:PASSWORD ftp://ftp.example.com/  URLがディレクトリの場合、標準出力に一覧が流れます。バッチ処理なら&gt; listing.txtで保存。  $ curl -u myuser:mypassword ftp://localhost/ -rw------- 1 ftp ftp 15 Feb 25 05:58 foo."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Windows標準のftp.exeはパッシブモード非対応。だからこそWinSCPやcurlでFTPを使う</h1>
+			<div class="meta">Posted at &mdash; Mar 4, 2026</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="tl-dr">TL;DR</h2>
+
+<ul>
+<li>Windowsのコマンドプロンプトで使う標準FTPクライアント<code>ftp.exe</code>は パッシブモード（PASV/EPSV）に対応していません。<code>quote pasv</code>を送れてもクライアント側はアクティブのままです。</li>
+<li>パッシブ必須のサーバーに接続したいなら、Windowsでは WinSCP / FFFTP などのGUIクライアントか、<code>curl</code>を使いましょう。</li>
+<li><code>curl</code>はデフォルトでパッシブ。必要なら<code>--ftp-pasv</code>（明示）、<code>--disable-epsv</code>、<code>--ftp-skip-pasv-ip</code>などで挙動を調整できます。</li>
+</ul>
+
+<h2 id="なぜ-ftp-exe-ではダメなのか">なぜ<code>ftp.exe</code>ではダメなのか</h2>
+
+<p>FTPは 制御用（通常21/tcp） と データ転送用 の2本のTCPコネクションを使うプロトコルです。データ側コネクションを「誰が張るか」でアクティブとパッシブに分かれます。</p>
+
+<ul>
+<li>アクティブ：クライアントが<code>PORT</code>を通知し、サーバー→クライアント にデータ接続を張ってくる。クライアント側FW/NATで止まりがち。</li>
+<li>パッシブ：クライアントが<code>PASV</code>/<code>EPSV</code>を送り、クライアント→サーバー にデータ接続を張る。FW/NAT下でも通りやすく、現在の主流。</li>
+</ul>
+
+<p>Windows標準の<code>ftp.exe</code>はパッシブモード非対応であるため、<code>quote pasv</code>でサーバー側をPASV状態にしてもクライアントは結局<code>PORT</code>を投げることになります。そのため、FW/NAT越しの一般的なサーバーでは、ディレクトリ一覧や転送が失敗しやすいという実害につながります。</p>
+
+<h2 id="代替手段の選択肢">代替手段の選択肢</h2>
+
+<ul>
+<li>WinSCP / FFFTP（GUI）：標準でパッシブ。WinSCPはスクリプト/CLIもあり、<code>-passive=on</code>で明示可能。一番早い解決法。</li>
+<li>curl：Windows 10/11には標準搭載 されており（PowerShellの<code>curl</code>は別名エイリアスなので<code>curl.exe</code>として呼ぶのが確実）、デフォルトがパッシブ。</li>
+<li>File Explorer（エクスプローラー）：既定でパッシブ（必要に応じてインターネットオプションの「パッシブFTP」設定）。</li>
+</ul>
+
+<blockquote>
+<p>補足（SFTP/FTPSの話）
+FTPは平文プロトコルです。機微情報には FTPS または SFTP を推奨します。なお、Windows同梱のcurlはSFTPが無効化されているビルドなので、SFTPが必要なら公式ビルドやWinSCPを検討してください。</p>
+</blockquote>
+
+<h2 id="curl-でやるftp"><code>curl</code>でやるFTP</h2>
+
+<p>Windowsにおいては、WinSCPやFFFTPなどのソフトウェアをインストールしてFTPを利用するのが簡単かつ便利です。が、「とりあえずFTPの接続確認だけできればいい」という場合は、わざわざインストールしなくても<code>curl</code>を使うことで実行できます。</p>
+
+<p>以降の例はパッシブモードで動きます。<code>curl</code>において、ユーザー名/パスワードは<code>--user</code>で指定します。</p>
+
+<h3 id="0-事前チェック-windowsでの呼び出しとバージョン">0) 事前チェック（Windowsでの呼び出しとバージョン）</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bat" data-lang="bat"><span style="color:#008000">REM PowerShellなら &#39;curl&#39; はInvoke-WebRequestのエイリアス。</span>
+<span style="color:#008000">REM 紛らわしい場合は常に &#39;curl.exe&#39; を使う。</span>
+curl.exe --version</code></pre></div>
+<h3 id="1-ディレクトリ一覧を取得-list">1) ディレクトリ一覧を取得（LIST）</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bat" data-lang="bat">curl.exe -u USER:PASSWORD ftp://ftp.example.com/</code></pre></div>
+<ul>
+<li>URLがディレクトリの場合、標準出力に一覧が流れます。バッチ処理なら<code>&gt; listing.txt</code>で保存。</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ curl -u myuser:mypassword ftp://localhost/
+-rw-------    1 ftp      ftp            15 Feb 25 05:58 foo.txt
+-rw-r--r--    1 ftp      ftp            15 Feb 25 05:06 hoge.txt</code></pre></div>
+<p>詳細ログが欲しいとき（トラブル調査やPASV応答の確認）：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bat" data-lang="bat">curl.exe -v -u USER:PASSWORD ftp://ftp.example.com/path/</code></pre></div>
+<p>-<code>-v</code>で PASV/EPSV のやり取りや応答コードが見えます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ curl -v -u myuser:mypassword ftp://localhost/
+* Host localhost:21 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying [::1]:21...
+* Established connection to localhost (::1 port 21) from ::1 port 64029
+&lt; 220 (vsFTPd 3.0.2)
+&gt; USER myuser
+&lt; 331 Please specify the password.
+&gt; PASS mypassword
+&lt; 230 Login successful.
+&gt; PWD
+&lt; 257 &#34;/&#34;
+* Entry path is &#39;/&#39;
+* Request has same path as previous transfer
+&gt; EPSV
+* Connect data stream passively
+&lt; 229 Entering Extended Passive Mode (|||21110|).
+* Connecting to ::1 (::1) port 21110
+*   Trying [::1]:21110...
+* Established 2nd connection to localhost (::1 port 21110) from ::1 port 64020
+&gt; TYPE A
+&lt; 200 Switching to ASCII mode.
+&gt; LIST
+&lt; 150 Here comes the directory listing.
+* Maxdownload = -1
+-rw-------    1 ftp      ftp            15 Feb 25 05:22 foo.txt
+-rw-r--r--    1 ftp      ftp            15 Feb 25 05:06 hoge.txt
+* abort upload
+* Remembering we are in dir &#34;&#34;
+&lt; 226 Directory send OK.
+* Connection #0 to host localhost:21 left intact</code></pre></div>
+<h3 id="2-ファイルをダウンロード-retr">2) ファイルをダウンロード（RETR）</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bat" data-lang="bat"># REM リモート名で保存（-O / --remote-name）
+curl.exe -O -u USER:PASSWORD ftp://ftp.example.com/path/file.zip</code></pre></div>
+<p>-<code>-O</code>を付けるとリモート名で保存。付けない場合は内容が標準出力へ。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ curl -O -u myuser:mypassword ftp://localhost/hoge.txt
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    15  100    15    0     0      2      0  0:00:07  0:00:07 --:--:--     3</code></pre></div>
+<h3 id="3-ファイルをアップロード-stor">3) ファイルをアップロード（STOR）</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bat" data-lang="bat"><span style="color:#008000">REM 単一ファイル</span>
+curl.exe -T .\report.csv -u USER:PASSWORD ftp://ftp.example.com/upload/
+
+<span style="color:#008000">REM 複数ファイル（ブレース展開）</span>
+curl.exe -T <span style="color:#a31515">&#34;{a.txt,b.txt}&#34;</span> -u USER:PASSWORD ftp://ftp.example.com/upload/</code></pre></div>
+<p>-<code>-T/--upload-file</code>が基本。URLがディレクトリで終わるとローカル名をそのまま使います。複数指定や連番の一括アップロードにも対応。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ curl -T foo.txt --user myuser:mypassword ftp://localhost/
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    15    0     0  100    15      0      2  0:00:07  0:00:07 --:--:--     3</code></pre></div>
+<p>必要ならサーバー側に中間ディレクトリを自動作成：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bat" data-lang="bat">curl.exe --ftp-create-dirs -T <span style="color:#a31515">&#34;.\build\artifact.bin&#34;</span> -u USER:PASSWORD <span style="color:#a31515">^
+</span><span style="color:#a31515"> </span> ftp://ftp.example.com/releases/2026/02/</code></pre></div>
+<p>-<code>--ftp-create-dirs</code>はリモート側のパスを作成してから転送します。</p>
+
+<h3 id="4-ファイルの削除-リネーム-ftpコマンドを直接発行">4) ファイルの削除・リネーム（FTPコマンドを直接発行）</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bat" data-lang="bat"><span style="color:#008000">REM 削除（DELE）</span>
+curl.exe -u USER:PASSWORD -Q <span style="color:#a31515">&#34;DELE /path/old.log&#34;</span> ftp://ftp.example.com/
+
+<span style="color:#008000">REM リネーム（RNFR/RNTO）</span>
+curl.exe -u USER:PASSWORD <span style="color:#a31515">^
+</span><span style="color:#a31515"> </span> -Q <span style="color:#a31515">&#34;RNFR /path/oldname.txt&#34;</span> -Q <span style="color:#a31515">&#34;RNTO /path/newname.txt&#34;</span> <span style="color:#a31515">^
+</span><span style="color:#a31515"> </span> ftp://ftp.example.com/</code></pre></div>
+<p>-<code>-Q/--quote</code>で任意のFTPコマンドを送れます（DELE/MKD/RMD/RNFR/RNTO など）。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">curl -u myuser:mypassword -Q &#34;RNFR foo.txt&#34; -Q &#34;RNTO noname.txt&#34; ftp://localhost/
+-rw-r--r--    1 ftp      ftp            15 Feb 25 05:06 hoge.txt
+-rw-------    1 ftp      ftp            15 Feb 25 05:58 noname.txt
+$ curl -u myuser:mypassword -Q &#34;DELE noname.txt&#34; ftp://localhost/
+-rw-r--r--    1 ftp      ftp            15 Feb 25 05:06 hoge.txt</code></pre></div>
+<h3 id="5-テキスト転送をasciiで行いたい-type-a">5) テキスト転送をASCIIで行いたい（TYPE A）</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bat" data-lang="bat">curl.exe --use-ascii -T .\readme.txt -u USER:PASSWORD ftp://ftp.example.com/</code></pre></div>
+<ul>
+<li>既定はバイナリ。改行変換などが必要な古い環境では<code>--use-ascii</code>を利用。</li>
+</ul>
+
+<h2 id="備考">備考</h2>
+
+<h3 id="実戦テクとトラブル対処">実戦テクとトラブル対処</h3>
+
+<p><code>curl</code>は既定でEPSV→PASVの順に試行し、パッシブ接続を張ります。挙動がおかしいときは、次のスイッチが有効です。</p>
+
+<ul>
+<li><p>EPSVを無効化（古い/特殊なサーバー対策）</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bat" data-lang="bat">curl.exe --disable-epsv -v -u USER:PASSWORD ftp://ftp.example.com/</code></pre></div></li>
+
+<li><p>PASV応答に含まれるIPが“おかしい”とき（NAT誤設定）
+サーバーがプライベートIPを返す例では、制御接続と同じIPを使う オプションが効きます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bat" data-lang="bat">curl.exe --ftp-skip-pasv-ip -v -u USER:PASSWORD ftp://ftp.example.com/</code></pre></div></li>
+
+<li><p>典型的なエラー “425 Can&rsquo;t open data connection”
+<code>--disable-epsv</code>/<code>--ftp-skip-pasv-ip</code>を試す。サーバー側ではパッシブ用のポートレンジ開放と、NAT配下なら外向きIPの通知設定（例：<code>pasv_address</code>等）が必要です。</p></li>
+</ul>
+
+<h3 id="認証情報の扱い">認証情報の扱い</h3>
+
+<ul>
+<li>そのまま平文で<code>--user USER:PASSWORD</code>を書くのは避け、<code>.netrc</code>（<code>--netrc</code>/<code>--netrc-file</code>）の利用や、CIのシークレット/環境変数から差し込むのが安全です。<em>（.netrcの詳細は curl 一般機能の話のため割愛）</em></li>
+<li>FTPは平文なので、機微データにはFTPSやSFTP を。Windows同梱curlのSFTP無効化に注意。</li>
+</ul>
+
+<h3 id="バッチの雛形-再実行に強い-ログ付き">バッチの雛形（再実行に強い・ログ付き）</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bat" data-lang="bat">@<span style="color:#00f">echo</span> off
+<span style="color:#00f">setlocal</span> enabledelayedexpansion
+
+<span style="color:#00f">set</span> HOST=ftp.example.com
+<span style="color:#00f">set</span> USER=myuser
+<span style="color:#00f">set</span> PASS=mypassword
+<span style="color:#00f">set</span> REMOTE_DIR=/incoming
+<span style="color:#00f">set</span> LOCAL_DIR=%~dp0out
+<span style="color:#00f">set</span> LOG=%~dp0logs\ftp-%DATE:~0,10%.log
+
+<span style="color:#00f">mkdir</span> <span style="color:#a31515">&#34;</span>%LOCAL_DIR%<span style="color:#a31515">&#34;</span> <span style="color:#a31515">&#34;</span>%~dp0<span style="color:#a31515">logs&#34;</span> 2&gt;nul
+
+<span style="color:#008000">REM 1) 一覧 + 2) ダウンロード + 3) アップロード</span>
+(
+  <span style="color:#00f">echo</span> === LIST ===
+  curl.exe -sS -v -u %USER%:%PASS%<span style="color:#008000"> ftp://%HOST%%REMOTE_DIR%/</span>
+
+  <span style="color:#00f">echo</span> === DOWNLOAD ===
+  curl.exe -sS -O -u %USER%:%PASS%<span style="color:#008000"> ftp://%HOST%%REMOTE_DIR%/spec.pdf</span>
+
+  <span style="color:#00f">echo</span> === UPLOAD ===
+  curl.exe -sS --ftp-create-dirs -T <span style="color:#a31515">&#34;</span>%LOCAL_DIR%<span style="color:#a31515">\report.csv&#34;</span> -u %USER%:%PASS%<span style="color:#008000"> ^</span>
+    ftp://%HOST%%REMOTE_DIR%/
+) 1&gt;&gt;<span style="color:#a31515">&#34;</span>%LOG%<span style="color:#a31515">&#34;</span> 2&gt;&amp;1
+
+<span style="color:#00f">if</span> <span style="color:#00f">errorlevel</span> 1 (
+  <span style="color:#00f">echo</span> [ERROR] 転送に失敗しました。ログを確認してください: %LOG%
+  <span style="color:#00f">exit</span> /b 1
+) <span style="color:#00f">else</span> (
+  <span style="color:#00f">echo</span> [OK] 転送に成功しました。ログ: %LOG%
+)</code></pre></div>
+<p>-<code>-sS</code>で静かに（失敗時はメッセージ）、<code>-v</code>を併用すると問題切り分けが容易。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>-<code>ftp.exe</code>はパッシブ非対応。PASV/EPSVが必須の現場では実用になりません。
+- curlはデフォルトでパッシブ。<code>--disable-epsv</code>、<code>--ftp-skip-pasv-ip</code>等のスイッチで相性問題に対応できます。
+- Windows 10/11なら<code>curl.exe</code>が標準で使える（PowerShellのエイリアスに注意）。SFTPが必要なら公式ビルドやWinSCPを。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://qiita.com/fuji_taka/items/3acff6ac76ca284f4e0c">【Windows】結論 ftp.exe は Passive モードに対応していない！</a></li>
+<li><a href="https://blog.putise.com/windows%E3%81%AEftp%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%A2%E3%83%B3%E3%83%88%E3%81%A7%E3%81%AFpasv%E3%83%A2%E3%83%BC%E3%83%89%E3%81%A7%E3%81%AF%E6%8E%A5%E7%B6%9A%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%84/">WindowsのFTPクライアントではパッシブモード(PASV)では接続できない？</a></li>
+<li><a href="https://qiita.com/yousan/items/cd993c12c84bd3449273">FTP操作はcURLで行うと便利です</a></li>
+<li><a href="https://stackoverflow.com/questions/18643542/how-to-use-passive-ftp-mode-in-windows-command-prompt">How to use passive FTP mode in Windows command prompt?</a></li>
+<li><a href="https://curl.se/windows/microsoft.html">curl shipped by Microsoft</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

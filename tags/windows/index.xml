@@ -7,10 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Tue, 22 Jul 2025 10:57:43 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 04 Mar 2026 12:01:25 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/tags/windows/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Windows標準のftp.exeはパッシブモード非対応。だからこそWinSCPやcurlでFTPを使う</title>
+      <link>https://ysko909.github.io/posts/windows-ftp-does-not-support-passive-mode/</link>
+      <pubDate>Wed, 04 Mar 2026 12:01:25 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/windows-ftp-does-not-support-passive-mode/</guid>
+      <description>TL;DR  Windowsのコマンドプロンプトで使う標準FTPクライアントftp.exeは パッシブモード（PASV/EPSV）に対応していません。quote pasvを送れてもクライアント側はアクティブのままです。 パッシブ必須のサーバーに接続したいなら、Windowsでは WinSCP / FFFTP などのGUIクライアントか、curlを使いましょう。 curlはデフォルトでパッシブ。必要なら--ftp-pasv（明示）、--disable-epsv、--ftp-skip-pasv-ipなどで挙動を調整できます。  なぜftp.exeではダメなのか FTPは 制御用（通常21/tcp） と データ転送用 の2本のTCPコネクションを使うプロトコルです。データ側コネクションを「誰が張るか」でアクティブとパッシブに分かれます。
+ アクティブ：クライアントがPORTを通知し、サーバー→クライアント にデータ接続を張ってくる。クライアント側FW/NATで止まりがち。 パッシブ：クライアントがPASV/EPSVを送り、クライアント→サーバー にデータ接続を張る。FW/NAT下でも通りやすく、現在の主流。  Windows標準のftp.exeはパッシブモード非対応であるため、quote pasvでサーバー側をPASV状態にしてもクライアントは結局PORTを投げることになります。そのため、FW/NAT越しの一般的なサーバーでは、ディレクトリ一覧や転送が失敗しやすいという実害につながります。
+代替手段の選択肢  WinSCP / FFFTP（GUI）：標準でパッシブ。WinSCPはスクリプト/CLIもあり、-passive=onで明示可能。一番早い解決法。 curl：Windows 10/11には標準搭載 されており（PowerShellのcurlは別名エイリアスなのでcurl.exeとして呼ぶのが確実）、デフォルトがパッシブ。 File Explorer（エクスプローラー）：既定でパッシブ（必要に応じてインターネットオプションの「パッシブFTP」設定）。   補足（SFTP/FTPSの話） FTPは平文プロトコルです。機微情報には FTPS または SFTP を推奨します。なお、Windows同梱のcurlはSFTPが無効化されているビルドなので、SFTPが必要なら公式ビルドやWinSCPを検討してください。
+ curlでやるFTP Windowsにおいては、WinSCPやFFFTPなどのソフトウェアをインストールしてFTPを利用するのが簡単かつ便利です。が、「とりあえずFTPの接続確認だけできればいい」という場合は、わざわざインストールしなくてもcurlを使うことで実行できます。
+以降の例はパッシブモードで動きます。curlにおいて、ユーザー名/パスワードは--userで指定します。
+0) 事前チェック（Windowsでの呼び出しとバージョン） REM PowerShellなら &amp;#39;curl&amp;#39; はInvoke-WebRequestのエイリアス。 REM 紛らわしい場合は常に &amp;#39;curl.exe&amp;#39; を使う。 curl.exe --version 1) ディレクトリ一覧を取得（LIST） curl.exe -u USER:PASSWORD ftp://ftp.example.com/  URLがディレクトリの場合、標準出力に一覧が流れます。バッチ処理なら&amp;gt; listing.txtで保存。  $ curl -u myuser:mypassword ftp://localhost/ -rw------- 1 ftp ftp 15 Feb 25 05:58 foo.</description>
+    </item>
     
     <item>
       <title>Windows11でリモートデスクトップ接続がエラーコード0x3で切断される</title>
