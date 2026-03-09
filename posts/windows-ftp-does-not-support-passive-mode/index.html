@@ -269,9 +269,11 @@ $ curl -u myuser:mypassword -Q &#34;DELE noname.txt&#34; ftp://localhost/
 
 <h2 id="まとめ">まとめ</h2>
 
-<p>-<code>ftp.exe</code>はパッシブ非対応。PASV/EPSVが必須の現場では実用になりません。
-- curlはデフォルトでパッシブ。<code>--disable-epsv</code>、<code>--ftp-skip-pasv-ip</code>等のスイッチで相性問題に対応できます。
-- Windows 10/11なら<code>curl.exe</code>が標準で使える（PowerShellのエイリアスに注意）。SFTPが必要なら公式ビルドやWinSCPを。</p>
+<ul>
+<li><code>ftp.exe</code>はパッシブ非対応。PASV/EPSVが必須の現場では実用になりません。</li>
+<li><code>curl</code>はデフォルトでパッシブ。<code>--disable-epsv</code>、<code>--ftp-skip-pasv-ip</code>等のスイッチで相性問題に対応できます。</li>
+<li>Windows 10/11なら<code>curl.exe</code>が標準で使えます（PowerShellのエイリアスに注意）。SFTPが必要なら公式ビルドやWinSCPを。</li>
+</ul>
 
 <h2 id="参考">参考</h2>
 
