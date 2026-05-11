@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>リバースプロキシの基本と実務での使いどころ - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="リバースプロキシの基本と実務での使いどころ" />
+<meta property="og:description" content="Web アプリを運用していると、ある時点で「外からのアクセスをどうさばくか」「HTTPS をどう終端するか」「複数台構成をどう見せるか」といった課題にぶつかります。そこで登場するのが リバースプロキシ（Reverse Proxy） です。
+本記事では、リバースプロキシの基本と実務での使いどころを整理します。
+リバースプロキシとは何か 一言で言うと リバースプロキシは「サーバ側の代理人」です。クライアント（ブラウザや API 呼び出し元）からのリクエストをいったん受け取り、裏側にあるアプリサーバへ中継します。
+Client ---&gt; Reverse Proxy ---&gt; App Server(s) クライアントは「本当のアプリサーバ」の存在を意識せず、常にリバースプロキシにアクセスします。
+「受付カウンター」のようなもの 大きなオフィスに訪問すると、最初に受付があります。来訪者（クライアント）は受付（リバースプロキシ）に要件を伝え、受付が担当部署（バックエンド）へ案内します。
+ 受付が 「どの部署へ案内するか」決める（ルーティング） 受付が 入館手続きをする（認証やアクセス制御） 受付が 来訪者数をさばく（負荷分散） 受付が 受付で荷物検査をする（WAF/セキュリティ）  フォワードプロキシとの違い プロキシには大きく 2 種類あります。
+   種類 代理する対象 典型例     フォワードプロキシ クライアント側の代理 社内ネットワークからの外部 Web アクセス制御   リバースプロキシ サーバ側の代理 Web サービスのフロントに置く Nginx/Apache/ALB    見分け方のコツ  フォワード：クライアントの代理で外へ出る リバース：サーバの代理として表に立つ  リバースプロキシを置くメリット：実務で効くポイント HTTPS（TLS）終端を一箇所に集約できる バックエンドが複数あっても、TLS 証明書の管理をリバースプロキシに集められます。アプリ側は HTTP だけで動かし、フロントで HTTPS を受ける構成が一般的です。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-reverse-proxy/" /><meta property="article:published_time" content="2026-05-11T13:58:47&#43;09:00"/>
+<meta property="article:modified_time" content="2026-05-11T13:58:47&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="リバースプロキシの基本と実務での使いどころ"/>
+<meta name="twitter:description" content="Web アプリを運用していると、ある時点で「外からのアクセスをどうさばくか」「HTTPS をどう終端するか」「複数台構成をどう見せるか」といった課題にぶつかります。そこで登場するのが リバースプロキシ（Reverse Proxy） です。
+本記事では、リバースプロキシの基本と実務での使いどころを整理します。
+リバースプロキシとは何か 一言で言うと リバースプロキシは「サーバ側の代理人」です。クライアント（ブラウザや API 呼び出し元）からのリクエストをいったん受け取り、裏側にあるアプリサーバへ中継します。
+Client ---&gt; Reverse Proxy ---&gt; App Server(s) クライアントは「本当のアプリサーバ」の存在を意識せず、常にリバースプロキシにアクセスします。
+「受付カウンター」のようなもの 大きなオフィスに訪問すると、最初に受付があります。来訪者（クライアント）は受付（リバースプロキシ）に要件を伝え、受付が担当部署（バックエンド）へ案内します。
+ 受付が 「どの部署へ案内するか」決める（ルーティング） 受付が 入館手続きをする（認証やアクセス制御） 受付が 来訪者数をさばく（負荷分散） 受付が 受付で荷物検査をする（WAF/セキュリティ）  フォワードプロキシとの違い プロキシには大きく 2 種類あります。
+   種類 代理する対象 典型例     フォワードプロキシ クライアント側の代理 社内ネットワークからの外部 Web アクセス制御   リバースプロキシ サーバ側の代理 Web サービスのフロントに置く Nginx/Apache/ALB    見分け方のコツ  フォワード：クライアントの代理で外へ出る リバース：サーバの代理として表に立つ  リバースプロキシを置くメリット：実務で効くポイント HTTPS（TLS）終端を一箇所に集約できる バックエンドが複数あっても、TLS 証明書の管理をリバースプロキシに集められます。アプリ側は HTTP だけで動かし、フロントで HTTPS を受ける構成が一般的です。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">リバースプロキシの基本と実務での使いどころ</h1>
+			<div class="meta">Posted at &mdash; May 11, 2026</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<p>Web アプリを運用していると、ある時点で「外からのアクセスをどうさばくか」「HTTPS をどう終端するか」「複数台構成をどう見せるか」といった課題にぶつかります。そこで登場するのが <strong>リバースプロキシ（Reverse Proxy）</strong> です。</p>
+
+<p>本記事では、リバースプロキシの基本と実務での使いどころを整理します。</p>
+
+<h2 id="リバースプロキシとは何か">リバースプロキシとは何か</h2>
+
+<h3 id="一言で言うと">一言で言うと</h3>
+
+<p>リバースプロキシは「サーバ側の代理人」です。クライアント（ブラウザや API 呼び出し元）からのリクエストをいったん受け取り、裏側にあるアプリサーバへ中継します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">Client  ---&gt;  Reverse Proxy  ---&gt;  App Server(s)</pre></div>
+<p>クライアントは「本当のアプリサーバ」の存在を意識せず、常にリバースプロキシにアクセスします。</p>
+
+<h3 id="受付カウンター-のようなもの">「受付カウンター」のようなもの</h3>
+
+<p>大きなオフィスに訪問すると、最初に受付があります。来訪者（クライアント）は受付（リバースプロキシ）に要件を伝え、受付が担当部署（バックエンド）へ案内します。</p>
+
+<ul>
+<li>受付が 「どの部署へ案内するか」決める（ルーティング）</li>
+<li>受付が <strong>入館手続き</strong>をする（認証やアクセス制御）</li>
+<li>受付が <strong>来訪者数をさばく</strong>（負荷分散）</li>
+<li>受付が <strong>受付で荷物検査</strong>をする（WAF/セキュリティ）</li>
+</ul>
+
+<h2 id="フォワードプロキシとの違い">フォワードプロキシとの違い</h2>
+
+<p><img src="image.png" alt="alt text" /></p>
+
+<p>プロキシには大きく 2 種類あります。</p>
+
+<table>
+<thead>
+<tr>
+<th>種類</th>
+<th>代理する対象</th>
+<th>典型例</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>フォワードプロキシ</td>
+<td><strong>クライアント側</strong>の代理</td>
+<td>社内ネットワークからの外部 Web アクセス制御</td>
+</tr>
+
+<tr>
+<td>リバースプロキシ</td>
+<td><strong>サーバ側</strong>の代理</td>
+<td>Web サービスのフロントに置く Nginx/Apache/ALB</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="見分け方のコツ">見分け方のコツ</h3>
+
+<ul>
+<li><strong>フォワード</strong>：クライアントの代理で外へ出る</li>
+<li><strong>リバース</strong>：サーバの代理として表に立つ</li>
+</ul>
+
+<h2 id="リバースプロキシを置くメリット-実務で効くポイント">リバースプロキシを置くメリット：実務で効くポイント</h2>
+
+<h3 id="https-tls-終端を一箇所に集約できる">HTTPS（TLS）終端を一箇所に集約できる</h3>
+
+<p>バックエンドが複数あっても、TLS 証明書の管理をリバースプロキシに集められます。アプリ側は HTTP だけで動かし、フロントで HTTPS を受ける構成が一般的です。</p>
+
+<h3 id="パスやドメインで振り分けできる-ルーティング">パスやドメインで振り分けできる（ルーティング）</h3>
+
+<p>同じドメイン配下でも、パスでアプリを切り替えられます。</p>
+
+<ul>
+<li><code>/api</code> → API サーバ</li>
+<li><code>/</code> → フロントエンド（SPA/SSR）サーバ</li>
+<li><code>/admin</code> → 管理画面</li>
+</ul>
+
+<h3 id="ロードバランシングとヘルスチェック-死活監視-ができる">ロードバランシングとヘルスチェック（死活監視）ができる</h3>
+
+<p>同じアプリを複数台用意し、負荷を分散できます。単に順番に振り分けるだけでなく、プロキシは裏側のサーバが生きているか定期的に確認する<strong>ヘルスチェック（死活監視）</strong>の機能も持ちます。これにより、「ダウンしているサーバにはリクエストを流さない」という賢い制御が可能になり、システムの可用性が向上します。</p>
+
+<blockquote>
+<p><strong>【注意】プロキシ自体が「単一障害点（SPOF）」になる</strong><br />
+バックエンドを10台並べて可用性を高めても、玄関口であるリバースプロキシ（1台）がダウンすればサービス全体が停止します（SPOF: Single Point of Failure）。実務の大規模運用では、リバースプロキシ自身も冗長化するか、AWS ALB などのマネージドサービス（自動でスケール・冗長化される）を採用するのが一般的です。</p>
+</blockquote>
+
+<h3 id="セキュリティ境界を作れる">セキュリティ境界を作れる</h3>
+
+<ul>
+<li>バックエンドをプライベートネットワークに隔離</li>
+<li>レート制限</li>
+<li>IP 制限</li>
+<li>基本認証</li>
+<li>WAF の前段</li>
+</ul>
+
+<h3 id="圧縮-キャッシュ-ヘッダ付与などの共通処理をまとめられる">圧縮・キャッシュ・ヘッダ付与などの共通処理をまとめられる</h3>
+
+<p>アプリごとに実装しがちな「システム全体にまたがる共通処理（ログ・認証・キャッシュなど）」を、フロントに集約できます。</p>
+
+<h2 id="どんな場面で使う-代表的ユースケース">どんな場面で使う？代表的ユースケース</h2>
+
+<ol>
+<li><p><strong>単一サーバ構成でも</strong></p>
+
+<ul>
+<li>HTTPS の終端を簡単にする</li>
+<li>静的ファイル配信を高速化する</li>
+<li>監視/ログを集約する</li>
+</ul></li>
+
+<li><p><strong>複数サービスを 1 ドメインに集約</strong></p>
+
+<ul>
+<li><code>example.com</code> は共通だが、裏側は複数のアプリ</li>
+</ul></li>
+
+<li><p><strong>Blue/Green / Canary リリース</strong></p>
+
+<ul>
+<li>80% を v1、20% を v2 に流す</li>
+<li>切り戻しが容易</li>
+</ul></li>
+</ol>
+
+<h2 id="よくある構成パターン">よくある構成パターン</h2>
+
+<h3 id="パスベースのルーティング">パスベースのルーティング</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">                    +--&gt; API Server (localhost:5000)
+    Client -&gt; Proxy |
+                    +--&gt; Web Server (localhost:3000)</code></pre></div>
+<h3 id="ロードバランシング">ロードバランシング</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">    Client -&gt; Proxy -&gt; App1 (10.0.0.11:8080)
+                  \-&gt; App2 (10.0.0.12:8080)
+                  \-&gt; App3 (10.0.0.13:8080)</code></pre></div>
+<h2 id="実例-nginx-でリバースプロキシ-最小構成">実例：Nginx でリバースプロキシ（最小構成）</h2>
+
+<h3 id="前提">前提</h3>
+
+<ul>
+<li>バックエンドが <code>http://127.0.0.1:5000</code> で動いている（例：ASP.NET / Node / Python など）</li>
+<li>クライアントは <code>http://example.com</code> にアクセスする</li>
+</ul>
+
+<h3 id="nginx-設定例-http-バックエンド">Nginx 設定例（HTTP → バックエンド）</h3>
+
+<p><code>/etc/nginx/conf.d/app.conf</code> などに以下を置きます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nginx" data-lang="nginx"><span style="color:#00f">server</span> {
+    <span style="color:#00f">listen</span> 80;
+    <span style="color:#00f">server_name</span> <span style="color:#a31515">example.com</span>;
+
+    <span style="color:#00f">location</span> <span style="color:#a31515">/</span> {
+        <span style="color:#00f">proxy_pass</span> <span style="color:#a31515">http://127.0.0.1:5000</span>;
+
+        <span style="color:#008000"># バックエンドに「元の情報」を渡す定番ヘッダ
+</span><span style="color:#008000"></span>        <span style="color:#00f">proxy_set_header</span> <span style="color:#a31515">Host</span> $host;
+        <span style="color:#00f">proxy_set_header</span> <span style="color:#a31515">X-Real-IP</span> $remote_addr;
+        <span style="color:#00f">proxy_set_header</span> <span style="color:#a31515">X-Forwarded-For</span> $proxy_add_x_forwarded_for;
+        <span style="color:#00f">proxy_set_header</span> <span style="color:#a31515">X-Forwarded-Proto</span> $scheme;
+
+        <span style="color:#008000"># WebSocket を使う場合に必要になりがち
+</span><span style="color:#008000"></span>        <span style="color:#00f">proxy_http_version</span> 1<span style="color:#a31515">.1</span>;
+        <span style="color:#00f">proxy_set_header</span> <span style="color:#a31515">Upgrade</span> $http_upgrade;
+        <span style="color:#00f">proxy_set_header</span> <span style="color:#a31515">Connection</span> <span style="color:#a31515">&#34;upgrade&#34;</span>;
+    }
+}</code></pre></div>
+<p>反映して起動します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo nginx -t
+sudo systemctl reload nginx</code></pre></div>
+<p>疎通確認：</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">curl -i http://example.com/</code></pre></div>
+<h3 id="https-終端-let-s-encrypt-を使う例">HTTPS 終端（Let’s Encrypt を使う例）</h3>
+
+<p>Ubuntu 系なら certbot を使うのが定番です（環境により手順は変わります）。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo apt update
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d example.com</code></pre></div>
+<p>成功すると Nginx の設定に <code>listen 443 ssl;</code> が追加され、TLS 設定が入ります。<br />
+以降、アプリ側は HTTP のままでも、外からは HTTPS で提供できます。</p>
+
+<h2 id="実例-docker-compose-で試す-ローカル検証向け">実例：Docker Compose で試す（ローカル検証向け）</h2>
+
+<p>「概念はわかったけど手元で動かしたい」場合の最小検証です。<br />
+ここではバックエンドを <code>hashicorp/http-echo</code>（受けた内容を返す）で代用します。</p>
+
+<h3 id="docker-compose-yml"><code>docker-compose.yml</code></h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">services:
+  proxy:
+    image: nginx:alpine
+    ports:
+      - <span style="color:#a31515">&#34;8080:80&#34;</span>
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+
+  app:
+    image: hashicorp/http-echo
+    command: [<span style="color:#a31515">&#34;-listen=:5000&#34;</span>, <span style="color:#a31515">&#34;-text=hello from backend&#34;</span>]</code></pre></div>
+<h3 id="nginx-conf"><code>nginx.conf</code></h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nginx" data-lang="nginx"><span style="color:#00f">server</span> {
+  <span style="color:#00f">listen</span> 80;
+
+  <span style="color:#00f">location</span> <span style="color:#a31515">/</span> {
+    <span style="color:#00f">proxy_pass</span> <span style="color:#a31515">http://app:5000</span>;
+    <span style="color:#00f">proxy_set_header</span> <span style="color:#a31515">Host</span> $host;
+    <span style="color:#00f">proxy_set_header</span> <span style="color:#a31515">X-Forwarded-For</span> $proxy_add_x_forwarded_for;
+  }
+}</code></pre></div>
+<h3 id="起動">起動</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker compose up -d
+curl -i http://localhost:8080/</code></pre></div>
+<p><code>hello from backend</code> が返ってくれば成功です。</p>
+
+<h2 id="ハマりどころ">ハマりどころ</h2>
+
+<h3 id="クライアント-ip-がアプリ側で取れない-偽装リスク">クライアント IP がアプリ側で取れない ＆ 偽装リスク</h3>
+
+<p>リバースプロキシ経由だと、バックエンドから見ると「アクセス元は常にプロキシのIP」に見えてしまいます。<br />
+そのため <code>X-Forwarded-For</code> などのヘッダを渡し、アプリ側はそれを参照する必要があります。</p>
+
+<ul>
+<li>Nginx 側：<code>proxy_set_header X-Forwarded-For ...</code></li>
+<li>アプリ側：フレームワークの「Forwarded Headers」設定を有効化（ASP.NET なら <code>UseForwardedHeaders</code> など）</li>
+</ul>
+
+<blockquote>
+<p><strong>【致命的なセキュリティの罠】</strong><br />
+<code>X-Forwarded-For</code> は悪意のあるユーザーが手元で自由に改ざんして送信できます。アプリ側でこれを信用して IP 制限をかけると、簡単に突破（IPスプーフィング）されてしまいます。アプリ側で設定を有効にする際は、<strong>「信頼できるプロキシ（Trusted Proxies）の IP から来た通信の場合のみ、このヘッダを信用する」</strong> という設定が必ずセットで必要です。</p>
+</blockquote>
+
+<h3 id="パスの付け替えで-404-二重パスになる">パスの付け替えで 404 / 二重パスになる</h3>
+
+<p><code>proxy_pass</code> の末尾スラッシュ有無で挙動が変わることがあります。</p>
+
+<ul>
+<li><code>location /api/ { proxy_pass http://backend/; }</code></li>
+<li><code>location /api/ { proxy_pass http://backend; }</code></li>
+</ul>
+
+<p>どちらが正しいかは「<code>/api/xxx</code> を backend 側で <code>/xxx</code> として扱うか <code>/api/xxx</code> のまま扱うか」で決まります。意図を明確にして設定しましょう。</p>
+
+<h3 id="クラウドのpaas等をバックエンドにすると-404-403-になる">クラウドのPaaS等をバックエンドにすると 404 / 403 になる</h3>
+
+<p>自前のサーバに流す場合は <code>proxy_set_header Host $host;</code> とするのがセオリーですが、<strong>外部のクラウドサービス（AWS API Gateway, Cloud Run, Heroku, Vercelなど）</strong>をバックエンドにする場合はこの設定が原因でエラーになります。
+クラウド側も「Hostヘッダ」を見てどのアプリにルーティングするかを判断しているため、クライアントの元のドメインをそのまま渡すと「知らないドメインだ」と弾かれてしまうのです。</p>
+
+<p>この場合は、バックエンドのドメイン名に <code>Host</code> ヘッダを書き換える必要があります。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nginx" data-lang="nginx"><span style="color:#008000"># $host ではなく、バックエンドのドメインを指定する
+</span><span style="color:#008000"></span><span style="color:#00f">proxy_set_header</span> <span style="color:#a31515">Host</span> <span style="color:#a31515">&#34;backend.example.com&#34;</span>;</code></pre></div>
+<h3 id="websocket-sse-が途切れる-溜め込まれる">WebSocket / SSE が途切れる・溜め込まれる</h3>
+
+<p>リアルタイム通信機能でも、プロキシ特有のハマりどころがあります。</p>
+
+<ul>
+<li><strong>WebSocket：</strong> Upgrade ヘッダや HTTP バージョン指定が必要なケースが多いです（6.2の例参照）。また、通信がないとプロキシのタイムアウト設定（<code>proxy_read_timeout</code>）で切断されます。</li>
+<li><strong>SSE（Server-Sent Events）：</strong> ChatGPTのような「文字が1文字ずつ表示されるストリーミング」を行う場合、<strong>プロキシのバッファリング</strong>が原因で「ずっと待たされた後、一気に文章が表示される」という現象が起きます。Nginxはレスポンスを溜め込んでからまとめて返すのがデフォルトの挙動のため、SSEなどの場合はバッファリングを無効化（例: <code>proxy_buffering off;</code> やバックエンドからの <code>X-Accel-Buffering: no</code> ヘッダ付与）する必要があります。</li>
+</ul>
+
+<h3 id="アップロードが失敗する-413-request-entity-too-large">アップロードが失敗する（413 Request Entity Too Large）</h3>
+
+<p>Nginx の <code>client_max_body_size</code> がデフォルトだと小さい（1MBなど）場合があります。ファイルアップロードがあるアプリではサイズ上限の緩和が必要です。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nginx" data-lang="nginx"><span style="color:#00f">client_max_body_size</span> 50m;</code></pre></div>
+<h3 id="リダイレクト-url-が-http-になってしまう">リダイレクト URL が http になってしまう</h3>
+
+<p>TLS をプロキシで終端していると、バックエンドは「http で受けた」と認識し、リダイレクト生成時（Locationヘッダなど）に http スキームを使ってしまうことがあります。<br />
+<code>X-Forwarded-Proto</code> ヘッダでプロキシが受けたスキーム（https）を渡し、アプリ側でそれを信頼して反映させる設定が必要です。</p>
+
+<h2 id="l4-ロードバランサ-api-gateway-との違いも軽く押さえる">L4 ロードバランサ / API Gateway との違いも軽く押さえる</h2>
+
+<ul>
+<li><strong>L4（TCP/UDP）ロードバランサ</strong>：IP/ポートレベルで振り分け。HTTP の中身は見ない。高速で単純。</li>
+<li><strong>L7（HTTP）リバースプロキシ</strong>：パス/ヘッダ/Cookie など HTTP の内容で柔軟に制御できる。裏側のヘルスチェックも柔軟に行える。</li>
+<li><strong>API Gateway</strong>：認証、レート制限、API 管理、メトリクス、開発者向けポータルなど「API 運用機能」が厚いことが多い（リバースプロキシの上位概念として語られることも）。</li>
+</ul>
+
+<p>運用規模が小さければ Nginx などのリバースプロキシで十分なことも多く、要件が増えると API Gateway を検討する、という理解でまずは問題ありません。</p>
+
+<h2 id="まとめ-リバースプロキシは-サービスの玄関口">まとめ：リバースプロキシは「サービスの玄関口」</h2>
+
+<p>リバースプロキシは、単なる中継役ではなく、以下をまとめて引き受ける「玄関口」です。</p>
+
+<ul>
+<li>HTTPS 終端の集約</li>
+<li>ルーティング（パス/ドメイン）</li>
+<li>負荷分散と死活監視（ヘルスチェック）</li>
+<li>セキュリティ境界（アクセス制御・レート制限）</li>
+<li>ログ/圧縮/キャッシュなどの共通処理</li>
+</ul>
+
+<p>玄関口である以上、<strong>「ここが落ちると全滅する（SPOF）」</strong>というインフラ上の弱点でもあります。
+まずは 「クライアント → プロキシ → バックエンド」の流れを腹落ちさせ、次に「どの役割をプロキシに持たせたいか」「どれくらいの冗長性が必要か」を要件として整理すると、実務での設計がブレにくくなります。</p>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>

@@ -7,10 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Wed, 04 Mar 2026 12:01:25 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 11 May 2026 13:58:47 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>リバースプロキシの基本と実務での使いどころ</title>
+      <link>https://ysko909.github.io/posts/fundamentals-of-reverse-proxy/</link>
+      <pubDate>Mon, 11 May 2026 13:58:47 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/fundamentals-of-reverse-proxy/</guid>
+      <description>Web アプリを運用していると、ある時点で「外からのアクセスをどうさばくか」「HTTPS をどう終端するか」「複数台構成をどう見せるか」といった課題にぶつかります。そこで登場するのが リバースプロキシ（Reverse Proxy） です。
+本記事では、リバースプロキシの基本と実務での使いどころを整理します。
+リバースプロキシとは何か 一言で言うと リバースプロキシは「サーバ側の代理人」です。クライアント（ブラウザや API 呼び出し元）からのリクエストをいったん受け取り、裏側にあるアプリサーバへ中継します。
+Client ---&amp;gt; Reverse Proxy ---&amp;gt; App Server(s) クライアントは「本当のアプリサーバ」の存在を意識せず、常にリバースプロキシにアクセスします。
+「受付カウンター」のようなもの 大きなオフィスに訪問すると、最初に受付があります。来訪者（クライアント）は受付（リバースプロキシ）に要件を伝え、受付が担当部署（バックエンド）へ案内します。
+ 受付が 「どの部署へ案内するか」決める（ルーティング） 受付が 入館手続きをする（認証やアクセス制御） 受付が 来訪者数をさばく（負荷分散） 受付が 受付で荷物検査をする（WAF/セキュリティ）  フォワードプロキシとの違い プロキシには大きく 2 種類あります。
+   種類 代理する対象 典型例     フォワードプロキシ クライアント側の代理 社内ネットワークからの外部 Web アクセス制御   リバースプロキシ サーバ側の代理 Web サービスのフロントに置く Nginx/Apache/ALB    見分け方のコツ  フォワード：クライアントの代理で外へ出る リバース：サーバの代理として表に立つ  リバースプロキシを置くメリット：実務で効くポイント HTTPS（TLS）終端を一箇所に集約できる バックエンドが複数あっても、TLS 証明書の管理をリバースプロキシに集められます。アプリ側は HTTP だけで動かし、フロントで HTTPS を受ける構成が一般的です。</description>
+    </item>
     
     <item>
       <title>Windows標準のftp.exeはパッシブモード非対応。だからこそWinSCPやcurlでFTPを使う</title>
