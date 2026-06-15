@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/list-of-github-copilot-models-and-recommended-models-by-use-case/</loc>
+    <lastmod>2026-06-15T09:58:15+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/fundamentals-of-reverse-proxy/</loc>
     <lastmod>2026-05-11T13:58:47+09:00</lastmod>
   </url>
@@ -701,6 +706,12 @@
   </url>
   
   <url>
+    <loc>https://ysko909.github.io/tags/ai/</loc>
+    <lastmod>2026-06-15T09:58:15+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/tags/album/</loc>
     <lastmod>2019-09-25T00:16:41+09:00</lastmod>
     <priority>0</priority>
@@ -767,6 +778,12 @@
   </url>
   
   <url>
+    <loc>https://ysko909.github.io/tags/copilot/</loc>
+    <lastmod>2026-06-15T09:58:15+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/tags/csharp/</loc>
     <lastmod>2025-11-19T14:13:03+09:00</lastmod>
     <priority>0</priority>
@@ -822,7 +839,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/github/</loc>
-    <lastmod>2020-05-11T22:02:34+09:00</lastmod>
+    <lastmod>2026-06-15T09:58:15+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1074,7 +1091,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2026-05-11T13:58:47+09:00</lastmod>
+    <lastmod>2026-06-15T09:58:15+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1314,7 +1331,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2026-05-11T13:58:47+09:00</lastmod>
+    <lastmod>2026-06-15T09:58:15+09:00</lastmod>
     <priority>0</priority>
   </url>
   

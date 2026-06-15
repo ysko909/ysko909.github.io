@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>GitHub copilotのモデル一覧と用途別推奨モデル - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="GitHub copilotのモデル一覧と用途別推奨モデル" />
+<meta property="og:description" content="概要 〜コストと性能から考える最適な使い分け戦略〜 GitHub Copilotでは複数のAIモデルが選択可能ですが、用途に応じて最適なモデルを選択することが重要です。しかし、「結局どれを使えばいいのか？」に悩む方は多いはずです。以下に、GitHub Copilotのモデル一覧と、用途別の推奨モデルをまとめました。
+なお、この一覧は2026年6月時点のもので、モデルの追加や価格変更がある可能性があります。最新情報は公式ドキュメントを参照してください。
+はじめに ～モデルの違い～ Copilotはモデルごとに以下が大きく異なります。
+ 精度（推論力・コード品質） 速度（応答の速さ） コスト（トークン単価）  特に重要なのは コスト差 で、モデルによっては 最大50倍の価格差があります（後述）。
+モデルコスト一覧（昇順） 以下は 入力トークン単価ベースで並べたものです。
+最安クラス    モデル 入力 出力 特徴     GPT-5.4 nano $0.20 $1.25 最安・最低性能   GPT-5 mini $0.25 $2.00 コスパ最強   Raptor mini $0.25 $2.00 高速補完    低コストクラス    モデル 入力 出力 特徴     Gemini 3 Flash $0." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/list-of-github-copilot-models-and-recommended-models-by-use-case/" /><meta property="article:published_time" content="2026-06-15T09:58:15&#43;09:00"/>
+<meta property="article:modified_time" content="2026-06-15T09:58:15&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GitHub copilotのモデル一覧と用途別推奨モデル"/>
+<meta name="twitter:description" content="概要 〜コストと性能から考える最適な使い分け戦略〜 GitHub Copilotでは複数のAIモデルが選択可能ですが、用途に応じて最適なモデルを選択することが重要です。しかし、「結局どれを使えばいいのか？」に悩む方は多いはずです。以下に、GitHub Copilotのモデル一覧と、用途別の推奨モデルをまとめました。
+なお、この一覧は2026年6月時点のもので、モデルの追加や価格変更がある可能性があります。最新情報は公式ドキュメントを参照してください。
+はじめに ～モデルの違い～ Copilotはモデルごとに以下が大きく異なります。
+ 精度（推論力・コード品質） 速度（応答の速さ） コスト（トークン単価）  特に重要なのは コスト差 で、モデルによっては 最大50倍の価格差があります（後述）。
+モデルコスト一覧（昇順） 以下は 入力トークン単価ベースで並べたものです。
+最安クラス    モデル 入力 出力 特徴     GPT-5.4 nano $0.20 $1.25 最安・最低性能   GPT-5 mini $0.25 $2.00 コスパ最強   Raptor mini $0.25 $2.00 高速補完    低コストクラス    モデル 入力 出力 特徴     Gemini 3 Flash $0."/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">GitHub copilotのモデル一覧と用途別推奨モデル</h1>
+			<div class="meta">Posted at &mdash; Jun 15, 2026</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="概要-コストと性能から考える最適な使い分け戦略">概要 〜コストと性能から考える最適な使い分け戦略〜</h2>
+
+<p>GitHub Copilotでは複数のAIモデルが選択可能ですが、用途に応じて最適なモデルを選択することが重要です。しかし、「結局どれを使えばいいのか？」に悩む方は多いはずです。以下に、GitHub Copilotのモデル一覧と、用途別の推奨モデルをまとめました。</p>
+
+<p>なお、この一覧は2026年6月時点のもので、モデルの追加や価格変更がある可能性があります。最新情報は公式ドキュメントを参照してください。</p>
+
+<h2 id="はじめに-モデルの違い">はじめに ～モデルの違い～</h2>
+
+<p>Copilotはモデルごとに以下が大きく異なります。</p>
+
+<ul>
+<li>精度（推論力・コード品質）</li>
+<li>速度（応答の速さ）</li>
+<li>コスト（トークン単価）</li>
+</ul>
+
+<p>特に重要なのは <strong>コスト差</strong> で、モデルによっては <strong>最大50倍の価格差</strong>があります（後述）。</p>
+
+<h2 id="モデルコスト一覧-昇順">モデルコスト一覧（昇順）</h2>
+
+<p><img src="image.png" alt="alt text" /></p>
+
+<p>以下は <strong>入力トークン単価ベース</strong>で並べたものです。</p>
+
+<h3 id="最安クラス">最安クラス</h3>
+
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th align="right">入力</th>
+<th align="right">出力</th>
+<th>特徴</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>GPT-5.4 nano</td>
+<td align="right">$0.20</td>
+<td align="right">$1.25</td>
+<td>最安・最低性能</td>
+</tr>
+
+<tr>
+<td>GPT-5 mini</td>
+<td align="right">$0.25</td>
+<td align="right">$2.00</td>
+<td>コスパ最強</td>
+</tr>
+
+<tr>
+<td>Raptor mini</td>
+<td align="right">$0.25</td>
+<td align="right">$2.00</td>
+<td>高速補完</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="低コストクラス">低コストクラス</h3>
+
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th align="right">入力</th>
+<th align="right">出力</th>
+<th>特徴</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Gemini 3 Flash</td>
+<td align="right">$0.50</td>
+<td align="right">$3.00</td>
+<td>軽量・高速</td>
+</tr>
+
+<tr>
+<td>MAI-Code-1-Flash</td>
+<td align="right">$0.75</td>
+<td align="right">$4.50</td>
+<td>実務向け</td>
+</tr>
+
+<tr>
+<td>GPT-5.4 mini</td>
+<td align="right">$0.75</td>
+<td align="right">$4.50</td>
+<td>軽量高性能</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="中コスト">中コスト</h3>
+
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th align="right">入力</th>
+<th align="right">出力</th>
+<th>特徴</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Claude Haiku 4.5</td>
+<td align="right">$1.00</td>
+<td align="right">$5.00</td>
+<td>軽量Claude</td>
+</tr>
+
+<tr>
+<td>Gemini 2.5 Pro</td>
+<td align="right">$1.25</td>
+<td align="right">$10.00</td>
+<td>中性能</td>
+</tr>
+
+<tr>
+<td>Gemini 3.5 Flash</td>
+<td align="right">$1.50</td>
+<td align="right">$9.00</td>
+<td>バランス</td>
+</tr>
+
+<tr>
+<td>GPT-5.3-Codex</td>
+<td align="right">$1.75</td>
+<td align="right">$14.00</td>
+<td>高品質コード</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="高コスト">高コスト</h3>
+
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th align="right">入力</th>
+<th align="right">出力</th>
+<th>特徴</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Gemini 3.1 Pro</td>
+<td align="right">$2.00</td>
+<td align="right">$12.00</td>
+<td>高度推論</td>
+</tr>
+
+<tr>
+<td>GPT-5.4</td>
+<td align="right">$2.50</td>
+<td align="right">$15.00</td>
+<td>汎用上位</td>
+</tr>
+
+<tr>
+<td>Claude Sonnet</td>
+<td align="right">$3.00</td>
+<td align="right">$15.00</td>
+<td>バランス高</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="超高コスト">超高コスト</h3>
+
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th align="right">入力</th>
+<th align="right">出力</th>
+<th>特徴</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>GPT-5.5</td>
+<td align="right">$5.00</td>
+<td align="right">$30.00</td>
+<td>最上位</td>
+</tr>
+
+<tr>
+<td>Claude Opus</td>
+<td align="right">$5.00</td>
+<td align="right">$25.00</td>
+<td>高度推論</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="最高コスト">最高コスト</h3>
+
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th align="right">入力</th>
+<th align="right">出力</th>
+<th>特徴</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Claude Fable 5</td>
+<td align="right"><strong>$10.00</strong></td>
+<td align="right">$50.00</td>
+<td>最強モデル</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="一目で分かるコスト差">一目で分かるコスト差</h2>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">GPT-5.4 nano ($0.20)
+↓
+Claude Fable 5 ($10.00)
+
+= 約50倍</code></pre></div>
+<p>モデル選択を間違えるとコストが爆発します</p>
+
+<h2 id="用途別-最適モデル-実務ベース">用途別：最適モデル（実務ベース）</h2>
+
+<p>ここが一番重要です。</p>
+
+<h3 id="普段の開発-80-90-の作業">普段の開発（80〜90%の作業）</h3>
+
+<h4 id="最適">最適</h4>
+
+<ul>
+<li>GPT-5 mini</li>
+<li>MAI-Code-1-Flash</li>
+</ul>
+
+<h4 id="理由">理由</h4>
+
+<ul>
+<li>高速・低コスト・十分な精度</li>
+<li>デフォルト用途に最適</li>
+</ul>
+
+<p><strong>結論</strong></p>
+
+<blockquote>
+<p>とりあえず GPT-5 mini を使えばOK</p>
+</blockquote>
+
+<h3 id="軽作業-小さな関数-質問">軽作業（小さな関数・質問）</h3>
+
+<h4 id="最適-1">最適</h4>
+
+<ul>
+<li>Claude Haiku</li>
+<li>Gemini Flash</li>
+</ul>
+
+<h4 id="理由-1">理由</h4>
+
+<ul>
+<li>応答が速い</li>
+<li>コスト効率が良い</li>
+</ul>
+
+<p><strong>結論</strong></p>
+
+<blockquote>
+<p>速度重視なら Haiku / Flash</p>
+</blockquote>
+
+<h3 id="実務レベルの開発">実務レベルの開発</h3>
+
+<h4 id="最適-2">最適</h4>
+
+<ul>
+<li>GPT-5.3-Codex</li>
+<li>Claude Sonnet</li>
+</ul>
+
+<h4 id="理由-2">理由</h4>
+
+<ul>
+<li>コード品質が高い</li>
+<li>リファクタリング・設計にも対応</li>
+</ul>
+
+<p><strong>結論</strong></p>
+
+<blockquote>
+<p>品質を上げたいときだけ切替</p>
+</blockquote>
+
+<h3 id="重いデバッグ-設計">重いデバッグ・設計</h3>
+
+<h4 id="最適-3">最適</h4>
+
+<ul>
+<li>GPT-5.5</li>
+<li>Claude Opus</li>
+<li>Gemini Pro</li>
+</ul>
+
+<h4 id="理由-3">理由</h4>
+
+<ul>
+<li>多段推論・複雑分析に対応</li>
+</ul>
+
+<p><strong>結論</strong></p>
+
+<blockquote>
+<p>難問専用（常用禁止）</p>
+</blockquote>
+
+<h3 id="超コスト重視">超コスト重視</h3>
+
+<h4 id="最適-4">最適</h4>
+
+<ul>
+<li>GPT-5.4 nano</li>
+</ul>
+
+<h4 id="理由-4">理由</h4>
+
+<ul>
+<li>最安</li>
+<li>品質は最低限</li>
+</ul>
+
+<p><strong>結論</strong></p>
+
+<blockquote>
+<p>大量処理専用</p>
+</blockquote>
+
+<h2 id="エンジニア向け実務戦略-重要">エンジニア向け実務戦略（重要）</h2>
+
+<h3 id="ベストプラクティス">ベストプラクティス</h3>
+
+<h4 id="デフォルト固定">デフォルト固定</h4>
+
+<ul>
+<li>GPT-5 mini を基本にする</li>
+</ul>
+
+<h4 id="必要なときだけ切替">必要なときだけ切替</h4>
+
+<table>
+<thead>
+<tr>
+<th>状況</th>
+<th>モデル</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>軽い</td>
+<td>Haiku / Flash</td>
+</tr>
+
+<tr>
+<td>普通</td>
+<td>GPT-5 mini</td>
+</tr>
+
+<tr>
+<td>少し難しい</td>
+<td>Codex / Sonnet</td>
+</tr>
+
+<tr>
+<td>難しい</td>
+<td>GPT-5.5 / Opus</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="コスト最適化">コスト最適化</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">普段：安いモデル（90%）
+難問：高性能（10%）</code></pre></div>
+<p>これだけで大幅にコスト削減可能</p>
+
+<p>以下では、**プロンプト難易度ごとの具体例を新たに作成しつつ、「実務での実測に近いコスト感」＋「モデル別の結果品質」**を整理します。<br />
+（※トークン量は実務でよくある規模をもとにした現実的な近似）</p>
+
+<h2 id="ケーススタディ-プロンプト例とモデル選択ガイド">ケーススタディ ～プロンプト例とモデル選択ガイド～</h2>
+
+<h3 id="ケース①-軽作業-テキスト-単一ファイル編集">ケース①：軽作業（テキスト・単一ファイル編集）</h3>
+
+<h4 id="プロンプト例-低難易度">プロンプト例（低難易度）</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">docs仕様書.md内の「エラーハンドリング」セクションから
+try-catchの説明部分だけ削除し、構成を整えて出力せよ</code></pre></div>
+<h4 id="想定規模">想定規模</h4>
+
+<ul>
+<li>入力：1,200 tokens</li>
+<li>出力：600 tokens</li>
+</ul>
+
+<h4 id="コスト-品質">コスト＆品質</h4>
+
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th align="right">コスト</th>
+<th>品質</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>GPT-5.4 nano</td>
+<td align="right">約 $0.6</td>
+<td>△ 文崩れ・削除ミスあり</td>
+</tr>
+
+<tr>
+<td>GPT-5 mini</td>
+<td align="right">約 $0.7</td>
+<td>◎ 十分安定</td>
+</tr>
+
+<tr>
+<td>Claude Haiku</td>
+<td align="right">約 $3〜4</td>
+<td>◎ 速い・正確だが割高</td>
+</tr>
+
+<tr>
+<td>GPT-5.5</td>
+<td align="right">約 $25</td>
+<td>◎ 過剰</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="解説">解説</h4>
+
+<ul>
+<li>テキスト操作は<strong>推論不要</strong></li>
+<li>精度差はほぼ出ない</li>
+</ul>
+
+<p><strong>最適</strong></p>
+
+<blockquote>
+<p>GPT-5 mini</p>
+</blockquote>
+
+<p><strong>NG</strong></p>
+
+<blockquote>
+<p>高性能モデル（完全無駄）</p>
+</blockquote>
+
+<h3 id="ケース-画面ui改修-軽いコード生成">ケース：画面UI改修（軽いコード生成）</h3>
+
+<h4 id="プロンプト例-やや低-中難易度">プロンプト例（やや低～中難易度）</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">Reactの既存ログイン画面に「パスワード可視化トグル」と
+ログイン失敗時のトースト通知を追加せよ。
+既存の状態管理を維持せよ。</code></pre></div>
+<h4 id="想定規模-1">想定規模</h4>
+
+<ul>
+<li>入力：3,000 tokens</li>
+<li>出力：1,800 tokens</li>
+</ul>
+
+<h4 id="コスト-品質-1">コスト＆品質</h4>
+
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th align="right">コスト</th>
+<th>品質</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>GPT-5 mini</td>
+<td align="right">約 $2</td>
+<td>○ 軽微な修正必要</td>
+</tr>
+
+<tr>
+<td>MAI-Code</td>
+<td align="right">約 $4</td>
+<td>◎ 実務レベル</td>
+</tr>
+
+<tr>
+<td>GPT-5.3 Codex</td>
+<td align="right">約 $15</td>
+<td>◎ 高品質</td>
+</tr>
+
+<tr>
+<td>Claude Sonnet</td>
+<td align="right">約 $18</td>
+<td>◎ UI理解強い</td>
+</tr>
+
+<tr>
+<td>GPT-5.5</td>
+<td align="right">約 $70</td>
+<td>◎ 過剰</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="解説-1">解説</h4>
+
+<ul>
+<li>UI＋状態管理で<strong>中程度の理解力が必要</strong></li>
+<li>miniだと微調整が必要になることあり</li>
+</ul>
+
+<p><strong>最適</strong></p>
+
+<blockquote>
+<p>MAI-Code / GPT-5 mini（軽量）<br />
+Codex / Sonnet（品質重視）</p>
+</blockquote>
+
+<h3 id="ケース-api設計-バックエンド実装">ケース：API設計＋バックエンド実装</h3>
+
+<h4 id="プロンプト例-中難易度">プロンプト例（中難易度）</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">注文管理APIを新規実装せよ。
+CRUDに加え、ステータス変更時のイベント発火と
+監査ログの保存も実装すること。
+既存のRepositoryパターンに従うこと。</code></pre></div>
+<h4 id="想定規模-2">想定規模</h4>
+
+<ul>
+<li>入力：6,000 tokens</li>
+<li>出力：4,000 tokens</li>
+</ul>
+
+<h4 id="コスト-品質-2">コスト＆品質</h4>
+
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th align="right">コスト</th>
+<th>品質</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>GPT-5 mini</td>
+<td align="right">約 $3.5</td>
+<td>△ 設計が浅い</td>
+</tr>
+
+<tr>
+<td>MAI-Code</td>
+<td align="right">約 $8</td>
+<td>○ 実装可能だが粗い</td>
+</tr>
+
+<tr>
+<td>GPT-5.3 Codex</td>
+<td align="right">約 $35</td>
+<td>◎ 実務品質</td>
+</tr>
+
+<tr>
+<td>Claude Sonnet</td>
+<td align="right">約 $40</td>
+<td>◎ 設計込みで優秀</td>
+</tr>
+
+<tr>
+<td>GPT-5.5</td>
+<td align="right">約 $150</td>
+<td>◎ 完璧だが高い</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="解説-2">解説</h4>
+
+<ul>
+<li>設計 + 実装で<strong>思考力が必要</strong></li>
+<li>mini系では破綻しやすい</li>
+</ul>
+
+<p><strong>最適</strong></p>
+
+<blockquote>
+<p>GPT-5.3 Codex / Claude Sonnet</p>
+</blockquote>
+
+<h3 id="ケース-大規模デバッグ-複数要因">ケース：大規模デバッグ（複数要因）</h3>
+
+<h4 id="プロンプト例-高難易度">プロンプト例（高難易度）</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">決済処理でランダムに二重請求が発生する問題を調査せよ。
+ログ、非同期処理、トランザクション境界を考慮し、
+原因特定と修正案を提示せよ。</code></pre></div>
+<h4 id="想定規模-3">想定規模</h4>
+
+<ul>
+<li>入力：12,000 tokens</li>
+<li>出力：6,000 tokens</li>
+</ul>
+
+<h4 id="コスト-品質-3">コスト＆品質</h4>
+
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th align="right">コスト</th>
+<th>品質</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>GPT-5 mini</td>
+<td align="right">約 $6</td>
+<td>✕ 誤推論多い</td>
+</tr>
+
+<tr>
+<td>GPT-5.3 Codex</td>
+<td align="right">約 $55</td>
+<td>△ 一部不完全</td>
+</tr>
+
+<tr>
+<td>Claude Sonnet</td>
+<td align="right">約 $70</td>
+<td>◎ 実務レベル</td>
+</tr>
+
+<tr>
+<td>GPT-5.5</td>
+<td align="right">約 $300</td>
+<td>◎ 高精度</td>
+</tr>
+
+<tr>
+<td>Claude Opus</td>
+<td align="right">約 $280</td>
+<td>◎ 最強クラス</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="解説-3">解説</h4>
+
+<ul>
+<li>非同期＋状態管理＋ログ分析
+→ <strong>高い推論力必須</strong></li>
+</ul>
+
+<p><strong>最適</strong></p>
+
+<blockquote>
+<p>Claude Sonnet（コスパ）<br />
+GPT-5.5 / Opus（最難）</p>
+</blockquote>
+
+<h3 id="ケース-大量ログ分析-バッチ処理">ケース：大量ログ分析（バッチ処理）</h3>
+
+<h4 id="プロンプト例-計算量高-思考軽">プロンプト例（計算量高・思考軽）</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">10万件のアクセスログを解析し、
+エラー種別ごとに分類し、ランキングを出力せよ。</code></pre></div>
+<h4 id="想定規模-4">想定規模</h4>
+
+<ul>
+<li>入力：40,000 tokens</li>
+<li>出力：12,000 tokens</li>
+</ul>
+
+<h4 id="コスト-品質-4">コスト＆品質</h4>
+
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th align="right">コスト</th>
+<th>品質</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>GPT-5.4 nano</td>
+<td align="right">約 $30</td>
+<td>△ 粗い</td>
+</tr>
+
+<tr>
+<td>GPT-5 mini</td>
+<td align="right">約 $40</td>
+<td>○ 実用</td>
+</tr>
+
+<tr>
+<td>GPT-5.3 Codex</td>
+<td align="right">約 $180</td>
+<td>◎ 高精度だが高すぎ</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="解説-4">解説</h4>
+
+<ul>
+<li>処理量は多いが推論は軽い</li>
+</ul>
+
+<p><strong>最適</strong></p>
+
+<blockquote>
+<p>GPT-5 mini<br />
+-&gt; <strong>節約</strong>
+nano</p>
+</blockquote>
+
+<h3 id="最終まとめ-実務でのリアル">最終まとめ（実務でのリアル）</h3>
+
+<h4 id="コスト感-現実">コスト感（現実）</h4>
+
+<table>
+<thead>
+<tr>
+<th>タスク</th>
+<th>コスト</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>軽作業</td>
+<td>$0.5〜1</td>
+</tr>
+
+<tr>
+<td>UI改修</td>
+<td>$2〜5</td>
+</tr>
+
+<tr>
+<td>API開発</td>
+<td>$8〜40</td>
+</tr>
+
+<tr>
+<td>デバッグ</td>
+<td>$50〜300</td>
+</tr>
+
+<tr>
+<td>大量処理</td>
+<td>$30〜100</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="最適なモデル選択ルール">最適なモデル選択ルール</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">軽い → GPT-5 mini
+普通 → MAI / Codex
+重い → Sonnet
+最難 → GPT-5.5</code></pre></div>
+<h4 id="よくある失敗">よくある失敗</h4>
+
+<ul>
+<li>「全部GPT-5.5でやる」
+→ コスト爆発</li>
+</ul>
+
+<h4 id="正解">正解</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">90% → GPT-5 mini
+8% → Codex / Sonnet
+2% → GPT-5.5</code></pre></div>
+<h2 id="まとめ">まとめ</h2>
+
+<h3 id="結論">結論</h3>
+
+<ul>
+<li>モデル選択でコストは最大50倍差</li>
+<li>デフォルトは <strong>GPT-5 mini</strong></li>
+<li>難易度でモデルを切り替えるのが最適</li>
+</ul>
+
+<h3 id="一言で">一言で</h3>
+
+<blockquote>
+<p><strong>「普段は安く、難しいときだけ強いモデル」</strong></p>
+</blockquote>
+
+<h3 id="最終推奨構成-実務">最終推奨構成（実務）</h3>
+
+<table>
+<thead>
+<tr>
+<th>役割</th>
+<th>モデル</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>デフォルト</td>
+<td>GPT-5 mini</td>
+</tr>
+
+<tr>
+<td>軽作業</td>
+<td>Haiku / Flash</td>
+</tr>
+
+<tr>
+<td>開発強化</td>
+<td>Codex / Sonnet</td>
+</tr>
+
+<tr>
+<td>難問</td>
+<td>GPT-5.5 / Opus</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li><a href="https://docs.github.com/ja/copilot/reference/copilot-billing/models-and-pricing">GitHub Copilotのモデルと価格</a></li>
+<li><a href="https://docs.github.com/ja/copilot/concepts/billing/usage-based-billing-for-individuals">個人の使用量ベースの課金</a></li>
+<li><a href="https://docs.github.com/ja/copilot/concepts/billing/usage-based-billing-for-organizations-and-enterprises">組織と企業の使用量ベースの課金</a></li>
+</ul>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
