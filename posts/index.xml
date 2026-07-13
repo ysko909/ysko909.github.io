@@ -7,10 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Mon, 15 Jun 2026 09:58:15 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 13 Jul 2026 10:03:04 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>すでにコミット済みの「コミットメッセージ」を安全に修正する方法</title>
+      <link>https://ysko909.github.io/posts/editing-committed-messages-in-git/</link>
+      <pubDate>Mon, 13 Jul 2026 10:03:04 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/editing-committed-messages-in-git/</guid>
+      <description>概要 Git でコミットした直後に「メッセージを間違えた……」というケースは誰にでもあります。直近のコミットから過去のコミット、さらにマージコミットまで、メッセージを変更するための正しい手順と、チーム開発で安全に運用するためのベストプラクティスをまとめます。
+ 重要：コミットメッセージの変更は 履歴の書き換えです。そのため、とくにチームで開発している場合において、共有ブランチ（例：main）で履歴を変えると、他メンバーのローカル履歴を壊す恐れがあります。リモートのブランチ保護設定次第では、強制プッシュが禁止されている場合もあります。作業前にチーム内で合意を形成するか、ルールについて確認してください。
+ 直前（最新）のコミットメッセージを修正する エディタを使ってメッセージを修正する 直近のコミットは git commit --amend で置き換えます。-m を付けるとエディタを開かずにメッセージを指定できます。
+# 直近のコミットメッセージだけを差し替える git commit --amend -m &amp;#34;修正後のメッセージ&amp;#34; ```` `--amend` は 直前のコミットを新しいコミットで置き換えるため、コミット ID が変わります。 よく使うバリエーション： ```bash # コミットし忘れたファイルを追加（メッセージは変更なし） git add &amp;lt;&amp;lt;忘れたファイル&amp;gt;&amp;gt; git commit --amend --no-edit # 既にコミットしたファイルを直前コミットから除外（メッセージは変更なし） git rm --cached &amp;lt;&amp;lt;いらないファイル&amp;gt;&amp;gt; git commit --amend --no-edit # 署名付きコミットを維持して再生成（署名必須なリポジトリ向け） git commit --amend -m &amp;#34;修正後のメッセージ&amp;#34; # 著者情報を修正 git commit --amend --author=&amp;#34;Correct Name &amp;lt;correct@example.com&amp;gt;&amp;#34; --no-edit これらのオプションは公式ドキュメントで定義されています。
+リモートへ反映する（安全な強制プッシュ） --amend でコミット ID が変わると、通常の git push は 非 fast-forward として拒否されます。そこで 安全な強制プッシュである --force-with-lease を使うのが推奨です。</description>
+    </item>
     
     <item>
       <title>GitHub copilotのモデル一覧と用途別推奨モデル</title>

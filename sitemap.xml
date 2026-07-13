@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/editing-committed-messages-in-git/</loc>
+    <lastmod>2026-07-13T10:03:04+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/list-of-github-copilot-models-and-recommended-models-by-use-case/</loc>
     <lastmod>2026-06-15T09:58:15+09:00</lastmod>
   </url>
@@ -833,7 +838,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/git/</loc>
-    <lastmod>2026-01-13T18:49:05+09:00</lastmod>
+    <lastmod>2026-07-13T10:03:04+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1091,7 +1096,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2026-06-15T09:58:15+09:00</lastmod>
+    <lastmod>2026-07-13T10:03:04+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1331,7 +1336,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2026-06-15T09:58:15+09:00</lastmod>
+    <lastmod>2026-07-13T10:03:04+09:00</lastmod>
     <priority>0</priority>
   </url>
   
