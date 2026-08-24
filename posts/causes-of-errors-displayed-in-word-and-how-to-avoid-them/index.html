@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Wordで「ファイルを開こうとして、エラーが発生しました。」と表示される原因と回避方法 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Wordで「ファイルを開こうとして、エラーが発生しました。」と表示される原因と回避方法" />
+<meta property="og:description" content="TL;DR Wordでネットワークドライブ上の.docxファイルを開こうとした際に表示される
+ファイルを開こうとして、エラーが発生しました。 というエラーは、保護ビューの設定変更で回避できる場合があります。でも、用事が済んだら必ず元の設定へ戻そうね！
+はじめに Wordを利用している環境で、Wordファイル（*.docx）を開こうとした際に、突然エラーが発生して文書を開けなくなることがあります。
+特に企業のファイルサーバーやNAS上で文書を共有している環境ではたまに見られる現象であり、業務に支障をきたす場合があります。
+本記事では、実際のエラーメッセージを紹介するとともに、考えられる原因と回避方法について解説します。ただ、結局大体は初手でWordの「保護ビュー」の設定を一時的に無効化してみることで解決することが多いです（後述）。
+なお、Wordのバージョンや環境によっては、表示されるエラーメッセージが異なる場合があります。当方は、Word 2021および2019で当メッセージを確認しています。
+発生したエラーメッセージ 画像から確認できるエラーメッセージは以下のとおりです。
+ファイルを開こうとして、エラーが発生しました。 次の操作を行ってください: * 文書またはドライブのアクセス権を確認してください。 * 空きメモリおよびディスクの空き領域が十分にあることを確認してください。 * テキスト回復コンバーターでファイルを開いてください。 (&lt;&lt;ここは開こうとしたファイルのパスが表示される&gt;&gt;) 最下部には対象ファイルのパスが表示されていますが、画像内では一部がマスクしています。
+このエラーが発生する主な原因 このエラーメッセージはWordの汎用的なエラーであり、実際にはさまざまな原因で表示されます。
+1. ネットワーク共有フォルダーのアクセス権不足 共有フォルダーや対象ファイルに対する読み取り権限が不足している場合、Wordはファイルを開けません。
+以下のどちらか、あるいは両方に問題がある場合があります。
+ 共有フォルダー権限 NTFSアクセス権  2. ネットワーク接続の問題 以下のような状況ではファイルの読み込みに失敗する場合があります。
+ VPN接続が不安定 Wi-Fi通信が不安定 ファイルサーバーへの応答遅延 SMB通信エラー  3. Word文書の破損 対象の.docxファイルが破損している場合にも同様のエラーが表示されます。
+例えば次のようなケースが考えられます。
+ 保存中のPC強制終了 ネットワーク切断中の保存 サーバー障害発生時の保存  4. ファイルロック 別ユーザーが編集中であったり、編集管理用の一時ファイルが残ったままになっている場合があります。
+例えば以下のような隠しファイルです。
+~$文書名.docx このファイルが残存していると正常に開けなくなることがあります。
+ただ、この場合は「&lt;&lt;ユーザー名&gt;&gt;が編集中です」と表示されると思うので、通常はエラーとして発生しないはずです。なお、この場合であればユーザー名が表示されるので、該当のユーザーに連絡して編集中のファイルを閉じてもらうことであっさり解決します。
+5. パス名が長すぎる 企業環境ではフォルダー階層が深くなりがちです。
+\\Server\Share\部署\プロジェクト\年度\顧客名\成果物\・・・ のような非常に長いパスの場合、Wordが正常に処理できないことがあります。
+6. セキュリティソフトやMicrosoft Defenderによる制限 ランサムウェア対策や不正アクセス対策によって、ネットワーク共有上のOfficeファイルへのアクセスが制限される場合があります。
+改善しない場合の切り分け方法 改善しない場合は、次の順番で確認すると効率的です。
+手順1 対象ファイルをローカルへコピーする。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/causes-of-errors-displayed-in-word-and-how-to-avoid-them/" /><meta property="article:published_time" content="2026-08-24T10:07:15&#43;09:00"/>
+<meta property="article:modified_time" content="2026-08-24T10:07:15&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Wordで「ファイルを開こうとして、エラーが発生しました。」と表示される原因と回避方法"/>
+<meta name="twitter:description" content="TL;DR Wordでネットワークドライブ上の.docxファイルを開こうとした際に表示される
+ファイルを開こうとして、エラーが発生しました。 というエラーは、保護ビューの設定変更で回避できる場合があります。でも、用事が済んだら必ず元の設定へ戻そうね！
+はじめに Wordを利用している環境で、Wordファイル（*.docx）を開こうとした際に、突然エラーが発生して文書を開けなくなることがあります。
+特に企業のファイルサーバーやNAS上で文書を共有している環境ではたまに見られる現象であり、業務に支障をきたす場合があります。
+本記事では、実際のエラーメッセージを紹介するとともに、考えられる原因と回避方法について解説します。ただ、結局大体は初手でWordの「保護ビュー」の設定を一時的に無効化してみることで解決することが多いです（後述）。
+なお、Wordのバージョンや環境によっては、表示されるエラーメッセージが異なる場合があります。当方は、Word 2021および2019で当メッセージを確認しています。
+発生したエラーメッセージ 画像から確認できるエラーメッセージは以下のとおりです。
+ファイルを開こうとして、エラーが発生しました。 次の操作を行ってください: * 文書またはドライブのアクセス権を確認してください。 * 空きメモリおよびディスクの空き領域が十分にあることを確認してください。 * テキスト回復コンバーターでファイルを開いてください。 (&lt;&lt;ここは開こうとしたファイルのパスが表示される&gt;&gt;) 最下部には対象ファイルのパスが表示されていますが、画像内では一部がマスクしています。
+このエラーが発生する主な原因 このエラーメッセージはWordの汎用的なエラーであり、実際にはさまざまな原因で表示されます。
+1. ネットワーク共有フォルダーのアクセス権不足 共有フォルダーや対象ファイルに対する読み取り権限が不足している場合、Wordはファイルを開けません。
+以下のどちらか、あるいは両方に問題がある場合があります。
+ 共有フォルダー権限 NTFSアクセス権  2. ネットワーク接続の問題 以下のような状況ではファイルの読み込みに失敗する場合があります。
+ VPN接続が不安定 Wi-Fi通信が不安定 ファイルサーバーへの応答遅延 SMB通信エラー  3. Word文書の破損 対象の.docxファイルが破損している場合にも同様のエラーが表示されます。
+例えば次のようなケースが考えられます。
+ 保存中のPC強制終了 ネットワーク切断中の保存 サーバー障害発生時の保存  4. ファイルロック 別ユーザーが編集中であったり、編集管理用の一時ファイルが残ったままになっている場合があります。
+例えば以下のような隠しファイルです。
+~$文書名.docx このファイルが残存していると正常に開けなくなることがあります。
+ただ、この場合は「&lt;&lt;ユーザー名&gt;&gt;が編集中です」と表示されると思うので、通常はエラーとして発生しないはずです。なお、この場合であればユーザー名が表示されるので、該当のユーザーに連絡して編集中のファイルを閉じてもらうことであっさり解決します。
+5. パス名が長すぎる 企業環境ではフォルダー階層が深くなりがちです。
+\\Server\Share\部署\プロジェクト\年度\顧客名\成果物\・・・ のような非常に長いパスの場合、Wordが正常に処理できないことがあります。
+6. セキュリティソフトやMicrosoft Defenderによる制限 ランサムウェア対策や不正アクセス対策によって、ネットワーク共有上のOfficeファイルへのアクセスが制限される場合があります。
+改善しない場合の切り分け方法 改善しない場合は、次の順番で確認すると効率的です。
+手順1 対象ファイルをローカルへコピーする。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">Wordで「ファイルを開こうとして、エラーが発生しました。」と表示される原因と回避方法</h1>
+			<div class="meta">Posted at &mdash; Aug 24, 2026</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="tl-dr">TL;DR</h2>
+
+<p>Wordでネットワークドライブ上の.docxファイルを開こうとした際に表示される</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">ファイルを開こうとして、エラーが発生しました。</code></pre></div>
+<p>というエラーは、保護ビューの設定変更で回避できる場合があります。でも、用事が済んだら必ず元の設定へ戻そうね！</p>
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>Wordを利用している環境で、Wordファイル（*.docx）を開こうとした際に、突然エラーが発生して文書を開けなくなることがあります。</p>
+
+<p>特に企業のファイルサーバーやNAS上で文書を共有している環境ではたまに見られる現象であり、業務に支障をきたす場合があります。</p>
+
+<p>本記事では、実際のエラーメッセージを紹介するとともに、考えられる原因と回避方法について解説します。ただ、結局大体は初手でWordの「保護ビュー」の設定を一時的に無効化してみることで解決することが多いです（後述）。</p>
+
+<p>なお、Wordのバージョンや環境によっては、表示されるエラーメッセージが異なる場合があります。当方は、Word 2021および2019で当メッセージを確認しています。</p>
+
+<h2 id="発生したエラーメッセージ">発生したエラーメッセージ</h2>
+
+<p>画像から確認できるエラーメッセージは以下のとおりです。</p>
+
+<p><img src="image_error_message.png" alt="alt text" /></p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">ファイルを開こうとして、エラーが発生しました。
+
+次の操作を行ってください:
+
+* 文書またはドライブのアクセス権を確認してください。
+* 空きメモリおよびディスクの空き領域が十分にあることを確認してください。
+* テキスト回復コンバーターでファイルを開いてください。
+
+(&lt;&lt;ここは開こうとしたファイルのパスが表示される&gt;&gt;)</code></pre></div>
+<p>最下部には対象ファイルのパスが表示されていますが、画像内では一部がマスクしています。</p>
+
+<h2 id="このエラーが発生する主な原因">このエラーが発生する主な原因</h2>
+
+<p>このエラーメッセージはWordの汎用的なエラーであり、実際にはさまざまな原因で表示されます。</p>
+
+<h3 id="1-ネットワーク共有フォルダーのアクセス権不足">1. ネットワーク共有フォルダーのアクセス権不足</h3>
+
+<p>共有フォルダーや対象ファイルに対する読み取り権限が不足している場合、Wordはファイルを開けません。</p>
+
+<p>以下のどちらか、あるいは両方に問題がある場合があります。</p>
+
+<ul>
+<li>共有フォルダー権限</li>
+<li>NTFSアクセス権</li>
+</ul>
+
+<h3 id="2-ネットワーク接続の問題">2. ネットワーク接続の問題</h3>
+
+<p>以下のような状況ではファイルの読み込みに失敗する場合があります。</p>
+
+<ul>
+<li>VPN接続が不安定</li>
+<li>Wi-Fi通信が不安定</li>
+<li>ファイルサーバーへの応答遅延</li>
+<li>SMB通信エラー</li>
+</ul>
+
+<h3 id="3-word文書の破損">3. Word文書の破損</h3>
+
+<p>対象の.docxファイルが破損している場合にも同様のエラーが表示されます。</p>
+
+<p>例えば次のようなケースが考えられます。</p>
+
+<ul>
+<li>保存中のPC強制終了</li>
+<li>ネットワーク切断中の保存</li>
+<li>サーバー障害発生時の保存</li>
+</ul>
+
+<h3 id="4-ファイルロック">4. ファイルロック</h3>
+
+<p>別ユーザーが編集中であったり、編集管理用の一時ファイルが残ったままになっている場合があります。</p>
+
+<p>例えば以下のような隠しファイルです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">~$文書名.docx</code></pre></div>
+<p>このファイルが残存していると正常に開けなくなることがあります。</p>
+
+<p>ただ、この場合は「&lt;&lt;ユーザー名&gt;&gt;が編集中です」と表示されると思うので、通常はエラーとして発生しないはずです。なお、この場合であればユーザー名が表示されるので、該当のユーザーに連絡して編集中のファイルを閉じてもらうことであっさり解決します。</p>
+
+<h3 id="5-パス名が長すぎる">5. パス名が長すぎる</h3>
+
+<p>企業環境ではフォルダー階層が深くなりがちです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">\\Server\Share\部署\プロジェクト\年度\顧客名\成果物\・・・</code></pre></div>
+<p>のような非常に長いパスの場合、Wordが正常に処理できないことがあります。</p>
+
+<h3 id="6-セキュリティソフトやmicrosoft-defenderによる制限">6. セキュリティソフトやMicrosoft Defenderによる制限</h3>
+
+<p>ランサムウェア対策や不正アクセス対策によって、ネットワーク共有上のOfficeファイルへのアクセスが制限される場合があります。</p>
+
+<h2 id="改善しない場合の切り分け方法">改善しない場合の切り分け方法</h2>
+
+<p>改善しない場合は、次の順番で確認すると効率的です。</p>
+
+<h3 id="手順1">手順1</h3>
+
+<p>対象ファイルをローカルへコピーする。</p>
+
+<h3 id="手順2">手順2</h3>
+
+<p>ローカルファイルを開く。</p>
+
+<ul>
+<li>開ける：ネットワークまたはセキュリティ設定の問題</li>
+<li>開けない：ファイル破損の可能性</li>
+</ul>
+
+<h3 id="手順3">手順3</h3>
+
+<p>別PCまたは別ユーザーアカウントで開く。</p>
+
+<ul>
+<li>別PCなら開く：PC固有の問題</li>
+<li>別ユーザーなら開く：ユーザー権限の問題</li>
+<li>別PCでも別ユーザーでも開けない：ファイル自体の問題</li>
+</ul>
+
+<h3 id="手順4">手順4</h3>
+
+<p>Wordの機能である「ファイル修復コンバーター」を実行する。</p>
+
+<p>ただし、修復コンバーターは破損したファイルを完全に復元できるわけではありません。テキスト内容の修復は可能ですが、レイアウトや画像などは復元できない場合があります。そのため、この方法は本当に「どうしても開けない場合の最終手段」として考えておくべきです。</p>
+
+<h2 id="保護ビュー-の設定を変更する">「保護ビュー」の設定を変更する</h2>
+
+<h3 id="保護ビュー-とは">「保護ビュー」とは</h3>
+
+<p>企業環境で比較的多いのが、Wordの保護ビュー（Protected View）による制限です。</p>
+
+<p>Wordにおける「保護ビュー」とは、インターネットやネットワーク共有上のファイルを開く際に、悪意のあるファイルから利用者を保護するための機能です。</p>
+
+<p>ただ、この機能のせいでWordはネットワーク共有上のファイルを「信頼できない場所に存在するファイル」と判断する場合があります。</p>
+
+<p>その結果として、</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">ファイルを開こうとして、エラーが発生しました。</code></pre></div>
+<p>が表示され、文書を開けなくなることがあります。つまり、保護ビューの設定が原因である場合は、Wordの設定を変更することで回避できる可能性があります。個人的にはこのケースが、企業環境で発生する「ファイルを開こうとして、エラーが発生しました。」の大体の原因だと思います。</p>
+
+<h3 id="回避方法">回避方法</h3>
+
+<p>Wordの「トラストセンター」の設定から、「保護ビュー」の設定内容を変更することで回避できます。</p>
+
+<h2 id="手順">手順</h2>
+
+<h3 id="1-wordを起動する">1. Wordを起動する</h3>
+
+<p>ファイルを開かずにWordだけ起動します。</p>
+
+<h3 id="2-トラストセンターを開く">2. トラストセンターを開く</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">オプション＞トラストセンター＞トラストセンターの設定</code></pre></div>
+<h3 id="3-保護ビューを開く">3. 保護ビューを開く</h3>
+
+<p>左側のメニューから</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">保護ビュー</code></pre></div>
+<p>を選択します。</p>
+
+<h3 id="4-保護ビュー設定を一時的に無効化する">4. 保護ビュー設定を一時的に無効化する</h3>
+
+<p>保護ビュー設定における、以下のチェックをすべて外します。</p>
+
+<p><img src="image_protected_view_settings.png" alt="alt text" /></p>
+
+<ul>
+<li>インターネットから取得したファイルに対して保護ビューを有効にする</li>
+<li>安全でない可能性のある場所にあるファイルに対して保護ビューを有効にする</li>
+<li>Outlook の添付ファイルに対して保護ビューを有効にする</li>
+</ul>
+
+<p>環境によっては2番目の</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">安全でない可能性のある場所にあるファイルに対して保護ビューを有効にする</code></pre></div>
+<p>のチェックを外すだけで改善する場合もあります。ただ、パッと確認したい場合は、まずはすべてのチェックを外してしまうのが手っ取り早いです。</p>
+
+<h3 id="5-wordを再起動する">5. Wordを再起動する</h3>
+
+<p>設定変更後にWordを再起動し、対象ファイルを再度開きます。</p>
+
+<h2 id="重要な注意事項">重要な注意事項</h2>
+
+<p>この方法はセキュリティ設定を緩和する対応です。</p>
+
+<p>保護ビューは悪意のあるファイルから利用者を保護するための機能であり、恒久的に無効化することは推奨されません。</p>
+
+<p>そのため、ファイルの閲覧・編集などの用事が済んだら、<strong>必ず元の設定へ戻してください</strong>。</p>
+
+<p>特に以下の環境では注意が必要です。</p>
+
+<ul>
+<li>メール添付ファイルを頻繁に開く環境</li>
+<li>インターネットからファイルをダウンロードする環境</li>
+<li>不特定多数の利用者が共有フォルダーへアクセスする環境</li>
+</ul>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>Wordでネットワークドライブ上の.docxファイルを開こうとした際に表示される</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">ファイルを開こうとして、エラーが発生しました。</code></pre></div>
+<p>というエラーは、</p>
+
+<ul>
+<li>アクセス権</li>
+<li>ネットワーク接続</li>
+<li>ファイル破損</li>
+<li>ファイルロック</li>
+<li>パス長</li>
+<li>セキュリティソフト</li>
+</ul>
+
+<p>など複数の要因によって発生します。</p>
+
+<p>しかし、企業環境ではWordのトラストセンターにある「保護ビュー」が原因となっているケースが少なくありません。そのため、初手として「とりあえず保護ビューの設定を一時的に無効化してみる」というのは、手っ取り早くわりと確実な回避方法です。</p>
+
+<p>ただし、この方法はセキュリティを緩和する設定変更であるため、<strong>用事が済んだら必ず元の設定へ戻すことを忘れないようにしましょう</strong>。</p>
+
+<h2 id="参考">参考</h2>
+
+<ol>
+<li><a href="https://pcdoc-support.com/2020/06/17/word%E3%81%A7%E3%80%8C%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E9%96%8B%E3%81%93%E3%81%86%E3%81%A8%E3%81%97%E3%81%A6%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%8C%E7%99%BA%E7%94%9F%E3%81%97%E3%81%BE/">Wordで「ファイルを開こうとしてエラーが発生しました」と表示されデータが開けない件の対応（館林）</a></li>
+</ol>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
