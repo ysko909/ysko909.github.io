@@ -160,9 +160,12 @@
 
   <span style="color:#00f">return</span> &lt;div&gt;{fullName}&lt;<span style="">/div&gt;;</span>
 }</code></pre></div>
-<p>この実装には深刻な問題があります。
-1. 不要な再レンダリング: <code>firstName</code> の変更によるレンダー → <code>useEffect</code> 実行 → <code>setFullName</code> による追加の再レンダー、と常に2回のレンダリングサイクルが発生します。
-2. 同期ズレ（State Inconsistency）: 描画が一瞬古い状態のままになり、画面のチラつきや競合状態（Race Condition）の原因になります。</p>
+<p>この実装には深刻な問題があります。</p>
+
+<ol>
+<li>不要な再レンダリング: <code>firstName</code> の変更によるレンダー → <code>useEffect</code> 実行 → <code>setFullName</code> による追加の再レンダー、と常に2回のレンダリングサイクルが発生します。</li>
+<li>同期ズレ（State Inconsistency）: 描画が一瞬古い状態のままになり、画面のチラつきや競合状態（Race Condition）の原因になります。</li>
+</ol>
 
 <h3 id="良い例-レンダー中の直接計算">良い例：レンダー中の直接計算</h3>
 
@@ -227,7 +230,7 @@
  └ Layout
      └ Header
          └ UserAvatar (user を使いたい)</code></pre></div>
-<p>これを解決するためにグローバルな Context を作成すると、コンポーネントの依存関係が暗黙的になり、テストや再利用が難しくなります。</p>
+<p>これを解決するためにグローバルな Context を作成すると、コンポーネントの依存関係が暗黙的になり、テストや再利用が難しくなります。何にしても、グローバルを理由なく安易に使っちゃうのは良くないわけです。</p>
 
 <h3 id="良い例-children-やコンポーネントスロットを利用した合成">良い例：<code>children</code> やコンポーネントスロットを利用した合成</h3>
 
@@ -274,7 +277,7 @@ type User = { id: <span style="color:#2b91af">string</span>; name: <span style="
 
 <h3 id="ルール-2-state-値-と-dispatch-更新関数-を分離する">ルール(2)：State（値）と Dispatch（更新関数）を分離する</h3>
 
-<p>Reactの Context は、Provider に渡された <code>value</code> の参照が変わると、そのContextを <code>useContext</code> しているすべてのコンポーネントが再レンダリングされます。更新関数と状態値を同じContextにまとめると、更新関数しか使っていないコンポーネントまで巻き添えで再描画されます。</p>
+<p>Reactの Context は、Provider に渡された <code>value</code> の参照が変わると、そのContextを <code>useContext</code> しているすべてのコンポーネントが再レンダリングされます。更新関数と状態値を同じContextにまとめると、更新関数しか使っていないコンポーネントまで巻き添えを食らって再描画されてしまいます。</p>
 
 <h3 id="実務レベルの-context-実装例">実務レベルの Context 実装例</h3>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-tsx" data-lang="tsx"><span style="color:#00f">import</span> { createContext, useContext, useState, ReactNode, Dispatch, SetStateAction } from <span style="color:#a31515">&#34;react&#34;</span>;
@@ -328,7 +331,7 @@ type Theme = <span style="color:#a31515">&#34;light&#34;</span> | <span style="c
 }</code></pre></div>
 <h2 id="原則5-url-state-と-server-state-を外部ライブラリに任せる">原則5：URL State と Server State を外部ライブラリに任せる</h2>
 
-<p>実務アプリケーションにおける「状態」の大部分は、純粋なクライアント状態ではなく URL か サーバーキャッシュ です。これらを <code>useState</code> や Zustand で自作するのは車輪の再発明であり、バグの温床になります。</p>
+<p>実際問題、アプリケーションにおける「状態」の大部分は、純粋なクライアント状態ではなく URL か サーバーキャッシュ だったりします。これらを <code>useState</code> や Zustand で自作するのは車輪の再発明であり、バグの温床になります。</p>
 
 <h3 id="a-検索条件-フィルター-タブは-url-に置く">A. 検索条件・フィルター・タブは「URL」に置く</h3>
 
@@ -478,19 +481,17 @@ type NotificationStore = {
        └─ YES: ──▶ 【Global Store】Zustand / Jotai</code></pre></div>
 <h2 id="まとめ">まとめ</h2>
 
-<p>React開発において「状態をどこに置くべきか」という問いは、「そのデータはどこに属するべき真実（Single Source of Truth）なのか」という設計思想そのものです。</p>
-
-<p>初心者を脱却し、堅牢なReactアプリケーションを構築するために覚えておくべき要点は次の通りです。</p>
+<p>React開発において「状態をどこに置くべきか」という問いは、「そのデータはどこに属するべき真実（Single Source of Truth）なのか」という設計思想そのものです。堅牢なReactアプリケーションを構築するために、覚えておくべき要点は次の通りです。</p>
 
 <ol>
 <li>まず分類する: クライアントUI、URL、サーバーキャッシュを混同しない。</li>
-<li>二重管理を捨てる: 導出可能な値をStateにせず、<code>useEffect</code> による状態同期をやめる。</li>
+<li>二重管理を捨てる: 導出可能な値を無理にStateにせず、<code>useEffect</code> による状態同期をやめる。</li>
 <li>コロケーション: 状態は使う場所の最も近くに置き、リフトアップは必要最小限にとどめる。</li>
 <li>合成を優先する: Prop Drillingを見たらContextを作る前に <code>children</code> を検討する。</li>
 <li>適材適所のツール選定: URLはRouter、APIはTanStack Query、複雑なUIはZustand/Contextに割り当てる。</li>
 </ol>
 
-<p>この判断基準をチームや個人開発で徹底することで、保守性が高く、無駄な再レンダリングのない洗練されたReactアプリケーションを実現できます。</p>
+<p>この判断基準をチームや個人開発で徹底することで、保守性が高く、無駄な再レンダリングのない洗練されたReactアプリケーションを実現できます。できると思います。できたらいいな。</p>
 
 <h2 id="参考文献">参考文献</h2>
 
