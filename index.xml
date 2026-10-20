@@ -7,10 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© Copyright ysko</copyright>
-    <lastBuildDate>Mon, 24 Aug 2026 10:07:15 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 20 Oct 2026 10:48:28 +0900</lastBuildDate>
     
 	<atom:link href="https://ysko909.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>React.jsにおける「状態の置き場所」方針</title>
+      <link>https://ysko909.github.io/posts/fundamentals-of-managing-states/</link>
+      <pubDate>Tue, 20 Oct 2026 10:48:28 +0900</pubDate>
+      
+      <guid>https://ysko909.github.io/posts/fundamentals-of-managing-states/</guid>
+      <description>はじめに Reactの基礎（JSX、useState、useEffect、コンポーネント分割、基本的なAPI通信）を習得したころ、実務で中〜大規模なフロントエンド開発に携わり始めると、次のような問題に直面しました。
+ 「親コンポーネントに useState が20数個並び、何がどこで更新されているのか追えない」 「Propsのバケツリレー（Prop Drilling）を回避するために安易にContextを作ったら、関係ない画面まで頻繁に再レンダリングされて動作が重くなった」 「APIからフェッチしたデータをとりあえずZustandやReduxのグローバルストアに保存した結果、キャッシュの整合性管理でバグが頻発した」 「URLで共有したい検索条件やページ番号を useState で持ったため、リロードやブラウザバックで状態がリセットされてしまい使い勝手が悪い」  実は、これらはすべて「状態の種類に応じた適切な置き場所」を設計できていないことに起因しています。React開発における設計品質は、コンポーネントツリーの分割テクニックやライブラリ選定もさることながら、「状態の責務と所有権（State Ownership）をどこに配置するか」という地味なところでも結構決まる、ということがわかりました。
+そこで本記事では、状態の分類法、配置の判断基準、避けるべきアンチパターン、そして実際の業務で使える決定フローチャートを検討してみます。
+状態（State）を4つの種類に分類する 「状態の置き場所」で迷う原因は、性質の異なる状態をすべて同一の useState（あるいはグローバルストア）で管理しようとすることにあります。まあ「性質が違うのに、同じモノとして扱うのは無理があるよね」という当たり前体操です。
+実務におけるReactの状態は、大きく以下の4つに分類されるかと思います。
+   分類 内容     1. Local UI State モーダル開閉、アコーディオン展開、入力途中のフォーム値   2. URL State 検索クエリ、選択中タブ、ソート順、ページネーション   3. Server Cache State ユーザー一覧、記事詳細、APIレスポンスの非同期データ   4. Global Client State 認証セッション、UIテーマ、グローバル通知（Toast）    これらをそれぞれ別物としてちゃんと分類して、それぞれを適切に扱おうねというのが大雑把な方針となります。
+なぜ分類が必要なのか？ 例えば「検索条件」は URL State にあるべきです。これを useState や Context に置くと、URLを共有した際に相手に同じ画面が表示されず、ブラウザバックの挙動も壊れます。また、「APIから取得したデータ」は Server Cache State であり、本来クライアントが真の所有権（Ownership）を持つデータではありません。これらを区別せずに useState や Redux に詰め込むことが、状態管理の複雑化を招く根本原因です。</description>
+    </item>
     
     <item>
       <title>Wordで「ファイルを開こうとして、エラーが発生しました。」と表示される原因と回避方法</title>

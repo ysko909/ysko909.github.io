@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>React.jsにおける「状態の置き場所」方針 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="React.jsにおける「状態の置き場所」方針" />
+<meta property="og:description" content="はじめに Reactの基礎（JSX、useState、useEffect、コンポーネント分割、基本的なAPI通信）を習得したころ、実務で中〜大規模なフロントエンド開発に携わり始めると、次のような問題に直面しました。
+ 「親コンポーネントに useState が20数個並び、何がどこで更新されているのか追えない」 「Propsのバケツリレー（Prop Drilling）を回避するために安易にContextを作ったら、関係ない画面まで頻繁に再レンダリングされて動作が重くなった」 「APIからフェッチしたデータをとりあえずZustandやReduxのグローバルストアに保存した結果、キャッシュの整合性管理でバグが頻発した」 「URLで共有したい検索条件やページ番号を useState で持ったため、リロードやブラウザバックで状態がリセットされてしまい使い勝手が悪い」  実は、これらはすべて「状態の種類に応じた適切な置き場所」を設計できていないことに起因しています。React開発における設計品質は、コンポーネントツリーの分割テクニックやライブラリ選定もさることながら、「状態の責務と所有権（State Ownership）をどこに配置するか」という地味なところでも結構決まる、ということがわかりました。
+そこで本記事では、状態の分類法、配置の判断基準、避けるべきアンチパターン、そして実際の業務で使える決定フローチャートを検討してみます。
+状態（State）を4つの種類に分類する 「状態の置き場所」で迷う原因は、性質の異なる状態をすべて同一の useState（あるいはグローバルストア）で管理しようとすることにあります。まあ「性質が違うのに、同じモノとして扱うのは無理があるよね」という当たり前体操です。
+実務におけるReactの状態は、大きく以下の4つに分類されるかと思います。
+   分類 内容     1. Local UI State モーダル開閉、アコーディオン展開、入力途中のフォーム値   2. URL State 検索クエリ、選択中タブ、ソート順、ページネーション   3. Server Cache State ユーザー一覧、記事詳細、APIレスポンスの非同期データ   4. Global Client State 認証セッション、UIテーマ、グローバル通知（Toast）    これらをそれぞれ別物としてちゃんと分類して、それぞれを適切に扱おうねというのが大雑把な方針となります。
+なぜ分類が必要なのか？ 例えば「検索条件」は URL State にあるべきです。これを useState や Context に置くと、URLを共有した際に相手に同じ画面が表示されず、ブラウザバックの挙動も壊れます。また、「APIから取得したデータ」は Server Cache State であり、本来クライアントが真の所有権（Ownership）を持つデータではありません。これらを区別せずに useState や Redux に詰め込むことが、状態管理の複雑化を招く根本原因です。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ysko909.github.io/posts/fundamentals-of-managing-states/" /><meta property="article:published_time" content="2026-10-20T10:48:28&#43;09:00"/>
+<meta property="article:modified_time" content="2026-10-20T10:48:28&#43;09:00"/><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="React.jsにおける「状態の置き場所」方針"/>
+<meta name="twitter:description" content="はじめに Reactの基礎（JSX、useState、useEffect、コンポーネント分割、基本的なAPI通信）を習得したころ、実務で中〜大規模なフロントエンド開発に携わり始めると、次のような問題に直面しました。
+ 「親コンポーネントに useState が20数個並び、何がどこで更新されているのか追えない」 「Propsのバケツリレー（Prop Drilling）を回避するために安易にContextを作ったら、関係ない画面まで頻繁に再レンダリングされて動作が重くなった」 「APIからフェッチしたデータをとりあえずZustandやReduxのグローバルストアに保存した結果、キャッシュの整合性管理でバグが頻発した」 「URLで共有したい検索条件やページ番号を useState で持ったため、リロードやブラウザバックで状態がリセットされてしまい使い勝手が悪い」  実は、これらはすべて「状態の種類に応じた適切な置き場所」を設計できていないことに起因しています。React開発における設計品質は、コンポーネントツリーの分割テクニックやライブラリ選定もさることながら、「状態の責務と所有権（State Ownership）をどこに配置するか」という地味なところでも結構決まる、ということがわかりました。
+そこで本記事では、状態の分類法、配置の判断基準、避けるべきアンチパターン、そして実際の業務で使える決定フローチャートを検討してみます。
+状態（State）を4つの種類に分類する 「状態の置き場所」で迷う原因は、性質の異なる状態をすべて同一の useState（あるいはグローバルストア）で管理しようとすることにあります。まあ「性質が違うのに、同じモノとして扱うのは無理があるよね」という当たり前体操です。
+実務におけるReactの状態は、大きく以下の4つに分類されるかと思います。
+   分類 内容     1. Local UI State モーダル開閉、アコーディオン展開、入力途中のフォーム値   2. URL State 検索クエリ、選択中タブ、ソート順、ページネーション   3. Server Cache State ユーザー一覧、記事詳細、APIレスポンスの非同期データ   4. Global Client State 認証セッション、UIテーマ、グローバル通知（Toast）    これらをそれぞれ別物としてちゃんと分類して、それぞれを適切に扱おうねというのが大雑把な方針となります。
+なぜ分類が必要なのか？ 例えば「検索条件」は URL State にあるべきです。これを useState や Context に置くと、URLを共有した際に相手に同じ画面が表示されず、ブラウザバックの挙動も壊れます。また、「APIから取得したデータ」は Server Cache State であり、本来クライアントが真の所有権（Ownership）を持つデータではありません。これらを区別せずに useState や Redux に詰め込むことが、状態管理の複雑化を招く根本原因です。"/>
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,300italic,400italic|Raleway:200,300"
+		rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://ysko909.github.io/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="https://ysko909.github.io/css/dark.css"
+		media="(prefers-color-scheme: dark)"  />
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script><script src="https://ysko909.github.io/js/main.js"></script>
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+	<script data-ad-client="ca-pub-2615583270378842" async
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+	<div class="container wrapper post">
+		<div class="header">
+	<h1 class="site-title">頑張らないために頑張る</h1>
+	<div class="site-description"><h2>ゆるく頑張ります</h2><nav class="nav social">
+			<ul class="flat"><a href="https://twitter.com/unknown_strings" title="Twitter"><i data-feather="twitter"></i></a><a href="https://github.com/ysko909" title="Github"><i data-feather="github"></i></a><a href="/index.xml" title="RSS"><i data-feather="rss"></i></a></ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+			<li>
+				<a href="/">Home</a>
+			</li>
+			
+			<li>
+				<a href="/about">About</a>
+			</li>
+			
+			<li>
+				<a href="https://forms.gle/mtbEheX7qDrZfKPP8">Contact</a>
+			</li>
+			
+			<li>
+				<a href="ppolicy/">Privacy policy</a>
+			</li>
+			
+			<li>
+				<a href=""></a>
+			</li>
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post-header">
+			<h1 class="title">React.jsにおける「状態の置き場所」方針</h1>
+			<div class="meta">Posted at &mdash; Oct 20, 2026</div>
+		</div>
+
+		<div class="markdown">
+			
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>Reactの基礎（JSX、<code>useState</code>、<code>useEffect</code>、コンポーネント分割、基本的なAPI通信）を習得したころ、実務で中〜大規模なフロントエンド開発に携わり始めると、次のような問題に直面しました。</p>
+
+<ul>
+<li>「親コンポーネントに <code>useState</code> が20数個並び、何がどこで更新されているのか追えない」</li>
+<li>「Propsのバケツリレー（Prop Drilling）を回避するために安易にContextを作ったら、関係ない画面まで頻繁に再レンダリングされて動作が重くなった」</li>
+<li>「APIからフェッチしたデータをとりあえずZustandやReduxのグローバルストアに保存した結果、キャッシュの整合性管理でバグが頻発した」</li>
+<li>「URLで共有したい検索条件やページ番号を <code>useState</code> で持ったため、リロードやブラウザバックで状態がリセットされてしまい使い勝手が悪い」</li>
+</ul>
+
+<p>実は、これらはすべて「状態の種類に応じた適切な置き場所」を設計できていないことに起因しています。React開発における設計品質は、コンポーネントツリーの分割テクニックやライブラリ選定もさることながら、「状態の責務と所有権（State Ownership）をどこに配置するか」という地味なところでも結構決まる、ということがわかりました。</p>
+
+<p>そこで本記事では、状態の分類法、配置の判断基準、避けるべきアンチパターン、そして実際の業務で使える決定フローチャートを検討してみます。</p>
+
+<h2 id="状態-state-を4つの種類に分類する">状態（State）を4つの種類に分類する</h2>
+
+<p>「状態の置き場所」で迷う原因は、性質の異なる状態をすべて同一の <code>useState</code>（あるいはグローバルストア）で管理しようとすることにあります。まあ「性質が違うのに、同じモノとして扱うのは無理があるよね」という当たり前体操です。</p>
+
+<p>実務におけるReactの状態は、大きく以下の4つに分類されるかと思います。</p>
+
+<table>
+<thead>
+<tr>
+<th>分類</th>
+<th>内容</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1. Local UI State</td>
+<td>モーダル開閉、アコーディオン展開、入力途中のフォーム値</td>
+</tr>
+
+<tr>
+<td>2. URL State</td>
+<td>検索クエリ、選択中タブ、ソート順、ページネーション</td>
+</tr>
+
+<tr>
+<td>3. Server Cache State</td>
+<td>ユーザー一覧、記事詳細、APIレスポンスの非同期データ</td>
+</tr>
+
+<tr>
+<td>4. Global Client State</td>
+<td>認証セッション、UIテーマ、グローバル通知（Toast）</td>
+</tr>
+</tbody>
+</table>
+
+<p>これらをそれぞれ別物としてちゃんと分類して、それぞれを適切に扱おうねというのが大雑把な方針となります。</p>
+
+<h3 id="なぜ分類が必要なのか">なぜ分類が必要なのか？</h3>
+
+<p>例えば「検索条件」は URL State にあるべきです。これを <code>useState</code> や Context に置くと、URLを共有した際に相手に同じ画面が表示されず、ブラウザバックの挙動も壊れます。また、「APIから取得したデータ」は Server Cache State であり、本来クライアントが真の所有権（Ownership）を持つデータではありません。これらを区別せずに <code>useState</code> や Redux に詰め込むことが、状態管理の複雑化を招く根本原因です。</p>
+
+<h2 id="原則1-導出可能な値はstateにしない-計算値の徹底">原則1：導出可能な値はStateにしない（計算値の徹底）</h2>
+
+<p>結構やってしまうアンチパターンが、「他の値から計算できる値を <code>useState</code> や <code>useEffect</code> でわざわざ管理する」ことです。「なんだ、そんなことか」と思うことなかれ、割と見たりします。</p>
+
+<h3 id="悪い例-useeffect-による状態の同期">悪い例：<code>useEffect</code> による状態の同期</h3>
+
+<p>姓名からフルネームを生成するために、StateとEffectを乱用するケースです。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-tsx" data-lang="tsx"><span style="color:#00f">import</span> { useState, useEffect } from <span style="color:#a31515">&#34;react&#34;</span>;
+
+<span style="color:#00f">export</span> <span style="color:#00f">function</span> UserProfile() {
+  <span style="color:#00f">const</span> [firstName, setFirstName] = useState(<span style="color:#a31515">&#34;太郎&#34;</span>);
+  <span style="color:#00f">const</span> [lastName, setLastName] = useState(<span style="color:#a31515">&#34;山田&#34;</span>);
+  <span style="color:#00f">const</span> [fullName, setFullName] = useState(<span style="color:#a31515">&#34;&#34;</span>);
+
+  <span style="color:#008000">// アンチパターン: 状態変更を検知して別の状態を更新する
+</span><span style="color:#008000"></span>  useEffect(() =&gt; {
+    setFullName(<span style="color:#a31515">`</span><span style="color:#a31515">${</span>lastName<span style="color:#a31515">}</span><span style="color:#a31515"> </span><span style="color:#a31515">${</span>firstName<span style="color:#a31515">}</span><span style="color:#a31515">`</span>);
+  }, [firstName, lastName]);
+
+  <span style="color:#00f">return</span> &lt;div&gt;{fullName}&lt;<span style="">/div&gt;;</span>
+}</code></pre></div>
+<p>この実装には深刻な問題があります。
+1. 不要な再レンダリング: <code>firstName</code> の変更によるレンダー → <code>useEffect</code> 実行 → <code>setFullName</code> による追加の再レンダー、と常に2回のレンダリングサイクルが発生します。
+2. 同期ズレ（State Inconsistency）: 描画が一瞬古い状態のままになり、画面のチラつきや競合状態（Race Condition）の原因になります。</p>
+
+<h3 id="良い例-レンダー中の直接計算">良い例：レンダー中の直接計算</h3>
+
+<p>React公式ドキュメントの「<a href="https://react.dev/learn/you-might-not-need-an-effect">You Might Not Need an Effect</a>」でも明言されている通り、既存の Props や State から計算できるものは、State にしてはいけません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-tsx" data-lang="tsx"><span style="color:#00f">import</span> { useState } from <span style="color:#a31515">&#34;react&#34;</span>;
+
+<span style="color:#00f">export</span> <span style="color:#00f">function</span> UserProfile() {
+  <span style="color:#00f">const</span> [firstName, setFirstName] = useState(<span style="color:#a31515">&#34;太郎&#34;</span>);
+  <span style="color:#00f">const</span> [lastName, setLastName] = useState(<span style="color:#a31515">&#34;山田&#34;</span>);
+
+  <span style="color:#008000">// レンダー中に直接計算する（Single Source of Truth の維持）
+</span><span style="color:#008000"></span>  <span style="color:#00f">const</span> fullName = <span style="color:#a31515">`</span><span style="color:#a31515">${</span>lastName<span style="color:#a31515">}</span><span style="color:#a31515"> </span><span style="color:#a31515">${</span>firstName<span style="color:#a31515">}</span><span style="color:#a31515">`</span>;
+
+  <span style="color:#00f">return</span> &lt;div&gt;{fullName}&lt;<span style="">/div&gt;;</span>
+}</code></pre></div>
+<p>計算コストが極めて高い処理（数千件の配列操作など）のみ、<code>useMemo</code> の使用を検討します。通常の文字列結合や単純なフィルタリング程度であれば、レンダーごとの直接計算で十分高速です。</p>
+
+<h2 id="原則2-状態は-可能な限り下-に置く-colocation">原則2：状態は「可能な限り下」に置く（Colocation）</h2>
+
+<p>「状態の持ち上げ（Lifting State Up）」を覚えると次に陥る罠が、「将来共有するかもしれないから」とすべての状態を親コンポーネント（<code>App</code> や <code>Page</code>）へ持ち上げてしまう、過剰リフトアップです。何でもかんでも持ち上げられたら、親だって困るという話です。</p>
+
+<h3 id="悪い例-過剰なリフトアップによる親の肥大化">悪い例：過剰なリフトアップによる親の肥大化</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-tsx" data-lang="tsx"><span style="color:#00f">export</span> <span style="color:#00f">function</span> ProductPage() {
+  <span style="color:#008000">// 親が子のローカルなUI状態まで抱え込んでいる
+</span><span style="color:#008000"></span>  <span style="color:#00f">const</span> [isModalOpen, setIsModalOpen] = useState(<span style="color:#00f">false</span>);
+  <span style="color:#00f">const</span> [tooltipVisible, setTooltipVisible] = useState(<span style="color:#00f">false</span>);
+  <span style="color:#00f">const</span> [searchTerm, setSearchTerm] = useState(<span style="color:#a31515">&#34;&#34;</span>);
+
+  <span style="color:#00f">return</span> (
+    &lt;div&gt;
+      &lt;SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} <span style="">/&gt;</span>
+      &lt;ProductList onOpenModal={() =&gt; setIsModalOpen(<span style="color:#00f">true</span>)} <span style="">/&gt;</span>
+      &lt;HelpTooltip visible={tooltipVisible} onToggle={setTooltipVisible} <span style="">/&gt;</span>
+      &lt;ProductModal isOpen={isModalOpen} onClose={() =&gt; setIsModalOpen(<span style="color:#00f">false</span>)} <span style="">/&gt;</span>
+    &lt;<span style="">/div&gt;</span>
+  );
+}</code></pre></div>
+<p>親コンポーネントが状態を持つと、例えばツールチップを開閉しただけで <code>ProductList</code> を含むページ全体が再レンダリングされます。</p>
+
+<h3 id="良い例-状態のコロケーション-colocation">良い例：状態のコロケーション（Colocation）</h3>
+
+<p>状態は、それを利用する最も末端のコンポーネント（または最小限のサブツリー）に閉じ込めます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-tsx" data-lang="tsx"><span style="color:#008000">// ツールチップの状態は HelpTooltip 自身が所有する
+</span><span style="color:#008000"></span><span style="color:#00f">export</span> <span style="color:#00f">function</span> HelpTooltip() {
+  <span style="color:#00f">const</span> [isVisible, setIsVisible] = useState(<span style="color:#00f">false</span>);
+
+  <span style="color:#00f">return</span> (
+    &lt;div&gt;
+      &lt;button onClick={() =&gt; setIsVisible((v) =&gt; !v)}&gt;?&lt;<span style="">/button&gt;</span>
+      {isVisible &amp;&amp; &lt;div className=<span style="color:#a31515">&#34;tooltip&#34;</span>&gt;<span style="">ヘルプテキスト</span>&lt;<span style="">/div&gt;}</span>
+    &lt;<span style="">/div&gt;</span>
+  );
+}</code></pre></div>
+<p>状態を共有する必要が生じたその瞬間にだけ、最も近い共通祖先（LCA: Lowest Common Ancestor）に持ち上げます。それまではローカルに留めておくのが大原則です。</p>
+
+<h2 id="原則3-prop-drilling対策は-context-の前に-コンポーネントの合成-を検討する">原則3：Prop Drilling対策は「Context」の前に「コンポーネントの合成」を検討する</h2>
+
+<p>Propsのバケツリレーが発生した際、 <code>createContext</code> を使おうとするケースを見ます。しかし、React公式ドキュメントでは Contextを適用する前に<a href="https://react.dev/learn/passing-data-deeply-with-context">「コンポーネントの合成（Component Composition）」を試すこと</a> が推奨されています。</p>
+
+<h3 id="悪い例-propsを中継するためだけのcontext利用">悪い例：Propsを中継するためだけのContext利用</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">Page (user を持っている)
+ └ Layout
+     └ Header
+         └ UserAvatar (user を使いたい)</code></pre></div>
+<p>これを解決するためにグローバルな Context を作成すると、コンポーネントの依存関係が暗黙的になり、テストや再利用が難しくなります。</p>
+
+<h3 id="良い例-children-やコンポーネントスロットを利用した合成">良い例：<code>children</code> やコンポーネントスロットを利用した合成</h3>
+
+<p><code>Layout</code> や <code>Header</code> に <code>user</code> を中継させるのではなく、末端のコンポーネントを親側で組み立てて <code>children</code> や Props として渡します。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-tsx" data-lang="tsx"><span style="color:#00f">import</span> { ReactNode } from <span style="color:#a31515">&#34;react&#34;</span>;
+
+type User = { id: <span style="color:#2b91af">string</span>; name: <span style="color:#2b91af">string</span>; avatarUrl: <span style="color:#2b91af">string</span> };
+
+<span style="color:#008000">// Layout は中身（children）を知る必要がない
+</span><span style="color:#008000"></span><span style="color:#00f">function</span> Layout({ header, children }: { header: <span style="color:#2b91af">ReactNode</span>; children: <span style="color:#2b91af">ReactNode</span> }) {
+  <span style="color:#00f">return</span> (
+    &lt;div className=<span style="color:#a31515">&#34;layout&#34;</span>&gt;
+      &lt;header&gt;{header}&lt;<span style="">/header&gt;</span>
+      &lt;main&gt;{children}&lt;<span style="">/main&gt;</span>
+    &lt;<span style="">/div&gt;</span>
+  );
+}
+
+<span style="color:#00f">function</span> UserAvatar({ user }: { user: <span style="color:#2b91af">User</span> }) {
+  <span style="color:#00f">return</span> &lt;img src={user.avatarUrl} alt={user.name} <span style="">/&gt;;</span>
+}
+
+<span style="color:#008000">// 親（Page）で結合する
+</span><span style="color:#008000"></span><span style="color:#00f">export</span> <span style="color:#00f">function</span> Page({ currentUser }: { currentUser: <span style="color:#2b91af">User</span> }) {
+  <span style="color:#00f">return</span> (
+    &lt;Layout
+      header={&lt;UserAvatar user={currentUser} <span style="">/&gt;}</span>
+    &gt;
+      &lt;div&gt;<span style="">メインコンテンツ</span>&lt;<span style="">/div&gt;</span>
+    &lt;<span style="">/Layout&gt;</span>
+  );
+}</code></pre></div>
+<p>このパターン（制御の反転: Inversion of Control）を使うことで、中間コンポーネントを汚染せずにProp Drillingを解消できます。</p>
+
+<h2 id="原則4-contextを正しく使うための2大ルール">原則4：Contextを正しく使うための2大ルール</h2>
+
+<p>コンポーネント合成では解決できず、アプリ内の広範囲でデータを共有する必要がある場合（テーマ、認証ユーザー、多言語化など）に初めて Context を利用します。</p>
+
+<p>ただし、実務でContextを使う際は以下の2点を徹底しなければなりません。</p>
+
+<h3 id="ルール-1-カスタムフックで-provider-外の利用を防止する">ルール(1)：カスタムフックで Provider 外の利用を防止する</h3>
+
+<p><code>useContext(MyContext)</code> を直接呼ぶのではなく、安全なカスタムフック経由で公開します。</p>
+
+<h3 id="ルール-2-state-値-と-dispatch-更新関数-を分離する">ルール(2)：State（値）と Dispatch（更新関数）を分離する</h3>
+
+<p>Reactの Context は、Provider に渡された <code>value</code> の参照が変わると、そのContextを <code>useContext</code> しているすべてのコンポーネントが再レンダリングされます。更新関数と状態値を同じContextにまとめると、更新関数しか使っていないコンポーネントまで巻き添えで再描画されます。</p>
+
+<h3 id="実務レベルの-context-実装例">実務レベルの Context 実装例</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-tsx" data-lang="tsx"><span style="color:#00f">import</span> { createContext, useContext, useState, ReactNode, Dispatch, SetStateAction } from <span style="color:#a31515">&#34;react&#34;</span>;
+
+type Theme = <span style="color:#a31515">&#34;light&#34;</span> | <span style="color:#a31515">&#34;dark&#34;</span>;
+
+<span style="color:#008000">// 1. State用 と Dispatch用 のContextを分離
+</span><span style="color:#008000"></span><span style="color:#00f">const</span> ThemeStateContext = createContext&lt;Theme | <span style="color:#00f">undefined</span>&gt;(<span style="color:#00f">undefined</span>);
+<span style="color:#00f">const</span> ThemeDispatchContext = createContext&lt;Dispatch&lt;SetStateAction&lt;Theme&gt;&gt; | <span style="color:#00f">undefined</span>&gt;(<span style="color:#00f">undefined</span>);
+
+<span style="color:#00f">export</span> <span style="color:#00f">function</span> ThemeProvider({ children }: { children: <span style="color:#2b91af">ReactNode</span> }) {
+  <span style="color:#00f">const</span> [theme, setTheme] = useState&lt;Theme&gt;(<span style="color:#a31515">&#34;light&#34;</span>);
+
+  <span style="color:#00f">return</span> (
+    &lt;ThemeStateContext.Provider value={theme}&gt;
+      &lt;ThemeDispatchContext.Provider value={setTheme}&gt;
+        {children}
+      &lt;<span style="">/ThemeDispatchContext.Provider&gt;</span>
+    &lt;<span style="">/ThemeStateContext.Provider&gt;</span>
+  );
+}
+
+<span style="color:#008000">// 2. カスタムフックでラップし、Provider漏れを型安全に検知
+</span><span style="color:#008000"></span><span style="color:#00f">export</span> <span style="color:#00f">function</span> useTheme(): Theme {
+  <span style="color:#00f">const</span> context = useContext(ThemeStateContext);
+  <span style="color:#00f">if</span> (context === <span style="color:#00f">undefined</span>) {
+    <span style="color:#00f">throw</span> <span style="color:#00f">new</span> Error(<span style="color:#a31515">&#34;useTheme must be used within a ThemeProvider&#34;</span>);
+  }
+  <span style="color:#00f">return</span> context;
+}
+
+<span style="color:#00f">export</span> <span style="color:#00f">function</span> useSetTheme(): Dispatch&lt;SetStateAction&lt;Theme&gt;&gt; {
+  <span style="color:#00f">const</span> context = useContext(ThemeDispatchContext);
+  <span style="color:#00f">if</span> (context === <span style="color:#00f">undefined</span>) {
+    <span style="color:#00f">throw</span> <span style="color:#00f">new</span> Error(<span style="color:#a31515">&#34;useSetTheme must be used within a ThemeProvider&#34;</span>);
+  }
+  <span style="color:#00f">return</span> context;
+}</code></pre></div>
+<h4 id="利用側">利用側</h4>
+
+<p>ボタンコンポーネントは更新関数しか購読しないため、テーマが切り替わっても不要な再レンダリングが発生しません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-tsx" data-lang="tsx"><span style="color:#00f">export</span> <span style="color:#00f">function</span> ThemeToggleButton() {
+  <span style="color:#008000">// テーマ自体の値（light/dark）は購読せず、セッターだけを取得
+</span><span style="color:#008000"></span>  <span style="color:#00f">const</span> setTheme = useSetTheme();
+
+  <span style="color:#00f">return</span> (
+    &lt;button onClick={() =&gt; setTheme((prev) =&gt; (prev === <span style="color:#a31515">&#34;light&#34;</span> ? <span style="color:#a31515">&#34;dark&#34;</span> : <span style="color:#a31515">&#34;light&#34;</span>))}&gt;
+      <span style="">テーマ切り替え</span>
+    &lt;<span style="">/button&gt;</span>
+  );
+}</code></pre></div>
+<h2 id="原則5-url-state-と-server-state-を外部ライブラリに任せる">原則5：URL State と Server State を外部ライブラリに任せる</h2>
+
+<p>実務アプリケーションにおける「状態」の大部分は、純粋なクライアント状態ではなく URL か サーバーキャッシュ です。これらを <code>useState</code> や Zustand で自作するのは車輪の再発明であり、バグの温床になります。</p>
+
+<h3 id="a-検索条件-フィルター-タブは-url-に置く">A. 検索条件・フィルター・タブは「URL」に置く</h3>
+
+<p>URLに状態を持たせることで、以下の恩恵を自動的に享受できます。</p>
+
+<ul>
+<li>ユーザーがURLをコピーして他人に共有できる（Deep Linking）</li>
+<li>ブラウザの「戻る」「進む」が期待通りに動作する</li>
+<li>ページをリロードしても状態が維持される</li>
+</ul>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-tsx" data-lang="tsx"><span style="color:#008000">// React Router や Next.js の useSearchParams を利用する例
+</span><span style="color:#008000"></span><span style="color:#00f">import</span> { useSearchParams } from <span style="color:#a31515">&#34;react-router-dom&#34;</span>;
+
+<span style="color:#00f">export</span> <span style="color:#00f">function</span> SearchFilter() {
+  <span style="color:#00f">const</span> [searchParams, setSearchParams] = useSearchParams();
+  <span style="color:#00f">const</span> currentCategory = searchParams.get(<span style="color:#a31515">&#34;category&#34;</span>) ?? <span style="color:#a31515">&#34;all&#34;</span>;
+
+  <span style="color:#00f">const</span> handleCategoryChange = (newCategory: <span style="color:#2b91af">string</span>) =&gt; {
+    setSearchParams((prev) =&gt; {
+      prev.set(<span style="color:#a31515">&#34;category&#34;</span>, newCategory);
+      prev.set(<span style="color:#a31515">&#34;page&#34;</span>, <span style="color:#a31515">&#34;1&#34;</span>); <span style="color:#008000">// 絞り込み時はページをリセット
+</span><span style="color:#008000"></span>      <span style="color:#00f">return</span> prev;
+    });
+  };
+
+  <span style="color:#00f">return</span> (
+    &lt;select
+      value={currentCategory}
+      onChange={(e) =&gt; handleCategoryChange(e.target.value)}
+    &gt;
+      &lt;option value=<span style="color:#a31515">&#34;all&#34;</span>&gt;<span style="">すべて</span>&lt;<span style="">/option&gt;</span>
+      &lt;option value=<span style="color:#a31515">&#34;books&#34;</span>&gt;<span style="">書籍</span>&lt;<span style="">/option&gt;</span>
+      &lt;option value=<span style="color:#a31515">&#34;electronics&#34;</span>&gt;<span style="">家電</span>&lt;<span style="">/option&gt;</span>
+    &lt;<span style="">/select&gt;</span>
+  );
+}</code></pre></div>
+<h3 id="b-サーバーデータは-tanstack-query-react-query-や-swr-に任せる">B. サーバーデータは「TanStack Query（React Query）」や「SWR」に任せる</h3>
+
+<p>APIからフェッチしたデータ（Server State）を <code>useState</code> と <code>useEffect</code> で管理しようとすると、キャッシュ破棄、重複リクエストの排除、ローディング/エラー状態の管理コードでコンポーネントが埋め尽くされます。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-tsx" data-lang="tsx"><span style="color:#00f">import</span> { useQuery } from <span style="color:#a31515">&#34;@tanstack/react-query&#34;</span>;
+
+async <span style="color:#00f">function</span> fetchUser(id: <span style="color:#2b91af">string</span>) {
+  <span style="color:#00f">const</span> res = await fetch(<span style="color:#a31515">`/api/users/</span><span style="color:#a31515">${</span>id<span style="color:#a31515">}</span><span style="color:#a31515">`</span>);
+  <span style="color:#00f">if</span> (!res.ok) <span style="color:#00f">throw</span> <span style="color:#00f">new</span> Error(<span style="color:#a31515">&#34;ネットワークエラー&#34;</span>);
+  <span style="color:#00f">return</span> res.json();
+}
+
+<span style="color:#00f">export</span> <span style="color:#00f">function</span> UserDetail({ userId }: { userId: <span style="color:#2b91af">string</span> }) {
+  <span style="color:#008000">// キャッシュ管理、再フェッチ、ローディング状態はすべてライブラリが担当
+</span><span style="color:#008000"></span>  <span style="color:#00f">const</span> { data: <span style="color:#2b91af">user</span>, isLoading, error } = useQuery({
+    queryKey: [<span style="color:#a31515">&#34;users&#34;</span>, userId],
+    queryFn: () =&gt; fetchUser(userId),
+    staleTime: <span style="color:#2b91af">1000</span> * 60 * 5, <span style="color:#008000">// 5分間はキャッシュを新鮮とみなす
+</span><span style="color:#008000"></span>  });
+
+  <span style="color:#00f">if</span> (isLoading) <span style="color:#00f">return</span> &lt;div&gt;<span style="">読み込み中</span>...&lt;<span style="">/div&gt;;</span>
+  <span style="color:#00f">if</span> (error) <span style="color:#00f">return</span> &lt;div&gt;<span style="">エラーが発生しました</span>&lt;<span style="">/div&gt;;</span>
+
+  <span style="color:#00f">return</span> &lt;div&gt;{user.name}&lt;<span style="">/div&gt;;</span>
+}</code></pre></div>
+<h2 id="原則6-zustand-redux-等の外部ストアはいつ導入すべきか">原則6：Zustand / Redux 等の外部ストアはいつ導入すべきか？</h2>
+
+<p>グローバルステート管理ライブラリ（Zustand、Redux Toolkit、Jotai等）は非常に強力ですが、導入すべきケースは限られています。</p>
+
+<h3 id="導入すべきケース">導入すべきケース</h3>
+
+<ol>
+<li>高頻度で更新され、かつツリーの深い複数箇所で参照されるクライアント状態
+
+<ul>
+<li>リッチテキストエディタの選択範囲やアンドゥ/リドゥ履歴</li>
+<li>リアルタイム共同編集のカーソル位置</li>
+<li>複雑なドラッグ＆ドロップUIの状態</li>
+</ul></li>
+<li>Contextによる再レンダリング最適化の限界
+
+<ul>
+<li>ContextだとProvider配下全体が巻き込まれるが、セレクタ（<code>useStore(state =&gt; state.item)</code>）を使って必要なコンポーネントだけをピンポイントで再描画したい場合。</li>
+</ul></li>
+</ol>
+
+<p>逆に言えば、これくらい頻度や難易度が高いケースでなければ、外部ストアを使う理由はさほど多くない、ということでもあります。</p>
+
+<h3 id="zustand-による適切な軽量グローバルストア例">Zustand による適切な軽量グローバルストア例</h3>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-tsx" data-lang="tsx"><span style="color:#00f">import</span> { create } from <span style="color:#a31515">&#34;zustand&#34;</span>;
+
+type Notification = { id: <span style="color:#2b91af">string</span>; message: <span style="color:#2b91af">string</span> };
+
+type NotificationStore = {
+  notifications: <span style="color:#2b91af">Notification</span>[];
+  addNotification: (message: <span style="color:#2b91af">string</span>) =&gt; <span style="color:#00f">void</span>;
+  removeNotification: (id: <span style="color:#2b91af">string</span>) =&gt; <span style="color:#00f">void</span>;
+};
+
+<span style="color:#00f">export</span> <span style="color:#00f">const</span> useNotificationStore = create&lt;NotificationStore&gt;((set) =&gt; ({
+  notifications: [],
+  addNotification: (message) =&gt;
+    set((state) =&gt; ({
+      notifications: [
+        ...state.notifications,
+        { id: <span style="color:#2b91af">crypto.randomUUID</span>(), message },
+      ],
+    })),
+  removeNotification: (id) =&gt;
+    set((state) =&gt; ({
+      notifications: <span style="color:#2b91af">state.notifications.filter</span>((n) =&gt; n.id !== id),
+    })),
+}));</code></pre></div>
+<h4 id="セレクタを用いた効率的な購読">セレクタを用いた効率的な購読</h4>
+
+<p>コンポーネントは必要なプロパティのみをセレクタで指定します。関係ない状態が変化しても再レンダリングされません。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-tsx" data-lang="tsx"><span style="color:#008000">// 通知追加ボタン: notifications 配列の変更では再レンダリングされない
+</span><span style="color:#008000"></span><span style="color:#00f">export</span> <span style="color:#00f">function</span> TriggerButton() {
+  <span style="color:#00f">const</span> addNotification = useNotificationStore((state) =&gt; state.addNotification);
+
+  <span style="color:#00f">return</span> (
+    &lt;button onClick={() =&gt; addNotification(<span style="color:#a31515">&#34;タスクが完了しました&#34;</span>)}&gt;
+      <span style="">通知を表示</span>
+    &lt;<span style="">/button&gt;</span>
+  );
+}</code></pre></div>
+<h2 id="実務で迷わない-状態の置き場所-決定デシジョンツリー">実務で迷わない「状態の置き場所」決定デシジョンツリー</h2>
+
+<p>新しい状態を定義する際は、以下のフローチャートを上から順に判定してください。</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">[新しいデータを定義したい]
+  │
+  ├─ Q1. そのデータはサーバー（API）に原本があるか？
+  │    └─ YES: ──▶ 【Server Cache】TanStack Query / SWR
+  │
+  ├─ Q2. ユーザーがリロードしたりURLを共有したときに復元すべきか？
+  │      （検索ワード、ソート順、選択中タブ、ページ番号など）
+  │    └─ YES: ──▶ 【URL State】useSearchParams (Router)
+  │
+  ├─ Q3. 他のPropsやStateから計算可能か？
+  │    └─ YES: ──▶ 【計算値】変数としてレンダー中に直接計算 (必要なら useMemo)
+  │
+  ├─ Q4. 1つのコンポーネント（またはその直下）だけで使うか？
+  │    └─ YES: ──▶ 【Local UI State】useState / useReducer
+  │
+  ├─ Q5. 親子関係でバケツリレーが深いだけか？
+  │    └─ YES: ──▶ 【コンポーネント合成】children やスロットPropsで解決
+  │
+  ├─ Q6. アプリ全体で共有する低頻度更新のデータか？（テーマ、認証など）
+  │    └─ YES: ──▶ 【React Context】State/Dispatch分離パターンを適用
+  │
+  └─ 上記すべてに当てはまらない、高頻度更新・複雑なクライアントデータ
+       └─ YES: ──▶ 【Global Store】Zustand / Jotai</code></pre></div>
+<h2 id="まとめ">まとめ</h2>
+
+<p>React開発において「状態をどこに置くべきか」という問いは、「そのデータはどこに属するべき真実（Single Source of Truth）なのか」という設計思想そのものです。</p>
+
+<p>初心者を脱却し、堅牢なReactアプリケーションを構築するために覚えておくべき要点は次の通りです。</p>
+
+<ol>
+<li>まず分類する: クライアントUI、URL、サーバーキャッシュを混同しない。</li>
+<li>二重管理を捨てる: 導出可能な値をStateにせず、<code>useEffect</code> による状態同期をやめる。</li>
+<li>コロケーション: 状態は使う場所の最も近くに置き、リフトアップは必要最小限にとどめる。</li>
+<li>合成を優先する: Prop Drillingを見たらContextを作る前に <code>children</code> を検討する。</li>
+<li>適材適所のツール選定: URLはRouter、APIはTanStack Query、複雑なUIはZustand/Contextに割り当てる。</li>
+</ol>
+
+<p>この判断基準をチームや個人開発で徹底することで、保守性が高く、無駄な再レンダリングのない洗練されたReactアプリケーションを実現できます。</p>
+
+<h2 id="参考文献">参考文献</h2>
+
+<ul>
+<li><a href="https://react.dev/learn/sharing-state-between-components">Sharing State Between Components – React公式</a>
+
+<ul>
+<li>コンポーネント間での状態共有とリフトアップの原則</li>
+</ul></li>
+<li><a href="https://react.dev/learn/you-might-not-need-an-effect">You Might Not Need an Effect – React公式</a>
+
+<ul>
+<li>導出可能な状態やPropsに基づく状態同期にEffectを使ってはならない理由</li>
+</ul></li>
+<li><a href="https://react.dev/learn/passing-data-deeply-with-context">Passing Data Deeply with Context – React公式</a>
+
+<ul>
+<li>Contextの適切な利用場面と、コンポーネント合成（Component Composition）による代替アプローチ</li>
+</ul></li>
+<li><a href="https://react.dev/learn/extracting-state-logic-into-a-reducer">Extracting State Logic into a Reducer – React公式</a>
+
+<ul>
+<li>複雑なローカル状態のロジック分離</li>
+</ul></li>
+<li><a href="https://react.dev/learn/choosing-the-state-structure">Choosing the State Structure – React公式</a>
+
+<ul>
+<li>状態の重複排除、Single Source of Truthの原則</li>
+</ul></li>
+<li><a href="https://tanstack.com/query/latest">TanStack Query Documentation</a>
+
+<ul>
+<li>サーバー状態（Server Cache）の標準的な管理手法</li>
+</ul></li>
+<li><a href="https://zustand.docs.pmnd.rs/">Zustand Documentation</a>
+
+<ul>
+<li>軽量なクライアントグローバル状態管理の実装</li>
+</ul></li>
+</ul>
+
+		</div><div id="disqus_thread"></div>
+<script type="text/javascript">
+	(function () {
+		
+		
+		if (window.location.hostname == "localhost")
+			return;
+
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		var disqus_shortname = 'come-as-you-are';
+		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div> © Copyright ysko |  <a href="https://github.com/vividvilla/ezhil">Ezhil theme</a> | Built with <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140331728-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>feather.replace()</script>
+</body>
+</html>
