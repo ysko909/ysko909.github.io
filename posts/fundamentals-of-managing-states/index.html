@@ -277,7 +277,7 @@ type User = { id: <span style="color:#2b91af">string</span>; name: <span style="
 
 <h3 id="ルール-2-state-値-と-dispatch-更新関数-を分離する">ルール(2)：State（値）と Dispatch（更新関数）を分離する</h3>
 
-<p>Reactの Context は、Provider に渡された <code>value</code> の参照が変わると、そのContextを <code>useContext</code> しているすべてのコンポーネントが再レンダリングされます。更新関数と状態値を同じContextにまとめると、更新関数しか使っていないコンポーネントまで巻き添えを食らって再描画されてしまいます。</p>
+<p>Reactの Context は、Provider に渡された <code>value</code> の参照が変わると、そのContextを <code>useContext</code> しているすべてのコンポーネントが再レンダリングされます。更新関数と状態値を同じContextにまとめると、更新関数しか使っていないコンポーネントまで巻き添えを食らって再描画されてしまいます。いやん。</p>
 
 <h3 id="実務レベルの-context-実装例">実務レベルの Context 実装例</h3>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-tsx" data-lang="tsx"><span style="color:#00f">import</span> { createContext, useContext, useState, ReactNode, Dispatch, SetStateAction } from <span style="color:#a31515">&#34;react&#34;</span>;
@@ -331,7 +331,7 @@ type Theme = <span style="color:#a31515">&#34;light&#34;</span> | <span style="c
 }</code></pre></div>
 <h2 id="原則5-url-state-と-server-state-を外部ライブラリに任せる">原則5：URL State と Server State を外部ライブラリに任せる</h2>
 
-<p>実際問題、アプリケーションにおける「状態」の大部分は、純粋なクライアント状態ではなく URL か サーバーキャッシュ だったりします。これらを <code>useState</code> や Zustand で自作するのは車輪の再発明であり、バグの温床になります。</p>
+<p>実際問題、アプリケーションにおける「状態」の大部分は、純粋なクライアント状態ではなく URL か サーバーキャッシュ だったりします。これらを <code>useState</code> や Zustand で無理くり自作するのは車輪の再発明であり、バグの原因になり得ます。</p>
 
 <h3 id="a-検索条件-フィルター-タブは-url-に置く">A. 検索条件・フィルター・タブは「URL」に置く</h3>
 
@@ -370,7 +370,7 @@ type Theme = <span style="color:#a31515">&#34;light&#34;</span> | <span style="c
 }</code></pre></div>
 <h3 id="b-サーバーデータは-tanstack-query-react-query-や-swr-に任せる">B. サーバーデータは「TanStack Query（React Query）」や「SWR」に任せる</h3>
 
-<p>APIからフェッチしたデータ（Server State）を <code>useState</code> と <code>useEffect</code> で管理しようとすると、キャッシュ破棄、重複リクエストの排除、ローディング/エラー状態の管理コードでコンポーネントが埋め尽くされます。</p>
+<p>APIからフェッチしたデータ（Server State）を <code>useState</code> と <code>useEffect</code> で管理しようとすると、キャッシュ破棄、重複リクエストの排除、ローディング/エラー状態の管理コードでコンポーネントが埋め尽くされます。素直に外部ライブラリに任せた方が、なんだかんだいろいろ楽です。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-tsx" data-lang="tsx"><span style="color:#00f">import</span> { useQuery } from <span style="color:#a31515">&#34;@tanstack/react-query&#34;</span>;
 
 async <span style="color:#00f">function</span> fetchUser(id: <span style="color:#2b91af">string</span>) {
@@ -394,7 +394,7 @@ async <span style="color:#00f">function</span> fetchUser(id: <span style="color:
 }</code></pre></div>
 <h2 id="原則6-zustand-redux-等の外部ストアはいつ導入すべきか">原則6：Zustand / Redux 等の外部ストアはいつ導入すべきか？</h2>
 
-<p>グローバルステート管理ライブラリ（Zustand、Redux Toolkit、Jotai等）は非常に強力ですが、導入すべきケースは限られています。</p>
+<p>グローバルステート管理ライブラリ（Zustand、Redux Toolkit、Jotai等）は非常に強力ですが、導入するケースは限られていると感じます。</p>
 
 <h3 id="導入すべきケース">導入すべきケース</h3>
 
@@ -455,7 +455,7 @@ type NotificationStore = {
 }</code></pre></div>
 <h2 id="実務で迷わない-状態の置き場所-決定デシジョンツリー">実務で迷わない「状態の置き場所」決定デシジョンツリー</h2>
 
-<p>新しい状態を定義する際は、以下のフローチャートを上から順に判定してください。</p>
+<p>現在のところ、自分は以下のようなフローチャートで置き場所を決定しています。何か新しい状態を定義する際は、このフローチャートを参考に上から順に判定してみてください。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">[新しいデータを定義したい]
   │
   ├─ Q1. そのデータはサーバー（API）に原本があるか？
