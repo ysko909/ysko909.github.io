@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://ysko909.github.io/posts/error-remote-wsl-loc-txt-file-permission-denied/</loc>
+    <lastmod>2026-11-25T12:07:04+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ysko909.github.io/posts/fundamentals-of-managing-states/</loc>
     <lastmod>2026-10-20T10:48:28+09:00</lastmod>
   </url>
@@ -1106,7 +1111,7 @@
   
   <url>
     <loc>https://ysko909.github.io/posts/</loc>
-    <lastmod>2026-10-20T10:48:28+09:00</lastmod>
+    <lastmod>2026-11-25T12:07:04+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1286,7 +1291,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/vscode/</loc>
-    <lastmod>2025-11-14T14:36:17+09:00</lastmod>
+    <lastmod>2026-11-25T12:07:04+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1334,7 +1339,7 @@
   
   <url>
     <loc>https://ysko909.github.io/tags/wsl/</loc>
-    <lastmod>2024-11-22T14:30:47+09:00</lastmod>
+    <lastmod>2026-11-25T12:07:04+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1346,7 +1351,7 @@
   
   <url>
     <loc>https://ysko909.github.io/</loc>
-    <lastmod>2026-10-20T10:48:28+09:00</lastmod>
+    <lastmod>2026-11-25T12:07:04+09:00</lastmod>
     <priority>0</priority>
   </url>
   
