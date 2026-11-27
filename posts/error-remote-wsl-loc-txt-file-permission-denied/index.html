@@ -4,13 +4,13 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>WSL環境でVSCode実行時に「remote-wsl-loc.txt: Permission denied」が発生した場合の対処法 - 頑張らないために頑張る</title><meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta property="og:title" content="WSL環境でVSCode実行時に「remote-wsl-loc.txt: Permission denied」が発生した場合の対処法" />
-<meta property="og:description" content="はじめに WSL（Windows Subsystem for Linux）環境で開発を行っていると、Visual Studio Code（VS Code）の Remote - WSL 機能を利用する機会が多いと思います。
-しかし、ある日突然 code . コマンドが動作しなくなり、remote-wsl-loc.txt: Permission deniedのようなエラーに遭遇することがあります。本記事では、このエラーの原因と対処方法についてまとめます。
-発生した事象 WSL上で以下のコマンドを実行した際にエラーが発生しました。
-code . 通常はVS Codeが起動し、カレントディレクトリが開かれるはずですが、今回は起動せずエラー終了しました。実際に表示されたエラーメッセージは次の通りです。
-$ code . /mnt/c/Users/hoge/AppData/Local/Programs/Microsoft VS Code/bin/code: 47: cannot create /tmp/remote-wsl-loc.txt: Permission denied /mnt/c/Users/hoge/AppData/Local/Programs/Microsoft VS Code/bin/code: 53: /mnt/c/Users/hoge/.vscode/extensions/ms-vscode-remote.remote-wsl-0.104.3/scripts/wslCode.sh: not found エラーメッセージのポイントは以下の2点です。
+<meta property="og:description" content="はじめに WSL（Windows Subsystem for Linux）環境で開発を行っていると、Visual Studio Code（VS Code）の Remote - WSL 機能を利用する方が多いと思います。
+ところがどっこい、ある日突然 code . コマンドが動作しなくなり、remote-wsl-loc.txt: Permission deniedのようなエラーに遭遇することがあります。本記事では、このエラーの原因と対処方法についてまとめます。誰かの役に立てば幸いです。こんなしょうもないエラーで時間を浪費するのは自分だけで良い・・・＿(　_´ω`)_ﾍﾟｼｮ
+発生した事象 簡単に状況を書くと、WSL上で以下のコマンドを実行した際にエラーが発生しました。
+code . 通常はVS Codeが起動し、カレントディレクトリが開かれるはずですが、今回は起動せずエラーで終了してしまいました。実際に表示されたエラーメッセージは次の通りです。
+$ code . /mnt/c/Users/hoge/AppData/Local/Programs/Microsoft VS Code/bin/code: 47: cannot create /tmp/remote-wsl-loc.txt: Permission denied /mnt/c/Users/hoge/AppData/Local/Programs/Microsoft VS Code/bin/code: 53: /mnt/c/Users/hoge/.vscode/extensions/ms-vscode-remote.remote-wsl-0.104.3/scripts/wslCode.sh: not found このエラーメッセージのポイントは以下の2点です。
  /tmp/remote-wsl-loc.txt に書き込めない wslCode.sh が見つからない  特に最初の
-cannot create /tmp/remote-wsl-loc.txt: Permission denied が根本原因になっているケースが多いようです。
+cannot create /tmp/remote-wsl-loc.txt: Permission denied が根本原因になっているケースが多いようです。ということは、このファイルをどうにかすればいいわけです。
 原因 調査したところ、VS Codeの Remote - WSL 拡張機能が利用する
 /tmp/remote-wsl-loc.txt というファイルの権限問題で発生することがあるようです。
 具体的には、
@@ -19,13 +19,13 @@ cannot create /tmp/remote-wsl-loc.txt: Permission denied が根本原因にな�
 <meta property="og:url" content="https://ysko909.github.io/posts/error-remote-wsl-loc-txt-file-permission-denied/" /><meta property="article:published_time" content="2026-11-25T12:07:04&#43;09:00"/>
 <meta property="article:modified_time" content="2026-11-25T12:07:04&#43;09:00"/><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="WSL環境でVSCode実行時に「remote-wsl-loc.txt: Permission denied」が発生した場合の対処法"/>
-<meta name="twitter:description" content="はじめに WSL（Windows Subsystem for Linux）環境で開発を行っていると、Visual Studio Code（VS Code）の Remote - WSL 機能を利用する機会が多いと思います。
-しかし、ある日突然 code . コマンドが動作しなくなり、remote-wsl-loc.txt: Permission deniedのようなエラーに遭遇することがあります。本記事では、このエラーの原因と対処方法についてまとめます。
-発生した事象 WSL上で以下のコマンドを実行した際にエラーが発生しました。
-code . 通常はVS Codeが起動し、カレントディレクトリが開かれるはずですが、今回は起動せずエラー終了しました。実際に表示されたエラーメッセージは次の通りです。
-$ code . /mnt/c/Users/hoge/AppData/Local/Programs/Microsoft VS Code/bin/code: 47: cannot create /tmp/remote-wsl-loc.txt: Permission denied /mnt/c/Users/hoge/AppData/Local/Programs/Microsoft VS Code/bin/code: 53: /mnt/c/Users/hoge/.vscode/extensions/ms-vscode-remote.remote-wsl-0.104.3/scripts/wslCode.sh: not found エラーメッセージのポイントは以下の2点です。
+<meta name="twitter:description" content="はじめに WSL（Windows Subsystem for Linux）環境で開発を行っていると、Visual Studio Code（VS Code）の Remote - WSL 機能を利用する方が多いと思います。
+ところがどっこい、ある日突然 code . コマンドが動作しなくなり、remote-wsl-loc.txt: Permission deniedのようなエラーに遭遇することがあります。本記事では、このエラーの原因と対処方法についてまとめます。誰かの役に立てば幸いです。こんなしょうもないエラーで時間を浪費するのは自分だけで良い・・・＿(　_´ω`)_ﾍﾟｼｮ
+発生した事象 簡単に状況を書くと、WSL上で以下のコマンドを実行した際にエラーが発生しました。
+code . 通常はVS Codeが起動し、カレントディレクトリが開かれるはずですが、今回は起動せずエラーで終了してしまいました。実際に表示されたエラーメッセージは次の通りです。
+$ code . /mnt/c/Users/hoge/AppData/Local/Programs/Microsoft VS Code/bin/code: 47: cannot create /tmp/remote-wsl-loc.txt: Permission denied /mnt/c/Users/hoge/AppData/Local/Programs/Microsoft VS Code/bin/code: 53: /mnt/c/Users/hoge/.vscode/extensions/ms-vscode-remote.remote-wsl-0.104.3/scripts/wslCode.sh: not found このエラーメッセージのポイントは以下の2点です。
  /tmp/remote-wsl-loc.txt に書き込めない wslCode.sh が見つからない  特に最初の
-cannot create /tmp/remote-wsl-loc.txt: Permission denied が根本原因になっているケースが多いようです。
+cannot create /tmp/remote-wsl-loc.txt: Permission denied が根本原因になっているケースが多いようです。ということは、このファイルをどうにかすればいいわけです。
 原因 調査したところ、VS Codeの Remote - WSL 拡張機能が利用する
 /tmp/remote-wsl-loc.txt というファイルの権限問題で発生することがあるようです。
 具体的には、
@@ -91,20 +91,20 @@ cannot create /tmp/remote-wsl-loc.txt: Permission denied が根本原因にな�
 
 <h2 id="はじめに">はじめに</h2>
 
-<p>WSL（Windows Subsystem for Linux）環境で開発を行っていると、Visual Studio Code（VS Code）の Remote - WSL 機能を利用する機会が多いと思います。</p>
+<p>WSL（Windows Subsystem for Linux）環境で開発を行っていると、Visual Studio Code（VS Code）の Remote - WSL 機能を利用する方が多いと思います。</p>
 
-<p>しかし、ある日突然 <code>code .</code> コマンドが動作しなくなり、<code>remote-wsl-loc.txt: Permission denied</code>のようなエラーに遭遇することがあります。本記事では、このエラーの原因と対処方法についてまとめます。</p>
+<p>ところがどっこい、ある日突然 <code>code .</code> コマンドが動作しなくなり、<code>remote-wsl-loc.txt: Permission denied</code>のようなエラーに遭遇することがあります。本記事では、このエラーの原因と対処方法についてまとめます。誰かの役に立てば幸いです。こんなしょうもないエラーで時間を浪費するのは自分だけで良い・・・＿(　_´ω`)_ﾍﾟｼｮ</p>
 
 <h2 id="発生した事象">発生した事象</h2>
 
-<p>WSL上で以下のコマンドを実行した際にエラーが発生しました。</p>
+<p>簡単に状況を書くと、WSL上で以下のコマンドを実行した際にエラーが発生しました。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">code .</code></pre></div>
-<p>通常はVS Codeが起動し、カレントディレクトリが開かれるはずですが、今回は起動せずエラー終了しました。実際に表示されたエラーメッセージは次の通りです。</p>
+<p>通常はVS Codeが起動し、カレントディレクトリが開かれるはずですが、今回は起動せずエラーで終了してしまいました。実際に表示されたエラーメッセージは次の通りです。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">$ code .
 
 /mnt/c/Users/hoge/AppData/Local/Programs/Microsoft VS Code/bin/code: 47: cannot create /tmp/remote-wsl-loc.txt: Permission denied
 /mnt/c/Users/hoge/AppData/Local/Programs/Microsoft VS Code/bin/code: 53: /mnt/c/Users/hoge/.vscode/extensions/ms-vscode-remote.remote-wsl-0.104.3/scripts/wslCode.sh: not found</code></pre></div>
-<p>エラーメッセージのポイントは以下の2点です。</p>
+<p>このエラーメッセージのポイントは以下の2点です。</p>
 
 <ul>
 <li><code>/tmp/remote-wsl-loc.txt</code> に書き込めない</li>
@@ -113,7 +113,7 @@ cannot create /tmp/remote-wsl-loc.txt: Permission denied が根本原因にな�
 
 <p>特に最初の</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">cannot create /tmp/remote-wsl-loc.txt: Permission denied</code></pre></div>
-<p>が根本原因になっているケースが多いようです。</p>
+<p>が根本原因になっているケースが多いようです。ということは、このファイルをどうにかすればいいわけです。</p>
 
 <h2 id="原因">原因</h2>
 
@@ -131,11 +131,11 @@ cannot create /tmp/remote-wsl-loc.txt: Permission denied が根本原因にな�
 
 <p>といったケースで、現在ログインしているユーザーが当該ファイルへ書き込めなくなります。</p>
 
-<p>Linuxの <code>/tmp</code> ディレクトリ自体は共有領域であるため、このような問題が発生する可能性があります。</p>
+<p>Linuxの <code>/tmp</code> ディレクトリ自体は共有領域であるため、このような問題が発生する可能性があります。マジかよ。</p>
 
 <h2 id="対処方法①-ファイルを削除する-推奨">対処方法①：ファイルを削除する（推奨）</h2>
 
-<p>もっとも手軽な対処方法です。</p>
+<p>もっとも手軽かつ早い対処方法です。</p>
 
 <p>WSL上で以下を実行します。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo rm -f /tmp/remote-wsl-loc.txt</code></pre></div>
@@ -145,11 +145,11 @@ cannot create /tmp/remote-wsl-loc.txt: Permission denied が根本原因にな�
 
 <h2 id="対処方法②-ファイルの所有者を変更する">対処方法②：ファイルの所有者を変更する</h2>
 
-<p>ファイルを残したい場合は、所有者を現在のユーザーへ変更します。</p>
+<p>何らかの理由でファイルを残したい場合は、所有者を現在のユーザーへ変更します。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo chown your_username:your_username /tmp/remote-wsl-loc.txt</code></pre></div>
 <p>例：</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo chown fuga:fuga /tmp/remote-wsl-loc.txt</code></pre></div>
-<p>実行後に、</p>
+<p>このコマンド実行後に、</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">code .</code></pre></div>
 <p>で動作確認を行います。</p>
 
@@ -165,7 +165,7 @@ cannot create /tmp/remote-wsl-loc.txt: Permission denied が根本原因にな�
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">~/remote-wsl-loc.txt</code></pre></div>
 <p>へ置換します。</p>
 
-<p>つまり、共有領域である <code>/tmp</code> ではなく、ユーザーごとのホームディレクトリを利用するよう変更します。</p>
+<p>つまり、共有領域である <code>/tmp</code> ではなく、ユーザーごとのホームディレクトリを利用するよう変更します。ただ、ここまでの対処をしないといけないケースは、まあまあ稀だと思います。</p>
 
 <h3 id="注意点">注意点</h3>
 
@@ -202,7 +202,7 @@ cannot create /tmp/remote-wsl-loc.txt: Permission denied が根本原因にな�
 
 <h3 id="tmp-の権限確認"><code>/tmp</code> の権限確認</h3>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ls -ld /tmp</code></pre></div>
-<p>正常な環境では以下のようになっています。</p>
+<p>正常な環境では以下のようになっているはずです。</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-console" data-lang="console">drwxrwxrwt</code></pre></div>
 <p>最後の <code>t</code>（Sticky Bit）が付与されていることが重要です。</p>
 
@@ -221,7 +221,7 @@ cannot create /tmp/remote-wsl-loc.txt: Permission denied が根本原因にな�
 <li>複数ユーザー環境では起動スクリプト修正も検討</li>
 </ol>
 
-<p>WSLではWindowsとLinuxの権限管理が混在するため、一見するとVS Codeの不具合に見えても、実際にはLinux側のファイル所有権が原因であるケースが少なくありません。同様のエラーに遭遇した場合は、まず <code>/tmp/remote-wsl-loc.txt</code> の状態を確認してみるとよいでしょう。</p>
+<p>WSLではWindowsとLinuxの権限管理が混在するため、一見するとVS Codeの不具合に見えても、実際にはLinux側のファイル所有権が原因であるケースが少なくありません。同様のエラーに遭遇した場合は、まず <code>/tmp/remote-wsl-loc.txt</code> の状態を確認してみるとよいかと思います。</p>
 
 <h2 id="参考">参考</h2>
 

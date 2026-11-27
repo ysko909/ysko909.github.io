@@ -18,13 +18,13 @@
       <pubDate>Wed, 25 Nov 2026 12:07:04 +0900</pubDate>
       
       <guid>https://ysko909.github.io/posts/error-remote-wsl-loc-txt-file-permission-denied/</guid>
-      <description>はじめに WSL（Windows Subsystem for Linux）環境で開発を行っていると、Visual Studio Code（VS Code）の Remote - WSL 機能を利用する機会が多いと思います。
-しかし、ある日突然 code . コマンドが動作しなくなり、remote-wsl-loc.txt: Permission deniedのようなエラーに遭遇することがあります。本記事では、このエラーの原因と対処方法についてまとめます。
-発生した事象 WSL上で以下のコマンドを実行した際にエラーが発生しました。
-code . 通常はVS Codeが起動し、カレントディレクトリが開かれるはずですが、今回は起動せずエラー終了しました。実際に表示されたエラーメッセージは次の通りです。
-$ code . /mnt/c/Users/hoge/AppData/Local/Programs/Microsoft VS Code/bin/code: 47: cannot create /tmp/remote-wsl-loc.txt: Permission denied /mnt/c/Users/hoge/AppData/Local/Programs/Microsoft VS Code/bin/code: 53: /mnt/c/Users/hoge/.vscode/extensions/ms-vscode-remote.remote-wsl-0.104.3/scripts/wslCode.sh: not found エラーメッセージのポイントは以下の2点です。
+      <description>はじめに WSL（Windows Subsystem for Linux）環境で開発を行っていると、Visual Studio Code（VS Code）の Remote - WSL 機能を利用する方が多いと思います。
+ところがどっこい、ある日突然 code . コマンドが動作しなくなり、remote-wsl-loc.txt: Permission deniedのようなエラーに遭遇することがあります。本記事では、このエラーの原因と対処方法についてまとめます。誰かの役に立てば幸いです。こんなしょうもないエラーで時間を浪費するのは自分だけで良い・・・＿(　_´ω`)_ﾍﾟｼｮ
+発生した事象 簡単に状況を書くと、WSL上で以下のコマンドを実行した際にエラーが発生しました。
+code . 通常はVS Codeが起動し、カレントディレクトリが開かれるはずですが、今回は起動せずエラーで終了してしまいました。実際に表示されたエラーメッセージは次の通りです。
+$ code . /mnt/c/Users/hoge/AppData/Local/Programs/Microsoft VS Code/bin/code: 47: cannot create /tmp/remote-wsl-loc.txt: Permission denied /mnt/c/Users/hoge/AppData/Local/Programs/Microsoft VS Code/bin/code: 53: /mnt/c/Users/hoge/.vscode/extensions/ms-vscode-remote.remote-wsl-0.104.3/scripts/wslCode.sh: not found このエラーメッセージのポイントは以下の2点です。
  /tmp/remote-wsl-loc.txt に書き込めない wslCode.sh が見つからない  特に最初の
-cannot create /tmp/remote-wsl-loc.txt: Permission denied が根本原因になっているケースが多いようです。
+cannot create /tmp/remote-wsl-loc.txt: Permission denied が根本原因になっているケースが多いようです。ということは、このファイルをどうにかすればいいわけです。
 原因 調査したところ、VS Codeの Remote - WSL 拡張機能が利用する
 /tmp/remote-wsl-loc.txt というファイルの権限問題で発生することがあるようです。
 具体的には、
